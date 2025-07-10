@@ -1,0 +1,40 @@
+name: "🐞 Bug Report"
+description: "버그나 오류를 제보합니다."
+title: "[AN/BE/ALL] 버그"
+labels:
+  - 🐞 BugFix
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "버그 설명"
+      description: "발생한 문제를 자세히 설명해주세요."
+      placeholder: "예: 버튼을 눌러도 동작하지 않습니다."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: "재현 방법"
+      description: "버그를 재현할 수 있는 단계가 있다면 작성해주세요."
+      placeholder: "1. 로그인\n2. 버튼 클릭\n3. 반응 없음"
+    validations:
+      required: true
+
+  - type: input
+    id: env
+    attributes:
+      label: "환경 정보"
+      description: "사용한 브라우저, OS, 앱 버전 등"
+      placeholder: "예: Android 14 / Chrome 124 / 앱 버전 1.0.3"
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: "체크리스트"
+      options:
+        - label: "최신 버전에서도 발생하는 문제인지 확인했습니다."
+          required: true
+        - label: "중복된 이슈가 없는지 확인했습니다."
+          required: true

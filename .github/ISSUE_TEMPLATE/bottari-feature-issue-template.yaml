@@ -1,0 +1,29 @@
+name: "✨ Feature Template"
+description: "Feature 작업 사항을 입력해주세요"
+title: "[AN/BE/ALL] 이슈"
+labels:
+  - ✨ Feature
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "기능 설명"
+      description: "필요한 기능과 그 이유를 설명해주세요."
+      placeholder: "예: 사용자 알림 기능이 필요합니다."
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: "추가 맥락"
+      description: "이 기능이 필요한 배경이나 상황을 설명해주세요."
+      placeholder: "예: 채팅 메시지를 놓치는 경우가 많습니다."
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: "체크리스트"
+      options:
+        - label: "기존에 제안된 유사한 기능이 없는지 확인했습니다."
+          required: true
