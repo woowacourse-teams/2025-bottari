@@ -23,3 +23,4 @@ rootProject.name = "Bottari"
 include(":app")
 include(":di")
 include(":domain")
+include(":presentation")
