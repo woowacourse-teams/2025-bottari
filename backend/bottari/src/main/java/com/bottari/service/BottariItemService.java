@@ -30,6 +30,10 @@ public class BottariItemService {
         return savedBottariItem.getId();
     }
 
+    public void delete(final Long id) {
+        bottariItemRepository.deleteById(id);
+    }
+
     private void validateDuplicateName(
             final Long bottariId,
             final String name
