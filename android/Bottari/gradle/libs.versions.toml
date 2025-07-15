@@ -13,6 +13,16 @@ constraintlayout = "2.2.1"
 # UI Components
 material = "1.12.0"
 
+# Network
+retrofit = "3.0.0"
+okhttp = "4.12.0"
+kotlinxSerializationJson = "1.8.1"
+retrofit2-kotlinx-serialization-converter = "1.0.0"
+
+# Local DB
+room = "2.7.2"
+datastore = "1.1.7"
+
 # Testing
 junit = "4.13.2"
 junit-jupiter = "5.12.2"
@@ -29,10 +39,22 @@ ktlint = "13.0.0"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 # --- UI ---
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# --- Network ---
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2-kotlinx-serialization-converter" }
+
+# --- Local DB ---
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 # --- Testing (Unit & Instrumented) ---
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -60,4 +82,16 @@ test = [
     "junit-jupiter",
     "kotest-runner-junit5",
     "mockk"
+]
+
+network = [
+    "retrofit",
+    "logging-interceptor",
+    "retrofit2-kotlinx-serialization-converter",
+    "kotlinx-serialization-json"
+]
+
+local = [
+    "androidx-room-runtime",
+    "androidx-datastore-preferences"
 ]

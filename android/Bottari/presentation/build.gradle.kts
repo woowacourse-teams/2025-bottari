@@ -35,6 +35,9 @@ android {
             it.useJUnitPlatform()
         }
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -42,6 +45,9 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
