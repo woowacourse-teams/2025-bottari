@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Bottari"
 include(":app")
+include(":di")
