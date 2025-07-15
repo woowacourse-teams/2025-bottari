@@ -5,25 +5,22 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.bottari.domain.Member;
 import com.bottari.dto.CreateMemberRequest;
-import com.bottari.repository.MemberRepository;
-import org.junit.jupiter.api.BeforeEach;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 @DataJpaTest
+@Import(MemberService.class)
 class MemberServiceTest {
 
+    @Autowired
     private MemberService memberService;
 
     @Autowired
-    private MemberRepository memberRepository;
-
-    @BeforeEach
-    void setUp() {
-        memberService = new MemberService(memberRepository);
-    }
+    private EntityManager entityManager;
 
     @DisplayName("사용자를 생성한다.")
     @Test
@@ -43,7 +40,7 @@ class MemberServiceTest {
     void create_Exception_DuplicateSsaid() {
         // given
         final String duplicateSsaid = "duplicateSsaid";
-        memberRepository.save(new Member(duplicateSsaid, "name"));
+        entityManager.persist(new Member(duplicateSsaid, "name"));
         final CreateMemberRequest request = new CreateMemberRequest(duplicateSsaid, "name");
 
         // when & then

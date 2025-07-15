@@ -5,29 +5,22 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.bottari.domain.Member;
 import com.bottari.dto.CreateBottariRequest;
-import com.bottari.repository.BottariRepository;
-import com.bottari.repository.MemberRepository;
-import org.junit.jupiter.api.BeforeEach;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 @DataJpaTest
+@Import(BottariService.class)
 class BottariServiceTest {
 
+    @Autowired
     private BottariService bottariService;
 
     @Autowired
-    private BottariRepository bottariRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @BeforeEach
-    void setUp() {
-        bottariService = new BottariService(bottariRepository, memberRepository);
-    }
+    private EntityManager entityManager;
 
     @DisplayName("보따리를 생성한다.")
     @Test
@@ -36,7 +29,7 @@ class BottariServiceTest {
         final CreateBottariRequest request = new CreateBottariRequest("title");
         final String ssaid = "ssaid";
         final Member member = new Member(ssaid, "name");
-        memberRepository.save(member);
+        entityManager.persist(member);
 
         // when
         final Long actual = bottariService.create(ssaid, request);
