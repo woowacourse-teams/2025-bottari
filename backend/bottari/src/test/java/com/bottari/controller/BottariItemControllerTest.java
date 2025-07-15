@@ -1,6 +1,8 @@
 package com.bottari.controller;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,5 +46,19 @@ class BottariItemControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(header().string(HttpHeaders.LOCATION, "/bottaries/" + bottariId + "/items/1"));
+    }
+
+    @DisplayName("보따리 안에 있는 물품을 삭제한다.")
+    @Test
+    void delete_Item() throws Exception {
+        // given
+        final Long bottariId = 1L;
+        final Long bottariItemId = 1L;
+        willDoNothing().given(bottariItemService)
+                .delete(bottariId, bottariItemId);
+
+        // when & then
+        mockMvc.perform(delete("/bottaries/" + bottariId + "/items/" + bottariItemId))
+                .andExpect(status().isNoContent());
     }
 }
