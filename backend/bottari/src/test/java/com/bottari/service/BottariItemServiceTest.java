@@ -102,7 +102,7 @@ class BottariItemServiceTest {
         assertThat(entityManager.contains(bottariItem)).isFalse();
     }
 
-    @DisplayName("보따리 물품을 삭제한다.")
+    @DisplayName("해당 보따리 내의 물품이 아니면, 예외를 던진다.")
     @Test
     void delete_Exception_AnotherBottari() {
         // given
@@ -122,6 +122,138 @@ class BottariItemServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariItemService.delete(anotherBottari.getId(), bottariItem.getId()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("해당 보따리 내에 존재하는 물품이 아닙니다.");
+    }
+
+    @DisplayName("보따리 물품을 체크한다.")
+    @Test
+    void check() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        final String duplicateItemName = "name";
+        final BottariItem bottariItem = new BottariItem(duplicateItemName, bottari);
+        entityManager.persist(bottariItem);
+
+        // when
+        bottariItemService.check(bottari.getId(), bottariItem.getId());
+
+        // then
+        final BottariItem actual = entityManager.find(BottariItem.class, bottariItem.getId());
+        assertThat(actual.isChecked()).isTrue();
+    }
+
+    @DisplayName("물품 체크 시, 보따리 물품을 찾을 수 없다면, 예외를 던진다.")
+    @Test
+    void check_Exception_NotExistsItem() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        final Long notExistsBottariItemId = 1L;
+
+        // when & then
+        assertThatThrownBy(() -> bottariItemService.check(bottari.getId(), notExistsBottariItemId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("보따리 물품을 찾을 수 없습니다.");
+    }
+
+    @DisplayName("물품 체크 시, 해당 보따리 내의 물품이 아니면, 예외를 던진다.")
+    @Test
+    void check_Exception_AnotherBottari() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        final Bottari anotherBottari = new Bottari("anotherTitle", member);
+        entityManager.persist(anotherBottari);
+
+        final BottariItem bottariItem = new BottariItem("name", bottari);
+        entityManager.persist(bottariItem);
+
+        // when & then
+        assertThatThrownBy(() -> bottariItemService.check(anotherBottari.getId(), bottariItem.getId()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("해당 보따리 내에 존재하는 물품이 아닙니다.");
+    }
+
+    @DisplayName("보따리 물품을 체크 해제한다.")
+    @Test
+    void uncheck() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        final String duplicateItemName = "name";
+        final BottariItem bottariItem = new BottariItem(duplicateItemName, bottari);
+        bottariItem.check();
+        entityManager.persist(bottariItem);
+
+        // when
+        bottariItemService.uncheck(bottari.getId(), bottariItem.getId());
+
+        // then
+        final BottariItem actual = entityManager.find(BottariItem.class, bottariItem.getId());
+        assertThat(actual.isChecked()).isFalse();
+    }
+
+    @DisplayName("물품 체크 해제 시, 보따리 물품을 찾을 수 없다면, 예외를 던진다.")
+    @Test
+    void uncheck_Exception_NotExistsItem() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        final Long notExistsBottariItemId = 1L;
+
+        // when & then
+        assertThatThrownBy(() -> bottariItemService.uncheck(bottari.getId(), notExistsBottariItemId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("보따리 물품을 찾을 수 없습니다.");
+    }
+
+    @DisplayName("물품 체크 해제 시, 해당 보따리 내의 물품이 아니면, 예외를 던진다.")
+    @Test
+    void uncheck_Exception_AnotherBottari() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        final Bottari anotherBottari = new Bottari("anotherTitle", member);
+        entityManager.persist(anotherBottari);
+
+        final BottariItem bottariItem = new BottariItem("name", bottari);
+        bottariItem.check();
+        entityManager.persist(bottariItem);
+
+        // when & then
+        assertThatThrownBy(() -> bottariItemService.uncheck(anotherBottari.getId(), bottariItem.getId()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 보따리 내에 존재하는 물품이 아닙니다.");
     }

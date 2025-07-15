@@ -38,6 +38,28 @@ public class BottariItemService {
         bottariItemRepository.deleteById(id);
     }
 
+    @Transactional
+    public void check(
+            final Long bottariId,
+            final Long id
+    ) {
+        final BottariItem bottariItem = bottariItemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("보따리 물품을 찾을 수 없습니다."));
+        validateItemInBottari(bottariId, id);
+        bottariItem.check();
+    }
+
+    @Transactional
+    public void uncheck(
+            final Long bottariId,
+            final Long id
+    ) {
+        final BottariItem bottariItem = bottariItemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("보따리 물품을 찾을 수 없습니다."));
+        validateItemInBottari(bottariId, id);
+        bottariItem.uncheck();
+    }
+
     private void validateDuplicateName(
             final Long bottariId,
             final String name
