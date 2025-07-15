@@ -1,7 +1,9 @@
 package com.bottari.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.bottari.domain.Member;
 import com.bottari.dto.CreateMemberRequest;
 import com.bottari.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,5 +36,19 @@ class MemberServiceTest {
 
         // then
         assertThat(actual).isNotNull();
+    }
+
+    @DisplayName("중복된 ssaid로 사용자를 생성할 경우, 예외를 던진다.")
+    @Test
+    void create_Exception_DuplicateSsaid() {
+        // given
+        final String duplicateSsaid = "duplicateSsaid";
+        memberRepository.save(new Member(duplicateSsaid, "name"));
+        final CreateMemberRequest request = new CreateMemberRequest(duplicateSsaid, "name");
+
+        // when & then
+        assertThatThrownBy(() -> memberService.create(request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("중복된 ssaid입니다.");
     }
 }
