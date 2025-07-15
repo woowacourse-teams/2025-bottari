@@ -30,7 +30,11 @@ public class BottariItemService {
         return savedBottariItem.getId();
     }
 
-    public void delete(final Long id) {
+    public void delete(
+            final Long bottariId,
+            final Long id
+    ) {
+        validateItemInBottari(bottariId, id);
         bottariItemRepository.deleteById(id);
     }
 
@@ -40,6 +44,12 @@ public class BottariItemService {
     ) {
         if (bottariItemRepository.existsByBottariIdAndName(bottariId, name)) {
             throw new IllegalArgumentException("중복된 보따리 물품명입니다.");
+        }
+    }
+
+    private void validateItemInBottari(final Long bottariId, final Long id) {
+        if (!bottariItemRepository.existsByBottariIdAndId(bottariId, id)) {
+            throw new IllegalArgumentException("해당 보따리 내에 존재하는 물품이 아닙니다.");
         }
     }
 }

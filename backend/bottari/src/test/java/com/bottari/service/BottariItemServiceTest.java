@@ -96,9 +96,33 @@ class BottariItemServiceTest {
         entityManager.persist(bottariItem);
 
         // when
-        bottariItemService.delete(bottariItem.getId());
+        bottariItemService.delete(bottari.getId(), bottariItem.getId());
 
         // then
         assertThat(entityManager.contains(bottariItem)).isFalse();
+    }
+
+    @DisplayName("보따리 물품을 삭제한다.")
+    @Test
+    void delete_Exception_AnotherBottari() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        final Bottari anotherBottari = new Bottari("anotherTitle", member);
+        entityManager.persist(anotherBottari);
+
+        final String duplicateItemName = "name";
+        final BottariItem bottariItem = new BottariItem(duplicateItemName, bottari);
+        entityManager.persist(bottariItem);
+
+        // when & then
+        assertThatThrownBy(() -> bottariItemService.delete(anotherBottari.getId(), bottariItem.getId()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("해당 보따리 내에 존재하는 물품이 아닙니다.");
     }
 }
