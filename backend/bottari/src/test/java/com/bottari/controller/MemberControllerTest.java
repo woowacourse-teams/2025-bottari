@@ -29,7 +29,7 @@ class MemberControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @DisplayName("멤버를 생성한다")
+    @DisplayName("사용자를 생성한다.")
     @Test
     void register() throws Exception {
         // given

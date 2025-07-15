@@ -25,7 +25,7 @@ class MemberServiceTest {
         memberService = new MemberService(memberRepository);
     }
 
-    @DisplayName("멤버를 생성한다")
+    @DisplayName("사용자를 생성한다.")
     @Test
     void create() {
         // given

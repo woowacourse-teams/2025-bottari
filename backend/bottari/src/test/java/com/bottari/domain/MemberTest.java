@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class MemberTest {
 
-    @DisplayName("이름이 3글자 미만 10글자 초과인 경우, 예외를 던진다")
+    @DisplayName("이름이 3글자 미만 10글자 초과인 경우, 예외를 던진다.")
     @ParameterizedTest
     @ValueSource(strings = {"12", "12345678910"})
     void validateName_throwException(final String name) {
