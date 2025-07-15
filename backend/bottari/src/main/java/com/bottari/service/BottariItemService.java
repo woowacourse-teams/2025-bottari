@@ -47,7 +47,10 @@ public class BottariItemService {
         }
     }
 
-    private void validateItemInBottari(final Long bottariId, final Long id) {
+    private void validateItemInBottari(
+            final Long bottariId,
+            final Long id
+    ) {
         if (!bottariItemRepository.existsByBottariIdAndId(bottariId, id)) {
             throw new IllegalArgumentException("해당 보따리 내에 존재하는 물품이 아닙니다.");
         }
