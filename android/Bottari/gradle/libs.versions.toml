@@ -1,39 +1,63 @@
 [versions]
+# Android Gradle Plugin & Kotlin
 agp = "8.9.0"
-kotestVersion = "5.9.1"
 kotlin = "2.0.21"
+jetbrainsKotlinJvm = "2.0.21"
+
+# AndroidX
 coreKtx = "1.16.0"
+appcompat = "1.7.1"
+activity = "1.10.1"
+constraintlayout = "2.2.1"
+
+# UI Components
+material = "1.12.0"
+
+# Testing
 junit = "4.13.2"
 junit-jupiter = "5.12.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-appcompat = "1.7.1"
-material = "1.12.0"
-activity = "1.10.1"
-constraintlayout = "2.2.1"
-jetbrainsKotlinJvm = "2.0.21"
-ktlint = "13.0.0"
+kotestVersion = "5.9.1"
 mockk = "1.14.4"
 
+# Code Quality
+ktlint = "13.0.0"
+
 [libraries]
+# --- AndroidX Core ---
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
+# --- UI ---
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# --- Testing (Unit & Instrumented) ---
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit-jupiter" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotestVersion" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [plugins]
+# --- Android Plugins ---
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+
+# --- Kotlin Plugins ---
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+
+# --- Code Quality Plugins ---
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 
 [bundles]
-test = ["junit", "junit-jupiter", "kotest-runner-junit5", "mockk"]
+test = [
+    "junit",
+    "junit-jupiter",
+    "kotest-runner-junit5",
+    "mockk"
+]
