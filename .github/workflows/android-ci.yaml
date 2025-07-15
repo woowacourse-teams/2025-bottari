@@ -1,46 +1,47 @@
-name: Android CI for an/develop
+name: Android CI [ an/develop ]
 
- on:
-   push:
-     branches: [ "an/develop" ]
-   pull_request:
-     branches: [ "an/develop" ]
+on:
+  push:
+    branches: [ "an/develop" ]
+  pull_request:
+    branches: [ "an/develop" ]
 
- jobs:
-   build:
-     runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-     defaults:
-       run:
-         shell: bash
-         working-directory: ./android/Bottari
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./android/Bottari
 
-     permissions:
-       contents: read
+    permissions:
+      contents: read
 
-     steps:
-       - uses: actions/checkout@v4
-         with:
-           fetch-depth: 0
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-       - name: set up JDK 21
-         uses: actions/setup-java@v3
-         with:
-           java-version: '21'
-           distribution: 'temurin'
-           cache: gradle
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
 
-       - name: Grant execute permission for gradlew
-         run: chmod +x gradlew
+      - name: Grant execute permission to gradlew
+        run: chmod +x gradlew
 
-       - name: Run ktlint
-         run: ./gradlew ktlintCheck
+      - name: Clean Project
+        run: ./gradlew clean
 
-       - name: Clean build
-         run: ./gradlew clean build
+      - name: Run ktlint Check
+        run: ./gradlew ktlintCheck
 
-       - name: Clean test
-         run: ./gradlew clean test
+      - name: Run Unit Tests
+        run: ./gradlew test
 
-       - name: Build with Gradle
-         run: ./gradlew build
+      - name: Assemble Build
+        run: ./gradlew build
