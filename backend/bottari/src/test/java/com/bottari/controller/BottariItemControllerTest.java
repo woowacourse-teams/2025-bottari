@@ -3,6 +3,7 @@ package com.bottari.controller;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -59,6 +60,34 @@ class BottariItemControllerTest {
 
         // when & then
         mockMvc.perform(delete("/bottaries/" + bottariId + "/items/" + bottariItemId))
+                .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("보따리 물품을 체크한다.")
+    @Test
+    void check() throws Exception {
+        // given
+        final Long bottariId = 1L;
+        final Long bottariItemId = 1L;
+        willDoNothing().given(bottariItemService)
+                .check(bottariId, bottariItemId);
+
+        // when & then
+        mockMvc.perform(patch("/bottaries/" + bottariId + "/items/" + bottariItemId + "/check"))
+                .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("보따리 물품을 체크 해제한다.")
+    @Test
+    void uncheck() throws Exception {
+        // given
+        final Long bottariId = 1L;
+        final Long bottariItemId = 1L;
+        willDoNothing().given(bottariItemService)
+                .uncheck(bottariId, bottariItemId);
+
+        // when & then
+        mockMvc.perform(patch("/bottaries/" + bottariId + "/items/" + bottariItemId + "/uncheck"))
                 .andExpect(status().isNoContent());
     }
 }
