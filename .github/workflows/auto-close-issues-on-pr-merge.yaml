@@ -1,0 +1,43 @@
+name: Auto Close Issues on PR Merge
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  close-referenced-issues:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - name: Close issues mentioned in PR body
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const body = pr.body || "";
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const matches = [...body.matchAll(/(?:Fixes|Closes|Resolves|Closed)\s+#(\d+)/gi)];
+
+            if (matches.length === 0) {
+              console.log("No issues referenced for closure.");
+              return;
+            }
+
+            for (const match of matches) {
+              const issue_number = match[1];
+              console.log(`Closing issue #${issue_number}`);
+              await github.rest.issues.update({
+                owner,
+                repo,
+                issue_number: issue_number,
+                state: "closed"
+              });
+            }
