@@ -1,11 +1,14 @@
 package com.bottari.controller;
 
 import com.bottari.dto.CreateBottariItemRequest;
+import com.bottari.dto.ReadBottariItemResponse;
 import com.bottari.service.BottariItemService;
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class BottariItemController {
 
     private final BottariItemService bottariItemService;
+
+    @GetMapping("/bottaries/{bottariId}/bottari-items")
+    public ResponseEntity<List<ReadBottariItemResponse>> readChecklist(
+            @PathVariable final Long bottariId
+    ) {
+        final List<ReadBottariItemResponse> responses = bottariItemService.getAllByBottariId(bottariId);
+
+        return ResponseEntity.ok(responses);
+    }
 
     @PostMapping("/bottaries/{bottariId}/bottari-items")
     public ResponseEntity<Void> create(
