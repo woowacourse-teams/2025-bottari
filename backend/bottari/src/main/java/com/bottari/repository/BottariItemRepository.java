@@ -9,9 +9,4 @@ public interface BottariItemRepository extends JpaRepository<BottariItem, Long> 
             final Long bottariId,
             final String name
     );
-
-    boolean existsByBottariIdAndId(
-            final Long bottariId,
-            final Long id
-    );
 }

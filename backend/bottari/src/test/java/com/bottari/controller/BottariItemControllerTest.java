@@ -42,24 +42,23 @@ class BottariItemControllerTest {
                 .willReturn(1L);
 
         // when & then
-        mockMvc.perform(post("/bottaries/" + bottariId + "/items")
+        mockMvc.perform(post("/bottaries/" + bottariId + "/bottari-items")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(header().string(HttpHeaders.LOCATION, "/bottaries/" + bottariId + "/items/1"));
+                .andExpect(header().string(HttpHeaders.LOCATION, "/bottaries/" + bottariId + "/bottari-items/1"));
     }
 
     @DisplayName("보따리 안에 있는 물품을 삭제한다.")
     @Test
     void delete_Item() throws Exception {
         // given
-        final Long bottariId = 1L;
         final Long bottariItemId = 1L;
         willDoNothing().given(bottariItemService)
-                .delete(bottariId, bottariItemId);
+                .delete(bottariItemId);
 
         // when & then
-        mockMvc.perform(delete("/bottaries/" + bottariId + "/items/" + bottariItemId))
+        mockMvc.perform(delete("/bottari-items/" + bottariItemId))
                 .andExpect(status().isNoContent());
     }
 
@@ -67,13 +66,12 @@ class BottariItemControllerTest {
     @Test
     void check() throws Exception {
         // given
-        final Long bottariId = 1L;
         final Long bottariItemId = 1L;
         willDoNothing().given(bottariItemService)
-                .check(bottariId, bottariItemId);
+                .check(bottariItemId);
 
         // when & then
-        mockMvc.perform(patch("/bottaries/" + bottariId + "/items/" + bottariItemId + "/check"))
+        mockMvc.perform(patch("/bottari-items/" + bottariItemId + "/check"))
                 .andExpect(status().isNoContent());
     }
 
@@ -81,13 +79,12 @@ class BottariItemControllerTest {
     @Test
     void uncheck() throws Exception {
         // given
-        final Long bottariId = 1L;
         final Long bottariItemId = 1L;
         willDoNothing().given(bottariItemService)
-                .uncheck(bottariId, bottariItemId);
+                .uncheck(bottariItemId);
 
         // when & then
-        mockMvc.perform(patch("/bottaries/" + bottariId + "/items/" + bottariItemId + "/uncheck"))
+        mockMvc.perform(patch("/bottari-items/" + bottariItemId + "/uncheck"))
                 .andExpect(status().isNoContent());
     }
 }
