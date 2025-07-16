@@ -10,6 +10,7 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseFragment<VB : ViewBinding> : Fragment() {
+    @Suppress("ktlint:standard:backing-property-naming")
     private var _binding: VB? = null
 
     protected val binding: VB
