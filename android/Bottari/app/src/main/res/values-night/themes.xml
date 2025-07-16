@@ -1,6 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Base.Theme.Bottari" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Base.Theme.Bottari" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/gray_f8f8f8</item>
+        <item name="android:navigationBarColor">@color/white</item>
 
     </style>
 </resources>

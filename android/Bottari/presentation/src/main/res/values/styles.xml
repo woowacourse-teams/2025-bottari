@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Bottari.BottomNavigation.TextAppearance" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+        <item name="android:fontWeight">400</item>
+    </style>
+</resources>
