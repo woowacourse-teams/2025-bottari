@@ -24,6 +24,11 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         return binding.root
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     protected abstract fun inflate(): VB
 
     protected fun showSnackbar(
