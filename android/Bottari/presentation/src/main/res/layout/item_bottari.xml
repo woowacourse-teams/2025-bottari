@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_bottari_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/space_large"
@@ -63,11 +64,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/view_test"
+    <ProgressBar
+        android:id="@+id/pb_bottari_item"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:background="@color/primary"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:progressDrawable="@drawable/bg_progress_bottari"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:max="100"
+        tools:progress="50" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
