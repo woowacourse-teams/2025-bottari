@@ -2,7 +2,7 @@ name: Label Based Review Assign
 
 on:
   pull_request:
-    types: [labeled]
+    types: [labeled, unlabeled]
 
 jobs:
   assign-reviewers-by-label:
@@ -28,20 +28,23 @@ jobs:
 
             const pr = context.payload.pull_request;
             const currentUser = pr.user.login;
-            const labels = pr.labels.map(label => label.name.toLowerCase().trim());
-
             const { owner, repo } = context.repo;
             const pull_number = pr.number;
 
-            let reviewersToAssign = [];
+            const labels = pr.labels.map(label => label.name.toLowerCase().trim());
+
+            let reviewersToAssign = new Set();
+
             for (const label of labels) {
-              if (labelToReviewers[label]) {
-                reviewersToAssign = labelToReviewers[label];
-                break;
+              const reviewers = labelToReviewers[label];
+              if (reviewers) {
+                reviewers.forEach(r => {
+                  if (r !== currentUser) reviewersToAssign.add(r);
+                });
               }
             }
 
-            reviewersToAssign = reviewersToAssign.filter(r => r !== currentUser);
+            reviewersToAssign = [...reviewersToAssign];
 
             const currentReviewersRes = await github.rest.pulls.listRequestedReviewers({
               owner,
@@ -54,7 +57,7 @@ jobs:
             const reviewersToRemove = currentReviewers.filter(r => !reviewersToAssign.includes(r));
             const reviewersToAdd = reviewersToAssign.filter(r => !currentReviewers.includes(r));
 
-            console.log('👉 선택된 라벨:', labels);
+            console.log('👉 남아있는 라벨:', labels);
             console.log('👤 PR 작성자:', currentUser);
             console.log('➕ 추가될 리뷰어:', reviewersToAdd);
             console.log('➖ 제거될 리뷰어:', reviewersToRemove);
