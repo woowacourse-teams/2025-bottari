@@ -27,6 +27,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
                 R.id.menu_bottari -> showFragment(BottariFragment::class.java)
                 R.id.menu_profile -> showFragment(ProfileFragment::class.java)
             }
+            changeToolbarTitle(item)
             true
         }
     }
@@ -43,4 +44,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
     }
 
     private fun isSameNavItem(item: MenuItem): Boolean = binding.bnvHome.selectedItemId == item.itemId
+
+    private fun changeToolbarTitle(item: MenuItem) {
+        binding.toolbarHome.title = item.title
+    }
 }
