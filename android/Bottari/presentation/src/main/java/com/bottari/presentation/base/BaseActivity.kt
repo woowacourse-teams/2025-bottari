@@ -1,5 +1,6 @@
 package com.bottari.presentation.base
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
@@ -25,7 +26,11 @@ abstract class BaseActivity<VB : ViewBinding>(
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            var adjustBottomPadding = systemBars.bottom
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                adjustBottomPadding = 0
+            }
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, adjustBottomPadding)
             insets
         }
     }
