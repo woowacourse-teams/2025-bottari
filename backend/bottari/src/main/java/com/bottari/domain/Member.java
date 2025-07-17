@@ -30,6 +30,10 @@ public class Member {
         this.name = name;
     }
 
+    public boolean isSameBySsaid(final String ssaid) {
+        return this.ssaid.equals(ssaid);
+    }
+
     private void validateName(final String name) {
         if (name.length() < 3 || name.length() > 10) {
             throw new IllegalArgumentException("사용자 이름은 3글자 이상 10글자 이하여야 합니다.");

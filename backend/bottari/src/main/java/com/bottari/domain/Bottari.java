@@ -35,6 +35,10 @@ public class Bottari {
         this.member = member;
     }
 
+    public boolean isOwner(final String ssaid) {
+        return member.isSameBySsaid(ssaid);
+    }
+
     private void validateTitle(final String title) {
         if (title.isBlank() || title.length() > 15) {
             throw new IllegalArgumentException("보따리 이름은 공백이거나 15자를 넘을 수 없습니다.");
