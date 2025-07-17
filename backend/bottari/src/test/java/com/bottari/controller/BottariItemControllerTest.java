@@ -3,14 +3,18 @@ package com.bottari.controller;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bottari.dto.CreateBottariItemRequest;
+import com.bottari.dto.ReadBottariItemResponse;
 import com.bottari.service.BottariItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +35,34 @@ class BottariItemControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @DisplayName("보따리에 물품을 생성한다.")
+    @Test
+    void readChecklist() throws Exception {
+        // given
+        final Long bottariId = 1L;
+        final List<ReadBottariItemResponse> returnValues = List.of(
+                new ReadBottariItemResponse(1L, "name1", true),
+                new ReadBottariItemResponse(2L, "name2", false),
+                new ReadBottariItemResponse(3L, "name3", true)
+        );
+        given(bottariItemService.getAllByBottariId(bottariId))
+                .willReturn(returnValues);
+
+        // when & then
+        mockMvc.perform(get("/bottaries/" + bottariId + "/bottari-items"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(3))
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[0].name").value("name1"))
+                .andExpect(jsonPath("$[0].isChecked").value(true))
+                .andExpect(jsonPath("$[1].id").value(2L))
+                .andExpect(jsonPath("$[1].name").value("name2"))
+                .andExpect(jsonPath("$[1].isChecked").value(false))
+                .andExpect(jsonPath("$[2].id").value(3L))
+                .andExpect(jsonPath("$[2].name").value("name3"))
+                .andExpect(jsonPath("$[2].isChecked").value(true));
+    }
 
     @DisplayName("보따리에 물품을 생성한다.")
     @Test

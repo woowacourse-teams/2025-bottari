@@ -2,12 +2,15 @@ package com.bottari.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.domain.Bottari;
 import com.bottari.domain.BottariItem;
 import com.bottari.domain.Member;
 import com.bottari.dto.CreateBottariItemRequest;
+import com.bottari.dto.ReadBottariItemResponse;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,46 @@ class BottariItemServiceTest {
 
     @Autowired
     private EntityManager entityManager;
+
+    @DisplayName("보따리 체크리스트를 조회한다.")
+    @Test
+    void getAllByBottariId() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari1 = new Bottari("title", member);
+        final Bottari bottari2 = new Bottari("title", member);
+        entityManager.persist(bottari1);
+        entityManager.persist(bottari2);
+
+        final BottariItem bottariItem1 = new BottariItem("bottari1_item", bottari1);
+        final BottariItem bottariItem2 = new BottariItem("bottari2_item", bottari2);
+        entityManager.persist(bottariItem1);
+        entityManager.persist(bottariItem2);
+
+        // when
+        final List<ReadBottariItemResponse> actual = bottariItemService.getAllByBottariId(bottari2.getId());
+
+        // then
+        assertAll(() -> {
+            assertThat(actual).hasSize(1);
+            assertThat(actual.getFirst()).isEqualTo(ReadBottariItemResponse.from(bottariItem2));
+        });
+    }
+
+    @DisplayName("존재하지 않는 보따리의 물품을 조회할 경우, 예외를 던진다.")
+    @Test
+    void getAllByBottariId_Exception_NotFoundBottari() {
+        // given
+        final Long notFoundBottariId = 1L;
+
+        // when & then
+        assertThatThrownBy(() -> bottariItemService.getAllByBottariId(notFoundBottariId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("보따리를 찾을 수 없습니다.");
+    }
 
     @DisplayName("보따리 물품을 생성한다.")
     @Test
