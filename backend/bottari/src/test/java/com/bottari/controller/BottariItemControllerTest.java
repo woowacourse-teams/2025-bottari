@@ -6,8 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bottari.dto.CreateBottariItemRequest;
@@ -36,7 +36,7 @@ class BottariItemControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @DisplayName("보따리에 물품을 생성한다.")
+    @DisplayName("보따리 체크리스트를 조회한다.")
     @Test
     void readChecklist() throws Exception {
         // given
@@ -52,16 +52,7 @@ class BottariItemControllerTest {
         // when & then
         mockMvc.perform(get("/bottaries/" + bottariId + "/bottari-items"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3))
-                .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].name").value("name1"))
-                .andExpect(jsonPath("$[0].isChecked").value(true))
-                .andExpect(jsonPath("$[1].id").value(2L))
-                .andExpect(jsonPath("$[1].name").value("name2"))
-                .andExpect(jsonPath("$[1].isChecked").value(false))
-                .andExpect(jsonPath("$[2].id").value(3L))
-                .andExpect(jsonPath("$[2].name").value("name3"))
-                .andExpect(jsonPath("$[2].isChecked").value(true));
+                .andExpect(content().json(objectMapper.writeValueAsString(returnValues)));
     }
 
     @DisplayName("보따리에 물품을 생성한다.")

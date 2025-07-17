@@ -1,13 +1,17 @@
 package com.bottari.controller;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bottari.dto.CreateBottariRequest;
+import com.bottari.dto.ReadBottariResponse;
 import com.bottari.service.BottariService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,22 @@ class BottariControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @DisplayName("보따리를 조회한다.")
+    @Test
+    void read() throws Exception {
+        // given
+        final String ssaid = "ssaid";
+        final ReadBottariResponse response = new ReadBottariResponse(1L, "title", List.of(), null);
+        given(bottariService.getById(ssaid, 1L))
+                .willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/bottaries/1")
+                        .header("ssaid", ssaid))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
 
     @DisplayName("보따리를 생성한다.")
     @Test
