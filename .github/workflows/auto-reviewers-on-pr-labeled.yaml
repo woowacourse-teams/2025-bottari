@@ -21,9 +21,9 @@ jobs:
             const allReviewers = [...new Set([...androidReviewers, ...backendReviewers])];
 
             const labelToReviewers = {
-              '🤖 Android': androidReviewers,
-              '💻 Backend': backendReviewers,
-              '🌐 All': allReviewers
+              '🤖 android': androidReviewers,
+              '💻 backend': backendReviewers,
+              '🌐 all': allReviewers
             };
 
             const pr = context.payload.pull_request;
@@ -53,6 +53,11 @@ jobs:
 
             const reviewersToRemove = currentReviewers.filter(r => !reviewersToAssign.includes(r));
             const reviewersToAdd = reviewersToAssign.filter(r => !currentReviewers.includes(r));
+
+            console.log('👉 선택된 라벨:', labels);
+            console.log('👤 PR 작성자:', currentUser);
+            console.log('➕ 추가될 리뷰어:', reviewersToAdd);
+            console.log('➖ 제거될 리뷰어:', reviewersToRemove);
 
             if (reviewersToRemove.length > 0) {
               await github.rest.pulls.removeRequestedReviewers({
