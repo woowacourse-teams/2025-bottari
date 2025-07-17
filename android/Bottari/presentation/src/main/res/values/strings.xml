@@ -14,4 +14,5 @@
 
     <!--  Description  -->
     <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>
+    <string name="bottari_create_button_description">보따리 생성 버튼</string>
 </resources>
