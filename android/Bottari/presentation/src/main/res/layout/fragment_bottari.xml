@@ -4,4 +4,13 @@
     android:id="@+id/cl_bottari"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.home.bottari.BottariFragment" />
+    tools:context=".view.home.bottari.BottariFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_bottari"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdgeLength="4dp"
+        android:requiresFadingEdge="vertical"
+        tools:listitem="@layout/item_bottari" />
+</androidx.constraintlayout.widget.ConstraintLayout>
