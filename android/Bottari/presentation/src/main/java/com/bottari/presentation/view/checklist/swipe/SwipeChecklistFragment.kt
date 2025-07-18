@@ -15,7 +15,9 @@ import com.bottari.presentation.view.checklist.swipe.adapter.SwipeCheckListAdapt
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
 import com.yuyakaido.android.cardstackview.Direction
+import com.yuyakaido.android.cardstackview.Duration
 import com.yuyakaido.android.cardstackview.StackFrom
+import com.yuyakaido.android.cardstackview.SwipeAnimationSetting
 
 class SwipeChecklistFragment :
     BaseFragment<FragmentSwipeChecklistBinding>(FragmentSwipeChecklistBinding::inflate),
@@ -36,77 +38,49 @@ class SwipeChecklistFragment :
         super.onViewCreated(view, savedInstanceState)
         setupObserver()
         setupUI()
+        setupListener()
         viewModel.filterNonChecklist()
     }
 
     override fun onCardSwiped(direction: Direction?) {
-        if (direction == Direction.Right) {
-            val index = cardStackLayoutManager.topPosition - INDEX_OFFSET
-            val currentItem = adapter.currentList.getOrNull(index) ?: return
-            viewModel.checkItem(currentItem.id)
-        }
+        if (direction != Direction.Right) return
+
+        val index = cardStackLayoutManager.topPosition - INDEX_OFFSET
+        val currentItem = adapter.currentList.getOrNull(index) ?: return
+        viewModel.checkItem(currentItem.id)
     }
 
     override fun onCardAppeared(
         view: View?,
         position: Int,
-    ) {
-    }
+    ) {}
 
     override fun onCardCanceled() {}
 
     override fun onCardDisappeared(
         view: View?,
         position: Int,
-    ) {
-    }
+    ) {}
 
     override fun onCardDragging(
         direction: Direction?,
         ratio: Float,
-    ) {
-    }
+    ) {}
 
     override fun onCardRewound() {}
 
     private fun setupObserver() {
         viewModel.nonChecklist.observe(viewLifecycleOwner, ::handleNonChecklistState)
         viewModel.checkedQuantity.observe(viewLifecycleOwner, ::handleCheckedState)
-        viewModel.isAllChecked.observe(viewLifecycleOwner, ::handleProgressBarState)
+        viewModel.isAllChecked.observe(viewLifecycleOwner, ::handleProgressBarColor)
     }
 
     private fun setupUI() {
-        setupCardSwipeViewAdapter()
         binding.pbChecklistSwipe.max = totalItemCount
+        setupCardStackView()
     }
 
-    private fun handleNonChecklistState(items: List<ItemUiModel>) {
-        adapter.submitList(items)
-    }
-
-    private fun handleCheckedState(checkedQuantity: Int) {
-        binding.pbChecklistSwipe.progress = checkedQuantity
-        binding.tvSwipeChecklistStatus.text =
-            getString(
-                R.string.swipe_checklist_status_text,
-                totalItemCount,
-                totalItemCount - checkedQuantity,
-            )
-    }
-
-    private fun handleProgressBarState(isAllChecked: Boolean) {
-        if (!isAllChecked) return
-        binding.pbChecklistSwipe.progressTintList =
-            ColorStateList.valueOf(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.primary,
-                ),
-            )
-    }
-
-    private fun setupCardSwipeViewAdapter() {
-        binding.csvChecklist.adapter = adapter
+    private fun setupCardStackView() {
         cardStackLayoutManager =
             CardStackLayoutManager(requireContext(), this).apply {
                 setStackFrom(StackFrom.Top)
@@ -114,10 +88,48 @@ class SwipeChecklistFragment :
                 setCanScrollHorizontal(true)
             }
         binding.csvChecklist.layoutManager = cardStackLayoutManager
+        binding.csvChecklist.adapter = adapter
+    }
+
+    private fun setupListener() {
+        binding.btnSwipeChecklistYes.setOnClickListener {
+            swipeCardTo(Direction.Right)
+        }
+        binding.btnSwipeChecklistNot.setOnClickListener {
+            swipeCardTo(Direction.Left)
+        }
+    }
+
+    private fun swipeCardTo(direction: Direction) {
+        val setting =
+            SwipeAnimationSetting
+                .Builder()
+                .setDirection(direction)
+                .setDuration(Duration.Normal.duration)
+                .build()
+
+        cardStackLayoutManager.setSwipeAnimationSetting(setting)
+        binding.csvChecklist.swipe()
+    }
+
+    private fun handleNonChecklistState(items: List<ItemUiModel>) {
+        adapter.submitList(items)
+    }
+
+    private fun handleCheckedState(checked: Int) {
+        binding.pbChecklistSwipe.progress = checked
+        binding.tvSwipeChecklistStatus.text =
+            getString(R.string.swipe_checklist_status_text, totalItemCount, totalItemCount - checked)
+    }
+
+    private fun handleProgressBarColor(isAllChecked: Boolean) {
+        if (!isAllChecked) return
+        val primaryColor = ContextCompat.getColor(requireContext(), R.color.primary)
+        binding.pbChecklistSwipe.progressTintList = ColorStateList.valueOf(primaryColor)
     }
 
     companion object {
-        private const val INDEX_OFFSET = 1
         private const val DEFAULT_PROGRESS_MAX_VALUE = 0
+        private const val INDEX_OFFSET = 1
     }
 }
