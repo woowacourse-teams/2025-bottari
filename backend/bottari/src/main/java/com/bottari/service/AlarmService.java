@@ -3,6 +3,7 @@ package com.bottari.service;
 import com.bottari.domain.Alarm;
 import com.bottari.domain.Bottari;
 import com.bottari.dto.CreateAlarmRequest;
+import com.bottari.dto.UpdateAlarmRequest;
 import com.bottari.repository.AlarmRepository;
 import com.bottari.repository.BottariRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,15 @@ public class AlarmService {
         final Alarm savedAlarm = alarmRepository.save(alarm);
 
         return savedAlarm.getId();
+    }
+
+    @Transactional
+    public void update(
+            final Long id,
+            final UpdateAlarmRequest request
+    ) {
+        final Alarm alarm = alarmRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 알람입니다."));
+        alarm.update(request.toRoutineAlarm(), request.toLocationAlarm());
     }
 }
