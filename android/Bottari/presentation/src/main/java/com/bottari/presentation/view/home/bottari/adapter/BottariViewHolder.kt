@@ -15,18 +15,28 @@ import com.bottari.presentation.databinding.ItemBottariBinding
 import com.bottari.presentation.extension.formatWithPattern
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.BottariUiModel
+import com.bottari.presentation.view.home.bottari.listener.OnBottariClickListener
 import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.Locale
 
 class BottariViewHolder private constructor(
     private val binding: ItemBottariBinding,
+    onBottariClickListener: OnBottariClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val dateFormat: String = getString(R.string.bottari_item_alarm_date_format)
     private val timeFormat: String = getString(R.string.bottari_item_alarm_time_format)
     private val separator: String = getString(R.string.bottari_item_alarm_info_separator)
+    private var bottariId: Long? = null
 
-    fun bind(bottari: BottariUiModel) =
+    init {
+        itemView.setOnClickListener {
+            bottariId?.let { onBottariClickListener.onClick(it) }
+        }
+    }
+
+    fun bind(bottari: BottariUiModel) {
+        bottariId = bottari.id
         with(binding) {
             clBottariItem.clipToOutline = true
             tvBottariTitle.text = bottari.title
@@ -35,6 +45,7 @@ class BottariViewHolder private constructor(
             tvBottariAlarmInfo.text = formatAlarmInfo(bottari.alarmTypeUiModel)
             updateProgressBar(bottari.checkedQuantity, bottari.totalQuantity)
         }
+    }
 
     private fun formatQuantityStatus(
         checked: Int,
@@ -130,10 +141,13 @@ class BottariViewHolder private constructor(
     }
 
     companion object {
-        fun from(parent: ViewGroup): BottariViewHolder {
+        fun from(
+            parent: ViewGroup,
+            onBottariClickListener: OnBottariClickListener,
+        ): BottariViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemBottariBinding.inflate(inflater, parent, false)
-            return BottariViewHolder(binding)
+            return BottariViewHolder(binding, onBottariClickListener)
         }
     }
 }
