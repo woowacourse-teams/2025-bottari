@@ -28,10 +28,11 @@ class ChecklistViewModel(
 
     fun checkItem(itemId: Long) {
         val currentList = _checklist.value?.takeSuccess() ?: return
-        val updatedList = currentList.map { item ->
-            if (item.id != itemId) return@map item
-            item.copy(isChecked = item.isChecked.not())
-        }
+        val updatedList =
+            currentList.map { item ->
+                if (item.id != itemId) return@map item
+                item.copy(isChecked = item.isChecked.not())
+            }
 
         _checklist.value = UiState.Success(updatedList)
     }
