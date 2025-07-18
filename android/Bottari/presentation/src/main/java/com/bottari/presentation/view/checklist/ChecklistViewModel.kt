@@ -25,6 +25,15 @@ class ChecklistViewModel(
     private val _nonChecklist: MutableLiveData<List<ItemUiModel>> = MutableLiveData(emptyList())
     val nonChecklist: LiveData<List<ItemUiModel>> = _nonChecklist
 
+    val checkedQuantity: LiveData<Int> =
+        _checklist.map { item ->
+            item.takeSuccess().orEmpty().count { it.isChecked }
+        }
+
+    val isAllChecked: LiveData<Boolean> = _checklist.map { item ->
+        item.takeSuccess().orEmpty().all { it.isChecked }
+    }
+
     init {
         val bottariId = stateHandle.get<Long>(EXTRAS_BOTTARI_ID)
         bottariId?.let { fetchBottari(it) }
