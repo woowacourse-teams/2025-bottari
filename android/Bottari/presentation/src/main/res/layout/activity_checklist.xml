@@ -20,7 +20,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:contentDescription="@string/previous_button_description"
-            android:padding="12dp"
+            android:padding="@dimen/space_small"
             android:src="@drawable/btn_previous" />
 
         <TextView
@@ -31,6 +31,15 @@
             android:layout_gravity="center"
             android:textColor="@color/black"
             tools:text="나의 보따리" />
+
+        <ImageView
+            android:id="@+id/btn_swipe"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:contentDescription="@string/checklist_swipe_button_description"
+            android:padding="@dimen/space_small"
+            android:src="@drawable/btn_swipe" />
 
     </Toolbar>
 
