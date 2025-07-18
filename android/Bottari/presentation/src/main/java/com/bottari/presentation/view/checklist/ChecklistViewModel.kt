@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.map
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.extension.takeSuccess
@@ -21,6 +22,19 @@ class ChecklistViewModel(
         MutableLiveData(UiState.Loading)
     val checklist: LiveData<UiState<List<ItemUiModel>>> = _checklist
 
+    private val _nonChecklist: MutableLiveData<List<ItemUiModel>> = MutableLiveData(emptyList())
+    val nonChecklist: LiveData<List<ItemUiModel>> = _nonChecklist
+
+    val checkedQuantity: LiveData<Int> =
+        _checklist.map { item ->
+            item.takeSuccess().orEmpty().count { it.isChecked }
+        }
+
+    val isAllChecked: LiveData<Boolean> =
+        _checklist.map { item ->
+            item.takeSuccess().orEmpty().all { it.isChecked }
+        }
+
     init {
         val bottariId = stateHandle.get<Long>(EXTRAS_BOTTARI_ID)
         bottariId?.let { fetchBottari(it) }
@@ -35,6 +49,12 @@ class ChecklistViewModel(
             }
 
         _checklist.value = UiState.Success(updatedList)
+    }
+
+    fun filterNonChecklist() {
+        val currentList = _checklist.value?.takeSuccess() ?: return
+        val updatedList = currentList.filter { !it.isChecked }
+        _nonChecklist.value = updatedList
     }
 
     private fun fetchBottari(bottariId: Long) {

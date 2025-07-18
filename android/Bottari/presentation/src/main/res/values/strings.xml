@@ -14,9 +14,13 @@
 
     <!-- Bottari Checklist -->
     <string name="checklist_item_title_prefix">•\u00A0\u00A0%s</string>
+    <string name="swipe_checklist_not_btn_text">아직이에요</string>
+    <string name="swipe_checklist_yes_btn_text">챙겼어요</string>
+    <string name="swipe_checklist_status_text">%d개 중 %d개 남았어요!</string>
 
     <!--  Description  -->
     <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>
     <string name="bottari_create_button_description">보따리 생성 버튼</string>
     <string name="previous_button_description">뒤로가기 버튼</string>
+    <string name="checklist_swipe_button_description">스와이프 화면 전환 버튼</string>
 </resources>
