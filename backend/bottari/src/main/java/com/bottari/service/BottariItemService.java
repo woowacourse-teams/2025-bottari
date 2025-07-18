@@ -3,6 +3,7 @@ package com.bottari.service;
 import com.bottari.domain.Bottari;
 import com.bottari.domain.BottariItem;
 import com.bottari.dto.CreateBottariItemRequest;
+import com.bottari.dto.EditBottariItemsRequest;
 import com.bottari.dto.ReadBottariItemResponse;
 import com.bottari.repository.BottariItemRepository;
 import com.bottari.repository.BottariRepository;
@@ -41,6 +42,23 @@ public class BottariItemService {
         return savedBottariItem.getId();
     }
 
+    @Transactional
+    public void update(
+            final Long bottariId,
+            final EditBottariItemsRequest request
+    ) {
+        final Bottari bottari = bottariRepository.findById(bottariId)
+                .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
+        validateItemsInBottari(bottariId, request.deleteIds());
+        bottariItemRepository.deleteByIdIn(request.deleteIds());
+        validateUpdateItemNames(bottariId, request.createItemNames());
+        final List<BottariItem> bottariItems = request.createItemNames()
+                .stream()
+                .map(name -> new BottariItem(name, bottari))
+                .toList();
+        bottariItemRepository.saveAll(bottariItems);
+    }
+
     public void delete(final Long id) {
         bottariItemRepository.deleteById(id);
     }
@@ -71,6 +89,42 @@ public class BottariItemService {
     ) {
         if (bottariItemRepository.existsByBottariIdAndName(bottariId, name)) {
             throw new IllegalArgumentException("중복된 보따리 물품명입니다.");
+        }
+    }
+
+    private void validateItemsInBottari(
+            final Long bottariId,
+            final List<Long> deleteIds
+    ) {
+        final int countItemInBottari = bottariItemRepository.countAllByBottariIdAndIdIn(bottariId, deleteIds);
+        if (countItemInBottari != deleteIds.size()) {
+            throw new IllegalArgumentException("보따리 안에 없는 물품은 삭제할 수 없습니다.");
+        }
+    }
+
+    private void validateUpdateItemNames(
+            final Long bottariId,
+            final List<String> itemNames
+    ) {
+        validateDuplicateItemNames(itemNames);
+        validateExistsItemNames(bottariId, itemNames);
+    }
+
+    private void validateExistsItemNames(
+            final Long bottariId,
+            final List<String> itemNames
+    ) {
+        if (bottariItemRepository.existsByBottariIdAndNameIn(bottariId, itemNames)) {
+            throw new IllegalArgumentException("중복된 물품이 존재합니다.");
+        }
+    }
+
+    private void validateDuplicateItemNames(final List<String> itemNames) {
+        final long countCreateItemNames = itemNames.stream()
+                .distinct()
+                .count();
+        if (countCreateItemNames != itemNames.size()) {
+            throw new IllegalArgumentException("중복된 물품이 존재합니다.");
         }
     }
 }
