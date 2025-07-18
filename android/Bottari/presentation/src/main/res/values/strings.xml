@@ -16,6 +16,7 @@
     <string name="checklist_item_title_prefix">•\u00A0\u00A0%s</string>
     <string name="swipe_checklist_not_btn_text">아직이에요</string>
     <string name="swipe_checklist_yes_btn_text">챙겼어요</string>
+    <string name="swipe_checklist_status_text">%d개 중 %d개 남았어요!</string>
 
     <!--  Description  -->
     <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>
