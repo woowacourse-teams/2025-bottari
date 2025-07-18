@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bottari.dto.CreateBottariRequest;
+import com.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.dto.ReadBottariResponse;
 import com.bottari.service.BottariService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,6 +48,25 @@ class BottariControllerTest {
                         .header("ssaid", ssaid))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @DisplayName("보따리 프리뷰 목록을 조회한다.")
+    @Test
+    void readPreviews() throws Exception {
+        // given
+        final String ssaid = "ssaid";
+        final List<ReadBottariPreviewResponse> responses = List.of(
+                new ReadBottariPreviewResponse(1L, "title1", 1, 0, null),
+                new ReadBottariPreviewResponse(2L, "title2", 3, 2, null)
+        );
+        given(bottariService.getAllBySsaid(ssaid))
+                .willReturn(responses);
+
+        // when & then
+        mockMvc.perform(get("/bottaries")
+                        .header("ssaid", ssaid))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(responses)));
     }
 
     @DisplayName("보따리를 생성한다.")
