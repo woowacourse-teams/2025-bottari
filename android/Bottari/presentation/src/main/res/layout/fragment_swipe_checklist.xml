@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="@color/gray_f8f8f8">
 
     <ProgressBar
         android:id="@+id/pb_checklist_swipe"
@@ -17,15 +18,15 @@
 
     <TextView
         android:id="@+id/tv_swipe_checklist_status"
+        style="@style/Pretendard_Medium_20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_median"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pb_checklist_swipe"
-        android:layout_marginTop="@dimen/space_median"
-        tools:text="5개 중 3개 남았어요!"
-        style="@style/Pretendard_Medium_20"/>
-
+        tools:text="5개 중 3개 남았어요!" />
 
 
     <com.yuyakaido.android.cardstackview.CardStackView
@@ -34,7 +35,8 @@
         android:layout_height="0dp"
         android:layout_marginVertical="@dimen/space_x_large"
         app:layout_constraintBottom_toTopOf="@+id/btn_swipe_checklist_not"
-        app:layout_constraintTop_toBottomOf="@id/tv_swipe_checklist_status" />
+        app:layout_constraintTop_toBottomOf="@id/tv_swipe_checklist_status"
+        tools:listitem="@layout/item_swipe_checklist" />
 
     <TextView
         android:id="@+id/btn_swipe_checklist_not"
@@ -54,7 +56,7 @@
         app:layout_constraintEnd_toStartOf="@+id/btn_swipe_checklist_yes"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/csv_checklist"
-        app:layout_constraintVertical_bias="1"/>
+        app:layout_constraintVertical_bias="1" />
 
     <TextView
         android:id="@+id/btn_swipe_checklist_yes"
@@ -73,7 +75,7 @@
         app:layout_constraintBottom_toBottomOf="@id/btn_swipe_checklist_not"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_swipe_checklist_not"
-        app:layout_constraintTop_toTopOf="@id/btn_swipe_checklist_not"/>
+        app:layout_constraintTop_toTopOf="@id/btn_swipe_checklist_not" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
