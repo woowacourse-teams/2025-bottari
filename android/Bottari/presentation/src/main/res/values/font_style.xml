@@ -12,6 +12,12 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="Pretendard_SemiBold_16">
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:textFontWeight">600</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="Pretendard_Medium_36">
         <item name="fontFamily">@font/pretendard</item>
         <item name="android:textFontWeight">500</item>
