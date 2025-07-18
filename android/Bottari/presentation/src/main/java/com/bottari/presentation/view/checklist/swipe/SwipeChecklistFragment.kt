@@ -23,6 +23,11 @@ class SwipeChecklistFragment :
     private val viewModel: ChecklistViewModel by activityViewModels()
     private val adapter: SwipeCheckListAdapter by lazy { SwipeCheckListAdapter() }
     private lateinit var cardStackLayoutManager: CardStackLayoutManager
+    private val totalItemCount by lazy {
+        viewModel.checklist.value
+            ?.takeSuccess()
+            ?.size ?: DEFAULT_PROGRESS_MAX_VALUE
+    }
 
     override fun onViewCreated(
         view: View,
@@ -66,32 +71,38 @@ class SwipeChecklistFragment :
 
     private fun setupObserver() {
         viewModel.nonChecklist.observe(viewLifecycleOwner, ::handleNonChecklistState)
-        viewModel.checkedQuantity.observe(viewLifecycleOwner) {
-            binding.pbChecklistSwipe.progress = it
-        }
+        viewModel.checkedQuantity.observe(viewLifecycleOwner, ::handleCheckedState)
         viewModel.isAllChecked.observe(viewLifecycleOwner, ::handleProgressBarState)
     }
 
     private fun setupUI() {
         setupCardSwipeViewAdapter()
-        binding.pbChecklistSwipe.max =
-            viewModel.checklist.value
-                ?.takeSuccess()
-                ?.size ?: DEFAULT_PROGRESS_MAX_VALUE
-    }
-
-    private fun handleProgressBarState(isAllChecked: Boolean) {
-        if (!isAllChecked) return
-        binding.pbChecklistSwipe.progressTintList = ColorStateList.valueOf(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.primary
-            )
-        )
+        binding.pbChecklistSwipe.max = totalItemCount
     }
 
     private fun handleNonChecklistState(items: List<ItemUiModel>) {
         adapter.submitList(items)
+    }
+
+    private fun handleCheckedState(checkedQuantity: Int) {
+        binding.pbChecklistSwipe.progress = checkedQuantity
+        binding.tvSwipeChecklistStatus.text =
+            getString(
+                R.string.swipe_checklist_status_text,
+                totalItemCount,
+                totalItemCount - checkedQuantity,
+            )
+    }
+
+    private fun handleProgressBarState(isAllChecked: Boolean) {
+        if (!isAllChecked) return
+        binding.pbChecklistSwipe.progressTintList =
+            ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.primary,
+                ),
+            )
     }
 
     private fun setupCardSwipeViewAdapter() {
