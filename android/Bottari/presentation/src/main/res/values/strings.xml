@@ -18,9 +18,16 @@
     <string name="swipe_checklist_yes_btn_text">챙겼어요</string>
     <string name="swipe_checklist_status_text">%d개 중 %d개 남았어요!</string>
 
+    <!--  Bottari Create Dialog -->
+    <string name="dialog_bottari_create_title_text">보따리 이름 작성</string>
+    <string name="dialog_bottari_create_description_text">이름은 언제든지 수정할 수 있어요</string>
+    <string name="dialog_bottari_create_name_hint">이름을 입력하세요</string>
+    <string name="dialog_bottari_create_btn_text">생성하기</string>
+
     <!--  Description  -->
     <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>
     <string name="bottari_create_button_description">보따리 생성 버튼</string>
     <string name="previous_button_description">뒤로가기 버튼</string>
     <string name="checklist_swipe_button_description">스와이프 화면 전환 버튼</string>
+    <string name="dialog_bottari_create_close_button_description">보따리 생성 다이얼로그 닫기 버튼</string>
 </resources>
