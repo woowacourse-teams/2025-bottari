@@ -7,6 +7,7 @@ import com.bottari.repository.AlarmRepository;
 import com.bottari.repository.BottariRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ public class AlarmService {
     private final AlarmRepository alarmRepository;
     private final BottariRepository bottariRepository;
 
+    @Transactional
     public Long create(
             final Long bottariId,
             final CreateAlarmRequest request
