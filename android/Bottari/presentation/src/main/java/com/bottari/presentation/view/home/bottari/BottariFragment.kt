@@ -14,6 +14,7 @@ import com.bottari.presentation.extension.fadeOut
 import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.view.checklist.ChecklistActivity
 import com.bottari.presentation.view.home.bottari.adapter.BottariAdapter
+import com.bottari.presentation.view.home.bottari.create.BottariCreateDialog
 
 class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate) {
     private val viewModel: BottariViewModel by viewModels()
@@ -54,6 +55,10 @@ class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBind
                 }
             },
         )
+
+        binding.btnBottariCreate.setOnClickListener {
+            BottariCreateDialog().show(parentFragmentManager, BottariCreateDialog::class.java.name)
+        }
     }
 
     private fun handleBottariState(uiState: UiState<List<BottariUiModel>>) {
