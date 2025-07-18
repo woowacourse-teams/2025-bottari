@@ -12,11 +12,16 @@ import com.bottari.presentation.databinding.FragmentBottariBinding
 import com.bottari.presentation.extension.fadeIn
 import com.bottari.presentation.extension.fadeOut
 import com.bottari.presentation.model.BottariUiModel
+import com.bottari.presentation.view.checklist.ChecklistActivity
 import com.bottari.presentation.view.home.bottari.adapter.BottariAdapter
 
 class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate) {
     private val viewModel: BottariViewModel by viewModels()
-    private val adapter: BottariAdapter by lazy { BottariAdapter() }
+    private val adapter: BottariAdapter by lazy {
+        BottariAdapter {
+            navigateToChecklist(it)
+        }
+    }
 
     override fun onViewCreated(
         view: View,
@@ -71,5 +76,10 @@ class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBind
                 binding.btnBottariCreate.fadeIn()
             }
         }
+    }
+
+    private fun navigateToChecklist(bottariId: Long) {
+        val intent = ChecklistActivity.newIntent(requireContext(), bottariId)
+        startActivity(intent)
     }
 }
