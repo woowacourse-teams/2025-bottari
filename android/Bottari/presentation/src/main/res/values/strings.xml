@@ -12,6 +12,9 @@
     <string name="bottari_item_alarm_type_everyweek_repeat">매주 반복</string>
     <string name="bottari_item_alarm_info_separator">\u00A0|\u00A0</string>
 
+    <!-- Bottari Checklist -->
+    <string name="checklist_item_title_prefix">•\u00A0\u00A0%s</string>
+
     <!--  Description  -->
     <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>
     <string name="bottari_create_button_description">보따리 생성 버튼</string>
