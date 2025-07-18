@@ -8,14 +8,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemChecklistBinding
 import com.bottari.presentation.model.ItemUiModel
+import com.bottari.presentation.view.checklist.main.listener.OnChecklistItemClickListener
 
 class MainChecklistViewHolder private constructor(
     private val binding: ItemChecklistBinding,
+    private val onChecklistItemClickListener: OnChecklistItemClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
+    private var itemId: Long? = null
+
+    init {
+        itemView.setOnClickListener {
+            itemId?.let { onChecklistItemClickListener.onClick(it) }
+        }
+    }
+
     fun bind(item: ItemUiModel) {
+        itemId = item.id
         binding.tvChecklistItemTitle.text =
             itemView.context.getString(R.string.checklist_item_title_prefix, item.name)
-
         updateCheckedState(item.isChecked)
     }
 
@@ -31,10 +41,13 @@ class MainChecklistViewHolder private constructor(
     }
 
     companion object {
-        fun from(parent: ViewGroup): MainChecklistViewHolder {
+        fun from(
+            parent: ViewGroup,
+            onChecklistItemClickListener: OnChecklistItemClickListener,
+        ): MainChecklistViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemChecklistBinding.inflate(inflater, parent, false)
-            return MainChecklistViewHolder(binding)
+            return MainChecklistViewHolder(binding, onChecklistItemClickListener)
         }
     }
 }

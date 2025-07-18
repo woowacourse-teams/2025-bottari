@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.bottari.presentation.base.UiState
+import com.bottari.presentation.extension.takeSuccess
 import com.bottari.presentation.model.ItemUiModel
 
 class ChecklistViewModel(
@@ -23,6 +24,16 @@ class ChecklistViewModel(
     init {
         val bottariId = stateHandle.get<Long>(EXTRAS_BOTTARI_ID)
         bottariId?.let { fetchBottari(it) }
+    }
+
+    fun checkItem(itemId: Long) {
+        val currentList = _checklist.value?.takeSuccess() ?: return
+        val updatedList = currentList.map { item ->
+            if (item.id != itemId) return@map item
+            item.copy(isChecked = item.isChecked.not())
+        }
+
+        _checklist.value = UiState.Success(updatedList)
     }
 
     private fun fetchBottari(bottariId: Long) {

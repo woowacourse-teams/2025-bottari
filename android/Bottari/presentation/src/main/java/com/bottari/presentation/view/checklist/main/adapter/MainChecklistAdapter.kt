@@ -4,8 +4,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.ItemUiModel
+import com.bottari.presentation.view.checklist.main.listener.OnChecklistItemClickListener
 
-class MainChecklistAdapter : ListAdapter<ItemUiModel, MainChecklistViewHolder>(DiffUtil) {
+class MainChecklistAdapter(
+    private val onChecklistItemClickListener: OnChecklistItemClickListener,
+) : ListAdapter<ItemUiModel, MainChecklistViewHolder>(DiffUtil) {
     override fun onBindViewHolder(
         holder: MainChecklistViewHolder,
         position: Int,
@@ -16,7 +19,7 @@ class MainChecklistAdapter : ListAdapter<ItemUiModel, MainChecklistViewHolder>(D
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): MainChecklistViewHolder = MainChecklistViewHolder.from(parent)
+    ): MainChecklistViewHolder = MainChecklistViewHolder.from(parent, onChecklistItemClickListener)
 
     companion object {
         private val DiffUtil =

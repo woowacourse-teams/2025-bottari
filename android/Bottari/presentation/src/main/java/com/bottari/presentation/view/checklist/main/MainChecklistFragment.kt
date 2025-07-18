@@ -11,9 +11,12 @@ import com.bottari.presentation.model.ItemUiModel
 import com.bottari.presentation.view.checklist.ChecklistViewModel
 import com.bottari.presentation.view.checklist.main.adapter.MainChecklistAdapter
 
-class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChecklistBinding::inflate) {
+class MainChecklistFragment :
+    BaseFragment<FragmentChecklistBinding>(FragmentChecklistBinding::inflate) {
     private val viewModel: ChecklistViewModel by activityViewModels()
-    private val adapter: MainChecklistAdapter by lazy { MainChecklistAdapter() }
+    private val adapter: MainChecklistAdapter by lazy {
+        MainChecklistAdapter { viewModel.checkItem(it) }
+    }
 
     override fun onViewCreated(
         view: View,
@@ -47,9 +50,5 @@ class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChe
 
             is UiState.Failure -> {}
         }
-    }
-
-    companion object {
-        fun newInstance(): Bundle = Bundle()
     }
 }
