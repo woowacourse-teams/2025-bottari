@@ -1,10 +1,12 @@
 package com.bottari.controller;
 
 import com.bottari.dto.CreateBottariRequest;
+import com.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.dto.ReadBottariResponse;
 import com.bottari.service.BottariService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +32,16 @@ public class BottariController {
         final ReadBottariResponse response = bottariService.getById(ssaid, id);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ReadBottariPreviewResponse>> readPreviews(
+            final HttpServletRequest httpServletRequest
+    ) {
+        final String ssaid = httpServletRequest.getHeader("ssaid");
+        final List<ReadBottariPreviewResponse> responses = bottariService.getAllBySsaid(ssaid);
+
+        return ResponseEntity.ok(responses);
     }
 
     @PostMapping
