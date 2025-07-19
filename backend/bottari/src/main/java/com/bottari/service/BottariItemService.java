@@ -51,6 +51,7 @@ public class BottariItemService {
     ) {
         final Bottari bottari = bottariRepository.findById(bottariId)
                 .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
+        validateDuplicateDeleteItemIds(request.deleteItemIds());
         validateAllItemsInBottari(bottariId, request.deleteItemIds());
         bottariItemRepository.deleteByIdIn(request.deleteItemIds());
         validateUpdateItemNames(bottariId, request.createItemNames());
@@ -91,6 +92,15 @@ public class BottariItemService {
     ) {
         if (bottariItemRepository.existsByBottariIdAndName(bottariId, name)) {
             throw new IllegalArgumentException("중복된 보따리 물품명입니다.");
+        }
+    }
+
+    private void validateDuplicateDeleteItemIds(final List<Long> deleteIds) {
+        final Set<Long> uniqueDeleteIds = new HashSet<>();
+        for (final Long deleteId : deleteIds) {
+            if (!uniqueDeleteIds.add(deleteId)) {
+                throw new IllegalArgumentException("삭제하려는 아이템에 중복이 있습니다.");
+            }
         }
     }
 

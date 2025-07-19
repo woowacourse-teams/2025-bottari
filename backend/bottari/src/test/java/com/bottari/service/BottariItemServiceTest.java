@@ -101,6 +101,25 @@ class BottariItemServiceTest {
                 .hasMessage("보따리를 찾을 수 없습니다.");
     }
 
+    @DisplayName("삭제하려는 아이템 아이디에 중복이 존재하는 경우, 예외를 던진다.")
+    @Test
+    void update_Exception_DuplicateDeleteIds() {
+        // given
+        final Member member = new Member("ssaid", "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        final List<Long> duplicateDeleteIds = List.of(1L, 1L, 2L);
+        final EditBottariItemsRequest request = new EditBottariItemsRequest(duplicateDeleteIds, List.of());
+
+        // when & then
+        assertThatThrownBy(() -> bottariItemService.update(bottari.getId(), request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("삭제하려는 아이템에 중복이 있습니다.");
+    }
+
     @DisplayName("같은 보따리 내에 중복되는 물품명이 존재할 경우, 예외를 던진다.")
     @Test
     void create_Exception_DuplicateName() {
