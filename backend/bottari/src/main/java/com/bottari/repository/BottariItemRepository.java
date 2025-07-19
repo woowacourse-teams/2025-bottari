@@ -26,5 +26,7 @@ public interface BottariItemRepository extends JpaRepository<BottariItem, Long> 
             final List<Long> ids
     );
 
+    int countAllByBottariId(final Long bottariId);
+
     void deleteByIdIn(final List<Long> ids);
 }
