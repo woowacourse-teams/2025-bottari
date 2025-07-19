@@ -30,6 +30,7 @@
     <string name="previous_button_description">뒤로가기 버튼</string>
     <string name="checklist_swipe_button_description">스와이프 화면 전환 버튼</string>
     <string name="dialog_bottari_create_close_button_description">보따리 생성 다이얼로그 닫기 버튼</string>
+    <string name="item_delete_button_description">제거 버튼</string>
 
     <!-- Bottari edit item -->
     <string name="bottari_edit_item_list_title">물건 목록</string>
