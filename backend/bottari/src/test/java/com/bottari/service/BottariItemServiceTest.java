@@ -187,8 +187,7 @@ class BottariItemServiceTest {
                 .getResultList();
 
         assertAll(() -> {
-            assertThat(actual).hasSize(3);
-            assertThat(actual.stream().map(BottariItem::getName).toList()).contains("name_3", "newName_1", "newName_2");
+            assertThat(actual).extracting("name").containsExactly("name_3", "newName_1", "newName_2");
             assertThat(anotherActual).hasSize(1);
             assertThat(anotherActual.getFirst().getName()).isEqualTo("another_name");
         });
