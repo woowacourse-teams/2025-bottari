@@ -11,6 +11,10 @@
         <activity
             android:name=".view.checklist.ChecklistActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".view.edit.personal.PersonalEditActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
