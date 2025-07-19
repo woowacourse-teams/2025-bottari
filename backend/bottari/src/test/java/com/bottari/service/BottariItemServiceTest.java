@@ -297,6 +297,32 @@ class BottariItemServiceTest {
                 .hasMessage("중복된 물품이 존재합니다.");
     }
 
+    @DisplayName("아이템 추가 시 총 보따리 물품이 200개가 넘어가는 경우, 예외가 발생한다.")
+    @Test
+    void update_Exception_OverMaxBottariItemsCount() {
+        // given
+        final Member member = new Member("ssaid", "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        for (int i = 0; i < 198; i++) {
+            final BottariItem bottariItem = new BottariItem("name" + i, bottari);
+            entityManager.persist(bottariItem);
+        }
+
+        final EditBottariItemsRequest request = new EditBottariItemsRequest(
+                List.of(),
+                List.of("newItem1", "newItem2", "newItem3")
+        );
+
+        // when & then
+        assertThatThrownBy(() -> bottariItemService.update(bottari.getId(), request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("물품은 최대 200개까지 보따리에 넣을 수 있습니다.");
+    }
+
     @DisplayName("보따리 물품을 삭제한다.")
     @Test
     void delete() {

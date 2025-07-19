@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BottariItemService {
 
+    private static final int MAX_BOTTARI_ITEMS_COUNT = 200;
+
     private final BottariItemRepository bottariItemRepository;
     private final BottariRepository bottariRepository;
 
@@ -54,6 +56,7 @@ public class BottariItemService {
         validateDuplicateDeleteItemIds(request.deleteItemIds());
         validateAllItemsInBottari(bottariId, request.deleteItemIds());
         bottariItemRepository.deleteByIdIn(request.deleteItemIds());
+        validateTotalItemCount(bottariId, request.createItemNames());
         validateUpdateItemNames(bottariId, request.createItemNames());
         final List<BottariItem> bottariItems = request.createItemNames()
                 .stream()
@@ -137,6 +140,17 @@ public class BottariItemService {
             if (!uniqueItemNames.add(itemName)) {
                 throw new IllegalArgumentException("중복된 물품이 존재합니다.");
             }
+        }
+    }
+
+    private void validateTotalItemCount(
+            final Long bottariId,
+            final List<String> itemNames
+    ) {
+        int bottariItemCount = bottariItemRepository.countAllByBottariId(bottariId);
+        int totalItemCount = bottariItemCount + itemNames.size();
+        if (totalItemCount > MAX_BOTTARI_ITEMS_COUNT) {
+            throw new IllegalArgumentException("물품은 최대 200개까지 보따리에 넣을 수 있습니다.");
         }
     }
 }
