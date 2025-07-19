@@ -8,8 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.DialogBottariCreateBinding
-import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditActivity
+import com.bottari.presentation.view.edit.personal.PersonalEditActivity
 
 class BottariCreateDialog :
     DialogFragment(),
@@ -32,6 +33,7 @@ class BottariCreateDialog :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        setupObserver()
         setupListener()
     }
 
@@ -73,18 +75,30 @@ class BottariCreateDialog :
         binding.btnBottariCreate.alpha = alphaValue
     }
 
+    private fun setupObserver() {
+        viewModel.createSuccess.observe(viewLifecycleOwner, ::handleCreateState)
+    }
+
     private fun setupListener() {
         binding.etBottariCreateName.addTextChangedListener(this)
         binding.btnBottariCreateClose.setOnClickListener { dismiss() }
         binding.btnBottariCreate.setOnClickListener {
             viewModel.createBottari(binding.etBottariCreateName.text.toString())
-            navigateToEdit()
         }
     }
 
-    private fun navigateToEdit() {
-        val intent = PersonalBottariEditActivity.newIntent(requireContext(), viewModel.bottariId)
+    private fun handleCreateState(uiState: UiState<Long>) {
+        when (uiState) {
+            is UiState.Loading -> {}
+            is UiState.Success -> navigateToScreen(uiState.data)
+            is UiState.Failure -> {}
+        }
+    }
+
+    private fun navigateToScreen(bottariId: Long) {
+        val intent = PersonalEditActivity.newIntent(requireContext(), bottariId)
         startActivity(intent)
+        dismiss()
     }
 
     companion object {
