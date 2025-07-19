@@ -1,6 +1,7 @@
 package com.bottari.controller;
 
 import com.bottari.dto.CreateBottariItemRequest;
+import com.bottari.dto.EditBottariItemsRequest;
 import com.bottari.dto.ReadBottariItemResponse;
 import com.bottari.service.BottariItemService;
 import java.net.URI;
@@ -38,6 +39,16 @@ public class BottariItemController {
         final Long id = bottariItemService.create(bottariId, request);
 
         return ResponseEntity.created(URI.create("/bottaries/" + bottariId + "/bottari-items/" + id)).build();
+    }
+
+    @PatchMapping("/bottaries/{bottariId}/bottari-items")
+    public ResponseEntity<Void> update(
+            @PathVariable final Long bottariId,
+            @RequestBody final EditBottariItemsRequest request
+    ) {
+        bottariItemService.update(bottariId, request);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/bottari-items/{id}")

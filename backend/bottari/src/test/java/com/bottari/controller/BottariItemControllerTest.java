@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bottari.dto.CreateBottariItemRequest;
+import com.bottari.dto.EditBottariItemsRequest;
 import com.bottari.dto.ReadBottariItemResponse;
 import com.bottari.service.BottariItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,6 +71,25 @@ class BottariItemControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(header().string(HttpHeaders.LOCATION, "/bottaries/" + bottariId + "/bottari-items/1"));
+    }
+
+    @DisplayName("보따리 물품을 수정한다.")
+    @Test
+    void update() throws Exception {
+        // given
+        final Long bottariId = 1L;
+        final EditBottariItemsRequest request = new EditBottariItemsRequest(
+                List.of(1L, 2L),
+                List.of("newName1", "newName2")
+        );
+        willDoNothing().given(bottariItemService)
+                .update(bottariId, request);
+
+        // when & then
+        mockMvc.perform(patch("/bottaries/" + bottariId + "/bottari-items")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent());
     }
 
     @DisplayName("보따리 안에 있는 물품을 삭제한다.")

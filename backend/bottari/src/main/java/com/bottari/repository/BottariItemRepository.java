@@ -9,10 +9,24 @@ public interface BottariItemRepository extends JpaRepository<BottariItem, Long> 
 
     List<BottariItem> findAllByBottariId(final Long bottariId);
 
+    List<BottariItem> findAllByBottariIn(final List<Bottari> bottaries);
+
     boolean existsByBottariIdAndName(
             final Long bottariId,
             final String name
     );
 
-    List<BottariItem> findAllByBottariIn(final List<Bottari> bottaries);
+    boolean existsByBottariIdAndNameIn(
+            final Long bottariId,
+            final List<String> itemNames
+    );
+
+    int countAllByBottariIdAndIdIn(
+            final Long bottariId,
+            final List<Long> ids
+    );
+
+    int countAllByBottariId(final Long bottariId);
+
+    void deleteByIdIn(final List<Long> ids);
 }
