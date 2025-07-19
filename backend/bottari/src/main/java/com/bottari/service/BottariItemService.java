@@ -49,8 +49,8 @@ public class BottariItemService {
     ) {
         final Bottari bottari = bottariRepository.findById(bottariId)
                 .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
-        validateItemsInBottari(bottariId, request.deleteIds());
-        bottariItemRepository.deleteByIdIn(request.deleteIds());
+        validateAllItemsInBottari(bottariId, request.deleteItemIds());
+        bottariItemRepository.deleteByIdIn(request.deleteItemIds());
         validateUpdateItemNames(bottariId, request.createItemNames());
         final List<BottariItem> bottariItems = request.createItemNames()
                 .stream()
@@ -92,12 +92,12 @@ public class BottariItemService {
         }
     }
 
-    private void validateItemsInBottari(
+    private void validateAllItemsInBottari(
             final Long bottariId,
-            final List<Long> deleteIds
+            final List<Long> itemIds
     ) {
-        final int countItemInBottari = bottariItemRepository.countAllByBottariIdAndIdIn(bottariId, deleteIds);
-        if (countItemInBottari != deleteIds.size()) {
+        final int countItemInBottari = bottariItemRepository.countAllByBottariIdAndIdIn(bottariId, itemIds);
+        if (countItemInBottari != itemIds.size()) {
             throw new IllegalArgumentException("보따리 안에 없는 물품은 삭제할 수 없습니다.");
         }
     }
