@@ -7,7 +7,9 @@ import com.bottari.dto.EditBottariItemsRequest;
 import com.bottari.dto.ReadBottariItemResponse;
 import com.bottari.repository.BottariItemRepository;
 import com.bottari.repository.BottariRepository;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -120,11 +122,11 @@ public class BottariItemService {
     }
 
     private void validateDuplicateItemNames(final List<String> itemNames) {
-        final long countCreateItemNames = itemNames.stream()
-                .distinct()
-                .count();
-        if (countCreateItemNames != itemNames.size()) {
-            throw new IllegalArgumentException("중복된 물품이 존재합니다.");
+        final Set<String> uniqueItemNames = new HashSet<>();
+        for (final String itemName : itemNames) {
+            if (!uniqueItemNames.add(itemName)) {
+                throw new IllegalArgumentException("중복된 물품이 존재합니다.");
+            }
         }
     }
 }
