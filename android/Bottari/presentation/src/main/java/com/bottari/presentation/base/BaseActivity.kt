@@ -24,12 +24,11 @@ abstract class BaseActivity<VB : ViewBinding>(
 
     private fun setWindowInsets() {
         enableEdgeToEdge()
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            var adjustBottomPadding = systemBars.bottom
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                adjustBottomPadding = 0
-            }
+            val adjustBottomPadding = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) systemBars.bottom else 0
+
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, adjustBottomPadding)
             insets
         }
