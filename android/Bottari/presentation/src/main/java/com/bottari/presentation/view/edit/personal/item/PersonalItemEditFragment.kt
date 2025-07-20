@@ -2,6 +2,9 @@ package com.bottari.presentation.view.edit.personal.item
 
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.base.BaseFragment
@@ -42,8 +45,31 @@ class PersonalItemEditFragment :
     }
 
     private fun setupListener() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
+            val bottomPadding = if (imeVisible) ime.bottom else systemBars.bottom
+            view.setPadding(0, 0, 0, bottomPadding)
+
+            insets
+        }
+
         binding.btnPrevious.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.btnPersonalItemAdd.setOnClickListener {
+            viewModel.addItem(binding.etPersonalItem.text.toString())
+            binding.etPersonalItem.text.clear()
+        }
+
+        binding.etPersonalItem.setOnEditorActionListener { view, actionId, _ ->
+            if (actionId != EditorInfo.IME_ACTION_NONE) return@setOnEditorActionListener false
+
+            viewModel.addItem(view.text.toString())
+            binding.etPersonalItem.text.clear()
+            true
         }
     }
 

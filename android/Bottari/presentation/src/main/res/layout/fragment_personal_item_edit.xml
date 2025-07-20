@@ -36,7 +36,7 @@
             android:layout_height="48dp"
             android:layout_gravity="end"
             android:gravity="center"
-            android:text="확인"
+            android:text="@string/personal_item_edit_confirm_btn_text"
             android:textColor="@color/black" />
 
     </Toolbar>
@@ -45,9 +45,43 @@
         android:id="@+id/rv_personal_item_edit"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/space_small"
         android:fadingEdgeLength="8dp"
         android:requiresFadingEdge="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/et_personal_item"
         app:layout_constraintTop_toBottomOf="@id/toolbar_personal_item_edit" />
 
+    <EditText
+        android:id="@+id/et_personal_item"
+        style="@style/Pretendard_Regular_16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/space_median"
+        android:layout_marginStart="@dimen/space_median"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:backgroundTint="@color/gray_eeeeee"
+        android:hint="@string/personal_item_edit_hint_text"
+        android:imeOptions="actionNone"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:maxLength="20"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/space_median"
+        android:paddingVertical="@dimen/space_small"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray_a6a6a6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_personal_item_add"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/btn_personal_item_add"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="@string/send_button_description"
+        android:padding="@dimen/space_small"
+        android:src="@drawable/btn_send"
+        app:layout_constraintBottom_toBottomOf="@id/et_personal_item"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/et_personal_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>
