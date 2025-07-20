@@ -24,6 +24,10 @@
     <string name="dialog_bottari_create_name_hint">이름을 입력하세요</string>
     <string name="dialog_bottari_create_btn_text">생성하기</string>
 
+    <!-- Personal Bottari Item Edit -->
+    <string name="personal_item_edit_confirm_btn_text">확인</string>
+    <string name="personal_item_edit_hint_text">추가할 물건을 입력하세요</string>
+
     <!--  Description  -->
     <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>
     <string name="bottari_create_button_description">보따리 생성 버튼</string>
@@ -31,6 +35,7 @@
     <string name="checklist_swipe_button_description">스와이프 화면 전환 버튼</string>
     <string name="dialog_bottari_create_close_button_description">보따리 생성 다이얼로그 닫기 버튼</string>
     <string name="item_delete_button_description">제거 버튼</string>
+    <string name="send_button_description">전송 버튼</string>
 
     <!-- Bottari edit item -->
     <string name="bottari_edit_item_list_title">물건 목록</string>
