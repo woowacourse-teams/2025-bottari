@@ -24,13 +24,12 @@ class PersonalBottariFragment : BaseFragment<FragmentMainEditBinding>(FragmentMa
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setupObservers()
-        setupItemRecyclerView()
-        setupAlarmRecyclerView()
+        setupObserver()
+        setupUI()
         fetchInitialData()
     }
 
-    private fun setupObservers() {
+    private fun setupObserver() {
         viewModel.items.observe(viewLifecycleOwner) { items ->
             itemAdapter.submitList(items)
             toggleItemSection(items.isNotEmpty())
@@ -40,6 +39,11 @@ class PersonalBottariFragment : BaseFragment<FragmentMainEditBinding>(FragmentMa
             alarmAdapter.submitList(alarms)
             toggleAlarmSelection(alarms.isNotEmpty())
         }
+    }
+
+    private fun setupUI(){
+        setupItemRecyclerView()
+        setupAlarmRecyclerView()
     }
 
     private fun toggleItemSection(hasItems: Boolean) {
