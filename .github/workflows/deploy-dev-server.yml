@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout pository
         uses: actions/checkout@v4
 
       - name: Set up JDK 21
@@ -51,4 +51,5 @@ jobs:
         run: |
           JAR_FILE=$(find ./artifacts -name "*.jar" | head -n 1)
           echo "Starting server with $JAR_FILE"
+          RUNNER_TRACKING_ID=""
           nohup java -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
