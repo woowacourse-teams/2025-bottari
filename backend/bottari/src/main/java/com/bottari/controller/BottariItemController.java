@@ -1,5 +1,6 @@
 package com.bottari.controller;
 
+import com.bottari.controller.docs.BottariItemApiDocs;
 import com.bottari.dto.CreateBottariItemRequest;
 import com.bottari.dto.EditBottariItemsRequest;
 import com.bottari.dto.ReadBottariItemResponse;
@@ -18,11 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class BottariItemController {
+public class BottariItemController implements BottariItemApiDocs {
 
     private final BottariItemService bottariItemService;
 
     @GetMapping("/bottaries/{bottariId}/bottari-items")
+    @Override
     public ResponseEntity<List<ReadBottariItemResponse>> readChecklist(
             @PathVariable final Long bottariId
     ) {
@@ -32,6 +34,7 @@ public class BottariItemController {
     }
 
     @PostMapping("/bottaries/{bottariId}/bottari-items")
+    @Override
     public ResponseEntity<Void> create(
             @PathVariable final Long bottariId,
             @RequestBody final CreateBottariItemRequest request
@@ -42,6 +45,7 @@ public class BottariItemController {
     }
 
     @PatchMapping("/bottaries/{bottariId}/bottari-items")
+    @Override
     public ResponseEntity<Void> update(
             @PathVariable final Long bottariId,
             @RequestBody final EditBottariItemsRequest request
@@ -52,6 +56,7 @@ public class BottariItemController {
     }
 
     @DeleteMapping("/bottari-items/{id}")
+    @Override
     public ResponseEntity<Void> delete(
             @PathVariable final Long id
     ) {
@@ -61,6 +66,7 @@ public class BottariItemController {
     }
 
     @PatchMapping("/bottari-items/{id}/check")
+    @Override
     public ResponseEntity<Void> check(
             @PathVariable final Long id
     ) {
@@ -70,6 +76,7 @@ public class BottariItemController {
     }
 
     @PatchMapping("/bottari-items/{id}/uncheck")
+    @Override
     public ResponseEntity<Void> uncheck(
             @PathVariable final Long id
     ) {
