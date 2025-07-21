@@ -7,49 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".view.edit.personal.main.PersonalBottariEditActivity">
 
-    <Toolbar
-        android:id="@+id/toolbar_edit"
-        style="@style/Pretendard_Medium_20"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentInsetStart="0dp"
-        android:titleTextColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/fcv_edit"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/btn_previous"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:contentDescription="@string/previous_button_description"
-            android:padding="@dimen/space_small"
-            android:src="@drawable/btn_previous" />
-
-        <TextView
-            android:id="@+id/tv_bottari_title"
-            style="@style/Pretendard_Bold_20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/black"
-            tools:text="나의 보따리" />
-
-        <ImageView
-            android:id="@+id/btn_swipe"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:contentDescription="@string/bottari_item_more_button_description"
-            android:padding="@dimen/space_small"
-            android:src="@drawable/btn_more" />
-
-    </Toolbar>
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcv_edit"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_edit" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

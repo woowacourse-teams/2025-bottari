@@ -9,6 +9,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.model.AlarmTypeUiModel
+import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.model.ItemUiModel
 import java.time.LocalDate
 import java.time.LocalTime
@@ -16,6 +17,9 @@ import java.time.LocalTime
 class PersonalBottariViewModel(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+    private val _bottari = MutableLiveData<UiState<BottariUiModel>>()
+    val bottari: LiveData<UiState<BottariUiModel>> = _bottari
+
     private val _items = MutableLiveData<UiState<List<ItemUiModel>>>()
     val items: LiveData<UiState<List<ItemUiModel>>> = _items
 
@@ -26,8 +30,12 @@ class PersonalBottariViewModel(
         val id =
             savedStateHandle.get<Long>(EXTRAS_BOTTARI_ID)
                 ?: error("bottariId가 없습니다.")
+        fetchBottariById(id)
         fetchItemsById(id)
         fetchAlarmById(id)
+    }
+    private fun fetchBottariById(id: Long) {
+        _bottari.value = UiState.Success(dummyBottari)
     }
 
     private fun fetchItemsById(id: Long) {
@@ -54,6 +62,8 @@ class PersonalBottariViewModel(
             }
     }
 }
+
+private val dummyBottari = BottariUiModel(1,"나의 보따리",0,0,null)
 
 private val dummyChecklist =
     listOf(
@@ -88,3 +98,4 @@ private val dummyAlarm =
             time = LocalTime.of(12, 0),
         ),
     )
+
