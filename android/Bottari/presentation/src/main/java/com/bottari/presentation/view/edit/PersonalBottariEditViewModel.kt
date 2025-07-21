@@ -1,6 +1,5 @@
 package com.bottari.presentation.view.edit
 
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -11,17 +10,16 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.model.BottariUiModel
 
-
 class PersonalBottariEditViewModel(
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-
     private val _bottari = MutableLiveData<UiState<BottariUiModel>>()
     val bottari: LiveData<UiState<BottariUiModel>> = _bottari
 
     init {
-        val bottariId = savedStateHandle.get<Long>(EXTRAS_BOTTARI_ID)
-            ?: error("Bottari ID가 없습니다.")
+        val bottariId =
+            savedStateHandle.get<Long>(EXTRAS_BOTTARI_ID)
+                ?: error("Bottari ID가 없습니다.")
         fetchBottariById(bottariId)
     }
 
@@ -54,4 +52,3 @@ private val dummyBottariUiModel =
         checkedQuantity = 0,
         alarmTypeUiModel = null,
     )
-

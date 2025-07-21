@@ -12,7 +12,7 @@ import com.bottari.presentation.databinding.ActivityPersonalBottariEditBinding
 import com.bottari.presentation.model.BottariUiModel
 
 class PersonalBottariEditActivity : BaseActivity<ActivityPersonalBottariEditBinding>(ActivityPersonalBottariEditBinding::inflate) {
-    private val viewModel: PersonalBottariEditViewModel by viewModels{
+    private val viewModel: PersonalBottariEditViewModel by viewModels {
         PersonalBottariEditViewModel.Factory(getBottariId())
     }
 

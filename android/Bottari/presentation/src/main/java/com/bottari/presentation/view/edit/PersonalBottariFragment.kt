@@ -11,7 +11,6 @@ import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentMainEditBinding
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.ItemUiModel
-import com.bottari.presentation.view.checklist.ChecklistViewModel
 import com.bottari.presentation.view.edit.adapter.PersonalBottariAlarmAdapter
 import com.bottari.presentation.view.edit.adapter.PersonalBottariItemAdapter
 import com.google.android.flexbox.FlexDirection
@@ -19,8 +18,7 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class PersonalBottariFragment :
-    BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
+class PersonalBottariFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
     private val viewModel: PersonalBottariViewModel by viewModels {
         PersonalBottariViewModel.Factory(getBottariId())
     }
@@ -111,7 +109,7 @@ class PersonalBottariFragment :
         }
     }
 
-    companion object{
+    companion object {
         private const val EXTRAS_BOTTARI_ID = "EXTRAS_BOTTARI_ID"
         private const val INVALID_BOTTARI_ID = -1L
     }

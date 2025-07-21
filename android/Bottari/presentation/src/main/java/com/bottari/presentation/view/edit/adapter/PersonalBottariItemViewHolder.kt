@@ -9,7 +9,6 @@ import com.bottari.presentation.model.ItemUiModel
 class PersonalBottariItemViewHolder private constructor(
     private val binding: ItemChecklistMiniBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     fun bind(item: ItemUiModel) {
         binding.tvChecklistItemMiniTitle.text = item.name
     }

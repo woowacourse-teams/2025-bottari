@@ -1,8 +1,5 @@
 package com.bottari.presentation.view.edit
 
-
-import android.os.Parcel
-import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -17,9 +14,8 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class PersonalBottariViewModel(
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-
     private val _items = MutableLiveData<UiState<List<ItemUiModel>>>()
     val items: LiveData<UiState<List<ItemUiModel>>> = _items
 
@@ -27,8 +23,9 @@ class PersonalBottariViewModel(
     val alarms: LiveData<UiState<List<AlarmTypeUiModel>>> = _alarms
 
     init {
-        val id = savedStateHandle.get<Long>(EXTRAS_BOTTARI_ID)
-            ?: error("bottariId가 없습니다.")
+        val id =
+            savedStateHandle.get<Long>(EXTRAS_BOTTARI_ID)
+                ?: error("bottariId가 없습니다.")
         fetchItemsById(id)
         fetchAlarmById(id)
     }
