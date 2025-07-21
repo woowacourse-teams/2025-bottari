@@ -8,8 +8,7 @@ import com.bottari.presentation.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityPersonalBottariEditBinding
 import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditFragment
 
-class PersonalBottariEditActivity :
-    BaseActivity<ActivityPersonalBottariEditBinding>(ActivityPersonalBottariEditBinding::inflate) {
+class PersonalBottariEditActivity : BaseActivity<ActivityPersonalBottariEditBinding>(ActivityPersonalBottariEditBinding::inflate) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

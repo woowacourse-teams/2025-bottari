@@ -21,8 +21,7 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class PersonalBottariEditFragment :
-    BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
+class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
         PersonalBottariEditViewModel.Factory(getBottariId())
     }
@@ -58,14 +57,14 @@ class PersonalBottariEditFragment :
         binding.layoutEditItem.setOnClickListener {
             navigateToScreen(
                 PersonalItemEditFragment::class.java,
-                PersonalItemEditFragment.newBundle(getBottariId())
+                PersonalItemEditFragment.newBundle(getBottariId()),
             )
         }
 
         binding.layoutEditAlarm.setOnClickListener {
             navigateToScreen(
                 PersonalItemEditFragment::class.java,
-                PersonalItemEditFragment.newBundle(getBottariId())
+                PersonalItemEditFragment.newBundle(getBottariId()),
             )
         }
     }
@@ -139,7 +138,10 @@ class PersonalBottariEditFragment :
         binding.rvEditAlarm.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun navigateToScreen(fragmentClass: Class<out Fragment>, bundle: Bundle? = null) {
+    private fun navigateToScreen(
+        fragmentClass: Class<out Fragment>,
+        bundle: Bundle? = null,
+    ) {
         val transaction = parentFragmentManager.beginTransaction()
         transaction.replace(R.id.fcv_personal_edit, fragmentClass, bundle)
         transaction.addToBackStack(fragmentClass.simpleName)
