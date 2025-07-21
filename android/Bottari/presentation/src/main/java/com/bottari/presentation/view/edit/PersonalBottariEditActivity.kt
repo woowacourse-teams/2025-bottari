@@ -7,19 +7,24 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseActivity
+import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.ActivityPersonalBottariEditBinding
+import com.bottari.presentation.model.BottariUiModel
 
 class PersonalBottariEditActivity : BaseActivity<ActivityPersonalBottariEditBinding>(ActivityPersonalBottariEditBinding::inflate) {
-    private val viewModel: PersonalBottariViewModel by viewModels()
+    private val viewModel: PersonalBottariEditViewModel by viewModels{
+        PersonalBottariEditViewModel.Factory(getBottariId())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupObsever()
         setupListener()
-        getBottari(intent.getIntExtra(BOTTARI_ID, DEFAULT_BOTTARI_ID))
         navigateToEdit()
         handleBackPress()
     }
+
+    private fun getBottariId(): Long = intent.getLongExtra(EXTRAS_BOTTARI_ID, INVALID_BOTTARI_ID)
 
     private fun setupListener() {
         binding.btnPrevious.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
@@ -49,26 +54,30 @@ class PersonalBottariEditActivity : BaseActivity<ActivityPersonalBottariEditBind
     }
 
     private fun setupObsever() {
-        viewModel.bottari.observe(this) {
-            binding.tvBottariTitle.text = it.title
+        viewModel.bottari.observe(this) { bottari ->
+            handleBottariTitleState(bottari)
         }
     }
 
-    private fun getBottari(bottariId: Int) {
-        viewModel.fetchBottariById(bottariId)
+    private fun handleBottariTitleState(uiState: UiState<BottariUiModel>) {
+        when (uiState) {
+            is UiState.Loading -> return
+            is UiState.Success -> binding.tvBottariTitle.text = uiState.data.title
+            is UiState.Failure -> {}
+        }
     }
 
     companion object {
-        private const val BOTTARI_ID = "BOTTARI_ID"
+        private const val EXTRAS_BOTTARI_ID = "EXTRAS_BOTTARI_ID"
+        private const val INVALID_BOTTARI_ID = -1L
         private const val MIN_FRAGMENT_ENTRY_COUNT = 0
-        private const val DEFAULT_BOTTARI_ID = 0
 
         fun newIntent(
             context: Context,
             bottariId: Long,
         ): Intent =
             Intent(context, PersonalBottariEditActivity::class.java).apply {
-                putExtra(BOTTARI_ID, bottariId)
+                putExtra(EXTRAS_BOTTARI_ID, bottariId)
             }
     }
 }

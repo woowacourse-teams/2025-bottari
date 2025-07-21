@@ -11,6 +11,7 @@ import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentMainEditBinding
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.ItemUiModel
+import com.bottari.presentation.view.checklist.ChecklistViewModel
 import com.bottari.presentation.view.edit.adapter.PersonalBottariAlarmAdapter
 import com.bottari.presentation.view.edit.adapter.PersonalBottariItemAdapter
 import com.google.android.flexbox.FlexDirection
@@ -18,8 +19,11 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class PersonalBottariFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
-    private val viewModel: PersonalBottariViewModel by viewModels()
+class PersonalBottariFragment :
+    BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
+    private val viewModel: PersonalBottariViewModel by viewModels {
+        PersonalBottariViewModel.Factory(getBottariId())
+    }
     private val itemAdapter = PersonalBottariItemAdapter()
     private val alarmAdapter = PersonalBottariAlarmAdapter()
 
@@ -31,6 +35,8 @@ class PersonalBottariFragment : BaseFragment<FragmentMainEditBinding>(FragmentMa
         setupObserver()
         setupUI()
     }
+
+    private fun getBottariId(): Long = arguments?.getLong(EXTRAS_BOTTARI_ID) ?: INVALID_BOTTARI_ID
 
     private fun setupObserver() {
         viewModel.items.observe(viewLifecycleOwner) { items ->
@@ -44,26 +50,28 @@ class PersonalBottariFragment : BaseFragment<FragmentMainEditBinding>(FragmentMa
     private fun handleItemsState(uiState: UiState<List<ItemUiModel>>) {
         when (uiState) {
             is UiState.Loading -> showSnackbar(R.string.home_nav_market_title)
-            is UiState.Success ->{
+            is UiState.Success -> {
                 itemAdapter.submitList(uiState.data)
                 toggleItemSection(uiState.data.isNotEmpty())
             }
+
             is UiState.Failure -> showSnackbar(R.string.home_nav_profile_title)
         }
     }
 
     private fun handleAlarmState(uiState: UiState<List<AlarmTypeUiModel>>) {
-        when(uiState) {
+        when (uiState) {
             is UiState.Loading -> showSnackbar(R.string.home_nav_market_title)
             is UiState.Success -> {
                 alarmAdapter.submitList(uiState.data)
                 toggleAlarmSelection(uiState.data.isNotEmpty())
             }
-            is UiState.Failure ->  showSnackbar(R.string.home_nav_profile_title)
+
+            is UiState.Failure -> showSnackbar(R.string.home_nav_profile_title)
         }
     }
 
-    private fun setupUI(){
+    private fun setupUI() {
         setupItemRecyclerView()
         setupAlarmRecyclerView()
     }
@@ -101,5 +109,10 @@ class PersonalBottariFragment : BaseFragment<FragmentMainEditBinding>(FragmentMa
             layoutManager = LinearLayoutManager(requireContext())
             adapter = this@PersonalBottariFragment.alarmAdapter
         }
+    }
+
+    companion object{
+        private const val EXTRAS_BOTTARI_ID = "EXTRAS_BOTTARI_ID"
+        private const val INVALID_BOTTARI_ID = -1L
     }
 }
