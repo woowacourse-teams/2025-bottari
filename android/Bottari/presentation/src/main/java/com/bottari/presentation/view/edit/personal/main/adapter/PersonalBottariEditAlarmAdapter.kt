@@ -5,11 +5,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.AlarmTypeUiModel
 
-class PersonalBottariAlarmAdapter : ListAdapter<AlarmTypeUiModel, PersonalBottariAlarmViewHolder>(
+class PersonalBottariEditAlarmAdapter : ListAdapter<AlarmTypeUiModel, PersonalBottariEditAlarmViewHolder>(
     DiffUtil
 ) {
     override fun onBindViewHolder(
-        holder: PersonalBottariAlarmViewHolder,
+        holder: PersonalBottariEditAlarmViewHolder,
         position: Int,
     ) {
         holder.bind(getItem(position))
@@ -18,7 +18,7 @@ class PersonalBottariAlarmAdapter : ListAdapter<AlarmTypeUiModel, PersonalBottar
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): PersonalBottariAlarmViewHolder = PersonalBottariAlarmViewHolder.from(parent)
+    ): PersonalBottariEditAlarmViewHolder = PersonalBottariEditAlarmViewHolder.from(parent)
 
     companion object {
         private val DiffUtil =

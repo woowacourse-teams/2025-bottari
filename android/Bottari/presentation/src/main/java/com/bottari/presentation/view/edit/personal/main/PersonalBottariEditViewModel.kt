@@ -14,7 +14,7 @@ import com.bottari.presentation.model.ItemUiModel
 import java.time.LocalDate
 import java.time.LocalTime
 
-class PersonalBottariViewModel(
+class PersonalBottariEditViewModel(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val _bottari = MutableLiveData<UiState<BottariUiModel>>()
@@ -57,7 +57,7 @@ class PersonalBottariViewModel(
                 ): T {
                     val handle = extras.createSavedStateHandle()
                     handle[EXTRAS_BOTTARI_ID] = bottariId
-                    return PersonalBottariViewModel(handle) as T
+                    return PersonalBottariEditViewModel(handle) as T
                 }
             }
     }

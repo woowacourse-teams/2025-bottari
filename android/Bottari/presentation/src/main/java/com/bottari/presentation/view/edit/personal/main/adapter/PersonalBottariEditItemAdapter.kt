@@ -5,12 +5,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.ItemUiModel
 
-class PersonalBottariItemAdapter :
-    ListAdapter<ItemUiModel, PersonalBottariItemViewHolder>(
+class PersonalBottariEditItemAdapter :
+    ListAdapter<ItemUiModel, PersonalBottariEditItemViewHolder>(
         DiffUtil,
     ) {
     override fun onBindViewHolder(
-        holder: PersonalBottariItemViewHolder,
+        holder: PersonalBottariEditItemViewHolder,
         position: Int,
     ) {
         holder.bind(getItem(position))
@@ -19,7 +19,7 @@ class PersonalBottariItemAdapter :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): PersonalBottariItemViewHolder = PersonalBottariItemViewHolder.from(parent)
+    ): PersonalBottariEditItemViewHolder = PersonalBottariEditItemViewHolder.from(parent)
 
     companion object {
         private val DiffUtil =

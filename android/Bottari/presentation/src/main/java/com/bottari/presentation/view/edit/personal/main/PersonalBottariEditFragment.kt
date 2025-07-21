@@ -12,19 +12,19 @@ import com.bottari.presentation.databinding.FragmentMainEditBinding
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.model.ItemUiModel
-import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariAlarmAdapter
-import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariItemAdapter
+import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditAlarmAdapter
+import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditItemAdapter
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class PersonalBottariFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
-    private val viewModel: PersonalBottariViewModel by viewModels {
-        PersonalBottariViewModel.Factory(getBottariId())
+class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
+    private val viewModel: PersonalBottariEditViewModel by viewModels {
+        PersonalBottariEditViewModel.Factory(getBottariId())
     }
-    private val itemAdapter = PersonalBottariItemAdapter()
-    private val alarmAdapter = PersonalBottariAlarmAdapter()
+    private val itemAdapter = PersonalBottariEditItemAdapter()
+    private val alarmAdapter = PersonalBottariEditAlarmAdapter()
 
     override fun onViewCreated(
         view: View,
@@ -114,14 +114,14 @@ class PersonalBottariFragment : BaseFragment<FragmentMainEditBinding>(FragmentMa
                     flexWrap = FlexWrap.WRAP
                     justifyContent = JustifyContent.FLEX_START
                 }
-            adapter = this@PersonalBottariFragment.itemAdapter
+            adapter = this@PersonalBottariEditFragment.itemAdapter
         }
     }
 
     private fun setupAlarmRecyclerView() {
         binding.rvEditAlarm.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = this@PersonalBottariFragment.alarmAdapter
+            adapter = this@PersonalBottariEditFragment.alarmAdapter
         }
     }
 

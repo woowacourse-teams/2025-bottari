@@ -20,9 +20,9 @@ class PersonalBottariEditActivity : BaseActivity<ActivityPersonalBottariEditBind
             setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
             replace(
                 R.id.fcv_edit,
-                PersonalBottariFragment::class.java,
+                PersonalBottariEditFragment::class.java,
                 null,
-                PersonalBottariFragment::class.java.name,
+                PersonalBottariEditFragment::class.java.name,
             )
             commit()
         }

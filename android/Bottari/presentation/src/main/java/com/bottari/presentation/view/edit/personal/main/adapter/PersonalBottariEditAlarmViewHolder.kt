@@ -11,7 +11,7 @@ import java.time.DayOfWeek
 import java.time.format.TextStyle
 import java.util.Locale
 
-class PersonalBottariAlarmViewHolder private constructor(
+class PersonalBottariEditAlarmViewHolder private constructor(
     private val binding: ItemChecklistAlarmBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val dateFormat: String by lazy {
@@ -62,10 +62,10 @@ class PersonalBottariAlarmViewHolder private constructor(
         }
 
     companion object {
-        fun from(parent: ViewGroup): PersonalBottariAlarmViewHolder {
+        fun from(parent: ViewGroup): PersonalBottariEditAlarmViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemChecklistAlarmBinding.inflate(inflater, parent, false)
-            return PersonalBottariAlarmViewHolder(binding)
+            return PersonalBottariEditAlarmViewHolder(binding)
         }
     }
 }

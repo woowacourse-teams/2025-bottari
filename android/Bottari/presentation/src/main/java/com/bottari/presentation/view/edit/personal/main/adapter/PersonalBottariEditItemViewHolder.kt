@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.databinding.ItemChecklistMiniBinding
 import com.bottari.presentation.model.ItemUiModel
 
-class PersonalBottariItemViewHolder private constructor(
+class PersonalBottariEditItemViewHolder private constructor(
     private val binding: ItemChecklistMiniBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: ItemUiModel) {
@@ -14,10 +14,10 @@ class PersonalBottariItemViewHolder private constructor(
     }
 
     companion object {
-        fun from(parent: ViewGroup): PersonalBottariItemViewHolder {
+        fun from(parent: ViewGroup): PersonalBottariEditItemViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemChecklistMiniBinding.inflate(inflater, parent, false)
-            return PersonalBottariItemViewHolder(binding)
+            return PersonalBottariEditItemViewHolder(binding)
         }
     }
 }
