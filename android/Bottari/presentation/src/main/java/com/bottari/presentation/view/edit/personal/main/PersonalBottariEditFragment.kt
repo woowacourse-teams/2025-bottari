@@ -19,8 +19,7 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class PersonalBottariEditFragment :
-    BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
+class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
         PersonalBottariEditViewModel.Factory(getBottariId())
     }

@@ -54,7 +54,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/space_large"
-            android:layout_marginBottom="@dimen/space_median"
             android:background="@drawable/bg_white_radius_12dp"
             android:elevation="2dp"
             android:padding="@dimen/space_median"
@@ -87,9 +86,9 @@
                 android:id="@+id/view_click_edit_item"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
-                android:layout_margin="@dimen/space_median"
                 android:background="@drawable/bg_white_radius_12dp_dotted_boder"
                 android:elevation="0dp"
+                android:layout_marginTop="@dimen/space_x_large"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -108,11 +107,11 @@
 
             <TextView
                 android:id="@+id/tv_click_edit_item_title"
-                style="@style/Pretendard_Bold_20"
+                style="@style/Pretendard_Bold_18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/bottari_edit_add_item_title"
-                android:textColor="@color/gray_a6a6a6"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@id/tv_click_edit_item_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -139,7 +138,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/space_large"
-            android:layout_marginTop="@dimen/space_x_large"
+            android:layout_marginTop="@dimen/space_large"
             android:background="@drawable/bg_white_radius_12dp"
             android:elevation="2dp"
             android:padding="@dimen/space_median"
@@ -171,13 +170,13 @@
                 android:id="@+id/view_click_edit_alarm"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
-                android:layout_margin="@dimen/space_median"
                 android:background="@drawable/bg_white_radius_12dp_dotted_boder"
                 android:elevation="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_edit_alarm" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_edit_alarm"
+                android:layout_marginTop="@dimen/space_x_large"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_edit_alarm"
@@ -192,11 +191,11 @@
 
             <TextView
                 android:id="@+id/tv_click_edit_alarm_title"
-                style="@style/Pretendard_Bold_20"
+                style="@style/Pretendard_Bold_18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/bottari_edit_add_alarm_title"
-                android:textColor="@color/gray_a6a6a6"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@id/tv_click_edit_alarm_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
