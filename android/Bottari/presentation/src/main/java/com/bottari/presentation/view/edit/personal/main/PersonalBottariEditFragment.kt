@@ -3,6 +3,7 @@ package com.bottari.presentation.view.edit.personal.main
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
@@ -12,6 +13,7 @@ import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.model.ItemUiModel
+import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditAlarmAdapter
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditItemAdapter
 import com.google.android.flexbox.FlexDirection
@@ -34,6 +36,7 @@ class PersonalBottariEditFragment :
         super.onViewCreated(view, savedInstanceState)
         setupObserver()
         setupUI()
+        setupListener()
     }
 
     private fun setupObserver() {
@@ -45,31 +48,44 @@ class PersonalBottariEditFragment :
     private fun setupUI() {
         setupItemRecyclerView()
         setupAlarmRecyclerView()
-        setupToolbar()
+    }
+
+    private fun setupListener() {
+        binding.btnPrevious.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.layoutEditItem.setOnClickListener {
+            navigateToScreen(PersonalItemEditFragment::class.java)
+        }
+
+        binding.layoutEditAlarm.setOnClickListener {
+            navigateToScreen(PersonalItemEditFragment::class.java)
+        }
     }
 
     private fun getBottariId(): Long = arguments?.getLong(EXTRA_BOTTARI_ID) ?: INVALID_BOTTARI_ID
 
     private fun handleBottariState(uiState: UiState<BottariUiModel>) {
         when (uiState) {
-            is UiState.Loading -> showSnackbar(R.string.home_nav_market_title)
+            is UiState.Loading -> Unit
             is UiState.Success -> {
                 binding.tvBottariTitle.text = uiState.data.title
             }
 
-            is UiState.Failure -> showSnackbar(R.string.home_nav_profile_title)
+            is UiState.Failure -> Unit
         }
     }
 
     private fun handleItemsState(uiState: UiState<List<ItemUiModel>>) {
         when (uiState) {
-            is UiState.Loading -> showSnackbar(R.string.home_nav_market_title)
+            is UiState.Loading -> Unit
             is UiState.Success -> {
                 itemAdapter.submitList(uiState.data)
                 toggleItemSection(uiState.data.isNotEmpty())
             }
 
-            is UiState.Failure -> showSnackbar(R.string.home_nav_profile_title)
+            is UiState.Failure -> Unit
         }
     }
 
@@ -103,28 +119,25 @@ class PersonalBottariEditFragment :
     }
 
     private fun setupItemRecyclerView() {
-        binding.rvEditItem.apply {
-            layoutManager =
-                FlexboxLayoutManager(requireContext()).apply {
-                    flexDirection = FlexDirection.ROW
-                    flexWrap = FlexWrap.WRAP
-                    justifyContent = JustifyContent.FLEX_START
-                }
-            adapter = this@PersonalBottariEditFragment.itemAdapter
-        }
+        binding.rvEditItem.adapter = itemAdapter
+        binding.rvEditItem.layoutManager =
+            FlexboxLayoutManager(requireContext()).apply {
+                flexDirection = FlexDirection.ROW
+                flexWrap = FlexWrap.WRAP
+                justifyContent = JustifyContent.FLEX_START
+            }
     }
 
     private fun setupAlarmRecyclerView() {
-        binding.rvEditAlarm.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = this@PersonalBottariEditFragment.alarmAdapter
-        }
+        binding.rvEditAlarm.adapter = alarmAdapter
+        binding.rvEditAlarm.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun setupToolbar() {
-        binding.btnPrevious.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
+    private fun navigateToScreen(fragmentClass: Class<out Fragment>) {
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.fcv_personal_edit, fragmentClass, null)
+        transaction.addToBackStack(fragmentClass.simpleName)
+        transaction.commit()
     }
 
     companion object {
