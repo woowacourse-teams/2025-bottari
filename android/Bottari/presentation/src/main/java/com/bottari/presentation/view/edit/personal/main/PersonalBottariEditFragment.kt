@@ -38,15 +38,9 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
     private fun getBottariId(): Long = arguments?.getLong(EXTRAS_BOTTARI_ID) ?: INVALID_BOTTARI_ID
 
     private fun setupObserver() {
-        viewModel.bottari.observe(viewLifecycleOwner) { bottari ->
-            handleBottariState(bottari)
-        }
-        viewModel.items.observe(viewLifecycleOwner) { items ->
-            handleItemsState(items)
-        }
-        viewModel.alarms.observe(viewLifecycleOwner) { alarms ->
-            handleAlarmState(alarms)
-        }
+        viewModel.bottari.observe(viewLifecycleOwner,::handleBottariState)
+        viewModel.items.observe(viewLifecycleOwner,::handleItemsState)
+        viewModel.alarms.observe(viewLifecycleOwner,::handleAlarmState)
     }
 
     private fun handleBottariState(uiState: UiState<BottariUiModel>) {
@@ -79,7 +73,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
                 alarmAdapter.submitList(uiState.data)
                 toggleAlarmSelection(uiState.data.isNotEmpty())
             }
-
             is UiState.Failure -> showSnackbar(R.string.home_nav_profile_title)
         }
     }
