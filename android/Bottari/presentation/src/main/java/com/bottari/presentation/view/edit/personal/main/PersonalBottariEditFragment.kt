@@ -56,11 +56,17 @@ class PersonalBottariEditFragment :
         }
 
         binding.layoutEditItem.setOnClickListener {
-            navigateToScreen(PersonalItemEditFragment::class.java)
+            navigateToScreen(
+                PersonalItemEditFragment::class.java,
+                PersonalItemEditFragment.newBundle(getBottariId())
+            )
         }
 
         binding.layoutEditAlarm.setOnClickListener {
-            navigateToScreen(PersonalItemEditFragment::class.java)
+            navigateToScreen(
+                PersonalItemEditFragment::class.java,
+                PersonalItemEditFragment.newBundle(getBottariId())
+            )
         }
     }
 
@@ -133,9 +139,9 @@ class PersonalBottariEditFragment :
         binding.rvEditAlarm.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun navigateToScreen(fragmentClass: Class<out Fragment>) {
+    private fun navigateToScreen(fragmentClass: Class<out Fragment>, bundle: Bundle? = null) {
         val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.fcv_personal_edit, fragmentClass, null)
+        transaction.replace(R.id.fcv_personal_edit, fragmentClass, bundle)
         transaction.addToBackStack(fragmentClass.simpleName)
         transaction.commit()
     }
