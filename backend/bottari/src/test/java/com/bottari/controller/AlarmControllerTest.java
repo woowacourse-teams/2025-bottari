@@ -2,6 +2,7 @@ package com.bottari.controller;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -103,7 +104,7 @@ class AlarmControllerTest {
                 .active(alarmId);
 
         // when & then
-        mockMvc.perform(put("/alarms/" + alarmId + "/active"))
+        mockMvc.perform(patch("/alarms/" + alarmId + "/active"))
                 .andExpect(status().isNoContent());
     }
 
@@ -116,7 +117,7 @@ class AlarmControllerTest {
                 .inactive(alarmId);
 
         // when & then
-        mockMvc.perform(put("/alarms/" + alarmId + "/inactive"))
+        mockMvc.perform(patch("/alarms/" + alarmId + "/inactive"))
                 .andExpect(status().isNoContent());
     }
 }
