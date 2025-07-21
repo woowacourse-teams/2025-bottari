@@ -182,4 +182,116 @@ class AlarmServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않는 알람입니다.");
     }
+
+    @DisplayName("알람을 활성화 시킨다.")
+    @Test
+    void active() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        final RoutineAlarm routineAlarm = new RoutineAlarm(
+                LocalTime.NOON,
+                RepeatType.NON_REPEAT,
+                LocalDate.MAX,
+                Set.of()
+        );
+        final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
+        final Alarm inactiveAlarm = new Alarm(false, routineAlarm, locationAlarm, bottari);
+        entityManager.persist(inactiveAlarm);
+
+        // when
+        alarmService.active(inactiveAlarm.getId());
+
+        // then
+        final Alarm actual = entityManager.find(Alarm.class, inactiveAlarm.getId());
+        assertThat(actual.isActive()).isTrue();
+    }
+
+    @DisplayName("이미 활성화된 알람을 활성화 시키면, 예외를 던진다.")
+    @Test
+    void active_Exception_AlreadyActive() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        final RoutineAlarm routineAlarm = new RoutineAlarm(
+                LocalTime.NOON,
+                RepeatType.NON_REPEAT,
+                LocalDate.MAX,
+                Set.of()
+        );
+        final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
+        final Alarm activeAlarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
+        entityManager.persist(activeAlarm);
+
+        // when & then
+        assertThatThrownBy(() -> alarmService.active(activeAlarm.getId()))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("알람이 이미 활성화되어 있습니다.");
+    }
+
+    @DisplayName("알람을 비활성화 시킨다.")
+    @Test
+    void inactive() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        final RoutineAlarm routineAlarm = new RoutineAlarm(
+                LocalTime.NOON,
+                RepeatType.NON_REPEAT,
+                LocalDate.MAX,
+                Set.of()
+        );
+        final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
+        final Alarm activeAlarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
+        entityManager.persist(activeAlarm);
+
+        // when
+        alarmService.inactive(activeAlarm.getId());
+
+        // then
+        final Alarm actual = entityManager.find(Alarm.class, activeAlarm.getId());
+        assertThat(actual.isActive()).isFalse();
+    }
+
+    @DisplayName("이미 비활성화된 알람을 비활성화 시키면, 예외를 던진다.")
+    @Test
+    void inactive_Exception_AlreadyInactive() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        final RoutineAlarm routineAlarm = new RoutineAlarm(
+                LocalTime.NOON,
+                RepeatType.NON_REPEAT,
+                LocalDate.MAX,
+                Set.of()
+        );
+        final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
+        final Alarm inactiveAlarm = new Alarm(false, routineAlarm, locationAlarm, bottari);
+        entityManager.persist(inactiveAlarm);
+
+        // when & then
+        assertThatThrownBy(() -> alarmService.inactive(inactiveAlarm.getId()))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("알람이 이미 비활성화되어 있습니다.");
+    }
 }

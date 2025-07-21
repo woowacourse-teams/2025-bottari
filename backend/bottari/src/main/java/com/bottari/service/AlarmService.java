@@ -44,4 +44,18 @@ public class AlarmService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 알람입니다."));
         alarm.update(request.toRoutineAlarm(), request.toLocationAlarm());
     }
+
+    @Transactional
+    public void active(final Long id) {
+        final Alarm alarm = alarmRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 알람입니다."));
+        alarm.active();
+    }
+
+    @Transactional
+    public void inactive(final Long id) {
+        final Alarm alarm = alarmRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 알람입니다."));
+        alarm.inactive();
+    }
 }
