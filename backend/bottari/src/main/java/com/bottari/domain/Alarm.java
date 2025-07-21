@@ -56,14 +56,14 @@ public class Alarm {
     }
 
     public void active() {
-        if (this.isActive) {
+        if (isActive) {
             throw new IllegalStateException("알람이 이미 활성화되어 있습니다.");
         }
         this.isActive = true;
     }
 
     public void inactive() {
-        if (!this.isActive) {
+        if (!isActive) {
             throw new IllegalStateException("알람이 이미 비활성화되어 있습니다.");
         }
         this.isActive = false;
