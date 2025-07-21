@@ -19,12 +19,13 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
+class PersonalBottariEditFragment :
+    BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
         PersonalBottariEditViewModel.Factory(getBottariId())
     }
-    private val itemAdapter = PersonalBottariEditItemAdapter()
-    private val alarmAdapter = PersonalBottariEditAlarmAdapter()
+    private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
+    private val alarmAdapter: PersonalBottariEditAlarmAdapter by lazy { PersonalBottariEditAlarmAdapter() }
 
     private fun getBottariId(): Long = arguments?.getLong(EXTRAS_BOTTARI_ID) ?: INVALID_BOTTARI_ID
 
@@ -55,6 +56,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
             is UiState.Success -> {
                 binding.tvBottariTitle.text = uiState.data.title
             }
+
             is UiState.Failure -> showSnackbar(R.string.home_nav_profile_title)
         }
     }
@@ -66,6 +68,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
                 itemAdapter.submitList(uiState.data)
                 toggleItemSection(uiState.data.isNotEmpty())
             }
+
             is UiState.Failure -> showSnackbar(R.string.home_nav_profile_title)
         }
     }
@@ -77,6 +80,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
                 alarmAdapter.submitList(uiState.data)
                 toggleAlarmSelection(uiState.data.isNotEmpty())
             }
+
             is UiState.Failure -> showSnackbar(R.string.home_nav_profile_title)
         }
     }
