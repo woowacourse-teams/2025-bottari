@@ -93,4 +93,30 @@ class AlarmControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNoContent());
     }
+
+    @DisplayName("알람을 활성화한다.")
+    @Test
+    void active() throws Exception {
+        // given
+        final Long alarmId = 1L;
+        willDoNothing().given(alarmService)
+                .active(alarmId);
+
+        // when & then
+        mockMvc.perform(put("/alarms/" + alarmId + "/active"))
+                .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("알람을 비활성화한다.")
+    @Test
+    void inactive() throws Exception {
+        // given
+        final Long alarmId = 1L;
+        willDoNothing().given(alarmService)
+                .inactive(alarmId);
+
+        // when & then
+        mockMvc.perform(put("/alarms/" + alarmId + "/inactive"))
+                .andExpect(status().isNoContent());
+    }
 }

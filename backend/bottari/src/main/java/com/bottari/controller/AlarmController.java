@@ -37,4 +37,22 @@ public class AlarmController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/alarms/{id}/active")
+    public ResponseEntity<Void> active(
+            @PathVariable final Long id
+    ) {
+        alarmService.active(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/alarms/{id}/inactive")
+    public ResponseEntity<Void> inactive(
+            @PathVariable final Long id
+    ) {
+        alarmService.inactive(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }
