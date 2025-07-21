@@ -15,6 +15,9 @@ class PersonalItemEditViewModel(
     stateHandle: SavedStateHandle,
 ) : ViewModel() {
 
+    private val _bottariName: MutableLiveData<UiState<String>> = MutableLiveData<UiState<String>>()
+    val bottariName: LiveData<UiState<String>> get() = _bottariName
+
     private val _items = MutableLiveData<UiState<List<ItemUiModel>>>(UiState.Loading)
     val items: LiveData<UiState<List<ItemUiModel>>> = _items
 
@@ -44,6 +47,7 @@ class PersonalItemEditViewModel(
             _items.value = UiState.Failure("유효하지 않은 보따리 ID입니다.")
             return
         }
+        _bottariName.value = UiState.Success("출근 보따리")
         _items.value = UiState.Success(dummyItems)
     }
 
