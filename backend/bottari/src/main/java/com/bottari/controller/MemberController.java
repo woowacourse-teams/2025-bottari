@@ -1,5 +1,6 @@
 package com.bottari.controller;
 
+import com.bottari.controller.docs.MemberApiDocs;
 import com.bottari.dto.CreateMemberRequest;
 import com.bottari.service.MemberService;
 import java.net.URI;
@@ -13,11 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor
-public class MemberController {
+public class MemberController implements MemberApiDocs {
 
     private final MemberService memberService;
 
     @PostMapping
+    @Override
     public ResponseEntity<Void> register(
             @RequestBody final CreateMemberRequest request
     ) {
