@@ -1,6 +1,7 @@
 package com.bottari.controller.docs;
 
 import com.bottari.dto.CreateBottariItemRequest;
+import com.bottari.dto.EditBottariItemsRequest;
 import com.bottari.dto.ReadBottariItemResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,6 +30,15 @@ public interface BottariItemApiDocs {
     ResponseEntity<Void> create(
             @PathVariable final Long bottariId,
             @RequestBody final CreateBottariItemRequest request
+    );
+
+    @Operation(summary = "보따리 물품 수정")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "보따리 물품 수정 성공"),
+    })
+    ResponseEntity<Void> update(
+            @PathVariable final Long bottariId,
+            @RequestBody final EditBottariItemsRequest request
     );
 
     @Operation(summary = "보따리 물품 삭제")

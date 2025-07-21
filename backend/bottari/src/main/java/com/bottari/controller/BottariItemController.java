@@ -45,6 +45,7 @@ public class BottariItemController implements BottariItemApiDocs {
     }
 
     @PatchMapping("/bottaries/{bottariId}/bottari-items")
+    @Override
     public ResponseEntity<Void> update(
             @PathVariable final Long bottariId,
             @RequestBody final EditBottariItemsRequest request

@@ -1,5 +1,6 @@
 package com.bottari.controller;
 
+import com.bottari.controller.docs.AlarmApiDocs;
 import com.bottari.dto.CreateAlarmRequest;
 import com.bottari.dto.UpdateAlarmRequest;
 import com.bottari.service.AlarmService;
@@ -14,11 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class AlarmController {
+public class AlarmController implements AlarmApiDocs {
 
     private final AlarmService alarmService;
 
     @PostMapping("/bottaries/{bottariId}/alarms")
+    @Override
     public ResponseEntity<Void> create(
             @PathVariable final Long bottariId,
             @RequestBody final CreateAlarmRequest request
@@ -29,6 +31,7 @@ public class AlarmController {
     }
 
     @PutMapping("/alarms/{id}")
+    @Override
     public ResponseEntity<Void> update(
             @PathVariable final Long id,
             @RequestBody final UpdateAlarmRequest request
@@ -39,6 +42,7 @@ public class AlarmController {
     }
 
     @PutMapping("/alarms/{id}/active")
+    @Override
     public ResponseEntity<Void> active(
             @PathVariable final Long id
     ) {
@@ -48,6 +52,7 @@ public class AlarmController {
     }
 
     @PutMapping("/alarms/{id}/inactive")
+    @Override
     public ResponseEntity<Void> inactive(
             @PathVariable final Long id
     ) {
