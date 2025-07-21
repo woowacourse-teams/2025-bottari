@@ -6,4 +6,9 @@
         <item name="android:fontFamily">@font/pretendard</item>
         <item name="android:fontWeight">400</item>
     </style>
+    <style name="CustomSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="trackColor">@color/primary</item>
+        <item name="thumbColor">@color/white</item>
+    </style>
+
 </resources>

@@ -1,5 +1,7 @@
 package com.bottari.presentation.view.home.bottari.listener
 
-fun interface OnBottariClickListener {
+interface OnBottariClickListener {
     fun onClick(bottariId: Long)
+
+    fun onMoreClick(bottariId: Long)
 }

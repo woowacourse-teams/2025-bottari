@@ -13,15 +13,25 @@ import com.bottari.presentation.extension.fadeIn
 import com.bottari.presentation.extension.fadeOut
 import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.view.checklist.ChecklistActivity
+import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditActivity
 import com.bottari.presentation.view.home.bottari.adapter.BottariAdapter
 import com.bottari.presentation.view.home.bottari.create.BottariCreateDialog
+import com.bottari.presentation.view.home.bottari.listener.OnBottariClickListener
 
 class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate) {
     private val viewModel: BottariViewModel by viewModels()
     private val adapter: BottariAdapter by lazy {
-        BottariAdapter {
-            navigateToChecklist(it)
-        }
+        BottariAdapter(
+            object : OnBottariClickListener {
+                override fun onClick(bottariId: Long) {
+                    navigateToChecklist(bottariId)
+                }
+
+                override fun onMoreClick(bottariId: Long) {
+                    navigateToEdit(bottariId)
+                }
+            },
+        )
     }
 
     override fun onViewCreated(
@@ -85,6 +95,11 @@ class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBind
 
     private fun navigateToChecklist(bottariId: Long) {
         val intent = ChecklistActivity.newIntent(requireContext(), bottariId)
+        startActivity(intent)
+    }
+
+    private fun navigateToEdit(bottariId: Long) {
+        val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId)
         startActivity(intent)
     }
 }

@@ -30,4 +30,12 @@
     <string name="previous_button_description">뒤로가기 버튼</string>
     <string name="checklist_swipe_button_description">스와이프 화면 전환 버튼</string>
     <string name="dialog_bottari_create_close_button_description">보따리 생성 다이얼로그 닫기 버튼</string>
+
+    <!-- Bottari edit item -->
+    <string name="bottari_edit_item_list_title">물건 목록</string>
+    <string name="bottari_edit_add_item_title">물건 추가</string>
+    <string name="bottari_edit_add_item_description">여기를 눌러 보따리에 물건을 추가하세요</string>
+    <string name="bottari_edit_alarm_list_title">알람</string>
+    <string name="bottari_edit_add_alarm_description">여기를 눌러 알람을 설정하세요</string>
+    <string name="bottari_edit_add_alarm_title">알람 설정</string>
 </resources>

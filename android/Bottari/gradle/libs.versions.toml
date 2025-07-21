@@ -14,6 +14,7 @@ constraintlayout = "2.2.1"
 # UI Components
 material = "1.12.0"
 cardstackview = "3.0.0"
+flexbox = "3.0.0"
 
 # Network
 retrofit = "3.0.0"
@@ -47,6 +48,7 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 
 # --- UI ---
 cardstackview = { module = "com.github.jens-muenker:CardStackView", version.ref = "cardstackview" }
+flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 # --- Network ---
