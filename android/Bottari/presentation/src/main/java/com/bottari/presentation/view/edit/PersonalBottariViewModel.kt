@@ -3,32 +3,39 @@ package com.bottari.presentation.view.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bottari.presentation.base.UiState
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.model.ItemUiModel
 import java.time.LocalDate
 import java.time.LocalTime
 
-class PersonalBottariViewModel : ViewModel() {
-    private val _bottari = MutableLiveData<BottariUiModel>()
-    val bottari: LiveData<BottariUiModel> = _bottari
+class PersonalBottariViewModel(
+    val bottariId: Int
+) : ViewModel() {
+    private val _bottari = MutableLiveData<UiState<BottariUiModel>>()
+    val bottari: LiveData<UiState<BottariUiModel>> = _bottari
 
-    private val _items = MutableLiveData<List<ItemUiModel>>()
-    val items: LiveData<List<ItemUiModel>> = _items
+    private val _items = MutableLiveData<UiState<List<ItemUiModel>>>()
+    val items: LiveData<UiState<List<ItemUiModel>>> = _items
 
-    private val _alarms = MutableLiveData<List<AlarmTypeUiModel>>()
-    val alarms: LiveData<List<AlarmTypeUiModel>> = _alarms
-
-    fun fetchBottariById(id: Int) {
-        _bottari.value = dummyBottariUiModel
+    private val _alarms = MutableLiveData<UiState<List<AlarmTypeUiModel>>>()
+    val alarms: LiveData<UiState<List<AlarmTypeUiModel>>> = _alarms
+    init{
+        fetchBottariById(bottariId)
+        fetchItemsById(bottariId)
+        fetchAlarmById(bottariId)
+    }
+    private fun fetchBottariById(id: Int) {
+        _bottari.value = UiState.Success(dummyBottariUiModel)
     }
 
-    fun fetchItemsById(id: Int) {
-        _items.value = dummyChecklist
+    private fun fetchItemsById(id: Int) {
+        _items.value = UiState.Success(dummyChecklist)
     }
 
-    fun fetchAlarmById(id: Int) {
-        _alarms.value = dummyAlarm
+    private fun fetchAlarmById(id: Int) {
+        _alarms.value = UiState.Success(dummyAlarm)
     }
 
     val dummyBottariUiModel =
@@ -73,4 +80,8 @@ class PersonalBottariViewModel : ViewModel() {
                 time = LocalTime.of(12, 0),
             ),
         )
+
+    companion object{
+
+    }
 }

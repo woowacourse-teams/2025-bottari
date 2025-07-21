@@ -5,8 +5,12 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
+import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentMainEditBinding
+import com.bottari.presentation.model.AlarmTypeUiModel
+import com.bottari.presentation.model.ItemUiModel
 import com.bottari.presentation.view.edit.adapter.PersonalBottariAlarmAdapter
 import com.bottari.presentation.view.edit.adapter.PersonalBottariItemAdapter
 import com.google.android.flexbox.FlexDirection
@@ -26,18 +30,36 @@ class PersonalBottariFragment : BaseFragment<FragmentMainEditBinding>(FragmentMa
         super.onViewCreated(view, savedInstanceState)
         setupObserver()
         setupUI()
-        fetchInitialData()
     }
 
     private fun setupObserver() {
         viewModel.items.observe(viewLifecycleOwner) { items ->
-            itemAdapter.submitList(items)
-            toggleItemSection(items.isNotEmpty())
+            handleItemsState(items)
         }
-
         viewModel.alarms.observe(viewLifecycleOwner) { alarms ->
-            alarmAdapter.submitList(alarms)
-            toggleAlarmSelection(alarms.isNotEmpty())
+            handleAlarmState(alarms)
+        }
+    }
+
+    private fun handleItemsState(uiState: UiState<List<ItemUiModel>>) {
+        when (uiState) {
+            is UiState.Loading -> showSnackbar(R.string.home_nav_market_title)
+            is UiState.Success ->{
+                itemAdapter.submitList(uiState.data)
+                toggleItemSection(uiState.data.isNotEmpty())
+            }
+            is UiState.Failure -> showSnackbar(R.string.home_nav_profile_title)
+        }
+    }
+
+    private fun handleAlarmState(uiState: UiState<List<AlarmTypeUiModel>>) {
+        when(uiState) {
+            is UiState.Loading -> showSnackbar(R.string.home_nav_market_title)
+            is UiState.Success -> {
+                alarmAdapter.submitList(uiState.data)
+                toggleAlarmSelection(uiState.data.isNotEmpty())
+            }
+            is UiState.Failure ->  showSnackbar(R.string.home_nav_profile_title)
         }
     }
 
@@ -79,10 +101,5 @@ class PersonalBottariFragment : BaseFragment<FragmentMainEditBinding>(FragmentMa
             layoutManager = LinearLayoutManager(requireContext())
             adapter = this@PersonalBottariFragment.alarmAdapter
         }
-    }
-
-    private fun fetchInitialData() {
-        viewModel.fetchItemsById(1)
-        viewModel.fetchAlarmById(1)
     }
 }
