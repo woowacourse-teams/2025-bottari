@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.databinding.DialogBottariCreateBinding
-import com.bottari.presentation.view.edit.PersonalBottariEditActivity
+import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditActivity
 
 class BottariCreateDialog :
     DialogFragment(),

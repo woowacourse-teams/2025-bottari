@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.edit
+package com.bottari.presentation.view.edit.personal.main
 
 import android.content.Context
 import android.content.Intent

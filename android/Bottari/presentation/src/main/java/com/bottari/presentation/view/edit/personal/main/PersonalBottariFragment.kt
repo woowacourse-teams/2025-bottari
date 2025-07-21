@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.edit
+package com.bottari.presentation.view.edit.personal.main
 
 import android.os.Bundle
 import android.view.View
@@ -11,8 +11,8 @@ import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentMainEditBinding
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.ItemUiModel
-import com.bottari.presentation.view.edit.adapter.PersonalBottariAlarmAdapter
-import com.bottari.presentation.view.edit.adapter.PersonalBottariItemAdapter
+import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariAlarmAdapter
+import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariItemAdapter
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
