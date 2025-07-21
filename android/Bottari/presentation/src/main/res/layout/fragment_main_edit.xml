@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".view.edit.MainEditFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_edit_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/space_large"
+            android:layout_marginBottom="@dimen/space_median"
+            android:background="@drawable/bg_white_radius_12dp"
+            android:elevation="2dp"
+            android:padding="@dimen/space_median"
+            app:layout_constraintBottom_toTopOf="@id/layout_edit_alarm"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_edit_item"
+                style="@style/Pretendard_Bold_20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bottari_edit_item_list_title"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_click_edit_item_description_notEmpty"
+                style="@style/Pretendard_Medium_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_x_small"
+                android:text="@string/bottari_edit_add_item_description"
+                android:textColor="@color/gray_a6a6a6"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_edit_item" />
+
+            <View
+                android:id="@+id/view_click_edit_item"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_margin="@dimen/space_median"
+                android:background="@drawable/bg_white_radius_12dp_dotted_boder"
+                android:elevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_edit_item" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_edit_item"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_median"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_click_edit_item_description_notEmpty" />
+
+            <TextView
+                android:id="@+id/tv_click_edit_item_title"
+                style="@style/Pretendard_Bold_20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bottari_edit_add_item_title"
+                android:textColor="@color/gray_a6a6a6"
+                app:layout_constraintBottom_toTopOf="@id/tv_click_edit_item_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/view_click_edit_item"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tv_click_edit_item_description"
+                style="@style/Pretendard_Medium_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/bottari_edit_add_item_description"
+                android:textColor="@color/gray_a6a6a6"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_click_edit_item_title" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_edit_alarm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/space_large"
+            android:layout_marginTop="@dimen/space_x_large"
+            android:background="@drawable/bg_white_radius_12dp"
+            android:elevation="2dp"
+            android:padding="@dimen/space_median"
+            app:layout_constraintTop_toBottomOf="@id/layout_edit_item">
+
+            <TextView
+                android:id="@+id/tv_edit_alarm"
+                style="@style/Pretendard_Bold_20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bottari_edit_alarm_list_title"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_click_edit_alarm_description_not_empty"
+                style="@style/Pretendard_Medium_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_x_small"
+                android:text="@string/bottari_edit_add_alarm_description"
+                android:textColor="@color/gray_a6a6a6"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_edit_alarm" />
+
+            <View
+                android:id="@+id/view_click_edit_alarm"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_margin="@dimen/space_median"
+                android:background="@drawable/bg_white_radius_12dp_dotted_boder"
+                android:elevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_edit_alarm" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_edit_alarm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_median"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_click_edit_alarm_description_not_empty" />
+
+            <TextView
+                android:id="@+id/tv_click_edit_alarm_title"
+                style="@style/Pretendard_Bold_20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bottari_edit_add_alarm_title"
+                android:textColor="@color/gray_a6a6a6"
+                app:layout_constraintBottom_toTopOf="@id/tv_click_edit_alarm_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/view_click_edit_alarm"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tv_click_edit_alarm_description"
+                style="@style/Pretendard_Medium_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/bottari_edit_add_alarm_description"
+                android:textColor="@color/gray_a6a6a6"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_click_edit_alarm_title" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
