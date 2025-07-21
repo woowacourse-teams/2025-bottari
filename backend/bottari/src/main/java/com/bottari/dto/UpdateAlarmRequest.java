@@ -7,6 +7,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public record UpdateAlarmRequest(
@@ -15,13 +16,15 @@ public record UpdateAlarmRequest(
 ) {
 
     public RoutineAlarm toRoutineAlarm() {
+        final Set<DayOfWeek> dayOfWeeks = routineAlarm.repeatDayOfWeekValues.stream()
+                .map(DayOfWeek::of)
+                .collect(Collectors.toSet());
+
         return new RoutineAlarm(
                 routineAlarm.time,
                 routineAlarm.type,
                 routineAlarm.date,
-                routineAlarm.repeatDayOfWeekValues.stream()
-                        .map(DayOfWeek::of)
-                        .collect(Collectors.toSet())
+                dayOfWeeks
         );
     }
 
