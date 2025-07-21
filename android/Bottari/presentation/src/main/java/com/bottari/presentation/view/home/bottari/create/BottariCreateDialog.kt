@@ -1,6 +1,5 @@
 package com.bottari.presentation.view.home.bottari.create
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -84,13 +83,11 @@ class BottariCreateDialog :
     }
 
     private fun navigateToEdit() {
-        val intent = Intent(requireContext(), PersonalBottariEditActivity::class.java)
-        intent.putExtra(BOTTARI_ID, viewModel.bottariId)
+        val intent = PersonalBottariEditActivity.newIntent(requireContext(),viewModel.bottariId)
         startActivity(intent)
     }
 
     companion object {
-        private const val BOTTARI_ID = "BOTTARI_ID"
         private const val DISABLED_ALPHA_VALUE = 0.4f
         private const val ENABLED_ALPHA_VALUE = 1f
     }
