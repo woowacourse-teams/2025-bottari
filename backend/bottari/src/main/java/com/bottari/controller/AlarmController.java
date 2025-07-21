@@ -7,6 +7,7 @@ import com.bottari.service.AlarmService;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,7 +42,7 @@ public class AlarmController implements AlarmApiDocs {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/alarms/{id}/active")
+    @PatchMapping("/alarms/{id}/active")
     @Override
     public ResponseEntity<Void> active(
             @PathVariable final Long id
@@ -51,7 +52,7 @@ public class AlarmController implements AlarmApiDocs {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/alarms/{id}/inactive")
+    @PatchMapping("/alarms/{id}/inactive")
     @Override
     public ResponseEntity<Void> inactive(
             @PathVariable final Long id
