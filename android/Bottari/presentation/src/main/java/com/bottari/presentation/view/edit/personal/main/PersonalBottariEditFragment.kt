@@ -26,6 +26,8 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
     private val itemAdapter = PersonalBottariEditItemAdapter()
     private val alarmAdapter = PersonalBottariEditAlarmAdapter()
 
+    private fun getBottariId(): Long = arguments?.getLong(EXTRAS_BOTTARI_ID) ?: INVALID_BOTTARI_ID
+
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -35,12 +37,16 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
         setupUI()
     }
 
-    private fun getBottariId(): Long = arguments?.getLong(EXTRAS_BOTTARI_ID) ?: INVALID_BOTTARI_ID
-
     private fun setupObserver() {
-        viewModel.bottari.observe(viewLifecycleOwner,::handleBottariState)
-        viewModel.items.observe(viewLifecycleOwner,::handleItemsState)
-        viewModel.alarms.observe(viewLifecycleOwner,::handleAlarmState)
+        viewModel.bottari.observe(viewLifecycleOwner, ::handleBottariState)
+        viewModel.items.observe(viewLifecycleOwner, ::handleItemsState)
+        viewModel.alarms.observe(viewLifecycleOwner, ::handleAlarmState)
+    }
+
+    private fun setupUI() {
+        setupItemRecyclerView()
+        setupAlarmRecyclerView()
+        setupToolbar()
     }
 
     private fun handleBottariState(uiState: UiState<BottariUiModel>) {
@@ -49,7 +55,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
             is UiState.Success -> {
                 binding.tvBottariTitle.text = uiState.data.title
             }
-
             is UiState.Failure -> showSnackbar(R.string.home_nav_profile_title)
         }
     }
@@ -61,7 +66,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
                 itemAdapter.submitList(uiState.data)
                 toggleItemSection(uiState.data.isNotEmpty())
             }
-
             is UiState.Failure -> showSnackbar(R.string.home_nav_profile_title)
         }
     }
@@ -91,12 +95,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
         binding.viewClickEditAlarm.isVisible = !hasAlarms
         binding.tvClickEditAlarmDescriptionNotEmpty.isVisible = hasAlarms
         binding.rvEditAlarm.isVisible = hasAlarms
-    }
-
-    private fun setupUI() {
-        setupItemRecyclerView()
-        setupAlarmRecyclerView()
-        setupToolbar()
     }
 
     private fun setupItemRecyclerView() {
