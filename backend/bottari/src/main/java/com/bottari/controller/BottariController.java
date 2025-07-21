@@ -1,5 +1,6 @@
 package com.bottari.controller;
 
+import com.bottari.controller.docs.BottariApiDocs;
 import com.bottari.dto.CreateBottariRequest;
 import com.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.dto.ReadBottariResponse;
@@ -19,11 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/bottaries")
 @RequiredArgsConstructor
-public class BottariController {
+public class BottariController implements BottariApiDocs {
 
     private final BottariService bottariService;
 
     @GetMapping("/{id}")
+    @Override
     public ResponseEntity<ReadBottariResponse> read(
             @PathVariable final Long id,
             final HttpServletRequest httpServletRequest
@@ -35,6 +37,7 @@ public class BottariController {
     }
 
     @GetMapping
+    @Override
     public ResponseEntity<List<ReadBottariPreviewResponse>> readPreviews(
             final HttpServletRequest httpServletRequest
     ) {
@@ -45,6 +48,7 @@ public class BottariController {
     }
 
     @PostMapping
+    @Override
     public ResponseEntity<Void> create(
             @RequestBody final CreateBottariRequest request,
             final HttpServletRequest httpServletRequest
