@@ -149,4 +149,37 @@ class AlarmServiceTest {
             assertThat(actual.getLocationAlarm().longitude()).isEqualTo(1.23);
         });
     }
+
+    @DisplayName("존재하지 않는 알람을 수정할 경우, 예외를 던진다.")
+    @Test
+    void update_Exception_NotExistsAlarm() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title", member);
+        entityManager.persist(bottari);
+
+        final UpdateAlarmRequest updateRequest = new UpdateAlarmRequest(
+                new UpdateAlarmRequest.RoutineAlarmRequest(
+                        LocalTime.NOON,
+                        RepeatType.NON_REPEAT,
+                        LocalDate.MAX,
+                        List.of()
+                ),
+                new UpdateAlarmRequest.LocationAlarmRequest(
+                        false,
+                        1.23,
+                        1.23,
+                        100
+                )
+        );
+        final Long invalidAlarmId = 1L;
+
+        // when & then
+        assertThatThrownBy(() -> alarmService.update(invalidAlarmId, updateRequest))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("존재하지 않는 알람입니다.");
+    }
 }
