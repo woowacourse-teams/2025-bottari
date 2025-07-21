@@ -46,6 +46,15 @@ public class Alarm {
         this.bottari = bottari;
     }
 
+    public void update(
+            final RoutineAlarm routineAlarm,
+            final LocationAlarm locationAlarm
+    ) {
+        validateLocationAlarm(routineAlarm, locationAlarm);
+        this.routineAlarm = routineAlarm;
+        this.locationAlarm = locationAlarm;
+    }
+
     private void validateLocationAlarm(
             final RoutineAlarm routineAlarm,
             final LocationAlarm locationAlarm
