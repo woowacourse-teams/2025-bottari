@@ -98,6 +98,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
         binding.viewClickEditAlarm.isVisible = !hasAlarms
         binding.tvClickEditAlarmDescriptionNotEmpty.isVisible = hasAlarms
         binding.rvEditAlarm.isVisible = hasAlarms
+        binding.swAlarm.isVisible = hasAlarms
     }
 
     private fun setupItemRecyclerView() {

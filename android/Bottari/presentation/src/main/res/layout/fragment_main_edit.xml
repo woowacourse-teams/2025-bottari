@@ -142,7 +142,8 @@
             android:background="@drawable/bg_white_radius_12dp"
             android:elevation="2dp"
             android:padding="@dimen/space_median"
-            app:layout_constraintTop_toBottomOf="@id/layout_edit_item">
+            app:layout_constraintTop_toBottomOf="@id/layout_edit_item"
+            tools:layout_editor_absoluteX="20dp">
 
             <TextView
                 android:id="@+id/tv_edit_alarm"
@@ -166,17 +167,30 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_edit_alarm" />
 
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/sw_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="6.4sp"
+                android:textOff=""
+                android:textOn=""
+                android:thumb="@drawable/bg_thumb"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:track="@drawable/bg_track"
+                android:checked="false"/>
+
             <View
                 android:id="@+id/view_click_edit_alarm"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
+                android:layout_marginTop="@dimen/space_x_large"
                 android:background="@drawable/bg_white_radius_12dp_dotted_boder"
                 android:elevation="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_edit_alarm"
-                android:layout_marginTop="@dimen/space_x_large"/>
+                app:layout_constraintTop_toBottomOf="@+id/tv_edit_alarm" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_edit_alarm"

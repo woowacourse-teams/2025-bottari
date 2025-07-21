@@ -9,7 +9,7 @@
     android:layout_marginEnd="@dimen/space_x_small"
     android:layout_marginTop="@dimen/space_x_small"
     android:paddingHorizontal="@dimen/space_small"
-    android:paddingVertical="@dimen/space_x_small">
+    android:paddingVertical="4dp">
 
     <TextView
         android:id="@+id/tv_checklist_item_mini_title"
