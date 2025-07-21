@@ -38,7 +38,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
     private fun getBottariId(): Long = arguments?.getLong(EXTRAS_BOTTARI_ID) ?: INVALID_BOTTARI_ID
 
     private fun setupObserver() {
-        viewModel.bottari.observe(viewLifecycleOwner){ bottari ->
+        viewModel.bottari.observe(viewLifecycleOwner) { bottari ->
             handleBottariState(bottari)
         }
         viewModel.items.observe(viewLifecycleOwner) { items ->
@@ -125,8 +125,8 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
         }
     }
 
-    private fun setupToolbar(){
-        binding.btnPrevious.setOnClickListener{
+    private fun setupToolbar() {
+        binding.btnPrevious.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }

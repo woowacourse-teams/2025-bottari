@@ -34,6 +34,7 @@ class PersonalBottariEditViewModel(
         fetchItemsById(id)
         fetchAlarmById(id)
     }
+
     private fun fetchBottariById(id: Long) {
         _bottari.value = UiState.Success(dummyBottari)
     }
@@ -63,7 +64,7 @@ class PersonalBottariEditViewModel(
     }
 }
 
-private val dummyBottari = BottariUiModel(1,"나의 보따리",0,0,null)
+private val dummyBottari = BottariUiModel(1, "나의 보따리", 0, 0, null)
 
 private val dummyChecklist =
     listOf(
@@ -98,4 +99,3 @@ private val dummyAlarm =
             time = LocalTime.of(12, 0),
         ),
     )
-
