@@ -1,5 +1,6 @@
 package com.bottari.presentation.view.edit.personal.item
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -36,6 +37,7 @@ class PersonalItemEditFragment :
     }
 
     private fun setupObserver() {
+        viewModel.bottariName.observe(viewLifecycleOwner, ::handleBottariNameState)
         viewModel.items.observe(viewLifecycleOwner, ::handleItemState)
     }
 
@@ -46,12 +48,14 @@ class PersonalItemEditFragment :
 
     private fun setupListener() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
             val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
-            val bottomPadding = if (imeVisible) ime.bottom else systemBars.bottom
-            view.setPadding(0, 0, 0, bottomPadding)
+            val bottomInset = when {
+                imeVisible -> insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.R -> insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+                else -> 0
+            }
 
+            view.setPadding(0, 0, 0, bottomInset)
             insets
         }
 
@@ -74,6 +78,14 @@ class PersonalItemEditFragment :
     }
 
     private fun getBottariId(): Long = arguments?.getLong(EXTRA_BOTTARI_ID) ?: INVALID_BOTTARI_ID
+
+    private fun handleBottariNameState(uiState: UiState<String>) {
+        when (uiState) {
+            is UiState.Loading -> {}
+            is UiState.Success -> binding.tvBottariTitle.text = uiState.data
+            is UiState.Failure -> {}
+        }
+    }
 
     private fun handleItemState(uiState: UiState<List<ItemUiModel>>) {
         when (uiState) {
