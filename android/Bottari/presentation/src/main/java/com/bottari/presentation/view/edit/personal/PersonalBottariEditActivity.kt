@@ -5,10 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseActivity
-import com.bottari.presentation.databinding.ActivityPersonalEditBinding
-import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
+import com.bottari.presentation.databinding.ActivityPersonalBottariEditBinding
+import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditFragment
 
-class PersonalEditActivity : BaseActivity<ActivityPersonalEditBinding>(ActivityPersonalEditBinding::inflate) {
+class PersonalBottariEditActivity :
+    BaseActivity<ActivityPersonalBottariEditBinding>(ActivityPersonalBottariEditBinding::inflate) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -25,8 +26,8 @@ class PersonalEditActivity : BaseActivity<ActivityPersonalEditBinding>(ActivityP
         supportFragmentManager.beginTransaction().run {
             replace(
                 R.id.fcv_personal_edit,
-                PersonalItemEditFragment::class.java,
-                PersonalItemEditFragment.newBundle(getBottariId()),
+                PersonalBottariEditFragment::class.java,
+                PersonalBottariEditFragment.newBundle(getBottariId()),
             )
             commit()
         }
@@ -40,7 +41,7 @@ class PersonalEditActivity : BaseActivity<ActivityPersonalEditBinding>(ActivityP
             context: Context,
             bottariId: Long,
         ): Intent =
-            Intent(context, PersonalEditActivity::class.java).apply {
+            Intent(context, PersonalBottariEditActivity::class.java).apply {
                 putExtra(EXTRA_BOTTARI_ID, bottariId)
             }
     }

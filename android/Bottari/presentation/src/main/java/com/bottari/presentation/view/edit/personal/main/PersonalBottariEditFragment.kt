@@ -19,14 +19,13 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
+class PersonalBottariEditFragment :
+    BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
         PersonalBottariEditViewModel.Factory(getBottariId())
     }
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val alarmAdapter: PersonalBottariEditAlarmAdapter by lazy { PersonalBottariEditAlarmAdapter() }
-
-    private fun getBottariId(): Long = arguments?.getLong(EXTRAS_BOTTARI_ID) ?: INVALID_BOTTARI_ID
 
     override fun onViewCreated(
         view: View,
@@ -48,6 +47,8 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
         setupAlarmRecyclerView()
         setupToolbar()
     }
+
+    private fun getBottariId(): Long = arguments?.getLong(EXTRA_BOTTARI_ID) ?: INVALID_BOTTARI_ID
 
     private fun handleBottariState(uiState: UiState<BottariUiModel>) {
         when (uiState) {
@@ -74,13 +75,13 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
 
     private fun handleAlarmState(uiState: UiState<List<AlarmTypeUiModel>>) {
         when (uiState) {
-            is UiState.Loading -> showSnackbar(R.string.home_nav_market_title)
+            is UiState.Loading -> Unit
             is UiState.Success -> {
                 alarmAdapter.submitList(uiState.data)
                 toggleAlarmSelection(uiState.data.isNotEmpty())
             }
 
-            is UiState.Failure -> showSnackbar(R.string.home_nav_profile_title)
+            is UiState.Failure -> Unit
         }
     }
 
@@ -127,7 +128,12 @@ class PersonalBottariEditFragment : BaseFragment<FragmentMainEditBinding>(Fragme
     }
 
     companion object {
-        private const val EXTRAS_BOTTARI_ID = "EXTRAS_BOTTARI_ID"
+        private const val EXTRA_BOTTARI_ID = "EXTRAS_BOTTARI_ID"
         private const val INVALID_BOTTARI_ID = -1L
+
+        fun newBundle(bottariId: Long) =
+            Bundle().apply {
+                putLong(EXTRA_BOTTARI_ID, bottariId)
+            }
     }
 }

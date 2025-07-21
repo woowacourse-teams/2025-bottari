@@ -12,7 +12,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".view.edit.personal.PersonalEditActivity"
+            android:name=".view.edit.personal.PersonalBottariEditActivity"
             android:exported="false" />
     </application>
 

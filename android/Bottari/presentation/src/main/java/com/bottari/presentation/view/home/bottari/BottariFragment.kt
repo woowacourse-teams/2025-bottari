@@ -13,7 +13,7 @@ import com.bottari.presentation.extension.fadeIn
 import com.bottari.presentation.extension.fadeOut
 import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.view.checklist.ChecklistActivity
-import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditActivity
+import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.home.bottari.adapter.BottariAdapter
 import com.bottari.presentation.view.home.bottari.create.BottariCreateDialog
 import com.bottari.presentation.view.home.bottari.listener.OnBottariClickListener
@@ -45,7 +45,7 @@ class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBind
     }
 
     private fun setupObserver() {
-        viewModel.bottaries.observe(viewLifecycleOwner) { uiState -> handleBottariState(uiState) }
+        viewModel.bottaries.observe(viewLifecycleOwner, ::handleBottariState)
     }
 
     private fun setupUI() {

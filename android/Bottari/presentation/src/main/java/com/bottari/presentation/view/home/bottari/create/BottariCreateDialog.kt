@@ -10,7 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.DialogBottariCreateBinding
-import com.bottari.presentation.view.edit.personal.PersonalEditActivity
+import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 
 class BottariCreateDialog :
     DialogFragment(),
@@ -96,7 +96,7 @@ class BottariCreateDialog :
     }
 
     private fun navigateToScreen(bottariId: Long) {
-        val intent = PersonalEditActivity.newIntent(requireContext(), bottariId)
+        val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId)
         startActivity(intent)
         dismiss()
     }
