@@ -55,6 +55,20 @@ public class Alarm {
         this.locationAlarm = locationAlarm;
     }
 
+    public void active() {
+        if (isActive) {
+            throw new IllegalStateException("알람이 이미 활성화되어 있습니다.");
+        }
+        this.isActive = true;
+    }
+
+    public void inactive() {
+        if (!isActive) {
+            throw new IllegalStateException("알람이 이미 비활성화되어 있습니다.");
+        }
+        this.isActive = false;
+    }
+
     private void validateLocationAlarm(
             final RoutineAlarm routineAlarm,
             final LocationAlarm locationAlarm
