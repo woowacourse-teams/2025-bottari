@@ -31,6 +31,8 @@ class PersonalItemEditViewModel(
         if (itemName.isBlank()) return
 
         val currentList = _items.value?.takeSuccess() ?: return
+        if (currentList.any { item -> item.name == itemName }) return
+
         val updatedList = currentList + createItem(itemName)
         _items.value = UiState.Success(updatedList)
     }
