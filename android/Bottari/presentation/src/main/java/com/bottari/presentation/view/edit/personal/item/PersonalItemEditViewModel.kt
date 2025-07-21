@@ -14,7 +14,6 @@ import com.bottari.presentation.model.ItemUiModel
 class PersonalItemEditViewModel(
     stateHandle: SavedStateHandle,
 ) : ViewModel() {
-
     private val _bottariName: MutableLiveData<UiState<String>> = MutableLiveData<UiState<String>>()
     val bottariName: LiveData<UiState<String>> get() = _bottariName
 
@@ -67,17 +66,22 @@ class PersonalItemEditViewModel(
                     modelClass: Class<T>,
                     extras: CreationExtras,
                 ): T {
-                    val handle = extras.createSavedStateHandle().apply {
-                        this[EXTRAS_BOTTARI_ID] = bottariId
-                    }
+                    val handle =
+                        extras.createSavedStateHandle().apply {
+                            this[EXTRAS_BOTTARI_ID] = bottariId
+                        }
                     return PersonalItemEditViewModel(handle) as T
                 }
             }
 
-        private val dummyItems = listOf(
-            "우유", "계란", "식빵", "세제",
-        ).mapIndexed { index, name ->
-            ItemUiModel(id = index.toLong(), isChecked = index % 2 == 0, name = name)
-        }
+        private val dummyItems =
+            listOf(
+                "우유",
+                "계란",
+                "식빵",
+                "세제",
+            ).mapIndexed { index, name ->
+                ItemUiModel(id = index.toLong(), isChecked = index % 2 == 0, name = name)
+            }
     }
 }

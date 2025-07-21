@@ -14,12 +14,10 @@ import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.model.ItemUiModel
 import com.bottari.presentation.view.edit.personal.item.adapter.PersonalItemEditAdapter
 
-class PersonalItemEditFragment :
-    BaseFragment<FragmentPersonalItemEditBinding>(FragmentPersonalItemEditBinding::inflate) {
-
+class PersonalItemEditFragment : BaseFragment<FragmentPersonalItemEditBinding>(FragmentPersonalItemEditBinding::inflate) {
     private val viewModel: PersonalItemEditViewModel by viewModels {
         PersonalItemEditViewModel.Factory(
-            getBottariId()
+            getBottariId(),
         )
     }
     private val adapter by lazy {
@@ -28,7 +26,10 @@ class PersonalItemEditFragment :
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         setupObserver()
@@ -49,11 +50,12 @@ class PersonalItemEditFragment :
     private fun setupListener() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
-            val bottomInset = when {
-                imeVisible -> insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.R -> insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
-                else -> 0
-            }
+            val bottomInset =
+                when {
+                    imeVisible -> insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+                    Build.VERSION.SDK_INT < Build.VERSION_CODES.R -> insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+                    else -> 0
+                }
 
             view.setPadding(0, 0, 0, bottomInset)
             insets
@@ -99,8 +101,9 @@ class PersonalItemEditFragment :
         private const val INVALID_BOTTARI_ID = -1L
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
 
-        fun newBundle(bottariId: Long) = Bundle().apply {
-            putLong(EXTRA_BOTTARI_ID, bottariId)
-        }
+        fun newBundle(bottariId: Long) =
+            Bundle().apply {
+                putLong(EXTRA_BOTTARI_ID, bottariId)
+            }
     }
 }

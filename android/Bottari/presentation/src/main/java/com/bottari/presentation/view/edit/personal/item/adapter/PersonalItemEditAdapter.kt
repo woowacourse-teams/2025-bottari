@@ -9,12 +9,15 @@ import com.bottari.presentation.view.edit.personal.item.listener.OnEditItemClick
 class PersonalItemEditAdapter(
     private val onEditItemClickListener: OnEditItemClickListener,
 ) : ListAdapter<ItemUiModel, PersonalItemEditViewHolder>(DiffUtil) {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): PersonalItemEditViewHolder = PersonalItemEditViewHolder.from(parent, onEditItemClickListener)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonalItemEditViewHolder {
-        return PersonalItemEditViewHolder.from(parent, onEditItemClickListener)
-    }
-
-    override fun onBindViewHolder(holder: PersonalItemEditViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: PersonalItemEditViewHolder,
+        position: Int,
+    ) {
         holder.bind(getItem(position))
     }
 
@@ -33,6 +36,3 @@ class PersonalItemEditAdapter(
             }
     }
 }
-
-
-

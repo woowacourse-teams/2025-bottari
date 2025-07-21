@@ -8,26 +8,25 @@ import com.bottari.presentation.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityPersonalEditBinding
 import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
 
-class PersonalEditActivity :
-    BaseActivity<ActivityPersonalEditBinding>(ActivityPersonalEditBinding::inflate) {
-
+class PersonalEditActivity : BaseActivity<ActivityPersonalEditBinding>(ActivityPersonalEditBinding::inflate) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         navigateToScreen()
     }
 
-    private fun getBottariId(): Long = intent.getLongExtra(
-        EXTRA_BOTTARI_ID, INVALID_BOTTARI_ID
-    )
-
+    private fun getBottariId(): Long =
+        intent.getLongExtra(
+            EXTRA_BOTTARI_ID,
+            INVALID_BOTTARI_ID,
+        )
 
     private fun navigateToScreen() {
         supportFragmentManager.beginTransaction().run {
             replace(
                 R.id.fcv_personal_edit,
                 PersonalItemEditFragment::class.java,
-                PersonalItemEditFragment.newBundle(getBottariId())
+                PersonalItemEditFragment.newBundle(getBottariId()),
             )
             commit()
         }

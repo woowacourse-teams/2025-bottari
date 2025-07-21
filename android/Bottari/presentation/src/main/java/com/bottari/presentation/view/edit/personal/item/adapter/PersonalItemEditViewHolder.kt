@@ -9,7 +9,7 @@ import com.bottari.presentation.view.edit.personal.item.listener.OnEditItemClick
 
 class PersonalItemEditViewHolder(
     private val binding: ItemEditPersonalItemBinding,
-    listener: OnEditItemClickListener
+    listener: OnEditItemClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     private var itemId: Long? = null
 
@@ -25,7 +25,10 @@ class PersonalItemEditViewHolder(
     }
 
     companion object {
-        fun from(parent: ViewGroup, listener: OnEditItemClickListener): PersonalItemEditViewHolder {
+        fun from(
+            parent: ViewGroup,
+            listener: OnEditItemClickListener,
+        ): PersonalItemEditViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ItemEditPersonalItemBinding.inflate(layoutInflater, parent, false)
             return PersonalItemEditViewHolder(binding, listener)
