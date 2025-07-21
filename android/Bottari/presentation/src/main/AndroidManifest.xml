@@ -3,9 +3,11 @@
 
     <application>
         <activity
+            android:name=".view.edit.PersonalBottariEditActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.home.HomeActivity"
             android:exported="false" />
-
         <activity
             android:name=".view.checklist.ChecklistActivity"
             android:exported="false" />

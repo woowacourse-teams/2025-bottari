@@ -1,5 +1,6 @@
 package com.bottari.presentation.view.home.bottari.create
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.databinding.DialogBottariCreateBinding
+import com.bottari.presentation.view.edit.PersonalBottariEditActivity
 
 class BottariCreateDialog :
     DialogFragment(),
@@ -77,10 +79,19 @@ class BottariCreateDialog :
         binding.btnBottariCreateClose.setOnClickListener { dismiss() }
         binding.btnBottariCreate.setOnClickListener {
             viewModel.createBottari(binding.etBottariCreateName.text.toString())
+            navigateToEdit()
         }
     }
 
+    private fun navigateToEdit(){
+        val intent = Intent(requireContext(), PersonalBottariEditActivity::class.java)
+        intent.putExtra(BOTTARI_ID, viewModel.bottariId)
+        startActivity(intent)
+
+    }
+
     companion object {
+        private const val BOTTARI_ID = "BOTTARI_ID"
         private const val DISABLED_ALPHA_VALUE = 0.4f
         private const val ENABLED_ALPHA_VALUE = 1f
     }

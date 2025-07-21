@@ -33,6 +33,10 @@ class BottariViewHolder private constructor(
         itemView.setOnClickListener {
             bottariId?.let { onBottariClickListener.onClick(it) }
         }
+
+        binding.btnBottariMore.setOnClickListener {
+            bottariId?.let { onBottariClickListener.onMoreClick(it) }
+        }
     }
 
     fun bind(bottari: BottariUiModel) {
@@ -55,13 +59,16 @@ class BottariViewHolder private constructor(
         return formatPattern.format(checked, total)
     }
 
-    private fun formatAlarmInfo(alarmType: AlarmTypeUiModel): String =
+    private fun formatAlarmInfo(alarmType: AlarmTypeUiModel?): String =
         when (alarmType) {
+
             is AlarmTypeUiModel.NonRepeat -> alarmType.formatted()
 
             is AlarmTypeUiModel.EveryDayRepeat -> alarmType.formatted()
 
             is AlarmTypeUiModel.EveryWeekRepeat -> alarmType.formatted()
+
+            null -> ""
         }
 
     private fun updateProgressBar(
@@ -128,15 +135,12 @@ class BottariViewHolder private constructor(
         color: Int,
     ): Drawable {
         if (drawable !is LayerDrawable) return drawable
-
         val progressLayer = drawable.findDrawableByLayerId(android.R.id.progress)
         val innerDrawable = (progressLayer as? ClipDrawable)?.drawable ?: return drawable
-
         when (innerDrawable) {
             is ShapeDrawable -> innerDrawable.paint.color = color
             is GradientDrawable -> innerDrawable.setColor(color)
         }
-
         return drawable
     }
 
