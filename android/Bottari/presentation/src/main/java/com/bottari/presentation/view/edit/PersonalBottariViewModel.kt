@@ -9,7 +9,7 @@ import com.bottari.presentation.model.ItemUiModel
 import java.time.LocalDate
 import java.time.LocalTime
 
-class MainEditViewModel : ViewModel() {
+class PersonalBottariViewModel : ViewModel() {
     private val _bottari = MutableLiveData<BottariUiModel>()
     val bottari: LiveData<BottariUiModel> = _bottari
 

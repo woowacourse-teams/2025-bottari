@@ -14,8 +14,8 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class MainEditFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
-    private val viewModel: MainEditViewModel by viewModels()
+class PersonalBottariFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditBinding::inflate) {
+    private val viewModel: PersonalBottariViewModel by viewModels()
     private val itemAdapter = PersonalBottariItemAdapter()
     private val alarmAdapter = PersonalBottariAlarmAdapter()
 
@@ -66,14 +66,14 @@ class MainEditFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditB
                     flexWrap = FlexWrap.WRAP
                     justifyContent = JustifyContent.FLEX_START
                 }
-            adapter = this@MainEditFragment.itemAdapter
+            adapter = this@PersonalBottariFragment.itemAdapter
         }
     }
 
     private fun setupAlarmRecyclerView() {
         binding.rvEditAlarm.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = this@MainEditFragment.alarmAdapter
+            adapter = this@PersonalBottariFragment.alarmAdapter
         }
     }
 

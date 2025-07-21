@@ -10,7 +10,7 @@ import com.bottari.presentation.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityPersonalBottariEditBinding
 
 class PersonalBottariEditActivity : BaseActivity<ActivityPersonalBottariEditBinding>(ActivityPersonalBottariEditBinding::inflate) {
-    private val viewModel: MainEditViewModel by viewModels()
+    private val viewModel: PersonalBottariViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +30,9 @@ class PersonalBottariEditActivity : BaseActivity<ActivityPersonalBottariEditBind
             setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
             replace(
                 R.id.fcv_edit,
-                MainEditFragment::class.java,
+                PersonalBottariFragment::class.java,
                 null,
-                MainEditFragment::class.java.name,
+                PersonalBottariFragment::class.java.name,
             )
             commit()
         }
