@@ -1,6 +1,7 @@
 [versions]
 # Android Gradle Plugin & Kotlin
 agp = "8.9.0"
+flexbox = "3.0.0"
 kotlin = "2.0.21"
 jetbrainsKotlinJvm = "2.0.21"
 
@@ -47,6 +48,7 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 
 # --- UI ---
 cardstackview = { module = "com.github.jens-muenker:CardStackView", version.ref = "cardstackview" }
+flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 # --- Network ---
