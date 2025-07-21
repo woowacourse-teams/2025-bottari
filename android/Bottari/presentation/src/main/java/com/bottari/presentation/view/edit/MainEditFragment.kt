@@ -19,7 +19,10 @@ class MainEditFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditB
     private val itemAdapter = PersonalBottariItemAdapter()
     private val alarmAdapter = PersonalBottariAlarmAdapter()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setupObservers()
         setupItemRecyclerView()
@@ -47,7 +50,7 @@ class MainEditFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditB
         binding.rvEditItem.isVisible = hasItems
     }
 
-    private fun toggleAlarmSelection(hasAlarms: Boolean){
+    private fun toggleAlarmSelection(hasAlarms: Boolean) {
         binding.tvClickEditAlarmTitle.isVisible = !hasAlarms
         binding.tvClickEditAlarmDescription.isVisible = !hasAlarms
         binding.viewClickEditAlarm.isVisible = !hasAlarms
@@ -57,16 +60,17 @@ class MainEditFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditB
 
     private fun setupItemRecyclerView() {
         binding.rvEditItem.apply {
-            layoutManager = FlexboxLayoutManager(requireContext()).apply {
-                flexDirection = FlexDirection.ROW
-                flexWrap = FlexWrap.WRAP
-                justifyContent = JustifyContent.FLEX_START
-            }
+            layoutManager =
+                FlexboxLayoutManager(requireContext()).apply {
+                    flexDirection = FlexDirection.ROW
+                    flexWrap = FlexWrap.WRAP
+                    justifyContent = JustifyContent.FLEX_START
+                }
             adapter = this@MainEditFragment.itemAdapter
         }
     }
 
-    private fun setupAlarmRecyclerView(){
+    private fun setupAlarmRecyclerView() {
         binding.rvEditAlarm.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = this@MainEditFragment.alarmAdapter
@@ -77,5 +81,4 @@ class MainEditFragment : BaseFragment<FragmentMainEditBinding>(FragmentMainEditB
         viewModel.fetchItemsById(1)
         viewModel.fetchAlarmById(1)
     }
-
 }

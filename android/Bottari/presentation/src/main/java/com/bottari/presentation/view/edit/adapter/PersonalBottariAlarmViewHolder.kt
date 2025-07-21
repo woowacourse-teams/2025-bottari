@@ -62,9 +62,7 @@ class PersonalBottariAlarmViewHolder private constructor(
         }
 
     companion object {
-        fun from(
-            parent: ViewGroup,
-        ): PersonalBottariAlarmViewHolder {
+        fun from(parent: ViewGroup): PersonalBottariAlarmViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemChecklistAlarmBinding.inflate(inflater, parent, false)
             return PersonalBottariAlarmViewHolder(binding)

@@ -5,8 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.AlarmTypeUiModel
 
-class PersonalBottariAlarmAdapter() :
-    ListAdapter<AlarmTypeUiModel, PersonalBottariAlarmViewHolder>(DiffUtil) {
+class PersonalBottariAlarmAdapter : ListAdapter<AlarmTypeUiModel, PersonalBottariAlarmViewHolder>(DiffUtil) {
     override fun onBindViewHolder(
         holder: PersonalBottariAlarmViewHolder,
         position: Int,
@@ -29,9 +28,8 @@ class PersonalBottariAlarmAdapter() :
 
                 override fun areItemsTheSame(
                     oldItem: AlarmTypeUiModel,
-                    newItem: AlarmTypeUiModel
+                    newItem: AlarmTypeUiModel,
                 ): Boolean = oldItem == newItem
-
             }
     }
 }

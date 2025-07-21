@@ -61,7 +61,6 @@ class BottariViewHolder private constructor(
 
     private fun formatAlarmInfo(alarmType: AlarmTypeUiModel?): String =
         when (alarmType) {
-
             is AlarmTypeUiModel.NonRepeat -> alarmType.formatted()
 
             is AlarmTypeUiModel.EveryDayRepeat -> alarmType.formatted()

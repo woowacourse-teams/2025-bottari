@@ -5,9 +5,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.ItemUiModel
 
-class PersonalBottariItemAdapter() : ListAdapter<ItemUiModel, PersonalBottariItemViewHolder>(
-    DiffUtil
-) {
+class PersonalBottariItemAdapter :
+    ListAdapter<ItemUiModel, PersonalBottariItemViewHolder>(
+        DiffUtil,
+    ) {
     override fun onBindViewHolder(
         holder: PersonalBottariItemViewHolder,
         position: Int,

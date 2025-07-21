@@ -9,8 +9,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityPersonalBottariEditBinding
 
-class PersonalBottariEditActivity :
-    BaseActivity<ActivityPersonalBottariEditBinding>(ActivityPersonalBottariEditBinding::inflate) {
+class PersonalBottariEditActivity : BaseActivity<ActivityPersonalBottariEditBinding>(ActivityPersonalBottariEditBinding::inflate) {
     private val viewModel: MainEditViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,17 +21,18 @@ class PersonalBottariEditActivity :
         handleBackPress()
     }
 
-    private fun setupListener(){
+    private fun setupListener() {
         binding.btnPrevious.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
-    private fun navigateToEdit(){
+
+    private fun navigateToEdit() {
         supportFragmentManager.beginTransaction().apply {
             setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
             replace(
                 R.id.fcv_edit,
                 MainEditFragment::class.java,
                 null,
-                MainEditFragment::class.java.name
+                MainEditFragment::class.java.name,
             )
             commit()
         }
@@ -47,20 +47,22 @@ class PersonalBottariEditActivity :
             supportFragmentManager.popBackStack()
         }
     }
-    private fun setupObsever(){
-        viewModel.bottari.observe(this){
+
+    private fun setupObsever() {
+        viewModel.bottari.observe(this) {
             binding.tvBottariTitle.text = it.title
         }
     }
 
-    private fun getBottari(bottariId : Int){
+    private fun getBottari(bottariId: Int) {
         viewModel.fetchBottariById(bottariId)
     }
 
-    companion object{
+    companion object {
         private const val BOTTARI_ID = "BOTTARI_ID"
         private const val MIN_FRAGMENT_ENTRY_COUNT = 0
         private const val DEFAULT_BOTTARI_ID = 0
+
         fun newIntent(
             context: Context,
             bottariId: Long,

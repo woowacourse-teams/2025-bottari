@@ -14,7 +14,7 @@ class MainEditViewModel : ViewModel() {
     val bottari: LiveData<BottariUiModel> = _bottari
 
     private val _items = MutableLiveData<List<ItemUiModel>>()
-    val items : LiveData<List<ItemUiModel>> = _items
+    val items: LiveData<List<ItemUiModel>> = _items
 
     private val _alarms = MutableLiveData<List<AlarmTypeUiModel>>()
     val alarms: LiveData<List<AlarmTypeUiModel>> = _alarms
@@ -27,17 +27,18 @@ class MainEditViewModel : ViewModel() {
         _items.value = dummyChecklist
     }
 
-    fun fetchAlarmById(id: Int){
+    fun fetchAlarmById(id: Int) {
         _alarms.value = dummyAlarm
     }
 
-    val dummyBottariUiModel = BottariUiModel(
-        id = 1,
-        title = "내가 만든 보따리",
-        totalQuantity = 0,
-        checkedQuantity = 0,
-        alarmTypeUiModel = null,
-    )
+    val dummyBottariUiModel =
+        BottariUiModel(
+            id = 1,
+            title = "내가 만든 보따리",
+            totalQuantity = 0,
+            checkedQuantity = 0,
+            alarmTypeUiModel = null,
+        )
 
     private val dummyChecklist =
         listOf(
@@ -66,14 +67,10 @@ class MainEditViewModel : ViewModel() {
     private val dummyAlarm =
         listOf(
             AlarmTypeUiModel.EveryDayRepeat(time = LocalTime.of(12, 0)),
-            AlarmTypeUiModel.EveryWeekRepeat(days = listOf(1,3,4),time = LocalTime.of(12,0)),
+            AlarmTypeUiModel.EveryWeekRepeat(days = listOf(1, 3, 4), time = LocalTime.of(12, 0)),
             AlarmTypeUiModel.NonRepeat(
-                date = LocalDate.of(2024,12,4),
-                time = LocalTime.of(12,0)
+                date = LocalDate.of(2024, 12, 4),
+                time = LocalTime.of(12, 0),
             ),
         )
-
 }
-
-
-

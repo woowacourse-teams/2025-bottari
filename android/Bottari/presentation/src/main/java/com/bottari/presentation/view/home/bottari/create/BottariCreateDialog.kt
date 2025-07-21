@@ -83,11 +83,10 @@ class BottariCreateDialog :
         }
     }
 
-    private fun navigateToEdit(){
+    private fun navigateToEdit() {
         val intent = Intent(requireContext(), PersonalBottariEditActivity::class.java)
         intent.putExtra(BOTTARI_ID, viewModel.bottariId)
         startActivity(intent)
-
     }
 
     companion object {

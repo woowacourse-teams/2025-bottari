@@ -17,9 +17,7 @@ class PersonalBottariItemViewHolder private constructor(
     }
 
     companion object {
-        fun from(
-            parent: ViewGroup,
-        ): PersonalBottariItemViewHolder {
+        fun from(parent: ViewGroup): PersonalBottariItemViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemChecklistMiniBinding.inflate(inflater, parent, false)
             return PersonalBottariItemViewHolder(binding)

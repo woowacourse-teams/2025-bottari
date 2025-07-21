@@ -21,16 +21,18 @@ import com.bottari.presentation.view.home.bottari.listener.OnBottariClickListene
 class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate) {
     private val viewModel: BottariViewModel by viewModels()
     private val adapter: BottariAdapter by lazy {
-        BottariAdapter(object : OnBottariClickListener {
-            override fun onClick(bottariId: Long) {
-                navigateToChecklist(bottariId)
-            }
-            override fun onMoreClick(bottariId: Long) {
-                navigateToEdit(bottariId)
-            }
-        })
-    }
+        BottariAdapter(
+            object : OnBottariClickListener {
+                override fun onClick(bottariId: Long) {
+                    navigateToChecklist(bottariId)
+                }
 
+                override fun onMoreClick(bottariId: Long) {
+                    navigateToEdit(bottariId)
+                }
+            },
+        )
+    }
 
     override fun onViewCreated(
         view: View,
@@ -96,7 +98,7 @@ class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBind
         startActivity(intent)
     }
 
-    private fun navigateToEdit(bottariId: Long){
+    private fun navigateToEdit(bottariId: Long) {
         val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId)
         startActivity(intent)
     }
