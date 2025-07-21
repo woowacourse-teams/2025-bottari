@@ -68,7 +68,7 @@ class AlarmTest {
         assertThat(alarm.isActive()).isTrue();
     }
 
-    @DisplayName("이미 활성화된 알람을 킨다면, 예외를 던진다.")
+    @DisplayName("이미 활성화된 알람을 활성화한다면, 예외를 던진다.")
     @Test
     void active_Exception_AlreadyActive() {
         // given
@@ -89,7 +89,7 @@ class AlarmTest {
                 .hasMessage("알람이 이미 활성화되어 있습니다.");
     }
 
-    @DisplayName("알람을 비활성화한다.")
+    @DisplayName("알람을 비활성화 한다.")
     @Test
     void inactive() {
         // given
@@ -111,7 +111,7 @@ class AlarmTest {
         assertThat(alarm.isActive()).isFalse();
     }
 
-    @DisplayName("이미 비활성화된 알람을 끈다면, 예외를 던진다.")
+    @DisplayName("이미 비활성화된 알람을 비활성화 한다면, 예외를 던진다.")
     @Test
     void inactive_Exception_AlreadyInactive() {
         // given
