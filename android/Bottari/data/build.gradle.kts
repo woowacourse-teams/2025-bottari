@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -13,6 +15,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        val baseUrl = gradleLocalProperties(rootDir, providers).getProperty("BASE_URL") ?: ""
+        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
     }
 
     buildTypes {
@@ -31,6 +36,9 @@ android {
     kotlinOptions {
         jvmTarget = "21"
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
@@ -38,6 +46,7 @@ dependencies {
 
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.timber)
     implementation(libs.bundles.network)
     implementation(libs.bundles.local)
     testImplementation(libs.bundles.test)

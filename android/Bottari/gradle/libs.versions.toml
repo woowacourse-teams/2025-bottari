@@ -38,6 +38,9 @@ mockk = "1.14.4"
 # Code Quality
 ktlint = "13.0.0"
 
+# Logging
+timber = "5.0.1"
+
 [libraries]
 # --- AndroidX Core ---
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -63,6 +66,9 @@ retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+
+# --- Logging ---
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 # --- Testing (Unit & Instrumented) ---
 junit = { group = "junit", name = "junit", version.ref = "junit" }
