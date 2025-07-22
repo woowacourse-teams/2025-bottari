@@ -103,11 +103,13 @@ class BottariTemplateServiceTest {
         // given
         final Member templateOwner = new Member("owner_ssaid", "owner_name");
         entityManager.persist(templateOwner);
+
         final BottariTemplate bottariTemplate = new BottariTemplate("title", templateOwner);
         entityManager.persist(bottariTemplate);
+
         final BottariTemplateItem bottariTemplateItem1 = new BottariTemplateItem("item1", bottariTemplate);
-        entityManager.persist(bottariTemplateItem1);
         final BottariTemplateItem bottariTemplateItem2 = new BottariTemplateItem("item2", bottariTemplate);
+        entityManager.persist(bottariTemplateItem1);
         entityManager.persist(bottariTemplateItem2);
 
         final String ssaid = "ssaid";
