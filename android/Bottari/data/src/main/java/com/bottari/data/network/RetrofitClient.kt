@@ -33,6 +33,8 @@ object RetrofitClient {
             .build()
     }
 
+    inline fun <reified T> create(): T = retrofit.create(T::class.java)
+
     private fun provideLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor(PrettyJsonLogger()).apply {
             level = HttpLoggingInterceptor.Level.BODY
