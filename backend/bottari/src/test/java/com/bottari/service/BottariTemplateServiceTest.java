@@ -27,7 +27,7 @@ class BottariTemplateServiceTest {
     @Autowired
     private EntityManager entityManager;
 
-    @DisplayName("검색어가 없을 시, 모든 보따리 템플릿을 조회한다.")
+    @DisplayName("검색어가 없을 시, 모든 보따리 템플릿을 최신순으로 조회한다.")
     @Test
     void getAll() {
         // given
@@ -36,14 +36,14 @@ class BottariTemplateServiceTest {
         final Member member = new Member("ssaid", "name");
         entityManager.persist(member);
 
-        final BottariTemplate template1 = new BottariTemplate("title_1", member);
+        final BottariTemplate template1 = new BottariTemplate("older_template", member);
         final BottariTemplateItem item1 = new BottariTemplateItem("item_1", template1);
         final BottariTemplateItem item2 = new BottariTemplateItem("item_2", template1);
         entityManager.persist(template1);
         entityManager.persist(item1);
         entityManager.persist(item2);
 
-        final BottariTemplate template2 = new BottariTemplate("title_2", member);
+        final BottariTemplate template2 = new BottariTemplate("newer_template", member);
         final BottariTemplateItem item3 = new BottariTemplateItem("item_3", template2);
         entityManager.persist(template2);
         entityManager.persist(item3);
@@ -54,13 +54,13 @@ class BottariTemplateServiceTest {
         // then
         assertAll(() -> {
                     assertThat(actual).hasSize(2);
-                    assertThat(actual.getFirst().title()).isEqualTo("title_1");
-                    assertThat(actual.getFirst().items()).hasSize(2);
-                    assertThat(actual.get(0).items().get(0).name()).isEqualTo("item_1");
-                    assertThat(actual.get(0).items().get(1).name()).isEqualTo("item_2");
-                    assertThat(actual.get(1).title()).isEqualTo("title_2");
-                    assertThat(actual.get(1).items()).hasSize(1);
-                    assertThat(actual.get(1).items().getFirst().name()).isEqualTo("item_3");
+                    assertThat(actual.get(0).title()).isEqualTo("newer_template");
+                    assertThat(actual.get(0).items()).hasSize(1);
+                    assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3");
+                    assertThat(actual.get(1).title()).isEqualTo("older_template");
+                    assertThat(actual.get(1).items()).hasSize(2);
+                    assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
+                    assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
                 }
         );
     }

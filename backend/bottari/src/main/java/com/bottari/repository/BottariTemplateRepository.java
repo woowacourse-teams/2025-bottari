@@ -14,6 +14,7 @@ public interface BottariTemplateRepository extends JpaRepository<BottariTemplate
             JOIN FETCH Member m
             ON bt.member.id = m.id
             WHERE bt.title LIKE CONCAT('%', :query, '%')
+            ORDER BY bt.createdAt DESC
             """)
     List<BottariTemplate> findAllWithMember(final String query);
 
