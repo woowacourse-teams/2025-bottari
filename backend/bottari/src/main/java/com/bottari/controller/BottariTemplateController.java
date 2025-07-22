@@ -24,16 +24,6 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
 
     private final BottariTemplateService bottariTemplateService;
 
-    @GetMapping
-    @Override
-    public ResponseEntity<List<ReadBottariTemplateResponse>> readAll(
-            @RequestParam(required = false, defaultValue = "") String query
-    ) {
-        final List<ReadBottariTemplateResponse> responses = bottariTemplateService.getAll(query);
-
-        return ResponseEntity.ok(responses);
-    }
-
     @GetMapping("/{id}")
     @Override
     public ResponseEntity<ReadBottariTemplateResponse> read(
@@ -42,6 +32,16 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
         final ReadBottariTemplateResponse response = bottariTemplateService.getById(id);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    @Override
+    public ResponseEntity<List<ReadBottariTemplateResponse>> readAll(
+            @RequestParam(required = false, defaultValue = "") String query
+    ) {
+        final List<ReadBottariTemplateResponse> responses = bottariTemplateService.getAll(query);
+
+        return ResponseEntity.ok(responses);
     }
 
     @PostMapping

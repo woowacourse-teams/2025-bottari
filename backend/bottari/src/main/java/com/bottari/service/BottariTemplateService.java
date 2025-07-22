@@ -24,18 +24,6 @@ public class BottariTemplateService {
     private final BottariTemplateItemRepository bottariTemplateItemRepository;
     private final MemberRepository memberRepository;
 
-    public List<ReadBottariTemplateResponse> getAll(final String query) {
-        final List<BottariTemplate> bottariTemplates = bottariTemplateRepository.findAllWithMember(query);
-        final List<ReadBottariTemplateResponse> responses = new ArrayList<>();
-        for (BottariTemplate bottariTemplate : bottariTemplates) {
-            final List<BottariTemplateItem> bottariTemplateItems =
-                    bottariTemplateItemRepository.findAllByBottariTemplateId(bottariTemplate.getId());
-            responses.add(ReadBottariTemplateResponse.of(bottariTemplate, bottariTemplateItems));
-        }
-
-        return responses;
-    }
-
     public ReadBottariTemplateResponse getById(final Long id) {
         final BottariTemplate bottariTemplate = bottariTemplateRepository.findByIdWithMember(id)
                 .orElseThrow(() -> new IllegalArgumentException("보따리 템플릿을 찾을 수 없습니다."));
@@ -43,6 +31,18 @@ public class BottariTemplateService {
                 bottariTemplateItemRepository.findAllByBottariTemplateId(bottariTemplate.getId());
 
         return ReadBottariTemplateResponse.of(bottariTemplate, bottariTemplateItems);
+    }
+
+    public List<ReadBottariTemplateResponse> getAll(final String query) {
+        final List<BottariTemplate> bottariTemplates = bottariTemplateRepository.findAllWithMember(query);
+        final List<ReadBottariTemplateResponse> responses = new ArrayList<>();
+        for (final BottariTemplate bottariTemplate : bottariTemplates) {
+            final List<BottariTemplateItem> bottariTemplateItems =
+                    bottariTemplateItemRepository.findAllByBottariTemplateId(bottariTemplate.getId());
+            responses.add(ReadBottariTemplateResponse.of(bottariTemplate, bottariTemplateItems));
+        }
+
+        return responses;
     }
 
     @Transactional
