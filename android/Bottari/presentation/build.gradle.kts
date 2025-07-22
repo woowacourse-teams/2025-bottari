@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.cardstackview)
     implementation(libs.flexbox)
+    implementation(libs.number.picker)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
