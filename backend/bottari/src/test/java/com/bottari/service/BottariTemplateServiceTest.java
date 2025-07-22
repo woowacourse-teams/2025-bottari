@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.bottari.config.JpaAuditingConfig;
 import com.bottari.domain.BottariTemplate;
 import com.bottari.domain.BottariTemplateItem;
 import com.bottari.domain.Member;
@@ -18,7 +19,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 @DataJpaTest
-@Import(BottariTemplateService.class)
+@Import({BottariTemplateService.class, JpaAuditingConfig.class})
 class BottariTemplateServiceTest {
 
     @Autowired
@@ -108,11 +109,11 @@ class BottariTemplateServiceTest {
         );
     }
 
-    @DisplayName("검색어가 존재할 시, 모든 보따리 템플릿을 조회한다.")
+    @DisplayName("검색어가 존재할 시, 타이틀에 검색어가 포함된 템플릿을 모두 조회한다.")
     @Test
     void getAll_WithQuery() {
         // given
-        final String query = "title_1";
+        final String query = "title";
 
         final Member member = new Member("ssaid", "name");
         entityManager.persist(member);
@@ -129,16 +130,24 @@ class BottariTemplateServiceTest {
         entityManager.persist(template2);
         entityManager.persist(item3);
 
+        final BottariTemplate template3 = new BottariTemplate("subject", member);
+        final BottariTemplateItem item4 = new BottariTemplateItem("item_4", template3);
+        entityManager.persist(template3);
+        entityManager.persist(item4);
+
         // when
         final List<ReadBottariTemplateResponse> actual = bottariTemplateService.getAll(query);
 
         // then
         assertAll(() -> {
-                    assertThat(actual).hasSize(1);
-                    assertThat(actual.getFirst().title()).isEqualTo("title_1");
-                    assertThat(actual.getFirst().items()).hasSize(2);
-                    assertThat(actual.getFirst().items().get(0).name()).isEqualTo("item_1");
-                    assertThat(actual.getFirst().items().get(1).name()).isEqualTo("item_2");
+                    assertThat(actual).hasSize(2);
+                    assertThat(actual.get(1).title()).isEqualTo("title_1");
+                    assertThat(actual.get(1).items()).hasSize(2);
+                    assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
+                    assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
+                    assertThat(actual.getFirst().title()).isEqualTo("title_2");
+                    assertThat(actual.getFirst().items()).hasSize(1);
+                    assertThat(actual.getFirst().items().getFirst().name()).isEqualTo("item_3");
                 }
         );
     }

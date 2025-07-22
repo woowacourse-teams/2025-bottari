@@ -9,6 +9,7 @@ import com.bottari.repository.BottariTemplateItemRepository;
 import com.bottari.repository.BottariTemplateRepository;
 import com.bottari.repository.MemberRepository;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -71,12 +72,21 @@ public class BottariTemplateService {
 
     private List<ReadBottariTemplateResponse> buildReadBottariTemplateResponses(final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate) {
         final List<ReadBottariTemplateResponse> responses = new ArrayList<>();
-        for (final BottariTemplate bottariTemplate : itemsGroupByTemplate.keySet()) {
-            List<BottariTemplateItem> templateItems = itemsGroupByTemplate.getOrDefault(bottariTemplate, List.of());
+        final List<BottariTemplate> sortedBottariTemplates = sortByCreatedAtDesc(itemsGroupByTemplate);
+        for (final BottariTemplate bottariTemplate : sortedBottariTemplates) {
+            final List<BottariTemplateItem> templateItems = itemsGroupByTemplate.getOrDefault(bottariTemplate,
+                    List.of());
             responses.add(ReadBottariTemplateResponse.of(bottariTemplate, templateItems));
         }
 
         return responses;
+    }
+
+    private List<BottariTemplate> sortByCreatedAtDesc(final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate) {
+        return itemsGroupByTemplate.keySet()
+                .stream()
+                .sorted(Comparator.comparing(BottariTemplate::getCreatedAt).reversed())
+                .toList();
     }
 
     private void validateDuplicateItemNames(final List<String> itemNames) {
