@@ -41,7 +41,6 @@ android {
 
 dependencies {
     implementation(project(":presentation"))
-    implementation(project(":di"))
 
     implementation(libs.timber)
     implementation(libs.androidx.core.ktx)
