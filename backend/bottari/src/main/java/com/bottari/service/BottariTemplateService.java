@@ -28,4 +28,13 @@ public class BottariTemplateService {
 
         return responses;
     }
+
+    public ReadBottariTemplateResponse getById(final Long id) {
+        final BottariTemplate bottariTemplate = bottariTemplateRepository.findByIdWithMember(id)
+                .orElseThrow(() -> new IllegalArgumentException("보따리 템플릿을 찾을 수 없습니다."));
+        final List<BottariTemplateItem> bottariTemplateItems =
+                bottariTemplateItemRepository.findAllByBottariTemplateId(bottariTemplate.getId());
+
+        return ReadBottariTemplateResponse.of(bottariTemplate, bottariTemplateItems);
+    }
 }
