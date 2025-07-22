@@ -113,7 +113,7 @@ class BottariTemplateServiceTest {
         entityManager.persist(bottariTemplateItem2);
 
         final String ssaid = "ssaid";
-        final Member member = new Member(ssaid,"name");
+        final Member member = new Member(ssaid, "name");
         entityManager.persist(member);
 
         // when
@@ -138,21 +138,21 @@ class BottariTemplateServiceTest {
 
     @DisplayName("보따리 생성 시 템플릿이 존재하지 않는다면, 예외를 던진다.")
     @Test
-    void createBottari_Exception_NotExistsTemplate(){
+    void createBottari_Exception_NotExistsTemplate() {
         // given
         final Member member = new Member("ssaid", "name");
         entityManager.persist(member);
         final Long notExistsTemplateId = 1L;
 
         // when & then
-        assertThatThrownBy(() -> bottariTemplateService.createBottari(notExistsTemplateId,"ssaid"))
+        assertThatThrownBy(() -> bottariTemplateService.createBottari(notExistsTemplateId, "ssaid"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 템플릿을 찾을 수 없습니다.");
     }
 
     @DisplayName("보따리 생성 시 사용자가 존재하지 않는다면, 예외를 던진다.")
     @Test
-    void createBottari_Exception_NotExistsMember(){
+    void createBottari_Exception_NotExistsMember() {
         // given
         final Member templateOwner = new Member("owner_ssaid", "owner_name");
         entityManager.persist(templateOwner);
@@ -162,7 +162,7 @@ class BottariTemplateServiceTest {
         final String notExistsSsaid = "invalid_ssaid";
 
         // when & then
-        assertThatThrownBy(() -> bottariTemplateService.createBottari(bottariTemplate.getId(),notExistsSsaid))
+        assertThatThrownBy(() -> bottariTemplateService.createBottari(bottariTemplate.getId(), notExistsSsaid))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
     }
