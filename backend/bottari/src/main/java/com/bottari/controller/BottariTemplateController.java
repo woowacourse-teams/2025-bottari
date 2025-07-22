@@ -33,6 +33,7 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     }
 
     @PostMapping("/{id}/create-bottari")
+    @Override
     public ResponseEntity<Void> createBottari(
             @PathVariable final Long id,
             final HttpServletRequest httpServletRequest
