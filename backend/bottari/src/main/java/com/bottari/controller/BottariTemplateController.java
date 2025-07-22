@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,8 +26,10 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
 
     @GetMapping
     @Override
-    public ResponseEntity<List<ReadBottariTemplateResponse>> readAll() {
-        final List<ReadBottariTemplateResponse> responses = bottariTemplateService.getAll();
+    public ResponseEntity<List<ReadBottariTemplateResponse>> readAll(
+            @RequestParam(required = false, defaultValue = "") String query
+    ) {
+        final List<ReadBottariTemplateResponse> responses = bottariTemplateService.getAll(query);
 
         return ResponseEntity.ok(responses);
     }

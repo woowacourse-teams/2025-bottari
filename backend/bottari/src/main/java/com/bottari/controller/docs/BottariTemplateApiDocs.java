@@ -17,7 +17,7 @@ public interface BottariTemplateApiDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "보따리 템플릿 목록 조회 성공"),
     })
-    ResponseEntity<List<ReadBottariTemplateResponse>> readAll();
+    ResponseEntity<List<ReadBottariTemplateResponse>> readAll(final String query);
 
     @Operation(summary = "보따리 템플릿 상세 조회")
     @ApiResponses(value = {

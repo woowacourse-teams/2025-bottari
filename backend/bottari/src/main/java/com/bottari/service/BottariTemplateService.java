@@ -24,8 +24,8 @@ public class BottariTemplateService {
     private final BottariTemplateItemRepository bottariTemplateItemRepository;
     private final MemberRepository memberRepository;
 
-    public List<ReadBottariTemplateResponse> getAll() {
-        final List<BottariTemplate> bottariTemplates = bottariTemplateRepository.findAllWithMember();
+    public List<ReadBottariTemplateResponse> getAll(final String query) {
+        final List<BottariTemplate> bottariTemplates = bottariTemplateRepository.findAllWithMember(query);
         final List<ReadBottariTemplateResponse> responses = new ArrayList<>();
         for (BottariTemplate bottariTemplate : bottariTemplates) {
             final List<BottariTemplateItem> bottariTemplateItems =
