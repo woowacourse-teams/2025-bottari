@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:contentInsetStart="0dp"
             android:titleTextColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@id/layout_edit_item"
+            app:layout_constraintBottom_toTopOf="@id/cl_edit_item"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
@@ -50,14 +50,14 @@
         </Toolbar>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_edit_item"
+            android:id="@+id/cl_edit_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/space_large"
             android:background="@drawable/bg_white_radius_12dp"
             android:elevation="2dp"
             android:padding="@dimen/space_median"
-            app:layout_constraintBottom_toTopOf="@id/layout_edit_alarm"
+            app:layout_constraintBottom_toTopOf="@id/cl_edit_alarm"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -86,9 +86,9 @@
                 android:id="@+id/view_click_edit_item"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
+                android:layout_marginTop="@dimen/space_x_large"
                 android:background="@drawable/bg_white_radius_12dp_dotted_boder"
                 android:elevation="0dp"
-                android:layout_marginTop="@dimen/space_x_large"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +134,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_edit_alarm"
+            android:id="@+id/cl_edit_alarm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/space_large"
@@ -142,7 +142,7 @@
             android:background="@drawable/bg_white_radius_12dp"
             android:elevation="2dp"
             android:padding="@dimen/space_median"
-            app:layout_constraintTop_toBottomOf="@id/layout_edit_item"
+            app:layout_constraintTop_toBottomOf="@id/cl_edit_item"
             tools:layout_editor_absoluteX="20dp">
 
             <TextView
@@ -168,17 +168,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_edit_alarm" />
 
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/sw_alarm"
+                android:id="@+id/switch_alarm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="false"
                 android:lineSpacingExtra="6.4sp"
                 android:textOff=""
                 android:textOn=""
                 android:thumb="@drawable/bg_thumb"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:track="@drawable/bg_track"
-                android:checked="false"/>
+                app:track="@drawable/bg_track" />
 
             <View
                 android:id="@+id/view_click_edit_alarm"
