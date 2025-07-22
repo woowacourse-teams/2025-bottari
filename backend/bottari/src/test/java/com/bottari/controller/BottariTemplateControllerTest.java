@@ -51,4 +51,21 @@ class BottariTemplateControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().string(HttpHeaders.LOCATION, "/templates/1"));
     }
+
+    @DisplayName("보따리 템플릿으로 보따리를 생성한다.")
+    @Test
+    void createBottari() throws Exception {
+        // given
+        final Long id = 2L;
+        final String ssaid = "ssaid";
+        given(bottariTemplateService.createBottari(id, ssaid))
+                .willReturn(1L);
+
+        // when & then
+        mockMvc.perform(post("/templates/" + id + "/create-bottari")
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(header().string(HttpHeaders.LOCATION, "/bottaries/1"));
+    }
 }
