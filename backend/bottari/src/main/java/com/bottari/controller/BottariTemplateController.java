@@ -24,6 +24,7 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     private final BottariTemplateService bottariTemplateService;
 
     @GetMapping
+    @Override
     public ResponseEntity<List<ReadBottariTemplateResponse>> readAll() {
         final List<ReadBottariTemplateResponse> responses = bottariTemplateService.getAll();
 
@@ -31,6 +32,7 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     }
 
     @GetMapping("/{id}")
+    @Override
     public ResponseEntity<ReadBottariTemplateResponse> read(
             @PathVariable final Long id
     ) {
