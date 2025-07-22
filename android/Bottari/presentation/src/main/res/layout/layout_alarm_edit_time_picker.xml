@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_alarm_time"
+        style="@style/Pretendard_Bold_20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_median"
+        android:layout_marginTop="@dimen/space_median"
+        android:text="@string/alarm_time_text"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/np_alarm_time_hour"
+        style="@style/CustomNumberPicker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_x_large"
+        app:layout_constraintEnd_toStartOf="@id/np_alarm_time_minute"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_alarm_time"
+        app:np_max="23"
+        app:np_min="0" />
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/np_alarm_time_minute"
+        style="@style/CustomNumberPicker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_x_large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/np_alarm_time_hour"
+        app:layout_constraintTop_toBottomOf="@id/tv_alarm_time"
+        app:np_max="59"
+        app:np_min="0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
