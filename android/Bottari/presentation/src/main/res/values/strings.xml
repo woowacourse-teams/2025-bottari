@@ -28,14 +28,17 @@
     <string name="personal_item_edit_confirm_btn_text">확인</string>
     <string name="personal_item_edit_hint_text">추가할 물건을 입력하세요</string>
 
-    <!--  Description  -->
-    <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>
-    <string name="bottari_create_button_description">보따리 생성 버튼</string>
-    <string name="previous_button_description">뒤로가기 버튼</string>
-    <string name="checklist_swipe_button_description">스와이프 화면 전환 버튼</string>
-    <string name="dialog_bottari_create_close_button_description">보따리 생성 다이얼로그 닫기 버튼</string>
-    <string name="item_delete_button_description">제거 버튼</string>
-    <string name="send_button_description">전송 버튼</string>
+    <!--  Alarm Edit  -->
+    <string name="alarm_edit_text">알람 설정</string>
+    <string name="alarm_edit_type_text">유형</string>
+    <string name="alarm_edit_type_no_repeat_text">반복 안함</string>
+    <string name="alarm_edit_type_everyday_repeat_text">매일</string>
+    <string name="alarm_edit_type_everyweek_repeat_text">매주</string>
+    <string name="alarm_date_text">날짜</string>
+    <string name="alarm_time_text">시간</string>
+    <string name="alarm_day_of_week_text">요일</string>
+    <string name="alarm_location_text">위치</string>
+    <string name="alarm_edit_confirm_btn_text">확인</string>
 
     <!-- Bottari edit item -->
     <string name="bottari_edit_item_list_title">물건 목록</string>
@@ -44,4 +47,15 @@
     <string name="bottari_edit_alarm_list_title">알람</string>
     <string name="bottari_edit_add_alarm_description">여기를 눌러 알람을 설정하세요</string>
     <string name="bottari_edit_add_alarm_title">알람 설정</string>
+    <string name="current_location_button_description">현재 위치 버튼</string>
+    <string name="alarm_edit_close_button_description">편집 종료 버튼</string>
+
+    <!--  Description  -->
+    <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>
+    <string name="bottari_create_button_description">보따리 생성 버튼</string>
+    <string name="previous_button_description">뒤로가기 버튼</string>
+    <string name="checklist_swipe_button_description">스와이프 화면 전환 버튼</string>
+    <string name="dialog_bottari_create_close_button_description">보따리 생성 다이얼로그 닫기 버튼</string>
+    <string name="item_delete_button_description">제거 버튼</string>
+    <string name="send_button_description">전송 버튼</string>
 </resources>
