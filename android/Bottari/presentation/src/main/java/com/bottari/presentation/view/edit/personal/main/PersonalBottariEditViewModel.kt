@@ -15,7 +15,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class PersonalBottariEditViewModel(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val _bottari = MutableLiveData<UiState<BottariUiModel>>()
     val bottari: LiveData<UiState<BottariUiModel>> = _bottari
@@ -28,7 +28,7 @@ class PersonalBottariEditViewModel(
 
     init {
         val id =
-            savedStateHandle.get<Long>(EXTRAS_BOTTARI_ID)
+            savedStateHandle.get<Long>(EXTRA_BOTTARI_ID)
                 ?: error("bottariId가 없습니다.")
         fetchBottariById(id)
         fetchItemsById(id)
@@ -48,7 +48,7 @@ class PersonalBottariEditViewModel(
     }
 
     companion object {
-        private const val EXTRAS_BOTTARI_ID = "EXTRAS_BOTTARI_ID"
+        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
 
         fun Factory(bottariId: Long): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
@@ -57,7 +57,7 @@ class PersonalBottariEditViewModel(
                     extras: CreationExtras,
                 ): T {
                     val handle = extras.createSavedStateHandle()
-                    handle[EXTRAS_BOTTARI_ID] = bottariId
+                    handle[EXTRA_BOTTARI_ID] = bottariId
                     return PersonalBottariEditViewModel(handle) as T
                 }
             }
