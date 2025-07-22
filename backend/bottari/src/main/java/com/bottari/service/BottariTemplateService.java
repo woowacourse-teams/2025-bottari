@@ -11,7 +11,9 @@ import com.bottari.repository.MemberRepository;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,14 +37,10 @@ public class BottariTemplateService {
 
     public List<ReadBottariTemplateResponse> getAll(final String query) {
         final List<BottariTemplate> bottariTemplates = bottariTemplateRepository.findAllWithMember(query);
-        final List<ReadBottariTemplateResponse> responses = new ArrayList<>();
-        for (final BottariTemplate bottariTemplate : bottariTemplates) {
-            final List<BottariTemplateItem> bottariTemplateItems =
-                    bottariTemplateItemRepository.findAllByBottariTemplateId(bottariTemplate.getId());
-            responses.add(ReadBottariTemplateResponse.of(bottariTemplate, bottariTemplateItems));
-        }
+        final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate = groupingItemsByTemplate(
+                bottariTemplates);
 
-        return responses;
+        return buildReadBottariTemplateResponses(itemsGroupByTemplate);
     }
 
     @Transactional
@@ -61,6 +59,24 @@ public class BottariTemplateService {
         bottariTemplateItemRepository.saveAll(bottariTemplateItems);
 
         return savedBottariTemplate.getId();
+    }
+
+    private Map<BottariTemplate, List<BottariTemplateItem>> groupingItemsByTemplate(final List<BottariTemplate> bottariTemplates) {
+        final List<BottariTemplateItem> items = bottariTemplateItemRepository.findAllByBottariTemplateIn(
+                bottariTemplates);
+
+        return items.stream()
+                .collect(Collectors.groupingBy(BottariTemplateItem::getBottariTemplate));
+    }
+
+    private List<ReadBottariTemplateResponse> buildReadBottariTemplateResponses(final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate) {
+        final List<ReadBottariTemplateResponse> responses = new ArrayList<>();
+        for (final BottariTemplate bottariTemplate : itemsGroupByTemplate.keySet()) {
+            List<BottariTemplateItem> templateItems = itemsGroupByTemplate.getOrDefault(bottariTemplate, List.of());
+            responses.add(ReadBottariTemplateResponse.of(bottariTemplate, templateItems));
+        }
+
+        return responses;
     }
 
     private void validateDuplicateItemNames(final List<String> itemNames) {
