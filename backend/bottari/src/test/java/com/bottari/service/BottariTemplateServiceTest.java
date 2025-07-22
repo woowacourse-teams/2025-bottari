@@ -147,7 +147,7 @@ class BottariTemplateServiceTest {
         // when & then
         assertThatThrownBy(() -> bottariTemplateService.createBottari(notExistsTemplateId, "ssaid"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당 템플릿을 찾을 수 없습니다.");
+                .hasMessage("해당 보따리 템플릿을 찾을 수 없습니다.");
     }
 
     @DisplayName("보따리 생성 시 사용자가 존재하지 않는다면, 예외를 던진다.")
