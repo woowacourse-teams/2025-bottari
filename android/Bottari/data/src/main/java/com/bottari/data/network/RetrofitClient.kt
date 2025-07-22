@@ -11,19 +11,22 @@ import retrofit2.Retrofit
 
 object RetrofitClient {
     private val contentType = "application/json".toMediaType()
-    private val json = Json {
-        ignoreUnknownKeys = true
-        encodeDefaults = true
-    }
+    private val json =
+        Json {
+            ignoreUnknownKeys = true
+            encodeDefaults = true
+        }
 
     private val okHttpClient: OkHttpClient by lazy {
-        OkHttpClient.Builder()
+        OkHttpClient
+            .Builder()
             .addInterceptor(provideLoggingInterceptor())
             .build()
     }
 
     val retrofit: Retrofit by lazy {
-        Retrofit.Builder()
+        Retrofit
+            .Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(json.asConverterFactory(contentType))
             .client(okHttpClient)

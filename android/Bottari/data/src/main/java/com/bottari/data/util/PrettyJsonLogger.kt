@@ -6,7 +6,6 @@ import kotlinx.serialization.json.JsonElement
 import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
 
-
 @OptIn(ExperimentalSerializationApi::class)
 class PrettyJsonLogger : HttpLoggingInterceptor.Logger {
     private val json =
@@ -45,10 +44,9 @@ class PrettyJsonLogger : HttpLoggingInterceptor.Logger {
 
     private fun isJson(text: String): Boolean =
         (text.startsWith(JSON_OBJECT_START) && text.endsWith(JSON_OBJECT_END)) ||
-                (text.startsWith(JSON_ARRAY_START) && text.endsWith(JSON_ARRAY_END))
+            (text.startsWith(JSON_ARRAY_START) && text.endsWith(JSON_ARRAY_END))
 
-    private fun isLastLine(text: String): Boolean =
-        text.startsWith(REQUEST_END_PREFIX) || text.startsWith(RESPONSE_END_PREFIX)
+    private fun isLastLine(text: String): Boolean = text.startsWith(REQUEST_END_PREFIX) || text.startsWith(RESPONSE_END_PREFIX)
 
     companion object {
         private const val TAG = "NETWORK"
