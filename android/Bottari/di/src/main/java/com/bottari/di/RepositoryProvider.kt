@@ -1,3 +1,7 @@
 package com.bottari.di
 
-object RepositoryProvider
+import com.bottari.data.repository.MemberRepositoryImpl
+
+object RepositoryProvider {
+    val memberRepository by lazy { MemberRepositoryImpl(DataSourceProvider.memberRemoteDataSource) }
+}
