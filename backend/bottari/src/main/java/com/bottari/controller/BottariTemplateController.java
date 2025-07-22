@@ -1,5 +1,6 @@
 package com.bottari.controller;
 
+import com.bottari.controller.docs.BottariTemplateApiDocs;
 import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.service.BottariTemplateService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,11 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class BottariTemplateController {
+public class BottariTemplateController implements BottariTemplateApiDocs {
 
     private final BottariTemplateService bottariTemplateService;
 
     @PostMapping("/templates")
+    @Override
     public ResponseEntity<Void> create(
             @RequestBody final CreateBottariTemplateRequest request,
             final HttpServletRequest httpServletRequest
