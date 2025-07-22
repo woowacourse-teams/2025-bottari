@@ -58,4 +58,25 @@ class BottariTemplateControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(responses)));
     }
+
+    @DisplayName("특정 보따리 템플릿을 조회한다.")
+    @Test
+    void read() throws Exception {
+        // given
+        final ReadBottariTemplateResponse response = new ReadBottariTemplateResponse(
+                1L,
+                "title_1",
+                List.of(
+                        new BottariTemplateItemResponse(1L, "item_1"),
+                        new BottariTemplateItemResponse(2L, "item_2")
+                ),
+                "author_1");
+        given(bottariTemplateService.getById(1L))
+                .willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/templates/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
 }

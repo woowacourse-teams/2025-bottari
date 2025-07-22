@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,5 +22,14 @@ public class BottariTemplateController {
         final List<ReadBottariTemplateResponse> responses = bottariTemplateService.getAll();
 
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReadBottariTemplateResponse> read(
+            @PathVariable final Long id
+    ) {
+        final ReadBottariTemplateResponse response = bottariTemplateService.getById(id);
+
+        return ResponseEntity.ok(response);
     }
 }
