@@ -118,17 +118,17 @@ class BottariTemplateServiceTest {
 
         // when
         final Long actualBottariId = bottariTemplateService.createBottari(bottariTemplate.getId(), ssaid);
+        final Bottari actualBottari = entityManager.find(Bottari.class, actualBottariId);
+        final List<BottariItem> actualBottariItems = entityManager.createQuery(
+                        "select i from BottariItem i where i.bottari.id = :bottariId",
+                        BottariItem.class)
+                .setParameter("bottariId", actualBottariId)
+                .getResultList();
 
         // then
         assertAll(() -> {
             assertThat(actualBottariId).isNotNull();
-            final Bottari actualBottari = entityManager.find(Bottari.class, actualBottariId);
             assertThat(actualBottari.getTitle()).isEqualTo("title");
-            final List<BottariItem> actualBottariItems = entityManager.createQuery(
-                            "select i from BottariItem i where i.bottari.id = :bottariId",
-                            BottariItem.class)
-                    .setParameter("bottariId", actualBottariId)
-                    .getResultList();
             assertThat(actualBottariItems).extracting("name").containsExactly(
                     bottariTemplateItem1.getName(),
                     bottariTemplateItem2.getName()
