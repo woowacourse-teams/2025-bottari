@@ -167,4 +167,8 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
     private fun showOnly(visibleView: View) {
         groups.forEach { it.isVisible = it == visibleView }
     }
+
+    companion object {
+        fun newBundle() = Bundle()
+    }
 }

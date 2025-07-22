@@ -13,6 +13,7 @@ import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.model.ItemUiModel
+import com.bottari.presentation.view.edit.alarm.AlarmEditFragment
 import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditAlarmAdapter
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditItemAdapter
@@ -53,18 +54,16 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         binding.btnPrevious.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
-
-        binding.layoutEditItem.setOnClickListener {
+        binding.clEditItem.setOnClickListener {
             navigateToScreen(
                 PersonalItemEditFragment::class.java,
                 PersonalItemEditFragment.newBundle(getBottariId()),
             )
         }
-
-        binding.layoutEditAlarm.setOnClickListener {
+        binding.clEditAlarm.setOnClickListener {
             navigateToScreen(
-                PersonalItemEditFragment::class.java,
-                PersonalItemEditFragment.newBundle(getBottariId()),
+                AlarmEditFragment::class.java,
+                AlarmEditFragment.newBundle(),
             )
         }
     }
@@ -120,7 +119,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         binding.viewClickEditAlarm.isVisible = !hasAlarms
         binding.tvClickEditAlarmDescriptionNotEmpty.isVisible = hasAlarms
         binding.rvEditAlarm.isVisible = hasAlarms
-        binding.swAlarm.isVisible = hasAlarms
+        binding.switchAlarm.isVisible = hasAlarms
     }
 
     private fun setupItemRecyclerView() {
