@@ -13,7 +13,7 @@ public interface BottariTemplateApiDocs {
 
     @Operation(summary = "보따리 템플릿 생성")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "보따리 템플릿 생 성공"),
+            @ApiResponse(responseCode = "201", description = "보따리 템플릿 생성 성공"),
     })
     ResponseEntity<Void> create(
             final CreateBottariTemplateRequest request,
