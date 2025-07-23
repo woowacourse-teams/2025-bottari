@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: bottari
+  sql:
+    init:
+      mode: never
