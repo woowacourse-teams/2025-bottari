@@ -3,10 +3,10 @@ package com.bottari.presentation.view.edit.personal.main.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.AlarmTypeUiModel
+import com.bottari.presentation.model.AlarmUiModel
 
 class PersonalBottariEditAlarmAdapter :
-    ListAdapter<AlarmTypeUiModel, PersonalBottariEditAlarmViewHolder>(
+    ListAdapter<AlarmUiModel, PersonalBottariEditAlarmViewHolder>(
         DiffUtil,
     ) {
     override fun onBindViewHolder(
@@ -23,16 +23,16 @@ class PersonalBottariEditAlarmAdapter :
 
     companion object {
         private val DiffUtil =
-            object : DiffUtil.ItemCallback<AlarmTypeUiModel>() {
+            object : DiffUtil.ItemCallback<AlarmUiModel>() {
                 override fun areContentsTheSame(
-                    oldItem: AlarmTypeUiModel,
-                    newItem: AlarmTypeUiModel,
+                    oldItem: AlarmUiModel,
+                    newItem: AlarmUiModel,
                 ): Boolean = oldItem == newItem
 
                 override fun areItemsTheSame(
-                    oldItem: AlarmTypeUiModel,
-                    newItem: AlarmTypeUiModel,
-                ): Boolean = oldItem == newItem
+                    oldItem: AlarmUiModel,
+                    newItem: AlarmUiModel,
+                ): Boolean = oldItem.id == newItem.id
             }
     }
 }

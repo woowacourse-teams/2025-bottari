@@ -14,9 +14,12 @@ import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemBottariBinding
 import com.bottari.presentation.extension.formatWithPattern
 import com.bottari.presentation.model.AlarmTypeUiModel
+import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.BottariUiModel
+import com.bottari.presentation.model.DayOfWeekUiModel
 import com.bottari.presentation.view.home.bottari.listener.OnBottariClickListener
-import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -46,7 +49,7 @@ class BottariViewHolder private constructor(
             tvBottariTitle.text = bottari.title
             tvBottariQuantityStatus.text =
                 formatQuantityStatus(bottari.checkedQuantity, bottari.totalQuantity)
-            tvBottariAlarmInfo.text = formatAlarmInfo(bottari.alarmTypeUiModel)
+            tvBottariAlarmInfo.text = formatAlarmInfo(bottari.alarm)
             updateProgressBar(bottari.checkedQuantity, bottari.totalQuantity)
         }
     }
@@ -59,16 +62,14 @@ class BottariViewHolder private constructor(
         return formatPattern.format(checked, total)
     }
 
-    private fun formatAlarmInfo(alarmType: AlarmTypeUiModel?): String =
-        when (alarmType) {
-            is AlarmTypeUiModel.NonRepeat -> alarmType.formatted()
-
-            is AlarmTypeUiModel.EveryDayRepeat -> alarmType.formatted()
-
-            is AlarmTypeUiModel.EveryWeekRepeat -> alarmType.formatted()
-
-            null -> ""
+    private fun formatAlarmInfo(alarm: AlarmUiModel?): String {
+        if (alarm == null) return ""
+        return when (alarm.type) {
+            AlarmTypeUiModel.NON_REPEAT -> formatNonRepeat(alarm.date, alarm.time)
+            AlarmTypeUiModel.EVERYDAY_REPEAT -> formatEveryDayRepeat(alarm.time)
+            AlarmTypeUiModel.EVERYWEEK_REPEAT -> formatEveryWeekRepeat(alarm.time, alarm.daysOfWeek)
         }
+    }
 
     private fun updateProgressBar(
         checked: Int,
@@ -92,30 +93,35 @@ class BottariViewHolder private constructor(
         @StringRes resId: Int,
     ): String = itemView.context.getString(resId)
 
-    private fun AlarmTypeUiModel.NonRepeat.formatted(): String =
+    private fun formatNonRepeat(
+        date: LocalDate,
+        time: LocalTime,
+    ): String =
         buildString {
             append(date.formatWithPattern(dateFormat))
             append(separator)
             append(time.formatWithPattern(timeFormat))
         }
 
-    private fun AlarmTypeUiModel.EveryDayRepeat.formatted(): String =
+    private fun formatEveryDayRepeat(time: LocalTime): String =
         buildString {
             append(time.formatWithPattern(timeFormat))
             append(separator)
             append(getString(R.string.bottari_item_alarm_type_everyday_repeat))
         }
 
-    private fun AlarmTypeUiModel.EveryWeekRepeat.formatted(): String =
+    private fun formatEveryWeekRepeat(
+        time: LocalTime,
+        daysOfWeek: List<DayOfWeekUiModel>,
+    ): String =
         buildString {
             append(time.formatWithPattern(timeFormat))
             append(separator)
             append(getString(R.string.bottari_item_alarm_type_everyweek_repeat))
             append(separator)
             append(
-                days.joinToString {
-                    DayOfWeek
-                        .of(it)
+                daysOfWeek.joinToString { dayOfWeek ->
+                    dayOfWeek.dayOfWeek
                         .getDisplayName(TextStyle.SHORT, Locale.getDefault())
                 },
             )

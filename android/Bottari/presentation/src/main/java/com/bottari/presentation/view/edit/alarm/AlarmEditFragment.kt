@@ -11,7 +11,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.common.ItemSpacingDecoration
 import com.bottari.presentation.databinding.FragmentAlarmEditBinding
-import com.bottari.presentation.model.AlarmType
+import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.view.edit.alarm.adapter.DayOfWeekAdapter
 import com.shawnlin.numberpicker.NumberPicker
 import java.time.LocalDate
@@ -124,15 +124,15 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
     private fun setupAlarmTypeSwitchers() {
         binding.tvAlarmTypeNoRepeat.setOnClickListener {
             showOnly(binding.groupAlarmNoRepeat)
-            viewModel.updateAlarmType(AlarmType.NON_REPEAT)
+            viewModel.updateAlarmType(AlarmTypeUiModel.NON_REPEAT)
         }
         binding.tvAlarmTypeEverydayRepeat.setOnClickListener {
             showOnly(binding.groupAlarmEverydayRepeat)
-            viewModel.updateAlarmType(AlarmType.EVERYDAY_REPEAT)
+            viewModel.updateAlarmType(AlarmTypeUiModel.EVERYDAY_REPEAT)
         }
         binding.tvAlarmTypeEveryweekRepeat.setOnClickListener {
             showOnly(binding.groupAlarmEveryweekRepeat)
-            viewModel.updateAlarmType(AlarmType.EVERYWEEK_REPEAT)
+            viewModel.updateAlarmType(AlarmTypeUiModel.EVERYWEEK_REPEAT)
         }
     }
 

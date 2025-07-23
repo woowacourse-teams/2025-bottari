@@ -8,11 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.bottari.presentation.base.UiState
-import com.bottari.presentation.model.AlarmTypeUiModel
+import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.model.ItemUiModel
-import java.time.LocalDate
-import java.time.LocalTime
 
 class PersonalBottariEditViewModel(
     savedStateHandle: SavedStateHandle,
@@ -23,8 +21,8 @@ class PersonalBottariEditViewModel(
     private val _items = MutableLiveData<UiState<List<ItemUiModel>>>()
     val items: LiveData<UiState<List<ItemUiModel>>> = _items
 
-    private val _alarms = MutableLiveData<UiState<List<AlarmTypeUiModel>>>()
-    val alarms: LiveData<UiState<List<AlarmTypeUiModel>>> = _alarms
+    private val _alarms = MutableLiveData<UiState<List<AlarmUiModel>>>()
+    val alarms: LiveData<UiState<List<AlarmUiModel>>> = _alarms
 
     init {
         val id =
@@ -44,7 +42,7 @@ class PersonalBottariEditViewModel(
     }
 
     private fun fetchAlarmById(id: Long) {
-        _alarms.value = UiState.Success(dummyAlarm)
+        _alarms.value = UiState.Success(listOf())
     }
 
     companion object {
@@ -88,14 +86,4 @@ private val dummyChecklist =
         ItemUiModel(id = 17, isChecked = false, name = "포스트잇"),
         ItemUiModel(id = 18, isChecked = true, name = "USB 케이블"),
         ItemUiModel(id = 19, isChecked = false, name = "보조 배터리"),
-    )
-
-private val dummyAlarm =
-    listOf(
-        AlarmTypeUiModel.EveryDayRepeat(time = LocalTime.of(12, 0)),
-        AlarmTypeUiModel.EveryWeekRepeat(days = listOf(1, 3, 4), time = LocalTime.of(12, 0)),
-        AlarmTypeUiModel.NonRepeat(
-            date = LocalDate.of(2024, 12, 4),
-            time = LocalTime.of(12, 0),
-        ),
     )

@@ -3,7 +3,7 @@ package com.bottari.presentation.view.edit.alarm
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.bottari.presentation.model.AlarmType
+import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.DayOfWeekUiModel
 import java.time.LocalDate
@@ -17,9 +17,9 @@ class AlarmEditViewModel : ViewModel() {
     fun saveAlarm() {
     }
 
-    fun updateAlarmType(alarmType: AlarmType) {
+    fun updateAlarmType(alarmTypeUiModel: AlarmTypeUiModel) {
         val currentAlarm = _alarm.value ?: return
-        _alarm.value = currentAlarm.copy(type = alarmType)
+        _alarm.value = currentAlarm.copy(type = alarmTypeUiModel)
     }
 
     fun updateAlarmTime(time: LocalTime) {
@@ -30,12 +30,12 @@ class AlarmEditViewModel : ViewModel() {
     fun updateAlarmDate(date: LocalDate) {
         val currentAlarm = _alarm.value ?: return
         when (currentAlarm.type) {
-            AlarmType.NON_REPEAT -> {
+            AlarmTypeUiModel.NON_REPEAT -> {
                 _alarm.value = currentAlarm.copy(date = date)
             }
 
-            AlarmType.EVERYDAY_REPEAT,
-            AlarmType.EVERYWEEK_REPEAT,
+            AlarmTypeUiModel.EVERYDAY_REPEAT,
+            AlarmTypeUiModel.EVERYWEEK_REPEAT,
             -> return
         }
     }
