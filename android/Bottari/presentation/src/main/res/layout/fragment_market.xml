@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.home.bottari.BottariFragment"/>
+    android:layout_marginTop="@dimen/space_median"
+    tools:context=".view.home.bottari.BottariFragment">
+
+    <EditText
+        android:id="@+id/et_bottari_template_title"
+        style="@style/Pretendard_Regular_16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_large"
+        android:layout_marginBottom="@dimen/space_large"
+        android:background="@drawable/bg_gray_radius_20dp"
+        android:hint="@string/market_place_edit_text_hint"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:paddingVertical="@dimen/space_median"
+        android:paddingStart="@dimen/space_small"
+        android:paddingEnd="0dp"
+        android:textColorHint="@color/gray_a6a6a6"
+        app:layout_constraintBottom_toTopOf="@id/rv_bottari_template"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_bottari_template"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_bottari_template_title" />
+</androidx.constraintlayout.widget.ConstraintLayout>
