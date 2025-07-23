@@ -9,7 +9,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.extension.takeSuccess
-import com.bottari.presentation.model.ItemUiModel
+import com.bottari.presentation.model.BottariItemUiModel
 
 class PersonalItemEditViewModel(
     stateHandle: SavedStateHandle,
@@ -17,8 +17,8 @@ class PersonalItemEditViewModel(
     private val _bottariName: MutableLiveData<UiState<String>> = MutableLiveData<UiState<String>>()
     val bottariName: LiveData<UiState<String>> get() = _bottariName
 
-    private val _items = MutableLiveData<UiState<List<ItemUiModel>>>(UiState.Loading)
-    val items: LiveData<UiState<List<ItemUiModel>>> = _items
+    private val _items = MutableLiveData<UiState<List<BottariItemUiModel>>>(UiState.Loading)
+    val items: LiveData<UiState<List<BottariItemUiModel>>> = _items
 
     init {
         val bottariId = stateHandle.get<Long>(EXTRAS_BOTTARI_ID)
@@ -52,10 +52,10 @@ class PersonalItemEditViewModel(
         _items.value = UiState.Success(dummyItems)
     }
 
-    private fun createItem(name: String): ItemUiModel {
+    private fun createItem(name: String): BottariItemUiModel {
         val currentList = _items.value?.takeSuccess().orEmpty()
         val maxId = currentList.maxOfOrNull { it.id } ?: 0L
-        return ItemUiModel(id = maxId + 1, isChecked = false, name = name)
+        return BottariItemUiModel(id = maxId + 1, isChecked = false, name = name)
     }
 
     companion object {
@@ -83,7 +83,7 @@ class PersonalItemEditViewModel(
                 "식빵",
                 "세제",
             ).mapIndexed { index, name ->
-                ItemUiModel(id = index.toLong(), isChecked = index % 2 == 0, name = name)
+                BottariItemUiModel(id = index.toLong(), isChecked = index % 2 == 0, name = name)
             }
     }
 }

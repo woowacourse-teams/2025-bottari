@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemChecklistBinding
-import com.bottari.presentation.model.ItemUiModel
+import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.checklist.main.listener.OnChecklistItemClickListener
 
 class MainChecklistViewHolder private constructor(
@@ -22,7 +22,7 @@ class MainChecklistViewHolder private constructor(
         }
     }
 
-    fun bind(item: ItemUiModel) {
+    fun bind(item: BottariItemUiModel) {
         itemId = item.id
         binding.tvChecklistItemTitle.text =
             itemView.context.getString(R.string.checklist_item_title_prefix, item.name)

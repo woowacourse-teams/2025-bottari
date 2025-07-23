@@ -3,12 +3,12 @@ package com.bottari.presentation.view.edit.personal.item.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.ItemUiModel
+import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.edit.personal.item.listener.OnEditItemClickListener
 
 class PersonalItemEditAdapter(
     private val onEditItemClickListener: OnEditItemClickListener,
-) : ListAdapter<ItemUiModel, PersonalItemEditViewHolder>(DiffUtil) {
+) : ListAdapter<BottariItemUiModel, PersonalItemEditViewHolder>(DiffUtil) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -23,15 +23,15 @@ class PersonalItemEditAdapter(
 
     companion object {
         private val DiffUtil =
-            object : DiffUtil.ItemCallback<ItemUiModel>() {
+            object : DiffUtil.ItemCallback<BottariItemUiModel>() {
                 override fun areContentsTheSame(
-                    oldItem: ItemUiModel,
-                    newItem: ItemUiModel,
+                    oldItem: BottariItemUiModel,
+                    newItem: BottariItemUiModel,
                 ): Boolean = oldItem == newItem
 
                 override fun areItemsTheSame(
-                    oldItem: ItemUiModel,
-                    newItem: ItemUiModel,
+                    oldItem: BottariItemUiModel,
+                    newItem: BottariItemUiModel,
                 ): Boolean = oldItem.id == newItem.id
             }
     }

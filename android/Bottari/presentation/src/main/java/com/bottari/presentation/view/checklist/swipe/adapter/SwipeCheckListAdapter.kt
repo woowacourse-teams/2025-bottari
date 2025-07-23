@@ -3,9 +3,9 @@ package com.bottari.presentation.view.checklist.swipe.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.ItemUiModel
+import com.bottari.presentation.model.BottariItemUiModel
 
-class SwipeCheckListAdapter : ListAdapter<ItemUiModel, SwipeChecklistViewHolder>(DiffUtil) {
+class SwipeCheckListAdapter : ListAdapter<BottariItemUiModel, SwipeChecklistViewHolder>(DiffUtil) {
     override fun onBindViewHolder(
         holder: SwipeChecklistViewHolder,
         position: Int,
@@ -20,15 +20,15 @@ class SwipeCheckListAdapter : ListAdapter<ItemUiModel, SwipeChecklistViewHolder>
 
     companion object {
         private val DiffUtil =
-            object : DiffUtil.ItemCallback<ItemUiModel>() {
+            object : DiffUtil.ItemCallback<BottariItemUiModel>() {
                 override fun areContentsTheSame(
-                    oldItem: ItemUiModel,
-                    newItem: ItemUiModel,
+                    oldItem: BottariItemUiModel,
+                    newItem: BottariItemUiModel,
                 ): Boolean = oldItem == newItem
 
                 override fun areItemsTheSame(
-                    oldItem: ItemUiModel,
-                    newItem: ItemUiModel,
+                    oldItem: BottariItemUiModel,
+                    newItem: BottariItemUiModel,
                 ): Boolean = oldItem.id == newItem.id
             }
     }

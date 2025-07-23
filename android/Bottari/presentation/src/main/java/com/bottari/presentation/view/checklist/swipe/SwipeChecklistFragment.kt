@@ -9,7 +9,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.databinding.FragmentSwipeChecklistBinding
 import com.bottari.presentation.extension.takeSuccess
-import com.bottari.presentation.model.ItemUiModel
+import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.checklist.ChecklistViewModel
 import com.bottari.presentation.view.checklist.swipe.adapter.SwipeCheckListAdapter
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
@@ -112,7 +112,7 @@ class SwipeChecklistFragment :
         binding.csvChecklist.swipe()
     }
 
-    private fun handleNonChecklistState(items: List<ItemUiModel>) {
+    private fun handleNonChecklistState(items: List<BottariItemUiModel>) {
         adapter.submitList(items)
     }
 
