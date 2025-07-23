@@ -84,6 +84,14 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             }
             permissionLauncher.launch(requiredPermissions)
         }
+        binding.switchAlarm.setOnClickListener{
+            if(binding.switchAlarm.isChecked){
+                viewModel.
+            }
+            else{
+
+            }
+        }
     }
 
     private fun getBottariId(): Long = arguments?.getLong(EXTRA_BOTTARI_ID) ?: INVALID_BOTTARI_ID

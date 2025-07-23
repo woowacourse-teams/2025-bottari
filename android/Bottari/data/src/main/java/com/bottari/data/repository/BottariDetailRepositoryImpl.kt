@@ -1,6 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.BottariResponseMapper.toDomain
+import com.bottari.data.mapper.BottariDetailMapper.toDomain
 import com.bottari.data.model.bottari.FindBottariRequest
 import com.bottari.data.source.remote.BottariDetailRemoteDataSource
 import com.bottari.domain.model.bottari.BottariDetail

@@ -6,7 +6,7 @@ import com.bottari.data.model.bottari.ItemResponse
 import com.bottari.domain.model.bottari.BottariDetail
 import com.bottari.domain.model.bottari.BottariItem
 
-object BottariResponseMapper {
+object BottariDetailMapper {
     fun BottariResponse.toDomain(): BottariDetail =
         BottariDetail(
             id = id.toLong(),
