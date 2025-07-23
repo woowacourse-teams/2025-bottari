@@ -28,7 +28,7 @@ object AlarmMapper {
             "EVERY_DAY_REPEAT" -> AlarmType.EveryDayRepeat
             "EVERY_WEEK_REPEAT" ->
                 AlarmType.EveryWeekRepeat(
-                    daysOfWeek = dayOfWeeks
+                    daysOfWeek = dayOfWeeks,
                 )
 
             else -> throw IllegalArgumentException("Unknown alarm type: $type")
