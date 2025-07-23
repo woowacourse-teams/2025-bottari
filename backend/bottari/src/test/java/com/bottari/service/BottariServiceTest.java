@@ -72,6 +72,7 @@ class BottariServiceTest {
             assertThat(actual.items()).hasSize(1);
             assertThat(actual.alarm()).isNotNull();
             assertThat(actual.alarm().id()).isEqualTo(alarm.getId());
+            assertThat(actual.alarm().isActive()).isTrue();
             assertThat(actual.alarm().routine().type()).isEqualTo(RepeatType.EVERY_WEEK_REPEAT);
             assertThat(actual.alarm().location().latitude()).isEqualTo(37.5);
         });
@@ -147,6 +148,7 @@ class BottariServiceTest {
             assertThat(actual.getFirst().checkedItemsCount()).isEqualTo(1);
             assertThat(actual.getFirst().alarm()).isNotNull();
             assertThat(actual.getFirst().alarm().id()).isEqualTo(alarm.getId());
+            assertThat(actual.getFirst().alarm().isActive()).isTrue();
             assertThat(actual.get(1).totalItemsCount()).isEqualTo(1);
             assertThat(actual.get(1).checkedItemsCount()).isEqualTo(0);
             assertThat(actual.get(1).alarm()).isNull();
