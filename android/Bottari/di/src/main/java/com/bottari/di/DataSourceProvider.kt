@@ -4,6 +4,8 @@ import com.bottari.data.source.remote.BottariItemRemoteDataSource
 import com.bottari.data.source.remote.BottariItemRemoteDataSourceImpl
 import com.bottari.data.source.remote.BottariRemoteDataSource
 import com.bottari.data.source.remote.BottariRemoteDataSourceImpl
+import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
+import com.bottari.data.source.remote.BottariTemplateRemoteDataSourceImpl
 import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSourceImpl
 
@@ -21,6 +23,11 @@ object DataSourceProvider {
     val bottariItemRemoteDataSource: BottariItemRemoteDataSource by lazy {
         BottariItemRemoteDataSourceImpl(
             ServiceProvider.bottariItemService,
+        )
+    }
+    val bottariTemplateRemoteSource: BottariTemplateRemoteDataSource by lazy {
+        BottariTemplateRemoteDataSourceImpl(
+            ServiceProvider.bottariTemplateService,
         )
     }
 }
