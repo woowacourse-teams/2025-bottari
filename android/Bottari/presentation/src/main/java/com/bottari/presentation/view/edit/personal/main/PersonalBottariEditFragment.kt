@@ -1,7 +1,9 @@
 package com.bottari.presentation.view.edit.personal.main
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,6 +15,8 @@ import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.BottariUiModel
+import com.bottari.presentation.util.permission.PermissionUtil
+import com.bottari.presentation.util.permission.PermissionUtil.requiredPermissions
 import com.bottari.presentation.view.edit.alarm.AlarmEditFragment
 import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditAlarmAdapter
@@ -28,6 +32,21 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val alarmAdapter: PersonalBottariEditAlarmAdapter by lazy { PersonalBottariEditAlarmAdapter() }
+    private val permissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions(),
+        ) { permissions ->
+            val allGranted = permissions.all { it.value }
+            if (allGranted) {
+                checkAndRequestSpecialPermission()
+            } else {
+                if (PermissionUtil.isPermanentlyDenied(this)) {
+                    showSettingsDialog()
+                } else {
+                    showSnackbar(R.string.alarm_edit_permission_failure_text)
+                }
+            }
+        }
 
     override fun onViewCreated(
         view: View,
@@ -61,10 +80,11 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             )
         }
         binding.clEditAlarm.setOnClickListener {
-            navigateToScreen(
-                AlarmEditFragment::class.java,
-                AlarmEditFragment.newBundle(),
-            )
+            if (PermissionUtil.hasAllRuntimePermissions(requireContext())) {
+                checkAndRequestSpecialPermission()
+                return@setOnClickListener
+            }
+            permissionLauncher.launch(requiredPermissions)
         }
     }
 
@@ -145,6 +165,38 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         transaction.replace(R.id.fcv_personal_edit, fragmentClass, bundle)
         transaction.addToBackStack(fragmentClass.simpleName)
         transaction.commit()
+    }
+
+    private fun checkAndRequestSpecialPermission() {
+        if (PermissionUtil.hasExactAlarmPermission(requireContext())) {
+            navigateToScreen(AlarmEditFragment::class.java, AlarmEditFragment.newBundle())
+            return
+        }
+        showExactAlarmSettingsDialog()
+    }
+
+    private fun showSettingsDialog() {
+        AlertDialog
+            .Builder(requireContext())
+            .setTitle(R.string.alarm_edit_permission_dialog_title_text)
+            .setMessage(R.string.alarm_edit_permission_dialog_message_text)
+            .setPositiveButton(R.string.alarm_edit_permission_dialog_positive_btn_text) { _, _ ->
+                PermissionUtil.openAppSettings(requireContext())
+            }.setNegativeButton(R.string.alarm_edit_permission_dialog_negative_btn_text, null)
+            .show()
+    }
+
+    private fun showExactAlarmSettingsDialog() {
+        AlertDialog
+            .Builder(requireContext())
+            .setTitle(R.string.alarm_edit_permission_dialog_title_text)
+            .setMessage(R.string.alarm_edit_exact_alarm_permission_dialog_message_text)
+            .setPositiveButton(R.string.alarm_edit_permission_dialog_positive_btn_text) { _, _ ->
+                PermissionUtil.requestExactAlarmPermission(
+                    requireContext(),
+                )
+            }.setNegativeButton(R.string.alarm_edit_permission_dialog_negative_btn_text, null)
+            .show()
     }
 
     companion object {
