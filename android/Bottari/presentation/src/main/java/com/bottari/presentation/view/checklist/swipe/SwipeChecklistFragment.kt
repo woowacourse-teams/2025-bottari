@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.databinding.FragmentSwipeChecklistBinding
+import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.extension.takeSuccess
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.checklist.ChecklistViewModel
@@ -22,7 +23,12 @@ import com.yuyakaido.android.cardstackview.SwipeAnimationSetting
 class SwipeChecklistFragment :
     BaseFragment<FragmentSwipeChecklistBinding>(FragmentSwipeChecklistBinding::inflate),
     CardStackListener {
-    private val viewModel: ChecklistViewModel by activityViewModels()
+    private val viewModel: ChecklistViewModel by activityViewModels {
+        ChecklistViewModel.Factory(
+            requireContext().getSSAID(),
+            getBottariId()
+        )
+    }
     private val adapter: SwipeCheckListAdapter by lazy { SwipeCheckListAdapter() }
     private lateinit var cardStackLayoutManager: CardStackLayoutManager
     private val totalItemCount by lazy {
@@ -68,6 +74,8 @@ class SwipeChecklistFragment :
     ) {}
 
     override fun onCardRewound() {}
+
+    private fun getBottariId(): Long = requireArguments().getLong(EXTRA_BOTTARI_ID)
 
     private fun setupObserver() {
         viewModel.nonChecklist.observe(viewLifecycleOwner, ::handleNonChecklistState)
@@ -119,7 +127,11 @@ class SwipeChecklistFragment :
     private fun handleCheckedState(checked: Int) {
         binding.pbChecklistSwipe.progress = checked
         binding.tvSwipeChecklistStatus.text =
-            getString(R.string.swipe_checklist_status_text, totalItemCount, totalItemCount - checked)
+            getString(
+                R.string.swipe_checklist_status_text,
+                totalItemCount,
+                totalItemCount - checked
+            )
     }
 
     private fun handleProgressBarColor(isAllChecked: Boolean) {
@@ -129,7 +141,12 @@ class SwipeChecklistFragment :
     }
 
     companion object {
+        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
         private const val DEFAULT_PROGRESS_MAX_VALUE = 0
         private const val INDEX_OFFSET = 1
+
+        fun newBundle(bottariId: Long): Bundle = Bundle().apply {
+            putLong(EXTRA_BOTTARI_ID, bottariId)
+        }
     }
 }
