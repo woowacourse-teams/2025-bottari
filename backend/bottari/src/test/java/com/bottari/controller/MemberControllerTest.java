@@ -1,10 +1,13 @@
 package com.bottari.controller;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.bottari.dto.CheckRegistrationResponse;
 import com.bottari.dto.CreateMemberRequest;
 import com.bottari.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,5 +46,24 @@ class MemberControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(header().string(HttpHeaders.LOCATION, "/members/1"));
+    }
+
+    @DisplayName("사용자의 회원가입 여부를 확인한다.")
+    @Test
+    void checkRegistration() throws Exception {
+        // given
+        final String ssaid = "ssaid";
+        final CheckRegistrationResponse response = new CheckRegistrationResponse(
+                true,
+                "name"
+        );
+        given(memberService.checkRegistration(ssaid))
+                .willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/members/check")
+                        .header("ssaid", ssaid))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
     }
 }

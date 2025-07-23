@@ -1,8 +1,10 @@
 package com.bottari.service;
 
 import com.bottari.domain.Member;
+import com.bottari.dto.CheckRegistrationResponse;
 import com.bottari.dto.CreateMemberRequest;
 import com.bottari.repository.MemberRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,5 +28,16 @@ public class MemberService {
         if (memberRepository.existsBySsaid(ssaid)) {
             throw new IllegalArgumentException("중복된 ssaid입니다.");
         }
+    }
+
+    public CheckRegistrationResponse checkRegistration(final String ssaid) {
+        final Optional<Member> optionalMember = memberRepository.findBySsaid(ssaid);
+        if (optionalMember.isPresent()) {
+            final Member member = optionalMember.get();
+
+            return new CheckRegistrationResponse(true, member.getName());
+        }
+
+        return new CheckRegistrationResponse(false, null);
     }
 }

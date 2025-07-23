@@ -2,8 +2,10 @@ package com.bottari.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.domain.Member;
+import com.bottari.dto.CheckRegistrationResponse;
 import com.bottari.dto.CreateMemberRequest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
@@ -47,5 +49,39 @@ class MemberServiceTest {
         assertThatThrownBy(() -> memberService.create(request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("중복된 ssaid입니다.");
+    }
+
+    @DisplayName("사용자 회원가입 여부를 확인할 때 가입된 ssaid라면, true와 사용자 이름을 반환한다.")
+    @Test
+    void checkRegistration() {
+        // given
+        final String ssaid = "ssaid";
+        final String name = "name";
+        entityManager.persist(new Member(ssaid, name));
+
+        // when
+        final CheckRegistrationResponse actual = memberService.checkRegistration(ssaid);
+
+        // then
+        assertAll(() -> {
+            assertThat(actual.isRegistered()).isTrue();
+            assertThat(actual.name()).isEqualTo(name);
+        });
+    }
+
+    @DisplayName("사용자 회원가입 여부를 확인할 때 가입되지 않은 ssaid라면, false와 null을 반환한다.")
+    @Test
+    void checkRegistration_unregister() {
+        // given
+        final String unregisteredSsaid = "ssaid";
+
+        // when
+        final CheckRegistrationResponse actual = memberService.checkRegistration(unregisteredSsaid);
+
+        // then
+        assertAll(() -> {
+            assertThat(actual.isRegistered()).isFalse();
+            assertThat(actual.name()).isNull();
+        });
     }
 }
