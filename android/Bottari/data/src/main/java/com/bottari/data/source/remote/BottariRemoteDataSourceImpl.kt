@@ -6,8 +6,9 @@ import com.bottari.data.util.safeApiCall
 
 class BottariRemoteDataSourceImpl(
     private val bottariService: BottariService,
-): BottariRemoteDataSource {
-    override suspend fun fetchBottaries(ssaid: String): Result<List<FetchBottariesResponse>> = safeApiCall {
-        bottariService.fetchBottaries(ssaid)
-    }
+) : BottariRemoteDataSource {
+    override suspend fun fetchBottaries(ssaid: String): Result<List<FetchBottariesResponse>> =
+        safeApiCall {
+            bottariService.fetchBottaries(ssaid)
+        }
 }

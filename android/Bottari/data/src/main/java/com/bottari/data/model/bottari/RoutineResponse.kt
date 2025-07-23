@@ -1,6 +1,5 @@
 package com.bottari.data.model.bottari
 
-
 import com.bottari.data.util.LocalDateSerializer
 import com.bottari.data.util.LocalTimeSerializer
 import kotlinx.serialization.SerialName

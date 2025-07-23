@@ -7,7 +7,7 @@ import com.bottari.domain.repository.BottariRepository
 
 class BottariRepositoryImpl(
     private val bottariRemoteDataSource: BottariRemoteDataSource,
-): BottariRepository {
+) : BottariRepository {
     override suspend fun fetchBottaries(ssaid: String): Result<List<Bottari>> =
         bottariRemoteDataSource.fetchBottaries(ssaid).map { bottari -> bottari.toDomain() }
 }

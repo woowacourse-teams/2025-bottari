@@ -8,12 +8,12 @@ import com.bottari.data.source.remote.MemberRemoteDataSourceImpl
 object DataSourceProvider {
     val memberRemoteDataSource: MemberRemoteDataSource by lazy {
         MemberRemoteDataSourceImpl(
-            ServiceProvider.memberService
+            ServiceProvider.memberService,
         )
     }
     val bottariRemoteDataSource: BottariRemoteDataSource by lazy {
         BottariRemoteDataSourceImpl(
-            ServiceProvider.bottariService
+            ServiceProvider.bottariService,
         )
     }
 }

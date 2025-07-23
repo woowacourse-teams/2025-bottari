@@ -35,8 +35,7 @@ class BottariViewModel(
                 .onSuccess { bottaries ->
                     val bottariUiModels = bottaries.map { bottari -> bottari.toUiModel() }
                     _bottaries.value = UiState.Success(bottariUiModels)
-                }
-                .onFailure {
+                }.onFailure {
                     _bottaries.value = UiState.Failure(it.message)
                 }
         }
@@ -54,6 +53,4 @@ class BottariViewModel(
                 }
             }
     }
-
 }
-

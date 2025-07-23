@@ -12,13 +12,14 @@ import com.bottari.domain.model.bottari.Bottari
 object BottariMapper {
     fun List<FetchBottariesResponse>.toDomain(): List<Bottari> = mapNotNull { it.toDomain() }
 
-    private fun FetchBottariesResponse.toDomain(): Bottari = Bottari(
-        alarm = alarmResponse?.toDomain(),
-        checkedQuantity = checkedItemsCount,
-        id = id,
-        title = title,
-        totalQuantity = totalItemsCount
-    )
+    private fun FetchBottariesResponse.toDomain(): Bottari =
+        Bottari(
+            alarm = alarmResponse?.toDomain(),
+            checkedQuantity = checkedItemsCount,
+            id = id,
+            title = title,
+            totalQuantity = totalItemsCount,
+        )
 
     private fun AlarmResponse.toDomain(): Alarm? {
         val alarmType = routine.toDomainType() ?: return null
@@ -30,17 +31,19 @@ object BottariMapper {
         )
     }
 
-    private fun LocationResponse.toDomain(): LocationAlarm = LocationAlarm(
-        isActive = isActive,
-        latitude = latitude,
-        longitude = longitude,
-        radius = radius
-    )
+    private fun LocationResponse.toDomain(): LocationAlarm =
+        LocationAlarm(
+            isActive = isActive,
+            latitude = latitude,
+            longitude = longitude,
+            radius = radius,
+        )
 
-    private fun RoutineResponse.toDomainType(): AlarmType? = when (type) {
-        "NON_REPEAT" -> date?.let { AlarmType.NonRepeat(it) }
-        "EVERY_DAY_REPEAT" -> AlarmType.EveryDayRepeat
-        "EVERY_WEEK_REPEAT" -> AlarmType.EveryWeekRepeat(dayOfWeeks)
-        else -> null
-    }
+    private fun RoutineResponse.toDomainType(): AlarmType? =
+        when (type) {
+            "NON_REPEAT" -> date?.let { AlarmType.NonRepeat(it) }
+            "EVERY_DAY_REPEAT" -> AlarmType.EveryDayRepeat
+            "EVERY_WEEK_REPEAT" -> AlarmType.EveryWeekRepeat(dayOfWeeks)
+            else -> null
+        }
 }

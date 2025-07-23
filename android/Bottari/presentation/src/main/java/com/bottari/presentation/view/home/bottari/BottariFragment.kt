@@ -85,7 +85,7 @@ class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBind
         when (state) {
             RecyclerView.SCROLL_STATE_DRAGGING,
             RecyclerView.SCROLL_STATE_SETTLING,
-                -> {
+            -> {
                 binding.btnBottariCreate.fadeOut()
             }
 
