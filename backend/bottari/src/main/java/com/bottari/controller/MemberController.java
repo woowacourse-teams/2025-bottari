@@ -1,11 +1,14 @@
 package com.bottari.controller;
 
 import com.bottari.controller.docs.MemberApiDocs;
+import com.bottari.dto.CheckRegistrationResponse;
 import com.bottari.dto.CreateMemberRequest;
 import com.bottari.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,5 +29,16 @@ public class MemberController implements MemberApiDocs {
         final Long id = memberService.create(request);
 
         return ResponseEntity.created(URI.create("/members/" + id)).build();
+    }
+
+    @GetMapping("/check")
+    @Override
+    public ResponseEntity<CheckRegistrationResponse> checkRegistration(
+            final HttpServletRequest httpServletRequest
+    ) {
+        final String ssaid = httpServletRequest.getHeader("ssaid");
+        final CheckRegistrationResponse response = memberService.checkRegistration(ssaid);
+
+        return ResponseEntity.ok(response);
     }
 }
