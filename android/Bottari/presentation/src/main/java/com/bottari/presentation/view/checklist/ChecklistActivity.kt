@@ -16,64 +16,37 @@ import com.bottari.presentation.view.checklist.swipe.SwipeChecklistFragment
 
 class ChecklistActivity :
     BaseActivity<ActivityChecklistBinding>(ActivityChecklistBinding::inflate) {
-    private val viewModel: ChecklistViewModel by viewModels {
-        ChecklistViewModel.Factory(getSSAID(), getBottariId())
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupUI()
         setupListener()
-        navigateToChecklist()
-        handleBackPress()
     }
 
-    private fun getBottariId(): Long = intent.getLongExtra(EXTRA_BOTTARI_ID, INVALID_BOTTARI_ID)
-
     private fun setupUI() {
+        navigateToChecklist(true)
         binding.tvBottariTitle.text = intent.getStringExtra(EXTRA_BOTTARI_TITLE)
     }
 
     private fun setupListener() {
         binding.btnPrevious.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
-        binding.btnSwipe.setOnClickListener { navigateToSwipeChecklist() }
+        binding.btnSwipe.setOnClickListener { navigateToChecklist(false) }
     }
 
-    private fun navigateToChecklist() {
-        val tag = MainChecklistFragment::class.java.name
-        if (supportFragmentManager.findFragmentByTag(tag) != null) return
-        supportFragmentManager.beginTransaction().apply {
-            val bundle = MainChecklistFragment.newBundle(getBottariId())
-            replace(R.id.fcv_checklist, MainChecklistFragment::class.java, bundle, tag)
-            commit()
-        }
-        binding.btnSwipe.isVisible = true
-        binding.btnPrevious.setImageResource(R.drawable.btn_previous)
-    }
-
-    private fun handleBackPress() {
-        onBackPressedDispatcher.addCallback(this) {
-            if (supportFragmentManager.backStackEntryCount == MIN_FRAGMENT_ENTRY_COUNT) {
-                finish()
-                return@addCallback
-            }
-            supportFragmentManager.popBackStack()
-            updateToolbar(true)
-        }
-    }
-
-    private fun navigateToSwipeChecklist() {
-        val tag = SwipeChecklistFragment::class.java.name
-        if (supportFragmentManager.findFragmentByTag(tag) != null) return
+    private fun navigateToChecklist(isMain: Boolean) {
+        val bottariId = getBottariId()
+        val fragment = if (isMain) MainChecklistFragment::class.java else SwipeChecklistFragment::class.java
+        val bundle = if (isMain) MainChecklistFragment.newBundle(bottariId) else SwipeChecklistFragment.newBundle(bottariId)
         supportFragmentManager.beginTransaction().apply {
             setSlideFastAnimation()
-            val bundle = SwipeChecklistFragment.newBundle(getBottariId())
-            add(R.id.fcv_checklist, SwipeChecklistFragment::class.java, bundle, tag)
-            addToBackStack(null)
+            replace(R.id.fcv_checklist, fragment, bundle, fragment.name)
+            if (!isMain) addToBackStack(fragment.name)
             commit()
         }
-        updateToolbar(false)
+        updateToolbar(isMain)
     }
+
+    private fun getBottariId(): Long = intent.getLongExtra(EXTRA_BOTTARI_ID, INVALID_BOTTARI_ID)
 
     private fun FragmentTransaction.setSlideFastAnimation() {
         setCustomAnimations(
@@ -91,7 +64,6 @@ class ChecklistActivity :
     }
 
     companion object {
-        private const val MIN_FRAGMENT_ENTRY_COUNT = 0
         private const val INVALID_BOTTARI_ID = -1L
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
         private const val EXTRA_BOTTARI_TITLE = "EXTRA_BOTTARI_TITLE"
