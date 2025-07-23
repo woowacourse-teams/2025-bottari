@@ -24,7 +24,6 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import com.google.android.material.snackbar.Snackbar
 
 class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
@@ -44,7 +43,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 if (PermissionUtil.isPermanentlyDenied(this)) {
                     showSettingsDialog()
                 } else {
-                    Snackbar.make(binding.root, "권한 요청에 실패했어요.", Snackbar.LENGTH_SHORT).show()
+                    showSnackbar(R.string.alarm_edit_permission_failure_text)
                 }
             }
         }
@@ -173,17 +172,30 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             navigateToScreen(AlarmEditFragment::class.java, AlarmEditFragment.newBundle())
             return
         }
-        PermissionUtil.requestExactAlarmPermission(requireContext())
+        showExactAlarmSettingsDialog()
     }
 
     private fun showSettingsDialog() {
         AlertDialog
             .Builder(requireContext())
-            .setTitle("권한이 필요합니다")
-            .setMessage("앱 기능을 사용하려면 권한을 허용해야 합니다. 설정 화면으로 이동하시겠습니까?")
-            .setPositiveButton("설정으로 이동") { _, _ ->
+            .setTitle(R.string.alarm_edit_permission_dialog_title_text)
+            .setMessage(R.string.alarm_edit_permission_dialog_message_text)
+            .setPositiveButton(R.string.alarm_edit_permission_dialog_positive_btn_text) { _, _ ->
                 PermissionUtil.openAppSettings(requireContext())
-            }.setNegativeButton("취소", null)
+            }.setNegativeButton(R.string.alarm_edit_permission_dialog_negative_btn_text, null)
+            .show()
+    }
+
+    private fun showExactAlarmSettingsDialog() {
+        AlertDialog
+            .Builder(requireContext())
+            .setTitle(R.string.alarm_edit_permission_dialog_title_text)
+            .setMessage(R.string.alarm_edit_exact_alarm_permission_dialog_message_text)
+            .setPositiveButton(R.string.alarm_edit_permission_dialog_positive_btn_text) { _, _ ->
+                PermissionUtil.requestExactAlarmPermission(
+                    requireContext(),
+                )
+            }.setNegativeButton(R.string.alarm_edit_permission_dialog_negative_btn_text, null)
             .show()
     }
 

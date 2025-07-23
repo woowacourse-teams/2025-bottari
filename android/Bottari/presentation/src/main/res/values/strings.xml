@@ -49,6 +49,12 @@
     <string name="bottari_edit_add_alarm_title">알람 설정</string>
     <string name="current_location_button_description">현재 위치 버튼</string>
     <string name="alarm_edit_close_button_description">편집 종료 버튼</string>
+    <string name="alarm_edit_permission_dialog_title_text">권한 알림</string>
+    <string name="alarm_edit_permission_dialog_message_text">"앱 기능을 사용하려면 권한이 필요해요.\n설정 화면으로 이동하시겠어요?"</string>
+    <string name="alarm_edit_exact_alarm_permission_dialog_message_text">보따리 알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동하시겠어요?</string>
+    <string name="alarm_edit_permission_dialog_positive_btn_text">이동</string>
+    <string name="alarm_edit_permission_dialog_negative_btn_text">취소</string>
+    <string name="alarm_edit_permission_failure_text">권한 요청에 실패했어요.</string>
 
     <!--  Description  -->
     <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>
