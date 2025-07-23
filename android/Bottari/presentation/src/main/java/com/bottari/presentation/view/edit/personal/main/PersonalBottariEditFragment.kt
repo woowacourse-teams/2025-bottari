@@ -16,6 +16,7 @@ import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.util.permission.PermissionUtil
+import com.bottari.presentation.util.permission.PermissionUtil.requiredPermissions
 import com.bottari.presentation.view.edit.alarm.AlarmEditFragment
 import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditAlarmAdapter
@@ -31,7 +32,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val alarmAdapter: PersonalBottariEditAlarmAdapter by lazy { PersonalBottariEditAlarmAdapter() }
-
     private val permissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions(),
@@ -84,7 +84,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 checkAndRequestSpecialPermission()
                 return@setOnClickListener
             }
-            permissionLauncher.launch(PermissionUtil.getRequiredPermissions())
+            permissionLauncher.launch(requiredPermissions)
         }
     }
 
