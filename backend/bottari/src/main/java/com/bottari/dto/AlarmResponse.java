@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 public record AlarmResponse(
+        Long id,
         RoutineAlarmResponse routine,
         LocationAlarmResponse location
 ) {
@@ -21,6 +22,7 @@ public record AlarmResponse(
         }
 
         return new AlarmResponse(
+                alarm.getId(),
                 RoutineAlarmResponse.from(alarm.getRoutineAlarm()),
                 LocationAlarmResponse.from(alarm.getLocationAlarm())
         );
