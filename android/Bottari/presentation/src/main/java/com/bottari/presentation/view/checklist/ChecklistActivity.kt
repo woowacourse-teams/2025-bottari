@@ -3,20 +3,15 @@ package com.bottari.presentation.view.checklist
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.addCallback
-import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityChecklistBinding
-import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.view.checklist.main.MainChecklistFragment
 import com.bottari.presentation.view.checklist.swipe.SwipeChecklistFragment
 
-class ChecklistActivity :
-    BaseActivity<ActivityChecklistBinding>(ActivityChecklistBinding::inflate) {
-
+class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityChecklistBinding::inflate) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupUI()

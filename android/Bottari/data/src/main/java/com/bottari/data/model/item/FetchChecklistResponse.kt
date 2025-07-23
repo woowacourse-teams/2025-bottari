@@ -10,5 +10,5 @@ data class FetchChecklistResponse(
     @SerialName("name")
     val name: String,
     @SerialName("isChecked")
-    val isChecked: Boolean
+    val isChecked: Boolean,
 )

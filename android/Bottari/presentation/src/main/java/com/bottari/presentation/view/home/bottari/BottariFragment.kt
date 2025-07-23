@@ -18,7 +18,8 @@ import com.bottari.presentation.view.home.bottari.adapter.BottariAdapter
 import com.bottari.presentation.view.home.bottari.create.BottariCreateDialog
 import com.bottari.presentation.view.home.bottari.listener.OnBottariClickListener
 
-class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate),
+class BottariFragment :
+    BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate),
     OnBottariClickListener {
     private val viewModel: BottariViewModel by viewModels {
         BottariViewModel.Factory(requireContext().getSSAID())
@@ -35,7 +36,10 @@ class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBind
         setupListener()
     }
 
-    override fun onClick(bottariId: Long, bottariTitle: String) {
+    override fun onClick(
+        bottariId: Long,
+        bottariTitle: String,
+    ) {
         navigateToChecklist(bottariId, bottariTitle)
     }
 
@@ -92,7 +96,10 @@ class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBind
         }
     }
 
-    private fun navigateToChecklist(bottariId: Long, bottariTitle: String) {
+    private fun navigateToChecklist(
+        bottariId: Long,
+        bottariTitle: String,
+    ) {
         val intent = ChecklistActivity.newIntent(requireContext(), bottariId, bottariTitle)
         startActivity(intent)
     }

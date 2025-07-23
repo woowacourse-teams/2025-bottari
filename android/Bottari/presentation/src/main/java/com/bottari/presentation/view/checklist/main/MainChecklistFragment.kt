@@ -12,12 +12,11 @@ import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.checklist.ChecklistViewModel
 import com.bottari.presentation.view.checklist.main.adapter.MainChecklistAdapter
 
-class MainChecklistFragment :
-    BaseFragment<FragmentChecklistBinding>(FragmentChecklistBinding::inflate) {
+class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChecklistBinding::inflate) {
     private val viewModel: ChecklistViewModel by activityViewModels {
         ChecklistViewModel.Factory(
             requireContext().getSSAID(),
-            getBottariId()
+            getBottariId(),
         )
     }
     private val adapter: MainChecklistAdapter by lazy {
@@ -63,8 +62,9 @@ class MainChecklistFragment :
     companion object {
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
 
-        fun newBundle(bottariId: Long): Bundle = Bundle().apply {
-            putLong(EXTRA_BOTTARI_ID, bottariId)
-        }
+        fun newBundle(bottariId: Long): Bundle =
+            Bundle().apply {
+                putLong(EXTRA_BOTTARI_ID, bottariId)
+            }
     }
 }

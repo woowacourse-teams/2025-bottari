@@ -26,7 +26,7 @@ class SwipeChecklistFragment :
     private val viewModel: ChecklistViewModel by activityViewModels {
         ChecklistViewModel.Factory(
             requireContext().getSSAID(),
-            getBottariId()
+            getBottariId(),
         )
     }
     private val adapter: SwipeCheckListAdapter by lazy { SwipeCheckListAdapter() }
@@ -130,7 +130,7 @@ class SwipeChecklistFragment :
             getString(
                 R.string.swipe_checklist_status_text,
                 totalItemCount,
-                totalItemCount - checked
+                totalItemCount - checked,
             )
     }
 
@@ -145,8 +145,9 @@ class SwipeChecklistFragment :
         private const val DEFAULT_PROGRESS_MAX_VALUE = 0
         private const val INDEX_OFFSET = 1
 
-        fun newBundle(bottariId: Long): Bundle = Bundle().apply {
-            putLong(EXTRA_BOTTARI_ID, bottariId)
-        }
+        fun newBundle(bottariId: Long): Bundle =
+            Bundle().apply {
+                putLong(EXTRA_BOTTARI_ID, bottariId)
+            }
     }
 }

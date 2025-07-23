@@ -38,13 +38,15 @@ class ChecklistViewModel(
     private val _nonChecklist = MutableLiveData<List<BottariItemUiModel>>(emptyList())
     val nonChecklist: LiveData<List<BottariItemUiModel>> = _nonChecklist
 
-    val checkedQuantity: LiveData<Int> = _checklist.map { state ->
-        state.takeSuccess().orEmpty().count { it.isChecked }
-    }
+    val checkedQuantity: LiveData<Int> =
+        _checklist.map { state ->
+            state.takeSuccess().orEmpty().count { it.isChecked }
+        }
 
-    val isAllChecked: LiveData<Boolean> = _checklist.map { state ->
-        state.takeSuccess().orEmpty().all { it.isChecked }
-    }
+    val isAllChecked: LiveData<Boolean> =
+        _checklist.map { state ->
+            state.takeSuccess().orEmpty().all { it.isChecked }
+        }
 
     init {
         val bottariId = stateHandle.get<Long>(EXTRA_BOTTARI_ID)!!
@@ -52,12 +54,13 @@ class ChecklistViewModel(
     }
 
     fun toggleItemChecked(itemId: Long) {
-        val updatedList = currentChecklist().map { item ->
-            if (item.id != itemId) return@map item
-            val toggledChecked = !item.isChecked
-            recordPendingCheckStatus(item.id, toggledChecked)
-            item.copy(isChecked = toggledChecked)
-        }
+        val updatedList =
+            currentChecklist().map { item ->
+                if (item.id != itemId) return@map item
+                val toggledChecked = !item.isChecked
+                recordPendingCheckStatus(item.id, toggledChecked)
+                item.copy(isChecked = toggledChecked)
+            }
 
         _checklist.value = UiState.Success(updatedList)
         restartDebounceTimer()
@@ -67,27 +70,33 @@ class ChecklistViewModel(
         _nonChecklist.value = currentChecklist().filter { !it.isChecked }
     }
 
-    private fun currentChecklist(): List<BottariItemUiModel> =
-        _checklist.value?.takeSuccess().orEmpty()
+    private fun currentChecklist(): List<BottariItemUiModel> = _checklist.value?.takeSuccess().orEmpty()
 
-    private fun recordPendingCheckStatus(itemId: Long, isChecked: Boolean) {
+    private fun recordPendingCheckStatus(
+        itemId: Long,
+        isChecked: Boolean,
+    ) {
         pendingCheckStatusMap[itemId] = isChecked
     }
 
     private fun restartDebounceTimer() {
         debounceJob?.cancel()
-        debounceJob = viewModelScope.launch {
-            delay(DEBOUNCE_DELAY_MS)
-            val copyPendingMap = pendingCheckStatusMap.toMap()
-            pendingCheckStatusMap.clear()
+        debounceJob =
+            viewModelScope.launch {
+                delay(DEBOUNCE_DELAY_MS)
+                val copyPendingMap = pendingCheckStatusMap.toMap()
+                pendingCheckStatusMap.clear()
 
-            copyPendingMap.forEach { (itemId, isChecked) ->
-                launch { updateCheckStatus(itemId, isChecked) }
+                copyPendingMap.forEach { (itemId, isChecked) ->
+                    launch { updateCheckStatus(itemId, isChecked) }
+                }
             }
-        }
     }
 
-    private suspend fun updateCheckStatus(itemId: Long, isChecked: Boolean) {
+    private suspend fun updateCheckStatus(
+        itemId: Long,
+        isChecked: Boolean,
+    ) {
         if (isChecked) {
             checkBottariItemUseCase(ssaid, itemId)
             return
@@ -101,8 +110,7 @@ class ChecklistViewModel(
             fetchChecklistUseCase(ssaid, bottariId)
                 .onSuccess { items ->
                     _checklist.value = UiState.Success(items.map { it.toUiModel() })
-                }
-                .onFailure { error ->
+                }.onFailure { error ->
                     _checklist.value = UiState.Failure(error.message)
                 }
         }
@@ -113,18 +121,22 @@ class ChecklistViewModel(
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
         private const val DEBOUNCE_DELAY_MS = 500L
 
-        fun Factory(ssaid: String, bottariId: Long): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val stateHandle = createSavedStateHandle()
-                stateHandle[EXTRA_SSAID] = ssaid
-                stateHandle[EXTRA_BOTTARI_ID] = bottariId
-                ChecklistViewModel(
-                    stateHandle,
-                    UseCaseProvider.fetchChecklistUseCase,
-                    UseCaseProvider.checkBottariItemUseCase,
-                    UseCaseProvider.unCheckBottariItemUseCase,
-                )
+        fun Factory(
+            ssaid: String,
+            bottariId: Long,
+        ): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    val stateHandle = createSavedStateHandle()
+                    stateHandle[EXTRA_SSAID] = ssaid
+                    stateHandle[EXTRA_BOTTARI_ID] = bottariId
+                    ChecklistViewModel(
+                        stateHandle,
+                        UseCaseProvider.fetchChecklistUseCase,
+                        UseCaseProvider.checkBottariItemUseCase,
+                        UseCaseProvider.unCheckBottariItemUseCase,
+                    )
+                }
             }
-        }
     }
 }

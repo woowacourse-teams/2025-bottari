@@ -10,16 +10,23 @@ class BottariItemRemoteDataSourceImpl(
     override suspend fun fetchChecklist(
         ssaid: String,
         bottariId: Long,
-    ): Result<List<FetchChecklistResponse>> = safeApiCall {
-        bottariItemService.fetchChecklist(ssaid, bottariId)
-    }
+    ): Result<List<FetchChecklistResponse>> =
+        safeApiCall {
+            bottariItemService.fetchChecklist(ssaid, bottariId)
+        }
 
-    override suspend fun uncheckBottariItem(ssaid: String, bottariItemId: Long): Result<Unit> =
+    override suspend fun uncheckBottariItem(
+        ssaid: String,
+        bottariItemId: Long,
+    ): Result<Unit> =
         safeApiCall {
             bottariItemService.uncheckBottariItem(ssaid, bottariItemId)
         }
 
-    override suspend fun checkBottariItem(ssaid: String, bottariItemId: Long): Result<Unit> =
+    override suspend fun checkBottariItem(
+        ssaid: String,
+        bottariItemId: Long,
+    ): Result<Unit> =
         safeApiCall {
             bottariItemService.checkBottariItem(ssaid, bottariItemId)
         }
