@@ -33,4 +33,13 @@ public interface BottariTemplateApiDocs {
             final CreateBottariTemplateRequest request,
             final HttpServletRequest httpServletRequest
     );
+
+    @Operation(summary = "보따리 템플릿으로 보따리 생성")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "보따리 템플릿으로 보따리 생성 성공"),
+    })
+    ResponseEntity<Void> createBottari(
+            final Long id,
+            final HttpServletRequest httpServletRequest
+    );
 }

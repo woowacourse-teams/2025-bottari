@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BottariTemplateItemRepository extends JpaRepository<BottariTemplateItem, Long> {
 
-    List<BottariTemplateItem> findAllByBottariTemplateId(final Long bottariTemplateId);
+    List<BottariTemplateItem> findAllByBottariTemplateId(final Long id);
 
     List<BottariTemplateItem> findAllByBottariTemplateIn(final List<BottariTemplate> bottariTemplates);
 }

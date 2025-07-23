@@ -55,4 +55,16 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
 
         return ResponseEntity.created(URI.create("/templates/" + id)).build();
     }
+
+    @PostMapping("/{id}/create-bottari")
+    @Override
+    public ResponseEntity<Void> createBottari(
+            @PathVariable final Long id,
+            final HttpServletRequest httpServletRequest
+    ) {
+        final String ssaid = httpServletRequest.getHeader("ssaid");
+        final Long bottariId = bottariTemplateService.createBottari(id, ssaid);
+
+        return ResponseEntity.created(URI.create("/bottaries/" + bottariId)).build();
+    }
 }
