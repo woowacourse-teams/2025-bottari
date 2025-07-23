@@ -1,7 +1,7 @@
 package com.bottari.presentation.model
 
-data class ItemUiModel(
+data class BottariItemUiModel(
     val id: Long,
-    val isChecked: Boolean,
     val name: String,
+    val isChecked: Boolean,
 )
