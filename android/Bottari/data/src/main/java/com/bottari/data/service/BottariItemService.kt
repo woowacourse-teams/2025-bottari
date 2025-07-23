@@ -10,6 +10,7 @@ import retrofit2.http.Path
 interface BottariItemService {
     @GET("/bottaries/{bottariId}/bottari-items")
     suspend fun fetchChecklist(
+        @Header("ssaid") ssaid: String,
         @Path("bottariId") bottariId: Long,
     ): Response<List<FetchChecklistResponse>>
 
