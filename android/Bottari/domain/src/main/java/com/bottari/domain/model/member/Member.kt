@@ -1,6 +1,9 @@
 package com.bottari.domain.model.member
 
-data class Member(val ssaid: String, val nickname: String) {
+data class Member(
+    val ssaid: String,
+    val nickname: String,
+) {
     init {
         require(ssaid.isNotBlank()) { ERR_MSG_SSAID_BLANK }
         require(nickname.length in MIN_NICKNAME_LENGTH..MAX_NICKNAME_LENGTH) { ERR_MSG_NICKNAME_LENGTH }

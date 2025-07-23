@@ -22,7 +22,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun handleLoginState(uiState: UiState<Unit>) {
-        when(uiState) {
+        when (uiState) {
             is UiState.Loading -> Unit
             is UiState.Success -> navigateToHome()
             is UiState.Failure -> Unit

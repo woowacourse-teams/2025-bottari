@@ -8,7 +8,6 @@ import com.bottari.domain.repository.MemberRepository
 class MemberRepositoryImpl(
     private val memberRemoteDataSource: MemberRemoteDataSource,
 ) : MemberRepository {
-    override suspend fun registerMember(member: Member): Result<Boolean> {
-        return memberRemoteDataSource.registerMember(member.toRequest()).map { true }
-    }
+    override suspend fun registerMember(member: Member): Result<Boolean> =
+        memberRemoteDataSource.registerMember(member.toRequest()).map { true }
 }

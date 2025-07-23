@@ -12,5 +12,3 @@ class MemberRemoteDataSourceImpl(
             memberService.registerMember(request)
         }
 }
-
-

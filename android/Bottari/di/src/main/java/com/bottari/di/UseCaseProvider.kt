@@ -6,7 +6,8 @@ import com.bottari.domain.util.NicknameGenerator
 object UseCaseProvider {
     val registerMemberUseCase by lazy {
         RegisterMemberUseCase(
-            RepositoryProvider.memberRepository, NicknameGenerator()
+            RepositoryProvider.memberRepository,
+            NicknameGenerator(),
         )
     }
 }

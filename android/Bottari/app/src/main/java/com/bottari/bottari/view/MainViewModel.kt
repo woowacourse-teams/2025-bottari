@@ -13,13 +13,11 @@ import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.presentation.base.UiState
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 class MainViewModel(
     stateHandle: SavedStateHandle,
     private val registerMemberUseCase: RegisterMemberUseCase,
 ) : ViewModel() {
-
     private val _loginState: MutableLiveData<UiState<Unit>> = MutableLiveData(UiState.Loading)
     val loginState: LiveData<UiState<Unit>> = _loginState
 
@@ -53,12 +51,13 @@ class MainViewModel(
         private const val EXTRA_SSAID = "SSAID"
         private const val NOT_FOUND_USER = "SSAID를 확인할 수 없음"
 
-        fun Factory(ssaid: String): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val stateHandle = createSavedStateHandle()
-                stateHandle[EXTRA_SSAID] = ssaid
-                MainViewModel(stateHandle, UseCaseProvider.registerMemberUseCase)
+        fun Factory(ssaid: String): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    val stateHandle = createSavedStateHandle()
+                    stateHandle[EXTRA_SSAID] = ssaid
+                    MainViewModel(stateHandle, UseCaseProvider.registerMemberUseCase)
+                }
             }
-        }
     }
 }
