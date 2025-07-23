@@ -5,12 +5,12 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentBottariBinding
 import com.bottari.presentation.extension.fadeIn
 import com.bottari.presentation.extension.fadeOut
+import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.view.checklist.ChecklistActivity
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
@@ -19,7 +19,9 @@ import com.bottari.presentation.view.home.bottari.create.BottariCreateDialog
 import com.bottari.presentation.view.home.bottari.listener.OnBottariClickListener
 
 class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate) {
-    private val viewModel: BottariViewModel by viewModels()
+    private val viewModel: BottariViewModel by viewModels {
+        BottariViewModel.Factory(requireContext().getSSAID())
+    }
     private val adapter: BottariAdapter by lazy {
         BottariAdapter(
             object : OnBottariClickListener {
@@ -73,9 +75,9 @@ class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBind
 
     private fun handleBottariState(uiState: UiState<List<BottariUiModel>>) {
         when (uiState) {
-            is UiState.Loading -> showSnackbar(R.string.home_nav_market_title)
+            is UiState.Loading -> Unit
             is UiState.Success -> adapter.submitList(uiState.data)
-            is UiState.Failure -> showSnackbar(R.string.home_nav_profile_title)
+            is UiState.Failure -> Unit
         }
     }
 
