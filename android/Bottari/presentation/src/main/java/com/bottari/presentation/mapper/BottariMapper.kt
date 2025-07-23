@@ -44,7 +44,7 @@ object BottariMapper {
             items = items.map { item -> item.toDomain() },
         )
 
-    private fun BottariItem.toUiModel(): BottariItemUiModel =
+    fun BottariItem.toUiModel(): BottariItemUiModel =
         BottariItemUiModel(
             id = id,
             isChecked = isChecked,
