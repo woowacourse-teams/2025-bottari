@@ -36,20 +36,12 @@ object PermissionUtil {
 
     fun requestExactAlarmPermission(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val intent =
-                Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                    data = "package:${context.packageName}".toUri()
-                }
-            context.startActivity(intent)
+            navigateToSettings(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, context)
         }
     }
 
     fun openAppSettings(context: Context) {
-        val intent =
-            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = "package:${context.packageName}".toUri()
-            }
-        context.startActivity(intent)
+        navigateToSettings(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, context)
     }
 
     fun isPermanentlyDenied(fragment: Fragment): Boolean =
@@ -60,4 +52,16 @@ object PermissionUtil {
             ) != PackageManager.PERMISSION_GRANTED &&
                 !fragment.shouldShowRequestPermissionRationale(permission)
         }
+
+    private fun navigateToSettings(
+        settingFlag: String,
+        context: Context,
+    ) {
+        val intent =
+            Intent(settingFlag).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                data = "package:${context.packageName}".toUri()
+            }
+        context.startActivity(intent)
+    }
 }
