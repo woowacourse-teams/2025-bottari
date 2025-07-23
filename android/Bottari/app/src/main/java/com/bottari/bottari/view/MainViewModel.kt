@@ -23,15 +23,15 @@ class MainViewModel(
 
     init {
         val ssaid = stateHandle.get<String>(EXTRA_SSAID) ?: error(NOT_FOUND_USER)
-        checkRegisteredUser(ssaid)
+        checkRegisteredMember(ssaid)
     }
 
-    private fun checkRegisteredUser(ssaid: String) {
+    private fun checkRegisteredMember(ssaid: String) {
         viewModelScope.launch {
             // todo: 유저 등록 여부 확인 필요
             val isUnRegistered = false
             if (isUnRegistered) {
-                registerUser(ssaid)
+                registerMember(ssaid)
                 return@launch
             }
 
@@ -39,7 +39,7 @@ class MainViewModel(
         }
     }
 
-    private fun registerUser(ssaid: String) {
+    private fun registerMember(ssaid: String) {
         viewModelScope.launch {
             registerMemberUseCase(ssaid)
                 .onFailure { _loginState.value = UiState.Failure(it.message) }
