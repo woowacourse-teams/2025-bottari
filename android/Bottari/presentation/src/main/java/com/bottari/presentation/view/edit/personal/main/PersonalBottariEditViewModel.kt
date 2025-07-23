@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
 import com.bottari.domain.usecase.bottariDetail.FindBottariDetailUseCase
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
@@ -17,15 +18,32 @@ import kotlinx.coroutines.launch
 class PersonalBottariEditViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val findBottariDetailUseCase: FindBottariDetailUseCase,
+    private val toggleAlarmStateUseCase: ToggleAlarmStateUseCase,
 ) : ViewModel() {
     private val _bottari = MutableLiveData<UiState<BottariDetailUiModel>>()
     val bottari: LiveData<UiState<BottariDetailUiModel>> = _bottari
 
-    private val ssaid: String = savedStateHandle.get<String>(EXTRA_SSAID) ?: error("SSAID를 확인할 수 없음")
-    private val bottariId: Long = savedStateHandle.get<Long>(EXTRA_BOTTARI_ID) ?: error("bottariId가 없습니다.")
+    private val ssaid: String =
+        savedStateHandle.get<String>(EXTRA_SSAID) ?: error("SSAID를 확인할 수 없음")
+    private val bottariId: Long =
+        savedStateHandle.get<Long>(EXTRA_BOTTARI_ID) ?: error("bottariId가 없습니다.")
 
     init {
         fetchBottariById(bottariId)
+    }
+
+    fun toggleAlarmState(isActive: Boolean) {
+        val currentState = _bottari.value
+        if (currentState is UiState.Success) {
+            val alarmId = currentState.data.alarm?.id
+            if (alarmId != null) {
+                viewModelScope.launch {
+                    toggleAlarmStateUseCase.invoke(ssaid, alarmId, isActive)
+                }
+            } else {
+                throw IllegalArgumentException("알람 ID가 없습니다")
+            }
+        }
     }
 
     private fun fetchBottariById(id: Long) {
@@ -54,8 +72,13 @@ class PersonalBottariEditViewModel(
                             this[EXTRA_BOTTARI_ID] = bottariId
                         }
                     val findBottariDetailUseCase = UseCaseProvider.findBottariDetailUseCase
+                    val toggleAlarmStateUseCase = UseCaseProvider.toggleAlarmStateUseCase
 
-                    PersonalBottariEditViewModel(handle, findBottariDetailUseCase)
+                    PersonalBottariEditViewModel(
+                        handle,
+                        findBottariDetailUseCase,
+                        toggleAlarmStateUseCase,
+                    )
                 }
             }
     }

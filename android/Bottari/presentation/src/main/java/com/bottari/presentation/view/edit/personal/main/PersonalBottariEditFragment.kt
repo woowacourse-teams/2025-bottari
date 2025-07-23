@@ -84,13 +84,8 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             }
             permissionLauncher.launch(requiredPermissions)
         }
-        binding.switchAlarm.setOnClickListener{
-            if(binding.switchAlarm.isChecked){
-                viewModel.
-            }
-            else{
-
-            }
+        binding.switchAlarm.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.toggleAlarmState(isChecked)
         }
     }
 
