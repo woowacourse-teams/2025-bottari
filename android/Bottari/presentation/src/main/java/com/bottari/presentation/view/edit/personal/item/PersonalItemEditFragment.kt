@@ -17,7 +17,7 @@ import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.extension.dpToPx
-import com.bottari.presentation.model.ItemUiModel
+import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.edit.personal.item.adapter.PersonalItemEditAdapter
 
 class PersonalItemEditFragment :
@@ -148,7 +148,7 @@ class PersonalItemEditFragment :
         }
     }
 
-    private fun handleItemState(uiState: UiState<List<ItemUiModel>>) {
+    private fun handleItemState(uiState: UiState<List<BottariItemUiModel>>) {
         when (uiState) {
             is UiState.Loading -> Unit
             is UiState.Success -> adapter.submitList(uiState.data)

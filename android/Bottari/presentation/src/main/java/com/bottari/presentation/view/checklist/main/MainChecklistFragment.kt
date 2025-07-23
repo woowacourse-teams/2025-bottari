@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentChecklistBinding
-import com.bottari.presentation.model.ItemUiModel
+import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.checklist.ChecklistViewModel
 import com.bottari.presentation.view.checklist.main.adapter.MainChecklistAdapter
 
@@ -40,7 +40,7 @@ class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChe
     private fun setupListener() {
     }
 
-    private fun handleChecklistState(uiState: UiState<List<ItemUiModel>>) {
+    private fun handleChecklistState(uiState: UiState<List<BottariItemUiModel>>) {
         when (uiState) {
             is UiState.Loading -> {}
             is UiState.Success -> {

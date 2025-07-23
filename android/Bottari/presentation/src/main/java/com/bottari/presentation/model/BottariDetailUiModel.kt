@@ -1,9 +1,8 @@
 package com.bottari.presentation.model
 
-data class BottariUiModel(
+data class BottariDetailUiModel(
     val id: Long,
     val title: String,
-    val totalQuantity: Int,
-    val checkedQuantity: Int,
     val alarm: AlarmUiModel?,
+    val items: List<BottariItemUiModel> = emptyList(),
 )

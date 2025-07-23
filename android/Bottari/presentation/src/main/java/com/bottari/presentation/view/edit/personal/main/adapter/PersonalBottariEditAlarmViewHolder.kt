@@ -7,7 +7,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemChecklistAlarmBinding
 import com.bottari.presentation.extension.formatWithPattern
 import com.bottari.presentation.model.AlarmTypeUiModel
-import java.time.DayOfWeek
+import com.bottari.presentation.model.AlarmUiModel
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -24,38 +24,33 @@ class PersonalBottariEditAlarmViewHolder private constructor(
         itemView.context.getString(R.string.bottari_item_alarm_info_separator)
     }
 
-    fun bind(item: AlarmTypeUiModel) {
-        when (item) {
-            is AlarmTypeUiModel.EveryDayRepeat -> {
-                binding.tvChecklistAlarmType.text = item.formatted()
+    fun bind(item: AlarmUiModel) {
+        when (item.type) {
+            AlarmTypeUiModel.NON_REPEAT -> {
+                binding.tvChecklistAlarmType.text = item.date.formatWithPattern(dateFormat)
                 binding.tvChecklistAlarmTime.text = item.time.formatWithPattern(timeFormat)
             }
 
-            is AlarmTypeUiModel.EveryWeekRepeat -> {
-                binding.tvChecklistAlarmType.text = item.formatted()
+            AlarmTypeUiModel.EVERYDAY_REPEAT -> {
+                binding.tvChecklistAlarmType.text =
+                    itemView.context.getString(R.string.bottari_item_alarm_type_everyday_repeat)
                 binding.tvChecklistAlarmTime.text = item.time.formatWithPattern(timeFormat)
             }
 
-            is AlarmTypeUiModel.NonRepeat -> {
+            AlarmTypeUiModel.EVERYWEEK_REPEAT -> {
                 binding.tvChecklistAlarmType.text = item.formatted()
                 binding.tvChecklistAlarmTime.text = item.time.formatWithPattern(timeFormat)
             }
         }
     }
 
-    private fun AlarmTypeUiModel.NonRepeat.formatted(): String = date.formatWithPattern(dateFormat)
-
-    private fun AlarmTypeUiModel.EveryDayRepeat.formatted(): String =
-        itemView.context.getString(R.string.bottari_item_alarm_type_everyday_repeat)
-
-    private fun AlarmTypeUiModel.EveryWeekRepeat.formatted(): String =
+    private fun AlarmUiModel.formatted(): String =
         buildString {
             append(itemView.context.getString(R.string.bottari_item_alarm_type_everyweek_repeat))
             append(separator)
             append(
-                days.joinToString {
-                    DayOfWeek
-                        .of(it)
+                daysOfWeek.joinToString { dayOfWeek ->
+                    dayOfWeek.dayOfWeek
                         .getDisplayName(TextStyle.SHORT, Locale.getDefault())
                 },
             )

@@ -10,9 +10,9 @@ import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
-import com.bottari.presentation.model.AlarmTypeUiModel
+import com.bottari.presentation.model.AlarmUiModel
+import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.BottariUiModel
-import com.bottari.presentation.model.ItemUiModel
 import com.bottari.presentation.view.edit.alarm.AlarmEditFragment
 import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditAlarmAdapter
@@ -81,7 +81,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         }
     }
 
-    private fun handleItemsState(uiState: UiState<List<ItemUiModel>>) {
+    private fun handleItemsState(uiState: UiState<List<BottariItemUiModel>>) {
         when (uiState) {
             is UiState.Loading -> Unit
             is UiState.Success -> {
@@ -93,7 +93,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         }
     }
 
-    private fun handleAlarmState(uiState: UiState<List<AlarmTypeUiModel>>) {
+    private fun handleAlarmState(uiState: UiState<List<AlarmUiModel>>) {
         when (uiState) {
             is UiState.Loading -> Unit
             is UiState.Success -> {
