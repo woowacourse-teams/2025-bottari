@@ -6,5 +6,4 @@ data class BottariUiModel(
     val totalQuantity: Int,
     val checkedQuantity: Int,
     val alarm: AlarmUiModel?,
-    val items: List<ItemUiModel> = emptyList(),
 )
