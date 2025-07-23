@@ -1,5 +1,6 @@
 package com.bottari.presentation.view.edit.personal.main
 
+import PersonalBottariEditViewModel
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
@@ -12,9 +13,8 @@ import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
-import com.bottari.presentation.model.AlarmUiModel
-import com.bottari.presentation.model.BottariItemUiModel
-import com.bottari.presentation.model.BottariUiModel
+import com.bottari.presentation.extension.getSSAID
+import com.bottari.presentation.model.BottariDetailUiModel
 import com.bottari.presentation.util.permission.PermissionUtil
 import com.bottari.presentation.util.permission.PermissionUtil.requiredPermissions
 import com.bottari.presentation.view.edit.alarm.AlarmEditFragment
@@ -28,7 +28,7 @@ import com.google.android.flexbox.JustifyContent
 
 class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
-        PersonalBottariEditViewModel.Factory(getBottariId())
+        PersonalBottariEditViewModel.Factory(requireContext().getSSAID(), getBottariId())
     }
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val alarmAdapter: PersonalBottariEditAlarmAdapter by lazy { PersonalBottariEditAlarmAdapter() }
@@ -60,8 +60,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
 
     private fun setupObserver() {
         viewModel.bottari.observe(viewLifecycleOwner, ::handleBottariState)
-        viewModel.items.observe(viewLifecycleOwner, ::handleItemsState)
-        viewModel.alarms.observe(viewLifecycleOwner, ::handleAlarmState)
     }
 
     private fun setupUI() {
@@ -90,39 +88,31 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
 
     private fun getBottariId(): Long = arguments?.getLong(EXTRA_BOTTARI_ID) ?: INVALID_BOTTARI_ID
 
-    private fun handleBottariState(uiState: UiState<BottariUiModel>) {
+    private fun handleBottariState(uiState: UiState<BottariDetailUiModel>) {
         when (uiState) {
             is UiState.Loading -> Unit
             is UiState.Success -> {
-                binding.tvBottariTitle.text = uiState.data.title
+                setupTitle(uiState)
+                setupItems(uiState)
+                setupAlarm(uiState)
             }
-
             is UiState.Failure -> Unit
         }
     }
 
-    private fun handleItemsState(uiState: UiState<List<BottariItemUiModel>>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> {
-                itemAdapter.submitList(uiState.data)
-                toggleItemSection(uiState.data.isNotEmpty())
-            }
-
-            is UiState.Failure -> Unit
-        }
+    private fun setupTitle(uiState: UiState.Success<BottariDetailUiModel>) {
+        binding.tvBottariTitle.text = uiState.data.title
     }
 
-    private fun handleAlarmState(uiState: UiState<List<AlarmUiModel>>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> {
-                alarmAdapter.submitList(uiState.data)
-                toggleAlarmSelection(uiState.data.isNotEmpty())
-            }
+    private fun setupItems(uiState: UiState.Success<BottariDetailUiModel>) {
+        itemAdapter.submitList(uiState.data.items)
+        toggleItemSection(uiState.data.items.isNotEmpty())
+    }
 
-            is UiState.Failure -> Unit
-        }
+    private fun setupAlarm(uiState: UiState.Success<BottariDetailUiModel>) {
+        alarmAdapter.submitList(listOf(uiState.data.alarm))
+        toggleAlarmSelection(uiState.data.alarm != null)
+        binding.switchAlarm.isChecked = uiState.data.alarm?.isActive ?: false
     }
 
     private fun toggleItemSection(hasItems: Boolean) {

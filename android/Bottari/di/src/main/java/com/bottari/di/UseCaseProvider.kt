@@ -1,6 +1,7 @@
 package com.bottari.di
 
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
+import com.bottari.domain.usecase.bottariDetail.FindBottariDetailUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.domain.util.NicknameGenerator
 
@@ -15,5 +16,8 @@ object UseCaseProvider {
         FetchBottariesUseCase(
             RepositoryProvider.bottariRepository,
         )
+    }
+    val findBottariDetailUseCase by lazy {
+        FindBottariDetailUseCase(RepositoryProvider.bottariDetailRepository)
     }
 }

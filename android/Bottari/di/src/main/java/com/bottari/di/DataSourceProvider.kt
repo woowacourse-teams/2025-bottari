@@ -1,5 +1,6 @@
 package com.bottari.di
 
+import com.bottari.data.source.remote.BottariDetailRemoteDataSourceImpl
 import com.bottari.data.source.remote.BottariRemoteDataSource
 import com.bottari.data.source.remote.BottariRemoteDataSourceImpl
 import com.bottari.data.source.remote.MemberRemoteDataSource
@@ -16,4 +17,5 @@ object DataSourceProvider {
             ServiceProvider.bottariService,
         )
     }
+    val bottariDetailRemoteDataSource by lazy { BottariDetailRemoteDataSourceImpl(ServiceProvider.bottariDetailService) }
 }
