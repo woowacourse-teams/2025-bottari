@@ -21,7 +21,7 @@ class MainChecklistFragment :
         )
     }
     private val adapter: MainChecklistAdapter by lazy {
-        MainChecklistAdapter { viewModel.checkItem(it) }
+        MainChecklistAdapter { viewModel.toggleItemChecked(it) }
     }
 
     override fun onViewCreated(

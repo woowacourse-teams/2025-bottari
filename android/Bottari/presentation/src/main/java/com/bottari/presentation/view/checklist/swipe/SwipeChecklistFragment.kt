@@ -45,7 +45,7 @@ class SwipeChecklistFragment :
         setupObserver()
         setupUI()
         setupListener()
-        viewModel.filterNonChecklist()
+        viewModel.filterUncheckedItems()
     }
 
     override fun onCardSwiped(direction: Direction?) {
@@ -53,7 +53,7 @@ class SwipeChecklistFragment :
 
         val index = cardStackLayoutManager.topPosition - INDEX_OFFSET
         val currentItem = adapter.currentList.getOrNull(index) ?: return
-        viewModel.checkItem(currentItem.id)
+        viewModel.toggleItemChecked(currentItem.id)
     }
 
     override fun onCardAppeared(
