@@ -1,5 +1,7 @@
 package com.bottari.presentation.view.home
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
@@ -47,5 +49,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
 
     private fun changeToolbarTitle(item: MenuItem) {
         binding.toolbarHome.title = item.title
+    }
+
+    companion object {
+        fun newIntent(context: Context) = Intent(context, HomeActivity::class.java)
     }
 }
