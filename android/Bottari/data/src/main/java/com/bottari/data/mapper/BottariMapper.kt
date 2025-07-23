@@ -25,9 +25,10 @@ object BottariMapper {
         val alarmType = routine.toDomainType() ?: return null
         return Alarm(
             id = null,
+            isActive = isActive,
             time = routine.time,
             alarmType = alarmType,
-            location = locationResponse?.toDomain(),
+            location = location?.toDomain(),
         )
     }
 
