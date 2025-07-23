@@ -34,7 +34,10 @@ class BottariViewHolder private constructor(
 
     init {
         itemView.setOnClickListener {
-            bottariId?.let { onBottariClickListener.onClick(it) }
+            bottariId?.let { id ->
+                val bottariTitle = binding.tvBottariTitle.text.toString()
+                onBottariClickListener.onClick(id, bottariTitle)
+            }
         }
 
         binding.btnBottariMore.setOnClickListener {
