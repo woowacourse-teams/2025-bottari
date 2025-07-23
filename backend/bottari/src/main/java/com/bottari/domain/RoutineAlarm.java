@@ -1,6 +1,8 @@
 package com.bottari.domain;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -30,8 +32,12 @@ public class RoutineAlarm {
     private static final int EVERY_DAY_OF_WEEKS_BITMASK = 0b1111111;
 
     private LocalTime time;
+
+    @Enumerated(EnumType.STRING)
     private RepeatType type;
+
     private LocalDate date;
+
     private int repeatDayOfWeeksBitmask;
 
     public RoutineAlarm(
