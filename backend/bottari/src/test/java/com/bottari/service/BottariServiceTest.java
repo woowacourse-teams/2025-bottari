@@ -67,13 +67,14 @@ class BottariServiceTest {
         final ReadBottariResponse actual = bottariService.getById(ssaid, bottari.getId());
 
         // then
-        assertAll(
-                () -> assertThat(actual.id()).isEqualTo(bottari.getId()),
-                () -> assertThat(actual.items()).hasSize(1),
-                () -> assertThat(actual.alarm()).isNotNull(),
-                () -> assertThat(actual.alarm().routine().type()).isEqualTo(RepeatType.EVERY_WEEK_REPEAT),
-                () -> assertThat(actual.alarm().location().latitude()).isEqualTo(37.5)
-        );
+        assertAll(() -> {
+            assertThat(actual.id()).isEqualTo(bottari.getId());
+            assertThat(actual.items()).hasSize(1);
+            assertThat(actual.alarm()).isNotNull();
+            assertThat(actual.alarm().id()).isEqualTo(alarm.getId());
+            assertThat(actual.alarm().routine().type()).isEqualTo(RepeatType.EVERY_WEEK_REPEAT);
+            assertThat(actual.alarm().location().latitude()).isEqualTo(37.5);
+        });
     }
 
     @DisplayName("본인의 보따리가 아닌 보따리를 조회할 경우, 예외를 던진다.")
@@ -140,15 +141,16 @@ class BottariServiceTest {
         final List<ReadBottariPreviewResponse> actual = bottariService.getAllBySsaid(ssaid);
 
         // then
-        assertAll(
-                () -> assertThat(actual).hasSize(2),
-                () -> assertThat(actual.get(0).totalItemsCount()).isEqualTo(2),
-                () -> assertThat(actual.get(0).checkedItemsCount()).isEqualTo(1),
-                () -> assertThat(actual.get(0).alarm()).isNotNull(),
-                () -> assertThat(actual.get(1).totalItemsCount()).isEqualTo(1),
-                () -> assertThat(actual.get(1).checkedItemsCount()).isEqualTo(0),
-                () -> assertThat(actual.get(1).alarm()).isNull()
-        );
+        assertAll(() -> {
+            assertThat(actual).hasSize(2);
+            assertThat(actual.getFirst().totalItemsCount()).isEqualTo(2);
+            assertThat(actual.getFirst().checkedItemsCount()).isEqualTo(1);
+            assertThat(actual.getFirst().alarm()).isNotNull();
+            assertThat(actual.getFirst().alarm().id()).isEqualTo(alarm.getId());
+            assertThat(actual.get(1).totalItemsCount()).isEqualTo(1);
+            assertThat(actual.get(1).checkedItemsCount()).isEqualTo(0);
+            assertThat(actual.get(1).alarm()).isNull();
+        });
     }
 
     @DisplayName("존재하지 않는 사용자의 모든 보따리를 조회할 경우, 예외를 던진다.")
