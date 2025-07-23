@@ -8,12 +8,17 @@ import com.bottari.domain.Member;
 import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.repository.BottariItemRepository;
 import com.bottari.repository.BottariRepository;
+import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.repository.BottariTemplateItemRepository;
 import com.bottari.repository.BottariTemplateRepository;
 import com.bottari.repository.MemberRepository;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +32,23 @@ public class BottariTemplateService {
     private final BottariRepository bottariRepository;
     private final BottariItemRepository bottariItemRepository;
     private final MemberRepository memberRepository;
+
+    public ReadBottariTemplateResponse getById(final Long id) {
+        final BottariTemplate bottariTemplate = bottariTemplateRepository.findByIdWithMember(id)
+                .orElseThrow(() -> new IllegalArgumentException("보따리 템플릿을 찾을 수 없습니다."));
+        final List<BottariTemplateItem> bottariTemplateItems =
+                bottariTemplateItemRepository.findAllByBottariTemplateId(bottariTemplate.getId());
+
+        return ReadBottariTemplateResponse.of(bottariTemplate, bottariTemplateItems);
+    }
+
+    public List<ReadBottariTemplateResponse> getAll(final String query) {
+        final List<BottariTemplate> bottariTemplates = bottariTemplateRepository.findAllWithMember(query);
+        final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate = groupingItemsByTemplate(
+                bottariTemplates);
+
+        return buildReadBottariTemplateResponses(itemsGroupByTemplate);
+    }
 
     @Transactional
     public Long create(
@@ -64,6 +86,33 @@ public class BottariTemplateService {
         bottariItemRepository.saveAll(bottariItems);
 
         return savedBottari.getId();
+    }
+  
+    private Map<BottariTemplate, List<BottariTemplateItem>> groupingItemsByTemplate(final List<BottariTemplate> bottariTemplates) {
+        final List<BottariTemplateItem> items = bottariTemplateItemRepository.findAllByBottariTemplateIn(
+                bottariTemplates);
+
+        return items.stream()
+                .collect(Collectors.groupingBy(BottariTemplateItem::getBottariTemplate));
+    }
+
+    private List<ReadBottariTemplateResponse> buildReadBottariTemplateResponses(final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate) {
+        final List<ReadBottariTemplateResponse> responses = new ArrayList<>();
+        final List<BottariTemplate> sortedBottariTemplates = sortByCreatedAtDesc(itemsGroupByTemplate);
+        for (final BottariTemplate bottariTemplate : sortedBottariTemplates) {
+            final List<BottariTemplateItem> templateItems = itemsGroupByTemplate.getOrDefault(bottariTemplate,
+                    List.of());
+            responses.add(ReadBottariTemplateResponse.of(bottariTemplate, templateItems));
+        }
+
+        return responses;
+    }
+
+    private List<BottariTemplate> sortByCreatedAtDesc(final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate) {
+        return itemsGroupByTemplate.keySet()
+                .stream()
+                .sorted(Comparator.comparing(BottariTemplate::getCreatedAt).reversed())
+                .toList();
     }
 
     private void validateDuplicateItemNames(final List<String> itemNames) {
