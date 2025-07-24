@@ -171,10 +171,24 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
 
     private fun checkAndRequestSpecialPermission() {
         if (PermissionUtil.hasExactAlarmPermission(requireContext())) {
-            navigateToScreen(AlarmEditFragment::class.java, AlarmEditFragment.newBundle())
+            navigateToAlarmEditScreen()
             return
         }
         showExactAlarmSettingsDialog()
+    }
+
+    private fun navigateToAlarmEditScreen() {
+        val bottari = viewModel.bottari.value?.takeSuccess()!!
+        navigateToScreen(
+            AlarmEditFragment::class.java,
+            AlarmEditFragment.newBundle(
+                bottariId = bottari.id,
+                alarm =
+                    viewModel.bottari.value
+                        ?.takeSuccess()
+                        ?.alarm,
+            ),
+        )
     }
 
     private fun showSettingsDialog() {
