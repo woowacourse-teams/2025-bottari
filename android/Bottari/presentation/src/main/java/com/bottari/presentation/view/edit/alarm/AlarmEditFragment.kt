@@ -127,7 +127,7 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
             is UiState.Loading -> Unit
             is UiState.Success -> {
                 showSnackbar(R.string.alarm_edit_save_success_text, Snackbar.LENGTH_SHORT)
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+                parentFragmentManager.popBackStack()
             }
 
             is UiState.Failure -> Unit

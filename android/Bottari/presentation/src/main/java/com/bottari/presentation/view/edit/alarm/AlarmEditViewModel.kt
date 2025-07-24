@@ -28,7 +28,7 @@ class AlarmEditViewModel(
     private val saveAlarmUseCase: SaveAlarmUseCase,
 ) : ViewModel() {
     private val _alarm: MutableLiveData<AlarmUiModel> =
-        MutableLiveData(stateHandle[EXTRA_ALARM])
+        MutableLiveData(stateHandle[EXTRA_ALARM] ?: AlarmUiModel.DEFAULT_ALARM_UI_MODEL)
     val alarm: LiveData<AlarmUiModel> get() = _alarm
 
     private val _saveState: MutableLiveData<UiState<Unit>> = MutableLiveData()
