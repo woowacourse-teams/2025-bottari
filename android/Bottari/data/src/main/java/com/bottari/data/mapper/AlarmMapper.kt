@@ -17,7 +17,7 @@ object AlarmMapper {
         Alarm(
             id = id,
             isActive = isActive,
-            time = routine.toLocalTime(),
+            time = routine.time,
             alarmType = routine.toAlarmType(),
             location = location?.toDomain(),
         )
@@ -36,8 +36,6 @@ object AlarmMapper {
 
             else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
         }
-
-    private fun RoutineResponse.toLocalTime(): LocalTime = time
 
     private fun LocationResponse.toDomain(): LocationAlarm =
         LocationAlarm(
