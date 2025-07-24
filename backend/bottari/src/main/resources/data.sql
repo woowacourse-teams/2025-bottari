@@ -179,10 +179,10 @@ VALUES
     -- 제주도 여행 알람 (bottari_id: 1, member_id: 1, 매일 오전 8시, 위치 알람 포함)
     (true, 1, '08:00:00', 'EVERY_DAY_REPEAT', null, 127, true, 33.4996, 126.5312, 100),
     -- 출장용 가방 알람 (bottari_id: 2, member_id: 1, 평일 오전 7시)
-    (true, 2, '07:00:00', 'EVERY_WEEK_REPEAT', null, 31, false, null, null, 0),
+    (true, 2, '07:00:00', 'EVERY_WEEK_REPEAT', null, 31, null, null, null, null),
     -- 캠핑 준비물 알람 (bottari_id: 3, member_id: 2, 주말 오후 6시)
-    (true, 3, '18:00:00', 'EVERY_WEEK_REPEAT', null, 96, false, null, null, 0),
+    (true, 3, '18:00:00', 'EVERY_WEEK_REPEAT', null, 96, null, null, null, null),
     -- 해외여행 짐 알람 (bottari_id: 4, member_id: 2, 출발 당일 1회)
-    (false, 4, '06:00:00', 'NON_REPEAT', '2024-03-15', 0, false, null, null, 0),
+    (false, 4, '06:00:00', 'NON_REPEAT', '2024-03-15', 0, null, null, null, null),
     -- 일상 외출용 알람 (bottari_id: 5, member_id: 3, 매일 오전 8시 30분, 집 근처 위치 알람)
     (true, 5, '08:30:00', 'EVERY_DAY_REPEAT', null, 127, true, 37.5665, 126.9780, 100);
