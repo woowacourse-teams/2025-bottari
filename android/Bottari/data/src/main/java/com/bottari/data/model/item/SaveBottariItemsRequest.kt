@@ -8,5 +8,5 @@ data class SaveBottariItemsRequest(
     @SerialName("createItemNames")
     val createItemNames: List<String>,
     @SerialName("deleteItemIds")
-    val deleteItemIds: List<Int>,
+    val deleteItemIds: List<Long>,
 )

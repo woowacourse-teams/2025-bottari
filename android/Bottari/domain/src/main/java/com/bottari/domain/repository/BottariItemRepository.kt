@@ -17,4 +17,11 @@ interface BottariItemRepository {
         ssaid: String,
         bottariItemId: Long,
     ): Result<Unit>
+
+    suspend fun saveBottariItems(
+        ssaid: String,
+        bottariId: Long,
+        deleteItemIds: List<Long>,
+        createItemNames: List<String>,
+    ): Result<Unit>
 }
