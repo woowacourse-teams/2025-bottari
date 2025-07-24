@@ -32,5 +32,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private fun navigateToHome() {
         val intent = HomeActivity.newIntent(this)
         startActivity(intent)
+        finish()
     }
 }
