@@ -1,9 +1,12 @@
 package com.bottari.presentation.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 
+@Parcelize
 data class AlarmUiModel(
     val id: Long? = null,
     val isActive: Boolean,
@@ -12,7 +15,7 @@ data class AlarmUiModel(
     val date: LocalDate,
     val daysOfWeek: List<DayOfWeekUiModel>,
     val locationAlarm: LocationAlarmUiModel? = null,
-) {
+) : Parcelable {
     companion object {
         val DEFAULT_ALARM_UI_MODEL =
             AlarmUiModel(

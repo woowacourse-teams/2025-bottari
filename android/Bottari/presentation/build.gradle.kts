@@ -3,6 +3,7 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -18,7 +19,8 @@ android {
         val devId = gradleLocalProperties(rootDir, providers).getProperty("DEV_ID") ?: ""
         buildConfigField("String", "DEV_ID", "\"$devId\"")
 
-        val privacyPolicyUrl = gradleLocalProperties(rootDir, providers).getProperty("PRIVACY_POLICY_URL") ?: ""
+        val privacyPolicyUrl =
+            gradleLocalProperties(rootDir, providers).getProperty("PRIVACY_POLICY_URL") ?: ""
         buildConfigField("String", "PRIVACY_POLICY_URL", "\"$privacyPolicyUrl\"")
     }
 

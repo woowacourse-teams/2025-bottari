@@ -25,6 +25,6 @@ interface BottariService {
     @POST("/bottaries")
     suspend fun createBottari(
         @Header("ssaid") ssaid: String,
-        @Body body: CreateBottariRequest,
+        @Body request: CreateBottariRequest,
     ): Response<Unit>
 }

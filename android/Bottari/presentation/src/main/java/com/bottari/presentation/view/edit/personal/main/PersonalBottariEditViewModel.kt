@@ -35,7 +35,7 @@ class PersonalBottariEditViewModel(
     private var toggleAlarmJob: Job? = null
 
     init {
-        fetchBottariById(bottariId)
+        fetchBottari()
     }
 
     fun toggleAlarmState(isActive: Boolean) {
@@ -49,11 +49,11 @@ class PersonalBottariEditViewModel(
             }
     }
 
-    private fun fetchBottariById(id: Long) {
+    fun fetchBottari() {
+        _bottari.value = UiState.Loading
+
         viewModelScope.launch {
-            _bottari.value = UiState.Loading
-            findBottariDetailUseCase
-                .invoke(id, ssaid)
+            findBottariDetailUseCase(bottariId, ssaid)
                 .onSuccess { _bottari.value = UiState.Success(it.toUiModel()) }
                 .onFailure { _bottari.value = UiState.Failure(it.message ?: ERROR_UNKNOWN) }
         }
