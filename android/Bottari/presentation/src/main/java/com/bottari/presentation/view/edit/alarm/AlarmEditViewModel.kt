@@ -35,7 +35,7 @@ class AlarmEditViewModel(
     val saveState: LiveData<UiState<Unit>> get() = _saveState
 
     private val ssaid: String = stateHandle[EXTRA_SSAID] ?: error(ERROR_REQUIRE_SSAID)
-    private val bottariId: Long = stateHandle[EXTRA_BOTTARI_ID] ?: error(ERROR_REQUIRE_SSAID)
+    private val bottariId: Long = stateHandle[EXTRA_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
     fun updateAlarm() {
         val currentAlarm = _alarm.value?.toDomain() ?: return
