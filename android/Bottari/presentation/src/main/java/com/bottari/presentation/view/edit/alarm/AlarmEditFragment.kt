@@ -190,10 +190,14 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
     ) {
         val maxDay = getDayOfMonth(month)
         val safeDay = minOf(day, maxDay)
-        binding.npNoRepeatAlarmDateDay.maxValue = getDayOfMonth(month)
-        binding.npNoRepeatAlarmDateDay.value = safeDay
-        val updatedDate = LocalDate.of(Year.now().value, month, day)
-        viewModel.updateAlarmDate(date = updatedDate)
+        if (binding.npNoRepeatAlarmDateDay.maxValue != maxDay) {
+            binding.npNoRepeatAlarmDateDay.maxValue = maxDay
+        }
+        if (binding.npNoRepeatAlarmDateDay.value != safeDay) {
+            binding.npNoRepeatAlarmDateDay.value = safeDay
+        }
+        val updatedDate = LocalDate.of(Year.now().value, month, safeDay)
+        viewModel.updateAlarmDate(updatedDate)
     }
 
     private fun getDayOfMonth(month: Int): Int {
