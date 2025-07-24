@@ -9,6 +9,10 @@ import com.bottari.domain.model.alarm.LocationAlarm
 import java.time.LocalTime
 
 object AlarmMapper {
+
+    private const val ERROR_MISSING_DATE = "NON_REPEAT 유형의 알람에는 날짜 정보가 필요합니다."
+    private const val ERROR_UNKNOWN_ALARM_TYPE = "지원하지 않는 알람 유형입니다: %s"
+
     fun AlarmResponse.toDomain(): Alarm =
         Alarm(
             id = id,
@@ -20,18 +24,17 @@ object AlarmMapper {
 
     private fun RoutineResponse.toAlarmType(): AlarmType =
         when (type.uppercase()) {
-            "NON_REPEAT" ->
-                AlarmType.NonRepeat(
-                    date = date ?: throw IllegalArgumentException("날짜가 존재하지 않습니다"),
-                )
+            "NON_REPEAT" -> AlarmType.NonRepeat(
+                date = date ?: throw IllegalArgumentException(ERROR_MISSING_DATE)
+            )
 
             "EVERY_DAY_REPEAT" -> AlarmType.EveryDayRepeat
-            "EVERY_WEEK_REPEAT" ->
-                AlarmType.EveryWeekRepeat(
-                    daysOfWeek = dayOfWeeks,
-                )
 
-            else -> throw IllegalArgumentException("Unknown alarm type: $type")
+            "EVERY_WEEK_REPEAT" -> AlarmType.EveryWeekRepeat(
+                daysOfWeek = dayOfWeeks
+            )
+
+            else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
         }
 
     private fun RoutineResponse.toLocalTime(): LocalTime = time
