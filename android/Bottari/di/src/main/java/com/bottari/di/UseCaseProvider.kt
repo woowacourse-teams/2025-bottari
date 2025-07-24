@@ -10,6 +10,7 @@ import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
 import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
+import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
@@ -90,6 +91,11 @@ object UseCaseProvider {
     val saveBottariItemsUseCase by lazy {
         SaveBottariItemsUseCase(
             RepositoryProvider.bottariItemRepository,
+        )
+    }
+    val checkRegisteredMemberUseCase by lazy {
+        CheckRegisteredMemberUseCase(
+            RepositoryProvider.memberRepository,
         )
     }
 }
