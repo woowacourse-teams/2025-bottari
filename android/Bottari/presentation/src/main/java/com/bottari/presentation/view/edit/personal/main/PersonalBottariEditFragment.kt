@@ -95,27 +95,27 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         when (uiState) {
             is UiState.Loading -> Unit
             is UiState.Success -> {
-                setupTitle(uiState)
-                setupItems(uiState)
-                setupAlarm(uiState)
+                setupTitle(uiState.data)
+                setupItems(uiState.data)
+                setupAlarm(uiState.data)
             }
             is UiState.Failure -> Unit
         }
     }
 
-    private fun setupTitle(uiState: UiState.Success<BottariDetailUiModel>) {
-        binding.tvBottariTitle.text = uiState.data.title
+    private fun setupTitle(bottari: BottariDetailUiModel) {
+        binding.tvBottariTitle.text = bottari.title
     }
 
-    private fun setupItems(uiState: UiState.Success<BottariDetailUiModel>) {
-        itemAdapter.submitList(uiState.data.items)
-        toggleItemSection(uiState.data.items.isNotEmpty())
+    private fun setupItems(bottari: BottariDetailUiModel) {
+        itemAdapter.submitList(bottari.items)
+        toggleItemSection(bottari.items.isNotEmpty())
     }
 
-    private fun setupAlarm(uiState: UiState.Success<BottariDetailUiModel>) {
-        alarmAdapter.submitList(listOf(uiState.data.alarm))
-        toggleAlarmSelection(uiState.data.alarm != null)
-        binding.switchAlarm.isChecked = uiState.data.alarm?.isActive ?: false
+    private fun setupAlarm(bottari: BottariDetailUiModel) {
+        alarmAdapter.submitList(listOf(bottari.alarm))
+        toggleAlarmSelection(bottari.alarm != null)
+        binding.switchAlarm.isChecked = bottari.alarm?.isActive ?: false
     }
 
     private fun toggleItemSection(hasItems: Boolean) {
