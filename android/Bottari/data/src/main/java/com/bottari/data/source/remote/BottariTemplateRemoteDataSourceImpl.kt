@@ -1,5 +1,6 @@
 package com.bottari.data.source.remote
 
+import com.bottari.data.extension.extractIdFromHeader
 import com.bottari.data.model.template.FetchBottariTemplateResponse
 import com.bottari.data.service.BottariTemplateService
 import com.bottari.data.util.safeApiCall
@@ -9,4 +10,20 @@ class BottariTemplateRemoteDataSourceImpl(
 ) : BottariTemplateRemoteDataSource {
     override suspend fun fetchBottariTemplates(searchWord: String?): Result<List<FetchBottariTemplateResponse>> =
         safeApiCall { bottariTemplateService.fetchBottariTemplates(searchWord) }
+
+    override suspend fun fetchBottariTemplateDetail(bottariId: Long): Result<FetchBottariTemplateResponse> =
+        safeApiCall { bottariTemplateService.fetchBottariTemplateDetail(bottariId) }
+
+    override suspend fun takeBottariTemplate(
+        ssaid: String,
+        bottariId: Long,
+    ): Result<Long?> =
+        runCatching {
+            val response = bottariTemplateService.takeBottariTemplate(ssaid, bottariId)
+            response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)
+        }
+
+    companion object {
+        private const val HEADER_BOTTARI_ID_PREFIX = "/bottaries/"
+    }
 }
