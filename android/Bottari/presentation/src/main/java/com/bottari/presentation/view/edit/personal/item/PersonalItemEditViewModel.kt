@@ -6,25 +6,27 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.extension.takeSuccess
+import com.bottari.presentation.model.BottariDetailUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 
 class PersonalItemEditViewModel(
     stateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val _bottariName: MutableLiveData<UiState<String>> = MutableLiveData<UiState<String>>()
-    val bottariName: LiveData<UiState<String>> get() = _bottariName
+    private var bottariId: Long? = null
+
+    private val _bottariName: MutableLiveData<String> = MutableLiveData<String>()
+    val bottariName: LiveData<String> get() = _bottariName
 
     private val _items = MutableLiveData<UiState<List<BottariItemUiModel>>>(UiState.Loading)
     val items: LiveData<UiState<List<BottariItemUiModel>>> = _items
 
     init {
-        val bottariId = stateHandle.get<Long>(EXTRAS_BOTTARI_ID)
-        requireNotNull(bottariId) { "bottariId must not be null" }
-
-        fetchItems(bottariId)
+        val bottariDetail = stateHandle.get<BottariDetailUiModel>(EXTRA_BOTTARI_DETAIL) ?: error("")
+        setupData(bottariDetail)
     }
 
     fun addItem(itemName: String) {
@@ -43,13 +45,10 @@ class PersonalItemEditViewModel(
         _items.value = UiState.Success(updatedList)
     }
 
-    private fun fetchItems(bottariId: Long) {
-        if (bottariId == INVALID_ID) {
-            _items.value = UiState.Failure("유효하지 않은 보따리 ID입니다.")
-            return
-        }
-        _bottariName.value = UiState.Success("출근 보따리")
-        _items.value = UiState.Success(dummyItems)
+    private fun setupData(bottariDetail: BottariDetailUiModel) {
+        bottariId = bottariDetail.id
+        _bottariName.value = bottariDetail.title
+        _items.value = UiState.Success(bottariDetail.items)
     }
 
     private fun createItem(name: String): BottariItemUiModel {
@@ -59,31 +58,16 @@ class PersonalItemEditViewModel(
     }
 
     companion object {
-        private const val INVALID_ID = -1L
-        private const val EXTRAS_BOTTARI_ID = "EXTRAS_BOTTARI_ID"
+        private const val EXTRA_BOTTARI_DETAIL = "EXTRA_BOTTARI_DETAIL"
+        private const val ERROR_REQUIRE_BOTTARI_ID = "보따리 ID가 없습니다"
 
-        fun Factory(bottariId: Long): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras,
-                ): T {
-                    val handle =
-                        extras.createSavedStateHandle().apply {
-                            this[EXTRAS_BOTTARI_ID] = bottariId
-                        }
-                    return PersonalItemEditViewModel(handle) as T
+        fun Factory(bottariDetail: BottariDetailUiModel): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    val stateHandle = createSavedStateHandle()
+                    stateHandle[EXTRA_BOTTARI_DETAIL] = bottariDetail
+                    PersonalItemEditViewModel(stateHandle)
                 }
-            }
-
-        private val dummyItems =
-            listOf(
-                "우유",
-                "계란",
-                "식빵",
-                "세제",
-            ).mapIndexed { index, name ->
-                BottariItemUiModel(id = index.toLong(), isChecked = index % 2 == 0, name = name)
             }
     }
 }

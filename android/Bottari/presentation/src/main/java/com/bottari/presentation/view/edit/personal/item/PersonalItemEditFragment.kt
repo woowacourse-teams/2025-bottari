@@ -17,6 +17,8 @@ import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.extension.dpToPx
+import com.bottari.presentation.extension.getParcelableCompat
+import com.bottari.presentation.model.BottariDetailUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.edit.personal.item.adapter.PersonalItemEditAdapter
 
@@ -24,7 +26,9 @@ class PersonalItemEditFragment :
     BaseFragment<FragmentPersonalItemEditBinding>(FragmentPersonalItemEditBinding::inflate),
     TextWatcher {
     private val viewModel: PersonalItemEditViewModel by viewModels {
-        PersonalItemEditViewModel.Factory(getBottariId())
+        val bottariDetail =
+            arguments.getParcelableCompat<BottariDetailUiModel>(EXTRA_BOTTARI_DETAIL)
+        PersonalItemEditViewModel.Factory(bottariDetail)
     }
 
     private val adapter by lazy {
@@ -90,8 +94,6 @@ class PersonalItemEditFragment :
         }
     }
 
-    private fun getBottariId(): Long = arguments?.getLong(EXTRA_BOTTARI_ID) ?: INVALID_BOTTARI_ID
-
     private fun setupInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
@@ -140,12 +142,8 @@ class PersonalItemEditFragment :
         }
     }
 
-    private fun handleBottariNameState(uiState: UiState<String>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> binding.tvBottariTitle.text = uiState.data
-            is UiState.Failure -> Unit
-        }
+    private fun handleBottariNameState(title: String) {
+        binding.tvBottariTitle.text = title
     }
 
     private fun handleItemState(uiState: UiState<List<BottariItemUiModel>>) {
@@ -157,17 +155,16 @@ class PersonalItemEditFragment :
     }
 
     companion object {
-        private const val INVALID_BOTTARI_ID = -1L
-        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
+        private const val EXTRA_BOTTARI_DETAIL = "EXTRA_BOTTARI_DETAIL"
 
         private const val DUPLICATE_BORDER_WIDTH_DP = 2
         private const val DISABLED_ALPHA = 0.3f
         private const val ENABLED_ALPHA = 1f
         private const val DEFAULT_BOTTOM_INSET = 0
 
-        fun newBundle(bottariId: Long) =
+        fun newBundle(bottariDetail: BottariDetailUiModel) =
             Bundle().apply {
-                putLong(EXTRA_BOTTARI_ID, bottariId)
+                putParcelable(EXTRA_BOTTARI_DETAIL, bottariDetail)
             }
     }
 }

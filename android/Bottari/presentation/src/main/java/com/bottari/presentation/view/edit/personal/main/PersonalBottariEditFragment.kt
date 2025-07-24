@@ -14,6 +14,7 @@ import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
 import com.bottari.presentation.extension.getSSAID
+import com.bottari.presentation.extension.takeSuccess
 import com.bottari.presentation.model.BottariDetailUiModel
 import com.bottari.presentation.util.permission.PermissionUtil
 import com.bottari.presentation.util.permission.PermissionUtil.requiredPermissions
@@ -26,9 +27,11 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
+class PersonalBottariEditFragment :
+    BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
-        PersonalBottariEditViewModel.Factory(requireContext().getSSAID(), getBottariId())
+        val bottariId = arguments?.getLong(EXTRA_BOTTARI_ID) ?: error(ERROR_REQUIRE_BOTTARI_ID)
+        PersonalBottariEditViewModel.Factory(requireContext().getSSAID(), bottariId)
     }
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val alarmAdapter: PersonalBottariEditAlarmAdapter by lazy { PersonalBottariEditAlarmAdapter() }
@@ -72,9 +75,10 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.clEditItem.setOnClickListener {
+            val bottariDetail = viewModel.bottari.value?.takeSuccess() ?: return@setOnClickListener
             navigateToScreen(
                 PersonalItemEditFragment::class.java,
-                PersonalItemEditFragment.newBundle(getBottariId()),
+                PersonalItemEditFragment.newBundle(bottariDetail),
             )
         }
         binding.clEditAlarm.setOnClickListener {
@@ -90,8 +94,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         }
     }
 
-    private fun getBottariId(): Long = arguments?.getLong(EXTRA_BOTTARI_ID) ?: INVALID_BOTTARI_ID
-
     private fun handleBottariState(uiState: UiState<BottariDetailUiModel>) {
         when (uiState) {
             is UiState.Loading -> Unit
@@ -100,6 +102,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 setupItems(uiState.data)
                 setupAlarm(uiState.data)
             }
+
             is UiState.Failure -> Unit
         }
     }
@@ -195,7 +198,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
 
     companion object {
         private const val EXTRA_BOTTARI_ID = "EXTRAS_BOTTARI_ID"
-        private const val INVALID_BOTTARI_ID = -1L
+        private const val ERROR_REQUIRE_BOTTARI_ID = "보따리 ID가 없습니다"
 
         fun newBundle(bottariId: Long) =
             Bundle().apply {
