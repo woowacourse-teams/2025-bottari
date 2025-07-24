@@ -44,17 +44,19 @@ class PersonalBottariEditAlarmViewHolder private constructor(
         }
     }
 
-    private fun AlarmUiModel.formatted(): String =
-        buildString {
+    private fun AlarmUiModel.formatted(): String {
+        val checkedDays = daysOfWeek.filter { it.isChecked }
+        return buildString {
             append(itemView.context.getString(R.string.bottari_item_alarm_type_everyweek_repeat))
             append(separator)
             append(
-                daysOfWeek.joinToString { dayOfWeek ->
+                checkedDays.joinToString { dayOfWeek ->
                     dayOfWeek.dayOfWeek
                         .getDisplayName(TextStyle.SHORT, Locale.getDefault())
                 },
             )
         }
+    }
 
     companion object {
         fun from(parent: ViewGroup): PersonalBottariEditAlarmViewHolder {

@@ -48,13 +48,15 @@ object AlarmMapper {
         return emptyList()
     }
 
-    private fun List<Int>.toUiModel(): List<DayOfWeekUiModel> =
-        this.map { dayOfWeek ->
+    private fun List<Int>.toUiModel(): List<DayOfWeekUiModel> {
+        val checkedDays = this.toSet()
+        return DayOfWeek.entries.map { dayOfWeek ->
             DayOfWeekUiModel(
-                dayOfWeek = DayOfWeek.of(dayOfWeek),
-                isChecked = false,
+                dayOfWeek = dayOfWeek,
+                isChecked = dayOfWeek.value in checkedDays,
             )
         }
+    }
 
     private fun AlarmUiModel.toDomainType(): AlarmType =
         when (type) {
@@ -64,9 +66,9 @@ object AlarmMapper {
         }
 
     private fun List<DayOfWeekUiModel>.toDomain(): List<Int> =
-        this.map { dayOfWeek ->
-            dayOfWeek.dayOfWeek.value
-        }
+        this
+            .filter { dayOfWeekUiModel -> dayOfWeekUiModel.isChecked }
+            .map { dayOfWeekUiModel -> dayOfWeekUiModel.dayOfWeek.value }
 
     private fun LocationAlarmUiModel.toDomain(): LocationAlarm =
         LocationAlarm(

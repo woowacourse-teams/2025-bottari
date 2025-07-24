@@ -94,7 +94,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             permissionLauncher.launch(requiredPermissions)
         }
         binding.switchAlarm.setOnCheckedChangeListener { _, isChecked ->
-
             viewModel.toggleAlarmState(isChecked)
         }
     }
@@ -122,9 +121,11 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun setupAlarm(bottari: BottariDetailUiModel) {
-        alarmAdapter.submitList(listOf(bottari.alarm))
-        toggleAlarmSelection(bottari.alarm != null)
+        val isAlarmExist = bottari.alarm != null
+        toggleAlarmSelection(isAlarmExist)
         binding.switchAlarm.isChecked = bottari.alarm?.isActive ?: false
+        if (isAlarmExist.not()) return
+        alarmAdapter.submitList(listOf(bottari.alarm))
     }
 
     private fun toggleItemSection(hasItems: Boolean) {
@@ -171,10 +172,24 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
 
     private fun checkAndRequestSpecialPermission() {
         if (PermissionUtil.hasExactAlarmPermission(requireContext())) {
-            navigateToScreen(AlarmEditFragment::class.java, AlarmEditFragment.newBundle())
+            navigateToAlarmEditScreen()
             return
         }
         showExactAlarmSettingsDialog()
+    }
+
+    private fun navigateToAlarmEditScreen() {
+        val bottari = viewModel.bottari.value?.takeSuccess()!!
+        navigateToScreen(
+            AlarmEditFragment::class.java,
+            AlarmEditFragment.newBundle(
+                bottariId = bottari.id,
+                alarm =
+                    viewModel.bottari.value
+                        ?.takeSuccess()
+                        ?.alarm,
+            ),
+        )
     }
 
     private fun showSettingsDialog() {
