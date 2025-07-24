@@ -11,11 +11,5 @@ class BottariDetailRepositoryImpl(
     override suspend fun findBottariDetail(
         id: Long,
         ssaid: String,
-    ): Result<BottariDetail> =
-        try {
-            val response = bottariDetailRemoteDataSource.findBottari(id, ssaid)
-            response.map { it.toDomain() }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+    ): Result<BottariDetail> = bottariDetailRemoteDataSource.findBottari(id, ssaid).mapCatching { it.toDomain() }
 }
