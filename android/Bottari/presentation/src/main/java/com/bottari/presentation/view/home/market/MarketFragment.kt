@@ -52,7 +52,10 @@ class MarketFragment :
         viewModel.searchTemplates(inputText)
     }
 
-    override fun onBottariTemplateClick(bottariTemplateId: Long) {}
+    override fun onBottariTemplateClick(bottariTemplateId: Long) {
+        val intent = MarketBottariDetailActivity.newIntent(requireContext(), bottariTemplateId)
+        startActivity(intent)
+    }
 
     private fun setupObserver() {
         viewModel.bottariTemplates.observe(viewLifecycleOwner, ::handleBottariTemplateState)
