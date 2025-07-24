@@ -1,9 +1,13 @@
 package com.bottari.data.source.remote
 
 interface AlarmRemoteDataSource {
-    suspend fun toggleAlarmState(
+    suspend fun activeAlarmState(
         id: Long,
         ssaid: String,
-        state: String,
-    ): Result<Boolean>
+    ): Result<Unit>
+
+    suspend fun inactiveAlarmState(
+        id: Long,
+        ssaid: String,
+    ): Result<Unit>
 }

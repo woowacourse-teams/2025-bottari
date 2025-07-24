@@ -1,9 +1,13 @@
 package com.bottari.domain.repository
 
 interface AlarmRepository {
-    suspend fun toggleAlarm(
+    suspend fun activeAlarm(
         ssaid: String,
-        bottariId: Long,
-        state: String,
-    ): Result<Boolean>
+        alarmId: Long,
+    ): Result<Unit>
+
+    suspend fun inactiveAlarm(
+        ssaid: String,
+        alarmId: Long,
+    ): Result<Unit>
 }

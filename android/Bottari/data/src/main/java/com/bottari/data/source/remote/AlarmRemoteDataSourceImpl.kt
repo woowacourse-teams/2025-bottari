@@ -9,8 +9,7 @@ class AlarmRemoteDataSourceImpl(
     override suspend fun toggleAlarmState(
         id: Long,
         ssaid: String,
-        state: String,
-    ): Result<Boolean> =
+    ): Result<Unit> =
         safeApiCall {
             alarmService.toggleAlarmState(id = id, ssaid = ssaid, state = state)
         }
