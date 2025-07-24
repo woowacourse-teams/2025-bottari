@@ -18,7 +18,7 @@ class MarketViewModel(
     private val bottariTemplatesUseCase: FetchBottariTemplatesUseCase,
 ) : ViewModel() {
     private val _bottariTemplates: MutableLiveData<UiState<List<BottariTemplateUiModel>>> =
-        MutableLiveData()
+        MutableLiveData(UiState.Loading)
     val bottariTemplates: LiveData<UiState<List<BottariTemplateUiModel>>> get() = _bottariTemplates
 
     init {
