@@ -10,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.domain.model.member.RegisteredMember
+import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.presentation.base.UiState
 import kotlinx.coroutines.launch
@@ -17,26 +19,31 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     stateHandle: SavedStateHandle,
     private val registerMemberUseCase: RegisterMemberUseCase,
+    private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
 ) : ViewModel() {
+    private val ssaid = stateHandle.get<String>(EXTRA_SSAID) ?: error(NOT_FOUND_USER)
     private val _loginState: MutableLiveData<UiState<Unit>> = MutableLiveData(UiState.Loading)
     val loginState: LiveData<UiState<Unit>> = _loginState
 
     init {
-        val ssaid = stateHandle.get<String>(EXTRA_SSAID) ?: error(NOT_FOUND_USER)
-        checkRegisteredMember(ssaid)
+        checkRegisteredMember()
     }
 
-    private fun checkRegisteredMember(ssaid: String) {
+    private fun checkRegisteredMember() {
         viewModelScope.launch {
-            // todo: 유저 등록 여부 확인 필요
-            val isUnRegistered = false
-            if (isUnRegistered) {
-                registerMember(ssaid)
-                return@launch
-            }
-
-            _loginState.value = UiState.Success(Unit)
+            checkRegisteredMemberUseCase(ssaid)
+                .onSuccess { handleCheckRegistrationResult(it) }
+                .onFailure { _loginState.value = UiState.Failure(it.message) }
         }
+    }
+
+    private fun handleCheckRegistrationResult(result: RegisteredMember) {
+        if (result.isRegistered) {
+            _loginState.value = UiState.Success(Unit)
+            return
+        }
+
+        registerMember(ssaid)
     }
 
     private fun registerMember(ssaid: String) {
@@ -56,7 +63,11 @@ class MainViewModel(
                 initializer {
                     val stateHandle = createSavedStateHandle()
                     stateHandle[EXTRA_SSAID] = ssaid
-                    MainViewModel(stateHandle, UseCaseProvider.registerMemberUseCase)
+                    MainViewModel(
+                        stateHandle,
+                        UseCaseProvider.registerMemberUseCase,
+                        UseCaseProvider.checkRegisteredMemberUseCase,
+                    )
                 }
             }
     }
