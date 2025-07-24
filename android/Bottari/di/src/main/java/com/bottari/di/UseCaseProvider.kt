@@ -1,5 +1,6 @@
 package com.bottari.di
 
+import com.bottari.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
 import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
@@ -32,6 +33,11 @@ object UseCaseProvider {
     val checkBottariItemUseCase by lazy {
         CheckBottariItemUseCase(
             RepositoryProvider.bottariItemRepository,
+        )
+    }
+    val createBottariUseCase by lazy {
+        CreateBottariUseCase(
+            RepositoryProvider.bottariRepository,
         )
     }
 }

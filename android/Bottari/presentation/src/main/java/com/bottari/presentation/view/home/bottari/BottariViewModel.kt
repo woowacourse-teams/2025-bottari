@@ -20,16 +20,16 @@ class BottariViewModel(
     stateHandle: SavedStateHandle,
     private val fetchBottariesUseCase: FetchBottariesUseCase,
 ) : ViewModel() {
+    private val ssaid: String by lazy { stateHandle.get<String>(EXTRA_SSAID)!! }
     private val _bottaries: MutableLiveData<UiState<List<BottariUiModel>>> =
         MutableLiveData(UiState.Loading)
     val bottaries: LiveData<UiState<List<BottariUiModel>>> get() = _bottaries
 
     init {
-        val ssaid = stateHandle.get<String>(EXTRA_SSAID) ?: error("SSAID를 확인할 수 없음")
-        fetchBottaries(ssaid)
+        fetchBottaries()
     }
 
-    private fun fetchBottaries(ssaid: String) {
+    fun fetchBottaries() {
         viewModelScope.launch {
             fetchBottariesUseCase(ssaid)
                 .onSuccess { bottaries ->
