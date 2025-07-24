@@ -1,6 +1,8 @@
 package com.bottari.data.source.remote
 
 import com.bottari.data.model.bottari.BottariResponse
+import com.bottari.data.extension.extractIdFromHeader
+import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.model.bottari.FetchBottariesResponse
 import com.bottari.data.service.BottariService
 import com.bottari.data.util.safeApiCall
@@ -20,4 +22,17 @@ class BottariRemoteDataSourceImpl(
         safeApiCall {
             bottariService.findBottari(id = id, ssaid = ssaid)
         }
+
+    override suspend fun createBottari(
+        ssaid: String,
+        createBottariRequest: CreateBottariRequest,
+    ): Result<Long> =
+        runCatching {
+            val response = bottariService.createBottari(ssaid, createBottariRequest)
+            requireNotNull(response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)) { }
+        }
+
+    companion object {
+        private const val HEADER_BOTTARI_ID_PREFIX = "/bottaries/"
+    }
 }

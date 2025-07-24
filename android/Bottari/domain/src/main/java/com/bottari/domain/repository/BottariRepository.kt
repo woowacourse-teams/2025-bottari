@@ -10,4 +10,9 @@ interface BottariRepository {
         id: Long,
         ssaid: String,
     ): Result<BottariDetail>
+
+    suspend fun createBottari(
+        ssaid: String,
+        title: String,
+    ): Result<Long>
 }
