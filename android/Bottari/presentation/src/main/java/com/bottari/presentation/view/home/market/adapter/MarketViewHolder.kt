@@ -29,12 +29,11 @@ class MarketViewHolder private constructor(
             val context = binding.tvBottariTemplateItemsTitle.context
             val paint = binding.tvBottariTemplateItemsTitle.paint
             val width = binding.root.width
-
             val summary =
                 generateSummaryTextFitting(
                     context = context,
                     paint = paint,
-                    availableWidth = width - 300,
+                    availableWidth = width - TEXT_PADDING_OFFSET_PX,
                     itemNames = bottariTemplate.items.map { item -> item.name },
                 )
             binding.tvBottariTemplateItemsTitle.text = summary
@@ -48,27 +47,29 @@ class MarketViewHolder private constructor(
         itemNames: List<String>,
     ): String {
         if (itemNames.isEmpty()) return ""
-
-        val suffix = context.getString(R.string.template_items_name_text, itemNames.size)
-
+        val fullText = itemNames.joinToString()
+        if (paint.measureText(fullText) <= availableWidth) {
+            return fullText
+        }
+        val totalItemCount = itemNames.size
+        val suffix = context.getString(R.string.template_items_name_text, totalItemCount)
         val fittingNames =
             itemNames
-                .runningFold(emptyList<String>()) { acc, item -> acc + item }
-                .filter { it.isNotEmpty() }
+                .indices
+                .asSequence()
+                .map { endIndex -> itemNames.subList(0, endIndex + 1) }
                 .takeWhile { names ->
-                    val preview = names.joinToString(", ")
-                    paint.measureText("$preview$suffix") < availableWidth
+                    val text = names.joinToString() + suffix
+                    paint.measureText(text) < availableWidth
                 }.lastOrNull()
                 ?: emptyList()
-
-        val prefix = fittingNames.joinToString(", ")
-        return buildString {
-            append(prefix)
-            append(suffix)
-        }
+        val prefix = fittingNames.joinToString()
+        return prefix + suffix
     }
 
     companion object {
+        private const val TEXT_PADDING_OFFSET_PX = 300
+
         fun from(
             parent: ViewGroup,
             clickListener: OnBottariTemplateClickListener,
