@@ -20,13 +20,15 @@ class PersonalBottariEditViewModel(
     private val findBottariDetailUseCase: FindBottariDetailUseCase,
     private val toggleAlarmStateUseCase: ToggleAlarmStateUseCase,
 ) : ViewModel() {
+
     private val _bottari = MutableLiveData<UiState<BottariDetailUiModel>>()
     val bottari: LiveData<UiState<BottariDetailUiModel>> = _bottari
 
     private val ssaid: String =
-        savedStateHandle.get<String>(EXTRA_SSAID) ?: error("SSAID를 확인할 수 없음")
+        savedStateHandle.get<String>(EXTRA_SSAID) ?: error(ERROR_SSAID_MISSING)
+
     private val bottariId: Long =
-        savedStateHandle.get<Long>(EXTRA_BOTTARI_ID) ?: error("bottariId가 없습니다.")
+        savedStateHandle.get<Long>(EXTRA_BOTTARI_ID) ?: error(ERROR_BOTTARI_ID_MISSING)
 
     init {
         fetchBottariById(bottariId)
@@ -41,7 +43,7 @@ class PersonalBottariEditViewModel(
                     toggleAlarmStateUseCase.invoke(ssaid, alarmId, isActive)
                 }
             } else {
-                throw IllegalArgumentException("알람 ID가 없습니다")
+                throw IllegalArgumentException(ERROR_ALARM_ID_MISSING)
             }
         }
     }
@@ -52,13 +54,18 @@ class PersonalBottariEditViewModel(
             findBottariDetailUseCase
                 .invoke(id, ssaid)
                 .onSuccess { _bottari.value = UiState.Success(it.toUiModel()) }
-                .onFailure { _bottari.value = UiState.Failure(it.message ?: "알 수 없는 오류") }
+                .onFailure { _bottari.value = UiState.Failure(it.message ?: ERROR_UNKNOWN) }
         }
     }
 
     companion object {
         private const val EXTRA_SSAID = "SSAID"
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
+
+        private const val ERROR_SSAID_MISSING = "SSAID를 확인할 수 없습니다"
+        private const val ERROR_BOTTARI_ID_MISSING = "보따리 Id가 없습니다"
+        private const val ERROR_ALARM_ID_MISSING = "알람 ID가 없습니다"
+        private const val ERROR_UNKNOWN = "알 수 없는 오류"
 
         fun Factory(
             ssaid: String,
