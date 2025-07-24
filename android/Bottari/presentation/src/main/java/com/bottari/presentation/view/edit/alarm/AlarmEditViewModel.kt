@@ -34,8 +34,8 @@ class AlarmEditViewModel(
     private val _saveState: MutableLiveData<UiState<Unit>> = MutableLiveData()
     val saveState: LiveData<UiState<Unit>> get() = _saveState
 
-    private val ssaid: String by lazy { stateHandle[EXTRA_SSAID]!! }
-    private val bottariId: Long by lazy { stateHandle[EXTRA_BOTTARI_ID]!! }
+    private val ssaid: String = stateHandle[EXTRA_SSAID] ?: error(ERROR_REQUIRE_SSAID)
+    private val bottariId: Long = stateHandle[EXTRA_BOTTARI_ID] ?: error(ERROR_REQUIRE_SSAID)
 
     fun updateAlarm() {
         val currentAlarm = _alarm.value?.toDomain() ?: return
@@ -100,6 +100,8 @@ class AlarmEditViewModel(
         private const val EXTRA_SSAID = "EXTRA_SSAID"
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
         private const val EXTRA_ALARM = "EXTRA_ALARM"
+        private const val ERROR_REQUIRE_SSAID = "[ERROR] SSAID가 존재하지 않습니다."
+        private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
 
         fun Factory(
             ssaid: String,
