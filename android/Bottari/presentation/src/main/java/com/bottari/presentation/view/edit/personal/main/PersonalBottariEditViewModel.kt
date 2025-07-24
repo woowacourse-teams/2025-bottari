@@ -11,6 +11,7 @@ import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
 import com.bottari.domain.usecase.bottariDetail.FindBottariDetailUseCase
 import com.bottari.presentation.base.UiState
+import com.bottari.presentation.extension.takeSuccess
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.model.BottariDetailUiModel
 import kotlinx.coroutines.Job
@@ -38,15 +39,12 @@ class PersonalBottariEditViewModel(
     }
 
     fun toggleAlarmState(isActive: Boolean) {
-        val state = _bottari.value as? UiState.Success ?: return
-
+        val state = _bottari.value?.takeSuccess()
+        val alarmId = state?.alarm?.id ?: return
         toggleAlarmJob?.cancel()
         toggleAlarmJob =
             viewModelScope.launch {
                 delay(DEBOUNCE_DELAY)
-                val alarmId =
-                    state.data.alarm?.id
-                        ?: error(ERROR_ALARM_ID_MISSING)
                 toggleAlarmStateUseCase(ssaid, alarmId, isActive)
             }
     }
@@ -62,14 +60,13 @@ class PersonalBottariEditViewModel(
     }
 
     companion object {
-        private const val EXTRA_SSAID = "SSAID"
+        private const val EXTRA_SSAID = "EXTRA_SSAID"
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
 
         private const val DEBOUNCE_DELAY = 500L
 
         private const val ERROR_SSAID_MISSING = "SSAID를 확인할 수 없습니다"
         private const val ERROR_BOTTARI_ID_MISSING = "보따리 Id가 없습니다"
-        private const val ERROR_ALARM_ID_MISSING = "알람 ID가 없습니다"
         private const val ERROR_UNKNOWN = "알 수 없는 오류"
 
         fun Factory(
