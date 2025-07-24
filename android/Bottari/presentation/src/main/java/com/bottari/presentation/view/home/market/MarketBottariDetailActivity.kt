@@ -6,9 +6,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.base.BaseActivity
+import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.ActivityMarketBottariDetailBinding
 import com.bottari.presentation.extension.getSSAID
-import com.bottari.presentation.extension.takeSuccess
+import com.bottari.presentation.model.BottariTemplateUiModel
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.home.market.adapter.MarketBottariDetailAdapter
 
@@ -29,17 +30,8 @@ class MarketBottariDetailActivity : BaseActivity<ActivityMarketBottariDetailBind
     }
 
     private fun setupObserver() {
-        viewModel.bottariTemplate.observe(this) { uiState ->
-            uiState.takeSuccess()?.let { template ->
-                binding.tvBottariTitle.text = template.title
-                adapter.submitList(template.items)
-            }
-        }
-        viewModel.createSuccess.observe(this) { uiState ->
-            uiState.takeSuccess()?.let {
-                navigateBottariEdit(uiState.takeSuccess()!!)
-            }
-        }
+        viewModel.bottariTemplate.observe(this, ::handleBottariTemplateState)
+        viewModel.createSuccess.observe(this, ::handleTakeSuccess)
     }
 
     private fun setupUI() {
@@ -60,9 +52,29 @@ class MarketBottariDetailActivity : BaseActivity<ActivityMarketBottariDetailBind
         viewModel.takeBottariTemplate()
     }
 
-    private fun navigateBottariEdit(bottariId: Long) {
+    private fun navigateBottariEdit(bottariId: Long?) {
+        if (bottariId == null) return
         startActivity(PersonalBottariEditActivity.newIntent(this, bottariId))
         finish()
+    }
+
+    private fun handleBottariTemplateState(uiState: UiState<BottariTemplateUiModel>) {
+        when (uiState) {
+            is UiState.Loading -> Unit
+            is UiState.Success -> {
+                binding.tvBottariTitle.text = uiState.data.title
+                adapter.submitList(uiState.data.items)
+            }
+            is UiState.Failure -> Unit
+        }
+    }
+
+    private fun handleTakeSuccess(uiState: UiState<Long?>) {
+        when (uiState) {
+            is UiState.Loading -> Unit
+            is UiState.Success -> navigateBottariEdit(uiState.data)
+            is UiState.Failure -> Unit
+        }
     }
 
     companion object {
