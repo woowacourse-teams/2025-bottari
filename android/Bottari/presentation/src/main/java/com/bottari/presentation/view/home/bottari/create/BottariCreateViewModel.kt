@@ -17,7 +17,10 @@ class BottariCreateViewModel(
     private val _createSuccess = MutableLiveData<UiState<Long>>()
     val createSuccess: MutableLiveData<UiState<Long>> = _createSuccess
 
-    fun createBottari(ssaid: String, title: String) {
+    fun createBottari(
+        ssaid: String,
+        title: String,
+    ) {
         _createSuccess.value = UiState.Loading
 
         viewModelScope.launch {
@@ -28,11 +31,11 @@ class BottariCreateViewModel(
     }
 
     companion object {
-
-        fun Factory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                BottariCreateViewModel(UseCaseProvider.createBottariUseCase)
+        fun Factory(): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    BottariCreateViewModel(UseCaseProvider.createBottariUseCase)
+                }
             }
-        }
     }
 }

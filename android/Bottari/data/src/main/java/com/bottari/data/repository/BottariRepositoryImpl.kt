@@ -5,7 +5,6 @@ import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.source.remote.BottariRemoteDataSource
 import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.repository.BottariRepository
-import retrofit2.Response
 
 class BottariRepositoryImpl(
     private val bottariRemoteDataSource: BottariRemoteDataSource,
@@ -15,7 +14,10 @@ class BottariRepositoryImpl(
             .fetchBottaries(ssaid)
             .mapCatching { bottari -> bottari.toDomain() }
 
-    override suspend fun createBottari(ssaid: String, title: String): Result<Long> =
+    override suspend fun createBottari(
+        ssaid: String,
+        title: String,
+    ): Result<Long> =
         bottariRemoteDataSource
             .createBottari(ssaid, CreateBottariRequest(title))
 }

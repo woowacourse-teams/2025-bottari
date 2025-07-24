@@ -2,8 +2,6 @@ package com.bottari.data.service
 
 import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.model.bottari.FetchBottariesResponse
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

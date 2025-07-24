@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CreateBottariRequest(
     @SerialName("title")
-    val title: String
+    val title: String,
 )

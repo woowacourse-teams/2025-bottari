@@ -17,10 +17,11 @@ class BottariRemoteDataSourceImpl(
     override suspend fun createBottari(
         ssaid: String,
         createBottariRequest: CreateBottariRequest,
-    ): Result<Long> = runCatching {
-        val response = bottariService.createBottari(ssaid, createBottariRequest)
-        requireNotNull(response.extractBottariId())
-    }
+    ): Result<Long> =
+        runCatching {
+            val response = bottariService.createBottari(ssaid, createBottariRequest)
+            requireNotNull(response.extractBottariId())
+        }
 
     private fun Response<*>.extractBottariId(): Long? {
         val locationHeader = this.headers()[HEADER_LOCATION]
