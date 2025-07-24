@@ -116,19 +116,21 @@ class BottariViewHolder private constructor(
     private fun formatEveryWeekRepeat(
         time: LocalTime,
         daysOfWeek: List<DayOfWeekUiModel>,
-    ): String =
-        buildString {
+    ): String {
+        val checkedDays = daysOfWeek.filter { it.isChecked }
+        return buildString {
             append(time.formatWithPattern(timeFormat))
             append(separator)
             append(getString(R.string.bottari_item_alarm_type_everyweek_repeat))
             append(separator)
             append(
-                daysOfWeek.joinToString { dayOfWeek ->
+                checkedDays.joinToString { dayOfWeek ->
                     dayOfWeek.dayOfWeek
                         .getDisplayName(TextStyle.SHORT, Locale.getDefault())
                 },
             )
         }
+    }
 
     private fun getProgressColor(
         checked: Int,
