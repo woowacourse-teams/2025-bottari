@@ -18,7 +18,6 @@ class BottariRepositoryImpl(
         ssaid: String,
     ): Result<BottariDetail> = bottariRemoteDataSource.findBottari(id, ssaid).mapCatching { it.toDomain() }
 
-
     override suspend fun createBottari(
         ssaid: String,
         title: String,

@@ -1,7 +1,7 @@
 package com.bottari.data.service
 
-import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.model.bottari.BottariResponse
+import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.model.bottari.FetchBottariesResponse
 import retrofit2.Response
 import retrofit2.http.Body
