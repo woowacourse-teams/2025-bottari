@@ -9,8 +9,6 @@ class AlarmRepositoryImpl(
     override suspend fun toggleAlarm(
         ssaid: String,
         bottariId: Long,
-        isActive: Boolean,
-    ): Result<Boolean> =
-        alarmRemoteDataSource.toggleAlarmState(id= bottariId, ssaid = ssaid, state = isActive)
-
+        state: String,
+    ): Result<Boolean> = alarmRemoteDataSource.toggleAlarmState(id = bottariId, ssaid = ssaid, state = state)
 }

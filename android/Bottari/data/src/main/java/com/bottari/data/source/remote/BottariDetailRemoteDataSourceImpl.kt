@@ -7,7 +7,10 @@ import com.bottari.data.util.safeApiCall
 class BottariDetailRemoteDataSourceImpl(
     val bottariDetailService: BottariDetailService,
 ) : BottariDetailRemoteDataSource {
-    override suspend fun findBottari(id: Long, ssaid: String): Result<BottariResponse> =
+    override suspend fun findBottari(
+        id: Long,
+        ssaid: String,
+    ): Result<BottariResponse> =
         safeApiCall {
             bottariDetailService.findBottari(id, ssaid)
         }

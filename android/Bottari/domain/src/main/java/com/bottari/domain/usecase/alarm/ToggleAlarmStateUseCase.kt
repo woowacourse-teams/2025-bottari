@@ -9,5 +9,13 @@ class ToggleAlarmStateUseCase(
         ssaid: String,
         bottariId: Long,
         isActive: Boolean,
-    ) = alarmRepository.toggleAlarm(ssaid, bottariId, isActive)
+    ): Result<Boolean> {
+        val state = if (isActive) STATE_ACTIVE else STATE_INACTIVE
+        return alarmRepository.toggleAlarm(ssaid, bottariId, state)
+    }
+
+    companion object {
+        private const val STATE_ACTIVE = "active"
+        private const val STATE_INACTIVE = "inactive"
+    }
 }

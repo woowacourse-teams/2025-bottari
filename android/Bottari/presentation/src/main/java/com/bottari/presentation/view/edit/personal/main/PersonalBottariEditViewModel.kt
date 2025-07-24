@@ -20,7 +20,6 @@ class PersonalBottariEditViewModel(
     private val findBottariDetailUseCase: FindBottariDetailUseCase,
     private val toggleAlarmStateUseCase: ToggleAlarmStateUseCase,
 ) : ViewModel() {
-
     private val _bottari = MutableLiveData<UiState<BottariDetailUiModel>>()
     val bottari: LiveData<UiState<BottariDetailUiModel>> = _bottari
 

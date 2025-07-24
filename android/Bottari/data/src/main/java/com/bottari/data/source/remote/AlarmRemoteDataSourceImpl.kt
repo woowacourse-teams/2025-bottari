@@ -4,17 +4,14 @@ import com.bottari.data.service.AlarmService
 import com.bottari.data.util.safeApiCall
 
 class AlarmRemoteDataSourceImpl(
-    private val alarmService: AlarmService,
+    val alarmService: AlarmService,
 ) : AlarmRemoteDataSource {
-
-    override suspend fun toggleAlarmState(id: Long, ssaid: String, state: Boolean): Result<Boolean> =
+    override suspend fun toggleAlarmState(
+        id: Long,
+        ssaid: String,
+        state: String,
+    ): Result<Boolean> =
         safeApiCall {
-            val stateString = if (state) ALARM_ACTIVE else ALARM_INACTIVE
-            alarmService.toggleAlarmState(id = id, ssaid = ssaid, state = stateString)
+            alarmService.toggleAlarmState(id = id, ssaid = ssaid, state = state)
         }
-
-    companion object {
-        private const val ALARM_ACTIVE = "active"
-        private const val ALARM_INACTIVE = "inactive"
-    }
 }

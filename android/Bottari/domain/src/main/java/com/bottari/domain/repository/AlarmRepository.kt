@@ -4,6 +4,6 @@ interface AlarmRepository {
     suspend fun toggleAlarm(
         ssaid: String,
         bottariId: Long,
-        isActive: Boolean,
+        state: String,
     ): Result<Boolean>
 }
