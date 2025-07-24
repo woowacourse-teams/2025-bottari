@@ -92,10 +92,11 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         }
         binding.switchAlarm.setOnCheckedChangeListener { _, isChecked ->
             toggleAlarmJob?.cancel()
-            toggleAlarmJob = CoroutineScope(Dispatchers.Main).launch {
-                delay(500L)
-                viewModel.toggleAlarmState(isChecked)
-            }
+            toggleAlarmJob =
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(500L)
+                    viewModel.toggleAlarmState(isChecked)
+                }
         }
     }
 
