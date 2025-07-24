@@ -21,6 +21,7 @@ class BottariCreateViewModel(
         ssaid: String,
         title: String,
     ) {
+        if (title.isBlank()) return
         _createSuccess.value = UiState.Loading
 
         viewModelScope.launch {
