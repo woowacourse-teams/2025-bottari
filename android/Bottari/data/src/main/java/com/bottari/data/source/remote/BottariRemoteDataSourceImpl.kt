@@ -26,10 +26,10 @@ class BottariRemoteDataSourceImpl(
     override suspend fun createBottari(
         ssaid: String,
         createBottariRequest: CreateBottariRequest,
-    ): Result<Long> =
+    ): Result<Long?> =
         runCatching {
             val response = bottariService.createBottari(ssaid, createBottariRequest)
-            requireNotNull(response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)) { }
+            response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)
         }
 
     companion object {

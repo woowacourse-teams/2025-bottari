@@ -8,5 +8,5 @@ class CreateBottariUseCase(
     suspend operator fun invoke(
         ssaid: String,
         title: String,
-    ): Result<Long> = bottariRepository.createBottari(ssaid, title)
+    ): Result<Long?> = bottariRepository.createBottari(ssaid, title)
 }

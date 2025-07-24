@@ -56,6 +56,8 @@
     <string name="alarm_edit_permission_dialog_positive_btn_text">이동</string>
     <string name="alarm_edit_permission_dialog_negative_btn_text">취소</string>
     <string name="alarm_edit_permission_failure_text">권한 요청에 실패했어요.</string>
+    <string name="personal_bottari_edit_create_template_success_text">마켓에 등록되었어요</string>
+    <string name="personal_bottari_edit_create_template_failure_text">마켓 등록에 실패했어요</string>
 
     <!-- Setting -->
     <string name="setting_toolbar_title">설정</string>
@@ -75,4 +77,7 @@
     <string name="send_button_description">전송 버튼</string>
     <string name="setting_button_description">설정 버튼</string>
     <string name="bottari_template_option_button_description">보따리 템플릿 옵션 버튼</string>
+
+    <!-- Menu -->
+    <string name="menu_title_create_market">마켓에 등록하기</string>
 </resources>

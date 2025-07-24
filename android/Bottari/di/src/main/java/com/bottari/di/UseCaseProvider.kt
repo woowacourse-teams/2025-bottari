@@ -11,6 +11,7 @@ import com.bottari.domain.usecase.item.FetchChecklistUseCase
 import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
+import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
 import com.bottari.domain.usecase.template.FetchBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
@@ -68,6 +69,11 @@ object UseCaseProvider {
     }
     val searchBottariTemplatesUseCase by lazy {
         SearchBottariTemplatesUseCase(
+            RepositoryProvider.bottariTemplateRepository,
+        )
+    }
+    val createBottariTemplateUseCase by lazy {
+        CreateBottariTemplateUseCase(
             RepositoryProvider.bottariTemplateRepository,
         )
     }

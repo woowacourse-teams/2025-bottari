@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
 import com.bottari.domain.usecase.bottariDetail.FindBottariDetailUseCase
+import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.extension.takeSuccess
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
@@ -22,9 +23,13 @@ class PersonalBottariEditViewModel(
     savedStateHandle: SavedStateHandle,
     private val findBottariDetailUseCase: FindBottariDetailUseCase,
     private val toggleAlarmStateUseCase: ToggleAlarmStateUseCase,
+    private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
 ) : ViewModel() {
     private val _bottari = MutableLiveData<UiState<BottariDetailUiModel>>()
     val bottari: LiveData<UiState<BottariDetailUiModel>> = _bottari
+
+    private val _createTemplateState: MutableLiveData<UiState<Unit>> = MutableLiveData()
+    val createTemplateState: LiveData<UiState<Unit>> = _createTemplateState
 
     private val ssaid: String =
         savedStateHandle.get<String>(EXTRA_SSAID) ?: error(ERROR_SSAID_MISSING)
@@ -47,6 +52,22 @@ class PersonalBottariEditViewModel(
                 delay(DEBOUNCE_DELAY)
                 toggleAlarmStateUseCase(ssaid, alarmId, isActive)
             }
+    }
+
+    fun createBottariTemplate() {
+        _createTemplateState.value = UiState.Loading
+
+        val bottari = _bottari.value?.takeSuccess()
+        val title = bottari?.title ?: return
+        val items = bottari.items.map { it.name }
+
+        viewModelScope.launch {
+            createBottariTemplateUseCase(ssaid, title, items)
+                .onSuccess { _createTemplateState.value = UiState.Success(Unit) }
+                .onFailure {
+                    _createTemplateState.value = UiState.Failure(it.message ?: ERROR_UNKNOWN)
+                }
+        }
     }
 
     fun fetchBottari() {
@@ -75,18 +96,15 @@ class PersonalBottariEditViewModel(
         ): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    val handle =
-                        createSavedStateHandle().apply {
-                            this[EXTRA_SSAID] = ssaid
-                            this[EXTRA_BOTTARI_ID] = bottariId
-                        }
-                    val findBottariDetailUseCase = UseCaseProvider.findBottariDetailUseCase
-                    val toggleAlarmStateUseCase = UseCaseProvider.toggleAlarmStateUseCase
+                    val stateHandle = createSavedStateHandle()
+                    stateHandle[EXTRA_SSAID] = ssaid
+                    stateHandle[EXTRA_BOTTARI_ID] = bottariId
 
                     PersonalBottariEditViewModel(
-                        handle,
-                        findBottariDetailUseCase,
-                        toggleAlarmStateUseCase,
+                        stateHandle,
+                        UseCaseProvider.findBottariDetailUseCase,
+                        UseCaseProvider.toggleAlarmStateUseCase,
+                        UseCaseProvider.createBottariTemplateUseCase,
                     )
                 }
             }

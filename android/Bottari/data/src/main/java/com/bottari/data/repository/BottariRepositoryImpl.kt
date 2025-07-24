@@ -21,7 +21,5 @@ class BottariRepositoryImpl(
     override suspend fun createBottari(
         ssaid: String,
         title: String,
-    ): Result<Long> =
-        bottariRemoteDataSource
-            .createBottari(ssaid, CreateBottariRequest(title))
+    ): Result<Long?> = bottariRemoteDataSource.createBottari(ssaid, CreateBottariRequest(title))
 }
