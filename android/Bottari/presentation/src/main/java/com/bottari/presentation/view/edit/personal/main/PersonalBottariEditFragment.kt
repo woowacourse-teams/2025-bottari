@@ -60,6 +60,12 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         setupListener()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        viewModel.fetchBottari()
+    }
+
     private fun setupObserver() {
         viewModel.bottari.observe(viewLifecycleOwner, ::handleBottariState)
     }
