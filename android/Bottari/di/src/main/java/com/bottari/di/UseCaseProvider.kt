@@ -22,7 +22,7 @@ object UseCaseProvider {
         )
     }
     val findBottariDetailUseCase by lazy {
-        FindBottariDetailUseCase(RepositoryProvider.bottariDetailRepository)
+        FindBottariDetailUseCase(RepositoryProvider.bottariRepository)
     }
 
     val toggleAlarmStateUseCase by lazy {
