@@ -90,7 +90,7 @@ class BottariCreateDialog :
         }
     }
 
-    private fun handleCreateState(uiState: UiState<Long>) {
+    private fun handleCreateState(uiState: UiState<Long?>) {
         when (uiState) {
             is UiState.Loading -> Unit
             is UiState.Success -> navigateToScreen(uiState.data)
@@ -100,7 +100,8 @@ class BottariCreateDialog :
         }
     }
 
-    private fun navigateToScreen(bottariId: Long) {
+    private fun navigateToScreen(bottariId: Long?) {
+        if (bottariId == null) return
         val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId)
         startActivity(intent)
         dismiss()
