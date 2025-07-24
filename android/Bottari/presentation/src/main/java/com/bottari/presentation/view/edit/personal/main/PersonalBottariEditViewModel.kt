@@ -13,6 +13,8 @@ import com.bottari.domain.usecase.bottariDetail.FindBottariDetailUseCase
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.model.BottariDetailUiModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PersonalBottariEditViewModel(
@@ -29,19 +31,24 @@ class PersonalBottariEditViewModel(
     private val bottariId: Long =
         savedStateHandle.get<Long>(EXTRA_BOTTARI_ID) ?: error(ERROR_BOTTARI_ID_MISSING)
 
+    private var toggleAlarmJob: Job? = null
+
     init {
         fetchBottariById(bottariId)
     }
 
     fun toggleAlarmState(isActive: Boolean) {
-        val currentState = _bottari.value
-        if (currentState !is UiState.Success) return
+        val state = _bottari.value as? UiState.Success ?: return
 
-        val alarmId = currentState.data.alarm?.id ?: throw IllegalArgumentException(ERROR_ALARM_ID_MISSING)
-
-        viewModelScope.launch {
-            toggleAlarmStateUseCase.invoke(ssaid, alarmId, isActive)
-        }
+        toggleAlarmJob?.cancel()
+        toggleAlarmJob =
+            viewModelScope.launch {
+                delay(DEBOUNCE_DELAY)
+                val alarmId =
+                    state.data.alarm?.id
+                        ?: error(ERROR_ALARM_ID_MISSING)
+                toggleAlarmStateUseCase(ssaid, alarmId, isActive)
+            }
     }
 
     private fun fetchBottariById(id: Long) {
@@ -57,6 +64,8 @@ class PersonalBottariEditViewModel(
     companion object {
         private const val EXTRA_SSAID = "SSAID"
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
+
+        private const val DEBOUNCE_DELAY = 500L
 
         private const val ERROR_SSAID_MISSING = "SSAID를 확인할 수 없습니다"
         private const val ERROR_BOTTARI_ID_MISSING = "보따리 Id가 없습니다"
