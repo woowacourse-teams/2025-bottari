@@ -24,7 +24,10 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
     }
 
     private fun setupListener() {
-        binding.btnPrevious.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        binding.btnPrevious.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+            updateToolbar(true)
+        }
         binding.btnSwipe.setOnClickListener { navigateToChecklist(false) }
     }
 
