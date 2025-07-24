@@ -14,5 +14,5 @@ interface BottariRepository {
     suspend fun createBottari(
         ssaid: String,
         title: String,
-    ): Result<Long>
+    ): Result<Long?>
 }
