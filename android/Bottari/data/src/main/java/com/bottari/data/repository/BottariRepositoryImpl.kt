@@ -11,15 +11,13 @@ class BottariRepositoryImpl(
     private val bottariRemoteDataSource: BottariRemoteDataSource,
 ) : BottariRepository {
     override suspend fun fetchBottaries(ssaid: String): Result<List<Bottari>> =
-        bottariRemoteDataSource.fetchBottaries(ssaid).map { bottari -> bottari.toDomain() }
+        bottariRemoteDataSource.fetchBottaries(ssaid).mapCatching { bottari -> bottari.toDomain() }
 
     override suspend fun findBottari(
         id: Long,
         ssaid: String,
     ): Result<BottariDetail> = bottariRemoteDataSource.findBottari(id, ssaid).mapCatching { it.toDomain() }
-        bottariRemoteDataSource
-            .fetchBottaries(ssaid)
-            .mapCatching { bottari -> bottari.toDomain() }
+
 
     override suspend fun createBottari(
         ssaid: String,
