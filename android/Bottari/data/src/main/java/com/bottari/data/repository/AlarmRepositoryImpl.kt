@@ -11,9 +11,6 @@ class AlarmRepositoryImpl(
         bottariId: Long,
         isActive: Boolean,
     ): Result<Boolean> =
-        if (isActive) {
-            alarmRemoteDataSource.toggleAlarmState(bottariId, ssaid, "active")
-        } else {
-            alarmRemoteDataSource.toggleAlarmState(bottariId, ssaid, "inactive")
-        }
+        alarmRemoteDataSource.toggleAlarmState(id= bottariId, ssaid = ssaid, state = isActive)
+
 }
