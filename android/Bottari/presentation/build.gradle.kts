@@ -17,6 +17,9 @@ android {
 
         val devId = gradleLocalProperties(rootDir, providers).getProperty("DEV_ID") ?: ""
         buildConfigField("String", "DEV_ID", "\"$devId\"")
+
+        val privacyPolicyUrl = gradleLocalProperties(rootDir, providers).getProperty("PRIVACY_POLICY_URL") ?: ""
+        buildConfigField("String", "PRIVACY_POLICY_URL", "\"$privacyPolicyUrl\"")
     }
 
     buildTypes {

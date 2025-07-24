@@ -11,14 +11,24 @@ import com.bottari.presentation.databinding.ActivityHomeBinding
 import com.bottari.presentation.view.home.bottari.BottariFragment
 import com.bottari.presentation.view.home.market.MarketFragment
 import com.bottari.presentation.view.home.profile.ProfileFragment
+import com.bottari.presentation.view.setting.SettingActivity
 
 class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::inflate) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setBottomNavigationView()
+        setupUI()
+        setupListener()
         if (savedInstanceState == null) {
             binding.bnvHome.selectedItemId = R.id.menu_bottari
         }
+    }
+
+    private fun setupUI() {
+        setBottomNavigationView()
+    }
+
+    private fun setupListener() {
+        binding.btnSetting.setOnClickListener { startActivity(SettingActivity.newIntent(this)) }
     }
 
     private fun setBottomNavigationView() {

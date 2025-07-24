@@ -56,6 +56,10 @@
     <string name="alarm_edit_permission_dialog_negative_btn_text">취소</string>
     <string name="alarm_edit_permission_failure_text">권한 요청에 실패했어요.</string>
 
+    <!-- Setting -->
+    <string name="setting_toolbar_title">설정</string>
+    <string name="setting_privacy_policy">개인정보 처리 방침</string>
+
     <!--  Market  -->
     <string name="template_items_name_text">\u00A0등 %d개의 물건</string>
     <string name="market_place_edit_text_hint">원하시는 보따리를 검색하세요!</string>
@@ -68,5 +72,6 @@
     <string name="dialog_bottari_create_close_button_description">보따리 생성 다이얼로그 닫기 버튼</string>
     <string name="item_delete_button_description">제거 버튼</string>
     <string name="send_button_description">전송 버튼</string>
+    <string name="setting_button_description">설정 버튼</string>
     <string name="bottari_template_option_button_description">보따리 템플릿 옵션 버튼</string>
 </resources>
