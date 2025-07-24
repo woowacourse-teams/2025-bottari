@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BottariResponse(
     @SerialName("id")
-    val id: Int,
+    val id: Long,
     @SerialName("alarm")
     val alarm: AlarmResponse?,
     @SerialName("items")

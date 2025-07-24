@@ -9,7 +9,7 @@ import com.bottari.domain.model.bottari.BottariItem
 object BottariDetailMapper {
     fun BottariResponse.toDomain(): BottariDetail =
         BottariDetail(
-            id = id.toLong(),
+            id = id,
             title = title,
             alarm = alarm?.toDomain(),
             items = items.toDomain(),
@@ -19,7 +19,7 @@ object BottariDetailMapper {
 
     private fun ItemResponse.toDomain(): BottariItem =
         BottariItem(
-            id = id.toLong(),
+            id = id,
             name = name,
             isChecked = false,
         )
