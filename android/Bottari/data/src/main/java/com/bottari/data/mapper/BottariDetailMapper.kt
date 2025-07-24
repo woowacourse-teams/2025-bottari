@@ -11,7 +11,7 @@ object BottariDetailMapper {
         BottariDetail(
             id = id.toLong(),
             title = title,
-            alarm = alarm.toDomain(),
+            alarm = alarm?.toDomain(),
             items = items.toDomain(),
         )
 

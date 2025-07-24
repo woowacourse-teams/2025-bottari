@@ -7,7 +7,7 @@ data class BottariResponse(
     @SerialName("id")
     val id: Int,
     @SerialName("alarm")
-    val alarm: AlarmResponse,
+    val alarm: AlarmResponse?,
     @SerialName("items")
     val items: List<ItemResponse>,
     @SerialName("title")
