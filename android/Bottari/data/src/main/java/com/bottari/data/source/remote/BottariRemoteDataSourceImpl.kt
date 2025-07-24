@@ -1,10 +1,10 @@
 package com.bottari.data.source.remote
 
+import com.bottari.data.extension.extractIdFromHeader
 import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.model.bottari.FetchBottariesResponse
 import com.bottari.data.service.BottariService
 import com.bottari.data.util.safeApiCall
-import retrofit2.Response
 
 class BottariRemoteDataSourceImpl(
     private val bottariService: BottariService,
@@ -20,19 +20,10 @@ class BottariRemoteDataSourceImpl(
     ): Result<Long> =
         runCatching {
             val response = bottariService.createBottari(ssaid, createBottariRequest)
-            requireNotNull(response.extractBottariId())
+            requireNotNull(response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)) { }
         }
 
-    private fun Response<*>.extractBottariId(): Long? {
-        val locationHeader = this.headers()[HEADER_LOCATION]
-        return locationHeader
-            ?.substringAfter(HEADER_BOTTARI_ID_PREFIX)
-            ?.takeWhile { it.isDigit() }
-            ?.toLongOrNull()
-    }
-
     companion object {
-        private const val HEADER_LOCATION = "Location"
         private const val HEADER_BOTTARI_ID_PREFIX = "/bottaries/"
     }
 }
