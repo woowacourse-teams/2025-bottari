@@ -1,6 +1,5 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.bottari.ToggleAlarmStateRequest
 import com.bottari.data.source.remote.AlarmRemoteDataSource
 import com.bottari.domain.repository.AlarmRepository
 
@@ -13,8 +12,8 @@ class AlarmRepositoryImpl(
         isActive: Boolean,
     ): Result<Boolean> =
         if (isActive) {
-            alarmRemoteDataSource.toggleAlarmState(ToggleAlarmStateRequest(bottariId, ssaid, "active"))
+            alarmRemoteDataSource.toggleAlarmState(bottariId, ssaid, "active")
         } else {
-            alarmRemoteDataSource.toggleAlarmState(ToggleAlarmStateRequest(bottariId, ssaid, "inactive"))
+            alarmRemoteDataSource.toggleAlarmState(bottariId, ssaid, "inactive")
         }
 }
