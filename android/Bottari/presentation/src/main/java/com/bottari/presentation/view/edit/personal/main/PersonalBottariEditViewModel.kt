@@ -35,15 +35,12 @@ class PersonalBottariEditViewModel(
 
     fun toggleAlarmState(isActive: Boolean) {
         val currentState = _bottari.value
-        if (currentState is UiState.Success) {
-            val alarmId = currentState.data.alarm?.id
-            if (alarmId != null) {
-                viewModelScope.launch {
-                    toggleAlarmStateUseCase.invoke(ssaid, alarmId, isActive)
-                }
-            } else {
-                throw IllegalArgumentException(ERROR_ALARM_ID_MISSING)
-            }
+        if (currentState !is UiState.Success) return
+
+        val alarmId = currentState.data.alarm?.id ?: throw IllegalArgumentException(ERROR_ALARM_ID_MISSING)
+
+        viewModelScope.launch {
+            toggleAlarmStateUseCase.invoke(ssaid, alarmId, isActive)
         }
     }
 
