@@ -14,6 +14,7 @@ object AlarmMapper {
     fun Alarm.toUiModel(): AlarmUiModel =
         AlarmUiModel(
             id = id,
+            isActive = isActive,
             time = time,
             type = alarmType.toUiModel(),
             date = alarmType.getDate(),
@@ -24,6 +25,7 @@ object AlarmMapper {
     fun AlarmUiModel.toDomain(): Alarm =
         Alarm(
             id = id,
+            isActive = isActive,
             time = time,
             alarmType = toDomainType(),
             location = locationAlarm?.toDomain(),

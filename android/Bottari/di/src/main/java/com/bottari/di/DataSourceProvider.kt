@@ -1,5 +1,6 @@
 package com.bottari.di
 
+import com.bottari.data.source.remote.AlarmRemoteDataSourceImpl
 import com.bottari.data.source.remote.BottariItemRemoteDataSource
 import com.bottari.data.source.remote.BottariItemRemoteDataSourceImpl
 import com.bottari.data.source.remote.BottariRemoteDataSource
@@ -18,6 +19,10 @@ object DataSourceProvider {
             ServiceProvider.bottariService,
         )
     }
+    val bottariDetailRemoteDataSource by lazy { BottariRemoteDataSourceImpl(ServiceProvider.bottariService) }
+
+    val alarmRemoteDataSource by lazy { AlarmRemoteDataSourceImpl(ServiceProvider.alarmService) }
+
     val bottariItemRemoteDataSource: BottariItemRemoteDataSource by lazy {
         BottariItemRemoteDataSourceImpl(
             ServiceProvider.bottariItemService,

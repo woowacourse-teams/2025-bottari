@@ -1,89 +1,94 @@
-package com.bottari.presentation.view.edit.personal.main
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.bottari.di.UseCaseProvider
+import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
+import com.bottari.domain.usecase.bottariDetail.FindBottariDetailUseCase
 import com.bottari.presentation.base.UiState
-import com.bottari.presentation.model.AlarmUiModel
-import com.bottari.presentation.model.BottariItemUiModel
-import com.bottari.presentation.model.BottariUiModel
+import com.bottari.presentation.extension.takeSuccess
+import com.bottari.presentation.mapper.BottariMapper.toUiModel
+import com.bottari.presentation.model.BottariDetailUiModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PersonalBottariEditViewModel(
     savedStateHandle: SavedStateHandle,
+    private val findBottariDetailUseCase: FindBottariDetailUseCase,
+    private val toggleAlarmStateUseCase: ToggleAlarmStateUseCase,
 ) : ViewModel() {
-    private val _bottari = MutableLiveData<UiState<BottariUiModel>>()
-    val bottari: LiveData<UiState<BottariUiModel>> = _bottari
+    private val _bottari = MutableLiveData<UiState<BottariDetailUiModel>>()
+    val bottari: LiveData<UiState<BottariDetailUiModel>> = _bottari
 
-    private val _items = MutableLiveData<UiState<List<BottariItemUiModel>>>()
-    val items: LiveData<UiState<List<BottariItemUiModel>>> = _items
+    private val ssaid: String =
+        savedStateHandle.get<String>(EXTRA_SSAID) ?: error(ERROR_SSAID_MISSING)
 
-    private val _alarms = MutableLiveData<UiState<List<AlarmUiModel>>>()
-    val alarms: LiveData<UiState<List<AlarmUiModel>>> = _alarms
+    private val bottariId: Long =
+        savedStateHandle.get<Long>(EXTRA_BOTTARI_ID) ?: error(ERROR_BOTTARI_ID_MISSING)
+
+    private var toggleAlarmJob: Job? = null
 
     init {
-        val id =
-            savedStateHandle.get<Long>(EXTRA_BOTTARI_ID)
-                ?: error("bottariId가 없습니다.")
-        fetchBottariById(id)
-        fetchItemsById(id)
-        fetchAlarmById(id)
+        fetchBottariById(bottariId)
+    }
+
+    fun toggleAlarmState(isActive: Boolean) {
+        val bottari = _bottari.value?.takeSuccess()
+        val alarmId = bottari?.alarm?.id ?: return
+        toggleAlarmJob?.cancel()
+        toggleAlarmJob =
+            viewModelScope.launch {
+                delay(DEBOUNCE_DELAY)
+                toggleAlarmStateUseCase(ssaid, alarmId, isActive)
+            }
     }
 
     private fun fetchBottariById(id: Long) {
-        _bottari.value = UiState.Success(dummyBottari)
-    }
-
-    private fun fetchItemsById(id: Long) {
-        _items.value = UiState.Success(dummyChecklist)
-    }
-
-    private fun fetchAlarmById(id: Long) {
-        _alarms.value = UiState.Success(listOf())
+        viewModelScope.launch {
+            _bottari.value = UiState.Loading
+            findBottariDetailUseCase
+                .invoke(id, ssaid)
+                .onSuccess { _bottari.value = UiState.Success(it.toUiModel()) }
+                .onFailure { _bottari.value = UiState.Failure(it.message ?: ERROR_UNKNOWN) }
+        }
     }
 
     companion object {
+        private const val EXTRA_SSAID = "EXTRA_SSAID"
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
 
-        fun Factory(bottariId: Long): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras,
-                ): T {
-                    val handle = extras.createSavedStateHandle()
-                    handle[EXTRA_BOTTARI_ID] = bottariId
-                    return PersonalBottariEditViewModel(handle) as T
+        private const val DEBOUNCE_DELAY = 500L
+
+        private const val ERROR_SSAID_MISSING = "SSAID를 확인할 수 없습니다"
+        private const val ERROR_BOTTARI_ID_MISSING = "보따리 Id가 없습니다"
+        private const val ERROR_UNKNOWN = "알 수 없는 오류"
+
+        fun Factory(
+            ssaid: String,
+            bottariId: Long,
+        ): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    val handle =
+                        createSavedStateHandle().apply {
+                            this[EXTRA_SSAID] = ssaid
+                            this[EXTRA_BOTTARI_ID] = bottariId
+                        }
+                    val findBottariDetailUseCase = UseCaseProvider.findBottariDetailUseCase
+                    val toggleAlarmStateUseCase = UseCaseProvider.toggleAlarmStateUseCase
+
+                    PersonalBottariEditViewModel(
+                        handle,
+                        findBottariDetailUseCase,
+                        toggleAlarmStateUseCase,
+                    )
                 }
             }
     }
 }
-
-private val dummyBottari = BottariUiModel(1, "나의 보따리", 0, 0, null)
-
-private val dummyChecklist =
-    listOf(
-        BottariItemUiModel(id = 0, isChecked = true, name = "우유"),
-        BottariItemUiModel(id = 1, isChecked = false, name = "계란"),
-        BottariItemUiModel(id = 2, isChecked = true, name = "식빵"),
-        BottariItemUiModel(id = 3, isChecked = false, name = "세제"),
-        BottariItemUiModel(id = 4, isChecked = true, name = "샴푸"),
-        BottariItemUiModel(id = 5, isChecked = false, name = "물티슈"),
-        BottariItemUiModel(id = 6, isChecked = true, name = "칫솔"),
-        BottariItemUiModel(id = 7, isChecked = false, name = "치약"),
-        BottariItemUiModel(id = 8, isChecked = true, name = "라면"),
-        BottariItemUiModel(id = 9, isChecked = false, name = "과자"),
-        BottariItemUiModel(id = 10, isChecked = true, name = "커피"),
-        BottariItemUiModel(id = 11, isChecked = false, name = "쌀"),
-        BottariItemUiModel(id = 12, isChecked = true, name = "김치"),
-        BottariItemUiModel(id = 13, isChecked = false, name = "휴지"),
-        BottariItemUiModel(id = 14, isChecked = true, name = "세탁세제"),
-        BottariItemUiModel(id = 15, isChecked = false, name = "청소기 필터"),
-        BottariItemUiModel(id = 16, isChecked = true, name = "텀블러"),
-        BottariItemUiModel(id = 17, isChecked = false, name = "포스트잇"),
-        BottariItemUiModel(id = 18, isChecked = true, name = "USB 케이블"),
-        BottariItemUiModel(id = 19, isChecked = false, name = "보조 배터리"),
-    )

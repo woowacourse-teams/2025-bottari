@@ -1,6 +1,7 @@
 package com.bottari.data.source.remote
 
 import com.bottari.data.extension.extractIdFromHeader
+import com.bottari.data.model.bottari.BottariResponse
 import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.model.bottari.FetchBottariesResponse
 import com.bottari.data.service.BottariService
@@ -12,6 +13,14 @@ class BottariRemoteDataSourceImpl(
     override suspend fun fetchBottaries(ssaid: String): Result<List<FetchBottariesResponse>> =
         safeApiCall {
             bottariService.fetchBottaries(ssaid)
+        }
+
+    override suspend fun findBottari(
+        id: Long,
+        ssaid: String,
+    ): Result<BottariResponse> =
+        safeApiCall {
+            bottariService.findBottari(id = id, ssaid = ssaid)
         }
 
     override suspend fun createBottari(

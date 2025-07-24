@@ -1,7 +1,9 @@
 package com.bottari.di
 
+import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
 import com.bottari.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
+import com.bottari.domain.usecase.bottariDetail.FindBottariDetailUseCase
 import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
@@ -19,6 +21,13 @@ object UseCaseProvider {
         FetchBottariesUseCase(
             RepositoryProvider.bottariRepository,
         )
+    }
+    val findBottariDetailUseCase by lazy {
+        FindBottariDetailUseCase(RepositoryProvider.bottariRepository)
+    }
+
+    val toggleAlarmStateUseCase by lazy {
+        ToggleAlarmStateUseCase(RepositoryProvider.alarmRepository)
     }
     val fetchChecklistUseCase by lazy {
         FetchChecklistUseCase(
