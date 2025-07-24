@@ -58,18 +58,11 @@ class AlarmEditViewModel(
 
     fun updateAlarmDate(date: LocalDate) {
         val currentAlarm = _alarm.value ?: return
-        when (currentAlarm.type) {
-            AlarmTypeUiModel.NON_REPEAT -> {
-                _alarm.value = currentAlarm.copy(date = date)
-            }
-
-            AlarmTypeUiModel.EVERYDAY_REPEAT,
-            AlarmTypeUiModel.EVERYWEEK_REPEAT,
-            -> return
-        }
+        if (currentAlarm.type != AlarmTypeUiModel.NON_REPEAT) return
+        _alarm.value = currentAlarm.copy(date = date)
     }
 
-    fun selectDayOfWeek(dayOfWeek: DayOfWeekUiModel) {
+    fun updateDaysOfWeek(dayOfWeek: DayOfWeekUiModel) {
         val currentAlarm = _alarm.value ?: return
         _alarm.value =
             currentAlarm.copy(

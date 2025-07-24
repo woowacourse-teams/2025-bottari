@@ -33,7 +33,7 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
             alarm = safeArgument { getParcelableCompat(EXTRA_ALARM) },
         )
     }
-    private val adapter: DayOfWeekAdapter by lazy { DayOfWeekAdapter(viewModel::selectDayOfWeek) }
+    private val adapter: DayOfWeekAdapter by lazy { DayOfWeekAdapter(viewModel::updateDaysOfWeek) }
     private val hourPickers: List<NumberPicker> by lazy {
         listOf(
             binding.layoutNoRepeatAlarmTime.npAlarmTimeHour,
