@@ -39,8 +39,8 @@ class PersonalBottariEditViewModel(
     }
 
     fun toggleAlarmState(isActive: Boolean) {
-        val state = _bottari.value?.takeSuccess()
-        val alarmId = state?.alarm?.id ?: return
+        val bottari = _bottari.value?.takeSuccess()
+        val alarmId = bottari?.alarm?.id ?: return
         toggleAlarmJob?.cancel()
         toggleAlarmJob =
             viewModelScope.launch {
