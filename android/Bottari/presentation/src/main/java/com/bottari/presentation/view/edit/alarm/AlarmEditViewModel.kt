@@ -38,12 +38,18 @@ class AlarmEditViewModel(
     private val bottariId: Long = stateHandle[EXTRA_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
     fun updateAlarm() {
-        val currentAlarm = _alarm.value?.toDomain() ?: return
-        if (currentAlarm.id == null) {
-            createAlarm(currentAlarm)
+        val currentAlarm = _alarm.value ?: return
+        if (currentAlarm.type == AlarmTypeUiModel.EVERYWEEK_REPEAT &&
+            currentAlarm.daysOfWeek.all { it.isChecked.not() }
+        ) {
             return
         }
-        saveAlarm(currentAlarm)
+        val alarmDomain = currentAlarm.toDomain()
+        if (currentAlarm.id == null) {
+            createAlarm(alarmDomain)
+            return
+        }
+        saveAlarm(alarmDomain)
     }
 
     fun updateAlarmType(alarmTypeUiModel: AlarmTypeUiModel) {
