@@ -18,23 +18,13 @@ import com.bottari.presentation.view.home.bottari.adapter.BottariAdapter
 import com.bottari.presentation.view.home.bottari.create.BottariCreateDialog
 import com.bottari.presentation.view.home.bottari.listener.OnBottariClickListener
 
-class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate) {
+class BottariFragment :
+    BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate),
+    OnBottariClickListener {
     private val viewModel: BottariViewModel by viewModels {
         BottariViewModel.Factory(requireContext().getSSAID())
     }
-    private val adapter: BottariAdapter by lazy {
-        BottariAdapter(
-            object : OnBottariClickListener {
-                override fun onClick(bottariId: Long) {
-                    navigateToChecklist(bottariId)
-                }
-
-                override fun onMoreClick(bottariId: Long) {
-                    navigateToEdit(bottariId)
-                }
-            },
-        )
-    }
+    private val adapter: BottariAdapter by lazy { BottariAdapter(this) }
 
     override fun onViewCreated(
         view: View,
@@ -44,6 +34,17 @@ class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBind
         setupObserver()
         setupUI()
         setupListener()
+    }
+
+    override fun onClick(
+        bottariId: Long,
+        bottariTitle: String,
+    ) {
+        navigateToChecklist(bottariId, bottariTitle)
+    }
+
+    override fun onMoreClick(bottariId: Long) {
+        navigateToEdit(bottariId)
     }
 
     private fun setupObserver() {
@@ -95,8 +96,11 @@ class BottariFragment : BaseFragment<FragmentBottariBinding>(FragmentBottariBind
         }
     }
 
-    private fun navigateToChecklist(bottariId: Long) {
-        val intent = ChecklistActivity.newIntent(requireContext(), bottariId)
+    private fun navigateToChecklist(
+        bottariId: Long,
+        bottariTitle: String,
+    ) {
+        val intent = ChecklistActivity.newIntent(requireContext(), bottariId, bottariTitle)
         startActivity(intent)
     }
 

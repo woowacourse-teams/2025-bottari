@@ -7,99 +7,136 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.map
-import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.bottari.di.UseCaseProvider
+import com.bottari.domain.usecase.item.CheckBottariItemUseCase
+import com.bottari.domain.usecase.item.FetchChecklistUseCase
+import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.extension.takeSuccess
+import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.model.BottariItemUiModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ChecklistViewModel(
     stateHandle: SavedStateHandle,
+    private val fetchChecklistUseCase: FetchChecklistUseCase,
+    private val checkBottariItemUseCase: CheckBottariItemUseCase,
+    private val unCheckBottariItemUseCase: UnCheckBottariItemUseCase,
 ) : ViewModel() {
-    private val _bottariTitle: MutableLiveData<UiState<String>> = MutableLiveData()
-    val bottariTitle: LiveData<UiState<String>> = _bottariTitle
+    private val ssaid: String by lazy { stateHandle.get<String>(EXTRA_SSAID)!! }
+    private val pendingCheckStatusMap = mutableMapOf<Long, Boolean>()
+    private var debounceJob: Job? = null
 
-    private val _checklist: MutableLiveData<UiState<List<BottariItemUiModel>>> =
-        MutableLiveData(UiState.Loading)
+    private val _checklist = MutableLiveData<UiState<List<BottariItemUiModel>>>(UiState.Loading)
     val checklist: LiveData<UiState<List<BottariItemUiModel>>> = _checklist
 
-    private val _nonChecklist: MutableLiveData<List<BottariItemUiModel>> = MutableLiveData(emptyList())
+    private val _nonChecklist = MutableLiveData<List<BottariItemUiModel>>(emptyList())
     val nonChecklist: LiveData<List<BottariItemUiModel>> = _nonChecklist
 
     val checkedQuantity: LiveData<Int> =
-        _checklist.map { item ->
-            item.takeSuccess().orEmpty().count { it.isChecked }
+        _checklist.map { state ->
+            state.takeSuccess().orEmpty().count { it.isChecked }
         }
 
     val isAllChecked: LiveData<Boolean> =
-        _checklist.map { item ->
-            item.takeSuccess().orEmpty().all { it.isChecked }
+        _checklist.map { state ->
+            state.takeSuccess().orEmpty().all { it.isChecked }
         }
 
     init {
-        val bottariId = stateHandle.get<Long>(EXTRAS_BOTTARI_ID)
-        bottariId?.let { fetchBottari(it) }
+        val bottariId = stateHandle.get<Long>(EXTRA_BOTTARI_ID)!!
+        fetchChecklist(bottariId)
     }
 
-    fun checkItem(itemId: Long) {
-        val currentList = _checklist.value?.takeSuccess() ?: return
+    fun toggleItemChecked(itemId: Long) {
         val updatedList =
-            currentList.map { item ->
+            currentChecklist().map { item ->
                 if (item.id != itemId) return@map item
-                item.copy(isChecked = item.isChecked.not())
+                val toggledChecked = !item.isChecked
+                recordPendingCheckStatus(item.id, toggledChecked)
+                item.copy(isChecked = toggledChecked)
             }
 
         _checklist.value = UiState.Success(updatedList)
+        restartDebounceTimer()
     }
 
-    fun filterNonChecklist() {
-        val currentList = _checklist.value?.takeSuccess() ?: return
-        val updatedList = currentList.filter { !it.isChecked }
-        _nonChecklist.value = updatedList
+    fun filterUncheckedItems() {
+        _nonChecklist.value = currentChecklist().filter { !it.isChecked }
     }
 
-    private fun fetchBottari(bottariId: Long) {
-        _bottariTitle.value = UiState.Success("테스트 보따리")
-        _checklist.value = UiState.Success(dummyChecklist)
+    private fun currentChecklist(): List<BottariItemUiModel> = _checklist.value?.takeSuccess().orEmpty()
+
+    private fun recordPendingCheckStatus(
+        itemId: Long,
+        isChecked: Boolean,
+    ) {
+        pendingCheckStatusMap[itemId] = isChecked
+    }
+
+    private fun restartDebounceTimer() {
+        debounceJob?.cancel()
+        debounceJob =
+            viewModelScope.launch {
+                delay(DEBOUNCE_DELAY_MS)
+                val copyPendingMap = pendingCheckStatusMap.toMap()
+                pendingCheckStatusMap.clear()
+
+                copyPendingMap.forEach { (itemId, isChecked) ->
+                    launch { updateCheckStatus(itemId, isChecked) }
+                }
+            }
+    }
+
+    private suspend fun updateCheckStatus(
+        itemId: Long,
+        isChecked: Boolean,
+    ) {
+        if (isChecked) {
+            checkBottariItemUseCase(ssaid, itemId)
+            return
+        }
+
+        unCheckBottariItemUseCase(ssaid, itemId)
+    }
+
+    private fun fetchChecklist(bottariId: Long) {
+        viewModelScope.launch {
+            fetchChecklistUseCase(ssaid, bottariId)
+                .onSuccess { items ->
+                    _checklist.value = UiState.Success(items.map { it.toUiModel() })
+                }.onFailure { error ->
+                    _checklist.value = UiState.Failure(error.message)
+                }
+        }
     }
 
     companion object {
-        private const val EXTRAS_BOTTARI_ID = "EXTRAS_BOTTARI_ID"
+        private const val EXTRA_SSAID = "EXTRA_SSAID"
+        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
+        private const val DEBOUNCE_DELAY_MS = 500L
 
-        fun Factory(bottariId: Long): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras,
-                ): T {
-                    val handle = extras.createSavedStateHandle()
-                    handle[EXTRAS_BOTTARI_ID] = bottariId
-
-                    return ChecklistViewModel(handle) as T
+        fun Factory(
+            ssaid: String,
+            bottariId: Long,
+        ): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    val stateHandle = createSavedStateHandle()
+                    stateHandle[EXTRA_SSAID] = ssaid
+                    stateHandle[EXTRA_BOTTARI_ID] = bottariId
+                    ChecklistViewModel(
+                        stateHandle,
+                        UseCaseProvider.fetchChecklistUseCase,
+                        UseCaseProvider.checkBottariItemUseCase,
+                        UseCaseProvider.unCheckBottariItemUseCase,
+                    )
                 }
             }
     }
 }
-
-private val dummyChecklist =
-    listOf(
-        BottariItemUiModel(id = 0, isChecked = true, name = "우유"),
-        BottariItemUiModel(id = 1, isChecked = false, name = "계란"),
-        BottariItemUiModel(id = 2, isChecked = true, name = "식빵"),
-        BottariItemUiModel(id = 3, isChecked = false, name = "세제"),
-        BottariItemUiModel(id = 4, isChecked = true, name = "샴푸"),
-        BottariItemUiModel(id = 5, isChecked = false, name = "물티슈"),
-        BottariItemUiModel(id = 6, isChecked = true, name = "칫솔"),
-        BottariItemUiModel(id = 7, isChecked = false, name = "치약"),
-        BottariItemUiModel(id = 8, isChecked = true, name = "라면"),
-        BottariItemUiModel(id = 9, isChecked = false, name = "과자"),
-        BottariItemUiModel(id = 10, isChecked = true, name = "커피"),
-        BottariItemUiModel(id = 11, isChecked = false, name = "쌀"),
-        BottariItemUiModel(id = 12, isChecked = true, name = "김치"),
-        BottariItemUiModel(id = 13, isChecked = false, name = "휴지"),
-        BottariItemUiModel(id = 14, isChecked = true, name = "세탁세제"),
-        BottariItemUiModel(id = 15, isChecked = false, name = "청소기 필터"),
-        BottariItemUiModel(id = 16, isChecked = true, name = "텀블러"),
-        BottariItemUiModel(id = 17, isChecked = false, name = "포스트잇"),
-        BottariItemUiModel(id = 18, isChecked = true, name = "USB 케이블"),
-        BottariItemUiModel(id = 19, isChecked = false, name = "보조 배터리"),
-    )
