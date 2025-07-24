@@ -19,6 +19,10 @@
         <activity
             android:name=".view.edit.personal.PersonalBottariEditActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".view.setting.SettingActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
