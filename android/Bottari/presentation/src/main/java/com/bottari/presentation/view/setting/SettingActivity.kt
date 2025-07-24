@@ -9,7 +9,6 @@ import com.bottari.presentation.base.BaseActivity
 import com.bottari.presentation.databinding.ActivitySettingBinding
 
 class SettingActivity : BaseActivity<ActivitySettingBinding>(ActivitySettingBinding::inflate) {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

@@ -55,8 +55,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
         transaction.commit()
     }
 
-    private fun isSameNavItem(item: MenuItem): Boolean =
-        binding.bnvHome.selectedItemId == item.itemId
+    private fun isSameNavItem(item: MenuItem): Boolean = binding.bnvHome.selectedItemId == item.itemId
 
     private fun changeToolbarTitle(item: MenuItem) {
         binding.toolbarHome.title = item.title
