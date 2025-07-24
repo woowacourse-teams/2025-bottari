@@ -25,3 +25,4 @@ jobs:
       - name: Build and Run Tests
         working-directory: ./backend/bottari
         run: ./gradlew clean build --no-daemon
+        
