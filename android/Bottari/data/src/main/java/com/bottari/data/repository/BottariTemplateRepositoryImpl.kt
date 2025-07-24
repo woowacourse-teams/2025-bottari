@@ -8,8 +8,8 @@ import com.bottari.domain.repository.BottariTemplateRepository
 class BottariTemplateRepositoryImpl(
     private val bottariTemplateRemoteDataSource: BottariTemplateRemoteDataSource,
 ) : BottariTemplateRepository {
-    override suspend fun fetchBottariTemplates(): Result<List<BottariTemplate>> =
+    override suspend fun fetchBottariTemplates(searchWord: String?): Result<List<BottariTemplate>> =
         bottariTemplateRemoteDataSource
-            .fetchBottariTemplates()
+            .fetchBottariTemplates(searchWord)
             .mapCatching { response -> response.map { it.toDomain() } }
 }

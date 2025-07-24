@@ -7,6 +7,6 @@ import com.bottari.data.util.safeApiCall
 class BottariTemplateRemoteDataSourceImpl(
     private val bottariTemplateService: BottariTemplateService,
 ) : BottariTemplateRemoteDataSource {
-    override suspend fun fetchBottariTemplates(): Result<List<FetchBottariTemplateResponse>> =
-        safeApiCall { bottariTemplateService.fetchBottariTemplates() }
+    override suspend fun fetchBottariTemplates(searchWord: String?): Result<List<FetchBottariTemplateResponse>> =
+        safeApiCall { bottariTemplateService.fetchBottariTemplates(searchWord) }
 }
