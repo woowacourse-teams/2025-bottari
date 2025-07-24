@@ -25,6 +25,11 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
@@ -32,6 +37,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val alarmAdapter: PersonalBottariEditAlarmAdapter by lazy { PersonalBottariEditAlarmAdapter() }
+    private var toggleAlarmJob: Job? = null
     private val permissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions(),
@@ -85,7 +91,11 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             permissionLauncher.launch(requiredPermissions)
         }
         binding.switchAlarm.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.toggleAlarmState(isChecked)
+            toggleAlarmJob?.cancel()
+            toggleAlarmJob = CoroutineScope(Dispatchers.Main).launch {
+                delay(500L)
+                viewModel.toggleAlarmState(isChecked)
+            }
         }
     }
 
