@@ -12,6 +12,6 @@ class BottariDetailRemoteDataSourceImpl(
         ssaid: String,
     ): Result<BottariResponse> =
         safeApiCall {
-            bottariDetailService.findBottari(id, ssaid)
+            bottariDetailService.findBottari(id = id, ssaid = ssaid)
         }
 }

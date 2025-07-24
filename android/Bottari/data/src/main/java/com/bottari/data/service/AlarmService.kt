@@ -8,8 +8,8 @@ import retrofit2.http.Path
 interface AlarmService {
     @PATCH("/alarms/{id}/{state}")
     suspend fun toggleAlarmState(
+        @Header("ssaid") ssaid: String,
         @Path("id") id: Long,
         @Path("state") state: String,
-        @Header("ssaid") ssaid: String,
     ): Response<Boolean>
 }

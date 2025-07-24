@@ -9,7 +9,7 @@ import retrofit2.http.Path
 interface BottariDetailService {
     @GET("/bottaries/{id}")
     suspend fun findBottari(
-        @Path("id") id: Long,
         @Header("ssaid") ssaid: String,
+        @Path("id") id: Long,
     ): Response<BottariResponse>
 }
