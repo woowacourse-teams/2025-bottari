@@ -32,8 +32,8 @@ class MarketBottariDetailViewModel(
     private val ssaid: String =
         savedStateHandle.get<String>(EXTRA_SSAID) ?: error(ERROR_SSAID_MISSING)
 
-    private val _createSuccess = MutableLiveData<UiState<Long>>()
-    val createSuccess: MutableLiveData<UiState<Long>> = _createSuccess
+    private val _createSuccess = MutableLiveData<UiState<Long?>>()
+    val createSuccess: MutableLiveData<UiState<Long?>> = _createSuccess
 
     init {
         fetchBottariTemplateDetail()

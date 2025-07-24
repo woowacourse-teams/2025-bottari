@@ -10,5 +10,5 @@ interface BottariTemplateRepository {
     suspend fun takeBottariTemplate(
         ssaid: String,
         bottariId: Long,
-    ): Result<Long>
+    ): Result<Long?>
 }

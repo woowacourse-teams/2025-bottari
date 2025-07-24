@@ -19,5 +19,5 @@ class BottariTemplateRepositoryImpl(
     override suspend fun takeBottariTemplate(
         ssaid: String,
         bottariId: Long,
-    ): Result<Long> = bottariTemplateRemoteDataSource.takeBottariTemplate(ssaid, bottariId)
+    ): Result<Long?> = bottariTemplateRemoteDataSource.takeBottariTemplate(ssaid, bottariId)
 }

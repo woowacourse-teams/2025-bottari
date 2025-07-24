@@ -17,10 +17,10 @@ class BottariTemplateRemoteDataSourceImpl(
     override suspend fun takeBottariTemplate(
         ssaid: String,
         bottariId: Long,
-    ): Result<Long> =
+    ): Result<Long?> =
         runCatching {
             val response = bottariTemplateService.takeBottariTemplate(ssaid, bottariId)
-            requireNotNull(response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)) { }
+            response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)
         }
 
     companion object {

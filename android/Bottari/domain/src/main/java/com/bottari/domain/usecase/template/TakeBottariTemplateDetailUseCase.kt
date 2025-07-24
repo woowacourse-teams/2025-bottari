@@ -8,5 +8,5 @@ class TakeBottariTemplateDetailUseCase(
     suspend operator fun invoke(
         ssaid: String,
         bottariId: Long,
-    ): Result<Long> = bottariTemplateRepository.takeBottariTemplate(ssaid, bottariId)
+    ): Result<Long?> = bottariTemplateRepository.takeBottariTemplate(ssaid, bottariId)
 }
