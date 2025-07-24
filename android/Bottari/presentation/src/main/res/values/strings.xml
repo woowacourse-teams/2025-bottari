@@ -39,6 +39,7 @@
     <string name="alarm_day_of_week_text">요일</string>
     <string name="alarm_location_text">위치</string>
     <string name="alarm_edit_confirm_btn_text">확인</string>
+    <string name="alarm_edit_save_success_text">알람이 저장되었어요.</string>
 
     <!-- Bottari edit item -->
     <string name="bottari_edit_item_list_title">물건 목록</string>
