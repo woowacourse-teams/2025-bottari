@@ -39,8 +39,8 @@ class MarketViewModel(
     }
 
     private fun fetchBottariTemplates() {
+        _bottariTemplates.value = UiState.Loading
         viewModelScope.launch {
-            _bottariTemplates.value = UiState.Loading
             bottariTemplatesUseCase()
                 .onSuccess { templates ->
                     _bottariTemplates.value =
@@ -52,12 +52,12 @@ class MarketViewModel(
     }
 
     private fun performSearch(searchWord: String) {
+        if (searchWord.isEmpty()) {
+            fetchBottariTemplates()
+            return
+        }
+        _bottariTemplates.value = UiState.Loading
         viewModelScope.launch {
-            if (searchWord.isEmpty()) {
-                fetchBottariTemplates()
-                return@launch
-            }
-            _bottariTemplates.value = UiState.Loading
             searchBottariTemplatesUseCase(searchWord)
                 .onSuccess { templates ->
                     _bottariTemplates.value =
