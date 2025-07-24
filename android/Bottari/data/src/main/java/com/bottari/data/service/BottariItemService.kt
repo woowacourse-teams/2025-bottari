@@ -1,7 +1,9 @@
 package com.bottari.data.service
 
 import com.bottari.data.model.item.FetchChecklistResponse
+import com.bottari.data.model.item.SaveBottariItemsRequest
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
@@ -24,5 +26,12 @@ interface BottariItemService {
     suspend fun checkBottariItem(
         @Header("ssaid") ssaid: String,
         @Path("id") bottariItemId: Long,
+    ): Response<Unit>
+
+    @PATCH("/bottaries/{bottariId}/bottari-items")
+    suspend fun saveBottariItems(
+        @Header("ssaid") ssaid: String,
+        @Path("bottariId") bottariId: Long,
+        @Body request: SaveBottariItemsRequest,
     ): Response<Unit>
 }
