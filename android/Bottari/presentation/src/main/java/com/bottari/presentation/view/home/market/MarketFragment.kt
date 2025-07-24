@@ -52,9 +52,7 @@ class MarketFragment :
         viewModel.searchTemplates(inputText)
     }
 
-    override fun onBottariTemplateClick(bottariTemplateId: Long) {
-        TODO("Not yet implemented")
-    }
+    override fun onBottariTemplateClick(bottariTemplateId: Long) {}
 
     private fun setupObserver() {
         viewModel.bottariTemplates.observe(viewLifecycleOwner, ::handleBottariTemplateState)
