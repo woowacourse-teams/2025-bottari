@@ -94,7 +94,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             toggleAlarmJob?.cancel()
             toggleAlarmJob =
                 CoroutineScope(Dispatchers.Main).launch {
-                    delay(500L)
+                    delay(DEBOUNCE_DELAY)
                     viewModel.toggleAlarmState(isChecked)
                 }
         }
@@ -206,6 +206,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     companion object {
         private const val EXTRA_BOTTARI_ID = "EXTRAS_BOTTARI_ID"
         private const val INVALID_BOTTARI_ID = -1L
+        private const val DEBOUNCE_DELAY = 500L
 
         fun newBundle(bottariId: Long) =
             Bundle().apply {
