@@ -6,9 +6,13 @@ import com.bottari.domain.repository.AlarmRepository
 class AlarmRepositoryImpl(
     private val alarmRemoteDataSource: AlarmRemoteDataSource,
 ) : AlarmRepository {
-    override suspend fun toggleAlarm(
+    override suspend fun activeAlarm(
         ssaid: String,
-        bottariId: Long,
-        state: String,
-    ): Result<Boolean> = alarmRemoteDataSource.toggleAlarmState(id = bottariId, ssaid = ssaid, state = state)
+        alarmId: Long,
+    ): Result<Unit> = alarmRemoteDataSource.activeAlarmState(id = alarmId, ssaid = ssaid)
+
+    override suspend fun inactiveAlarm(
+        ssaid: String,
+        alarmId: Long,
+    ): Result<Unit> = alarmRemoteDataSource.inactiveAlarmState(id = alarmId, ssaid = ssaid)
 }

@@ -6,11 +6,19 @@ import com.bottari.data.util.safeApiCall
 class AlarmRemoteDataSourceImpl(
     val alarmService: AlarmService,
 ) : AlarmRemoteDataSource {
-    override suspend fun toggleAlarmState(
+    override suspend fun activeAlarmState(
         id: Long,
         ssaid: String,
     ): Result<Unit> =
         safeApiCall {
-            alarmService.toggleAlarmState(id = id, ssaid = ssaid, state = state)
+            alarmService.activeAlarm(id = id, ssaid = ssaid)
+        }
+
+    override suspend fun inactiveAlarmState(
+        id: Long,
+        ssaid: String,
+    ): Result<Unit> =
+        safeApiCall {
+            alarmService.inactiveAlarm(id = id, ssaid = ssaid)
         }
 }

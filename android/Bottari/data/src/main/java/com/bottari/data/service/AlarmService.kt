@@ -6,10 +6,15 @@ import retrofit2.http.PATCH
 import retrofit2.http.Path
 
 interface AlarmService {
-    @PATCH("/alarms/{id}/{state}")
-    suspend fun toggleAlarmState(
+    @PATCH("/alarms/{id}/active")
+    suspend fun activeAlarm(
         @Header("ssaid") ssaid: String,
         @Path("id") id: Long,
-        @Path("state") state: String,
-    ): Response<Boolean>
+    ): Response<Unit>
+
+    @PATCH("/alarms/{id}/inactive")
+    suspend fun inactiveAlarm(
+        @Header("ssaid") ssaid: String,
+        @Path("id") id: Long,
+    ): Response<Unit>
 }
