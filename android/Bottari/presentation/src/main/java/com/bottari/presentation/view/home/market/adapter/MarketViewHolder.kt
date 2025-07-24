@@ -18,7 +18,7 @@ class MarketViewHolder private constructor(
 
     init {
         binding.clBottariTemplate.setOnClickListener {
-            bottariTemplateId?.let { clickListener.onClick(it) }
+            bottariTemplateId?.let { clickListener.onBottariTemplateClick(it) }
         }
     }
 
