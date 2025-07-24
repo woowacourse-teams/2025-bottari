@@ -3,8 +3,11 @@ package com.bottari.presentation.view.edit.personal.main
 import PersonalBottariEditViewModel
 import android.app.AlertDialog
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,6 +35,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         val bottariId = arguments?.getLong(EXTRA_BOTTARI_ID) ?: error(ERROR_REQUIRE_BOTTARI_ID)
         PersonalBottariEditViewModel.Factory(requireContext().getSSAID(), bottariId)
     }
+    private val popupMenu: PopupMenu by lazy { createPopupMenu() }
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val alarmAdapter: PersonalBottariEditAlarmAdapter by lazy { PersonalBottariEditAlarmAdapter() }
     private val permissionLauncher =
@@ -68,14 +72,29 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
 
     private fun setupObserver() {
         viewModel.bottari.observe(viewLifecycleOwner, ::handleBottariState)
+        viewModel.createTemplateState.observe(viewLifecycleOwner, ::handleCreateTemplateState)
     }
 
     private fun setupUI() {
+        setupPopupMenu()
         setupItemRecyclerView()
         setupAlarmRecyclerView()
     }
 
     private fun setupListener() {
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_market -> {
+                    viewModel.createBottariTemplate()
+                    true
+                }
+
+                else -> false
+            }
+        }
+        binding.btnOption.setOnClickListener {
+            popupMenu.show()
+        }
         binding.btnPrevious.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
@@ -98,6 +117,21 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         }
     }
 
+    private fun setupPopupMenu() {
+        popupMenu.menuInflater.inflate(R.menu.personal_bottari_edit_popup_menu, popupMenu.menu)
+    }
+
+    private fun createPopupMenu(): PopupMenu {
+        val contextWrapper = ContextThemeWrapper(requireContext(), R.style.CustomPopupMenuText)
+        return PopupMenu(
+            contextWrapper,
+            binding.btnOption,
+            Gravity.CENTER,
+            0,
+            R.style.CustomPopupMenu,
+        )
+    }
+
     private fun handleBottariState(uiState: UiState<BottariDetailUiModel>) {
         when (uiState) {
             is UiState.Loading -> Unit
@@ -108,6 +142,14 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             }
 
             is UiState.Failure -> Unit
+        }
+    }
+
+    private fun handleCreateTemplateState(uiState: UiState<Unit>) {
+        when (uiState) {
+            is UiState.Loading -> Unit
+            is UiState.Success -> showSnackbar(R.string.personal_bottari_edit_create_template_success_text)
+            is UiState.Failure -> showSnackbar(R.string.personal_bottari_edit_create_template_failure_text)
         }
     }
 
