@@ -32,7 +32,7 @@ class MemberRepositoryImplTest {
             result.isSuccess shouldBe true
             result.getOrNull() shouldBe true
 
-            //verify
+            // verify
             coVerify { remoteDataSource.registerMember(request) }
         }
 
@@ -54,7 +54,7 @@ class MemberRepositoryImplTest {
             result.isFailure shouldBe true
             result.exceptionOrNull() shouldBe exception
 
-            //verify
+            // verify
             coVerify { remoteDataSource.registerMember(request) }
         }
 }

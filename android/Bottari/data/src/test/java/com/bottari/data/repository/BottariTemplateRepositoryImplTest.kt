@@ -34,7 +34,7 @@ class BottariTemplateRepositoryImplTest {
                 it[1].title shouldBe "template2"
             }
 
-            //verify
+            // verify
             coVerify { remoteDataSource.fetchBottariTemplates(null) }
         }
 
@@ -53,7 +53,7 @@ class BottariTemplateRepositoryImplTest {
             result.isFailure shouldBe true
             result.exceptionOrNull() shouldBe exception
 
-            //verify
+            // verify
             coVerify { remoteDataSource.fetchBottariTemplates("검색어") }
         }
 }

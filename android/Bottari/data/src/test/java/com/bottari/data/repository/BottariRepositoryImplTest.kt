@@ -30,131 +30,137 @@ class BottariRepositoryImplTest {
 
     @DisplayName("보따리 목록 조회에 성공하면 도메인 모델 리스트로 매핑된다")
     @Test
-    fun fetchBottariesSuccessReturnsMappedList() = runTest {
-        // given
-        val ssaid = "ssaid123"
-        val response = fetchBottariesResponseFixture()
-        coEvery { remoteDataSource.fetchBottaries(ssaid) } returns Result.success(response)
+    fun fetchBottariesSuccessReturnsMappedList() =
+        runTest {
+            // given
+            val ssaid = "ssaid123"
+            val response = fetchBottariesResponseFixture()
+            coEvery { remoteDataSource.fetchBottaries(ssaid) } returns Result.success(response)
 
-        // when
-        val result = repository.fetchBottaries(ssaid)
+            // when
+            val result = repository.fetchBottaries(ssaid)
 
-        // then
-        result.shouldBeSuccess {
-            it shouldHaveSize 2
-            it[0].title shouldBe "title1"
-            it[1].title shouldBe "title2"
+            // then
+            result.shouldBeSuccess {
+                it shouldHaveSize 2
+                it[0].title shouldBe "title1"
+                it[1].title shouldBe "title2"
+            }
+
+            // verify
+            coVerify { remoteDataSource.fetchBottaries(ssaid) }
         }
-
-        // verify
-        coVerify { remoteDataSource.fetchBottaries(ssaid) }
-    }
 
     @DisplayName("보따리 단건 조회에 성공하면 도메인 모델로 매핑된다")
     @Test
-    fun findBottariSuccessReturnsMappedDetail() = runTest {
-        // given
-        val ssaid = "ssaid123"
-        val bottariId = 100L
-        val detailResponse = bottariResponseFixture()
-        coEvery { remoteDataSource.findBottari(bottariId, ssaid) } returns Result.success(detailResponse)
+    fun findBottariSuccessReturnsMappedDetail() =
+        runTest {
+            // given
+            val ssaid = "ssaid123"
+            val bottariId = 100L
+            val detailResponse = bottariResponseFixture()
+            coEvery { remoteDataSource.findBottari(bottariId, ssaid) } returns Result.success(detailResponse)
 
-        // when
-        val result = repository.findBottari(bottariId, ssaid)
+            // when
+            val result = repository.findBottari(bottariId, ssaid)
 
-        // then
-        result.shouldBeSuccess {
-            it.title shouldBe "detail"
+            // then
+            result.shouldBeSuccess {
+                it.title shouldBe "detail"
+            }
+
+            // verify
+            coVerify { remoteDataSource.findBottari(bottariId, ssaid) }
         }
-
-        // verify
-        coVerify { remoteDataSource.findBottari(bottariId, ssaid) }
-    }
 
     @DisplayName("보따리 생성을 성공하면 ID를 반환한다")
     @Test
-    fun createBottariSuccessReturnsId() = runTest {
-        // given
-        val ssaid = "ssaid123"
-        val title = "new bottari"
-        val expectedId = 42L
-        coEvery {
-            remoteDataSource.createBottari(ssaid, CreateBottariRequest(title))
-        } returns Result.success(expectedId)
+    fun createBottariSuccessReturnsId() =
+        runTest {
+            // given
+            val ssaid = "ssaid123"
+            val title = "new bottari"
+            val expectedId = 42L
+            coEvery {
+                remoteDataSource.createBottari(ssaid, CreateBottariRequest(title))
+            } returns Result.success(expectedId)
 
-        // when
-        val result = repository.createBottari(ssaid, title)
+            // when
+            val result = repository.createBottari(ssaid, title)
 
-        // then
-        result.shouldBeSuccess {
-            it shouldBe expectedId
+            // then
+            result.shouldBeSuccess {
+                it shouldBe expectedId
+            }
+
+            // verify
+            coVerify { remoteDataSource.createBottari(ssaid, CreateBottariRequest(title)) }
         }
-
-        // verify
-        coVerify { remoteDataSource.createBottari(ssaid, CreateBottariRequest(title)) }
-    }
 
     @DisplayName("보따리 목록 조회 실패 시 예외를 반환한다")
     @Test
-    fun fetchBottariesFailureReturnsException() = runTest {
-        // given
-        val ssaid = "ssaid_error"
-        val exception = RuntimeException("불러오기 실패")
-        coEvery { remoteDataSource.fetchBottaries(ssaid) } returns Result.failure(exception)
+    fun fetchBottariesFailureReturnsException() =
+        runTest {
+            // given
+            val ssaid = "ssaid_error"
+            val exception = RuntimeException("불러오기 실패")
+            coEvery { remoteDataSource.fetchBottaries(ssaid) } returns Result.failure(exception)
 
-        // when
-        val result = repository.fetchBottaries(ssaid)
+            // when
+            val result = repository.fetchBottaries(ssaid)
 
-        // then
-        result.shouldBeFailure {
-            it shouldBe exception
+            // then
+            result.shouldBeFailure {
+                it shouldBe exception
+            }
+
+            // verify
+            coVerify { remoteDataSource.fetchBottaries(ssaid) }
         }
-
-        // verify
-        coVerify { remoteDataSource.fetchBottaries(ssaid) }
-    }
 
     @DisplayName("보따리 단건 조회 실패 시 예외를 반환한다")
     @Test
-    fun findBottariFailureReturnsException() = runTest {
-        // given
-        val ssaid = "ssaid_error"
-        val id = 1L
-        val exception = RuntimeException("단건 조회 실패")
-        coEvery { remoteDataSource.findBottari(id, ssaid) } returns Result.failure(exception)
+    fun findBottariFailureReturnsException() =
+        runTest {
+            // given
+            val ssaid = "ssaid_error"
+            val id = 1L
+            val exception = RuntimeException("단건 조회 실패")
+            coEvery { remoteDataSource.findBottari(id, ssaid) } returns Result.failure(exception)
 
-        // when
-        val result = repository.findBottari(id, ssaid)
+            // when
+            val result = repository.findBottari(id, ssaid)
 
-        // then
-        result.shouldBeFailure {
-            it shouldBe exception
+            // then
+            result.shouldBeFailure {
+                it shouldBe exception
+            }
+
+            // verify
+            coVerify { remoteDataSource.findBottari(id, ssaid) }
         }
-
-        // verify
-        coVerify { remoteDataSource.findBottari(id, ssaid) }
-    }
 
     @DisplayName("보따리 생성 실패 시 예외를 반환한다")
     @Test
-    fun createBottariFailureReturnsException() = runTest {
-        // given
-        val ssaid = "ssaid_error"
-        val title = "error title"
-        val exception = RuntimeException("생성 실패")
-        coEvery {
-            remoteDataSource.createBottari(ssaid, CreateBottariRequest(title))
-        } returns Result.failure(exception)
+    fun createBottariFailureReturnsException() =
+        runTest {
+            // given
+            val ssaid = "ssaid_error"
+            val title = "error title"
+            val exception = RuntimeException("생성 실패")
+            coEvery {
+                remoteDataSource.createBottari(ssaid, CreateBottariRequest(title))
+            } returns Result.failure(exception)
 
-        // when
-        val result = repository.createBottari(ssaid, title)
+            // when
+            val result = repository.createBottari(ssaid, title)
 
-        // then
-        result.shouldBeFailure {
-            it shouldBe exception
+            // then
+            result.shouldBeFailure {
+                it shouldBe exception
+            }
+
+            // verify
+            coVerify { remoteDataSource.createBottari(ssaid, CreateBottariRequest(title)) }
         }
-
-        // verify
-        coVerify { remoteDataSource.createBottari(ssaid, CreateBottariRequest(title)) }
-    }
 }
