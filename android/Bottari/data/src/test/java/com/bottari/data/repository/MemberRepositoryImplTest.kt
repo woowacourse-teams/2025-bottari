@@ -1,7 +1,6 @@
-package com.bottari.data
+package com.bottari.data.repository
 
 import com.bottari.data.mapper.MemberMapper.toRequest
-import com.bottari.data.repository.MemberRepositoryImpl
 import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.domain.model.member.Member
 import io.kotest.matchers.shouldBe

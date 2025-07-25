@@ -1,7 +1,6 @@
-package com.bottari.data
+package com.bottari.data.repository
 
 import com.bottari.data.model.template.FetchBottariTemplateResponse
-import com.bottari.data.repository.BottariTemplateRepositoryImpl
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeSuccess

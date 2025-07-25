@@ -1,7 +1,6 @@
-package com.bottari.data
+package com.bottari.data.repository
 
 import com.bottari.data.model.item.FetchChecklistResponse
-import com.bottari.data.repository.BottariItemRepositoryImpl
 import com.bottari.data.source.remote.BottariItemRemoteDataSource
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeFailure

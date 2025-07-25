@@ -1,6 +1,5 @@
-package com.bottari.data
+package com.bottari.data.repository
 
-import com.bottari.data.repository.AlarmRepositoryImpl
 import com.bottari.data.source.remote.AlarmRemoteDataSource
 import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.result.shouldBeSuccess

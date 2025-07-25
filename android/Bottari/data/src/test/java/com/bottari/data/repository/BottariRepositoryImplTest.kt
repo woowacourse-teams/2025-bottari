@@ -1,11 +1,10 @@
-package com.bottari.data
+package com.bottari.data.repository
 
 import com.bottari.data.model.bottari.AlarmResponse
 import com.bottari.data.model.bottari.BottariResponse
 import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.model.bottari.FetchBottariesResponse
 import com.bottari.data.model.bottari.RoutineResponse
-import com.bottari.data.repository.BottariRepositoryImpl
 import com.bottari.data.source.remote.BottariRemoteDataSource
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeFailure
