@@ -2,11 +2,13 @@ package com.bottari.presentation.view.home.bottari
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
+import com.bottari.presentation.common.BottomPaddingDecoration
 import com.bottari.presentation.databinding.FragmentBottariBinding
 import com.bottari.presentation.extension.fadeIn
 import com.bottari.presentation.extension.fadeOut
@@ -59,6 +61,9 @@ class BottariFragment :
     private fun setupUI() {
         binding.rvBottari.adapter = adapter
         binding.rvBottari.layoutManager = LinearLayoutManager(requireContext())
+        binding.btnBottariCreate.doOnPreDraw {
+            binding.rvBottari.addItemDecoration(BottomPaddingDecoration((it.height * PADDING_HEIGHT_RATIO).toInt()))
+        }
     }
 
     private fun setupListener() {
@@ -112,5 +117,9 @@ class BottariFragment :
     private fun navigateToEdit(bottariId: Long) {
         val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId)
         startActivity(intent)
+    }
+
+    companion object {
+        private const val PADDING_HEIGHT_RATIO = 1.2f
     }
 }

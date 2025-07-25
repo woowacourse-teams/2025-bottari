@@ -11,9 +11,7 @@
         android:id="@+id/rv_bottari"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
         android:fadingEdgeLength="8dp"
-        android:paddingBottom="80dp"
         android:requiresFadingEdge="vertical"
         tools:listitem="@layout/item_bottari" />
 
