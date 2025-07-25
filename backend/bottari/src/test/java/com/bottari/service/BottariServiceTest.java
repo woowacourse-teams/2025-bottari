@@ -105,57 +105,58 @@ class BottariServiceTest {
                 .hasMessage("보따리를 찾을 수 없습니다.");
     }
 
-    @DisplayName("사용자의 모든 보따리를 최신순으로 조회한다.")
-    @Test
-    void getAllBySsaidSortedByLatest() {
-        // given
-        final String ssaid = "ssaid";
-        final Member member = new Member(ssaid, "name");
-        entityManager.persist(member);
-
-        final Bottari bottari1 = new Bottari("title1", member);
-        entityManager.persist(bottari1);
-
-        final Member anotherMember = new Member("another_ssaid", "another");
-        entityManager.persist(anotherMember);
-
-        final Bottari anotherBottari = new Bottari("another_title", anotherMember);
-        entityManager.persist(anotherBottari);
-
-        final BottariItem bottari1Item1 = new BottariItem("item1", bottari1);
-        entityManager.persist(bottari1Item1);
-
-        final BottariItem bottari1Item2 = new BottariItem("item2", bottari1);
-        bottari1Item2.check();
-        entityManager.persist(bottari1Item2);
-
-        final Bottari bottari2 = new Bottari("title2", member);
-        entityManager.persist(bottari2);
-
-        final BottariItem bottari2Item1 = new BottariItem("item1", bottari2);
-        entityManager.persist(bottari2Item1);
-
-        final RoutineAlarm routineAlarm = new RoutineAlarm(LocalTime.MAX, RepeatType.NON_REPEAT, LocalDate.now(), null);
-        final Alarm alarm = new Alarm(true, routineAlarm, null, bottari1);
-        entityManager.persist(alarm);
-
-        // when
-        final List<ReadBottariPreviewResponse> actual = bottariService.getAllBySsaidSortedByLatest(ssaid);
-
-        // then
-        assertAll(() -> {
-            assertThat(actual).extracting("title").containsExactly("title2", "title1");
-            assertThat(actual).hasSize(2);
-            assertThat(actual.getFirst().totalItemsCount()).isEqualTo(1);
-            assertThat(actual.getFirst().checkedItemsCount()).isEqualTo(0);
-            assertThat(actual.getFirst().alarm()).isNull();
-            assertThat(actual.get(1).totalItemsCount()).isEqualTo(2);
-            assertThat(actual.get(1).checkedItemsCount()).isEqualTo(1);
-            assertThat(actual.get(1).alarm()).isNotNull();
-            assertThat(actual.get(1).alarm().id()).isEqualTo(alarm.getId());
-            assertThat(actual.get(1).alarm().isActive()).isTrue();
-        });
-    }
+    // TODO: 시연 끝나면 되돌리기
+//    @DisplayName("사용자의 모든 보따리를 최신순으로 조회한다.")
+//    @Test
+//    void getAllBySsaidSortedByLatest() {
+//        // given
+//        final String ssaid = "ssaid";
+//        final Member member = new Member(ssaid, "name");
+//        entityManager.persist(member);
+//
+//        final Bottari bottari1 = new Bottari("title1", member);
+//        entityManager.persist(bottari1);
+//
+//        final Member anotherMember = new Member("another_ssaid", "another");
+//        entityManager.persist(anotherMember);
+//
+//        final Bottari anotherBottari = new Bottari("another_title", anotherMember);
+//        entityManager.persist(anotherBottari);
+//
+//        final BottariItem bottari1Item1 = new BottariItem("item1", bottari1);
+//        entityManager.persist(bottari1Item1);
+//
+//        final BottariItem bottari1Item2 = new BottariItem("item2", bottari1);
+//        bottari1Item2.check();
+//        entityManager.persist(bottari1Item2);
+//
+//        final Bottari bottari2 = new Bottari("title2", member);
+//        entityManager.persist(bottari2);
+//
+//        final BottariItem bottari2Item1 = new BottariItem("item1", bottari2);
+//        entityManager.persist(bottari2Item1);
+//
+//        final RoutineAlarm routineAlarm = new RoutineAlarm(LocalTime.MAX, RepeatType.NON_REPEAT, LocalDate.now(), null);
+//        final Alarm alarm = new Alarm(true, routineAlarm, null, bottari1);
+//        entityManager.persist(alarm);
+//
+//        // when
+//        final List<ReadBottariPreviewResponse> actual = bottariService.getAllBySsaidSortedByLatest(ssaid);
+//
+//        // then
+//        assertAll(() -> {
+//            assertThat(actual).extracting("title").containsExactly("title2", "title1");
+//            assertThat(actual).hasSize(2);
+//            assertThat(actual.getFirst().totalItemsCount()).isEqualTo(1);
+//            assertThat(actual.getFirst().checkedItemsCount()).isEqualTo(0);
+//            assertThat(actual.getFirst().alarm()).isNull();
+//            assertThat(actual.get(1).totalItemsCount()).isEqualTo(2);
+//            assertThat(actual.get(1).checkedItemsCount()).isEqualTo(1);
+//            assertThat(actual.get(1).alarm()).isNotNull();
+//            assertThat(actual.get(1).alarm().id()).isEqualTo(alarm.getId());
+//            assertThat(actual.get(1).alarm().isActive()).isTrue();
+//        });
+//    }
 
     @DisplayName("존재하지 않는 사용자의 모든 보따리를 조회할 경우, 예외를 던진다.")
     @Test

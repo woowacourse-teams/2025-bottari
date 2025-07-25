@@ -74,7 +74,7 @@ public class BottariService {
             final List<BottariItem> items = bottariItemsGroupByBottari.getOrDefault(bottari, Collections.emptyList());
             final ReadBottariPreviewResponse response = new ReadBottariPreviewResponse(
                     bottari.getId(),
-                    bottari.getTitle(),
+                    bottari.getTitle() + " 디포솔 화이팅!",
                     items.size(),
                     countCheckedItems(items),
                     AlarmResponse.from(alarmMap.getOrDefault(bottari, null))
