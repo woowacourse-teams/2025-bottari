@@ -2,7 +2,6 @@ package com.bottari.data.repository
 
 import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.source.remote.BottariRemoteDataSource
-import com.bottari.data.testFixture.alarmResponseFixture
 import com.bottari.data.testFixture.bottariResponseFixture
 import com.bottari.data.testFixture.fetchBottariesResponseFixture
 import io.kotest.matchers.collections.shouldHaveSize
@@ -57,7 +56,6 @@ class BottariRepositoryImplTest {
         // given
         val ssaid = "ssaid123"
         val bottariId = 100L
-        val mockAlarm = alarmResponseFixture()
         val detailResponse = bottariResponseFixture()
         coEvery { remoteDataSource.findBottari(bottariId, ssaid) } returns Result.success(detailResponse)
 
