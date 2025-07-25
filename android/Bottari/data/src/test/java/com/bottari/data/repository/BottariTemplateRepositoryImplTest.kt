@@ -1,7 +1,7 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.template.FetchBottariTemplateResponse
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
+import com.bottari.data.testFixture.fetchBottariTemplateResponseListFixture
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
@@ -21,11 +21,7 @@ class BottariTemplateRepositoryImplTest {
     fun fetchTemplatesSuccessReturnsMappedList() =
         runTest {
             // given
-            val response =
-                listOf(
-                    FetchBottariTemplateResponse(id = 1, title = "template1", items = emptyList(), author = "author"),
-                    FetchBottariTemplateResponse(id = 2, title = "template2", items = emptyList(), author = "author"),
-                )
+            val response = fetchBottariTemplateResponseListFixture()
             coEvery { remoteDataSource.fetchBottariTemplates(null) } returns Result.success(response)
 
             // when
@@ -38,6 +34,7 @@ class BottariTemplateRepositoryImplTest {
                 it[1].title shouldBe "template2"
             }
 
+            //verify
             coVerify { remoteDataSource.fetchBottariTemplates(null) }
         }
 
@@ -56,6 +53,7 @@ class BottariTemplateRepositoryImplTest {
             result.isFailure shouldBe true
             result.exceptionOrNull() shouldBe exception
 
+            //verify
             coVerify { remoteDataSource.fetchBottariTemplates("검색어") }
         }
 }

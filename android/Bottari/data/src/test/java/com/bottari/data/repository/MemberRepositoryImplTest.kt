@@ -2,7 +2,7 @@ package com.bottari.data.repository
 
 import com.bottari.data.mapper.MemberMapper.toRequest
 import com.bottari.data.source.remote.MemberRemoteDataSource
-import com.bottari.domain.model.member.Member
+import com.bottari.data.testFixture.memberFixture
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -20,7 +20,7 @@ class MemberRepositoryImplTest {
     fun registerMemberSuccessReturnsTrue() =
         runTest {
             // given
-            val member = Member(ssaid = "ssaid123", nickname = "닉네임")
+            val member = memberFixture()
             val request = member.toRequest()
 
             coEvery { remoteDataSource.registerMember(request) } returns Result.success(Unit)
@@ -32,6 +32,7 @@ class MemberRepositoryImplTest {
             result.isSuccess shouldBe true
             result.getOrNull() shouldBe true
 
+            //verify
             coVerify { remoteDataSource.registerMember(request) }
         }
 
@@ -40,7 +41,7 @@ class MemberRepositoryImplTest {
     fun registerMemberFailsReturnsException() =
         runTest {
             // given
-            val member = Member(ssaid = "ssaid123", nickname = "닉네임")
+            val member = memberFixture()
             val request = member.toRequest()
             val exception = RuntimeException("회원 등록 실패")
 
@@ -53,6 +54,7 @@ class MemberRepositoryImplTest {
             result.isFailure shouldBe true
             result.exceptionOrNull() shouldBe exception
 
+            //verify
             coVerify { remoteDataSource.registerMember(request) }
         }
 }
