@@ -59,7 +59,7 @@ class BottariControllerTest {
                 new ReadBottariPreviewResponse(1L, "title1", 1, 0, null),
                 new ReadBottariPreviewResponse(2L, "title2", 3, 2, null)
         );
-        given(bottariService.getAllBySsaid(ssaid))
+        given(bottariService.getAllBySsaidSortedByLatest(ssaid))
                 .willReturn(responses);
 
         // when & then

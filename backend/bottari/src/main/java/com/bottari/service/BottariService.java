@@ -45,10 +45,10 @@ public class BottariService {
         return ReadBottariResponse.of(bottari, bottariItems, alarm);
     }
 
-    public List<ReadBottariPreviewResponse> getAllBySsaid(final String ssaid) {
+    public List<ReadBottariPreviewResponse> getAllBySsaidSortedByLatest(final String ssaid) {
         final Member member = memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
-        final List<Bottari> bottaries = bottariRepository.findAllByMemberId(member.getId());
+        final List<Bottari> bottaries = bottariRepository.findAllByMemberIdOrderByCreatedAtDesc(member.getId());
 
         return buildReadBottariPreviewResponses(bottaries);
     }

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BottariRepository extends JpaRepository<Bottari, Long> {
 
-    List<Bottari> findAllByMemberId(final Long memberId);
+    List<Bottari> findAllByMemberIdOrderByCreatedAtDesc(final Long memberId);
 }
