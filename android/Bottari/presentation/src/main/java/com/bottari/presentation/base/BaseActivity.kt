@@ -1,13 +1,15 @@
 package com.bottari.presentation.base
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.children
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 abstract class BaseActivity<VB : ViewBinding>(
     private val bindingFactory: (LayoutInflater) -> VB,
@@ -25,12 +27,23 @@ abstract class BaseActivity<VB : ViewBinding>(
     private fun setWindowInsets() {
         enableEdgeToEdge()
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val adjustBottomPadding = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) systemBars.bottom else 0
+            val bottomPadding =
+                if (hasBottomNavigationView()) DEFAULT_BOTTOM_INSET else systemBars.bottom
 
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, adjustBottomPadding)
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, bottomPadding)
             insets
         }
+    }
+
+    private fun hasBottomNavigationView(): Boolean =
+        (binding.root as? ViewGroup)
+            ?.children
+            ?.filterIsInstance<BottomNavigationView>()
+            ?.count() != 0
+
+    companion object {
+        private const val DEFAULT_BOTTOM_INSET = 0
     }
 }

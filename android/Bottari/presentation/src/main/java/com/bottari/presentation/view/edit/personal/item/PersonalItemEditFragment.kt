@@ -1,15 +1,12 @@
 package com.bottari.presentation.view.edit.personal.item
 
 import android.graphics.drawable.GradientDrawable
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
@@ -75,8 +72,6 @@ class PersonalItemEditFragment :
     }
 
     private fun setupUI() {
-        setupInsets()
-
         binding.rvPersonalItemEdit.adapter = adapter
         binding.rvPersonalItemEdit.layoutManager = LinearLayoutManager(requireContext())
     }
@@ -97,27 +92,6 @@ class PersonalItemEditFragment :
             true
         }
     }
-
-    private fun setupInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
-            val bottomInset = calculateBottomInset(insets, imeVisible)
-            view.setPadding(0, 0, 0, bottomInset)
-            insets
-        }
-    }
-
-    private fun calculateBottomInset(
-        insets: WindowInsetsCompat,
-        imeVisible: Boolean,
-    ): Int =
-        when {
-            imeVisible -> insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.R ->
-                insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
-
-            else -> DEFAULT_BOTTOM_INSET
-        }
 
     private fun addItemFromInput() {
         viewModel.addItem(binding.etPersonalItem.text.toString())
@@ -168,7 +142,6 @@ class PersonalItemEditFragment :
         private const val DUPLICATE_BORDER_WIDTH_DP = 2
         private const val DISABLED_ALPHA = 0.3f
         private const val ENABLED_ALPHA = 1f
-        private const val DEFAULT_BOTTOM_INSET = 0
 
         fun newBundle(bottariDetail: BottariDetailUiModel) =
             Bundle().apply {
