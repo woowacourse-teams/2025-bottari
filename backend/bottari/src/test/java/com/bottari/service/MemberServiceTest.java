@@ -117,4 +117,24 @@ class MemberServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
     }
+
+    @DisplayName("이미 사용 중인 이름으로 사용자의 이름을 수정할 경우, 예외를 던진다.")
+    @Test
+    void updateName_Exception_DuplicateName() {
+        // given
+        final String duplicatedName = "중복_이름";
+        final Member memberWithDuplicatedName = new Member("ssaid_1", duplicatedName);
+        entityManager.persist(memberWithDuplicatedName);
+
+        final String requesterSsaid = "ssaid_2";
+        final Member memberToUpdate = new Member(requesterSsaid, "기존_이름");
+        entityManager.persist(memberToUpdate);
+
+        final UpdateMemberRequest updateRequest = new UpdateMemberRequest(duplicatedName);
+
+        // when & then
+        assertThatThrownBy(() -> memberService.updateName(requesterSsaid, updateRequest))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미 사용 중인 이름입니다.");
+    }
 }

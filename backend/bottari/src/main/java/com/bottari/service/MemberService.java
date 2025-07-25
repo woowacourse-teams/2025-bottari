@@ -49,6 +49,13 @@ public class MemberService {
     ) {
         final Member member = memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+        validateDuplicateName(request);
         member.updateName(request.name());
+    }
+
+    private void validateDuplicateName(final UpdateMemberRequest request) {
+        if (memberRepository.existsByName(request.name())) {
+            throw new IllegalArgumentException("이미 사용 중인 이름입니다.");
+        }
     }
 }
