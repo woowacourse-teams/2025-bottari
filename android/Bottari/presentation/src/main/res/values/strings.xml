@@ -67,6 +67,9 @@
     <string name="template_items_name_text">\u00A0등 %d개의 물건</string>
     <string name="market_place_edit_text_hint">원하시는 보따리를 검색하세요!</string>
 
+    <!-- Profile -->
+    <string name="profile_screen_nickname_title">닉네임</string>
+
     <!--  Description  -->
     <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>
     <string name="bottari_create_button_description">보따리 생성 버튼</string>

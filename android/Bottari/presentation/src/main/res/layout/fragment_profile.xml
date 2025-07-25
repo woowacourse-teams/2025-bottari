@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.home.bottari.BottariFragment"/>
+    tools:context=".view.home.bottari.BottariFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_large"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:elevation="2dp"
+        android:orientation="vertical"
+        android:padding="@dimen/space_median"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_profile_nickname_title"
+            style="@style/Pretendard_SemiBold_16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_screen_nickname_title"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <TextView
+            android:id="@+id/tv_profile_nickname"
+            style="@style/Pretendard_Medium_16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            tools:text="꼼꼼한 짐꾼27" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
