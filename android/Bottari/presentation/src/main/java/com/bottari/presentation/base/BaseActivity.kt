@@ -22,14 +22,9 @@ abstract class BaseActivity<VB : ViewBinding>(
         super.onCreate(savedInstanceState)
         binding = bindingFactory(layoutInflater)
         setContentView(binding.root)
-        setupStatusBar()
         setWindowInsets()
-    }
-
-    private fun setupStatusBar() {
-        WindowCompat
-            .getInsetsController(window, window.decorView)
-            .isAppearanceLightStatusBars = true
+        setupStatusBar()
+        setupNavigationBar()
     }
 
     private fun setWindowInsets() {
@@ -43,6 +38,18 @@ abstract class BaseActivity<VB : ViewBinding>(
             view.setPadding(systemBars.left, systemBars.top, systemBars.right, bottomPadding)
             insets
         }
+    }
+
+    private fun setupStatusBar() {
+        WindowCompat
+            .getInsetsController(window, window.decorView)
+            .isAppearanceLightStatusBars = true
+    }
+
+    private fun setupNavigationBar() {
+        WindowCompat
+            .getInsetsController(window, window.decorView)
+            .isAppearanceLightNavigationBars = true
     }
 
     private fun hasBottomNavigationView(): Boolean =
