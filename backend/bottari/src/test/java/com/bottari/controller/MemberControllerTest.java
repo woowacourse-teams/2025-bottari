@@ -2,6 +2,7 @@ package com.bottari.controller;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -9,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.bottari.dto.CheckRegistrationResponse;
 import com.bottari.dto.CreateMemberRequest;
+import com.bottari.dto.UpdateMemberRequest;
 import com.bottari.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -65,5 +67,20 @@ class MemberControllerTest {
                         .header("ssaid", ssaid))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @DisplayName("사용자의 이름을 수정한다.")
+    @Test
+    void updateName() throws Exception {
+        // given
+        final String ssaid = "ssaid";
+        final UpdateMemberRequest request = new UpdateMemberRequest("new_name");
+
+        // when & then
+        mockMvc.perform(patch("/members/me")
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent());
     }
 }

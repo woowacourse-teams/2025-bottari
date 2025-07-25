@@ -2,6 +2,7 @@ package com.bottari.controller.docs;
 
 import com.bottari.dto.CheckRegistrationResponse;
 import com.bottari.dto.CreateMemberRequest;
+import com.bottari.dto.UpdateMemberRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,6 +26,15 @@ public interface MemberApiDocs {
             @ApiResponse(responseCode = "200", description = "사용자 회원가입 여부 확인 성공"),
     })
     ResponseEntity<CheckRegistrationResponse> checkRegistration(
+            final HttpServletRequest httpServletRequest
+    );
+
+    @Operation(summary = "사용자 이름 수정")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "사용자 이름 수정 성공"),
+    })
+    ResponseEntity<Void> updateName(
+            final UpdateMemberRequest request,
             final HttpServletRequest httpServletRequest
     );
 }
