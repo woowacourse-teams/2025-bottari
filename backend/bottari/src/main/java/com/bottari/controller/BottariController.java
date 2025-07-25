@@ -42,7 +42,7 @@ public class BottariController implements BottariApiDocs {
             final HttpServletRequest httpServletRequest
     ) {
         final String ssaid = httpServletRequest.getHeader("ssaid");
-        final List<ReadBottariPreviewResponse> responses = bottariService.getAllBySsaid(ssaid);
+        final List<ReadBottariPreviewResponse> responses = bottariService.getAllBySsaidSortedByLatest(ssaid);
 
         return ResponseEntity.ok(responses);
     }

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.bottari.config.JpaAuditingConfig;
 import com.bottari.domain.Alarm;
 import com.bottari.domain.Bottari;
 import com.bottari.domain.BottariItem;
@@ -27,7 +28,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 @DataJpaTest
-@Import(BottariService.class)
+@Import({BottariService.class, JpaAuditingConfig.class})
 class BottariServiceTest {
 
     @Autowired
@@ -104,9 +105,9 @@ class BottariServiceTest {
                 .hasMessage("보따리를 찾을 수 없습니다.");
     }
 
-    @DisplayName("사용자의 모든 보따리를 조회한다.")
+    @DisplayName("사용자의 모든 보따리를 최신순으로 조회한다.")
     @Test
-    void getAllBySsaid() {
+    void getAllBySsaidSortedByLatest() {
         // given
         final String ssaid = "ssaid";
         final Member member = new Member(ssaid, "name");
@@ -139,30 +140,31 @@ class BottariServiceTest {
         entityManager.persist(alarm);
 
         // when
-        final List<ReadBottariPreviewResponse> actual = bottariService.getAllBySsaid(ssaid);
+        final List<ReadBottariPreviewResponse> actual = bottariService.getAllBySsaidSortedByLatest(ssaid);
 
         // then
         assertAll(() -> {
+            assertThat(actual).extracting("title").containsExactly("title2", "title1");
             assertThat(actual).hasSize(2);
-            assertThat(actual.getFirst().totalItemsCount()).isEqualTo(2);
-            assertThat(actual.getFirst().checkedItemsCount()).isEqualTo(1);
-            assertThat(actual.getFirst().alarm()).isNotNull();
-            assertThat(actual.getFirst().alarm().id()).isEqualTo(alarm.getId());
-            assertThat(actual.getFirst().alarm().isActive()).isTrue();
-            assertThat(actual.get(1).totalItemsCount()).isEqualTo(1);
-            assertThat(actual.get(1).checkedItemsCount()).isEqualTo(0);
-            assertThat(actual.get(1).alarm()).isNull();
+            assertThat(actual.getFirst().totalItemsCount()).isEqualTo(1);
+            assertThat(actual.getFirst().checkedItemsCount()).isEqualTo(0);
+            assertThat(actual.getFirst().alarm()).isNull();
+            assertThat(actual.get(1).totalItemsCount()).isEqualTo(2);
+            assertThat(actual.get(1).checkedItemsCount()).isEqualTo(1);
+            assertThat(actual.get(1).alarm()).isNotNull();
+            assertThat(actual.get(1).alarm().id()).isEqualTo(alarm.getId());
+            assertThat(actual.get(1).alarm().isActive()).isTrue();
         });
     }
 
     @DisplayName("존재하지 않는 사용자의 모든 보따리를 조회할 경우, 예외를 던진다.")
     @Test
-    void getAllBySsaid_Exception_NotFoundMember() {
+    void getAllBySsaidSortedByLatest_SortedByLatest_Exception_NotFoundMember() {
         // given
         final String ssaid = "invalid_ssaid";
 
         // when & then
-        assertThatThrownBy(() -> bottariService.getAllBySsaid(ssaid))
+        assertThatThrownBy(() -> bottariService.getAllBySsaidSortedByLatest(ssaid))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
     }
