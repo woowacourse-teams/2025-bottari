@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.bottari.domain.Member;
 import com.bottari.dto.CheckRegistrationResponse;
 import com.bottari.dto.CreateMemberRequest;
+import com.bottari.dto.UpdateMemberRequest;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,5 +84,37 @@ class MemberServiceTest {
             assertThat(actual.isRegistered()).isFalse();
             assertThat(actual.name()).isNull();
         });
+    }
+
+    @DisplayName("사용자의 이름을 수정한다.")
+    @Test
+    void updateName() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final UpdateMemberRequest request = new UpdateMemberRequest("new_name");
+
+        // when
+        memberService.updateName(ssaid, request);
+
+        // then
+        final Member updatedMember = entityManager.find(Member.class, member.getId());
+        final String actual = updatedMember.getName();
+        assertThat(actual).isEqualTo("new_name");
+    }
+
+    @DisplayName("존재하지 않는 ssaid로 사용자의 이름을 수정할 경우, 예외를 던진다.")
+    @Test
+    void updateName_Exception_NotExistsSsaid() {
+        // given
+        final String ssaid = "invalid_ssaid";
+        final UpdateMemberRequest request = new UpdateMemberRequest("new_name");
+
+        // when & then
+        assertThatThrownBy(() -> memberService.updateName(ssaid, request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
     }
 }

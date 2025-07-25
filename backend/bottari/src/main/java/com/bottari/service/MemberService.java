@@ -3,6 +3,7 @@ package com.bottari.service;
 import com.bottari.domain.Member;
 import com.bottari.dto.CheckRegistrationResponse;
 import com.bottari.dto.CreateMemberRequest;
+import com.bottari.dto.UpdateMemberRequest;
 import com.bottari.repository.MemberRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +40,15 @@ public class MemberService {
         }
 
         return new CheckRegistrationResponse(false, null);
+    }
+
+    @Transactional
+    public void updateName(
+            final String ssaid,
+            final UpdateMemberRequest request
+    ) {
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+        member.updateName(request.name());
     }
 }
