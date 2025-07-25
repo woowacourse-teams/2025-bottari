@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import androidx.viewbinding.ViewBinding
@@ -21,7 +22,14 @@ abstract class BaseActivity<VB : ViewBinding>(
         super.onCreate(savedInstanceState)
         binding = bindingFactory(layoutInflater)
         setContentView(binding.root)
+        setupStatusBar()
         setWindowInsets()
+    }
+
+    private fun setupStatusBar() {
+        WindowCompat
+            .getInsetsController(window, window.decorView)
+            .isAppearanceLightStatusBars = true
     }
 
     private fun setWindowInsets() {
