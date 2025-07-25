@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".view.home.bottari.BottariFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/space_large"
@@ -24,11 +24,10 @@
             android:layout_height="wrap_content"
             android:text="@string/profile_screen_nickname_title"
             android:textColor="@color/black"
-            android:textSize="20sp" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@id/btn_nickname_edit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_profile_nickname"
@@ -36,6 +35,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_profile_nickname_title"
             tools:text="꼼꼼한 짐꾼27" />
-    </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btn_nickname_edit"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/nickname_edit_button_description"
+            android:padding="@dimen/space_small"
+            android:src="@drawable/btn_edit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
