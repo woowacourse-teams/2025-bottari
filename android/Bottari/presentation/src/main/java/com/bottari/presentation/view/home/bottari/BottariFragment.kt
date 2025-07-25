@@ -2,7 +2,6 @@ package com.bottari.presentation.view.home.bottari
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -71,7 +70,6 @@ class BottariFragment :
                 ) {
                     super.onScrollStateChanged(recyclerView, newState)
                     handleScrollState(newState)
-                    handleButtonVisibility(newState)
                 }
             },
         )
@@ -100,14 +98,6 @@ class BottariFragment :
             RecyclerView.SCROLL_STATE_IDLE -> {
                 binding.btnBottariCreate.fadeIn()
             }
-        }
-    }
-
-    private fun handleButtonVisibility(state: Int) {
-        if (!binding.rvBottari.canScrollVertically(LinearLayoutManager.VERTICAL) &&
-            state == RecyclerView.SCROLL_STATE_IDLE
-        ) {
-            binding.btnBottariCreate.isVisible = false
         }
     }
 
