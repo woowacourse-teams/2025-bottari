@@ -20,67 +20,82 @@ class PersonalItemEditViewModel(
     stateHandle: SavedStateHandle,
     private val saveBottariItemsUseCase: SaveBottariItemsUseCase,
 ) : ViewModel() {
-    private val ssaid: String =
-        stateHandle.get<String>(EXTRA_BOTTARI_ID) ?: error(ERROR_REQUIRE_SSAID)
-    private val bottariDetail: BottariDetailUiModel =
-        stateHandle.get(EXTRA_BOTTARI_DETAIL) ?: error(ERROR_REQUIRE_BOTTARI_DATA)
+    private val ssaid = stateHandle.getOrThrow<String>(EXTRA_BOTTARI_ID)
+    private val bottariDetail = stateHandle.getOrThrow<BottariDetailUiModel>(EXTRA_BOTTARI_DETAIL)
 
-    private val bottariId: Long = bottariDetail.id
-    private val createItemNames = mutableSetOf<String>()
-    private val deleteItems = mutableSetOf<BottariItemUiModel>()
+    private val bottariId = bottariDetail.id
+    private val initialItemIds = bottariDetail.items.map { it.id }.toSet()
+
+    private val newItemNames = mutableSetOf<String>()
+    private val pendingDeleteItems = mutableSetOf<BottariItemUiModel>()
 
     private val _saveState = MutableLiveData<UiState<Unit>>()
-    val saveState: LiveData<UiState<Unit>> get() = _saveState
+    val saveState: LiveData<UiState<Unit>> = _saveState
 
     private val _bottariName = MutableLiveData(bottariDetail.title)
-    val bottariName: LiveData<String> get() = _bottariName
+    val bottariName: LiveData<String> = _bottariName
 
-    private val _items = MutableLiveData<List<BottariItemUiModel>>(bottariDetail.items)
-    val items: LiveData<List<BottariItemUiModel>> get() = _items
+    private val _bottariItems = MutableLiveData(bottariDetail.items)
+    val bottariItems: LiveData<List<BottariItemUiModel>> = _bottariItems
 
-    private val currentList: List<BottariItemUiModel> get() = _items.value ?: emptyList()
+    private val currentItemList: List<BottariItemUiModel>
+        get() = _bottariItems.value.orEmpty()
 
-    fun addItem(itemName: String) {
-        if (itemName.isBlank() || isAlreadyExistItem(itemName)) return
+    fun addNewItemIfNeeded(itemName: String) {
+        if (itemName.isBlank() || isDuplicateItem(itemName)) return
 
-        val restored = deleteItems.find { it.name == itemName }
-        if (restored != null) {
-            deleteItems.remove(restored)
-            _items.value = currentList + restored
+        pendingDeleteItems.firstOrNull { it.name == itemName }?.let {
+            pendingDeleteItems.remove(it)
+            _bottariItems.value = currentItemList + it
             return
         }
 
-        _items.value = currentList + createNewItem(itemName)
-        createItemNames.add(itemName)
+        _bottariItems.value = currentItemList + generateNewItemUiModel(itemName)
+        newItemNames.add(itemName)
     }
 
-    fun deleteItem(itemId: Long) {
-        val updated = currentList.filterNot { it.id == itemId }
-        val deleted = currentList.find { it.id == itemId } ?: return
+    fun markItemAsDeleted(itemId: Long) {
+        val target = currentItemList.find { it.id == itemId } ?: return
+        _bottariItems.value = currentItemList.filterNot { it.id == itemId }
 
-        _items.value = updated
-        deleteItems.add(deleted)
+        if (initialItemIds.contains(itemId)) {
+            pendingDeleteItems.add(target)
+            return
+        }
+
+        newItemNames.remove(target.name)
+        pendingDeleteItems.remove(target)
     }
 
-    fun saveItems() {
+    fun saveChanges() {
         _saveState.value = UiState.Loading
 
         viewModelScope.launch {
-            val deleteItemIds = deleteItems.map { it.id }
-            saveBottariItemsUseCase(ssaid, bottariId, deleteItemIds, createItemNames.toList())
-                .onSuccess { _saveState.value = UiState.Success(Unit) }
-                .onFailure { _saveState.value = UiState.Failure(it.message) }
+            val deletedIds = pendingDeleteItems.map { it.id }
+
+            saveBottariItemsUseCase(
+                ssaid = ssaid,
+                bottariId = bottariId,
+                deleteItemIds = deletedIds,
+                createItemNames = newItemNames.toList(),
+            ).onSuccess {
+                _saveState.value = UiState.Success(Unit)
+            }.onFailure {
+                _saveState.value = UiState.Failure(it.message)
+            }
         }
     }
 
-    private fun isAlreadyExistItem(name: String): Boolean = currentList.any { it.name == name }
+    private fun isDuplicateItem(name: String): Boolean = currentItemList.any { it.name == name }
 
-    private fun createNewItem(name: String): BottariItemUiModel =
+    private fun generateNewItemUiModel(name: String): BottariItemUiModel =
         BottariItemUiModel(
-            id = (currentList.maxOfOrNull { it.id } ?: DEFAULT_ITEM_ID) + ITEM_ID_INCREMENT,
+            id = nextGeneratedItemId(),
             isChecked = false,
             name = name,
         )
+
+    private fun nextGeneratedItemId(): Long = (currentItemList.maxOfOrNull { it.id } ?: DEFAULT_ITEM_ID) + ITEM_ID_INCREMENT
 
     companion object {
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
@@ -97,14 +112,25 @@ class PersonalItemEditViewModel(
         ): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[EXTRA_BOTTARI_ID] = ssaid
-                    stateHandle[EXTRA_BOTTARI_DETAIL] = bottariDetail
+                    val stateHandle =
+                        createSavedStateHandle().apply {
+                            this[EXTRA_BOTTARI_ID] = ssaid
+                            this[EXTRA_BOTTARI_DETAIL] = bottariDetail
+                        }
 
                     PersonalItemEditViewModel(
-                        stateHandle,
-                        UseCaseProvider.saveBottariItemsUseCase,
+                        stateHandle = stateHandle,
+                        saveBottariItemsUseCase = UseCaseProvider.saveBottariItemsUseCase,
                     )
+                }
+            }
+
+        private inline fun <reified T> SavedStateHandle.getOrThrow(key: String): T =
+            requireNotNull(this[key]) {
+                if (key == EXTRA_BOTTARI_ID) {
+                    ERROR_REQUIRE_SSAID
+                } else {
+                    ERROR_REQUIRE_BOTTARI_DATA
                 }
             }
     }

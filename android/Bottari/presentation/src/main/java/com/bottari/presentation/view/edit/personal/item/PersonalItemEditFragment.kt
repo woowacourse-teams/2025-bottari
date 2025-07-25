@@ -31,7 +31,7 @@ class PersonalItemEditFragment :
 
     private val adapter by lazy {
         PersonalItemEditAdapter {
-            viewModel.deleteItem(it)
+            viewModel.markItemAsDeleted(it)
         }
     }
 
@@ -67,7 +67,7 @@ class PersonalItemEditFragment :
 
     private fun setupObserver() {
         viewModel.bottariName.observe(viewLifecycleOwner, ::handleBottariNameState)
-        viewModel.items.observe(viewLifecycleOwner, ::handleItemState)
+        viewModel.bottariItems.observe(viewLifecycleOwner, ::handleItemState)
         viewModel.saveState.observe(viewLifecycleOwner, ::handleSaveState)
     }
 
@@ -83,7 +83,7 @@ class PersonalItemEditFragment :
 
         binding.etPersonalItem.addTextChangedListener(this)
 
-        binding.btnConfirm.setOnClickListener { viewModel.saveItems() }
+        binding.btnConfirm.setOnClickListener { viewModel.saveChanges() }
 
         binding.etPersonalItem.setOnEditorActionListener { _, actionId, _ ->
             if (actionId != EditorInfo.IME_ACTION_SEND) return@setOnEditorActionListener false
@@ -94,7 +94,7 @@ class PersonalItemEditFragment :
     }
 
     private fun addItemFromInput() {
-        viewModel.addItem(binding.etPersonalItem.text.toString())
+        viewModel.addNewItemIfNeeded(binding.etPersonalItem.text.toString())
         binding.etPersonalItem.text.clear()
     }
 
