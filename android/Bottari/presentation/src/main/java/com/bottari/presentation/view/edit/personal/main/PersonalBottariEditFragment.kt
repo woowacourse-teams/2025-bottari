@@ -124,7 +124,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
 
         childFragmentManager.setFragmentResultListener(
             BottariRenameDialog.RENAME_RESULT_KEY,
-            viewLifecycleOwner
+            viewLifecycleOwner,
         ) { _, _ ->
             viewModel.fetchBottari()
         }
