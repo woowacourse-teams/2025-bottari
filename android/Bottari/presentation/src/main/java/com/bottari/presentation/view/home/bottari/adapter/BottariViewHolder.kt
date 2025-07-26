@@ -64,12 +64,12 @@ class BottariViewHolder private constructor(
 
                 popupWindow.showAsDropDown(anchorView, -200, 0)
 
-                popupView.findViewById<View>(R.id.btnEdit).setOnClickListener {
+                popupView.findViewById<View>(R.id.btn_edit).setOnClickListener {
                     onBottariClickListener.onEditClick(id)
                     popupWindow.dismiss()
                 }
 
-                popupView.findViewById<View>(R.id.btnDelete).setOnClickListener {
+                popupView.findViewById<View>(R.id.btn_delete).setOnClickListener {
                     onBottariClickListener.onDeleteClick(id)
                     popupWindow.dismiss()
                 }
