@@ -36,10 +36,10 @@ class BottariRemoteDataSourceImpl(
     override suspend fun renameBottari(
         id: Long,
         ssaid: String,
-        updateBottariRequest: UpdateBottariRequest,
+        request: UpdateBottariRequest,
     ): Result<Unit> =
         safeApiCall {
-            bottariService.renameBottari(id = id, ssaid = ssaid, request = updateBottariRequest)
+            bottariService.renameBottari(id = id, ssaid = ssaid, request = request)
         }
 
     companion object {
