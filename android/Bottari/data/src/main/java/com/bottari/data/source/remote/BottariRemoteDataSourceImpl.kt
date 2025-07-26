@@ -4,6 +4,7 @@ import com.bottari.data.extension.extractIdFromHeader
 import com.bottari.data.model.bottari.BottariResponse
 import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.model.bottari.FetchBottariesResponse
+import com.bottari.data.model.bottari.UpdateBottariRequest
 import com.bottari.data.service.BottariService
 import com.bottari.data.util.safeApiCall
 
@@ -35,10 +36,10 @@ class BottariRemoteDataSourceImpl(
     override suspend fun renameBottari(
         id: Long,
         ssaid: String,
-        title: String,
+        updateBottariRequest: UpdateBottariRequest,
     ): Result<Unit> =
         safeApiCall {
-            bottariService.renameBottari(id = id, ssaid = ssaid, title = title)
+            bottariService.renameBottari(id = id, ssaid = ssaid, request = updateBottariRequest)
         }
 
     companion object {

@@ -3,6 +3,7 @@ package com.bottari.presentation.view.edit.personal.main
 import PersonalBottariEditViewModel
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -120,6 +121,13 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         }
         binding.switchAlarm.setOnCheckedChangeListener { _, isChecked ->
             viewModel.toggleAlarmState(isChecked)
+        }
+
+        childFragmentManager.setFragmentResultListener(
+            BottariRenameDialog.RENAME_RESULT_KEY,
+            viewLifecycleOwner
+        ) { _, _ ->
+            viewModel.fetchBottari()
         }
     }
 
