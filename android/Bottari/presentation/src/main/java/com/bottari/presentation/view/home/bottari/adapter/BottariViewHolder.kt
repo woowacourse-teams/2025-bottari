@@ -1,14 +1,18 @@
 package com.bottari.presentation.view.home.bottari.adapter
 
+import android.graphics.Color
 import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupWindow
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemBottariBinding
@@ -40,8 +44,36 @@ class BottariViewHolder private constructor(
             }
         }
 
-        binding.btnBottariMore.setOnClickListener {
-            bottariId?.let { onBottariClickListener.onMoreClick(it) }
+        binding.btnBottariMore.setOnClickListener { anchorView ->
+            bottariId?.let { id ->
+                val context = anchorView.context
+                val inflater = LayoutInflater.from(context)
+                val popupView = inflater.inflate(R.layout.popup_bottari_options, null)
+
+                val popupWindow =
+                    PopupWindow(
+                        popupView,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        true,
+                    )
+
+                popupWindow.isOutsideTouchable = true
+                popupWindow.setBackgroundDrawable(Color.TRANSPARENT.toDrawable()) // 중요
+                popupWindow.elevation = 10f
+
+                popupWindow.showAsDropDown(anchorView, -200, 0)
+
+                popupView.findViewById<View>(R.id.btnEdit).setOnClickListener {
+                    onBottariClickListener.onEditClick(id)
+                    popupWindow.dismiss()
+                }
+
+                popupView.findViewById<View>(R.id.btnDelete).setOnClickListener {
+                    onBottariClickListener.onDeleteClick(id)
+                    popupWindow.dismiss()
+                }
+            }
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 class BottariViewModel(
     stateHandle: SavedStateHandle,
     private val fetchBottariesUseCase: FetchBottariesUseCase,
+    private val deleteBottarieUseCase: DeleteBottariUseCase,
 ) : ViewModel() {
     private val ssaid: String by lazy { stateHandle.get<String>(EXTRA_SSAID)!! }
     private val _bottaries: MutableLiveData<UiState<List<BottariUiModel>>> =
@@ -41,6 +43,14 @@ class BottariViewModel(
         }
     }
 
+    fun deleteBottari(bottariId: Long) {
+        viewModelScope.launch {
+            deleteBottarieUseCase(ssaid, bottariId).onSuccess {
+                fetchBottaries()
+            }
+        }
+    }
+
     companion object {
         private const val EXTRA_SSAID = "SSAID"
 
@@ -49,7 +59,7 @@ class BottariViewModel(
                 initializer {
                     val stateHandle = createSavedStateHandle()
                     stateHandle[EXTRA_SSAID] = ssaid
-                    BottariViewModel(stateHandle, UseCaseProvider.fetchBottariesUseCase)
+                    BottariViewModel(stateHandle, UseCaseProvider.fetchBottariesUseCase, UseCaseProvider.deleteBottariUseCase)
                 }
             }
     }
