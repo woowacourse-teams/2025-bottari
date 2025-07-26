@@ -108,7 +108,7 @@ class BottariRenameDialog :
             is UiState.Success -> {
                 parentFragmentManager.setFragmentResult(
                     RENAME_RESULT_KEY,
-                    Bundle()
+                    Bundle(),
                 )
                 dismiss()
             }

@@ -34,6 +34,6 @@ interface BottariService {
     suspend fun renameBottari(
         @Header("ssaid") ssaid: String,
         @Path("id") id: Long,
-        @Body request: UpdateBottariRequest
+        @Body request: UpdateBottariRequest,
     ): Response<Unit>
 }
