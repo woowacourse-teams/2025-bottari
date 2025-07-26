@@ -244,8 +244,10 @@ class BottariServiceTest {
                         "SELECT COUNT(b) FROM Bottari b WHERE b.member.ssaid = :ssaid", Long.class)
                 .setParameter("ssaid", ssaid)
                 .getSingleResult());
-        assertThat(countBottariFromSsaid_Before).isEqualTo(1);
-        assertThat(countBottariFromSsaid_After).isEqualTo(0);
+        assertAll(() -> {
+            assertThat(countBottariFromSsaid_Before).isEqualTo(1);
+            assertThat(countBottariFromSsaid_After).isEqualTo(0);
+        });
     }
 
     @DisplayName("존재하지 않는 보따리를 삭제할 경우, 예외를 던진다.")
@@ -268,7 +270,7 @@ class BottariServiceTest {
         final Member member = new Member(ssaid, "name");
         entityManager.persist(member);
 
-        final Member anotherMember = new Member("another_ssaid", "name");
+        final Member anotherMember = new Member("another_ssaid", "name_2");
         entityManager.persist(anotherMember);
 
         final Bottari anotherMemberBottari = new Bottari("title1", anotherMember);
