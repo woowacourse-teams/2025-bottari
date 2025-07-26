@@ -8,6 +8,7 @@ import com.bottari.dto.AlarmResponse;
 import com.bottari.dto.CreateBottariRequest;
 import com.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.dto.ReadBottariResponse;
+import com.bottari.dto.UpdateBottariRequest;
 import com.bottari.repository.AlarmRepository;
 import com.bottari.repository.BottariItemRepository;
 import com.bottari.repository.BottariRepository;
@@ -64,6 +65,18 @@ public class BottariService {
         final Bottari savedBottari = bottariRepository.save(bottari);
 
         return savedBottari.getId();
+    }
+
+    @Transactional
+    public void update(
+            final UpdateBottariRequest request,
+            final Long id,
+            final String ssaid
+    ) {
+        final Bottari bottari = bottariRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
+        validateOwner(ssaid, bottari);
+        bottari.updateTitle(request.title());
     }
 
     private List<ReadBottariPreviewResponse> buildReadBottariPreviewResponses(final List<Bottari> bottaries) {
