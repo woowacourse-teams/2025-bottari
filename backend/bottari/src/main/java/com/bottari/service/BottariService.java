@@ -66,6 +66,13 @@ public class BottariService {
         return savedBottari.getId();
     }
 
+    @Transactional
+    public void deleteById(final Long id) {
+        bottariItemRepository.deleteByBottariId(id);
+        alarmRepository.deleteByBottariId(id);
+        bottariRepository.deleteById(id);
+    }
+
     private List<ReadBottariPreviewResponse> buildReadBottariPreviewResponses(final List<Bottari> bottaries) {
         final Map<Bottari, List<BottariItem>> bottariItemsGroupByBottari = groupingBottariItmesById(bottaries);
         final Map<Bottari, Alarm> alarmMap = groupingAlarmByBottari(bottaries);

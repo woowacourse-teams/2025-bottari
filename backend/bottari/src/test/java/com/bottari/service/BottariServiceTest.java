@@ -197,4 +197,54 @@ class BottariServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
     }
+
+    @DisplayName("아이디를 통해 보따리를 삭제한다.")
+    @Test
+    void deleteById() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("title1", member);
+        entityManager.persist(bottari);
+
+        final BottariItem bottariItem1 = new BottariItem("bottari1_item", bottari);
+        final BottariItem bottariItem2 = new BottariItem("bottari2_item", bottari);
+        entityManager.persist(bottariItem1);
+        entityManager.persist(bottariItem2);
+
+        final RoutineAlarm routineAlarm = new RoutineAlarm(
+                LocalTime.now(),
+                RepeatType.EVERY_WEEK_REPEAT,
+                null,
+                Set.of(DayOfWeek.MONDAY)
+        );
+        final LocationAlarm locationAlarm = new LocationAlarm(
+                true,
+                37.5,
+                127.5,
+                100
+        );
+        final Alarm alarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
+        entityManager.persist(alarm);
+        entityManager.flush();
+        entityManager.clear();
+
+        final Long countBottariFromSsaid_Before = entityManager.createQuery(
+                        "SELECT COUNT(b) FROM Bottari b WHERE b.member.ssaid = :ssaid", Long.class)
+                .setParameter("ssaid", ssaid)
+                .getSingleResult();
+
+        // when
+        bottariService.deleteById(bottari.getId());
+
+        // then
+        final int countBottariFromSsaid_After = Math.toIntExact(entityManager.createQuery(
+                        "SELECT COUNT(b) FROM Bottari b WHERE b.member.ssaid = :ssaid", Long.class)
+                .setParameter("ssaid", ssaid)
+                .getSingleResult());
+        assertThat(countBottariFromSsaid_Before).isEqualTo(1);
+        assertThat(countBottariFromSsaid_After).isEqualTo(0);
+    }
 }
