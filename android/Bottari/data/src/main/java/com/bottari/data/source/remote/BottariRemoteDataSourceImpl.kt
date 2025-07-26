@@ -39,6 +39,7 @@ class BottariRemoteDataSourceImpl(
         safeApiCall {
             bottariService.deleteBottari(id = id, ssaid = ssaid)
         }
+
     companion object {
         private const val HEADER_BOTTARI_ID_PREFIX = "/bottaries/"
     }
