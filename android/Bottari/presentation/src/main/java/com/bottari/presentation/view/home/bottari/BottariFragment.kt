@@ -50,8 +50,12 @@ class BottariFragment :
         navigateToChecklist(bottariId, bottariTitle)
     }
 
-    override fun onMoreClick(bottariId: Long) {
+    override fun onEditClick(bottariId: Long) {
         navigateToEdit(bottariId)
+    }
+
+    override fun onDeleteClick(bottariId: Long) {
+        viewModel.deleteBottari(bottariId)
     }
 
     private fun setupObserver() {

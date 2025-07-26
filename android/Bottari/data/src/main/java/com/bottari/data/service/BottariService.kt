@@ -27,4 +27,10 @@ interface BottariService {
         @Header("ssaid") ssaid: String,
         @Body request: CreateBottariRequest,
     ): Response<Unit>
+
+    @DELETE("/bottaries/{id}")
+    suspend fun deleteBottari(
+        @Header("ssaid") ssaid: String,
+        @Path("id") id: Long,
+    ): Response<Unit>
 }

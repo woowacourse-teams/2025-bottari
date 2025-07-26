@@ -16,4 +16,9 @@ interface BottariRemoteDataSource {
         id: Long,
         ssaid: String,
     ): Result<BottariResponse>
+
+    suspend fun deleteBottari(
+        id: Long,
+        ssaid: String,
+    ): Result<Unit>
 }

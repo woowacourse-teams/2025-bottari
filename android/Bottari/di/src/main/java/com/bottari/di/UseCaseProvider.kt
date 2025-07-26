@@ -98,4 +98,10 @@ object UseCaseProvider {
             RepositoryProvider.memberRepository,
         )
     }
+
+    val deleteBottariUseCase by lazy {
+        DeleteBottariUseCase(
+            RepositoryProvider.bottariRepository,
+        )
+    }
 }
