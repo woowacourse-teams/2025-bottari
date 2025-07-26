@@ -15,6 +15,9 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     List<Alarm> findAllByBottariIn(final List<Bottari> bottaries);
 
     @Modifying
-    @Query("DELETE FROM Alarm a WHERE a.bottari.id = :bottariId")
+    @Query("""
+            DELETE FROM Alarm a 
+            WHERE a.bottari.id = :bottariId
+            """)
     void deleteByBottariId(Long bottariId);
 }
