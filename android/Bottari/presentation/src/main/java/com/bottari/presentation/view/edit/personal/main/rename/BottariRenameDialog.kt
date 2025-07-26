@@ -105,7 +105,13 @@ class BottariRenameDialog :
     private fun handleRenameState(uiState: UiState<Unit?>) {
         when (uiState) {
             is UiState.Loading -> Unit
-            is UiState.Success -> dismiss()
+            is UiState.Success -> {
+                parentFragmentManager.setFragmentResult(
+                    RENAME_RESULT_KEY,
+                    Bundle()
+                )
+                dismiss()
+            }
             is UiState.Failure -> {
                 Snackbar
                     .make(binding.root, uiState.message.toString(), Snackbar.LENGTH_SHORT)
@@ -118,6 +124,8 @@ class BottariRenameDialog :
         private const val WIDTH_RATIO = 0.9
         private const val DISABLED_ALPHA_VALUE = 0.4f
         private const val ENABLED_ALPHA_VALUE = 1f
+
+        const val RENAME_RESULT_KEY = "RENAME_RESULT_KEY"
 
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
 

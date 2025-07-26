@@ -3,6 +3,7 @@ package com.bottari.data.source.remote
 import com.bottari.data.model.bottari.BottariResponse
 import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.model.bottari.FetchBottariesResponse
+import com.bottari.data.model.bottari.UpdateBottariRequest
 
 interface BottariRemoteDataSource {
     suspend fun fetchBottaries(ssaid: String): Result<List<FetchBottariesResponse>>
@@ -20,6 +21,6 @@ interface BottariRemoteDataSource {
     suspend fun renameBottari(
         id: Long,
         ssaid: String,
-        title: String,
+        request: UpdateBottariRequest,
     ): Result<Unit>
 }
