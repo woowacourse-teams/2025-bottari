@@ -32,6 +32,15 @@ class BottariRemoteDataSourceImpl(
             response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)
         }
 
+    override suspend fun renameBottari(
+        id: Long,
+        ssaid: String,
+        title: String,
+    ): Result<Unit> =
+        safeApiCall {
+            bottariService.renameBottari(id = id, ssaid = ssaid, title = title)
+        }
+
     companion object {
         private const val HEADER_BOTTARI_ID_PREFIX = "/bottaries/"
     }

@@ -27,4 +27,10 @@ interface BottariService {
         @Header("ssaid") ssaid: String,
         @Body request: CreateBottariRequest,
     ): Response<Unit>
+
+    suspend fun renameBottari(
+        @Header("ssaid") ssaid: String,
+        @Path("id") id: Long,
+        @Body title: String,
+    ): Response<Unit>
 }

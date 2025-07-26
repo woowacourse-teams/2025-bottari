@@ -16,4 +16,10 @@ interface BottariRemoteDataSource {
         id: Long,
         ssaid: String,
     ): Result<BottariResponse>
+
+    suspend fun renameBottari(
+        id: Long,
+        ssaid: String,
+        title: String,
+    ): Result<Unit>
 }
