@@ -11,6 +11,15 @@ public interface BottariTemplateRepository extends JpaRepository<BottariTemplate
     @Query("""
             SELECT bt
             FROM BottariTemplate bt
+            JOIN FETCH bt.member m
+            WHERE m.id = :id
+            ORDER BY bt.createdAt DESC
+            """)
+    List<BottariTemplate> findAllMyBottariTemplatesByMemberIdWithMember(final Long id);
+
+    @Query("""
+            SELECT bt
+            FROM BottariTemplate bt
             JOIN FETCH Member m
             ON bt.member.id = m.id
             WHERE bt.title LIKE CONCAT('%', :query, '%')

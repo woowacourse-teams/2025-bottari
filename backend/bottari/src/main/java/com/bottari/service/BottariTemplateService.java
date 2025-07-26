@@ -6,9 +6,9 @@ import com.bottari.domain.BottariTemplate;
 import com.bottari.domain.BottariTemplateItem;
 import com.bottari.domain.Member;
 import com.bottari.dto.CreateBottariTemplateRequest;
+import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.repository.BottariItemRepository;
 import com.bottari.repository.BottariRepository;
-import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.repository.BottariTemplateItemRepository;
 import com.bottari.repository.BottariTemplateRepository;
 import com.bottari.repository.MemberRepository;
@@ -40,6 +40,17 @@ public class BottariTemplateService {
                 bottariTemplateItemRepository.findAllByBottariTemplateId(bottariTemplate.getId());
 
         return ReadBottariTemplateResponse.of(bottariTemplate, bottariTemplateItems);
+    }
+
+    public List<ReadBottariTemplateResponse> getMine(final String ssaid) {
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+        List<BottariTemplate> bottariTemplateItems =
+                bottariTemplateRepository.findAllMyBottariTemplatesByMemberIdWithMember(member.getId());
+        Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate = groupingItemsByTemplate(
+                bottariTemplateItems);
+
+        return buildReadBottariTemplateResponses(itemsGroupByTemplate);
     }
 
     public List<ReadBottariTemplateResponse> getAll(final String query) {
