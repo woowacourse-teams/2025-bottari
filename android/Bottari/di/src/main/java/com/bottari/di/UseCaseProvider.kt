@@ -5,6 +5,7 @@ import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
 import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
 import com.bottari.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
+import com.bottari.domain.usecase.bottari.RenameBottariUseCase
 import com.bottari.domain.usecase.bottariDetail.FindBottariDetailUseCase
 import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
@@ -96,6 +97,12 @@ object UseCaseProvider {
     val checkRegisteredMemberUseCase by lazy {
         CheckRegisteredMemberUseCase(
             RepositoryProvider.memberRepository,
+        )
+    }
+
+    val renameBottariUseCase by lazy {
+        RenameBottariUseCase(
+            RepositoryProvider.bottariRepository,
         )
     }
 }
