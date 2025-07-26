@@ -83,4 +83,7 @@
 
     <!-- Menu -->
     <string name="menu_title_create_market">마켓에 등록하기</string>
+    <string name="menu_title_edit">편집하기</string>
+    <string name="menu_title_delete">삭제하기</string>
+
 </resources>
