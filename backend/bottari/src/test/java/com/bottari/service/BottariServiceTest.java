@@ -237,7 +237,7 @@ class BottariServiceTest {
                 .getSingleResult();
 
         // when
-        bottariService.deleteById(bottari.getId());
+        bottariService.deleteById(bottari.getId(), ssaid);
 
         // then
         final int countBottariFromSsaid_After = Math.toIntExact(entityManager.createQuery(
@@ -246,5 +246,39 @@ class BottariServiceTest {
                 .getSingleResult());
         assertThat(countBottariFromSsaid_Before).isEqualTo(1);
         assertThat(countBottariFromSsaid_After).isEqualTo(0);
+    }
+
+    @DisplayName("존재하지 않는 보따리를 삭제할 경우, 예외를 던진다.")
+    @Test
+    void deleteById_Exception_NotFound() {
+        // given
+        final Long invalid_bottari_id = -1L;
+
+        // when & then
+        assertThatThrownBy(() -> bottariService.deleteById(invalid_bottari_id, "ssaid"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("보따리를 찾을 수 없습니다.");
+    }
+
+    @DisplayName("본인의 것이 아닌 보따리를 삭제할 경우, 예외를 던진다.")
+    @Test
+    void deleteById_Exception_NotMine() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Member anotherMember = new Member("another_ssaid", "name");
+        entityManager.persist(anotherMember);
+
+        final Bottari anotherMemberBottari = new Bottari("title1", anotherMember);
+        entityManager.persist(anotherMemberBottari);
+        entityManager.flush();
+        entityManager.clear();
+
+        // when & then
+        assertThatThrownBy(() -> bottariService.deleteById(anotherMemberBottari.getId(), "ssaid"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("본인의 보따리가 아닙니다.");
     }
 }

@@ -67,7 +67,13 @@ public class BottariService {
     }
 
     @Transactional
-    public void deleteById(final Long id) {
+    public void deleteById(
+            final Long id,
+            final String ssaid
+    ) {
+        final Bottari bottari = bottariRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
+        validateOwner(ssaid, bottari);
         bottariItemRepository.deleteByBottariId(id);
         alarmRepository.deleteByBottariId(id);
         bottariRepository.deleteById(id);
