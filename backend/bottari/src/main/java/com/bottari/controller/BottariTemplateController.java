@@ -35,6 +35,7 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     }
 
     @GetMapping("/me")
+    @Override
     public ResponseEntity<List<ReadBottariTemplateResponse>> readMine(
             final HttpServletRequest httpServletRequest
     ) {
