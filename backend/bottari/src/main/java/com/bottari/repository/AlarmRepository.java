@@ -16,8 +16,8 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     @Modifying
     @Query("""
-            DELETE FROM Alarm a 
+            DELETE FROM Alarm a
             WHERE a.bottari.id = :bottariId
             """)
-    void deleteByBottariId(Long bottariId);
+    void deleteByBottariId(final Long bottariId);
 }

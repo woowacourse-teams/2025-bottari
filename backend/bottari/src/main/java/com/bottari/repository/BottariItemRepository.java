@@ -30,12 +30,12 @@ public interface BottariItemRepository extends JpaRepository<BottariItem, Long> 
 
     int countAllByBottariId(final Long bottariId);
 
-    void deleteByIdIn(final List<Long> ids);
-
     @Modifying
     @Query("""
-            DELETE FROM BottariItem bt 
+            DELETE FROM BottariItem bt
             WHERE bt.bottari.id = :bottariId
             """)
-    void deleteByBottariId(Long bottariId);
+    void deleteByBottariId(final Long bottariId);
+
+    void deleteByIdIn(final List<Long> ids);
 }
