@@ -77,7 +77,7 @@ class BottariTemplateServiceTest {
     @Test
     void getBySsaid() {
         // given
-        String memberASsaid = "memberA_ssaid";
+        final String memberASsaid = "memberA_ssaid";
         final Member memberA = new Member(memberASsaid, "memberA");
         entityManager.persist(memberA);
         final Member memberB = new Member("memberB_ssaid", "memberA");
@@ -101,30 +101,30 @@ class BottariTemplateServiceTest {
         entityManager.persist(item4);
 
         // when
-        List<ReadBottariTemplateResponse> actual = bottariTemplateService.getMine(memberASsaid);
+        final List<ReadBottariTemplateResponse> actual = bottariTemplateService.getBySsaid(memberASsaid);
 
         // then
         assertAll(() -> {
-                    assertThat(actual).hasSize(2);
-                    assertThat(actual.get(0).title()).isEqualTo("A_template2");
-                    assertThat(actual.get(0).items()).hasSize(1);
-                    assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3");
-                    assertThat(actual.get(1).title()).isEqualTo("A_template1");
-                    assertThat(actual.get(1).items()).hasSize(2);
-                    assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
-                    assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
-                }
+                      assertThat(actual).hasSize(2);
+                      assertThat(actual.get(0).title()).isEqualTo("A_template2");
+                      assertThat(actual.get(0).items()).hasSize(1);
+                      assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3");
+                      assertThat(actual.get(1).title()).isEqualTo("A_template1");
+                      assertThat(actual.get(1).items()).hasSize(2);
+                      assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
+                      assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
+                  }
         );
     }
 
     @DisplayName("내 보따리 템플릿 조회 시, 존재하지 않은 사용자면 예외를 던진다.")
     @Test
-    void getMine_Exception_NotExistsMember() {
+    void getBySsaid_Exception_NotExistsMember() {
         // given
-        String invalidSsaid = "invalid_ssaid";
+        final String invalidSsaid = "invalid_ssaid";
 
         // when & then
-        assertThatThrownBy(() -> bottariTemplateService.getMine(invalidSsaid))
+        assertThatThrownBy(() -> bottariTemplateService.getBySsaid(invalidSsaid))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
     }
@@ -133,7 +133,7 @@ class BottariTemplateServiceTest {
     @Test
     void getAll() {
         // given
-        String empty_query = "";
+        final String empty_query = "";
 
         final Member member = new Member("ssaid", "name");
         entityManager.persist(member);
@@ -155,15 +155,15 @@ class BottariTemplateServiceTest {
 
         // then
         assertAll(() -> {
-                    assertThat(actual).hasSize(2);
-                    assertThat(actual.get(0).title()).isEqualTo("newer_template");
-                    assertThat(actual.get(0).items()).hasSize(1);
-                    assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3");
-                    assertThat(actual.get(1).title()).isEqualTo("older_template");
-                    assertThat(actual.get(1).items()).hasSize(2);
-                    assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
-                    assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
-                }
+                      assertThat(actual).hasSize(2);
+                      assertThat(actual.get(0).title()).isEqualTo("newer_template");
+                      assertThat(actual.get(0).items()).hasSize(1);
+                      assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3");
+                      assertThat(actual.get(1).title()).isEqualTo("older_template");
+                      assertThat(actual.get(1).items()).hasSize(2);
+                      assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
+                      assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
+                  }
         );
     }
 
@@ -198,15 +198,15 @@ class BottariTemplateServiceTest {
 
         // then
         assertAll(() -> {
-                    assertThat(actual).hasSize(2);
-                    assertThat(actual.get(1).title()).isEqualTo("title_1");
-                    assertThat(actual.get(1).items()).hasSize(2);
-                    assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
-                    assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
-                    assertThat(actual.getFirst().title()).isEqualTo("title_2");
-                    assertThat(actual.getFirst().items()).hasSize(1);
-                    assertThat(actual.getFirst().items().getFirst().name()).isEqualTo("item_3");
-                }
+                      assertThat(actual).hasSize(2);
+                      assertThat(actual.get(1).title()).isEqualTo("title_1");
+                      assertThat(actual.get(1).items()).hasSize(2);
+                      assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
+                      assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
+                      assertThat(actual.getFirst().title()).isEqualTo("title_2");
+                      assertThat(actual.getFirst().items()).hasSize(1);
+                      assertThat(actual.getFirst().items().getFirst().name()).isEqualTo("item_3");
+                  }
         );
     }
 
@@ -303,7 +303,8 @@ class BottariTemplateServiceTest {
         final Bottari actualBottari = entityManager.find(Bottari.class, actualBottariId);
         final List<BottariItem> actualBottariItems = entityManager.createQuery(
                         "select i from BottariItem i where i.bottari.id = :bottariId",
-                        BottariItem.class)
+                        BottariItem.class
+                )
                 .setParameter("bottariId", actualBottariId)
                 .getResultList();
 

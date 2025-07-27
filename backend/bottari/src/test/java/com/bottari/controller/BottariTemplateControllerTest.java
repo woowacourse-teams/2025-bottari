@@ -46,7 +46,8 @@ class BottariTemplateControllerTest {
                         new BottariTemplateItemResponse(1L, "item_1"),
                         new BottariTemplateItemResponse(2L, "item_2")
                 ),
-                "author_1");
+                "author_1"
+        );
         given(bottariTemplateService.getById(1L))
                 .willReturn(response);
 
@@ -60,7 +61,7 @@ class BottariTemplateControllerTest {
     @Test
     void readMine() throws Exception {
         // given
-        String ssaid = "ssaid";
+        final String ssaid = "ssaid";
         final List<ReadBottariTemplateResponse> responses = List.of(
                 new ReadBottariTemplateResponse(
                         1L,
@@ -69,16 +70,18 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(1L, "item_1"),
                                 new BottariTemplateItemResponse(2L, "item_2")
                         ),
-                        "author_1"),
+                        "author_1"
+                ),
                 new ReadBottariTemplateResponse(
                         2L,
                         "title_2",
                         List.of(
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
-                        "author_2")
+                        "author_2"
+                )
         );
-        given(bottariTemplateService.getMine("ssaid"))
+        given(bottariTemplateService.getBySsaid("ssaid"))
                 .willReturn(responses);
 
         // when & then
@@ -100,14 +103,16 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(1L, "item_1"),
                                 new BottariTemplateItemResponse(2L, "item_2")
                         ),
-                        "author_1"),
+                        "author_1"
+                ),
                 new ReadBottariTemplateResponse(
                         2L,
                         "title_2",
                         List.of(
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
-                        "author_2")
+                        "author_2"
+                )
         );
         given(bottariTemplateService.getAll(anyString()))
                 .willReturn(responses);
