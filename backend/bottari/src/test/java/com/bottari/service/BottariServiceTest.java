@@ -206,11 +206,14 @@ class BottariServiceTest {
         final Member member = new Member(ssaid, "name");
         entityManager.persist(member);
 
-        final Bottari bottari = new Bottari("title1", member);
-        entityManager.persist(bottari);
+        final Bottari delete_bottari = new Bottari("delete_bottari", member);
+        entityManager.persist(delete_bottari);
 
-        final BottariItem bottariItem1 = new BottariItem("bottari1_item", bottari);
-        final BottariItem bottariItem2 = new BottariItem("bottari2_item", bottari);
+        final Bottari remain_bottari = new Bottari("remain_bottari", member);
+        entityManager.persist(remain_bottari);
+
+        final BottariItem bottariItem1 = new BottariItem("bottari1_item1", delete_bottari);
+        final BottariItem bottariItem2 = new BottariItem("bottari1_item2", delete_bottari);
         entityManager.persist(bottariItem1);
         entityManager.persist(bottariItem2);
 
@@ -226,27 +229,24 @@ class BottariServiceTest {
                 127.5,
                 100
         );
-        final Alarm alarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
+        final Alarm alarm = new Alarm(true, routineAlarm, locationAlarm, delete_bottari);
         entityManager.persist(alarm);
         entityManager.flush();
         entityManager.clear();
 
-        final Long countBottariFromSsaid_Before = entityManager.createQuery(
-                        "SELECT COUNT(b) FROM Bottari b WHERE b.member.ssaid = :ssaid", Long.class)
-                .setParameter("ssaid", ssaid)
-                .getSingleResult();
-
         // when
-        bottariService.deleteById(bottari.getId(), ssaid);
+        bottariService.deleteById(delete_bottari.getId(), ssaid);
 
         // then
-        final int countBottariFromSsaid_After = Math.toIntExact(entityManager.createQuery(
-                        "SELECT COUNT(b) FROM Bottari b WHERE b.member.ssaid = :ssaid", Long.class)
-                .setParameter("ssaid", ssaid)
-                .getSingleResult());
+        entityManager.flush();
+        entityManager.clear();
+        final Bottari remainingBottari = entityManager.find(Bottari.class, remain_bottari.getId());
+        final Bottari deletedBottari = entityManager.find(Bottari.class, delete_bottari.getId());
+
         assertAll(() -> {
-            assertThat(countBottariFromSsaid_Before).isEqualTo(1);
-            assertThat(countBottariFromSsaid_After).isEqualTo(0);
+            assertThat(deletedBottari).isNull();
+            assertThat(remainingBottari).isNotNull();
+            assertThat(remainingBottari.getTitle()).isEqualTo("remain_bottari");
         });
     }
 
