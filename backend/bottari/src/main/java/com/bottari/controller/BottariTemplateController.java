@@ -40,7 +40,7 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
             final HttpServletRequest httpServletRequest
     ) {
         final String ssaid = httpServletRequest.getHeader("ssaid");
-        final List<ReadBottariTemplateResponse> responses = bottariTemplateService.getMine(ssaid);
+        final List<ReadBottariTemplateResponse> responses = bottariTemplateService.getBySsaid(ssaid);
 
         return ResponseEntity.ok(responses);
     }

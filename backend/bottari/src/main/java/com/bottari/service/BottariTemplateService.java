@@ -42,7 +42,7 @@ public class BottariTemplateService {
         return ReadBottariTemplateResponse.of(bottariTemplate, bottariTemplateItems);
     }
 
-    public List<ReadBottariTemplateResponse> getMine(final String ssaid) {
+    public List<ReadBottariTemplateResponse> getBySsaid(final String ssaid) {
         final Member member = memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
         List<BottariTemplate> bottariTemplateItems =

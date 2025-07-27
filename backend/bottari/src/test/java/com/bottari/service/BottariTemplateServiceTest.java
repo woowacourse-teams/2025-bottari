@@ -75,7 +75,7 @@ class BottariTemplateServiceTest {
 
     @DisplayName("내 보따리 템플릿 조회 시, 내 보따리 템플릿을 최신순으로 조회한다.")
     @Test
-    void getMine() {
+    void getBySsaid() {
         // given
         String memberASsaid = "memberA_ssaid";
         final Member memberA = new Member(memberASsaid, "memberA");
