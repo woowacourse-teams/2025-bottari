@@ -12,7 +12,7 @@ public interface BottariTemplateRepository extends JpaRepository<BottariTemplate
             SELECT bt
             FROM BottariTemplate bt
             JOIN FETCH bt.member m
-            WHERE m.id = :id
+            WHERE m.id = :memberId
             ORDER BY bt.createdAt DESC
             """)
     List<BottariTemplate> findAllByMemberIdWithMember(final Long memberId);
