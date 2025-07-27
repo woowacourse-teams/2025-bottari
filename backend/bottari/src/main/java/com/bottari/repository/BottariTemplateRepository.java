@@ -15,13 +15,12 @@ public interface BottariTemplateRepository extends JpaRepository<BottariTemplate
             WHERE m.id = :id
             ORDER BY bt.createdAt DESC
             """)
-    List<BottariTemplate> findAllMyBottariTemplatesByMemberIdWithMember(final Long id);
+    List<BottariTemplate> findAllByMemberIdWithMember(final Long memberId);
 
     @Query("""
             SELECT bt
             FROM BottariTemplate bt
-            JOIN FETCH Member m
-            ON bt.member.id = m.id
+            JOIN FETCH bt.member m
             WHERE bt.title LIKE CONCAT('%', :query, '%')
             ORDER BY bt.createdAt DESC
             """)
@@ -30,8 +29,7 @@ public interface BottariTemplateRepository extends JpaRepository<BottariTemplate
     @Query("""
             SELECT bt
             FROM BottariTemplate bt
-            JOIN FETCH Member m
-            ON bt.member.id = m.id
+            JOIN FETCH bt.member m
             WHERE bt.id = :id
             """)
     Optional<BottariTemplate> findByIdWithMember(final Long id);
