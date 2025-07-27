@@ -44,7 +44,7 @@ public interface BottariApiDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "보따리 삭제 성공"),
     })
-    ResponseEntity<Void> deleteById(
+    ResponseEntity<Void> delete(
             final Long id,
             final HttpServletRequest httpServletRequest
     );

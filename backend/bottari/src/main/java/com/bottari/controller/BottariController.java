@@ -62,7 +62,7 @@ public class BottariController implements BottariApiDocs {
 
     @DeleteMapping("/{id}")
     @Override
-    public ResponseEntity<Void> deleteById(
+    public ResponseEntity<Void> delete(
             @PathVariable final Long id,
             final HttpServletRequest httpServletRequest
     ) {
