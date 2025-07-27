@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.bottari.config.JpaAuditingConfig;
 import com.bottari.domain.Bottari;
 import com.bottari.domain.BottariItem;
-import com.bottari.config.JpaAuditingConfig;
 import com.bottari.domain.BottariTemplate;
 import com.bottari.domain.BottariTemplateItem;
 import com.bottari.domain.Member;
@@ -291,5 +291,77 @@ class BottariTemplateServiceTest {
         assertThatThrownBy(() -> bottariTemplateService.createBottari(bottariTemplate.getId(), notExistsSsaid))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
+    }
+
+    @DisplayName("보따리 템플릿 아이디로 해당 보따리 템플릿을 삭제한다.")
+    @Test
+    void deleteById() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member("ssaid", "name");
+        entityManager.persist(member);
+
+        final BottariTemplate bottariTemplate1 = new BottariTemplate("title1", member);
+        final BottariTemplate bottariTemplate2 = new BottariTemplate("title2", member);
+        entityManager.persist(bottariTemplate1);
+        entityManager.persist(bottariTemplate2);
+
+        final BottariTemplateItem bottariTemplate1Item1 = new BottariTemplateItem("name1", bottariTemplate1);
+        final BottariTemplateItem bottariTemplate1Item2 = new BottariTemplateItem("name2", bottariTemplate1);
+        final BottariTemplateItem bottariTemplate2Item1 = new BottariTemplateItem("name3", bottariTemplate2);
+        entityManager.persist(bottariTemplate1Item1);
+        entityManager.persist(bottariTemplate1Item2);
+        entityManager.persist(bottariTemplate2Item1);
+
+        // when
+        bottariTemplateService.deleteById(bottariTemplate1.getId(), ssaid);
+
+        // then
+        final List<BottariTemplate> remainingTemplates = entityManager
+                .createQuery("SELECT bt FROM BottariTemplate bt", BottariTemplate.class)
+                .getResultList();
+        final List<BottariTemplateItem> remainingItems = entityManager
+                .createQuery("SELECT bti FROM BottariTemplateItem bti", BottariTemplateItem.class)
+                .getResultList();
+
+        assertAll(() -> {
+            assertThat(remainingTemplates)
+                    .hasSize(1)
+                    .extracting(BottariTemplate::getId)
+                    .containsExactly(bottariTemplate2.getId());
+
+            assertThat(remainingItems)
+                    .hasSize(1)
+                    .extracting(BottariTemplateItem::getName)
+                    .containsExactly("name3");
+        });
+    }
+
+    @DisplayName("삭제 시, 해당 보따리 템플릿이 없는 경우 예외가 발생한다.")
+    @Test
+    void deleteById_Exception_NotFoundBottariTemplate() {
+        // given
+        final Long invalidId = 1L;
+
+        // when & then
+        assertThatThrownBy(() -> bottariTemplateService.deleteById(invalidId, "ssaid"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("보따리 템플릿을 찾을 수 없습니다.");
+    }
+
+    @DisplayName("삭제 시, 해당 보따리 템플릿 주인이 아닌 경우 예외가 발생한다.")
+    @Test
+    void deleteById_Exception_NotOwner() {
+        // given
+        final String anotherSsaid = "another_ssaid";
+        final Member member = new Member("ssaid", "name");
+        entityManager.persist(member);
+        final BottariTemplate bottariTemplate = new BottariTemplate("title", member);
+        entityManager.persist(bottariTemplate);
+
+        // when & then
+        assertThatThrownBy(() -> bottariTemplateService.deleteById(bottariTemplate.getId(), anotherSsaid))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("본인의 보따리 템플릿이 아닙니다.");
     }
 }
