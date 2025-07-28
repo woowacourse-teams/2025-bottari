@@ -7,6 +7,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
+import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentProfileBinding
@@ -30,11 +31,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 
     private fun setupObserver() {
         viewModel.nickname.observe(viewLifecycleOwner, ::handleNicknameState)
-        viewModel.nicknameEvent.observeEvent(viewLifecycleOwner, ::showNicknameEvent)
+        viewModel.nicknameEvent.observeEvent(viewLifecycleOwner, ::handleNicknameEvent)
     }
 
     private fun setupListener() {
-        setupRootClickListener()
         setupNicknameEditListener()
         setupNicknameEditButtonClickListener()
     }
@@ -54,16 +54,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         }
     }
 
-    private fun showNicknameEvent(message: String) {
+    private fun handleNicknameEvent(message: String) {
         Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
-    }
-
-    private fun setupRootClickListener() {
-        binding.root.setOnClickListener {
-            if (binding.etNicknameEdit.isFocused) {
-                binding.etNicknameEdit.clearFocus()
-            }
-        }
     }
 
     private fun setupNicknameEditListener() {
@@ -79,7 +71,13 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 
     private fun setupNicknameEditButtonClickListener() {
         binding.btnNicknameEdit.setOnClickListener {
+            if (binding.etNicknameEdit.isFocused) {
+                setEditMode(false)
+                binding.btnNicknameEdit.setImageResource(R.drawable.btn_edit)
+                return@setOnClickListener
+            }
             setEditMode(true)
+            binding.btnNicknameEdit.setImageResource(R.drawable.btn_confirm)
         }
     }
 
@@ -88,7 +86,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
             actionId == EditorInfo.IME_ACTION_NEXT ||
             actionId == EditorInfo.IME_ACTION_UNSPECIFIED
         ) {
-            hideKeyboard(binding.etNicknameEdit)
+            setEditMode(false)
             return true
         }
         return false
@@ -96,17 +94,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 
     private fun confirmNicknameEdit() {
         val newNickname = binding.etNicknameEdit.text.toString()
-        setEditMode(false)
+        binding.btnNicknameEdit.setImageResource(R.drawable.btn_edit)
         viewModel.updateNickName(newNickname)
-    }
-
-    private fun showKeyboard(view: View) {
-        view.post { inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT) }
-    }
-
-    private fun hideKeyboard(view: View) {
-        inputManager.hideSoftInputFromWindow(view.windowToken, 0)
-        view.clearFocus()
     }
 
     private fun setEditMode(enabled: Boolean) {
@@ -126,5 +115,14 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
             clearFocus()
             hideKeyboard(this)
         }
+    }
+
+    private fun showKeyboard(view: View) {
+        view.post { inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT) }
+    }
+
+    private fun hideKeyboard(view: View) {
+        inputManager.hideSoftInputFromWindow(view.windowToken, 0)
+        view.clearFocus()
     }
 }
