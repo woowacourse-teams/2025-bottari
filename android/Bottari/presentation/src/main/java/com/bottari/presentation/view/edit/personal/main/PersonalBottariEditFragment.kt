@@ -31,7 +31,8 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
+class PersonalBottariEditFragment :
+    BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
         val bottariId = arguments?.getLong(EXTRA_BOTTARI_ID) ?: error(ERROR_REQUIRE_BOTTARI_ID)
         PersonalBottariEditViewModel.Factory(requireContext().getSSAID(), bottariId)
@@ -276,11 +277,13 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             viewModel.bottari.value
                 ?.takeSuccess()
                 ?.id ?: return
+        val oldTitle =
+            viewModel.bottari.value?.takeSuccess()?.title ?: return
 
         if (!isAdded) return
 
         BottariRenameDialog
-            .newInstance(bottariId)
+            .newInstance(bottariId, oldTitle)
             .show(childFragmentManager, BottariRenameDialog::class.java.name)
     }
 

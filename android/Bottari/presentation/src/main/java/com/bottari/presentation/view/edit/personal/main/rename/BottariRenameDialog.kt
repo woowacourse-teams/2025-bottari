@@ -24,6 +24,7 @@ class BottariRenameDialog :
     val binding: DialogBottariRenameBinding get() = _binding!!
 
     private var bottariId: Long = -1
+    private var oldTitle: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +43,7 @@ class BottariRenameDialog :
         setupObserver()
         setupListener()
         bottariId = arguments?.getLong(EXTRA_BOTTARI_ID) ?: -1
+        oldTitle = arguments?.getString(EXTRA_OLD_TITLE) ?: ""
     }
 
     override fun onStart() {
@@ -85,7 +87,7 @@ class BottariRenameDialog :
         binding.btnBottariCreateClose.setOnClickListener { dismiss() }
         binding.btnBottariCreate.setOnClickListener {
             val title = binding.etBottariCreateName.text.toString()
-            viewModel.renameBottari(bottariId, requireContext().getSSAID(), title)
+            viewModel.renameBottari(bottariId, ssaid = requireContext().getSSAID(), title = title , oldTitle = oldTitle)
         }
     }
 
@@ -112,6 +114,7 @@ class BottariRenameDialog :
                 )
                 dismiss()
             }
+
             is UiState.Failure -> {
                 Snackbar
                     .make(binding.root, uiState.message.toString(), Snackbar.LENGTH_SHORT)
@@ -128,12 +131,14 @@ class BottariRenameDialog :
         const val RENAME_RESULT_KEY = "RENAME_RESULT_KEY"
 
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
+        private const val EXTRA_OLD_TITLE = "EXTRA_OLD_TITLE"
 
-        fun newInstance(bottariId: Long): BottariRenameDialog =
+        fun newInstance(bottariId: Long,oldTitle:String): BottariRenameDialog =
             BottariRenameDialog().apply {
                 arguments =
                     Bundle().apply {
                         putLong(EXTRA_BOTTARI_ID, bottariId)
+                        putString(EXTRA_OLD_TITLE, oldTitle)
                     }
             }
     }

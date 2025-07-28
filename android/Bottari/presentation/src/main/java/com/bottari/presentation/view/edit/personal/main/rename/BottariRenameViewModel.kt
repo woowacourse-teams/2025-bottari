@@ -19,10 +19,18 @@ class BottariRenameViewModel(
 
     fun renameBottari(
         id: Long,
+        oldTitle: String,
         ssaid: String,
         title: String,
     ) {
-        if (title.isBlank()) return
+        if (title.isBlank()){
+            _renameSuccess.value = UiState.Failure("이름을 빈칸으로 지정할 수 없습니다")
+            return
+        }
+        if (title == oldTitle) {
+            _renameSuccess.value = UiState.Failure("기존과 똑같은 이름으로 변경할 수 없습니다")
+            return
+        }
         _renameSuccess.value = UiState.Loading
 
         viewModelScope.launch {
