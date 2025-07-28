@@ -80,7 +80,7 @@ class BottariTemplateServiceTest {
         final String memberASsaid = "memberA_ssaid";
         final Member memberA = new Member(memberASsaid, "memberA");
         entityManager.persist(memberA);
-        final Member memberB = new Member("memberB_ssaid", "memberA");
+        final Member memberB = new Member("memberB_ssaid", "memberB");
         entityManager.persist(memberB);
 
         final BottariTemplate memberATemplate1 = new BottariTemplate("A_template1", memberA);
