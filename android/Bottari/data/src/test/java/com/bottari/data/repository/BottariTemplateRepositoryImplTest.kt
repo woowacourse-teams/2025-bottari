@@ -3,6 +3,7 @@ package com.bottari.data.repository
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
 import com.bottari.data.testFixture.fetchBottariTemplateResponseListFixture
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
@@ -50,8 +51,9 @@ class BottariTemplateRepositoryImplTest {
             val result = repository.fetchBottariTemplates("검색어")
 
             // then
-            result.isFailure shouldBe true
-            result.exceptionOrNull() shouldBe exception
+            result.shouldBeFailure{
+                it shouldBe exception
+            }
 
             // verify
             coVerify { remoteDataSource.fetchBottariTemplates("검색어") }

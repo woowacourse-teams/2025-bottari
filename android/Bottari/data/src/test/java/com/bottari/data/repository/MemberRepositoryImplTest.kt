@@ -3,6 +3,8 @@ package com.bottari.data.repository
 import com.bottari.data.mapper.MemberMapper.toRequest
 import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.data.testFixture.memberFixture
+import io.kotest.matchers.result.shouldBeFailure
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -29,8 +31,7 @@ class MemberRepositoryImplTest {
             val result = repository.registerMember(member)
 
             // then
-            result.isSuccess shouldBe true
-            result.getOrNull() shouldBe true
+            result.shouldBeSuccess()
 
             // verify
             coVerify { remoteDataSource.registerMember(request) }
@@ -51,9 +52,9 @@ class MemberRepositoryImplTest {
             val result = repository.registerMember(member)
 
             // then
-            result.isFailure shouldBe true
-            result.exceptionOrNull() shouldBe exception
-
+            result.shouldBeFailure{
+                it shouldBe exception
+            }
             // verify
             coVerify { remoteDataSource.registerMember(request) }
         }
