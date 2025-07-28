@@ -4,6 +4,11 @@
     <string name="home_nav_bottari_title">나의 보따리</string>
     <string name="home_nav_profile_title">프로필</string>
 
+    <!-- Bottari Home -->
+    <string name= "bottari_fetch_bottaries_failure_text">보따리 불러오기에 실패했어요</string>
+    <string name= "bottari_delete_failure_text">보따리 삭제에 실패했어요</string>"
+
+
     <!--  Bottari Item  -->
     <string name="bottari_item_quantity_status_format">%d/%d</string>
     <string name="bottari_item_alarm_date_format">M월 d일</string>

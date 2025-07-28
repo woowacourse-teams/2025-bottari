@@ -6,6 +6,7 @@ import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.common.BottomPaddingDecoration
@@ -60,6 +61,7 @@ class BottariFragment :
 
     private fun setupObserver() {
         viewModel.bottaries.observe(viewLifecycleOwner, ::handleBottariState)
+        viewModel.deleteBottariState.observe(viewLifecycleOwner, ::handleDeleteBottariState)
     }
 
     private fun setupUI() {
@@ -92,7 +94,7 @@ class BottariFragment :
         when (uiState) {
             is UiState.Loading -> Unit
             is UiState.Success -> adapter.submitList(uiState.data)
-            is UiState.Failure -> Unit
+            is UiState.Failure -> showSnackbar(R.string.bottari_fetch_bottaries_failure_text)
         }
     }
 
@@ -107,6 +109,14 @@ class BottariFragment :
             RecyclerView.SCROLL_STATE_IDLE -> {
                 binding.btnBottariCreate.fadeIn()
             }
+        }
+    }
+
+    private fun handleDeleteBottariState(uiState: UiState<Unit>) {
+        when (uiState) {
+            is UiState.Loading -> Unit
+            is UiState.Success -> viewModel.fetchBottaries()
+            is UiState.Failure -> showSnackbar(R.string.bottari_delete_failure_text)
         }
     }
 

@@ -27,6 +27,9 @@ class BottariViewModel(
         MutableLiveData(UiState.Loading)
     val bottaries: LiveData<UiState<List<BottariUiModel>>> get() = _bottaries
 
+    private val _deleteBottariState: MutableLiveData<UiState<Unit>> = MutableLiveData(UiState.Loading)
+    val deleteBottariState: LiveData<UiState<Unit>> get() = _deleteBottariState
+
     init {
         fetchBottaries()
     }
@@ -45,9 +48,13 @@ class BottariViewModel(
 
     fun deleteBottari(bottariId: Long) {
         viewModelScope.launch {
-            deleteBottarieUseCase(ssaid, bottariId).onSuccess {
-                fetchBottaries()
-            }
+            deleteBottarieUseCase(ssaid, bottariId)
+                .onSuccess {
+                    _deleteBottariState.value = UiState.Success(Unit)
+                }
+                .onFailure {
+                    _deleteBottariState.value = UiState.Failure(it.message)
+                }
         }
     }
 
@@ -59,7 +66,11 @@ class BottariViewModel(
                 initializer {
                     val stateHandle = createSavedStateHandle()
                     stateHandle[EXTRA_SSAID] = ssaid
-                    BottariViewModel(stateHandle, UseCaseProvider.fetchBottariesUseCase, UseCaseProvider.deleteBottariUseCase)
+                    BottariViewModel(
+                        stateHandle,
+                        UseCaseProvider.fetchBottariesUseCase,
+                        UseCaseProvider.deleteBottariUseCase
+                    )
                 }
             }
     }
