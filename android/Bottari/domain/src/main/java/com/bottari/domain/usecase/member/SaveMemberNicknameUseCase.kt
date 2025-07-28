@@ -3,7 +3,7 @@ package com.bottari.domain.usecase.member
 import com.bottari.domain.model.member.Member
 import com.bottari.domain.repository.MemberRepository
 
-class UpdateMemberNicknameUseCase(
+class SaveMemberNicknameUseCase(
     private val memberRepository: MemberRepository,
 ) {
     suspend operator fun invoke(
@@ -12,6 +12,6 @@ class UpdateMemberNicknameUseCase(
     ): Result<Unit> =
         runCatching {
             val member = Member(ssaid, nickname)
-            memberRepository.updateMemberNickname(ssaid, member).getOrThrow()
+            memberRepository.saveMemberNickname(ssaid, member).getOrThrow()
         }
 }

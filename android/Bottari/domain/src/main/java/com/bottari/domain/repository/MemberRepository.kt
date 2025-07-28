@@ -6,7 +6,7 @@ import com.bottari.domain.model.member.RegisteredMember
 interface MemberRepository {
     suspend fun registerMember(member: Member): Result<Unit>
 
-    suspend fun updateMemberNickname(
+    suspend fun saveMemberNickname(
         ssaid: String,
         member: Member,
     ): Result<Unit>

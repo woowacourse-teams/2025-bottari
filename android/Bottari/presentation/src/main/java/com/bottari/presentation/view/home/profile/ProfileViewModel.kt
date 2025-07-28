@@ -11,7 +11,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
-import com.bottari.domain.usecase.member.UpdateMemberNicknameUseCase
+import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.common.event.SingleLiveEvent
 import com.bottari.presentation.extension.takeSuccess
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class ProfileViewModel(
     stateHandle: SavedStateHandle,
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
-    private val updateMemberNicknameUseCase: UpdateMemberNicknameUseCase,
+    private val saveMemberNicknameUseCase: SaveMemberNicknameUseCase,
 ) : ViewModel() {
     private val _nickname: MutableLiveData<UiState<String>> = MutableLiveData(UiState.Loading)
     val nickname: LiveData<UiState<String>> = _nickname
@@ -34,10 +34,10 @@ class ProfileViewModel(
         fetchNickname(ssaid)
     }
 
-    fun updateNickName(nickname: String) {
+    fun saveNickname(nickname: String) {
         val currentNickname = _nickname.value?.takeSuccess() ?: ""
         viewModelScope.launch {
-            updateMemberNicknameUseCase(ssaid, nickname)
+            saveMemberNicknameUseCase(ssaid, nickname)
                 .onSuccess {
                     _nickname.value = UiState.Success(nickname)
                 }.onFailure { error ->
@@ -68,7 +68,7 @@ class ProfileViewModel(
                     ProfileViewModel(
                         stateHandle,
                         UseCaseProvider.checkRegisteredMemberUseCase,
-                        UseCaseProvider.updateMemberNicknameUseCase,
+                        UseCaseProvider.saveMemberNicknameUseCase,
                     )
                 }
             }

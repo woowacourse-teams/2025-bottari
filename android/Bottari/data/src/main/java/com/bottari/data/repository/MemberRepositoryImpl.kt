@@ -13,10 +13,10 @@ class MemberRepositoryImpl(
 ) : MemberRepository {
     override suspend fun registerMember(member: Member): Result<Unit> = memberRemoteDataSource.registerMember(member.toRequest())
 
-    override suspend fun updateMemberNickname(
+    override suspend fun saveMemberNickname(
         ssaid: String,
         member: Member,
-    ): Result<Unit> = memberRemoteDataSource.updateMemberNickname(ssaid, member.toUpdateRequest())
+    ): Result<Unit> = memberRemoteDataSource.saveMemberNickname(ssaid, member.toUpdateRequest())
 
     override suspend fun checkRegisteredMember(ssaid: String): Result<RegisteredMember> =
         memberRemoteDataSource.checkRegisteredMember(ssaid).mapCatching { it.toDomain() }

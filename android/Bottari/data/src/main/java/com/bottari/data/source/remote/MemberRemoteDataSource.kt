@@ -7,7 +7,7 @@ import com.bottari.data.model.member.UpdateMemberNicknameRequest
 interface MemberRemoteDataSource {
     suspend fun registerMember(request: RegisterMemberRequest): Result<Unit>
 
-    suspend fun updateMemberNickname(
+    suspend fun saveMemberNickname(
         ssaid: String,
         request: UpdateMemberNicknameRequest,
     ): Result<Unit>

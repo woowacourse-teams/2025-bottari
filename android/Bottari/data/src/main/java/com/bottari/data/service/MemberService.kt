@@ -17,7 +17,7 @@ interface MemberService {
     ): Response<Unit>
 
     @PATCH("/members/me")
-    suspend fun updateMemberNickname(
+    suspend fun saveMemberNickname(
         @Header("ssaid") ssaid: String,
         @Body request: UpdateMemberNicknameRequest,
     ): Response<Unit>

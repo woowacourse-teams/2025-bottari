@@ -14,7 +14,7 @@ import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
-import com.bottari.domain.usecase.member.UpdateMemberNicknameUseCase
+import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
@@ -34,8 +34,8 @@ object UseCaseProvider {
             RepositoryProvider.memberRepository,
         )
     }
-    val updateMemberNicknameUseCase by lazy {
-        UpdateMemberNicknameUseCase(
+    val saveMemberNicknameUseCase by lazy {
+        SaveMemberNicknameUseCase(
             RepositoryProvider.memberRepository,
         )
     }

@@ -95,7 +95,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
     private fun confirmNicknameEdit() {
         val newNickname = binding.etNicknameEdit.text.toString()
         binding.btnNicknameEdit.setImageResource(R.drawable.btn_edit)
-        viewModel.updateNickName(newNickname)
+        viewModel.saveNickname(newNickname)
     }
 
     private fun setEditMode(enabled: Boolean) {
