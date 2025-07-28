@@ -7,7 +7,6 @@ import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.data.testFixture.memberFixture
 import com.bottari.domain.repository.MemberRepository
 import io.kotest.assertions.assertSoftly
-import com.bottari.domain.repository.MemberRepository
 import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
