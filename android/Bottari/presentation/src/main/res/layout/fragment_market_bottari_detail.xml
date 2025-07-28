@@ -30,8 +30,6 @@
             android:layout_gravity="center"
             android:textColor="@color/black"
             tools:text="나의 보따리" />
-
-
     </Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -58,7 +56,6 @@
         android:paddingVertical="@dimen/space_median"
         android:text="@string/btn_bottari_template_detail_receive"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="24dp" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
