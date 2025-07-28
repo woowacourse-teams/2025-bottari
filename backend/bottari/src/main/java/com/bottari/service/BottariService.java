@@ -79,7 +79,8 @@ public class BottariService {
         validateOwner(ssaid, bottari);
         bottari.updateTitle(request.title());
     }
-      
+
+    @Transactional
     public void deleteById(
             final Long id,
             final String ssaid
