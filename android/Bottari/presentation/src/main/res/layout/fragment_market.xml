@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_small"
         android:text="@string/btn_navigate_my_bottari_template"
-        android:textColor="#787878"
+        android:textColor="@color/gray_787878"
         app:layout_constraintEnd_toEndOf="@id/et_bottari_template_title"
         app:layout_constraintTop_toBottomOf="@id/et_bottari_template_title" />
 
