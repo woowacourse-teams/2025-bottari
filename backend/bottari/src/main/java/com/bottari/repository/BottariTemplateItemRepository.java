@@ -14,6 +14,9 @@ public interface BottariTemplateItemRepository extends JpaRepository<BottariTemp
     List<BottariTemplateItem> findAllByBottariTemplateIn(final List<BottariTemplate> bottariTemplates);
 
     @Modifying(clearAutomatically = true)
-    @Query("DELETE FROM BottariTemplateItem bi where bi.bottariTemplate.id = :bottariTemplateId")
+    @Query("""
+            DELETE FROM BottariTemplateItem bi 
+            WHERE bi.bottariTemplate.id = :bottariTemplateId
+            """)
     void deleteByBottariTemplateId(final Long bottariTemplateId);
 }
