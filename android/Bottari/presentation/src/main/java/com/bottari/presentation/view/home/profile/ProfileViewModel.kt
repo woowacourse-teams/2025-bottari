@@ -10,10 +10,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
-import com.bottari.domain.model.member.Member
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.UpdateMemberNicknameUseCase
 import com.bottari.presentation.base.UiState
+import com.bottari.presentation.common.event.SingleLiveEvent
 import com.bottari.presentation.extension.takeSuccess
 import kotlinx.coroutines.launch
 
@@ -25,35 +25,33 @@ class ProfileViewModel(
     private val _nickname: MutableLiveData<UiState<String>> = MutableLiveData(UiState.Loading)
     val nickname: LiveData<UiState<String>> = _nickname
 
-    private val ssaid: String by lazy {
-        stateHandle.get<String>(KEY_SSAID) ?: error(
-            ERROR_REQUIRED_SSAID,
-        )
-    }
+    private val _nicknameEvent = SingleLiveEvent<String>()
+    val nicknameEvent: SingleLiveEvent<String> get() = _nicknameEvent
+
+    private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRED_SSAID)
 
     init {
         fetchNickname(ssaid)
     }
 
     fun updateNickName(nickname: String) {
-        val currentNickname = _nickname.value?.takeSuccess().orEmpty()
-        runCatching { Member(ssaid, nickname) }
-            .onSuccess { member ->
-                viewModelScope.launch {
-                    updateMemberNicknameUseCase(member)
-                        .onSuccess { _nickname.value = UiState.Success(nickname) }
-                        .onFailure { _nickname.value = UiState.Failure(currentNickname) }
+        val currentNickname = _nickname.value?.takeSuccess() ?: ""
+        viewModelScope.launch {
+            updateMemberNicknameUseCase(ssaid, nickname)
+                .onSuccess {
+                    _nickname.value = UiState.Success(nickname)
+                }.onFailure { error ->
+                    _nickname.value = UiState.Failure(currentNickname)
+                    _nicknameEvent.emit(error.message)
                 }
-            }.onFailure {
-                _nickname.value = UiState.Failure(currentNickname)
-            }
+        }
     }
 
     private fun fetchNickname(ssaid: String) {
         viewModelScope.launch {
             checkRegisteredMemberUseCase(ssaid)
                 .onSuccess { _nickname.value = UiState.Success(it.name ?: "") }
-                .onFailure { _nickname.value = UiState.Failure(it.message) }
+                .onFailure { error -> _nicknameEvent.emit(error.message) }
         }
     }
 

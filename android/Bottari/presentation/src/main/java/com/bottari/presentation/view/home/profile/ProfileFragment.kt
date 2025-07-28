@@ -11,6 +11,7 @@ import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentProfileBinding
 import com.bottari.presentation.extension.getSSAID
+import com.google.android.material.snackbar.Snackbar
 
 class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
     private val viewModel: ProfileViewModel by viewModels { ProfileViewModel.Factory(requireContext().getSSAID()) }
@@ -29,6 +30,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 
     private fun setupObserver() {
         viewModel.nickname.observe(viewLifecycleOwner, ::handleNicknameState)
+        viewModel.nicknameEvent.observeEvent(viewLifecycleOwner, ::showNicknameEvent)
     }
 
     private fun setupListener() {
@@ -50,6 +52,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                     Editable.Factory.getInstance().newEditable(uiState.message)
             }
         }
+    }
+
+    private fun showNicknameEvent(message: String) {
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun setupRootClickListener() {
