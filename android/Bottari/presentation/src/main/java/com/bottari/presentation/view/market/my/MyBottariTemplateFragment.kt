@@ -8,6 +8,7 @@ import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentMyBottariTemplateBinding
 import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.model.BottariTemplateUiModel
+import com.bottari.presentation.view.market.MarketNavigator
 import com.bottari.presentation.view.market.my.adapter.MyBottariTemplateAdapter
 import com.bottari.presentation.view.market.my.listener.MyBottariTemplateEventListener
 
