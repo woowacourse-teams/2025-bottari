@@ -4,6 +4,7 @@ import com.bottari.data.extension.extractIdFromHeader
 import com.bottari.data.model.bottari.BottariResponse
 import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.model.bottari.FetchBottariesResponse
+import com.bottari.data.model.bottari.UpdateBottariTitleRequest
 import com.bottari.data.service.BottariService
 import com.bottari.data.util.safeApiCall
 
@@ -30,6 +31,15 @@ class BottariRemoteDataSourceImpl(
         runCatching {
             val response = bottariService.createBottari(ssaid, createBottariRequest)
             response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)
+        }
+
+    override suspend fun saveBottariTitle(
+        id: Long,
+        ssaid: String,
+        request: UpdateBottariTitleRequest,
+    ): Result<Unit> =
+        safeApiCall {
+            bottariService.saveBottariTitle(id = id, ssaid = ssaid, request = request)
         }
 
     companion object {

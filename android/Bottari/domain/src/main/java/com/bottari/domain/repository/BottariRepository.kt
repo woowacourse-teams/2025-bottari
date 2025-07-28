@@ -15,4 +15,10 @@ interface BottariRepository {
         ssaid: String,
         title: String,
     ): Result<Long?>
+
+    suspend fun saveBottariTitle(
+        id: Long,
+        ssaid: String,
+        title: String,
+    ): Result<Unit>
 }

@@ -1,6 +1,7 @@
 package com.bottari.data.repository
 
 import com.bottari.data.model.bottari.CreateBottariRequest
+import com.bottari.data.model.bottari.UpdateBottariTitleRequest
 import com.bottari.data.source.remote.BottariRemoteDataSource
 import com.bottari.data.testFixture.bottariResponseFixture
 import com.bottari.data.testFixture.fetchBottariesResponseFixture
@@ -118,6 +119,30 @@ class BottariRepositoryImplTest {
             coVerify { remoteDataSource.fetchBottaries(ssaid) }
         }
 
+    @DisplayName("보따리 이름 변경에 성공하면 Unit을 반환한다")
+    @Test
+    fun saveBottariTitleSuccessReturnsUnit() =
+        runTest {
+            // given
+            val id = 1L
+            val ssaid = "ssaid123"
+            val title = "renamed title"
+            coEvery {
+                remoteDataSource.saveBottariTitle(id, ssaid, UpdateBottariTitleRequest(title))
+            } returns Result.success(Unit)
+
+            // when
+            val result = repository.saveBottariTitle(id, ssaid, title)
+
+            // then
+            result.shouldBeSuccess {
+                it shouldBe Unit
+            }
+
+            // verify
+            coVerify { remoteDataSource.saveBottariTitle(id, ssaid, UpdateBottariTitleRequest(title)) }
+        }
+
     @DisplayName("보따리 단건 조회 실패 시 예외를 반환한다")
     @Test
     fun findBottariFailureReturnsException() =
@@ -162,5 +187,30 @@ class BottariRepositoryImplTest {
 
             // verify
             coVerify { remoteDataSource.createBottari(ssaid, CreateBottariRequest(title)) }
+        }
+
+    @DisplayName("보따리 이름 변경 실패 시 예외를 반환한다")
+    @Test
+    fun saveBottariTitleFailureReturnsException() =
+        runTest {
+            // given
+            val id = 1L
+            val ssaid = "ssaid_error"
+            val title = "error title"
+            val exception = RuntimeException("제목 변경 실패")
+            coEvery {
+                remoteDataSource.saveBottariTitle(id, ssaid, UpdateBottariTitleRequest(title))
+            } returns Result.failure(exception)
+
+            // when
+            val result = repository.saveBottariTitle(id, ssaid, title)
+
+            // then
+            result.shouldBeFailure {
+                it shouldBe exception
+            }
+
+            // verify
+            coVerify { remoteDataSource.saveBottariTitle(id, ssaid, UpdateBottariTitleRequest(title)) }
         }
 }

@@ -83,4 +83,13 @@
 
     <!-- Menu -->
     <string name="menu_title_create_market">마켓에 등록하기</string>
+    <string name="menu_title_rename">이름 변경하기</string>
+
+    <!--  Bottari Rename Dialog -->
+    <string name="dialog_bottari_rename_title_text">보따리 이름 수정</string>
+    <string name="dialog_bottari_rename_btn_text">수정하기</string>
+    <string name="dialog_bottari_rename_name_hint">이름을 입력하세요</string>
+    <string name="dialog_bottari_rename_close_button_description">보따리 이름 수정 다이얼로그 닫기 버튼</string>
+
+
 </resources>

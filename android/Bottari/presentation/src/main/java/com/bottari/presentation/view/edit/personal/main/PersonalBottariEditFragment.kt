@@ -25,6 +25,7 @@ import com.bottari.presentation.view.edit.alarm.AlarmEditFragment
 import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditAlarmAdapter
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditItemAdapter
+import com.bottari.presentation.view.edit.personal.main.rename.BottariRenameDialog
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -88,6 +89,10 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                     viewModel.createBottariTemplate()
                     true
                 }
+                R.id.rename -> {
+                    showRenameDialog()
+                    true
+                }
 
                 else -> false
             }
@@ -114,6 +119,12 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         }
         binding.switchAlarm.setOnCheckedChangeListener { _, isChecked ->
             viewModel.toggleAlarmState(isChecked)
+        }
+        childFragmentManager.setFragmentResultListener(
+            BottariRenameDialog.SAVE_BOTTARI_TITLE_RESULT_KEY,
+            viewLifecycleOwner,
+        ) { _, _ ->
+            viewModel.fetchBottari()
         }
     }
 
@@ -256,6 +267,14 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 )
             }.setNegativeButton(R.string.alarm_edit_permission_dialog_negative_btn_text, null)
             .show()
+    }
+
+    private fun showRenameDialog() {
+        val bottari = viewModel.bottari.value?.takeSuccess() ?: return
+
+        BottariRenameDialog
+            .newInstance(bottari.id, bottari.title)
+            .show(childFragmentManager, BottariRenameDialog::class.java.name)
     }
 
     companion object {
