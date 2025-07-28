@@ -76,8 +76,8 @@ class BottariRenameDialog :
     ) {
         val isEnabled = s.isNullOrBlank().not()
         val alphaValue = if (isEnabled) ENABLED_ALPHA_VALUE else DISABLED_ALPHA_VALUE
-        binding.btnBottariCreate.isClickable = isEnabled
-        binding.btnBottariCreate.alpha = alphaValue
+        binding.btnBottariRename.isClickable = isEnabled
+        binding.btnBottariRename.alpha = alphaValue
     }
 
     private fun setupObserver() {
@@ -85,10 +85,10 @@ class BottariRenameDialog :
     }
 
     private fun setupListener() {
-        binding.etBottariCreateName.addTextChangedListener(this)
-        binding.btnBottariCreateClose.setOnClickListener { dismiss() }
-        binding.btnBottariCreate.setOnClickListener {
-            val title = binding.etBottariCreateName.text.toString()
+        binding.etBottariRenameName.addTextChangedListener(this)
+        binding.btnBottariRenameClose.setOnClickListener { dismiss() }
+        binding.btnBottariRename.setOnClickListener {
+            val title = binding.etBottariRenameName.text.toString()
             viewModel.renameBottari(ssaid = requireContext().getSSAID(), newTitle = title)
         }
     }
