@@ -5,6 +5,7 @@ import com.bottari.data.model.member.RegisterMemberRequest
 import com.bottari.data.model.member.SaveMemberNicknameRequest
 import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.data.testFixture.memberFixture
+import com.bottari.domain.repository.MemberRepository
 import io.kotest.assertions.assertSoftly
 import com.bottari.domain.repository.MemberRepository
 import io.kotest.matchers.result.shouldBeFailure
@@ -23,14 +24,14 @@ import retrofit2.HttpException
 import retrofit2.Response
 
 class MemberRepositoryImplTest {
-    private val errorResponseBody =
-        """{"message":"잘못된 요청입니다."}""".toResponseBody("application/json".toMediaType())
     private lateinit var remoteDataSource: MemberRemoteDataSource
     private lateinit var repository: MemberRepository
+    private val errorResponseBody =
+        """{"message":"잘못된 요청입니다."}""".toResponseBody("application/json".toMediaType())
 
     @BeforeEach
-    fun setup() {
-        remoteDataSource = mockk()
+    fun setUp() {
+        remoteDataSource = mockk<MemberRemoteDataSource>()
         repository = MemberRepositoryImpl(remoteDataSource)
     }
 
@@ -155,7 +156,10 @@ class MemberRepositoryImplTest {
             // given
             val ssaid = "ssaid"
             val response = CheckRegisteredMemberResponse(false, "test")
-            coEvery { remoteDataSource.checkRegisteredMember(ssaid) } returns Result.success(response)
+            coEvery { remoteDataSource.checkRegisteredMember(ssaid) } returns
+                Result.success(
+                    response,
+                )
 
             // when
             val result = repository.checkRegisteredMember(ssaid)
