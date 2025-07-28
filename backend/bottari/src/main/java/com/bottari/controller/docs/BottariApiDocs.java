@@ -10,8 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "Bottari", description = "보따리 API")
 public interface BottariApiDocs {
@@ -21,7 +19,7 @@ public interface BottariApiDocs {
             @ApiResponse(responseCode = "200", description = "보따리 상세 조회 성공"),
     })
     ResponseEntity<ReadBottariResponse> read(
-            @PathVariable final Long id,
+            final Long id,
             final HttpServletRequest httpServletRequest
     );
 
@@ -38,7 +36,16 @@ public interface BottariApiDocs {
             @ApiResponse(responseCode = "201", description = "보따리 생성 성공"),
     })
     ResponseEntity<Void> create(
-            @RequestBody final CreateBottariRequest request,
+            final CreateBottariRequest request,
+            final HttpServletRequest httpServletRequest
+    );
+
+    @Operation(summary = "보따리 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "보따리 삭제 성공"),
+    })
+    ResponseEntity<Void> delete(
+            final Long id,
             final HttpServletRequest httpServletRequest
     );
 }

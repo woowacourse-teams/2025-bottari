@@ -1,6 +1,7 @@
 package com.bottari.controller;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -21,6 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(BottariController.class)
 class BottariControllerTest {
@@ -85,5 +87,20 @@ class BottariControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(header().string(HttpHeaders.LOCATION, "/bottaries/1"));
+    }
+
+    @DisplayName("보따리를 삭제한다.")
+    @Test
+    void delete() throws Exception {
+        // given
+        final Long bottariId = 1L;
+        final String ssaid = "ssaid";
+        willDoNothing().given(bottariService)
+                .deleteById(bottariId, ssaid);
+
+        // when & then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/bottaries/" + bottariId)
+                        .header("ssaid", ssaid))
+                .andExpect(status().isNoContent());
     }
 }
