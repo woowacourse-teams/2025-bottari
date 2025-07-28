@@ -28,7 +28,7 @@ class MarketActivity :
                 MarketBottariDetailFragment::class.java,
                 MarketBottariDetailFragment.newBundle(bottariTemplateId, isMyTemplate),
             )
-            addToBackStack(null)
+            if (isMyTemplate) addToBackStack(null)
             commit()
         }
     }
