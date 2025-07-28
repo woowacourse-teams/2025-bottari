@@ -51,8 +51,7 @@ class BottariViewModel(
             deleteBottarieUseCase(ssaid, bottariId)
                 .onSuccess {
                     _deleteBottariState.value = UiState.Success(Unit)
-                }
-                .onFailure {
+                }.onFailure {
                     _deleteBottariState.value = UiState.Failure(it.message)
                 }
         }
@@ -69,7 +68,7 @@ class BottariViewModel(
                     BottariViewModel(
                         stateHandle,
                         UseCaseProvider.fetchBottariesUseCase,
-                        UseCaseProvider.deleteBottariUseCase
+                        UseCaseProvider.deleteBottariUseCase,
                     )
                 }
             }
