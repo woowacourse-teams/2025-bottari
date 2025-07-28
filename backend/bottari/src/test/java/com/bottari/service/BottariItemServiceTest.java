@@ -50,10 +50,10 @@ class BottariItemServiceTest {
         final List<ReadBottariItemResponse> actual = bottariItemService.getAllByBottariId(bottari2.getId());
 
         // then
-        assertAll(() -> {
-            assertThat(actual).hasSize(1);
-            assertThat(actual.getFirst()).isEqualTo(ReadBottariItemResponse.from(bottariItem2));
-        });
+        assertAll(
+                () -> assertThat(actual).hasSize(1),
+                () -> assertThat(actual.getFirst()).isEqualTo(ReadBottariItemResponse.from(bottariItem2))
+        );
     }
 
     @DisplayName("존재하지 않는 보따리의 물품을 조회할 경우, 예외를 던진다.")
@@ -186,11 +186,11 @@ class BottariItemServiceTest {
                 .setParameter("bottariId", anotherBottari.getId())
                 .getResultList();
 
-        assertAll(() -> {
-            assertThat(actual).extracting("name").containsExactly("name_3", "newName_1", "newName_2");
-            assertThat(anotherActual).hasSize(1);
-            assertThat(anotherActual.getFirst().getName()).isEqualTo("another_name");
-        });
+        assertAll(
+                () -> assertThat(actual).extracting("name").containsExactly("name_3", "newName_1", "newName_2"),
+                () -> assertThat(anotherActual).hasSize(1),
+                () -> assertThat(anotherActual.getFirst().getName()).isEqualTo("another_name")
+        );
     }
 
     @DisplayName("수정 시 보따리가 존재하지 않는 경우, 예외를 던진다.")

@@ -46,6 +46,7 @@ public class BottariService {
         return ReadBottariResponse.of(bottari, bottariItems, alarm);
     }
 
+
     public List<ReadBottariPreviewResponse> getAllBySsaidSortedByLatest(final String ssaid) {
         final Member member = memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
@@ -92,7 +93,7 @@ public class BottariService {
     }
 
     private List<ReadBottariPreviewResponse> buildReadBottariPreviewResponses(final List<Bottari> bottaries) {
-        final Map<Bottari, List<BottariItem>> bottariItemsGroupByBottari = groupingBottariItmesById(bottaries);
+        final Map<Bottari, List<BottariItem>> bottariItemsGroupByBottari = groupingBottariItemsById(bottaries);
         final Map<Bottari, Alarm> alarmMap = groupingAlarmByBottari(bottaries);
         final List<ReadBottariPreviewResponse> readBottariPreviewResponses = new ArrayList<>();
         for (final Bottari bottari : bottaries) {
@@ -127,7 +128,7 @@ public class BottariService {
                 );
     }
 
-    private Map<Bottari, List<BottariItem>> groupingBottariItmesById(final List<Bottari> bottaries) {
+    private Map<Bottari, List<BottariItem>> groupingBottariItemsById(final List<Bottari> bottaries) {
         final List<BottariItem> bottariItems = bottariItemRepository.findAllByBottariIn(bottaries);
 
         return bottariItems.stream()

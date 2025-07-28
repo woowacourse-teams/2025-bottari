@@ -6,9 +6,9 @@ import com.bottari.domain.BottariTemplate;
 import com.bottari.domain.BottariTemplateItem;
 import com.bottari.domain.Member;
 import com.bottari.dto.CreateBottariTemplateRequest;
+import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.repository.BottariItemRepository;
 import com.bottari.repository.BottariRepository;
-import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.repository.BottariTemplateItemRepository;
 import com.bottari.repository.BottariTemplateRepository;
 import com.bottari.repository.MemberRepository;
@@ -40,6 +40,17 @@ public class BottariTemplateService {
                 bottariTemplateItemRepository.findAllByBottariTemplateId(bottariTemplate.getId());
 
         return ReadBottariTemplateResponse.of(bottariTemplate, bottariTemplateItems);
+    }
+
+    public List<ReadBottariTemplateResponse> getBySsaid(final String ssaid) {
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+        final List<BottariTemplate> bottariTemplateItems =
+                bottariTemplateRepository.findAllByMemberIdWithMember(member.getId());
+        final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate =
+                groupingItemsByTemplate(bottariTemplateItems);
+
+        return buildReadBottariTemplateResponses(itemsGroupByTemplate);
     }
 
     public List<ReadBottariTemplateResponse> getAll(final String query) {
@@ -78,16 +89,28 @@ public class BottariTemplateService {
         final List<BottariTemplateItem> bottariTemplateItems = bottariTemplateItemRepository.findAllByBottariTemplateId(id);
         final Member member = memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
-        final Bottari bottari = new Bottari(bottariTemplate.getTitle(),member);
+        final Bottari bottari = new Bottari(bottariTemplate.getTitle(), member);
         final Bottari savedBottari = bottariRepository.save(bottari);
         final List<BottariItem> bottariItems = bottariTemplateItems.stream()
-                .map(item -> new BottariItem(item.getName(),bottari))
+                .map(item -> new BottariItem(item.getName(), bottari))
                 .toList();
         bottariItemRepository.saveAll(bottariItems);
 
         return savedBottari.getId();
     }
-  
+
+    @Transactional
+    public void deleteById(
+            final Long id,
+            final String ssaid
+    ) {
+        final BottariTemplate bottariTemplate = bottariTemplateRepository.findByIdWithMember(id)
+                .orElseThrow(() -> new IllegalArgumentException("보따리 템플릿을 찾을 수 없습니다."));
+        validateOwner(ssaid, bottariTemplate);
+        bottariTemplateItemRepository.deleteByBottariTemplateId(id);
+        bottariTemplateRepository.deleteById(id);
+    }
+
     private Map<BottariTemplate, List<BottariTemplateItem>> groupingItemsByTemplate(final List<BottariTemplate> bottariTemplates) {
         final List<BottariTemplateItem> items = bottariTemplateItemRepository.findAllByBottariTemplateIn(
                 bottariTemplates);
@@ -100,8 +123,10 @@ public class BottariTemplateService {
         final List<ReadBottariTemplateResponse> responses = new ArrayList<>();
         final List<BottariTemplate> sortedBottariTemplates = sortByCreatedAtDesc(itemsGroupByTemplate);
         for (final BottariTemplate bottariTemplate : sortedBottariTemplates) {
-            final List<BottariTemplateItem> templateItems = itemsGroupByTemplate.getOrDefault(bottariTemplate,
-                    List.of());
+            final List<BottariTemplateItem> templateItems = itemsGroupByTemplate.getOrDefault(
+                    bottariTemplate,
+                    List.of()
+            );
             responses.add(ReadBottariTemplateResponse.of(bottariTemplate, templateItems));
         }
 
@@ -121,6 +146,15 @@ public class BottariTemplateService {
             if (!uniqueItemNames.add(itemName)) {
                 throw new IllegalArgumentException("중복된 물품이 존재합니다.");
             }
+        }
+    }
+
+    private void validateOwner(
+            final String ssaid,
+            final BottariTemplate bottariTemplate
+    ) {
+        if (!bottariTemplate.isOwner(ssaid)) {
+            throw new IllegalArgumentException("본인의 보따리 템플릿이 아닙니다.");
         }
     }
 }

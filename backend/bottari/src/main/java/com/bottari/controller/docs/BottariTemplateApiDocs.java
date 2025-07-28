@@ -13,17 +13,23 @@ import org.springframework.http.ResponseEntity;
 @Tag(name = "Bottari Template", description = "보따리 템플릿 API")
 public interface BottariTemplateApiDocs {
 
-    @Operation(summary = "보따리 템플릿 목록 조회")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "보따리 템플릿 목록 조회 성공"),
-    })
-    ResponseEntity<List<ReadBottariTemplateResponse>> readAll(final String query);
-
     @Operation(summary = "보따리 템플릿 상세 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "보따리 템플릿 상세 조회 성공"),
     })
     ResponseEntity<ReadBottariTemplateResponse> read(final Long id);
+
+    @Operation(summary = "내 보따리 템플릿 목록 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "내 보따리 템플릿 목록 조회 성공")
+    })
+    ResponseEntity<List<ReadBottariTemplateResponse>> readMine(final HttpServletRequest httpServletRequest);
+
+    @Operation(summary = "보따리 템플릿 목록 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "보따리 템플릿 목록 조회 성공"),
+    })
+    ResponseEntity<List<ReadBottariTemplateResponse>> readAll(final String query);
 
     @Operation(summary = "보따리 템플릿 생성")
     @ApiResponses(value = {
@@ -39,6 +45,15 @@ public interface BottariTemplateApiDocs {
             @ApiResponse(responseCode = "201", description = "보따리 템플릿으로 보따리 생성 성공"),
     })
     ResponseEntity<Void> createBottari(
+            final Long id,
+            final HttpServletRequest httpServletRequest
+    );
+
+    @Operation(summary = "보따리 템플릿 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "보따리 템플릿 삭제 성공")
+    })
+    ResponseEntity<Void> delete(
             final Long id,
             final HttpServletRequest httpServletRequest
     );
