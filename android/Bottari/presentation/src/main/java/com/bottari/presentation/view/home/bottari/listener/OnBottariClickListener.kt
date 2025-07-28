@@ -6,5 +6,7 @@ interface OnBottariClickListener {
         bottariTitle: String,
     )
 
-    fun onMoreClick(bottariId: Long)
+    fun onEditClick(bottariId: Long)
+
+    fun onDeleteClick(bottariId: Long)
 }

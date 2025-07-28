@@ -33,6 +33,14 @@ class BottariRemoteDataSourceImpl(
             response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)
         }
 
+    override suspend fun deleteBottari(
+        id: Long,
+        ssaid: String,
+    ): Result<Unit> =
+        safeApiCall {
+            bottariService.deleteBottari(id = id, ssaid = ssaid)
+        }
+
     override suspend fun saveBottariTitle(
         id: Long,
         ssaid: String,

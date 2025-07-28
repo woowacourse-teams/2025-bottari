@@ -16,6 +16,11 @@ interface BottariRepository {
         title: String,
     ): Result<Long?>
 
+    suspend fun deleteBottari(
+        id: Long,
+        ssaid: String,
+    ): Result<Unit>
+
     suspend fun saveBottariTitle(
         id: Long,
         ssaid: String,

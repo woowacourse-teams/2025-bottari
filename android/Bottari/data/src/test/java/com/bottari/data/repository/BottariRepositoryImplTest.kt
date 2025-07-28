@@ -12,13 +12,11 @@ import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-@ExperimentalCoroutinesApi
 class BottariRepositoryImplTest {
     private lateinit var remoteDataSource: BottariRemoteDataSource
     private lateinit var repository: BottariRepositoryImpl
@@ -96,6 +94,27 @@ class BottariRepositoryImplTest {
 
             // verify
             coVerify { remoteDataSource.createBottari(ssaid, CreateBottariRequest(title)) }
+        }
+
+    @DisplayName("보따리 생성 성공 시 Unit을 반환한다")
+    @Test
+    fun deleteBottariSuccessReturnsUnit() =
+        runTest {
+            // given
+            val ssaid = "ssaid_error"
+            val id = 1L
+            coEvery {
+                remoteDataSource.deleteBottari(id, ssaid)
+            } returns Result.success(Unit)
+
+            // when
+            val result = repository.deleteBottari(id, ssaid)
+
+            // then
+            result.shouldBeSuccess()
+
+            // verify
+            coVerify { remoteDataSource.deleteBottari(id, ssaid) }
         }
 
     @DisplayName("보따리 목록 조회 실패 시 예외를 반환한다")
@@ -212,5 +231,29 @@ class BottariRepositoryImplTest {
 
             // verify
             coVerify { remoteDataSource.saveBottariTitle(id, ssaid, UpdateBottariTitleRequest(title)) }
+        }
+
+    @DisplayName("보따리 삭제 실패 시 예외를 반환한다")
+    @Test
+    fun deleteBottariFailureReturnsException() =
+        runTest {
+            // given
+            val ssaid = "ssaid_error"
+            val id = -1L
+            val exception = RuntimeException("삭제 실패")
+            coEvery {
+                remoteDataSource.deleteBottari(id, ssaid)
+            } returns Result.failure(exception)
+
+            // when
+            val result = repository.deleteBottari(id, ssaid)
+
+            // then
+            result.shouldBeFailure {
+                it shouldBe exception
+            }
+
+            // verify
+            coVerify { remoteDataSource.deleteBottari(id, ssaid) }
         }
 }

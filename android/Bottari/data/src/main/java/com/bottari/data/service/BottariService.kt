@@ -6,6 +6,7 @@ import com.bottari.data.model.bottari.FetchBottariesResponse
 import com.bottari.data.model.bottari.UpdateBottariTitleRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
@@ -28,6 +29,12 @@ interface BottariService {
     suspend fun createBottari(
         @Header("ssaid") ssaid: String,
         @Body request: CreateBottariRequest,
+    ): Response<Unit>
+
+    @DELETE("/bottaries/{id}")
+    suspend fun deleteBottari(
+        @Header("ssaid") ssaid: String,
+        @Path("id") id: Long,
     ): Response<Unit>
 
     @PATCH("/bottaries/{id}")

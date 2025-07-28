@@ -1,17 +1,22 @@
 package com.bottari.presentation.view.home.bottari.adapter
 
+import android.graphics.Color
 import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupWindow
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemBottariBinding
+import com.bottari.presentation.databinding.PopupBottariOptionsBinding
 import com.bottari.presentation.extension.formatWithPattern
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
@@ -25,7 +30,7 @@ import java.util.Locale
 
 class BottariViewHolder private constructor(
     private val binding: ItemBottariBinding,
-    onBottariClickListener: OnBottariClickListener,
+    private val onBottariClickListener: OnBottariClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val dateFormat: String = getString(R.string.bottari_item_alarm_date_format)
     private val timeFormat: String = getString(R.string.bottari_item_alarm_time_format)
@@ -39,9 +44,10 @@ class BottariViewHolder private constructor(
                 onBottariClickListener.onClick(id, bottariTitle)
             }
         }
-
-        binding.btnBottariMore.setOnClickListener {
-            bottariId?.let { onBottariClickListener.onMoreClick(it) }
+        binding.btnBottariMore.setOnClickListener { anchorView ->
+            bottariId?.let { id ->
+                showBottariOptionsPopup(anchorView, id)
+            }
         }
     }
 
@@ -152,6 +158,44 @@ class BottariViewHolder private constructor(
             is GradientDrawable -> innerDrawable.setColor(color)
         }
         return drawable
+    }
+
+    private fun showBottariOptionsPopup(
+        anchorView: View,
+        bottariId: Long,
+    ) {
+        val binding = PopupBottariOptionsBinding.inflate(LayoutInflater.from(anchorView.context))
+
+        val popupWindow =
+            PopupWindow(
+                binding.root,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true,
+            ).apply {
+                isOutsideTouchable = true
+                setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+                elevation = 10f
+                showAsDropDown(anchorView, -200, 0)
+            }
+
+        setPopupClickListeners(binding, popupWindow, bottariId)
+    }
+
+    private fun setPopupClickListeners(
+        binding: PopupBottariOptionsBinding,
+        popupWindow: PopupWindow,
+        bottariId: Long,
+    ) {
+        binding.btnEdit.setOnClickListener {
+            onBottariClickListener.onEditClick(bottariId)
+            popupWindow.dismiss()
+        }
+
+        binding.btnDelete.setOnClickListener {
+            onBottariClickListener.onDeleteClick(bottariId)
+            popupWindow.dismiss()
+        }
     }
 
     companion object {

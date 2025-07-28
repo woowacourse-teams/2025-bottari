@@ -2,6 +2,7 @@ package com.bottari.data.repository
 
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
 import com.bottari.data.testFixture.fetchBottariTemplateResponseListFixture
+import com.bottari.domain.repository.BottariTemplateRepository
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.result.shouldBeSuccess
@@ -10,12 +11,19 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 class BottariTemplateRepositoryImplTest {
-    private val remoteDataSource = mockk<BottariTemplateRemoteDataSource>()
-    private val repository = BottariTemplateRepositoryImpl(remoteDataSource)
+    private lateinit var remoteDataSource: BottariTemplateRemoteDataSource
+    private lateinit var repository: BottariTemplateRepository
+
+    @BeforeEach
+    fun setup() {
+        remoteDataSource = mockk()
+        repository = BottariTemplateRepositoryImpl(remoteDataSource)
+    }
 
     @DisplayName("보따리 템플릿 목록 조회에 성공하면 도메인 모델 리스트로 매핑된다")
     @Test

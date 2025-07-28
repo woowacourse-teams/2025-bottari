@@ -24,6 +24,11 @@ class BottariRepositoryImpl(
         title: String,
     ): Result<Long?> = bottariRemoteDataSource.createBottari(ssaid, CreateBottariRequest(title))
 
+    override suspend fun deleteBottari(
+        id: Long,
+        ssaid: String,
+    ): Result<Unit> = bottariRemoteDataSource.deleteBottari(id, ssaid)
+
     override suspend fun saveBottariTitle(
         id: Long,
         ssaid: String,
