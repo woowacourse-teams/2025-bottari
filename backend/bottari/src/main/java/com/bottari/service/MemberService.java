@@ -9,6 +9,9 @@ import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,16 +23,30 @@ public class MemberService {
             "체커", "잊꾸", "짐장인", "출근러", "여행러",
             "물건러", "챙김러", "잊꾸러기", "보따리꾼", "가방요정"
     };
-    private static final double MAX_TEMP_NAME_GENERATION_ATTEMPTS = 3;
 
     private final MemberRepository memberRepository;
 
     @Transactional
+    @Retryable(
+            retryFor = DataIntegrityViolationException.class,
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 300, multiplier = 2)
+    )
     public Long create(final CreateMemberRequest request) {
         validateDuplicateSsaid(request.ssaid());
-        final Member savedMember = saveWithUniqueTempName(request.ssaid());
+        final String tempName = createRandomNameCandidate();
+        final Member member = new Member(request.ssaid(), tempName);
+        final Member savedMember = memberRepository.save(member);
 
         return savedMember.getId();
+    }
+
+    @Recover
+    public Long recoverCreate(
+            final DataIntegrityViolationException exception,
+            final CreateMemberRequest request
+    ) {
+        throw new IllegalStateException("고유한 임시 닉네임을 생성하고 저장하는 데 실패했습니다. (관리자 문의 필요)");
     }
 
     public CheckRegistrationResponse checkRegistration(final String ssaid) {
@@ -60,30 +77,15 @@ public class MemberService {
         }
     }
 
-    private void validateDuplicateName(final UpdateMemberRequest request) {
-        if (memberRepository.existsByName(request.name())) {
-            throw new IllegalArgumentException("이미 사용 중인 이름입니다.");
-        }
-    }
-
-    private Member saveWithUniqueTempName(final String ssaid) {
-        for (int i = 0; i < MAX_TEMP_NAME_GENERATION_ATTEMPTS; i++) {
-            try {
-                final String tempName = createRandomNameCandidate();
-                final Member member = new Member(ssaid, tempName);
-                return memberRepository.save(member);
-            } catch (DataIntegrityViolationException e) {
-                if (i == MAX_TEMP_NAME_GENERATION_ATTEMPTS - 1) {
-                    throw new IllegalStateException("고유한 임시 닉네임을 생성하고 저장하는 데 실패했습니다. (관리자 문의 필요)");
-                }
-            }
-        }
-        throw new IllegalStateException("알 수 없는 이유로 닉네임 생성에 실패했습니다.");
-    }
-
     private String createRandomNameCandidate() {
         String word = NAME_POOL[ThreadLocalRandom.current().nextInt(NAME_POOL.length)];
         int suffix = ThreadLocalRandom.current().nextInt(10_000);
         return "%s-%04d".formatted(word, suffix);
+    }
+
+    private void validateDuplicateName(final UpdateMemberRequest request) {
+        if (memberRepository.existsByName(request.name())) {
+            throw new IllegalArgumentException("이미 사용 중인 이름입니다.");
+        }
     }
 }
