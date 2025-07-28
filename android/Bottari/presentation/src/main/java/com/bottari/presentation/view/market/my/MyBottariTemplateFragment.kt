@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentMyBottariTemplateBinding
+import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.model.BottariTemplateUiModel
 import com.bottari.presentation.view.market.my.adapter.MyBottariTemplateAdapter
 import com.bottari.presentation.view.market.my.listener.MyBottariTemplateEventListener
@@ -13,7 +14,11 @@ import com.bottari.presentation.view.market.my.listener.MyBottariTemplateEventLi
 class MyBottariTemplateFragment :
     BaseFragment<FragmentMyBottariTemplateBinding>(FragmentMyBottariTemplateBinding::inflate),
     MyBottariTemplateEventListener {
-    private val viewModel: MyBottariTemplateViewModel by viewModels { MyBottariTemplateViewModel.Factory() }
+    private val viewModel: MyBottariTemplateViewModel by viewModels {
+        MyBottariTemplateViewModel.Factory(
+            requireContext().getSSAID(),
+        )
+    }
     private val adapter: MyBottariTemplateAdapter by lazy { MyBottariTemplateAdapter(this) }
 
     override fun onViewCreated(
@@ -23,6 +28,7 @@ class MyBottariTemplateFragment :
         super.onViewCreated(view, savedInstanceState)
 
         setupObserver()
+        setupUI()
         setupListener()
     }
 
@@ -36,6 +42,10 @@ class MyBottariTemplateFragment :
 
     private fun setupObserver() {
         viewModel.myBottariTemplates.observe(viewLifecycleOwner, ::handleMyBottariTemplateState)
+    }
+
+    private fun setupUI() {
+        binding.rvMyBottariTemplate.adapter = adapter
     }
 
     private fun setupListener() {
