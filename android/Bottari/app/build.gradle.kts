@@ -25,6 +25,18 @@ android {
                 "proguard-rules.pro",
             )
         }
+
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-dev"
+            resValue("string", "app_name", "보따리 (Dev)")
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
