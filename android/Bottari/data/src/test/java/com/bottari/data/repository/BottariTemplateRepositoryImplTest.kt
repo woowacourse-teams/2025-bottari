@@ -51,7 +51,7 @@ class BottariTemplateRepositoryImplTest {
             val result = repository.fetchBottariTemplates("검색어")
 
             // then
-            result.shouldBeFailure{
+            result.shouldBeFailure {
                 it shouldBe exception
             }
 

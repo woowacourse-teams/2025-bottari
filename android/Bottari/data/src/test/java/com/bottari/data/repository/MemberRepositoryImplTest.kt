@@ -52,7 +52,7 @@ class MemberRepositoryImplTest {
             val result = repository.registerMember(member)
 
             // then
-            result.shouldBeFailure{
+            result.shouldBeFailure {
                 it shouldBe exception
             }
             // verify
