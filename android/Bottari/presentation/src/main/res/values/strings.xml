@@ -76,6 +76,9 @@
     <!-- Market Detail -->
     <string name="btn_bottari_template_detail_receive">가져오기</string>
 
+    <!-- My Bottari Template -->
+    <string name="my_bottari_template_screen_title">내가 공유한 보따리</string>
+
     <!-- Profile -->
     <string name="profile_screen_nickname_title">닉네임</string>
 
