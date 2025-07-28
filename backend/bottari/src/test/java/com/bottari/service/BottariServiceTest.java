@@ -231,15 +231,11 @@ class BottariServiceTest {
         );
         final Alarm alarm = new Alarm(true, routineAlarm, locationAlarm, delete_bottari);
         entityManager.persist(alarm);
-        entityManager.flush();
-        entityManager.clear();
 
         // when
         bottariService.deleteById(delete_bottari.getId(), ssaid);
 
         // then
-        entityManager.flush();
-        entityManager.clear();
         final Bottari remainingBottari = entityManager.find(Bottari.class, remain_bottari.getId());
         final Bottari deletedBottari = entityManager.find(Bottari.class, delete_bottari.getId());
 
@@ -275,8 +271,6 @@ class BottariServiceTest {
 
         final Bottari anotherMemberBottari = new Bottari("title1", anotherMember);
         entityManager.persist(anotherMemberBottari);
-        entityManager.flush();
-        entityManager.clear();
 
         // when & then
         assertThatThrownBy(() -> bottariService.deleteById(anotherMemberBottari.getId(), "ssaid"))
