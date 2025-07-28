@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.market.main.adapter
+package com.bottari.presentation.view.market.detail.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

@@ -1,47 +1,52 @@
-package com.bottari.presentation.view.home.market.detail
+package com.bottari.presentation.view.market.detail
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import androidx.activity.viewModels
+import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bottari.presentation.base.BaseActivity
+import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
-import com.bottari.presentation.databinding.ActivityMarketBottariDetailBinding
+import com.bottari.presentation.databinding.FragmentMarketBottariDetailBinding
 import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.model.BottariTemplateUiModel
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
-import com.bottari.presentation.view.home.market.main.adapter.MarketBottariDetailAdapter
+import com.bottari.presentation.view.market.detail.adapter.MarketBottariDetailAdapter
 
-class MarketBottariDetailActivity : BaseActivity<ActivityMarketBottariDetailBinding>(ActivityMarketBottariDetailBinding::inflate) {
+class MarketBottariDetailFragment : BaseFragment<FragmentMarketBottariDetailBinding>(FragmentMarketBottariDetailBinding::inflate) {
     private val viewModel: MarketBottariDetailViewModel by viewModels {
-        MarketBottariDetailViewModel.Factory(ssaid = getSSAID(), bottarID = fetchBottariId())
+        MarketBottariDetailViewModel.Factory(
+            ssaid = requireContext().getSSAID(),
+            bottarID = fetchBottariId(),
+        )
     }
 
     private val adapter by lazy { MarketBottariDetailAdapter() }
 
-    private fun fetchBottariId(): Long = intent?.getLongExtra(EXTRA_BOTTARI_ID, INVALID_BOTTARI_ID) ?: INVALID_BOTTARI_ID
+    private fun fetchBottariId(): Long = arguments?.getLong(EXTRA_BOTTARI_ID, INVALID_BOTTARI_ID) ?: INVALID_BOTTARI_ID
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
         setupObserver()
         setupUI()
         setupListener()
     }
 
     private fun setupObserver() {
-        viewModel.bottariTemplate.observe(this, ::handleBottariTemplateState)
-        viewModel.createSuccess.observe(this, ::handleTakeSuccess)
+        viewModel.bottariTemplate.observe(viewLifecycleOwner, ::handleBottariTemplateState)
+        viewModel.createSuccess.observe(viewLifecycleOwner, ::handleTakeSuccess)
     }
 
     private fun setupUI() {
         binding.rvMarketBottariDetail.adapter = adapter
-        binding.rvMarketBottariDetail.layoutManager = LinearLayoutManager(this)
+        binding.rvMarketBottariDetail.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun setupListener() {
         binding.btnPrevious.setOnClickListener {
-            finish()
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.btnTakeTemplate.setOnClickListener {
             takeBottariTemplate()
@@ -54,8 +59,8 @@ class MarketBottariDetailActivity : BaseActivity<ActivityMarketBottariDetailBind
 
     private fun navigateBottariEdit(bottariId: Long?) {
         if (bottariId == null) return
-        startActivity(PersonalBottariEditActivity.newIntent(this, bottariId))
-        finish()
+        startActivity(PersonalBottariEditActivity.newIntent(requireContext(), bottariId))
+        requireActivity().finish()
     }
 
     private fun handleBottariTemplateState(uiState: UiState<BottariTemplateUiModel>) {
@@ -65,6 +70,7 @@ class MarketBottariDetailActivity : BaseActivity<ActivityMarketBottariDetailBind
                 binding.tvBottariTitle.text = uiState.data.title
                 adapter.submitList(uiState.data.items)
             }
+
             is UiState.Failure -> Unit
         }
     }
@@ -81,12 +87,9 @@ class MarketBottariDetailActivity : BaseActivity<ActivityMarketBottariDetailBind
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
         private const val INVALID_BOTTARI_ID = -1L
 
-        fun newIntent(
-            context: Context,
-            bottariId: Long,
-        ): Intent =
-            Intent(context, MarketBottariDetailActivity::class.java).apply {
-                putExtra(EXTRA_BOTTARI_ID, bottariId)
+        fun newBundle(bottariId: Long): Bundle =
+            Bundle().apply {
+                putLong(EXTRA_BOTTARI_ID, bottariId)
             }
     }
 }
