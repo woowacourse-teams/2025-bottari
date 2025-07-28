@@ -21,9 +21,10 @@ class BottariRenameDialog :
     DialogFragment(),
     TextWatcher {
     private val viewModel: BottariRenameViewModel by viewModels {
+        val ssaid = requireContext().getSSAID()
         val bottariId = requireArguments().getLong(EXTRA_BOTTARI_ID)
         val oldTitle = requireArguments().getString(EXTRA_OLD_TITLE).orEmpty()
-        BottariRenameViewModel.Factory(bottariId, oldTitle)
+        BottariRenameViewModel.Factory(ssaid, bottariId, oldTitle)
     }
 
     private var _binding: DialogBottariRenameBinding? = null
@@ -87,8 +88,8 @@ class BottariRenameDialog :
         binding.etBottariRenameName.addTextChangedListener(this)
         binding.btnBottariRenameClose.setOnClickListener { dismiss() }
         binding.btnBottariRename.setOnClickListener {
-            val title = binding.etBottariRenameName.text.toString()
-            viewModel.renameBottari(ssaid = requireContext().getSSAID(), newTitle = title)
+            val newTitle = binding.etBottariRenameName.text.toString()
+            viewModel.renameBottari(newTitle)
         }
     }
 

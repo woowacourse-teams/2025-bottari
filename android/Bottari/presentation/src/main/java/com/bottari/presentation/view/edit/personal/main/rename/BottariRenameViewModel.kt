@@ -15,17 +15,17 @@ class BottariRenameViewModel(
     savedStateHandle: SavedStateHandle,
     private val renameBottariUseCase: RenameBottariUseCase,
 ) : ViewModel() {
-    private val id: Long = savedStateHandle.get<Long>(EXTRA_BOTTARI_ID) ?: error(ERROR_REQUIRE_BOTTARI_ID)
-    private val oldTitle: String = savedStateHandle.get<String>(EXTRA_OLD_TITLE) ?: error(ERROR_REQUIRE_OLD_TITLE)
+    private val ssaid: String = savedStateHandle.get<String>(KEY_SSAID) ?: error(ERROR_REQUIRE_SSAID)
+    private val id: Long = savedStateHandle.get<Long>(KEY_BOTTARI_ID) ?: error(ERROR_REQUIRE_BOTTARI_ID)
+    private val oldTitle: String = savedStateHandle.get<String>(KEY_OLD_TITLE) ?: error(ERROR_REQUIRE_OLD_TITLE)
 
     private val _renameSuccess = MutableLiveData<UiState<Unit?>>()
     val renameSuccess: MutableLiveData<UiState<Unit?>> = _renameSuccess
 
     fun renameBottari(
-        ssaid: String,
         newTitle: String,
     ) {
-        if (!isValidTitle(newTitle, oldTitle)) return
+        if (!isValidTitle(newTitle)) return
 
         _renameSuccess.value = UiState.Loading
 
@@ -38,7 +38,6 @@ class BottariRenameViewModel(
 
     private fun isValidTitle(
         newTitle: String,
-        oldTitle: String,
     ): Boolean =
         when {
             newTitle.isBlank() -> false
@@ -50,20 +49,25 @@ class BottariRenameViewModel(
         }
 
     companion object {
-        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
-        private const val EXTRA_OLD_TITLE = "EXTRA_OLD_TITLE"
+        private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
+        private const val KEY_OLD_TITLE = "KEY_OLD_TITLE"
+        private const val KEY_SSAID = "KEY_SSAID"
+
         private const val ERROR_REQUIRE_BOTTARI_ID = "보따리 ID가 없습니다"
         private const val ERROR_REQUIRE_OLD_TITLE = "보따리 이름이 없습니다"
+        private const val ERROR_REQUIRE_SSAID = "SSAID가 없습니다"
 
         fun Factory(
+            ssaid: String,
             bottariId: Long,
             oldTitle: String,
         ): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val handle = createSavedStateHandle()
-                    handle[EXTRA_BOTTARI_ID] = bottariId
-                    handle[EXTRA_OLD_TITLE] = oldTitle
+                    handle[KEY_BOTTARI_ID] = bottariId
+                    handle[KEY_OLD_TITLE] = oldTitle
+                    handle[KEY_SSAID] = ssaid
 
                     BottariRenameViewModel(
                         handle,
