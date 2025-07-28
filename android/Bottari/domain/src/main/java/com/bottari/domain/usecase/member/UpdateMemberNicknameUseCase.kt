@@ -10,6 +10,8 @@ class UpdateMemberNicknameUseCase(
         ssaid: String,
         nickname: String,
     ): Result<Unit> =
-        runCatching { Member(ssaid, nickname) }
-            .mapCatching { member -> memberRepository.updateMemberNickname(ssaid, member) }
+        runCatching {
+            val member = Member(ssaid, nickname)
+            memberRepository.updateMemberNickname(ssaid, member).getOrThrow()
+        }
 }
