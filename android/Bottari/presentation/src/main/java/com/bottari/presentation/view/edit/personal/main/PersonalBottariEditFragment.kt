@@ -25,6 +25,7 @@ import com.bottari.presentation.view.edit.alarm.AlarmEditFragment
 import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditAlarmAdapter
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditItemAdapter
+import com.bottari.presentation.view.edit.personal.main.rename.BottariRenameDialog
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
