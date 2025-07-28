@@ -82,6 +82,7 @@
 
     <!-- Profile -->
     <string name="profile_screen_nickname_title">닉네임</string>
+    <string name="nickname_edit_hint_text">닉네임을 입력하세요</string>
 
     <!--  Description  -->
     <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>
