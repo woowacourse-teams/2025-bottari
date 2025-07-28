@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/space_large"
-        android:layout_marginBottom="@dimen/space_large"
         android:background="@drawable/bg_gray_radius_20dp"
         android:hint="@string/market_place_edit_text_hint"
         android:importantForAutofill="no"
@@ -23,17 +22,28 @@
         android:paddingEnd="0dp"
         android:textColor="@color/black"
         android:textColorHint="@color/gray_a6a6a6"
-        app:layout_constraintBottom_toTopOf="@id/rv_bottari_template"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/btn_my_bottari_template"
+        style="@style/Pretendard_Medium_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_small"
+        android:text="@string/btn_navigate_my_bottari_template"
+        android:textColor="#787878"
+        app:layout_constraintEnd_toEndOf="@id/et_bottari_template_title"
+        app:layout_constraintTop_toBottomOf="@id/et_bottari_template_title" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_bottari_template"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/space_small"
+        android:fadingEdgeLength="@dimen/space_x_small"
+        android:requiresFadingEdge="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_bottari_template_title"
-        android:requiresFadingEdge="vertical"
-        android:fadingEdgeLength="@dimen/space_small"/>
+        app:layout_constraintTop_toBottomOf="@id/btn_my_bottari_template" />
 </androidx.constraintlayout.widget.ConstraintLayout>
