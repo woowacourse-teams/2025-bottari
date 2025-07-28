@@ -9,6 +9,7 @@ import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,5 +78,17 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
         final Long bottariId = bottariTemplateService.createBottari(id, ssaid);
 
         return ResponseEntity.created(URI.create("/bottaries/" + bottariId)).build();
+    }
+
+    @DeleteMapping("/{id}")
+    @Override
+    public ResponseEntity<Void> delete(
+            @PathVariable final Long id,
+            final HttpServletRequest httpServletRequest
+    ) {
+        final String ssaid = httpServletRequest.getHeader("ssaid");
+        bottariTemplateService.deleteById(id, ssaid);
+
+        return ResponseEntity.noContent().build();
     }
 }

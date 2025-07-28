@@ -99,6 +99,18 @@ public class BottariTemplateService {
         return savedBottari.getId();
     }
 
+    @Transactional
+    public void deleteById(
+            final Long id,
+            final String ssaid
+    ) {
+        final BottariTemplate bottariTemplate = bottariTemplateRepository.findByIdWithMember(id)
+                .orElseThrow(() -> new IllegalArgumentException("보따리 템플릿을 찾을 수 없습니다."));
+        validateOwner(ssaid, bottariTemplate);
+        bottariTemplateItemRepository.deleteByBottariTemplateId(id);
+        bottariTemplateRepository.deleteById(id);
+    }
+
     private Map<BottariTemplate, List<BottariTemplateItem>> groupingItemsByTemplate(final List<BottariTemplate> bottariTemplates) {
         final List<BottariTemplateItem> items = bottariTemplateItemRepository.findAllByBottariTemplateIn(
                 bottariTemplates);
@@ -134,6 +146,15 @@ public class BottariTemplateService {
             if (!uniqueItemNames.add(itemName)) {
                 throw new IllegalArgumentException("중복된 물품이 존재합니다.");
             }
+        }
+    }
+
+    private void validateOwner(
+            final String ssaid,
+            final BottariTemplate bottariTemplate
+    ) {
+        if (!bottariTemplate.isOwner(ssaid)) {
+            throw new IllegalArgumentException("본인의 보따리 템플릿이 아닙니다.");
         }
     }
 }
