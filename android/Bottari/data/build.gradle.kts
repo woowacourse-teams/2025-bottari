@@ -13,30 +13,38 @@ android {
 
     defaultConfig {
         minSdk = 28
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        val baseUrl = gradleLocalProperties(rootDir, providers).getProperty("BASE_URL") ?: ""
-        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
     }
 
     buildTypes {
+        val localProperties = gradleLocalProperties(rootDir, providers)
+        val debugBaseUrl: String = localProperties.getProperty("DEBUG_BASE_URL") ?: ""
+        val releaseBaseUrl: String = localProperties.getProperty("RELEASE_BASE_URL") ?: ""
+
         release {
             isMinifyEnabled = false
+            buildConfigField("String", "BASE_URL", "\"$releaseBaseUrl\"")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
         }
+        debug {
+            isMinifyEnabled = false
+            buildConfigField("String", "BASE_URL", "\"$debugBaseUrl\"")
+        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+
     kotlinOptions {
         jvmTarget = "21"
     }
+
     buildFeatures {
         buildConfig = true
     }
