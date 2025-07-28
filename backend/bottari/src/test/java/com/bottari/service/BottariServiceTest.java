@@ -15,6 +15,7 @@ import com.bottari.domain.RoutineAlarm;
 import com.bottari.dto.CreateBottariRequest;
 import com.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.dto.ReadBottariResponse;
+import com.bottari.dto.UpdateBottariRequest;
 import jakarta.persistence.EntityManager;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -244,6 +245,62 @@ class BottariServiceTest {
                 () -> assertThat(remainingBottari).isNotNull(),
                 () -> assertThat(remainingBottari.getTitle()).isEqualTo("remain_bottari")
         );
+    }
+
+    @DisplayName("보따리의 제목을 수정한다.")
+    @Test
+    void update() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari bottari = new Bottari("original_title", member);
+        entityManager.persist(bottari);
+
+        final UpdateBottariRequest request = new UpdateBottariRequest("updated_title");
+
+        // when
+        bottariService.update(request, bottari.getId(), ssaid);
+
+        // then
+        final Bottari updatedBottari = entityManager.find(Bottari.class, bottari.getId());
+        assertThat(updatedBottari.getTitle()).isEqualTo("updated_title");
+    }
+
+    @DisplayName("본인의 보따리가 아닌 보따리를 수정할 경우, 예외를 던진다.")
+    @Test
+    void update_Exception_NotMine() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "member_1");
+        entityManager.persist(member);
+
+        final Member anotherMember = new Member("another_ssaid", "member_2");
+        entityManager.persist(anotherMember);
+
+        final Bottari bottari = new Bottari("title", anotherMember);
+        entityManager.persist(bottari);
+
+        final UpdateBottariRequest request = new UpdateBottariRequest("updated_title");
+
+        // when & then
+        assertThatThrownBy(() -> bottariService.update(request, bottari.getId(), "invalid_ssaid"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("본인의 보따리가 아닙니다.");
+    }
+
+    @DisplayName("존재하지 않는 id로 보따리를 수정할 경우, 예외를 던진다.")
+    @Test
+    void update_Exception_NotFound() {
+        // given
+        final Long invalid_bottari_id = -1L;
+        final UpdateBottariRequest request = new UpdateBottariRequest("updated_title");
+
+        // when & then
+        assertThatThrownBy(() -> bottariService.update(request, invalid_bottari_id, "ssaid"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("보따리를 찾을 수 없습니다.");
     }
 
     @DisplayName("존재하지 않는 보따리를 삭제할 경우, 예외를 던진다.")

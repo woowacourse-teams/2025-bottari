@@ -3,6 +3,7 @@ package com.bottari.controller;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -11,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.bottari.dto.CreateBottariRequest;
 import com.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.dto.ReadBottariResponse;
+import com.bottari.dto.UpdateBottariRequest;
 import com.bottari.service.BottariService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -87,6 +89,23 @@ class BottariControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(header().string(HttpHeaders.LOCATION, "/bottaries/1"));
+    }
+
+    @DisplayName("보따리를 수정한다.")
+    @Test
+    void update() throws Exception {
+        // given
+        final String ssaid = "ssaid";
+        final Long bottariId = 1L;
+        final UpdateBottariRequest request = new UpdateBottariRequest("update_title");
+        willDoNothing().given(bottariService)
+                .update(request, bottariId, ssaid);
+
+        // when & then
+        mockMvc.perform(patch("/bottaries/" + bottariId)
+                .header("ssaid", ssaid)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)));
     }
 
     @DisplayName("보따리를 삭제한다.")

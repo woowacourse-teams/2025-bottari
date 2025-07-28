@@ -3,6 +3,7 @@ package com.bottari.controller.docs;
 import com.bottari.dto.CreateBottariRequest;
 import com.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.dto.ReadBottariResponse;
+import com.bottari.dto.UpdateBottariRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -37,6 +38,16 @@ public interface BottariApiDocs {
     })
     ResponseEntity<Void> create(
             final CreateBottariRequest request,
+            final HttpServletRequest httpServletRequest
+    );
+
+    @Operation(summary = "보따리 이름 수정")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "보따리 이름 수정 성공"),
+    })
+    ResponseEntity<Void> update(
+            final Long id,
+            final UpdateBottariRequest request,
             final HttpServletRequest httpServletRequest
     );
 
