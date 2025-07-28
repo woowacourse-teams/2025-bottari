@@ -1,4 +1,4 @@
-package com.bottari.data
+package com.bottari.data.repository
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

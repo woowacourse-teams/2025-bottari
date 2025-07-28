@@ -42,6 +42,10 @@ android {
     }
 }
 
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation(project(":domain"))
 
@@ -52,4 +56,5 @@ dependencies {
     implementation(libs.bundles.local)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
+    testImplementation(libs.kotest.assertions.core)
 }
