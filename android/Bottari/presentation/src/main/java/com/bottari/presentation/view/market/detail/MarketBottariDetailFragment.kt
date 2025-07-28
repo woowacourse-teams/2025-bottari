@@ -3,7 +3,6 @@ package com.bottari.presentation.view.market.detail
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentMarketBottariDetailBinding
@@ -16,13 +15,10 @@ class MarketBottariDetailFragment : BaseFragment<FragmentMarketBottariDetailBind
     private val viewModel: MarketBottariDetailViewModel by viewModels {
         MarketBottariDetailViewModel.Factory(
             ssaid = requireContext().getSSAID(),
-            bottarID = fetchBottariId(),
+            bottarID = getBottariId(),
         )
     }
-
     private val adapter by lazy { MarketBottariDetailAdapter() }
-
-    private fun fetchBottariId(): Long = arguments?.getLong(EXTRA_BOTTARI_ID, INVALID_BOTTARI_ID) ?: INVALID_BOTTARI_ID
 
     override fun onViewCreated(
         view: View,
@@ -41,7 +37,7 @@ class MarketBottariDetailFragment : BaseFragment<FragmentMarketBottariDetailBind
 
     private fun setupUI() {
         binding.rvMarketBottariDetail.adapter = adapter
-        binding.rvMarketBottariDetail.layoutManager = LinearLayoutManager(requireContext())
+        if (getIsMyTemplate()) binding.btnTakeTemplate.visibility = View.GONE
     }
 
     private fun setupListener() {
@@ -52,6 +48,10 @@ class MarketBottariDetailFragment : BaseFragment<FragmentMarketBottariDetailBind
             takeBottariTemplate()
         }
     }
+
+    private fun getBottariId(): Long = requireArguments().getLong(ARG_BOTTARI_ID, INVALID_BOTTARI_ID)
+
+    private fun getIsMyTemplate(): Boolean = requireArguments().getBoolean(ARG_IS_MY_TEMPLATE, false)
 
     private fun takeBottariTemplate() {
         viewModel.takeBottariTemplate()
@@ -84,12 +84,17 @@ class MarketBottariDetailFragment : BaseFragment<FragmentMarketBottariDetailBind
     }
 
     companion object {
-        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
+        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
+        private const val ARG_IS_MY_TEMPLATE = "ARG_IS_MY_TEMPLATE"
         private const val INVALID_BOTTARI_ID = -1L
 
-        fun newBundle(bottariId: Long): Bundle =
+        fun newBundle(
+            bottariId: Long,
+            isMyTemplate: Boolean,
+        ): Bundle =
             Bundle().apply {
-                putLong(EXTRA_BOTTARI_ID, bottariId)
+                putLong(ARG_BOTTARI_ID, bottariId)
+                putBoolean(ARG_IS_MY_TEMPLATE, isMyTemplate)
             }
     }
 }

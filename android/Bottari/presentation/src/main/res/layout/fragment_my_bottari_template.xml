@@ -28,10 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/black"
-            tools:text="내가 공유한 보따리" />
-
-
+            android:text="@string/my_bottari_template_screen_title"
+            android:textColor="@color/black" />
     </Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -40,10 +38,10 @@
         android:layout_height="0dp"
         android:fadingEdgeLength="8dp"
         android:requiresFadingEdge="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_my_template"
         tools:listitem="@layout/item_market_bottari_detail_item" />
 

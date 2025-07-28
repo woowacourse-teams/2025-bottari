@@ -11,6 +11,7 @@ import com.bottari.presentation.model.BottariTemplateUiModel
 import com.bottari.presentation.view.market.MarketNavigator
 import com.bottari.presentation.view.market.my.adapter.MyBottariTemplateAdapter
 import com.bottari.presentation.view.market.my.listener.MyBottariTemplateEventListener
+import com.google.android.material.snackbar.Snackbar
 
 class MyBottariTemplateFragment :
     BaseFragment<FragmentMyBottariTemplateBinding>(FragmentMyBottariTemplateBinding::inflate),
@@ -27,7 +28,6 @@ class MyBottariTemplateFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-
         setupObserver()
         setupUI()
         setupListener()
@@ -38,11 +38,12 @@ class MyBottariTemplateFragment :
     }
 
     override fun onDetailClick(bottariTemplateId: Long) {
-        (requireActivity() as? MarketNavigator)?.navigateToDetail(bottariTemplateId)
+        (requireActivity() as? MarketNavigator)?.navigateToDetail(bottariTemplateId, true)
     }
 
     private fun setupObserver() {
         viewModel.myBottariTemplates.observe(viewLifecycleOwner, ::handleMyBottariTemplateState)
+        viewModel.uiEvent.observeEvent(viewLifecycleOwner, ::showSnackBar)
     }
 
     private fun setupUI() {
@@ -61,6 +62,10 @@ class MyBottariTemplateFragment :
             is UiState.Success -> adapter.submitList(uiState.data)
             is UiState.Failure -> Unit
         }
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     companion object {

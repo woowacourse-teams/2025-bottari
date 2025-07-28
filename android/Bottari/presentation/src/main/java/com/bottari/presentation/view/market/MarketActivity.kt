@@ -18,12 +18,15 @@ class MarketActivity :
         navigateToScreen()
     }
 
-    override fun navigateToDetail(bottariTemplateId: Long) {
+    override fun navigateToDetail(
+        bottariTemplateId: Long,
+        isMyTemplate: Boolean,
+    ) {
         supportFragmentManager.beginTransaction().apply {
             replace(
                 R.id.fcv_market,
                 MarketBottariDetailFragment::class.java,
-                MarketBottariDetailFragment.newBundle(bottariTemplateId),
+                MarketBottariDetailFragment.newBundle(bottariTemplateId, isMyTemplate),
             )
             commit()
         }

@@ -10,8 +10,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
 import com.bottari.presentation.base.UiState
+import com.bottari.presentation.common.event.SingleLiveEvent
+import com.bottari.presentation.extension.takeSuccess
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
 import com.bottari.presentation.model.BottariTemplateUiModel
 import kotlinx.coroutines.launch
@@ -19,8 +22,11 @@ import kotlinx.coroutines.launch
 class MyBottariTemplateViewModel(
     stateHandle: SavedStateHandle,
     private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
+    private val deleteMyBottariTemplateUseCase: DeleteMyBottariTemplateUseCase,
 ) : ViewModel() {
     private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_SSAID_MISSING)
+
+    val uiEvent: SingleLiveEvent<String> = SingleLiveEvent()
 
     private val _myBottariTemplates: MutableLiveData<UiState<List<BottariTemplateUiModel>>> =
         MutableLiveData(UiState.Loading)
@@ -31,7 +37,15 @@ class MyBottariTemplateViewModel(
     }
 
     fun deleteBottariTemplate(bottariTemplateId: Long) {
-        viewModelScope.launch { }
+        viewModelScope.launch {
+            deleteMyBottariTemplateUseCase(ssaid, bottariTemplateId)
+                .onSuccess {
+                    val newTemplates = currentTemplates().filterNot { it.id == bottariTemplateId }
+                    _myBottariTemplates.value = UiState.Success(newTemplates)
+                }.onFailure { error ->
+                    uiEvent.emit(error.message)
+                }
+        }
     }
 
     private fun fetchMyBottariTemplates() {
@@ -47,6 +61,8 @@ class MyBottariTemplateViewModel(
         }
     }
 
+    private fun currentTemplates(): List<BottariTemplateUiModel> = _myBottariTemplates.value?.takeSuccess() ?: emptyList()
+
     companion object {
         private const val KEY_SSAID = "KEY_SSAID"
         private const val ERROR_SSAID_MISSING = "SSAID를 확인할 수 없습니다"
@@ -60,6 +76,7 @@ class MyBottariTemplateViewModel(
                     MyBottariTemplateViewModel(
                         stateHandle,
                         UseCaseProvider.fetchMyBottariTemplatesUseCase,
+                        UseCaseProvider.deleteMyBottariTemplateUseCase,
                     )
                 }
             }
