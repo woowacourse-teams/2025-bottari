@@ -20,4 +20,9 @@ interface BottariTemplateRemoteDataSource {
     ): Result<Long?>
 
     suspend fun fetchMyBottariTemplates(ssaid: String): Result<List<FetchMyBottariTemplatesResponse>>
+
+    suspend fun deleteMyBottariTemplate(
+        ssaid: String,
+        bottariTemplateId: Long,
+    ): Result<Unit>
 }

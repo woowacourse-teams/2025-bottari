@@ -40,6 +40,14 @@ class BottariTemplateRemoteDataSourceImpl(
             bottariTemplateService.fetchMyBottariTemplates(ssaid)
         }
 
+    override suspend fun deleteMyBottariTemplate(
+        ssaid: String,
+        bottariTemplateId: Long,
+    ): Result<Unit> =
+        safeApiCall {
+            bottariTemplateService.deleteMyBottariTemplate(ssaid, bottariTemplateId)
+        }
+
     companion object {
         private const val HEADER_TEMPLATE_ID_PREFIX = "/templates/"
         private const val HEADER_BOTTARI_ID_PREFIX = "/bottaries/"

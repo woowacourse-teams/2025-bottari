@@ -36,4 +36,9 @@ class BottariTemplateRepositoryImpl(
         bottariTemplateRemoteDataSource
             .fetchMyBottariTemplates(ssaid)
             .mapCatching { response -> response.map { it.toDomain() } }
+
+    override suspend fun deleteMyBottariTemplate(
+        ssaid: String,
+        bottariTemplateId: Long,
+    ): Result<Unit> = bottariTemplateRemoteDataSource.deleteMyBottariTemplate(ssaid, bottariTemplateId)
 }
