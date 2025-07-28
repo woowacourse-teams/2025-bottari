@@ -1,5 +1,6 @@
 package com.bottari.presentation.view.edit.personal.main.rename
 
+import BottariRenameViewModel
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
@@ -19,12 +20,15 @@ import com.google.android.material.snackbar.Snackbar
 class BottariRenameDialog :
     DialogFragment(),
     TextWatcher {
-    private val viewModel: BottariRenameViewModel by viewModels { BottariRenameViewModel.Factory() }
+
+    private val viewModel: BottariRenameViewModel by viewModels {
+        val bottariId = requireArguments().getLong(EXTRA_BOTTARI_ID)
+        val oldTitle = requireArguments().getString(EXTRA_OLD_TITLE).orEmpty()
+        BottariRenameViewModel.Factory(bottariId, oldTitle)
+    }
+
     private var _binding: DialogBottariRenameBinding? = null
     val binding: DialogBottariRenameBinding get() = _binding!!
-
-    private var bottariId: Long = -1
-    private var oldTitle: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,8 +46,6 @@ class BottariRenameDialog :
         super.onViewCreated(view, savedInstanceState)
         setupObserver()
         setupListener()
-        bottariId = arguments?.getLong(EXTRA_BOTTARI_ID) ?: -1
-        oldTitle = arguments?.getString(EXTRA_OLD_TITLE) ?: ""
     }
 
     override fun onStart() {
@@ -87,7 +89,7 @@ class BottariRenameDialog :
         binding.btnBottariCreateClose.setOnClickListener { dismiss() }
         binding.btnBottariCreate.setOnClickListener {
             val title = binding.etBottariCreateName.text.toString()
-            viewModel.renameBottari(bottariId, ssaid = requireContext().getSSAID(), newTitle = title, oldTitle = oldTitle)
+            viewModel.renameBottari(ssaid = requireContext().getSSAID(), newTitle = title)
         }
     }
 

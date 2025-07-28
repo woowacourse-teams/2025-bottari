@@ -1,9 +1,9 @@
-package com.bottari.presentation.view.edit.personal.main.rename
-
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
@@ -12,14 +12,17 @@ import com.bottari.presentation.base.UiState
 import kotlinx.coroutines.launch
 
 class BottariRenameViewModel(
+    savedStateHandle: SavedStateHandle,
     private val renameBottariUseCase: RenameBottariUseCase,
 ) : ViewModel() {
+
+    private val id: Long = savedStateHandle.get<Long>(EXTRA_BOTTARI_ID) ?: error(ERROR_REQUIRE_BOTTARI_ID)
+    private val oldTitle: String = savedStateHandle.get<String>(EXTRA_OLD_TITLE) ?: error(ERROR_REQUIRE_OLD_TITLE)
+
     private val _renameSuccess = MutableLiveData<UiState<Unit?>>()
     val renameSuccess: MutableLiveData<UiState<Unit?>> = _renameSuccess
 
     fun renameBottari(
-        id: Long,
-        oldTitle: String,
         ssaid: String,
         newTitle: String,
     ) {
@@ -48,10 +51,25 @@ class BottariRenameViewModel(
         }
 
     companion object {
-        fun Factory(): ViewModelProvider.Factory =
+        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
+        private const val EXTRA_OLD_TITLE = "EXTRA_OLD_TITLE"
+        private const val ERROR_REQUIRE_BOTTARI_ID = "보따리 ID가 없습니다"
+        private const val ERROR_REQUIRE_OLD_TITLE = "보따리 이름이 없습니다"
+
+        fun Factory(
+            bottariId: Long,
+            oldTitle: String,
+        ): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    BottariRenameViewModel(UseCaseProvider.renameBottariUseCase)
+                    val handle = createSavedStateHandle()
+                    handle[EXTRA_BOTTARI_ID] = bottariId
+                    handle[EXTRA_OLD_TITLE] = oldTitle
+
+                    BottariRenameViewModel(
+                        handle,
+                        UseCaseProvider.renameBottariUseCase,
+                    )
                 }
             }
     }
