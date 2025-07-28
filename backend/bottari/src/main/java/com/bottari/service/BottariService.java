@@ -35,7 +35,7 @@ public class BottariService {
             final String ssaid,
             final Long id
     ) {
-        final Bottari bottari = bottariRepository.findById(id)
+        final Bottari bottari = bottariRepository.findByIdWithMember(id)
                 .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
         validateOwner(ssaid, bottari);
         final List<BottariItem> bottariItems = bottariItemRepository.findAllByBottariId(id);
@@ -65,6 +65,19 @@ public class BottariService {
         final Bottari savedBottari = bottariRepository.save(bottari);
 
         return savedBottari.getId();
+    }
+
+    @Transactional
+    public void deleteById(
+            final Long id,
+            final String ssaid
+    ) {
+        final Bottari bottari = bottariRepository.findByIdWithMember(id)
+                .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
+        validateOwner(ssaid, bottari);
+        bottariItemRepository.deleteByBottariId(id);
+        alarmRepository.deleteByBottariId(id);
+        bottariRepository.deleteById(id);
     }
 
     private List<ReadBottariPreviewResponse> buildReadBottariPreviewResponses(final List<Bottari> bottaries) {

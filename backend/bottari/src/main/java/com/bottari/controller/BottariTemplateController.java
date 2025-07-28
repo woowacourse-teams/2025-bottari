@@ -35,6 +35,17 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/me")
+    @Override
+    public ResponseEntity<List<ReadBottariTemplateResponse>> readMine(
+            final HttpServletRequest httpServletRequest
+    ) {
+        final String ssaid = httpServletRequest.getHeader("ssaid");
+        final List<ReadBottariTemplateResponse> responses = bottariTemplateService.getBySsaid(ssaid);
+
+        return ResponseEntity.ok(responses);
+    }
+
     @GetMapping
     @Override
     public ResponseEntity<List<ReadBottariTemplateResponse>> readAll(

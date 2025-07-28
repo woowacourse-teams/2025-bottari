@@ -42,6 +42,17 @@ public class BottariTemplateService {
         return ReadBottariTemplateResponse.of(bottariTemplate, bottariTemplateItems);
     }
 
+    public List<ReadBottariTemplateResponse> getBySsaid(final String ssaid) {
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+        final List<BottariTemplate> bottariTemplateItems =
+                bottariTemplateRepository.findAllByMemberIdWithMember(member.getId());
+        final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate =
+                groupingItemsByTemplate(bottariTemplateItems);
+
+        return buildReadBottariTemplateResponses(itemsGroupByTemplate);
+    }
+
     public List<ReadBottariTemplateResponse> getAll(final String query) {
         final List<BottariTemplate> bottariTemplates = bottariTemplateRepository.findAllWithMember(query);
         final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate = groupingItemsByTemplate(
@@ -78,10 +89,10 @@ public class BottariTemplateService {
         final List<BottariTemplateItem> bottariTemplateItems = bottariTemplateItemRepository.findAllByBottariTemplateId(id);
         final Member member = memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
-        final Bottari bottari = new Bottari(bottariTemplate.getTitle(),member);
+        final Bottari bottari = new Bottari(bottariTemplate.getTitle(), member);
         final Bottari savedBottari = bottariRepository.save(bottari);
         final List<BottariItem> bottariItems = bottariTemplateItems.stream()
-                .map(item -> new BottariItem(item.getName(),bottari))
+                .map(item -> new BottariItem(item.getName(), bottari))
                 .toList();
         bottariItemRepository.saveAll(bottariItems);
 
@@ -112,8 +123,10 @@ public class BottariTemplateService {
         final List<ReadBottariTemplateResponse> responses = new ArrayList<>();
         final List<BottariTemplate> sortedBottariTemplates = sortByCreatedAtDesc(itemsGroupByTemplate);
         for (final BottariTemplate bottariTemplate : sortedBottariTemplates) {
-            final List<BottariTemplateItem> templateItems = itemsGroupByTemplate.getOrDefault(bottariTemplate,
-                    List.of());
+            final List<BottariTemplateItem> templateItems = itemsGroupByTemplate.getOrDefault(
+                    bottariTemplate,
+                    List.of()
+            );
             responses.add(ReadBottariTemplateResponse.of(bottariTemplate, templateItems));
         }
 

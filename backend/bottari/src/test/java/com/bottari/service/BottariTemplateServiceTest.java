@@ -73,11 +73,67 @@ class BottariTemplateServiceTest {
                 .hasMessage("보따리 템플릿을 찾을 수 없습니다.");
     }
 
+    @DisplayName("내 보따리 템플릿 조회 시, 내 보따리 템플릿을 최신순으로 조회한다.")
+    @Test
+    void getBySsaid() {
+        // given
+        final String memberASsaid = "memberA_ssaid";
+        final Member memberA = new Member(memberASsaid, "memberA");
+        entityManager.persist(memberA);
+        final Member memberB = new Member("memberB_ssaid", "memberA");
+        entityManager.persist(memberB);
+
+        final BottariTemplate memberATemplate1 = new BottariTemplate("A_template1", memberA);
+        final BottariTemplateItem item1 = new BottariTemplateItem("item_1", memberATemplate1);
+        final BottariTemplateItem item2 = new BottariTemplateItem("item_2", memberATemplate1);
+        entityManager.persist(memberATemplate1);
+        entityManager.persist(item1);
+        entityManager.persist(item2);
+
+        final BottariTemplate memberATemplate2 = new BottariTemplate("A_template2", memberA);
+        final BottariTemplateItem item3 = new BottariTemplateItem("item_3", memberATemplate2);
+        entityManager.persist(memberATemplate2);
+        entityManager.persist(item3);
+
+        final BottariTemplate memberBTemplate = new BottariTemplate("B_template", memberB);
+        final BottariTemplateItem item4 = new BottariTemplateItem("item_4", memberBTemplate);
+        entityManager.persist(memberBTemplate);
+        entityManager.persist(item4);
+
+        // when
+        final List<ReadBottariTemplateResponse> actual = bottariTemplateService.getBySsaid(memberASsaid);
+
+        // then
+        assertAll(() -> {
+                      assertThat(actual).hasSize(2);
+                      assertThat(actual.get(0).title()).isEqualTo("A_template2");
+                      assertThat(actual.get(0).items()).hasSize(1);
+                      assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3");
+                      assertThat(actual.get(1).title()).isEqualTo("A_template1");
+                      assertThat(actual.get(1).items()).hasSize(2);
+                      assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
+                      assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
+                  }
+        );
+    }
+
+    @DisplayName("내 보따리 템플릿 조회 시, 존재하지 않은 사용자면 예외를 던진다.")
+    @Test
+    void getBySsaid_Exception_NotExistsMember() {
+        // given
+        final String invalidSsaid = "invalid_ssaid";
+
+        // when & then
+        assertThatThrownBy(() -> bottariTemplateService.getBySsaid(invalidSsaid))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
+    }
+
     @DisplayName("검색어가 없을 시, 모든 보따리 템플릿을 최신순으로 조회한다.")
     @Test
     void getAll() {
         // given
-        String empty_query = "";
+        final String empty_query = "";
 
         final Member member = new Member("ssaid", "name");
         entityManager.persist(member);
@@ -245,7 +301,8 @@ class BottariTemplateServiceTest {
         final Bottari actualBottari = entityManager.find(Bottari.class, actualBottariId);
         final List<BottariItem> actualBottariItems = entityManager.createQuery(
                         "select i from BottariItem i where i.bottari.id = :bottariId",
-                        BottariItem.class)
+                        BottariItem.class
+                )
                 .setParameter("bottariId", actualBottariId)
                 .getResultList();
 

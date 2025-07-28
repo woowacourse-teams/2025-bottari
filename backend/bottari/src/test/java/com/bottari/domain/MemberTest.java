@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -38,5 +39,30 @@ class MemberTest {
 
         // then
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @DisplayName("이름을 수정한다.")
+    @Test
+    void updateName() {
+        // given
+        final Member member = new Member("ssaid", "name");
+
+        // when
+        member.updateName("new_name");
+
+        // then
+        assertThat(member.getName()).isEqualTo("new_name");
+    }
+
+    @DisplayName("기존 이름과 동일한 이름으로는 수정할 수 없다.")
+    @Test
+    void updateName_Exception_SameName() {
+        // given
+        final Member member = new Member("ssaid", "name");
+
+        // when & then
+        assertThatThrownBy(() -> member.updateName("name"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("기존 이름과 동일한 이름으로는 변경할 수 없습니다.");
     }
 }

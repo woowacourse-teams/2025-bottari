@@ -37,6 +37,62 @@ class BottariTemplateControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @DisplayName("특정 보따리 템플릿을 조회한다.")
+    @Test
+    void read() throws Exception {
+        // given
+        final ReadBottariTemplateResponse response = new ReadBottariTemplateResponse(
+                1L,
+                "title_1",
+                List.of(
+                        new BottariTemplateItemResponse(1L, "item_1"),
+                        new BottariTemplateItemResponse(2L, "item_2")
+                ),
+                "author_1"
+        );
+        given(bottariTemplateService.getById(1L))
+                .willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/templates/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @DisplayName("내 보따리 템플릿을 조회한다.")
+    @Test
+    void readMine() throws Exception {
+        // given
+        final String ssaid = "ssaid";
+        final List<ReadBottariTemplateResponse> responses = List.of(
+                new ReadBottariTemplateResponse(
+                        1L,
+                        "title_1",
+                        List.of(
+                                new BottariTemplateItemResponse(1L, "item_1"),
+                                new BottariTemplateItemResponse(2L, "item_2")
+                        ),
+                        "author_1"
+                ),
+                new ReadBottariTemplateResponse(
+                        2L,
+                        "title_2",
+                        List.of(
+                                new BottariTemplateItemResponse(3L, "item_3")
+                        ),
+                        "author_2"
+                )
+        );
+        given(bottariTemplateService.getBySsaid("ssaid"))
+                .willReturn(responses);
+
+        // when & then
+        mockMvc.perform(get("/templates/me")
+                        .header("ssaid", ssaid))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(responses)));
+    }
+
     @DisplayName("모든 보따리 템플릿을 조회한다.")
     @Test
     void readAll() throws Exception {
@@ -49,14 +105,16 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(1L, "item_1"),
                                 new BottariTemplateItemResponse(2L, "item_2")
                         ),
-                        "author_1"),
+                        "author_1"
+                ),
                 new ReadBottariTemplateResponse(
                         2L,
                         "title_2",
                         List.of(
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
-                        "author_2")
+                        "author_2"
+                )
         );
         given(bottariTemplateService.getAll(anyString()))
                 .willReturn(responses);
@@ -65,27 +123,6 @@ class BottariTemplateControllerTest {
         mockMvc.perform(get("/templates"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(responses)));
-    }
-
-    @DisplayName("특정 보따리 템플릿을 조회한다.")
-    @Test
-    void read() throws Exception {
-        // given
-        final ReadBottariTemplateResponse response = new ReadBottariTemplateResponse(
-                1L,
-                "title_1",
-                List.of(
-                        new BottariTemplateItemResponse(1L, "item_1"),
-                        new BottariTemplateItemResponse(2L, "item_2")
-                ),
-                "author_1");
-        given(bottariTemplateService.getById(1L))
-                .willReturn(response);
-
-        // when & then
-        mockMvc.perform(get("/templates/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(response)));
     }
 
     @DisplayName("보따리 템플릿을 생성한다.")
