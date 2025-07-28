@@ -6,5 +6,10 @@ import com.bottari.domain.repository.MemberRepository
 class UpdateMemberNicknameUseCase(
     private val memberRepository: MemberRepository,
 ) {
-    suspend operator fun invoke(member: Member): Result<Unit> = memberRepository.updateMemberNickname(member.ssaid, member)
+    suspend operator fun invoke(
+        ssaid: String,
+        nickname: String,
+    ): Result<Unit> =
+        runCatching { Member(ssaid, nickname) }
+            .mapCatching { member -> memberRepository.updateMemberNickname(ssaid, member) }
 }
