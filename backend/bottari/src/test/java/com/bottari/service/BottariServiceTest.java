@@ -246,8 +246,8 @@ class BottariServiceTest {
                 () -> assertThat(remainingBottari.getTitle()).isEqualTo("remain_bottari")
         );
     }
-  
-      @DisplayName("보따리의 제목을 수정한다.")
+
+    @DisplayName("보따리의 제목을 수정한다.")
     @Test
     void update() {
         // given
@@ -273,10 +273,10 @@ class BottariServiceTest {
     void update_Exception_NotMine() {
         // given
         final String ssaid = "ssaid";
-        final Member member = new Member(ssaid, "name");
+        final Member member = new Member(ssaid, "member_1");
         entityManager.persist(member);
 
-        final Member anotherMember = new Member("another_ssaid", "name");
+        final Member anotherMember = new Member("another_ssaid", "member_2");
         entityManager.persist(anotherMember);
 
         final Bottari bottari = new Bottari("title", anotherMember);

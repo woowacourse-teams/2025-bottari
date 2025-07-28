@@ -103,11 +103,11 @@ class BottariControllerTest {
 
         // when & then
         mockMvc.perform(patch("/bottaries/" + bottariId)
-                        .header("ssaid", ssaid)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-      }
-          
+                .header("ssaid", ssaid)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)));
+    }
+
     @DisplayName("보따리를 삭제한다.")
     @Test
     void delete() throws Exception {
