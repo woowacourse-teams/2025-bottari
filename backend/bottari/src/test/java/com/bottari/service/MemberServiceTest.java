@@ -29,7 +29,7 @@ class MemberServiceTest {
     @Test
     void create() {
         // given
-        final CreateMemberRequest request = new CreateMemberRequest("ssaid", "name");
+        final CreateMemberRequest request = new CreateMemberRequest("ssaid");
 
         // when
         final Long actual = memberService.create(request);
@@ -38,13 +38,31 @@ class MemberServiceTest {
         assertThat(actual).isNotNull();
     }
 
+    @DisplayName("사용자를 생성하면 고유한 임시 이름이 부여된다.")
+    @Test
+    void create_AssignTemporaryName() {
+        // given
+        final String ssaid = "ssaid";
+        final CreateMemberRequest request = new CreateMemberRequest(ssaid);
+
+        // when
+        final Long memberId = memberService.create(request);
+
+        // then
+        final Member createdMember = entityManager.find(Member.class, memberId);
+        assertAll(
+                () -> assertThat(createdMember).isNotNull(),
+                () -> assertThat(createdMember.getName()).isNotBlank()
+        );
+    }
+
     @DisplayName("중복된 ssaid로 사용자를 생성할 경우, 예외를 던진다.")
     @Test
     void create_Exception_DuplicateSsaid() {
         // given
         final String duplicateSsaid = "duplicateSsaid";
         entityManager.persist(new Member(duplicateSsaid, "name"));
-        final CreateMemberRequest request = new CreateMemberRequest(duplicateSsaid, "name");
+        final CreateMemberRequest request = new CreateMemberRequest(duplicateSsaid);
 
         // when & then
         assertThatThrownBy(() -> memberService.create(request))
