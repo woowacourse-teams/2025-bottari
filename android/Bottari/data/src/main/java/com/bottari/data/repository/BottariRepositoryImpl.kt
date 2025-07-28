@@ -2,7 +2,7 @@ package com.bottari.data.repository
 
 import com.bottari.data.mapper.BottariMapper.toDomain
 import com.bottari.data.model.bottari.CreateBottariRequest
-import com.bottari.data.model.bottari.UpdateBottariRequest
+import com.bottari.data.model.bottari.UpdateBottariTitleRequest
 import com.bottari.data.source.remote.BottariRemoteDataSource
 import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariDetail
@@ -28,5 +28,5 @@ class BottariRepositoryImpl(
         id: Long,
         ssaid: String,
         title: String,
-    ): Result<Unit> = bottariRemoteDataSource.renameBottari(id, ssaid, UpdateBottariRequest(title))
+    ): Result<Unit> = bottariRemoteDataSource.renameBottari(id, ssaid, UpdateBottariTitleRequest(title))
 }

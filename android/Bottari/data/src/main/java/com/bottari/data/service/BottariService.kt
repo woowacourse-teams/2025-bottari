@@ -3,7 +3,7 @@ package com.bottari.data.service
 import com.bottari.data.model.bottari.BottariResponse
 import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.model.bottari.FetchBottariesResponse
-import com.bottari.data.model.bottari.UpdateBottariRequest
+import com.bottari.data.model.bottari.UpdateBottariTitleRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -34,6 +34,6 @@ interface BottariService {
     suspend fun renameBottari(
         @Header("ssaid") ssaid: String,
         @Path("id") id: Long,
-        @Body request: UpdateBottariRequest,
+        @Body request: UpdateBottariTitleRequest,
     ): Response<Unit>
 }
