@@ -13,9 +13,13 @@ class BottomPaddingDecoration(
         parent: RecyclerView,
         state: RecyclerView.State,
     ) {
-        val isLastItem = parent.getChildAdapterPosition(view) == state.itemCount - 1
+        val adapter = parent.adapter ?: return
+        val position = parent.getChildAdapterPosition(view)
+        val isLastItem = position != RecyclerView.NO_POSITION && position == adapter.itemCount - 1
         if (isLastItem) {
             outRect.bottom = bottomPadding
+        } else {
+            outRect.bottom = 0
         }
     }
 }
