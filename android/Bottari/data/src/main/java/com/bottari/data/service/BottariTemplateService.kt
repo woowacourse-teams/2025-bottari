@@ -2,6 +2,7 @@ package com.bottari.data.service
 
 import com.bottari.data.model.template.CreateBottariTemplateRequest
 import com.bottari.data.model.template.FetchBottariTemplateResponse
+import com.bottari.data.model.template.FetchMyBottariTemplatesResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -32,4 +33,9 @@ interface BottariTemplateService {
         @Header("ssaid") ssaid: String,
         @Path("bottariId") bottariId: Long,
     ): Response<Unit>
+
+    @GET("/templates/me")
+    suspend fun fetchMyBottariTemplates(
+        @Header("ssaid") ssaid: String,
+    ): Response<List<FetchMyBottariTemplatesResponse>>
 }

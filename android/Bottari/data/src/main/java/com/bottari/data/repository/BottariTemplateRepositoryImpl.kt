@@ -23,10 +23,17 @@ class BottariTemplateRepositoryImpl(
             .createBottariTemplate(ssaid, CreateBottariTemplateRequest(items, title))
 
     override suspend fun fetchBottariTemplate(bottariId: Long): Result<BottariTemplate> =
-        bottariTemplateRemoteDataSource.fetchBottariTemplateDetail(bottariId).mapCatching { it.toDomain() }
+        bottariTemplateRemoteDataSource
+            .fetchBottariTemplateDetail(bottariId)
+            .mapCatching { it.toDomain() }
 
     override suspend fun takeBottariTemplate(
         ssaid: String,
         bottariId: Long,
     ): Result<Long?> = bottariTemplateRemoteDataSource.takeBottariTemplate(ssaid, bottariId)
+
+    override suspend fun fetchMyBottariTemplates(ssaid: String): Result<List<BottariTemplate>> =
+        bottariTemplateRemoteDataSource
+            .fetchMyBottariTemplates(ssaid)
+            .mapCatching { response -> response.map { it.toDomain() } }
 }

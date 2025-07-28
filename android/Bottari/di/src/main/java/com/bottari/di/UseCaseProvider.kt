@@ -17,6 +17,7 @@ import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
 import com.bottari.domain.usecase.template.FetchBottariTemplatesUseCase
+import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
 import com.bottari.domain.util.NicknameGenerator
@@ -98,6 +99,11 @@ object UseCaseProvider {
     val checkRegisteredMemberUseCase by lazy {
         CheckRegisteredMemberUseCase(
             RepositoryProvider.memberRepository,
+        )
+    }
+    val fetchMyBottariTemplatesUseCase by lazy {
+        FetchMyBottariTemplatesUseCase(
+            RepositoryProvider.bottariTemplateRepository,
         )
     }
     val deleteBottariUseCase by lazy {
