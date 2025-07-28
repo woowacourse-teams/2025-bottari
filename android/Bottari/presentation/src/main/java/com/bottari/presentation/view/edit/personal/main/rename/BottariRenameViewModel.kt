@@ -34,8 +34,11 @@ class BottariRenameViewModel(
         }
     }
 
-    private fun isValidTitle(newTitle: String, oldTitle: String): Boolean {
-        return when {
+    private fun isValidTitle(
+        newTitle: String,
+        oldTitle: String,
+    ): Boolean =
+        when {
             newTitle.isBlank() -> false
             newTitle == oldTitle -> {
                 _renameSuccess.value = UiState.Success(Unit)
@@ -43,7 +46,6 @@ class BottariRenameViewModel(
             }
             else -> true
         }
-    }
 
     companion object {
         fun Factory(): ViewModelProvider.Factory =
