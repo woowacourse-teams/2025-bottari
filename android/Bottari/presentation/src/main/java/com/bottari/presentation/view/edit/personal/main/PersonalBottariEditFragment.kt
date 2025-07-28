@@ -270,17 +270,10 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun showRenameDialog() {
-        val bottariId =
-            viewModel.bottari.value
-                ?.takeSuccess()
-                ?.id ?: return
-        val oldTitle =
-            viewModel.bottari.value
-                ?.takeSuccess()
-                ?.title ?: return
+        val bottari = viewModel.bottari.value?.takeSuccess() ?: return
 
         BottariRenameDialog
-            .newInstance(bottariId, oldTitle)
+            .newInstance(bottari.id, bottari.title)
             .show(childFragmentManager, BottariRenameDialog::class.java.name)
     }
 
