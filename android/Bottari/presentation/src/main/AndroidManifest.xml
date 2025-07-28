@@ -25,7 +25,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".view.home.market.MarketBottariDetailActivity"
+            android:name=".view.home.market.detail.MarketBottariDetailActivity"
             android:exported="false"/>
     </application>
 

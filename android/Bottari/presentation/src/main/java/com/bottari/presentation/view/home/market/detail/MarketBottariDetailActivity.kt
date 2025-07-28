@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.market
+package com.bottari.presentation.view.home.market.detail
 
 import android.content.Context
 import android.content.Intent

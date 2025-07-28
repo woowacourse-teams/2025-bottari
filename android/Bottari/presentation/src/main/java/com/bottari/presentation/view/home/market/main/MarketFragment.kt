@@ -10,7 +10,7 @@ import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentMarketBinding
 import com.bottari.presentation.model.BottariTemplateUiModel
-import com.bottari.presentation.view.home.market.MarketBottariDetailActivity
+import com.bottari.presentation.view.home.market.detail.MarketBottariDetailActivity
 import com.bottari.presentation.view.home.market.main.adapter.MarketAdapter
 import com.bottari.presentation.view.home.market.main.listener.OnBottariTemplateClickListener
 
