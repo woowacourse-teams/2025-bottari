@@ -17,4 +17,11 @@ interface BottariTemplateRepository {
         ssaid: String,
         bottariId: Long,
     ): Result<Long?>
+
+    suspend fun fetchMyBottariTemplates(ssaid: String): Result<List<BottariTemplate>>
+
+    suspend fun deleteMyBottariTemplate(
+        ssaid: String,
+        bottariTemplateId: Long,
+    ): Result<Unit>
 }

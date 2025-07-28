@@ -12,6 +12,7 @@ import com.bottari.presentation.databinding.FragmentMarketBinding
 import com.bottari.presentation.model.BottariTemplateUiModel
 import com.bottari.presentation.view.home.market.adapter.MarketAdapter
 import com.bottari.presentation.view.home.market.listener.OnBottariTemplateClickListener
+import com.bottari.presentation.view.market.MarketActivity
 
 class MarketFragment :
     BaseFragment<FragmentMarketBinding>(FragmentMarketBinding::inflate),
@@ -53,8 +54,7 @@ class MarketFragment :
     }
 
     override fun onBottariTemplateClick(bottariTemplateId: Long) {
-        val intent = MarketBottariDetailActivity.newIntent(requireContext(), bottariTemplateId)
-        startActivity(intent)
+        navigateToDetail(bottariTemplateId)
     }
 
     private fun setupObserver() {
@@ -68,6 +68,7 @@ class MarketFragment :
 
     private fun setupListener() {
         binding.etBottariTemplateTitle.addTextChangedListener(this)
+        binding.btnMyBottariTemplate.setOnClickListener { navigateToMyBottariTemplate() }
     }
 
     private fun handleBottariTemplateState(uiState: UiState<List<BottariTemplateUiModel>>) {
@@ -76,5 +77,15 @@ class MarketFragment :
             is UiState.Success -> adapter.submitList(uiState.data)
             is UiState.Failure -> Unit
         }
+    }
+
+    private fun navigateToDetail(bottariTemplateId: Long) {
+        val intent = MarketActivity.newIntentForDetail(requireContext(), bottariTemplateId)
+        startActivity(intent)
+    }
+
+    private fun navigateToMyBottariTemplate() {
+        val intent = MarketActivity.newIntentForMyTemplate(requireContext())
+        startActivity(intent)
     }
 }

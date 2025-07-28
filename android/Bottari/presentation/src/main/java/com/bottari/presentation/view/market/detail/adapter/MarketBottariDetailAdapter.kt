@@ -1,11 +1,14 @@
-package com.bottari.presentation.view.home.market.adapter
+package com.bottari.presentation.view.market.detail.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.BottariTemplateItemUiModel
 
-class MarketBottariDetailAdapter : ListAdapter<BottariTemplateItemUiModel, MarketBottariDetailViewHolder>(DiffUtil) {
+class MarketBottariDetailAdapter :
+    ListAdapter<BottariTemplateItemUiModel, MarketBottariDetailViewHolder>(
+        DiffUtil,
+    ) {
     override fun onBindViewHolder(
         holder: MarketBottariDetailViewHolder,
         position: Int,

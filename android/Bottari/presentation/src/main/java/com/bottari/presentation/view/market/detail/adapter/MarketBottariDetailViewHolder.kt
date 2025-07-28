@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.market.adapter
+package com.bottari.presentation.view.market.detail.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

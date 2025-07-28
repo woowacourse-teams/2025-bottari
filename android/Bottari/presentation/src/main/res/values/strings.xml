@@ -71,6 +71,15 @@
     <!--  Market  -->
     <string name="template_items_name_text">\u00A0등 %d개의 물건</string>
     <string name="market_place_edit_text_hint">원하시는 보따리를 검색하세요!</string>
+    <string name="btn_navigate_my_bottari_template"><![CDATA[내가 올린 보따리 >]]></string>
+
+    <!-- Market Detail -->
+    <string name="btn_bottari_template_detail_receive">가져오기</string>
+
+    <!-- My Bottari Template -->
+    <string name="my_bottari_template_screen_title">내가 공유한 보따리</string>
+    <string name="my_bottari_template_screen_delete_success">내 보따리 삭제 성공</string>
+    <string name="my_bottari_template_screen_delete_failure">내 보따리 삭제 실패</string>
 
     <!-- Profile -->
     <string name="profile_screen_nickname_title">닉네임</string>
@@ -85,6 +94,7 @@
     <string name="send_button_description">전송 버튼</string>
     <string name="setting_button_description">설정 버튼</string>
     <string name="bottari_template_option_button_description">보따리 템플릿 옵션 버튼</string>
+    <string name="bottari_template_delete_button_description">보따리 템플릿 제거 버튼</string>
 
     <!-- Menu -->
     <string name="menu_title_create_market">마켓에 등록하기</string>
