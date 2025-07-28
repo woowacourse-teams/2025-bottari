@@ -3,6 +3,7 @@ package com.bottari.presentation.view.market.my
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentMyBottariTemplateBinding
@@ -11,7 +12,6 @@ import com.bottari.presentation.model.BottariTemplateUiModel
 import com.bottari.presentation.view.market.MarketNavigator
 import com.bottari.presentation.view.market.my.adapter.MyBottariTemplateAdapter
 import com.bottari.presentation.view.market.my.listener.MyBottariTemplateEventListener
-import com.google.android.material.snackbar.Snackbar
 
 class MyBottariTemplateFragment :
     BaseFragment<FragmentMyBottariTemplateBinding>(FragmentMyBottariTemplateBinding::inflate),
@@ -64,8 +64,13 @@ class MyBottariTemplateFragment :
         }
     }
 
-    private fun showSnackBar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+    private fun showSnackBar(event: MyBottariTemplateUiEvent) {
+        val stringRes =
+            when (event) {
+                MyBottariTemplateUiEvent.DELETE_MY_TEMPLATE_SUCCESS -> R.string.my_bottari_template_screen_delete_success
+                MyBottariTemplateUiEvent.DELETE_MY_TEMPLATE_FAILURE -> R.string.my_bottari_template_screen_delete_failure
+            }
+        showSnackbar(stringRes)
     }
 
     companion object {

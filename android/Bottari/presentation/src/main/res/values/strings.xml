@@ -78,6 +78,8 @@
 
     <!-- My Bottari Template -->
     <string name="my_bottari_template_screen_title">내가 공유한 보따리</string>
+    <string name="my_bottari_template_screen_delete_success">내 보따리 삭제 성공</string>
+    <string name="my_bottari_template_screen_delete_failure">내 보따리 삭제 실패</string>
 
     <!-- Profile -->
     <string name="profile_screen_nickname_title">닉네임</string>

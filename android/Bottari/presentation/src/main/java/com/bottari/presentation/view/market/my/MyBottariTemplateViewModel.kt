@@ -26,7 +26,7 @@ class MyBottariTemplateViewModel(
 ) : ViewModel() {
     private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_SSAID_MISSING)
 
-    val uiEvent: SingleLiveEvent<String> = SingleLiveEvent()
+    val uiEvent: SingleLiveEvent<MyBottariTemplateUiEvent> = SingleLiveEvent()
 
     private val _myBottariTemplates: MutableLiveData<UiState<List<BottariTemplateUiModel>>> =
         MutableLiveData(UiState.Loading)
@@ -42,8 +42,9 @@ class MyBottariTemplateViewModel(
                 .onSuccess {
                     val newTemplates = currentTemplates().filterNot { it.id == bottariTemplateId }
                     _myBottariTemplates.value = UiState.Success(newTemplates)
-                }.onFailure { error ->
-                    uiEvent.emit(error.message)
+                    uiEvent.emit(MyBottariTemplateUiEvent.DELETE_MY_TEMPLATE_SUCCESS)
+                }.onFailure {
+                    uiEvent.emit(MyBottariTemplateUiEvent.DELETE_MY_TEMPLATE_FAILURE)
                 }
         }
     }
