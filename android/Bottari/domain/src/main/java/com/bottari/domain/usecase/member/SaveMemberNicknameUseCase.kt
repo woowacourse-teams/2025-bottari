@@ -12,6 +12,6 @@ class SaveMemberNicknameUseCase(
     ): Result<Unit> =
         runCatching {
             val member = Member(ssaid, nickname)
-            memberRepository.saveMemberNickname(ssaid, member).getOrThrow()
+            memberRepository.saveMemberNickname(member).getOrThrow()
         }
 }

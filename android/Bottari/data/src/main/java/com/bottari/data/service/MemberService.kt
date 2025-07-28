@@ -2,7 +2,7 @@ package com.bottari.data.service
 
 import com.bottari.data.model.member.CheckRegisteredMemberResponse
 import com.bottari.data.model.member.RegisterMemberRequest
-import com.bottari.data.model.member.UpdateMemberNicknameRequest
+import com.bottari.data.model.member.SaveMemberNicknameRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -19,7 +19,7 @@ interface MemberService {
     @PATCH("/members/me")
     suspend fun saveMemberNickname(
         @Header("ssaid") ssaid: String,
-        @Body request: UpdateMemberNicknameRequest,
+        @Body request: SaveMemberNicknameRequest,
     ): Response<Unit>
 
     @GET("/members/check")
