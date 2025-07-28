@@ -53,12 +53,12 @@ class BottariTemplateServiceTest {
         final ReadBottariTemplateResponse actual = bottariTemplateService.getById(template1.getId());
 
         // then
-        assertAll(() -> {
-            assertThat(actual.title()).isEqualTo("title_1");
-            assertThat(actual.items()).hasSize(2);
-            assertThat(actual.items().get(0).name()).isEqualTo("item_1");
-            assertThat(actual.items().get(1).name()).isEqualTo("item_2");
-        });
+        assertAll(
+                () -> assertThat(actual.title()).isEqualTo("title_1"),
+                () -> assertThat(actual.items()).hasSize(2),
+                () -> assertThat(actual.items().get(0).name()).isEqualTo("item_1"),
+                () -> assertThat(actual.items().get(1).name()).isEqualTo("item_2")
+        );
     }
 
     @DisplayName("존재하지 않는 보따리 템플릿을 상세 조회할 경우, 예외를 던진다.")
@@ -98,16 +98,15 @@ class BottariTemplateServiceTest {
         final List<ReadBottariTemplateResponse> actual = bottariTemplateService.getAll(empty_query);
 
         // then
-        assertAll(() -> {
-                    assertThat(actual).hasSize(2);
-                    assertThat(actual.get(0).title()).isEqualTo("newer_template");
-                    assertThat(actual.get(0).items()).hasSize(1);
-                    assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3");
-                    assertThat(actual.get(1).title()).isEqualTo("older_template");
-                    assertThat(actual.get(1).items()).hasSize(2);
-                    assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
-                    assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
-                }
+        assertAll(
+                () -> assertThat(actual).hasSize(2),
+                () -> assertThat(actual.get(0).title()).isEqualTo("newer_template"),
+                () -> assertThat(actual.get(0).items()).hasSize(1),
+                () -> assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3"),
+                () -> assertThat(actual.get(1).title()).isEqualTo("older_template"),
+                () -> assertThat(actual.get(1).items()).hasSize(2),
+                () -> assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1"),
+                () -> assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2")
         );
     }
 
@@ -141,16 +140,15 @@ class BottariTemplateServiceTest {
         final List<ReadBottariTemplateResponse> actual = bottariTemplateService.getAll(query);
 
         // then
-        assertAll(() -> {
-                    assertThat(actual).hasSize(2);
-                    assertThat(actual.get(1).title()).isEqualTo("title_1");
-                    assertThat(actual.get(1).items()).hasSize(2);
-                    assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
-                    assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
-                    assertThat(actual.getFirst().title()).isEqualTo("title_2");
-                    assertThat(actual.getFirst().items()).hasSize(1);
-                    assertThat(actual.getFirst().items().getFirst().name()).isEqualTo("item_3");
-                }
+        assertAll(
+                () -> assertThat(actual).hasSize(2),
+                () -> assertThat(actual.get(1).title()).isEqualTo("title_1"),
+                () -> assertThat(actual.get(1).items()).hasSize(2),
+                () -> assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1"),
+                () -> assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2"),
+                () -> assertThat(actual.getFirst().title()).isEqualTo("title_2"),
+                () -> assertThat(actual.getFirst().items()).hasSize(1),
+                () -> assertThat(actual.getFirst().items().getFirst().name()).isEqualTo("item_3")
         );
     }
 
@@ -179,11 +177,11 @@ class BottariTemplateServiceTest {
                 .setParameter("bottariTemplateId", actual)
                 .getResultList();
 
-        assertAll(() -> {
-            assertThat(actual).isNotNull();
-            assertThat(actualItems).extracting("name")
-                    .containsExactlyInAnyOrderElementsOf(bottariTemplateItems);
-        });
+        assertAll(
+                () -> assertThat(actual).isNotNull(),
+                () -> assertThat(actualItems).extracting("name")
+                        .containsExactlyInAnyOrderElementsOf(bottariTemplateItems)
+        );
     }
 
     @DisplayName("생성 시 존재하지 않는 사용자라면, 예외를 던진다.")
@@ -252,14 +250,12 @@ class BottariTemplateServiceTest {
                 .getResultList();
 
         // then
-        assertAll(() -> {
-            assertThat(actualBottariId).isNotNull();
-            assertThat(actualBottari.getTitle()).isEqualTo("title");
-            assertThat(actualBottariItems).extracting("name").containsExactly(
-                    bottariTemplateItem1.getName(),
-                    bottariTemplateItem2.getName()
-            );
-        });
+        assertAll(
+                () -> assertThat(actualBottariId).isNotNull(),
+                () -> assertThat(actualBottari.getTitle()).isEqualTo("title"),
+                () -> assertThat(actualBottariItems).extracting("name")
+                        .containsExactly(bottariTemplateItem1.getName(), bottariTemplateItem2.getName())
+        );
     }
 
     @DisplayName("보따리 생성 시 템플릿이 존재하지 않는다면, 예외를 던진다.")
@@ -324,17 +320,17 @@ class BottariTemplateServiceTest {
                 .createQuery("SELECT bti FROM BottariTemplateItem bti", BottariTemplateItem.class)
                 .getResultList();
 
-        assertAll(() -> {
-            assertThat(remainingTemplates)
-                    .hasSize(1)
-                    .extracting(BottariTemplate::getId)
-                    .containsExactly(bottariTemplate2.getId());
+        assertAll(
+                () -> assertThat(remainingTemplates)
+                        .hasSize(1)
+                        .extracting(BottariTemplate::getId)
+                        .containsExactly(bottariTemplate2.getId()),
 
-            assertThat(remainingItems)
-                    .hasSize(1)
-                    .extracting(BottariTemplateItem::getName)
-                    .containsExactly("name3");
-        });
+                () -> assertThat(remainingItems)
+                        .hasSize(1)
+                        .extracting(BottariTemplateItem::getName)
+                        .containsExactly("name3")
+        );
     }
 
     @DisplayName("삭제 시, 해당 보따리 템플릿이 없는 경우 예외가 발생한다.")
