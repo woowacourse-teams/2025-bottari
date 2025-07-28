@@ -1,5 +1,6 @@
 package com.bottari.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,8 +18,10 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String ssaid;
 
+    @Column(unique = true)
     private String name;
 
     public Member(
@@ -32,6 +35,14 @@ public class Member {
 
     public boolean isSameBySsaid(final String ssaid) {
         return this.ssaid.equals(ssaid);
+    }
+
+    public void updateName(final String newName) {
+        if (name.equals(newName)) {
+            throw new IllegalArgumentException("기존 이름과 동일한 이름으로는 변경할 수 없습니다.");
+        }
+        validateName(newName);
+        this.name = newName;
     }
 
     private void validateName(final String name) {

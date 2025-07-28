@@ -48,6 +48,14 @@ public interface BottariApiDocs {
     ResponseEntity<Void> update(
             final Long id,
             final UpdateBottariRequest request,
+    )
+      
+    @Operation(summary = "보따리 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "보따리 삭제 성공"),
+    })
+    ResponseEntity<Void> delete(
+            final Long id,
             final HttpServletRequest httpServletRequest
     );
 }

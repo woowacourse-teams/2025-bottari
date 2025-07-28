@@ -69,15 +69,15 @@ class BottariServiceTest {
         final ReadBottariResponse actual = bottariService.getById(ssaid, bottari.getId());
 
         // then
-        assertAll(() -> {
-            assertThat(actual.id()).isEqualTo(bottari.getId());
-            assertThat(actual.items()).hasSize(1);
-            assertThat(actual.alarm()).isNotNull();
-            assertThat(actual.alarm().id()).isEqualTo(alarm.getId());
-            assertThat(actual.alarm().isActive()).isTrue();
-            assertThat(actual.alarm().routine().type()).isEqualTo(RepeatType.EVERY_WEEK_REPEAT);
-            assertThat(actual.alarm().location().latitude()).isEqualTo(37.5);
-        });
+        assertAll(
+                () -> assertThat(actual.id()).isEqualTo(bottari.getId()),
+                () -> assertThat(actual.items()).hasSize(1),
+                () -> assertThat(actual.alarm()).isNotNull(),
+                () -> assertThat(actual.alarm().id()).isEqualTo(alarm.getId()),
+                () -> assertThat(actual.alarm().isActive()).isTrue(),
+                () -> assertThat(actual.alarm().routine().type()).isEqualTo(RepeatType.EVERY_WEEK_REPEAT),
+                () -> assertThat(actual.alarm().location().latitude()).isEqualTo(37.5)
+        );
     }
 
     @DisplayName("본인의 보따리가 아닌 보따리를 조회할 경우, 예외를 던진다.")
@@ -144,18 +144,18 @@ class BottariServiceTest {
         final List<ReadBottariPreviewResponse> actual = bottariService.getAllBySsaidSortedByLatest(ssaid);
 
         // then
-        assertAll(() -> {
-            assertThat(actual).extracting("title").containsExactly("title2", "title1");
-            assertThat(actual).hasSize(2);
-            assertThat(actual.getFirst().totalItemsCount()).isEqualTo(1);
-            assertThat(actual.getFirst().checkedItemsCount()).isEqualTo(0);
-            assertThat(actual.getFirst().alarm()).isNull();
-            assertThat(actual.get(1).totalItemsCount()).isEqualTo(2);
-            assertThat(actual.get(1).checkedItemsCount()).isEqualTo(1);
-            assertThat(actual.get(1).alarm()).isNotNull();
-            assertThat(actual.get(1).alarm().id()).isEqualTo(alarm.getId());
-            assertThat(actual.get(1).alarm().isActive()).isTrue();
-        });
+        assertAll(
+                () -> assertThat(actual).extracting("title").containsExactly("title2", "title1"),
+                () -> assertThat(actual).hasSize(2),
+                () -> assertThat(actual.getFirst().totalItemsCount()).isEqualTo(1),
+                () -> assertThat(actual.getFirst().checkedItemsCount()).isEqualTo(0),
+                () -> assertThat(actual.getFirst().alarm()).isNull(),
+                () -> assertThat(actual.get(1).totalItemsCount()).isEqualTo(2),
+                () -> assertThat(actual.get(1).checkedItemsCount()).isEqualTo(1),
+                () -> assertThat(actual.get(1).alarm()).isNotNull(),
+                () -> assertThat(actual.get(1).alarm().id()).isEqualTo(alarm.getId()),
+                () -> assertThat(actual.get(1).alarm().isActive()).isTrue()
+        );
     }
 
     @DisplayName("존재하지 않는 사용자의 모든 보따리를 조회할 경우, 예외를 던진다.")
@@ -199,7 +199,55 @@ class BottariServiceTest {
                 .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
     }
 
-    @DisplayName("보따리의 제목을 수정한다.")
+    @DisplayName("아이디를 통해 보따리를 삭제한다.")
+    @Test
+    void deleteById() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Bottari delete_bottari = new Bottari("delete_bottari", member);
+        entityManager.persist(delete_bottari);
+
+        final Bottari remain_bottari = new Bottari("remain_bottari", member);
+        entityManager.persist(remain_bottari);
+
+        final BottariItem bottariItem1 = new BottariItem("bottari1_item1", delete_bottari);
+        final BottariItem bottariItem2 = new BottariItem("bottari1_item2", delete_bottari);
+        entityManager.persist(bottariItem1);
+        entityManager.persist(bottariItem2);
+
+        final RoutineAlarm routineAlarm = new RoutineAlarm(
+                LocalTime.now(),
+                RepeatType.EVERY_WEEK_REPEAT,
+                null,
+                Set.of(DayOfWeek.MONDAY)
+        );
+        final LocationAlarm locationAlarm = new LocationAlarm(
+                true,
+                37.5,
+                127.5,
+                100
+        );
+        final Alarm alarm = new Alarm(true, routineAlarm, locationAlarm, delete_bottari);
+        entityManager.persist(alarm);
+
+        // when
+        bottariService.deleteById(delete_bottari.getId(), ssaid);
+
+        // then
+        final Bottari remainingBottari = entityManager.find(Bottari.class, remain_bottari.getId());
+        final Bottari deletedBottari = entityManager.find(Bottari.class, delete_bottari.getId());
+
+        assertAll(
+                () -> assertThat(deletedBottari).isNull(),
+                () -> assertThat(remainingBottari).isNotNull(),
+                () -> assertThat(remainingBottari.getTitle()).isEqualTo("remain_bottari")
+        );
+    }
+  
+      @DisplayName("보따리의 제목을 수정한다.")
     @Test
     void update() {
         // given
@@ -253,5 +301,37 @@ class BottariServiceTest {
         assertThatThrownBy(() -> bottariService.update(request, invalid_bottari_id, "ssaid"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("보따리를 찾을 수 없습니다.");
+    }
+
+    @DisplayName("존재하지 않는 보따리를 삭제할 경우, 예외를 던진다.")
+    @Test
+    void deleteById_Exception_NotFound() {
+        // given
+        final Long invalid_bottari_id = -1L;
+
+        // when & then
+        assertThatThrownBy(() -> bottariService.deleteById(invalid_bottari_id, "ssaid"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("보따리를 찾을 수 없습니다.");
+    }
+
+    @DisplayName("본인의 것이 아닌 보따리를 삭제할 경우, 예외를 던진다.")
+    @Test
+    void deleteById_Exception_NotMine() {
+        // given
+        final String ssaid = "ssaid";
+        final Member member = new Member(ssaid, "name");
+        entityManager.persist(member);
+
+        final Member anotherMember = new Member("another_ssaid", "name_2");
+        entityManager.persist(anotherMember);
+
+        final Bottari anotherMemberBottari = new Bottari("title1", anotherMember);
+        entityManager.persist(anotherMemberBottari);
+
+        // when & then
+        assertThatThrownBy(() -> bottariService.deleteById(anotherMemberBottari.getId(), "ssaid"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("본인의 보따리가 아닙니다.");
     }
 }

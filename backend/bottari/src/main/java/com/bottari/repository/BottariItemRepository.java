@@ -4,6 +4,8 @@ import com.bottari.domain.Bottari;
 import com.bottari.domain.BottariItem;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 public interface BottariItemRepository extends JpaRepository<BottariItem, Long> {
 
@@ -27,6 +29,13 @@ public interface BottariItemRepository extends JpaRepository<BottariItem, Long> 
     );
 
     int countAllByBottariId(final Long bottariId);
+
+    @Modifying(clearAutomatically = true)
+    @Query("""
+            DELETE FROM BottariItem bt
+            WHERE bt.bottari.id = :bottariId
+            """)
+    void deleteByBottariId(final Long bottariId);
 
     void deleteByIdIn(final List<Long> ids);
 }

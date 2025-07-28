@@ -11,6 +11,7 @@ import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,6 +71,18 @@ public class BottariController implements BottariApiDocs {
     ) {
         final String ssaid = httpServletRequest.getHeader("ssaid");
         bottariService.update(request, id, ssaid);
+      
+        return ResponseEntity.noContent().build();
+    }
+
+  @DeleteMapping("/{id}")
+    @Override
+    public ResponseEntity<Void> delete(
+            @PathVariable final Long id,
+            final HttpServletRequest httpServletRequest
+    ) {
+        final String ssaid = httpServletRequest.getHeader("ssaid");
+        bottariService.deleteById(id, ssaid);
 
         return ResponseEntity.noContent().build();
     }

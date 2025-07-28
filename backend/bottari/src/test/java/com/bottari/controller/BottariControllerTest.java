@@ -24,6 +24,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(BottariController.class)
 class BottariControllerTest {
@@ -90,7 +91,7 @@ class BottariControllerTest {
                 .andExpect(header().string(HttpHeaders.LOCATION, "/bottaries/1"));
     }
 
-    @DisplayName("보따리를 생성한다.")
+    @DisplayName("보따리를 수정한다.")
     @Test
     void update() throws Exception {
         // given
@@ -105,6 +106,20 @@ class BottariControllerTest {
                         .header("ssaid", ssaid)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
+      }
+          
+    @DisplayName("보따리를 삭제한다.")
+    @Test
+    void delete() throws Exception {
+        // given
+        final Long bottariId = 1L;
+        final String ssaid = "ssaid";
+        willDoNothing().given(bottariService)
+                .deleteById(bottariId, ssaid);
+
+        // when & then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/bottaries/" + bottariId)
+                        .header("ssaid", ssaid))
                 .andExpect(status().isNoContent());
     }
 }
