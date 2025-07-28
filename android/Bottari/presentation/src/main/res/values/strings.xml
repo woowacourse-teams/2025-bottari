@@ -73,6 +73,9 @@
     <string name="market_place_edit_text_hint">원하시는 보따리를 검색하세요!</string>
     <string name="btn_navigate_my_bottari_template"><![CDATA[내가 올린 보따리 >]]></string>
 
+    <!-- Market Detail -->
+    <string name="btn_bottari_template_detail_receive">가져오기</string>
+
     <!-- Profile -->
     <string name="profile_screen_nickname_title">닉네임</string>
 

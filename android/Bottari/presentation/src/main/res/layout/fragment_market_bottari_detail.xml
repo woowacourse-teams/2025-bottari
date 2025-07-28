@@ -54,7 +54,7 @@
         android:background="@drawable/bg_primary_radius_16dp"
         android:gravity="center"
         android:paddingVertical="@dimen/space_median"
-        android:text="가져오기"
+        android:text="@string/btn_bottari_template_detail_receive"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="24dp" />
