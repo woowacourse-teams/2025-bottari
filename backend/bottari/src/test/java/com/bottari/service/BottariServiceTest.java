@@ -68,15 +68,15 @@ class BottariServiceTest {
         final ReadBottariResponse actual = bottariService.getById(ssaid, bottari.getId());
 
         // then
-        assertAll(() -> {
-            assertThat(actual.id()).isEqualTo(bottari.getId());
-            assertThat(actual.items()).hasSize(1);
-            assertThat(actual.alarm()).isNotNull();
-            assertThat(actual.alarm().id()).isEqualTo(alarm.getId());
-            assertThat(actual.alarm().isActive()).isTrue();
-            assertThat(actual.alarm().routine().type()).isEqualTo(RepeatType.EVERY_WEEK_REPEAT);
-            assertThat(actual.alarm().location().latitude()).isEqualTo(37.5);
-        });
+        assertAll(
+                () -> assertThat(actual.id()).isEqualTo(bottari.getId()),
+                () -> assertThat(actual.items()).hasSize(1),
+                () -> assertThat(actual.alarm()).isNotNull(),
+                () -> assertThat(actual.alarm().id()).isEqualTo(alarm.getId()),
+                () -> assertThat(actual.alarm().isActive()).isTrue(),
+                () -> assertThat(actual.alarm().routine().type()).isEqualTo(RepeatType.EVERY_WEEK_REPEAT),
+                () -> assertThat(actual.alarm().location().latitude()).isEqualTo(37.5)
+        );
     }
 
     @DisplayName("본인의 보따리가 아닌 보따리를 조회할 경우, 예외를 던진다.")
@@ -143,18 +143,18 @@ class BottariServiceTest {
         final List<ReadBottariPreviewResponse> actual = bottariService.getAllBySsaidSortedByLatest(ssaid);
 
         // then
-        assertAll(() -> {
-            assertThat(actual).extracting("title").containsExactly("title2", "title1");
-            assertThat(actual).hasSize(2);
-            assertThat(actual.getFirst().totalItemsCount()).isEqualTo(1);
-            assertThat(actual.getFirst().checkedItemsCount()).isEqualTo(0);
-            assertThat(actual.getFirst().alarm()).isNull();
-            assertThat(actual.get(1).totalItemsCount()).isEqualTo(2);
-            assertThat(actual.get(1).checkedItemsCount()).isEqualTo(1);
-            assertThat(actual.get(1).alarm()).isNotNull();
-            assertThat(actual.get(1).alarm().id()).isEqualTo(alarm.getId());
-            assertThat(actual.get(1).alarm().isActive()).isTrue();
-        });
+        assertAll(
+                () -> assertThat(actual).extracting("title").containsExactly("title2", "title1"),
+                () -> assertThat(actual).hasSize(2),
+                () -> assertThat(actual.getFirst().totalItemsCount()).isEqualTo(1),
+                () -> assertThat(actual.getFirst().checkedItemsCount()).isEqualTo(0),
+                () -> assertThat(actual.getFirst().alarm()).isNull(),
+                () -> assertThat(actual.get(1).totalItemsCount()).isEqualTo(2),
+                () -> assertThat(actual.get(1).checkedItemsCount()).isEqualTo(1),
+                () -> assertThat(actual.get(1).alarm()).isNotNull(),
+                () -> assertThat(actual.get(1).alarm().id()).isEqualTo(alarm.getId()),
+                () -> assertThat(actual.get(1).alarm().isActive()).isTrue()
+        );
     }
 
     @DisplayName("존재하지 않는 사용자의 모든 보따리를 조회할 경우, 예외를 던진다.")
@@ -243,11 +243,11 @@ class BottariServiceTest {
         final Bottari remainingBottari = entityManager.find(Bottari.class, remain_bottari.getId());
         final Bottari deletedBottari = entityManager.find(Bottari.class, delete_bottari.getId());
 
-        assertAll(() -> {
-            assertThat(deletedBottari).isNull();
-            assertThat(remainingBottari).isNotNull();
-            assertThat(remainingBottari.getTitle()).isEqualTo("remain_bottari");
-        });
+        assertAll(
+                () -> assertThat(deletedBottari).isNull(),
+                () -> assertThat(remainingBottari).isNotNull(),
+                () -> assertThat(remainingBottari.getTitle()).isEqualTo("remain_bottari")
+        );
     }
 
     @DisplayName("존재하지 않는 보따리를 삭제할 경우, 예외를 던진다.")
