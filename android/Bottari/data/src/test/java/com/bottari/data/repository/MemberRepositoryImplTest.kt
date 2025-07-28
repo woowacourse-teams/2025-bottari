@@ -16,8 +16,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 class MemberRepositoryImplTest {
-    private lateinit var remoteDataSource :MemberRemoteDataSource
-    private lateinit var repository : MemberRepository
+    private lateinit var remoteDataSource: MemberRemoteDataSource
+    private lateinit var repository: MemberRepository
 
     @BeforeEach
     fun setup() {

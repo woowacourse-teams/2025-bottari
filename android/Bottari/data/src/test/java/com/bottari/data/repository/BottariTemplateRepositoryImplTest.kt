@@ -16,8 +16,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 class BottariTemplateRepositoryImplTest {
-    private lateinit var remoteDataSource : BottariTemplateRemoteDataSource
-    private lateinit var repository : BottariTemplateRepository
+    private lateinit var remoteDataSource: BottariTemplateRemoteDataSource
+    private lateinit var repository: BottariTemplateRepository
 
     @BeforeEach
     fun setup() {
