@@ -121,7 +121,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             viewModel.toggleAlarmState(isChecked)
         }
         childFragmentManager.setFragmentResultListener(
-            BottariRenameDialog.RENAME_RESULT_KEY,
+            BottariRenameDialog.SAVE_BOTTARI_TITLE_RESULT_KEY,
             viewLifecycleOwner,
         ) { _, _ ->
             viewModel.fetchBottari()

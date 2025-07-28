@@ -2,12 +2,12 @@ package com.bottari.domain.usecase.bottari
 
 import com.bottari.domain.repository.BottariRepository
 
-class RenameBottariUseCase(
+class SaveBottariTitleUseCase(
     private val bottariRepository: BottariRepository,
 ) {
     suspend operator fun invoke(
         id: Long,
         ssaid: String,
         title: String,
-    ): Result<Unit> = bottariRepository.renameBottari(id, ssaid, title)
+    ): Result<Unit> = bottariRepository.saveBottariTitle(id, ssaid, title)
 }

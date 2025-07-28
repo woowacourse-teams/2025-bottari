@@ -24,9 +24,9 @@ class BottariRepositoryImpl(
         title: String,
     ): Result<Long?> = bottariRemoteDataSource.createBottari(ssaid, CreateBottariRequest(title))
 
-    override suspend fun renameBottari(
+    override suspend fun saveBottariTitle(
         id: Long,
         ssaid: String,
         title: String,
-    ): Result<Unit> = bottariRemoteDataSource.renameBottari(id, ssaid, UpdateBottariTitleRequest(title))
+    ): Result<Unit> = bottariRemoteDataSource.saveBottariTitle(id, ssaid, UpdateBottariTitleRequest(title))
 }

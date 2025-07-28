@@ -31,7 +31,7 @@ interface BottariService {
     ): Response<Unit>
 
     @PATCH("/bottaries/{id}")
-    suspend fun renameBottari(
+    suspend fun saveBottariTitle(
         @Header("ssaid") ssaid: String,
         @Path("id") id: Long,
         @Body request: UpdateBottariTitleRequest,

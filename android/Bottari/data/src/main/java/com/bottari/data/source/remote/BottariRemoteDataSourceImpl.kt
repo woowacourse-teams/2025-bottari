@@ -33,13 +33,13 @@ class BottariRemoteDataSourceImpl(
             response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)
         }
 
-    override suspend fun renameBottari(
+    override suspend fun saveBottariTitle(
         id: Long,
         ssaid: String,
         request: UpdateBottariTitleRequest,
     ): Result<Unit> =
         safeApiCall {
-            bottariService.renameBottari(id = id, ssaid = ssaid, request = request)
+            bottariService.saveBottariTitle(id = id, ssaid = ssaid, request = request)
         }
 
     companion object {

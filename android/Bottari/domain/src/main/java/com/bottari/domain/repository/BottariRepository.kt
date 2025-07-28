@@ -16,7 +16,7 @@ interface BottariRepository {
         title: String,
     ): Result<Long?>
 
-    suspend fun renameBottari(
+    suspend fun saveBottariTitle(
         id: Long,
         ssaid: String,
         title: String,

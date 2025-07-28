@@ -7,30 +7,30 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
-import com.bottari.domain.usecase.bottari.RenameBottariUseCase
+import com.bottari.domain.usecase.bottari.SaveBottariTitleUseCase
 import com.bottari.presentation.base.UiState
 import kotlinx.coroutines.launch
 
 class BottariRenameViewModel(
     savedStateHandle: SavedStateHandle,
-    private val renameBottariUseCase: RenameBottariUseCase,
+    private val saveBottariTitleUseCase: SaveBottariTitleUseCase,
 ) : ViewModel() {
     private val ssaid: String = savedStateHandle.get<String>(KEY_SSAID) ?: error(ERROR_REQUIRE_SSAID)
     private val id: Long = savedStateHandle.get<Long>(KEY_BOTTARI_ID) ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val oldTitle: String = savedStateHandle.get<String>(KEY_OLD_TITLE) ?: error(ERROR_REQUIRE_OLD_TITLE)
 
-    private val _renameSuccess = MutableLiveData<UiState<Unit?>>()
-    val renameSuccess: MutableLiveData<UiState<Unit?>> = _renameSuccess
+    private val _saveBottariTitleSuccess = MutableLiveData<UiState<Unit?>>()
+    val saveBottariTitleSuccess: MutableLiveData<UiState<Unit?>> = _saveBottariTitleSuccess
 
-    fun renameBottari(newTitle: String) {
+    fun saveBottariTitle(newTitle: String) {
         if (!isValidTitle(newTitle)) return
 
-        _renameSuccess.value = UiState.Loading
+        _saveBottariTitleSuccess.value = UiState.Loading
 
         viewModelScope.launch {
-            renameBottariUseCase(id, ssaid, newTitle)
-                .onSuccess { _renameSuccess.value = UiState.Success(it) }
-                .onFailure { _renameSuccess.value = UiState.Failure(it.message) }
+            saveBottariTitleUseCase(id, ssaid, newTitle)
+                .onSuccess { _saveBottariTitleSuccess.value = UiState.Success(it) }
+                .onFailure { _saveBottariTitleSuccess.value = UiState.Failure(it.message) }
         }
     }
 
@@ -38,7 +38,7 @@ class BottariRenameViewModel(
         when {
             newTitle.isBlank() -> false
             newTitle == oldTitle -> {
-                _renameSuccess.value = UiState.Success(Unit)
+                _saveBottariTitleSuccess.value = UiState.Success(Unit)
                 false
             }
             else -> true

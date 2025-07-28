@@ -121,18 +121,18 @@ class BottariRepositoryImplTest {
 
     @DisplayName("보따리 이름 변경에 성공하면 Unit을 반환한다")
     @Test
-    fun renameBottariSuccessReturnsUnit() =
+    fun saveBottariTitleSuccessReturnsUnit() =
         runTest {
             // given
             val id = 1L
             val ssaid = "ssaid123"
             val title = "renamed title"
             coEvery {
-                remoteDataSource.renameBottari(id, ssaid, UpdateBottariTitleRequest(title))
+                remoteDataSource.saveBottariTitle(id, ssaid, UpdateBottariTitleRequest(title))
             } returns Result.success(Unit)
 
             // when
-            val result = repository.renameBottari(id, ssaid, title)
+            val result = repository.saveBottariTitle(id, ssaid, title)
 
             // then
             result.shouldBeSuccess {
@@ -140,7 +140,7 @@ class BottariRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.renameBottari(id, ssaid, UpdateBottariTitleRequest(title)) }
+            coVerify { remoteDataSource.saveBottariTitle(id, ssaid, UpdateBottariTitleRequest(title)) }
         }
 
     @DisplayName("보따리 단건 조회 실패 시 예외를 반환한다")
@@ -191,7 +191,7 @@ class BottariRepositoryImplTest {
 
     @DisplayName("보따리 이름 변경 실패 시 예외를 반환한다")
     @Test
-    fun renameBottariFailureReturnsException() =
+    fun saveBottariTitleFailureReturnsException() =
         runTest {
             // given
             val id = 1L
@@ -199,11 +199,11 @@ class BottariRepositoryImplTest {
             val title = "error title"
             val exception = RuntimeException("제목 변경 실패")
             coEvery {
-                remoteDataSource.renameBottari(id, ssaid, UpdateBottariTitleRequest(title))
+                remoteDataSource.saveBottariTitle(id, ssaid, UpdateBottariTitleRequest(title))
             } returns Result.failure(exception)
 
             // when
-            val result = repository.renameBottari(id, ssaid, title)
+            val result = repository.saveBottariTitle(id, ssaid, title)
 
             // then
             result.shouldBeFailure {
@@ -211,6 +211,6 @@ class BottariRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.renameBottari(id, ssaid, UpdateBottariTitleRequest(title)) }
+            coVerify { remoteDataSource.saveBottariTitle(id, ssaid, UpdateBottariTitleRequest(title)) }
         }
 }

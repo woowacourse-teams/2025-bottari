@@ -81,7 +81,7 @@ class BottariRenameDialog :
     }
 
     private fun setupObserver() {
-        viewModel.renameSuccess.observe(viewLifecycleOwner, ::handleRenameState)
+        viewModel.saveBottariTitleSuccess.observe(viewLifecycleOwner, ::handleRenameState)
     }
 
     private fun setupListener() {
@@ -89,7 +89,7 @@ class BottariRenameDialog :
         binding.btnBottariRenameClose.setOnClickListener { dismiss() }
         binding.btnBottariRename.setOnClickListener {
             val newTitle = binding.etBottariRenameName.text.toString()
-            viewModel.renameBottari(newTitle)
+            viewModel.saveBottariTitle(newTitle)
         }
     }
 
@@ -111,7 +111,7 @@ class BottariRenameDialog :
             is UiState.Loading -> Unit
             is UiState.Success -> {
                 parentFragmentManager.setFragmentResult(
-                    RENAME_RESULT_KEY,
+                    SAVE_BOTTARI_TITLE_RESULT_KEY,
                     Bundle(),
                 )
                 dismiss()
@@ -129,7 +129,7 @@ class BottariRenameDialog :
         private const val DISABLED_ALPHA_VALUE = 0.4f
         private const val ENABLED_ALPHA_VALUE = 1f
 
-        const val RENAME_RESULT_KEY = "RENAME_RESULT_KEY"
+        const val SAVE_BOTTARI_TITLE_RESULT_KEY = "RENAME_RESULT_KEY"
 
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
         private const val EXTRA_OLD_TITLE = "EXTRA_OLD_TITLE"

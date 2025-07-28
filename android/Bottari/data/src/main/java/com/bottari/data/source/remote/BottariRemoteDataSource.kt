@@ -18,7 +18,7 @@ interface BottariRemoteDataSource {
         ssaid: String,
     ): Result<BottariResponse>
 
-    suspend fun renameBottari(
+    suspend fun saveBottariTitle(
         id: Long,
         ssaid: String,
         request: UpdateBottariTitleRequest,
