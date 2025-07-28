@@ -87,7 +87,7 @@ class BottariRenameDialog :
         binding.btnBottariCreateClose.setOnClickListener { dismiss() }
         binding.btnBottariCreate.setOnClickListener {
             val title = binding.etBottariCreateName.text.toString()
-            viewModel.renameBottari(bottariId, ssaid = requireContext().getSSAID(), title = title , oldTitle = oldTitle)
+            viewModel.renameBottari(bottariId, ssaid = requireContext().getSSAID(), newTitle = title , oldTitle = oldTitle)
         }
     }
 

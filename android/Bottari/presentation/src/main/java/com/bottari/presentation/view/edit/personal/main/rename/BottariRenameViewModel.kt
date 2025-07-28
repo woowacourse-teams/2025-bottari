@@ -21,22 +21,27 @@ class BottariRenameViewModel(
         id: Long,
         oldTitle: String,
         ssaid: String,
-        title: String,
+        newTitle: String,
     ) {
-        if (title.isBlank()){
-            _renameSuccess.value = UiState.Failure("이름을 빈칸으로 지정할 수 없습니다")
-            return
-        }
-        if (title == oldTitle) {
-            _renameSuccess.value = UiState.Failure("기존과 똑같은 이름으로 변경할 수 없습니다")
-            return
-        }
+        if (!isValidTitle(newTitle, oldTitle)) return
+
         _renameSuccess.value = UiState.Loading
 
         viewModelScope.launch {
-            renameBottariUseCase(id, ssaid, title)
+            renameBottariUseCase(id, ssaid, newTitle)
                 .onSuccess { _renameSuccess.value = UiState.Success(it) }
                 .onFailure { _renameSuccess.value = UiState.Failure(it.message) }
+        }
+    }
+
+    private fun isValidTitle(newTitle: String, oldTitle: String): Boolean {
+        return when {
+            newTitle.isBlank() -> false
+            newTitle == oldTitle -> {
+                _renameSuccess.value = UiState.Success(Unit)
+                false
+            }
+            else -> true
         }
     }
 
