@@ -2,8 +2,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
@@ -15,7 +15,6 @@ class BottariRenameViewModel(
     savedStateHandle: SavedStateHandle,
     private val renameBottariUseCase: RenameBottariUseCase,
 ) : ViewModel() {
-
     private val id: Long = savedStateHandle.get<Long>(EXTRA_BOTTARI_ID) ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val oldTitle: String = savedStateHandle.get<String>(EXTRA_OLD_TITLE) ?: error(ERROR_REQUIRE_OLD_TITLE)
 

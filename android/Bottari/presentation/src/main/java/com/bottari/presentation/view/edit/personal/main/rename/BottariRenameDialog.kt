@@ -20,7 +20,6 @@ import com.google.android.material.snackbar.Snackbar
 class BottariRenameDialog :
     DialogFragment(),
     TextWatcher {
-
     private val viewModel: BottariRenameViewModel by viewModels {
         val bottariId = requireArguments().getLong(EXTRA_BOTTARI_ID)
         val oldTitle = requireArguments().getString(EXTRA_OLD_TITLE).orEmpty()
