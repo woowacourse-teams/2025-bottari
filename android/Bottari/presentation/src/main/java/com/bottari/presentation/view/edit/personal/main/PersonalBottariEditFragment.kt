@@ -279,8 +279,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 ?.takeSuccess()
                 ?.title ?: return
 
-        if (!isAdded) return
-
         BottariRenameDialog
             .newInstance(bottariId, oldTitle)
             .show(childFragmentManager, BottariRenameDialog::class.java.name)
