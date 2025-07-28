@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.market
+package com.bottari.presentation.view.home.market.main
 
 import android.os.Bundle
 import android.text.Editable
@@ -10,8 +10,9 @@ import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentMarketBinding
 import com.bottari.presentation.model.BottariTemplateUiModel
-import com.bottari.presentation.view.home.market.adapter.MarketAdapter
-import com.bottari.presentation.view.home.market.listener.OnBottariTemplateClickListener
+import com.bottari.presentation.view.home.market.MarketBottariDetailActivity
+import com.bottari.presentation.view.home.market.main.adapter.MarketAdapter
+import com.bottari.presentation.view.home.market.main.listener.OnBottariTemplateClickListener
 
 class MarketFragment :
     BaseFragment<FragmentMarketBinding>(FragmentMarketBinding::inflate),

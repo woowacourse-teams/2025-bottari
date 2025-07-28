@@ -11,7 +11,7 @@ import com.bottari.presentation.databinding.ActivityMarketBottariDetailBinding
 import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.model.BottariTemplateUiModel
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
-import com.bottari.presentation.view.home.market.adapter.MarketBottariDetailAdapter
+import com.bottari.presentation.view.home.market.main.adapter.MarketBottariDetailAdapter
 
 class MarketBottariDetailActivity : BaseActivity<ActivityMarketBottariDetailBinding>(ActivityMarketBottariDetailBinding::inflate) {
     private val viewModel: MarketBottariDetailViewModel by viewModels {

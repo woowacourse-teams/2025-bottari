@@ -1,10 +1,10 @@
-package com.bottari.presentation.view.home.market.adapter
+package com.bottari.presentation.view.home.market.main.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.BottariTemplateUiModel
-import com.bottari.presentation.view.home.market.listener.OnBottariTemplateClickListener
+import com.bottari.presentation.view.home.market.main.listener.OnBottariTemplateClickListener
 
 class MarketAdapter(
     private val clickListener: OnBottariTemplateClickListener,

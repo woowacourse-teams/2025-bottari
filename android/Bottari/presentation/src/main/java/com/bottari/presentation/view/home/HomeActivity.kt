@@ -9,7 +9,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityHomeBinding
 import com.bottari.presentation.view.home.bottari.BottariFragment
-import com.bottari.presentation.view.home.market.MarketFragment
+import com.bottari.presentation.view.home.market.main.MarketFragment
 import com.bottari.presentation.view.home.profile.ProfileFragment
 import com.bottari.presentation.view.setting.SettingActivity
 
