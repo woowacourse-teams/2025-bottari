@@ -22,9 +22,7 @@ class BottariRenameViewModel(
     private val _renameSuccess = MutableLiveData<UiState<Unit?>>()
     val renameSuccess: MutableLiveData<UiState<Unit?>> = _renameSuccess
 
-    fun renameBottari(
-        newTitle: String,
-    ) {
+    fun renameBottari(newTitle: String) {
         if (!isValidTitle(newTitle)) return
 
         _renameSuccess.value = UiState.Loading
@@ -36,9 +34,7 @@ class BottariRenameViewModel(
         }
     }
 
-    private fun isValidTitle(
-        newTitle: String,
-    ): Boolean =
+    private fun isValidTitle(newTitle: String): Boolean =
         when {
             newTitle.isBlank() -> false
             newTitle == oldTitle -> {
