@@ -25,7 +25,6 @@ import com.bottari.presentation.view.edit.alarm.AlarmEditFragment
 import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditAlarmAdapter
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditItemAdapter
-import com.bottari.presentation.view.edit.personal.main.rename.BottariRenameDialog
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -90,7 +89,6 @@ class PersonalBottariEditFragment :
                     viewModel.createBottariTemplate()
                     true
                 }
-
                 R.id.rename -> {
                     showRenameDialog()
                     true
@@ -122,7 +120,6 @@ class PersonalBottariEditFragment :
         binding.switchAlarm.setOnCheckedChangeListener { _, isChecked ->
             viewModel.toggleAlarmState(isChecked)
         }
-
         childFragmentManager.setFragmentResultListener(
             BottariRenameDialog.RENAME_RESULT_KEY,
             viewLifecycleOwner,

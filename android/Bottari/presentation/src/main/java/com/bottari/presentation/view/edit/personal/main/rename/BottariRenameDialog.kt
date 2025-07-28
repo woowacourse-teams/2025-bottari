@@ -114,7 +114,6 @@ class BottariRenameDialog :
                 )
                 dismiss()
             }
-
             is UiState.Failure -> {
                 Snackbar
                     .make(binding.root, uiState.message.toString(), Snackbar.LENGTH_SHORT)
