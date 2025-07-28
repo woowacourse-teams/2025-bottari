@@ -34,8 +34,8 @@ public class MemberService {
     )
     public Long create(final CreateMemberRequest request) {
         validateDuplicateSsaid(request.ssaid());
-        final String tempName = createRandomNameCandidate();
-        final Member member = new Member(request.ssaid(), tempName);
+        final String generatedName = generatedRandomNameCandidate();
+        final Member member = new Member(request.ssaid(), generatedName);
         final Member savedMember = memberRepository.save(member);
 
         return savedMember.getId();
@@ -77,7 +77,7 @@ public class MemberService {
         }
     }
 
-    private String createRandomNameCandidate() {
+    private String generatedRandomNameCandidate() {
         String word = NAME_POOL[ThreadLocalRandom.current().nextInt(NAME_POOL.length)];
         int suffix = ThreadLocalRandom.current().nextInt(10_000);
         return "%s-%04d".formatted(word, suffix);
