@@ -5,9 +5,8 @@
     <string name="home_nav_profile_title">프로필</string>
 
     <!-- Bottari Home -->
-    <string name= "bottari_fetch_bottaries_failure_text">보따리 불러오기에 실패했어요</string>
-    <string name= "bottari_delete_failure_text">보따리 삭제에 실패했어요</string>"
-
+    <string name="bottari_fetch_bottaries_failure_text">보따리 불러오기에 실패했어요</string>
+    <string name="bottari_delete_failure_text">보따리 삭제에 실패했어요</string>"
 
     <!--  Bottari Item  -->
     <string name="bottari_item_quantity_status_format">%d/%d</string>
@@ -83,6 +82,7 @@
 
     <!-- Profile -->
     <string name="profile_screen_nickname_title">닉네임</string>
+    <string name="nickname_edit_hint_text">닉네임을 입력하세요</string>
 
     <!--  Description  -->
     <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>
@@ -95,6 +95,7 @@
     <string name="setting_button_description">설정 버튼</string>
     <string name="bottari_template_option_button_description">보따리 템플릿 옵션 버튼</string>
     <string name="bottari_template_delete_button_description">보따리 템플릿 제거 버튼</string>
+    <string name="nickname_edit_button_description">닉네임 수정 버튼</string>
 
     <!-- Menu -->
     <string name="menu_title_create_market">마켓에 등록하기</string>

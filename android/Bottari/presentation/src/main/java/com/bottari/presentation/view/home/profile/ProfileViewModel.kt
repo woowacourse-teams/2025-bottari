@@ -11,44 +11,65 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
+import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
 import com.bottari.presentation.base.UiState
+import com.bottari.presentation.common.event.SingleLiveEvent
+import com.bottari.presentation.extension.takeSuccess
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     stateHandle: SavedStateHandle,
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
+    private val saveMemberNicknameUseCase: SaveMemberNicknameUseCase,
 ) : ViewModel() {
     private val _nickname: MutableLiveData<UiState<String>> = MutableLiveData(UiState.Loading)
     val nickname: LiveData<UiState<String>> = _nickname
 
+    private val _nicknameEvent = SingleLiveEvent<String>()
+    val nicknameEvent: SingleLiveEvent<String> get() = _nicknameEvent
+
+    private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRED_SSAID)
+
     init {
-        val ssaid = stateHandle.get<String>(EXTRA_SSAID) ?: error(ERROR_REQUIRED_SSAID)
         fetchNickname(ssaid)
     }
 
-    private fun fetchNickname(ssaid: String) {
-        _nickname.value = UiState.Loading
+    fun saveNickname(nickname: String) {
+        val currentNickname = _nickname.value?.takeSuccess() ?: ""
+        val nicknameNoBlank = nickname.trim()
+        viewModelScope.launch {
+            saveMemberNicknameUseCase(ssaid, nicknameNoBlank)
+                .onSuccess {
+                    _nickname.value = UiState.Success(nicknameNoBlank)
+                }.onFailure { error ->
+                    _nickname.value = UiState.Failure(currentNickname)
+                    _nicknameEvent.emit(error.message)
+                }
+        }
+    }
 
+    private fun fetchNickname(ssaid: String) {
         viewModelScope.launch {
             checkRegisteredMemberUseCase(ssaid)
                 .onSuccess { _nickname.value = UiState.Success(it.name ?: "") }
-                .onFailure { _nickname.value = UiState.Failure(it.message) }
+                .onFailure { error -> _nicknameEvent.emit(error.message) }
         }
     }
 
     companion object {
-        private const val EXTRA_SSAID = "EXTRA_SSAID"
+        private const val KEY_SSAID = "KEY_SSAID"
         private const val ERROR_REQUIRED_SSAID = "[ERROR] SSAID를 찾지 못함"
 
         fun Factory(ssaid: String): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
-                    stateHandle[EXTRA_SSAID] = ssaid
+                    stateHandle[KEY_SSAID] = ssaid
 
                     ProfileViewModel(
                         stateHandle,
                         UseCaseProvider.checkRegisteredMemberUseCase,
+                        UseCaseProvider.saveMemberNicknameUseCase,
                     )
                 }
             }
