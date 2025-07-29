@@ -44,7 +44,7 @@ class MemberRepositoryImplTest {
             coEvery { remoteDataSource.registerMember(request) } returns Result.success(Unit)
 
             // when
-            val result = repository.registerMember(member)
+            val result = repository.registerMember(member.ssaid)
 
             // then
             result.shouldBeSuccess()
@@ -64,7 +64,7 @@ class MemberRepositoryImplTest {
             coEvery { remoteDataSource.registerMember(request) } returns Result.failure(exception)
 
             // when
-            val result = repository.registerMember(member)
+            val result = repository.registerMember(member.ssaid)
 
             // then
             result.shouldBeFailure { it shouldBe exception }
