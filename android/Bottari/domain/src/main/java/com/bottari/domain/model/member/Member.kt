@@ -2,7 +2,7 @@ package com.bottari.domain.model.member
 
 data class Member(
     val ssaid: String,
-    val nickname: String = "",
+    val nickname: String,
 ) {
     init {
         require(ssaid.isNotBlank()) { SSAID_BLANK_ERROR }

@@ -11,9 +11,9 @@ import com.bottari.domain.repository.MemberRepository
 class MemberRepositoryImpl(
     private val memberRemoteDataSource: MemberRemoteDataSource,
 ) : MemberRepository {
-    override suspend fun registerMember(member: Member): Result<Unit> =
+    override suspend fun registerMember(ssaid: String): Result<Unit> =
         memberRemoteDataSource.registerMember(
-            RegisterMemberRequest(member.ssaid),
+            RegisterMemberRequest(ssaid),
         )
 
     override suspend fun saveMemberNickname(member: Member): Result<Unit> =
