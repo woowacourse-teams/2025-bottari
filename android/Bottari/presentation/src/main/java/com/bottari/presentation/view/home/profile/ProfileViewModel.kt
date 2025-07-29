@@ -36,10 +36,11 @@ class ProfileViewModel(
 
     fun saveNickname(nickname: String) {
         val currentNickname = _nickname.value?.takeSuccess() ?: ""
+        val nicknameNoBlank = nickname.trim()
         viewModelScope.launch {
-            saveMemberNicknameUseCase(ssaid, nickname)
+            saveMemberNicknameUseCase(ssaid, nicknameNoBlank)
                 .onSuccess {
-                    _nickname.value = UiState.Success(nickname)
+                    _nickname.value = UiState.Success(nicknameNoBlank)
                 }.onFailure { error ->
                     _nickname.value = UiState.Failure(currentNickname)
                     _nicknameEvent.emit(error.message)
