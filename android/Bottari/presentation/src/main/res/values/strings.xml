@@ -6,7 +6,9 @@
 
     <!-- Bottari Home -->
     <string name="bottari_fetch_bottaries_failure_text">보따리 불러오기에 실패했어요</string>
-    <string name="bottari_delete_failure_text">보따리 삭제에 실패했어요</string>"
+    <string name="bottari_delete_failure_text">보따리 삭제에 실패했어요</string>
+    <string name="bottari_delete_success_text">보따리 삭제에 성공했어요</string>
+    <string name="bottari_fetch_failure_text">보따리 목록 조회에 실패했어요</string>
 
     <!--  Bottari Item  -->
     <string name="bottari_item_quantity_status_format">%d/%d</string>
