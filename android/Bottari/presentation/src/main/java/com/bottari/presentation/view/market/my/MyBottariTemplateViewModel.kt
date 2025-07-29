@@ -42,9 +42,9 @@ class MyBottariTemplateViewModel(
                 .onSuccess {
                     val newTemplates = currentTemplates().filterNot { it.id == bottariTemplateId }
                     _myBottariTemplates.value = UiState.Success(newTemplates)
-                    uiEvent.emit(MyBottariTemplateUiEvent.DELETE_MY_TEMPLATE_SUCCESS)
+                    uiEvent.value = MyBottariTemplateUiEvent.DELETE_MY_TEMPLATE_SUCCESS
                 }.onFailure {
-                    uiEvent.emit(MyBottariTemplateUiEvent.DELETE_MY_TEMPLATE_FAILURE)
+                    uiEvent.value = MyBottariTemplateUiEvent.DELETE_MY_TEMPLATE_FAILURE
                 }
         }
     }

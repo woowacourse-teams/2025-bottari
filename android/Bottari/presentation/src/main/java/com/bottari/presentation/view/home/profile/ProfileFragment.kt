@@ -31,7 +31,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 
     private fun setupObserver() {
         viewModel.nickname.observe(viewLifecycleOwner, ::handleNicknameState)
-        viewModel.nicknameEvent.observeEvent(viewLifecycleOwner, ::handleNicknameEvent)
+        viewModel.nicknameEvent.observe(viewLifecycleOwner, ::handleNicknameEvent)
     }
 
     private fun setupListener() {

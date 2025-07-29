@@ -43,7 +43,7 @@ class ProfileViewModel(
                     _nickname.value = UiState.Success(nicknameNoBlank)
                 }.onFailure { error ->
                     _nickname.value = UiState.Failure(currentNickname)
-                    _nicknameEvent.emit(error.message)
+                    _nicknameEvent.value = error.message
                 }
         }
     }
@@ -52,7 +52,7 @@ class ProfileViewModel(
         viewModelScope.launch {
             checkRegisteredMemberUseCase(ssaid)
                 .onSuccess { _nickname.value = UiState.Success(it.name ?: "") }
-                .onFailure { error -> _nicknameEvent.emit(error.message) }
+                .onFailure { error -> _nicknameEvent.value = error.message }
         }
     }
 

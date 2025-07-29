@@ -43,7 +43,7 @@ class MyBottariTemplateFragment :
 
     private fun setupObserver() {
         viewModel.myBottariTemplates.observe(viewLifecycleOwner, ::handleMyBottariTemplateState)
-        viewModel.uiEvent.observeEvent(viewLifecycleOwner, ::showSnackBar)
+        viewModel.uiEvent.observe(viewLifecycleOwner, ::showSnackBar)
     }
 
     private fun setupUI() {
