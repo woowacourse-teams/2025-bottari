@@ -20,6 +20,7 @@ public class HttpLogEntry {
 
     public String toLogString() {
         return String.format("""
+                        
                         ==================== HTTP LOG ====================
                         Start Time     : %s
                         End Time       : %s
