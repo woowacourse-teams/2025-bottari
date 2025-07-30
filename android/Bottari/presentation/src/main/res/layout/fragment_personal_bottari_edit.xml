@@ -18,7 +18,6 @@
             android:layout_height="wrap_content"
             android:contentInsetStart="0dp"
             android:titleTextColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@id/cl_edit_item"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
@@ -58,7 +57,7 @@
             android:elevation="2dp"
             android:padding="@dimen/space_median"
             app:layout_constraintBottom_toTopOf="@id/cl_edit_alarm"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/toolbar_edit">
 
             <TextView
                 android:id="@+id/tv_edit_item"
