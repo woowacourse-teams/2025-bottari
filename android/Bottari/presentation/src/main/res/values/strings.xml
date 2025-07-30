@@ -89,6 +89,10 @@
     <!-- Profile -->
     <string name="profile_screen_nickname_title">닉네임</string>
     <string name="nickname_edit_hint_text">닉네임을 입력하세요</string>
+    <string name="fetch_member_info_failure">프로필 정보 조회에 실패했어요</string>
+    <string name="save_nickname_success">닉네임이 저장되었어요</string>
+    <string name="save_nickname_failure">닉네임 저장에 실패했어요</string>
+    <string name="invalid_nickname_rule">닉네임은 3–10글자 사이로 입력해주세요</string>
 
     <!--  Description  -->
     <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>

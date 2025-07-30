@@ -3,18 +3,19 @@ package com.bottari.presentation.view.home.profile
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
-import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentProfileBinding
 import com.bottari.presentation.extension.getSSAID
-import com.google.android.material.snackbar.Snackbar
 
-class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
+class ProfileFragment :
+    BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate),
+    TextWatcher {
     private val viewModel: ProfileViewModel by viewModels { ProfileViewModel.Factory(requireContext().getSSAID()) }
     private val inputManager: InputMethodManager by lazy {
         requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -29,9 +30,41 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         setupListener()
     }
 
+    override fun beforeTextChanged(
+        p0: CharSequence?,
+        p1: Int,
+        p2: Int,
+        p3: Int,
+    ) {
+    }
+
+    override fun onTextChanged(
+        p0: CharSequence?,
+        p1: Int,
+        p2: Int,
+        p3: Int,
+    ) {
+    }
+
+    override fun afterTextChanged(p0: Editable?) {
+        viewModel.updateNickname(p0.toString().trim())
+    }
+
     private fun setupObserver() {
-        viewModel.nickname.observe(viewLifecycleOwner, ::handleNicknameState)
-        viewModel.nicknameEvent.observe(viewLifecycleOwner, ::handleNicknameEvent)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            if (binding.etNicknameEdit.text.toString() != uiState.editingNickname) {
+                binding.etNicknameEdit.setText(uiState.editingNickname)
+                binding.etNicknameEdit.setSelection(uiState.editingNickname.length)
+            }
+        }
+        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+            when (uiEvent) {
+                ProfileUiEvent.FetchMemberInfoFailure -> showSnackbar(R.string.fetch_member_info_failure)
+                ProfileUiEvent.SaveMemberNicknameSuccess -> showSnackbar(R.string.save_nickname_success)
+                ProfileUiEvent.SaveMemberNicknameFailure -> showSnackbar(R.string.save_nickname_failure)
+                ProfileUiEvent.InvalidNicknameRule -> showSnackbar(R.string.invalid_nickname_rule)
+            }
+        }
     }
 
     private fun setupListener() {
@@ -39,33 +72,13 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         setupNicknameEditButtonClickListener()
     }
 
-    private fun handleNicknameState(uiState: UiState<String>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> {
-                binding.etNicknameEdit.text =
-                    Editable.Factory.getInstance().newEditable(uiState.data)
-            }
-
-            is UiState.Failure -> {
-                binding.etNicknameEdit.text =
-                    Editable.Factory.getInstance().newEditable(uiState.message)
-            }
-        }
-    }
-
-    private fun handleNicknameEvent(message: String) {
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
-    }
-
     private fun setupNicknameEditListener() {
+        binding.etNicknameEdit.addTextChangedListener(this)
         binding.etNicknameEdit.setOnEditorActionListener { _, actionId, _ ->
             handleEditorAction(actionId)
         }
         binding.etNicknameEdit.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                confirmNicknameEdit()
-            }
+            if (!hasFocus) confirmNicknameEdit()
         }
     }
 
@@ -93,9 +106,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
     }
 
     private fun confirmNicknameEdit() {
-        val newNickname = binding.etNicknameEdit.text.toString()
         binding.btnNicknameEdit.setImageResource(R.drawable.btn_edit)
-        viewModel.saveNickname(newNickname)
+        viewModel.saveNickname()
     }
 
     private fun setEditMode(enabled: Boolean) {

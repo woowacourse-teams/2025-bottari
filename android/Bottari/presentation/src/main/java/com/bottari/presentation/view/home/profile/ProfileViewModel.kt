@@ -12,9 +12,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
-import com.bottari.presentation.base.UiState
 import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.extension.takeSuccess
+import com.bottari.presentation.extension.update
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
@@ -22,37 +21,53 @@ class ProfileViewModel(
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
     private val saveMemberNicknameUseCase: SaveMemberNicknameUseCase,
 ) : ViewModel() {
-    private val _nickname: MutableLiveData<UiState<String>> = MutableLiveData(UiState.Loading)
-    val nickname: LiveData<UiState<String>> = _nickname
+    private val _uiState: MutableLiveData<ProfileUiState> = MutableLiveData(ProfileUiState())
+    val uiState: LiveData<ProfileUiState> = _uiState
 
-    private val _nicknameEvent = SingleLiveEvent<String>()
-    val nicknameEvent: SingleLiveEvent<String> get() = _nicknameEvent
+    private val _uiEvent: SingleLiveEvent<ProfileUiEvent> = SingleLiveEvent()
+    val uiEvent: LiveData<ProfileUiEvent> = _uiEvent
 
     private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRED_SSAID)
 
     init {
-        fetchNickname(ssaid)
+        fetchMemberInfo()
     }
 
-    fun saveNickname(nickname: String) {
-        val currentNickname = _nickname.value?.takeSuccess() ?: ""
-        val nicknameNoBlank = nickname.trim()
+    fun updateNickname(nickname: String) {
+        _uiState.update { copy(editingNickname = nickname) }
+    }
+
+    fun saveNickname() {
+        if (_uiState.value?.isNicknameChanged == false) return
+        val editingNickname = _uiState.value?.editingNickname.orEmpty()
+
         viewModelScope.launch {
-            saveMemberNicknameUseCase(ssaid, nicknameNoBlank)
+            saveMemberNicknameUseCase(ssaid, editingNickname)
                 .onSuccess {
-                    _nickname.value = UiState.Success(nicknameNoBlank)
+                    _uiState.update { copy(nickname = editingNickname) }
+                    _uiEvent.value = ProfileUiEvent.SaveMemberNicknameSuccess
                 }.onFailure { error ->
-                    _nickname.value = UiState.Failure(currentNickname)
-                    _nicknameEvent.value = error.message
+                    _uiState.update { copy(editingNickname = this.nickname) }
+                    _uiEvent.value =
+                        when (error) {
+                            is IllegalArgumentException -> ProfileUiEvent.InvalidNicknameRule
+                            else -> ProfileUiEvent.SaveMemberNicknameFailure
+                        }
                 }
         }
     }
 
-    private fun fetchNickname(ssaid: String) {
+    private fun fetchMemberInfo() {
         viewModelScope.launch {
             checkRegisteredMemberUseCase(ssaid)
-                .onSuccess { _nickname.value = UiState.Success(it.name ?: "") }
-                .onFailure { error -> _nicknameEvent.value = error.message }
+                .onSuccess {
+                    _uiState.update {
+                        copy(
+                            nickname = it.name.orEmpty(),
+                            editingNickname = it.name.orEmpty(),
+                        )
+                    }
+                }.onFailure { _uiEvent.value = ProfileUiEvent.FetchMemberInfoFailure }
         }
     }
 
