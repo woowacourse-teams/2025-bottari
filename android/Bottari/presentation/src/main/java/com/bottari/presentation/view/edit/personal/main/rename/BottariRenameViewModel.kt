@@ -20,11 +20,11 @@ class BottariRenameViewModel(
     private val saveBottariTitleUseCase: SaveBottariTitleUseCase,
 ) : ViewModel() {
     private val ssaid: String =
-        savedStateHandle.get<String>(KEY_SSAID) ?: error(ERROR_REQUIRE_SSAID)
+        savedStateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
     private val id: Long =
-        savedStateHandle.get<Long>(KEY_BOTTARI_ID) ?: error(ERROR_REQUIRE_BOTTARI_ID)
+        savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val oldTitle: String =
-        savedStateHandle.get<String>(KEY_OLD_TITLE) ?: error(ERROR_REQUIRE_OLD_TITLE)
+        savedStateHandle[KEY_OLD_TITLE] ?: error(ERROR_REQUIRE_OLD_TITLE)
 
     private val _uiState: MutableLiveData<BottariRenameUiState> =
         MutableLiveData(BottariRenameUiState())

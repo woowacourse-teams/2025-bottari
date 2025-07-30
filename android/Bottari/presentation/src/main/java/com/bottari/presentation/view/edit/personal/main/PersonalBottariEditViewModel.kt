@@ -28,10 +28,7 @@ class PersonalBottariEditViewModel(
     private val _uiState: MutableLiveData<PersonalBottariEditUiState> =
         MutableLiveData(
             PersonalBottariEditUiState(
-                bottariId =
-                    savedStateHandle.get<Long>(
-                        EXTRA_BOTTARI_ID,
-                    ) ?: error(ERROR_BOTTARI_ID_MISSING),
+                id = savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID_MISSING),
             ),
         )
     val uiState: LiveData<PersonalBottariEditUiState> get() = _uiState
@@ -40,7 +37,7 @@ class PersonalBottariEditViewModel(
     val uiEvent: LiveData<PersonalBottariEditUiEvent> get() = _uiEvent
 
     private val ssaid: String =
-        savedStateHandle.get<String>(EXTRA_SSAID) ?: error(ERROR_SSAID_MISSING)
+        savedStateHandle[KEY_SSAID] ?: error(ERROR_SSAID_MISSING)
 
     init {
         fetchBottari()
@@ -53,16 +50,14 @@ class PersonalBottariEditViewModel(
         ) { isActive ->
             val alarmId =
                 _uiState.value
-                    ?.bottari
                     ?.alarm
                     ?.id ?: return@debounce
             toggleAlarmState(alarmId, isActive)
         }
 
     fun createBottariTemplate() {
-        val bottari = _uiState.value?.bottari ?: return
-        val title = bottari.title
-        val items = bottari.items.map { it.name }
+        val title = _uiState.value?.title ?: return
+        val items = _uiState.value?.items?.map { it.name } ?: return
 
         _uiState.update { copy(isLoading = true) }
 
@@ -82,10 +77,10 @@ class PersonalBottariEditViewModel(
 
         viewModelScope.launch {
             findBottariDetailUseCase(
-                _uiState.value?.bottariId ?: error(ERROR_BOTTARI_ID_MISSING),
+                _uiState.value?.id ?: error(ERROR_BOTTARI_ID_MISSING),
                 ssaid,
             ).onSuccess {
-                _uiState.update { copy(bottari = it.toUiModel()) }
+                _uiState.update { PersonalBottariEditUiState.from(it.toUiModel()) }
             }.onFailure {
                 _uiEvent.value = PersonalBottariEditUiEvent.FetchBottariFailure
             }
@@ -103,8 +98,8 @@ class PersonalBottariEditViewModel(
     }
 
     companion object {
-        private const val EXTRA_SSAID = "EXTRA_SSAID"
-        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
+        private const val KEY_SSAID = "KEY_SSAID"
+        private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
 
         private const val DEBOUNCE_DELAY = 500L
 
@@ -118,8 +113,8 @@ class PersonalBottariEditViewModel(
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
-                    stateHandle[EXTRA_SSAID] = ssaid
-                    stateHandle[EXTRA_BOTTARI_ID] = bottariId
+                    stateHandle[KEY_SSAID] = ssaid
+                    stateHandle[KEY_BOTTARI_ID] = bottariId
 
                     PersonalBottariEditViewModel(
                         stateHandle,

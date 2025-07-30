@@ -16,7 +16,8 @@ import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
 import com.bottari.presentation.extension.getSSAID
-import com.bottari.presentation.model.BottariDetailUiModel
+import com.bottari.presentation.model.AlarmUiModel
+import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.util.permission.PermissionUtil
 import com.bottari.presentation.util.permission.PermissionUtil.requiredPermissions
 import com.bottari.presentation.view.edit.alarm.AlarmEditFragment
@@ -72,10 +73,9 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            val bottari = uiState.bottari ?: return@observe
-            setupTitle(bottari)
-            setupItems(bottari)
-            setupAlarm(bottari)
+            setupTitle(uiState.title ?: return@observe)
+            setupItems(uiState.items)
+            setupAlarm(uiState.alarm)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
@@ -83,10 +83,12 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                     showSnackbar(
                         R.string.personal_bottari_edit_create_template_failure_text,
                     )
+
                 PersonalBottariEditUiEvent.CreateTemplateSuccess ->
                     showSnackbar(
                         R.string.personal_bottari_edit_create_template_success_text,
                     )
+
                 PersonalBottariEditUiEvent.FetchBottariFailure -> showSnackbar(R.string.personal_bottari_edit_fetch_failure_text)
             }
         }
@@ -105,6 +107,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                     viewModel.createBottariTemplate()
                     true
                 }
+
                 R.id.rename -> {
                     showRenameDialog()
                     true
@@ -120,10 +123,10 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.clEditItem.setOnClickListener {
-            val bottariDetail = viewModel.uiState.value?.bottari ?: return@setOnClickListener
+            val uiState = viewModel.uiState.value ?: return@setOnClickListener
             navigateToScreen(
                 PersonalItemEditFragment::class.java,
-                PersonalItemEditFragment.newBundle(bottariDetail),
+                PersonalItemEditFragment.newBundle(uiState.id, uiState.title, uiState.items),
             )
         }
         binding.clEditAlarm.setOnClickListener {
@@ -159,21 +162,21 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         )
     }
 
-    private fun setupTitle(bottari: BottariDetailUiModel) {
-        binding.tvBottariTitle.text = bottari.title
+    private fun setupTitle(title: String) {
+        binding.tvBottariTitle.text = title
     }
 
-    private fun setupItems(bottari: BottariDetailUiModel) {
-        itemAdapter.submitList(bottari.items)
-        toggleItemSection(bottari.items.isNotEmpty())
+    private fun setupItems(items: List<BottariItemUiModel>) {
+        itemAdapter.submitList(items)
+        toggleItemSection(items.isNotEmpty())
     }
 
-    private fun setupAlarm(bottari: BottariDetailUiModel) {
-        val isAlarmExist = bottari.alarm != null
+    private fun setupAlarm(alarm: AlarmUiModel?) {
+        val isAlarmExist = alarm != null
         toggleAlarmSelection(isAlarmExist)
-        binding.switchAlarm.isChecked = bottari.alarm?.isActive ?: false
+        binding.switchAlarm.isChecked = alarm?.isActive ?: false
         if (isAlarmExist.not()) return
-        alarmAdapter.submitList(listOf(bottari.alarm))
+        alarmAdapter.submitList(listOf(alarm))
     }
 
     private fun toggleItemSection(hasItems: Boolean) {
@@ -227,12 +230,12 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun navigateToAlarmEditScreen() {
-        val bottari = viewModel.uiState.value?.bottari ?: return
+        val uiState = viewModel.uiState.value ?: return
         navigateToScreen(
             AlarmEditFragment::class.java,
             AlarmEditFragment.newBundle(
-                bottariId = bottari.id,
-                alarm = bottari.alarm,
+                bottariId = uiState.id,
+                alarm = uiState.alarm,
             ),
         )
     }
@@ -262,10 +265,10 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun showRenameDialog() {
-        val bottari = viewModel.uiState.value?.bottari ?: return
+        val uiState = viewModel.uiState.value ?: return
 
         BottariRenameDialog
-            .newInstance(bottari.id, bottari.title)
+            .newInstance(uiState.id, uiState.title)
             .show(parentFragmentManager, BottariRenameDialog::class.java.name)
     }
 
