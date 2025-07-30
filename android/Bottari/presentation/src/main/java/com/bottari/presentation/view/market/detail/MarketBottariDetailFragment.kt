@@ -59,7 +59,7 @@ class MarketBottariDetailFragment : BaseFragment<FragmentMarketBottariDetailBind
 
     private fun navigateBottariEdit(bottariId: Long?) {
         if (bottariId == null) return
-        startActivity(PersonalBottariEditActivity.newIntent(requireContext(), bottariId))
+        startActivity(PersonalBottariEditActivity.newIntent(requireContext(), bottariId, true))
         requireActivity().finish()
     }
 

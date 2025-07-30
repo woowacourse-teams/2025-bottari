@@ -122,7 +122,7 @@ class BottariFragment :
     }
 
     private fun navigateToEdit(bottariId: Long) {
-        val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId)
+        val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId, false)
         startActivity(intent)
     }
 

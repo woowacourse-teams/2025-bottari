@@ -31,6 +31,8 @@
     <string name="dialog_bottari_create_description_text">이름은 언제든지 수정할 수 있어요</string>
     <string name="dialog_bottari_create_name_hint">이름을 입력하세요</string>
     <string name="dialog_bottari_create_btn_text">생성하기</string>
+    <string name="create_bottari_failure">보따리 생성에 실패했어요</string>
+    <string name="default_bottari_title">새로운 보따리</string>
 
     <!-- Personal Bottari Item Edit -->
     <string name="personal_item_edit_confirm_btn_text">확인</string>
@@ -70,6 +72,7 @@
     <string name="personal_bottari_edit_fetch_failure_text">보따리 조회에 실패했어요</string>"
     <string name="personal_bottari_edit_create_template_success_text">마켓에 등록되었어요</string>
     <string name="personal_bottari_edit_create_template_failure_text">마켓 등록에 실패했어요</string>
+    <string name="new_bottari_welcome_message">보따리가 생성되었어요</string>
 
     <!-- Bottari rename -->
     <string name="bottari_rename_failure_text">이름 변경에 실패했어요</string>
