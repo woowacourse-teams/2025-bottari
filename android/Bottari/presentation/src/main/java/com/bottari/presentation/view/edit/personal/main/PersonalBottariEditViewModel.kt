@@ -17,8 +17,6 @@ import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.util.debounce
 import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditUiEvent
 import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditUiState
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PersonalBottariEditViewModel(
@@ -30,10 +28,11 @@ class PersonalBottariEditViewModel(
     private val _uiState: MutableLiveData<PersonalBottariEditUiState> =
         MutableLiveData(
             PersonalBottariEditUiState(
-                bottariId = savedStateHandle.get<Long>(
-                    EXTRA_BOTTARI_ID
-                ) ?: error(ERROR_BOTTARI_ID_MISSING)
-            )
+                bottariId =
+                    savedStateHandle.get<Long>(
+                        EXTRA_BOTTARI_ID,
+                    ) ?: error(ERROR_BOTTARI_ID_MISSING),
+            ),
         )
     val uiState: LiveData<PersonalBottariEditUiState> get() = _uiState
 
@@ -61,11 +60,11 @@ class PersonalBottariEditViewModel(
         }
 
     fun createBottariTemplate() {
-        _uiState.update { copy(isLoading = true) }
-
         val bottari = _uiState.value?.bottari ?: return
         val title = bottari.title
         val items = bottari.items.map { it.name }
+
+        _uiState.update { copy(isLoading = true) }
 
         viewModelScope.launch {
             createBottariTemplateUseCase(ssaid, title, items)
@@ -84,13 +83,12 @@ class PersonalBottariEditViewModel(
         viewModelScope.launch {
             findBottariDetailUseCase(
                 _uiState.value?.bottariId ?: error(ERROR_BOTTARI_ID_MISSING),
-                ssaid
-            )
-                .onSuccess {
-                    _uiState.update { copy(bottari = it.toUiModel()) }
-                }.onFailure {
-                    _uiEvent.value = PersonalBottariEditUiEvent.FetchBottariFailure
-                }
+                ssaid,
+            ).onSuccess {
+                _uiState.update { copy(bottari = it.toUiModel()) }
+            }.onFailure {
+                _uiEvent.value = PersonalBottariEditUiEvent.FetchBottariFailure
+            }
             _uiState.update { copy(isLoading = false) }
         }
     }

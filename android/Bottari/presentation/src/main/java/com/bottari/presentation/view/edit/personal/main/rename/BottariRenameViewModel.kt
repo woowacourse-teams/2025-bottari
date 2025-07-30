@@ -43,8 +43,7 @@ class BottariRenameViewModel(
                 .onSuccess {
                     _uiState.update { copy(title = newTitle) }
                     _uiEvent.value = BottariRenameUiEvent.SaveBottariTitleSuccess
-                }
-                .onFailure {
+                }.onFailure {
                     _uiEvent.value = BottariRenameUiEvent.SaveBottariTitleFailure
                 }
             _uiState.update { copy(isLoading = false) }
