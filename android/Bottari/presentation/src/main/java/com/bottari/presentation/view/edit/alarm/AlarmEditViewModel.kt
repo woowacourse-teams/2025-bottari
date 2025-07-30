@@ -19,8 +19,6 @@ import com.bottari.presentation.mapper.AlarmMapper.toDomain
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.DayOfWeekUiModel
-import com.bottari.presentation.view.edit.alarm.listener.AlarmUiEvent
-import com.bottari.presentation.view.edit.alarm.listener.AlarmUiState
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime

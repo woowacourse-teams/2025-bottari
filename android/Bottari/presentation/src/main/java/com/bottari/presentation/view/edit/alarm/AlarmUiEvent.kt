@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.edit.alarm.listener
+package com.bottari.presentation.view.edit.alarm
 
 sealed interface AlarmUiEvent {
     data object AlarmCreateSuccess : AlarmUiEvent

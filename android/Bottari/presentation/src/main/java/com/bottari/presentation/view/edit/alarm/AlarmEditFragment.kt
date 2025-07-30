@@ -17,7 +17,6 @@ import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.view.edit.alarm.adapter.DayOfWeekAdapter
-import com.bottari.presentation.view.edit.alarm.listener.AlarmUiEvent
 import com.shawnlin.numberpicker.NumberPicker
 import java.time.LocalDate
 import java.time.LocalTime
