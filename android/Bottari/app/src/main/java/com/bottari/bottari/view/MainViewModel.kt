@@ -13,7 +13,8 @@ import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.member.RegisteredMember
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
-import com.bottari.presentation.base.UiState
+import com.bottari.presentation.common.event.SingleLiveEvent
+import com.bottari.presentation.extension.update
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -21,48 +22,55 @@ class MainViewModel(
     private val registerMemberUseCase: RegisterMemberUseCase,
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
 ) : ViewModel() {
-    private val ssaid = stateHandle.get<String>(EXTRA_SSAID) ?: error(NOT_FOUND_USER)
-    private val _loginState: MutableLiveData<UiState<Unit>> = MutableLiveData(UiState.Loading)
-    val loginState: LiveData<UiState<Unit>> = _loginState
+    private val _uiState: MutableLiveData<MainUiState> = MutableLiveData(MainUiState())
+    val uiState: LiveData<MainUiState> get() = _uiState
+
+    private val _uiEvent: SingleLiveEvent<MainUiEvent> = SingleLiveEvent()
+    val uiEvent: LiveData<MainUiEvent> get() = _uiEvent
+
+    private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
 
     init {
         checkRegisteredMember()
     }
 
     private fun checkRegisteredMember() {
+        _uiState.update { copy(isLoading = true) }
         viewModelScope.launch {
             checkRegisteredMemberUseCase(ssaid)
-                .onSuccess { handleCheckRegistrationResult(it) }
-                .onFailure { _loginState.value = UiState.Failure(it.message) }
+                .onSuccess { result -> handleCheckRegistrationResult(result) }
+                .onFailure { _uiEvent.value = MainUiEvent.LoginFailure }
         }
     }
 
     private fun handleCheckRegistrationResult(result: RegisteredMember) {
         if (result.isRegistered) {
-            _loginState.value = UiState.Success(Unit)
+            _uiState.update { copy(isLoading = false) }
+            _uiEvent.value = MainUiEvent.LoginSuccess
             return
         }
-
         registerMember(ssaid)
     }
 
     private fun registerMember(ssaid: String) {
         viewModelScope.launch {
             registerMemberUseCase(ssaid)
-                .onFailure { _loginState.value = UiState.Failure(it.message) }
-                .onSuccess { _loginState.value = UiState.Success(Unit) }
+                .onSuccess {
+                    _uiState.update { copy(isLoading = false) }
+                    _uiEvent.value = MainUiEvent.LoginSuccess
+                }.onFailure { _uiEvent.value = MainUiEvent.RegisterFailure }
         }
     }
 
     companion object {
-        private const val EXTRA_SSAID = "SSAID"
-        private const val NOT_FOUND_USER = "SSAID를 확인할 수 없음"
+        private const val KEY_SSAID = "KEY_SSAID"
+        private const val ERROR_REQUIRE_SSAID = "[ERROR] SSAID가 존재하지 않습니다."
 
         fun Factory(ssaid: String): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
-                    stateHandle[EXTRA_SSAID] = ssaid
+                    stateHandle[KEY_SSAID] = ssaid
                     MainViewModel(
                         stateHandle,
                         UseCaseProvider.registerMemberUseCase,
