@@ -46,6 +46,9 @@
     <string name="alarm_location_text">위치</string>
     <string name="alarm_edit_confirm_btn_text">확인</string>
     <string name="alarm_edit_save_success_text">알람이 저장되었어요.</string>
+    <string name="alarm_edit_save_failure_text">알람 저장에 실패했어요.</string>
+    <string name="alarm_edit_create_success_text">성공적으로 알람이 생성되었어요.</string>
+    <string name="alarm_edit_create_failure_text">알람 생성에 실패했어요.</string>
 
     <!-- Bottari edit item -->
     <string name="bottari_edit_item_list_title">물건 목록</string>
