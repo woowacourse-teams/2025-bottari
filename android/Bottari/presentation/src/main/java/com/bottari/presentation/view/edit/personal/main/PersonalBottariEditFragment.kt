@@ -32,7 +32,7 @@ import com.google.android.flexbox.JustifyContent
 
 class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
-        val bottariId = arguments?.getLong(EXTRA_BOTTARI_ID) ?: error(ERROR_REQUIRE_BOTTARI_ID)
+        val bottariId = requireArguments().getLong(ARG_BOTTARI_ID)
         PersonalBottariEditViewModel.Factory(requireContext().getSSAID(), bottariId)
     }
     private val popupMenu: PopupMenu by lazy { createPopupMenu() }
@@ -273,12 +273,11 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     companion object {
-        private const val EXTRA_BOTTARI_ID = "EXTRAS_BOTTARI_ID"
-        private const val ERROR_REQUIRE_BOTTARI_ID = "보따리 ID가 없습니다"
+        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
 
         fun newBundle(bottariId: Long) =
             Bundle().apply {
-                putLong(EXTRA_BOTTARI_ID, bottariId)
+                putLong(ARG_BOTTARI_ID, bottariId)
             }
     }
 }

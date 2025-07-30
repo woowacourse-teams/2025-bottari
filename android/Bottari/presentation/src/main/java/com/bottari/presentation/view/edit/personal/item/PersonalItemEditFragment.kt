@@ -22,16 +22,12 @@ class PersonalItemEditFragment :
     BaseFragment<FragmentPersonalItemEditBinding>(FragmentPersonalItemEditBinding::inflate),
     TextWatcher {
     private val viewModel: PersonalItemEditViewModel by viewModels {
-        val id: Long = arguments?.getLong(EXTRA_BOTTARI_ID) ?: error("보따리 ID가 없습니다")
-        val title: String = arguments?.getString(EXTRA_BOTTARI_TITLE) ?: error("보따리 이름이 없습니다")
-        val items: ArrayList<BottariItemUiModel> =
-            arguments?.getParcelableArrayListCompat<BottariItemUiModel>(EXTRA_BOTTARI_ITEMS)
-                ?: error("보따리 아이템이 없습니다")
+        val arguments = requireArguments()
         PersonalItemEditViewModel.Factory(
             ssaid = requireContext().getSSAID(),
-            id = id,
-            title = title,
-            items = items,
+            bottariId = arguments.getLong(ARG_EXTRA_BOTTARI_ID),
+            title = arguments.getString(ARG_BOTTARI_TITLE) ?: "",
+            items = arguments.getParcelableArrayListCompat(ARG_BOTTARI_ITEMS) ?: emptyList(),
         )
     }
 
@@ -142,9 +138,9 @@ class PersonalItemEditFragment :
     }
 
     companion object {
-        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
-        private const val EXTRA_BOTTARI_TITLE = "EXTRA_BOTTARI_TITLE"
-        private const val EXTRA_BOTTARI_ITEMS = "EXTRA_BOTTARI_ITEMS"
+        private const val ARG_EXTRA_BOTTARI_ID = "ARG_EXTRA_BOTTARI_ID"
+        private const val ARG_BOTTARI_TITLE = "ARG_BOTTARI_TITLE"
+        private const val ARG_BOTTARI_ITEMS = "ARG_BOTTARI_ITEMS"
 
         private const val DUPLICATE_BORDER_WIDTH_DP = 2
         private const val DISABLED_ALPHA = 0.3f
@@ -155,9 +151,9 @@ class PersonalItemEditFragment :
             title: String,
             items: List<BottariItemUiModel>,
         ) = Bundle().apply {
-            putLong(EXTRA_BOTTARI_ID, id)
-            putString(EXTRA_BOTTARI_TITLE, title)
-            putParcelableArrayList(EXTRA_BOTTARI_ITEMS, ArrayList(items))
+            putLong(ARG_EXTRA_BOTTARI_ID, id)
+            putString(ARG_BOTTARI_TITLE, title)
+            putParcelableArrayList(ARG_BOTTARI_ITEMS, ArrayList(items))
         }
     }
 }
