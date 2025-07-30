@@ -1,6 +1,9 @@
 package com.bottari.presentation.view.market.my
 
-enum class MyBottariTemplateUiEvent {
-    DELETE_MY_TEMPLATE_SUCCESS,
-    DELETE_MY_TEMPLATE_FAILURE,
+sealed interface MyBottariTemplateUiEvent {
+    data object FetchMyTemplateFailure : MyBottariTemplateUiEvent
+
+    data object DeleteMyTemplateSuccess : MyBottariTemplateUiEvent
+
+    data object DeleteMyTemplateFailure : MyBottariTemplateUiEvent
 }

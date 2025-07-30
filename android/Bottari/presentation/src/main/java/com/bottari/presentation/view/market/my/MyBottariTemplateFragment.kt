@@ -5,10 +5,8 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
-import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentMyBottariTemplateBinding
 import com.bottari.presentation.extension.getSSAID
-import com.bottari.presentation.model.BottariTemplateUiModel
 import com.bottari.presentation.view.market.MarketNavigator
 import com.bottari.presentation.view.market.my.adapter.MyBottariTemplateAdapter
 import com.bottari.presentation.view.market.my.listener.MyBottariTemplateEventListener
@@ -42,8 +40,17 @@ class MyBottariTemplateFragment :
     }
 
     private fun setupObserver() {
-        viewModel.myBottariTemplates.observe(viewLifecycleOwner, ::handleMyBottariTemplateState)
-        viewModel.uiEvent.observe(viewLifecycleOwner, ::showSnackBar)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            adapter.submitList(uiState.bottariTemplates)
+        }
+
+        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+            when (uiEvent) {
+                MyBottariTemplateUiEvent.FetchMyTemplateFailure -> showSnackbar(R.string.my_bottari_template_screen_fetch_failure)
+                MyBottariTemplateUiEvent.DeleteMyTemplateFailure -> showSnackbar(R.string.my_bottari_template_screen_delete_failure)
+                MyBottariTemplateUiEvent.DeleteMyTemplateSuccess -> showSnackbar(R.string.my_bottari_template_screen_delete_success)
+            }
+        }
     }
 
     private fun setupUI() {
@@ -54,23 +61,6 @@ class MyBottariTemplateFragment :
         binding.btnPrevious.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
-    }
-
-    private fun handleMyBottariTemplateState(uiState: UiState<List<BottariTemplateUiModel>>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> adapter.submitList(uiState.data)
-            is UiState.Failure -> Unit
-        }
-    }
-
-    private fun showSnackBar(event: MyBottariTemplateUiEvent) {
-        val stringRes =
-            when (event) {
-                MyBottariTemplateUiEvent.DELETE_MY_TEMPLATE_SUCCESS -> R.string.my_bottari_template_screen_delete_success
-                MyBottariTemplateUiEvent.DELETE_MY_TEMPLATE_FAILURE -> R.string.my_bottari_template_screen_delete_failure
-            }
-        showSnackbar(stringRes)
     }
 
     companion object {
