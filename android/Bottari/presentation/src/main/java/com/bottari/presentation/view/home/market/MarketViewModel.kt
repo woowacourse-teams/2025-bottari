@@ -10,9 +10,11 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.template.FetchBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
+import com.bottari.presentation.common.event.SingleLiveEvent
 import com.bottari.presentation.extension.update
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
 import com.bottari.presentation.util.debounce
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class MarketViewModel(
@@ -22,12 +24,14 @@ class MarketViewModel(
     private val _uiState: MutableLiveData<MarketUiState> = MutableLiveData(MarketUiState())
     val uiState: LiveData<MarketUiState> get() = _uiState
 
-    private val _uiEvent: MutableLiveData<MarketUiEvent> = MutableLiveData()
+    private val _uiEvent: SingleLiveEvent<MarketUiEvent> = SingleLiveEvent()
     val uiEvent: LiveData<MarketUiEvent> get() = _uiEvent
 
+    private val job: Job = Job()
     private val debouncedSearch: (String) -> Unit =
         debounce(
-            timeMillis = TIME_MILLIS,
+            job = job,
+            timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
         ) { searchWord -> performSearch(searchWord) }
 
@@ -46,7 +50,6 @@ class MarketViewModel(
                 .onSuccess { templates ->
                     val templateUiModels = templates.map { it.toUiModel() }
                     _uiState.update { copy(isLoading = false, templates = templateUiModels) }
-                    _uiEvent.value = MarketUiEvent.FetchBottariTemplatesSuccess
                 }.onFailure {
                     _uiState.update { copy(isLoading = false) }
                     _uiEvent.value = MarketUiEvent.FetchBottariTemplatesFailure
@@ -65,7 +68,6 @@ class MarketViewModel(
                 .onSuccess { templates ->
                     val templateUiModels = templates.map { it.toUiModel() }
                     _uiState.update { copy(isLoading = false, templates = templateUiModels) }
-                    _uiEvent.value = MarketUiEvent.FetchBottariTemplatesSuccess
                 }.onFailure {
                     _uiState.update { copy(isLoading = false) }
                     _uiEvent.value = MarketUiEvent.FetchBottariTemplatesFailure
@@ -74,7 +76,7 @@ class MarketViewModel(
     }
 
     companion object {
-        private const val TIME_MILLIS = 500L
+        private const val DEBOUNCE_DELAY = 500L
 
         fun Factory(): ViewModelProvider.Factory =
             viewModelFactory {

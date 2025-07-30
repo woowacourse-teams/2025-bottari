@@ -63,7 +63,6 @@ class MarketFragment :
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
                 MarketUiEvent.FetchBottariTemplatesFailure -> showSnackbar(R.string.bottari_template_fetch_failure_text)
-                MarketUiEvent.FetchBottariTemplatesSuccess -> Unit
             }
         }
     }
