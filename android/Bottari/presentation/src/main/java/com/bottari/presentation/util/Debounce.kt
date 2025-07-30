@@ -6,11 +6,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 fun <T> debounce(
+    job: Job?,
     timeMillis: Long,
     coroutineScope: CoroutineScope,
     block: (T) -> Unit,
 ): (T) -> Unit {
-    var debounceJob: Job? = null
+    var debounceJob: Job? = job
     return { param: T ->
         debounceJob?.cancel()
         debounceJob =
