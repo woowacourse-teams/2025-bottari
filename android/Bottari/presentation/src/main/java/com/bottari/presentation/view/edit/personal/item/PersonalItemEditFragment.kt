@@ -11,12 +11,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
-import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.extension.dpToPx
-import com.bottari.presentation.extension.getParcelableCompat
+import com.bottari.presentation.extension.getParcelableArrayListCompat
 import com.bottari.presentation.extension.getSSAID
-import com.bottari.presentation.model.BottariDetailUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.edit.personal.item.adapter.PersonalItemEditAdapter
 
@@ -24,9 +22,17 @@ class PersonalItemEditFragment :
     BaseFragment<FragmentPersonalItemEditBinding>(FragmentPersonalItemEditBinding::inflate),
     TextWatcher {
     private val viewModel: PersonalItemEditViewModel by viewModels {
-        val bottariDetail =
-            arguments.getParcelableCompat<BottariDetailUiModel>(EXTRA_BOTTARI_DETAIL)
-        PersonalItemEditViewModel.Factory(requireContext().getSSAID(), bottariDetail)
+        val id: Long = arguments?.getLong(EXTRA_BOTTARI_ID) ?: error("보따리 ID가 없습니다")
+        val title: String = arguments?.getString(EXTRA_BOTTARI_TITLE) ?: error("보따리 이름이 없습니다")
+        val items: ArrayList<BottariItemUiModel> =
+            arguments?.getParcelableArrayListCompat<BottariItemUiModel>(EXTRA_BOTTARI_ITEMS)
+                ?: error("보따리 아이템이 없습니다")
+        PersonalItemEditViewModel.Factory(
+            ssaid = requireContext().getSSAID(),
+            id = id,
+            title = title,
+            items = items,
+        )
     }
 
     private val adapter by lazy {
@@ -66,9 +72,16 @@ class PersonalItemEditFragment :
     }
 
     private fun setupObserver() {
-        viewModel.bottariName.observe(viewLifecycleOwner, ::handleBottariNameState)
-        viewModel.bottariItems.observe(viewLifecycleOwner, ::handleItemState)
-        viewModel.saveState.observe(viewLifecycleOwner, ::handleSaveState)
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            handleBottariNameState(state.title)
+            handleItemState(state.items)
+        }
+        viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
+            when (event) {
+                PersonalItemEditUiEvent.SaveBottariItemsFailure -> showSnackbar(R.string.checklist_item_title_prefix)
+                PersonalItemEditUiEvent.SaveBottariItemsSuccess -> requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
+        }
     }
 
     private fun setupUI() {
@@ -128,24 +141,23 @@ class PersonalItemEditFragment :
         adapter.submitList(bottariItems)
     }
 
-    private fun handleSaveState(uiState: UiState<Unit>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> requireActivity().onBackPressedDispatcher.onBackPressed()
-            is UiState.Failure -> showSnackbar(R.string.checklist_item_title_prefix)
-        }
-    }
-
     companion object {
-        private const val EXTRA_BOTTARI_DETAIL = "EXTRA_BOTTARI_DETAIL"
+        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
+        private const val EXTRA_BOTTARI_TITLE = "EXTRA_BOTTARI_TITLE"
+        private const val EXTRA_BOTTARI_ITEMS = "EXTRA_BOTTARI_ITEMS"
 
         private const val DUPLICATE_BORDER_WIDTH_DP = 2
         private const val DISABLED_ALPHA = 0.3f
         private const val ENABLED_ALPHA = 1f
 
-        fun newBundle(bottariDetail: BottariDetailUiModel) =
-            Bundle().apply {
-                putParcelable(EXTRA_BOTTARI_DETAIL, bottariDetail)
-            }
+        fun newBundle(
+            id: Long,
+            title: String,
+            items: List<BottariItemUiModel>,
+        ) = Bundle().apply {
+            putLong(EXTRA_BOTTARI_ID, id)
+            putString(EXTRA_BOTTARI_TITLE, title)
+            putParcelableArrayList(EXTRA_BOTTARI_ITEMS, ArrayList(items))
+        }
     }
 }
