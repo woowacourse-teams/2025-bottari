@@ -14,6 +14,7 @@ import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.presentation.common.event.SingleLiveEvent
 import com.bottari.presentation.extension.update
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
+import com.bottari.presentation.util.debounce
 import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditUiEvent
 import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditUiState
 import kotlinx.coroutines.Job
@@ -46,16 +47,18 @@ class PersonalBottariEditViewModel(
         fetchBottari()
     }
 
-    fun toggleAlarmState(isActive: Boolean) {
-        val bottari = _uiState.value?.bottari ?: return
-        val alarmId = bottari.alarm?.id ?: return
-        toggleAlarmJob?.cancel()
-        toggleAlarmJob =
-            viewModelScope.launch {
-                delay(DEBOUNCE_DELAY)
-                toggleAlarmStateUseCase(ssaid, alarmId, isActive)
-            }
-    }
+    val debouncedAlarmState: ((Boolean) -> Unit) =
+        debounce(
+            timeMillis = DEBOUNCE_DELAY,
+            coroutineScope = viewModelScope,
+        ) { isActive ->
+            val alarmId =
+                _uiState.value
+                    ?.bottari
+                    ?.alarm
+                    ?.id ?: return@debounce
+            toggleAlarmState(alarmId, isActive)
+        }
 
     fun createBottariTemplate() {
         _uiState.update { copy(isLoading = true) }
@@ -89,6 +92,15 @@ class PersonalBottariEditViewModel(
                     _uiEvent.value = PersonalBottariEditUiEvent.FetchBottariFailure
                 }
             _uiState.update { copy(isLoading = false) }
+        }
+    }
+
+    private fun toggleAlarmState(
+        alarmId: Long,
+        isActive: Boolean,
+    ) {
+        viewModelScope.launch {
+            toggleAlarmStateUseCase(ssaid, alarmId, isActive)
         }
     }
 

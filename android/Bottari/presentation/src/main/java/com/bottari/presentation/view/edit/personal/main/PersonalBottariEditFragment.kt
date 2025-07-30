@@ -134,7 +134,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             permissionLauncher.launch(requiredPermissions)
         }
         binding.switchAlarm.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.toggleAlarmState(isChecked)
+            viewModel.debouncedAlarmState(isChecked)
         }
         childFragmentManager.setFragmentResultListener(
             BottariRenameDialog.SAVE_BOTTARI_TITLE_RESULT_KEY,
