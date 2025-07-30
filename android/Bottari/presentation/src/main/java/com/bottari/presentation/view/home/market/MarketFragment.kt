@@ -6,10 +6,9 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
-import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentMarketBinding
-import com.bottari.presentation.model.BottariTemplateUiModel
 import com.bottari.presentation.view.home.market.adapter.MarketAdapter
 import com.bottari.presentation.view.home.market.listener.OnBottariTemplateClickListener
 import com.bottari.presentation.view.market.MarketActivity
@@ -58,7 +57,15 @@ class MarketFragment :
     }
 
     private fun setupObserver() {
-        viewModel.bottariTemplates.observe(viewLifecycleOwner, ::handleBottariTemplateState)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            adapter.submitList(uiState.templates)
+        }
+        viewModel.uiEvent.observe(viewLifecycleOwner) { uiState ->
+            when (uiState) {
+                MarketUiEvent.FetchBottariTemplatesFailure -> showSnackbar(R.string.bottari_template_fetch_failure_text)
+                MarketUiEvent.FetchBottariTemplatesSuccess -> Unit
+            }
+        }
     }
 
     private fun setupUI() {
@@ -69,14 +76,6 @@ class MarketFragment :
     private fun setupListener() {
         binding.etBottariTemplateTitle.addTextChangedListener(this)
         binding.btnMyBottariTemplate.setOnClickListener { navigateToMyBottariTemplate() }
-    }
-
-    private fun handleBottariTemplateState(uiState: UiState<List<BottariTemplateUiModel>>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> adapter.submitList(uiState.data)
-            is UiState.Failure -> Unit
-        }
     }
 
     private fun navigateToDetail(bottariTemplateId: Long) {

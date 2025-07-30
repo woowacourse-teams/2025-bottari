@@ -1,6 +1,6 @@
 <resources>
     <!--  Home Bottom Navigation  -->
-    <string name="home_nav_market_title">마켓플레이스</string>
+    <string name="home_nav_market_title">모두의 보따리</string>
     <string name="home_nav_bottari_title">나의 보따리</string>
     <string name="home_nav_profile_title">프로필</string>
 
@@ -45,10 +45,10 @@
     <string name="alarm_day_of_week_text">요일</string>
     <string name="alarm_location_text">위치</string>
     <string name="alarm_edit_confirm_btn_text">확인</string>
-    <string name="alarm_edit_save_success_text">알람이 저장되었어요.</string>
-    <string name="alarm_edit_save_failure_text">알람 저장에 실패했어요.</string>
-    <string name="alarm_edit_create_success_text">성공적으로 알람이 생성되었어요.</string>
-    <string name="alarm_edit_create_failure_text">알람 생성에 실패했어요.</string>
+    <string name="alarm_edit_save_success_text">알람이 저장되었어요</string>
+    <string name="alarm_edit_save_failure_text">알람 저장에 실패했어요</string>
+    <string name="alarm_edit_create_success_text">성공적으로 알람이 생성되었어요</string>
+    <string name="alarm_edit_create_failure_text">알람 생성에 실패했어요</string>
 
     <!-- Bottari edit item -->
     <string name="bottari_edit_item_list_title">물건 목록</string>
@@ -76,6 +76,7 @@
     <string name="template_items_name_text">\u00A0등 %d개의 물건</string>
     <string name="market_place_edit_text_hint">원하시는 보따리를 검색하세요!</string>
     <string name="btn_navigate_my_bottari_template"><![CDATA[내가 올린 보따리 >]]></string>
+    <string name="bottari_template_fetch_failure_text">보따리 템플릿을 불러오는데 실패했어요</string>
 
     <!-- Market Detail -->
     <string name="btn_bottari_template_detail_receive">가져오기</string>

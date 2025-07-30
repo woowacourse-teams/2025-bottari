@@ -10,9 +10,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.template.FetchBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
-import com.bottari.presentation.base.UiState
+import com.bottari.presentation.extension.update
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
-import com.bottari.presentation.model.BottariTemplateUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.launch
 
@@ -20,9 +19,11 @@ class MarketViewModel(
     private val bottariTemplatesUseCase: FetchBottariTemplatesUseCase,
     private val searchBottariTemplatesUseCase: SearchBottariTemplatesUseCase,
 ) : ViewModel() {
-    private val _bottariTemplates: MutableLiveData<UiState<List<BottariTemplateUiModel>>> =
-        MutableLiveData(UiState.Loading)
-    val bottariTemplates: LiveData<UiState<List<BottariTemplateUiModel>>> get() = _bottariTemplates
+    private val _uiState: MutableLiveData<MarketUiState> = MutableLiveData(MarketUiState())
+    val uiState: LiveData<MarketUiState> get() = _uiState
+
+    private val _uiEvent: MutableLiveData<MarketUiEvent> = MutableLiveData()
+    val uiEvent: LiveData<MarketUiEvent> get() = _uiEvent
 
     private val debouncedSearch: (String) -> Unit =
         debounce(
@@ -39,14 +40,16 @@ class MarketViewModel(
     }
 
     private fun fetchBottariTemplates() {
-        _bottariTemplates.value = UiState.Loading
+        _uiState.update { copy(isLoading = true) }
         viewModelScope.launch {
             bottariTemplatesUseCase()
                 .onSuccess { templates ->
-                    _bottariTemplates.value =
-                        UiState.Success(templates.map { template -> template.toUiModel() })
-                }.onFailure { error ->
-                    _bottariTemplates.value = UiState.Failure(error.message)
+                    val templateUiModels = templates.map { it.toUiModel() }
+                    _uiState.update { copy(isLoading = false, templates = templateUiModels) }
+                    _uiEvent.value = MarketUiEvent.FetchBottariTemplatesSuccess
+                }.onFailure {
+                    _uiState.update { copy(isLoading = false) }
+                    _uiEvent.value = MarketUiEvent.FetchBottariTemplatesFailure
                 }
         }
     }
@@ -56,14 +59,16 @@ class MarketViewModel(
             fetchBottariTemplates()
             return
         }
-        _bottariTemplates.value = UiState.Loading
         viewModelScope.launch {
+            _uiState.update { copy(isLoading = true) }
             searchBottariTemplatesUseCase(searchWord)
                 .onSuccess { templates ->
-                    _bottariTemplates.value =
-                        UiState.Success(templates.map { template -> template.toUiModel() })
-                }.onFailure { error ->
-                    _bottariTemplates.value = UiState.Failure(error.message)
+                    val templateUiModels = templates.map { it.toUiModel() }
+                    _uiState.update { copy(isLoading = false, templates = templateUiModels) }
+                    _uiEvent.value = MarketUiEvent.FetchBottariTemplatesSuccess
+                }.onFailure {
+                    _uiState.update { copy(isLoading = false) }
+                    _uiEvent.value = MarketUiEvent.FetchBottariTemplatesFailure
                 }
         }
     }
