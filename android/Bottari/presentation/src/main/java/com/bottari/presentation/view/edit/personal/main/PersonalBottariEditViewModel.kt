@@ -26,7 +26,8 @@ class PersonalBottariEditViewModel(
     private val toggleAlarmStateUseCase: ToggleAlarmStateUseCase,
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
 ) : ViewModel() {
-    private val _uiState = MutableLiveData<PersonalBottariEditUiState>(PersonalBottariEditUiState())
+    private val _uiState: MutableLiveData<PersonalBottariEditUiState> =
+        MutableLiveData(PersonalBottariEditUiState())
     val uiState: LiveData<PersonalBottariEditUiState> get() = _uiState
 
     private val _uiEvent = SingleLiveEvent<PersonalBottariEditUiEvent>()
@@ -65,12 +66,11 @@ class PersonalBottariEditViewModel(
         viewModelScope.launch {
             createBottariTemplateUseCase(ssaid, title, items)
                 .onSuccess {
-                    _uiState.update { copy(isLoading = false) }
                     _uiEvent.value = PersonalBottariEditUiEvent.CreateTemplateSuccess
                 }.onFailure {
-                    _uiState.update { copy(isLoading = false) }
                     _uiEvent.value = PersonalBottariEditUiEvent.CreateTemplateFailure
                 }
+            _uiState.update { copy(isLoading = false) }
         }
     }
 
@@ -79,11 +79,11 @@ class PersonalBottariEditViewModel(
 
         viewModelScope.launch {
             findBottariDetailUseCase(bottariId, ssaid)
-                .onSuccess { _uiState.update { copy(isLoading = false, bottari = it.toUiModel()) } }
+                .onSuccess { _uiState.update { copy(bottari = it.toUiModel()) } }
                 .onFailure {
-                    _uiState.update { copy(isLoading = false) }
                     _uiEvent.value = PersonalBottariEditUiEvent.FetchBottariFailure
                 }
+            _uiState.update { copy(isLoading = false) }
         }
     }
 
