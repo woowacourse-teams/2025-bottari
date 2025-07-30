@@ -23,6 +23,8 @@
     <string name="swipe_checklist_not_btn_text">아직이에요</string>
     <string name="swipe_checklist_yes_btn_text">챙겼어요</string>
     <string name="swipe_checklist_status_text">%d개 중 %d개 남았어요!</string>
+    <string name="checklist_fetch_failure_text">체크리스트 조회에 실패했어요</string>
+    <string name="checklist_check_faliure_text">체크에 실패했어요</string>
 
     <!--  Bottari Create Dialog -->
     <string name="dialog_bottari_create_title_text">보따리 이름 작성</string>
