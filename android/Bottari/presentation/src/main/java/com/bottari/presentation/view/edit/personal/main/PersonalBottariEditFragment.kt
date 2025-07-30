@@ -14,10 +14,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.base.BaseFragment
-import com.bottari.presentation.base.UiState
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
 import com.bottari.presentation.extension.getSSAID
-import com.bottari.presentation.extension.takeSuccess
 import com.bottari.presentation.model.BottariDetailUiModel
 import com.bottari.presentation.util.permission.PermissionUtil
 import com.bottari.presentation.util.permission.PermissionUtil.requiredPermissions
@@ -72,8 +70,25 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun setupObserver() {
-        viewModel.bottari.observe(viewLifecycleOwner, ::handleBottariState)
-        viewModel.createTemplateState.observe(viewLifecycleOwner, ::handleCreateTemplateState)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            val bottari = uiState.bottari ?: return@observe
+            setupTitle(bottari)
+            setupItems(bottari)
+            setupAlarm(bottari)
+        }
+        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+            when (uiEvent) {
+                PersonalBottariEditUiEvent.CreateTemplateFailure ->
+                    showSnackbar(
+                        R.string.personal_bottari_edit_create_template_failure_text,
+                    )
+                PersonalBottariEditUiEvent.CreateTemplateSuccess ->
+                    showSnackbar(
+                        R.string.personal_bottari_edit_create_template_success_text,
+                    )
+                PersonalBottariEditUiEvent.FetchBottariFailure -> showSnackbar(R.string.personal_bottari_edit_fetch_failure_text)
+            }
+        }
     }
 
     private fun setupUI() {
@@ -104,7 +119,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.clEditItem.setOnClickListener {
-            val bottariDetail = viewModel.bottari.value?.takeSuccess() ?: return@setOnClickListener
+            val bottariDetail = viewModel.uiState.value?.bottari ?: return@setOnClickListener
             navigateToScreen(
                 PersonalItemEditFragment::class.java,
                 PersonalItemEditFragment.newBundle(bottariDetail),
@@ -141,27 +156,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             0,
             R.style.CustomPopupMenu,
         )
-    }
-
-    private fun handleBottariState(uiState: UiState<BottariDetailUiModel>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> {
-                setupTitle(uiState.data)
-                setupItems(uiState.data)
-                setupAlarm(uiState.data)
-            }
-
-            is UiState.Failure -> Unit
-        }
-    }
-
-    private fun handleCreateTemplateState(uiState: UiState<Unit>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> showSnackbar(R.string.personal_bottari_edit_create_template_success_text)
-            is UiState.Failure -> showSnackbar(R.string.personal_bottari_edit_create_template_failure_text)
-        }
     }
 
     private fun setupTitle(bottari: BottariDetailUiModel) {
@@ -232,15 +226,12 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun navigateToAlarmEditScreen() {
-        val bottari = viewModel.bottari.value?.takeSuccess()!!
+        val bottari = viewModel.uiState.value?.bottari ?: return
         navigateToScreen(
             AlarmEditFragment::class.java,
             AlarmEditFragment.newBundle(
                 bottariId = bottari.id,
-                alarm =
-                    viewModel.bottari.value
-                        ?.takeSuccess()
-                        ?.alarm,
+                alarm = bottari.alarm,
             ),
         )
     }
@@ -270,11 +261,11 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun showRenameDialog() {
-        val bottari = viewModel.bottari.value?.takeSuccess() ?: return
+        val bottari = viewModel.uiState.value?.bottari ?: return
 
         BottariRenameDialog
             .newInstance(bottari.id, bottari.title)
-            .show(childFragmentManager, BottariRenameDialog::class.java.name)
+            .show(parentFragmentManager, BottariRenameDialog::class.java.name)
     }
 
     companion object {
