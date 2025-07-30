@@ -73,7 +73,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            setupTitle(uiState.title ?: return@observe)
+            setupTitle(uiState.title)
             setupItems(uiState.items)
             setupAlarm(uiState.alarm)
         }
