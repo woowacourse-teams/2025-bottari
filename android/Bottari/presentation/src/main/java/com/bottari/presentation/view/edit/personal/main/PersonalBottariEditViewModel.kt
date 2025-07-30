@@ -30,7 +30,7 @@ class PersonalBottariEditViewModel(
         MutableLiveData(PersonalBottariEditUiState())
     val uiState: LiveData<PersonalBottariEditUiState> get() = _uiState
 
-    private val _uiEvent = SingleLiveEvent<PersonalBottariEditUiEvent>()
+    private val _uiEvent: SingleLiveEvent<PersonalBottariEditUiEvent> = SingleLiveEvent()
     val uiEvent: LiveData<PersonalBottariEditUiEvent> get() = _uiEvent
 
     private val ssaid: String =
