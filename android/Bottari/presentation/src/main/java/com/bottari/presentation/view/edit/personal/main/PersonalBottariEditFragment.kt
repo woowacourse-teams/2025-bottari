@@ -37,7 +37,9 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     private val popupMenu: PopupMenu by lazy { createPopupMenu() }
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val alarmAdapter: PersonalBottariEditAlarmAdapter by lazy { PersonalBottariEditAlarmAdapter() }
-    private val permissionLauncher =
+    private val permissionLauncher = getPermissionLauncher()
+
+    private fun getPermissionLauncher() =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions(),
         ) { permissions ->
@@ -65,7 +67,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
 
     override fun onStart() {
         super.onStart()
-
         viewModel.fetchBottari()
     }
 
