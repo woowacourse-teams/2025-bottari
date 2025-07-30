@@ -8,10 +8,11 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import com.bottari.presentation.base.UiState
+import com.bottari.presentation.R
 import com.bottari.presentation.databinding.DialogBottariCreateBinding
 import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
@@ -20,7 +21,9 @@ import com.google.android.material.snackbar.Snackbar
 class BottariCreateDialog :
     DialogFragment(),
     TextWatcher {
-    private val viewModel: BottariCreateViewModel by viewModels { BottariCreateViewModel.Factory() }
+    private val viewModel: BottariCreateViewModel by viewModels {
+        BottariCreateViewModel.Factory(getString(R.string.default_bottari_title))
+    }
     private var _binding: DialogBottariCreateBinding? = null
     val binding: DialogBottariCreateBinding get() = _binding!!
 
@@ -52,14 +55,16 @@ class BottariCreateDialog :
         _binding = null
     }
 
-    override fun afterTextChanged(s: Editable?) {}
-
     override fun beforeTextChanged(
         s: CharSequence?,
         start: Int,
         count: Int,
         after: Int,
     ) {
+    }
+
+    override fun afterTextChanged(s: Editable?) {
+        viewModel.updateBottariTitle(s.toString().trim())
     }
 
     override fun onTextChanged(
@@ -75,7 +80,18 @@ class BottariCreateDialog :
     }
 
     private fun setupObserver() {
-        viewModel.createSuccess.observe(viewLifecycleOwner, ::handleCreateState)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            if (binding.etBottariCreateName.text.toString() == uiState.bottariTitle) return@observe
+            binding.etBottariCreateName.setText(uiState.bottariTitle)
+            binding.etBottariCreateName.setSelection(uiState.bottariTitle.length)
+        }
+
+        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+            when (uiEvent) {
+                is BottariCreateUiEvent.CreateBottariSuccess -> navigateToScreen(uiEvent.bottariId)
+                BottariCreateUiEvent.CreateBottariFailure -> showSnackBar(R.string.create_bottari_failure)
+            }
+        }
     }
 
     private fun setupListener() {
@@ -100,21 +116,21 @@ class BottariCreateDialog :
         }
     }
 
-    private fun handleCreateState(uiState: UiState<Long?>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> navigateToScreen(uiState.data)
-            is UiState.Failure -> {
-                Snackbar
-                    .make(binding.root, uiState.message.toString(), Snackbar.LENGTH_SHORT)
-                    .show()
-            }
-        }
+    private fun showSnackBar(
+        @StringRes message: Int,
+    ) {
+        Snackbar
+            .make(
+                requireActivity().findViewById(android.R.id.content),
+                message,
+                Snackbar.LENGTH_SHORT,
+            ).show()
+        dismiss()
     }
 
     private fun navigateToScreen(bottariId: Long?) {
         if (bottariId == null) return
-        val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId)
+        val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId, true)
         startActivity(intent)
         dismiss()
     }

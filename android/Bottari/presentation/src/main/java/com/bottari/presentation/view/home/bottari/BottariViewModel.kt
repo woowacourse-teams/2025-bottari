@@ -46,7 +46,7 @@ class BottariViewModel(
                         )
                     }
                 }.onFailure {
-                    _uiEvent.update { BottariUiEvent.FetchBottariesFailure }
+                    _uiEvent.value = BottariUiEvent.FetchBottariesFailure
                 }
         }
     }
@@ -56,9 +56,9 @@ class BottariViewModel(
             deleteBottariUseCase(ssaid, bottariId)
                 .onSuccess {
                     fetchBottaries()
-                    _uiEvent.update { BottariUiEvent.BottariDeleteSuccess }
+                    _uiEvent.value = BottariUiEvent.BottariDeleteSuccess
                 }.onFailure {
-                    _uiEvent.update { BottariUiEvent.BottariDeleteFailure }
+                    _uiEvent.value = BottariUiEvent.BottariDeleteFailure
                 }
         }
     }
@@ -71,6 +71,7 @@ class BottariViewModel(
                 initializer {
                     val stateHandle = createSavedStateHandle()
                     stateHandle[KEY_SSAID] = ssaid
+
                     BottariViewModel(
                         stateHandle,
                         UseCaseProvider.fetchBottariesUseCase,
