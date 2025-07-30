@@ -136,7 +136,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         binding.switchAlarm.setOnCheckedChangeListener { _, isChecked ->
             viewModel.debouncedAlarmState(isChecked)
         }
-        childFragmentManager.setFragmentResultListener(
+        parentFragmentManager.setFragmentResultListener(
             BottariRenameDialog.SAVE_BOTTARI_TITLE_RESULT_KEY,
             viewLifecycleOwner,
         ) { _, _ ->
