@@ -18,7 +18,6 @@ import com.bottari.presentation.extension.update
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.util.debounce
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
@@ -38,10 +37,8 @@ class ChecklistViewModel(
     private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val pendingCheckStatusMap = mutableMapOf<Long, BottariItemUiModel>()
-    private val job: Job = Job()
     private val debouncedCheck: (List<BottariItemUiModel>) -> Unit =
         debounce(
-            job = job,
             timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
         ) { items -> performCheck(items) }

@@ -14,7 +14,6 @@ import com.bottari.presentation.common.event.SingleLiveEvent
 import com.bottari.presentation.extension.update
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
 import com.bottari.presentation.util.debounce
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class MarketViewModel(
@@ -27,10 +26,8 @@ class MarketViewModel(
     private val _uiEvent: SingleLiveEvent<MarketUiEvent> = SingleLiveEvent()
     val uiEvent: LiveData<MarketUiEvent> get() = _uiEvent
 
-    private val job: Job = Job()
     private val debouncedSearch: (String) -> Unit =
         debounce(
-            job = job,
             timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
         ) { searchWord -> performSearch(searchWord) }
