@@ -40,7 +40,10 @@ class BottariRenameViewModel(
 
         viewModelScope.launch {
             saveBottariTitleUseCase(id, ssaid, newTitle)
-                .onSuccess { _uiState.update { copy(title = newTitle) } }
+                .onSuccess {
+                    _uiState.update { copy(title = newTitle) }
+                    _uiEvent.value = BottariRenameUiEvent.SaveBottariTitleSuccess
+                }
                 .onFailure {
                     _uiEvent.value = BottariRenameUiEvent.SaveBottariTitleFailure
                 }
