@@ -59,6 +59,7 @@ class BottariFragment :
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            toggleLoadingIndicator(uiState.isLoading)
             adapter.submitList(uiState.bottaries)
         }
 
