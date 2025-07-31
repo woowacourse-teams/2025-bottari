@@ -73,7 +73,6 @@
     <string name="common_setting_btn_description">설정 버튼</string>
     <string name="common_close_btn_description">닫기 버튼</string>
     <string name="common_option_btn_description">옵션 버튼</string>
-    <string name="test">보따리 아이콘 이미지</string>
 
     <!-- Home Navigation -->
     <string name="home_nav_market_title_text">모두의 보따리</string>
@@ -179,6 +178,8 @@
     <string name="nickname_edit_btn_description">닉네임 수정 버튼</string>
     <string name="alarm_edit_location_btn_description">위치 설정 버튼</string>
     <string name="bottari_personal_item_add_btn_description">물건 추가 버튼</string>
+    <string name="bottari_home_icon_description">보따리 아이콘 이미지</string>
+
 
     <!-- Menu -->
     <string name="menu_create_market_title_text">마켓에 등록하기</string>
