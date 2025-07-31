@@ -5,12 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
-import com.bottari.presentation.databinding.ActivityMarketBinding
+import com.bottari.presentation.databinding.ActivityTemplateBinding
 import com.bottari.presentation.view.template.detail.TemplateDetailFragment
 import com.bottari.presentation.view.template.my.MyTemplateFragment
 
 class TemplateActivity :
-    BaseActivity<ActivityMarketBinding>(ActivityMarketBinding::inflate),
+    BaseActivity<ActivityTemplateBinding>(ActivityTemplateBinding::inflate),
     TemplateNavigator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

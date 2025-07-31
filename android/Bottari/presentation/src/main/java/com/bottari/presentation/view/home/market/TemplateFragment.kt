@@ -8,13 +8,13 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.databinding.FragmentMarketBinding
+import com.bottari.presentation.databinding.FragmentTemplateBinding
 import com.bottari.presentation.view.home.market.adapter.TemplateAdapter
 import com.bottari.presentation.view.home.market.listener.OnTemplateClickListener
 import com.bottari.presentation.view.template.TemplateActivity
 
 class TemplateFragment :
-    BaseFragment<FragmentMarketBinding>(FragmentMarketBinding::inflate),
+    BaseFragment<FragmentTemplateBinding>(FragmentTemplateBinding::inflate),
     TextWatcher,
     OnTemplateClickListener {
     private val viewModel: TemplateViewModel by viewModels {

@@ -7,11 +7,11 @@ import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getSSAID
-import com.bottari.presentation.databinding.FragmentMarketBottariDetailBinding
+import com.bottari.presentation.databinding.FragmentTemplateDetailBinding
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.template.detail.adapter.TemplateDetailAdapter
 
-class TemplateDetailFragment : BaseFragment<FragmentMarketBottariDetailBinding>(FragmentMarketBottariDetailBinding::inflate) {
+class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(FragmentTemplateDetailBinding::inflate) {
     private val viewModel: TemplateDetailViewModel by viewModels {
         TemplateDetailViewModel.Factory(
             ssaid = requireContext().getSSAID(),
@@ -49,7 +49,7 @@ class TemplateDetailFragment : BaseFragment<FragmentMarketBottariDetailBinding>(
     }
 
     private fun setupUI() {
-        binding.rvMarketBottariDetail.adapter = adapter
+        binding.rvTemplateDetail.adapter = adapter
         if (getIsMyTemplate()) binding.btnTakeTemplate.isVisible = false
     }
 
