@@ -18,11 +18,11 @@
 
     <TextView
         android:id="@+id/tv_empty_view_title"
+        style="@style/Pretendard_Bold_20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bottari_home_empty_view_title_text"
         android:textColor="@color/gray_a6a6a6"
-        style="@style/Pretendard_Bold_20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,13 +30,13 @@
 
     <TextView
         android:id="@+id/tv_empty_view_text"
+        style="@style/Pretendard_Medium_16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_small"
         android:gravity="center"
         android:text="@string/bottari_home_empty_view_sub_title_text"
         android:textColor="@color/gray_a6a6a6"
-        style="@style/Pretendard_Medium_16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_empty_view_title" />
