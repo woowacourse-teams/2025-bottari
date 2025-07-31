@@ -40,7 +40,6 @@ class ProfileViewModel(
     fun saveNickname() {
         if (_uiState.value?.isNicknameChanged == false) return
         val editingNickname = _uiState.value?.editingNickname.orEmpty()
-        _uiState.update { copy(isLoading = true) }
 
         viewModelScope.launch {
             saveMemberNicknameUseCase(ssaid, editingNickname)
@@ -55,8 +54,6 @@ class ProfileViewModel(
                             else -> ProfileUiEvent.SaveMemberNicknameFailure
                         }
                 }
-
-            _uiState.update { copy(isLoading = false) }
         }
     }
 

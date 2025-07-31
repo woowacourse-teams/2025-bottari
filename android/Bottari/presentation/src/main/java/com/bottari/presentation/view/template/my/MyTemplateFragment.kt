@@ -6,13 +6,13 @@ import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getSSAID
-import com.bottari.presentation.databinding.FragmentMyBottariTemplateBinding
+import com.bottari.presentation.databinding.FragmentMyTemplateBinding
 import com.bottari.presentation.view.template.TemplateNavigator
 import com.bottari.presentation.view.template.my.adapter.MyTemplateAdapter
 import com.bottari.presentation.view.template.my.listener.MyBottariTemplateEventListener
 
 class MyTemplateFragment :
-    BaseFragment<FragmentMyBottariTemplateBinding>(FragmentMyBottariTemplateBinding::inflate),
+    BaseFragment<FragmentMyTemplateBinding>(FragmentMyTemplateBinding::inflate),
     MyBottariTemplateEventListener {
     private val viewModel: MyTemplateViewModel by viewModels {
         MyTemplateViewModel.Factory(

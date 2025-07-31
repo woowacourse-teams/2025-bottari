@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
-import com.bottari.presentation.databinding.ItemBottariTemplateBinding
+import com.bottari.presentation.databinding.ItemTemplateBinding
 import com.bottari.presentation.model.BottariTemplateUiModel
 import com.bottari.presentation.view.home.market.listener.OnTemplateClickListener
 
 class TemplateViewHolder private constructor(
-    private val binding: ItemBottariTemplateBinding,
+    private val binding: ItemTemplateBinding,
     clickListener: OnTemplateClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     private var bottariTemplateId: Long? = null
@@ -75,7 +75,7 @@ class TemplateViewHolder private constructor(
             clickListener: OnTemplateClickListener,
         ): TemplateViewHolder {
             val inflater = LayoutInflater.from(parent.context)
-            val binding = ItemBottariTemplateBinding.inflate(inflater, parent, false)
+            val binding = ItemTemplateBinding.inflate(inflater, parent, false)
             return TemplateViewHolder(binding, clickListener)
         }
     }

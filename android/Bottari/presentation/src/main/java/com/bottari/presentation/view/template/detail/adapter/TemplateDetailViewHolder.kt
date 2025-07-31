@@ -3,11 +3,11 @@ package com.bottari.presentation.view.template.detail.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bottari.presentation.databinding.ItemMarketBottariDetailItemBinding
+import com.bottari.presentation.databinding.ItemTemplateDetailItemBinding
 import com.bottari.presentation.model.BottariTemplateItemUiModel
 
 class TemplateDetailViewHolder private constructor(
-    private val binding: ItemMarketBottariDetailItemBinding,
+    private val binding: ItemTemplateDetailItemBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     private var bottariTemplateId: Long? = null
 
@@ -19,7 +19,7 @@ class TemplateDetailViewHolder private constructor(
     companion object {
         fun from(parent: ViewGroup): TemplateDetailViewHolder {
             val inflater = LayoutInflater.from(parent.context)
-            val binding = ItemMarketBottariDetailItemBinding.inflate(inflater, parent, false)
+            val binding = ItemTemplateDetailItemBinding.inflate(inflater, parent, false)
             return TemplateDetailViewHolder(binding)
         }
     }
