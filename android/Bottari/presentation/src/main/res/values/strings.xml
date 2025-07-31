@@ -118,7 +118,7 @@
     <string name="bottari_create_default_title_text">새 보따리</string>
     <string name="bottari_create_success_text">보따리를 만들었어요</string>
 
-    <!-- Bottari Edit Item -->
+    <!-- Bottari Edit -->
     <string name="bottari_edit_item_list_title">내 물건</string>
     <string name="bottari_edit_add_item_title">물건 추가하기</string>
     <string name="bottari_edit_add_item_description_text">보따리에 물건을 추가하려면 눌러주세요</string>
@@ -128,6 +128,7 @@
     <string name="bottari_edit_fetch_failure_text">보따리를 불러오지 못했어요</string>
     <string name="bottari_edit_create_template_success_text">마켓에 등록했어요</string>
     <string name="bottari_edit_create_template_failure_text">마켓에 등록하지 못했어요</string>
+    <string name="bottari_edit_toggle_alarm_state_failure_text">알람 상태를 변경하지 못했어요</string>
 
     <!-- Bottari Personal Item Edit -->
     <string name="bottari_personal_item_edit_confirm_btn_text">추가하기</string>
