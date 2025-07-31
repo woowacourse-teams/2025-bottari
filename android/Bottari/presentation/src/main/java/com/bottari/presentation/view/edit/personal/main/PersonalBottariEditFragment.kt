@@ -96,7 +96,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     private fun setupListener() {
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.action_market -> {
+                R.id.action_template -> {
                     viewModel.createBottariTemplate()
                     true
                 }
