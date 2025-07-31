@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_radius_12dp"
+    android:elevation="2dp"
+    android:padding="@dimen/space_large">
+
+    <TextView
+        android:id="@+id/tv_permission_title"
+        style="@style/Pretendard_Bold_20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/common_permission_notice_dialog_title_text"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_notification"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/space_x_large"
+        android:background="@drawable/bg_gray_oval"
+        android:contentDescription="@string/notification_permission_iv_description"
+        android:padding="@dimen/space_x_small"
+        android:src="@drawable/iv_notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_permission_title" />
+
+    <TextView
+        android:id="@+id/tv_notification_permission"
+        style="@style/Pretendard_Regular_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_small"
+        android:text="@string/common_notification_permission_text"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/tv_notification_permission_description"
+        app:layout_constraintStart_toEndOf="@id/iv_notification"
+        app:layout_constraintTop_toTopOf="@id/iv_notification" />
+
+    <TextView
+        android:id="@+id/tv_notification_permission_description"
+        style="@style/Pretendard_Regular_12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_small"
+        android:text="@string/common_notification_permission_description_text"
+        android:textColor="@color/gray_a6a6a6"
+        app:layout_constraintBottom_toBottomOf="@id/iv_notification"
+        app:layout_constraintStart_toEndOf="@id/iv_notification"
+        app:layout_constraintTop_toBottomOf="@id/tv_notification_permission" />
+
+    <ImageView
+        android:id="@+id/iv_alarm"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/space_median"
+        android:background="@drawable/bg_gray_oval"
+        android:contentDescription="@string/alarm_permission_iv_description"
+        android:padding="@dimen/space_x_small"
+        android:src="@drawable/iv_alarm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_notification" />
+
+    <TextView
+        android:id="@+id/tv_alarm_permission"
+        style="@style/Pretendard_Regular_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_small"
+        android:text="@string/common_alarm_permission_text"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/tv_alarm_permission_description"
+        app:layout_constraintStart_toEndOf="@id/iv_alarm"
+        app:layout_constraintTop_toTopOf="@id/iv_alarm" />
+
+    <TextView
+        android:id="@+id/tv_alarm_permission_description"
+        style="@style/Pretendard_Regular_12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_small"
+        android:text="@string/common_alarm_permission_description_text"
+        android:textColor="@color/gray_a6a6a6"
+        app:layout_constraintBottom_toBottomOf="@id/iv_alarm"
+        app:layout_constraintStart_toEndOf="@id/iv_alarm"
+        app:layout_constraintTop_toBottomOf="@id/tv_alarm_permission" />
+
+    <ImageView
+        android:id="@+id/iv_location"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/space_median"
+        android:background="@drawable/bg_gray_oval"
+        android:contentDescription="@string/location_permission_iv_description"
+        android:padding="@dimen/space_x_small"
+        android:src="@drawable/iv_location"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_alarm" />
+
+    <TextView
+        android:id="@+id/tv_location_permission"
+        style="@style/Pretendard_Regular_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_small"
+        android:textColor="@color/black"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/tv_location_permission_description"
+        app:layout_constraintStart_toEndOf="@id/iv_location"
+        app:layout_constraintTop_toTopOf="@id/iv_location"
+        tools:text="위치 (선택)" />
+
+    <TextView
+        android:id="@+id/tv_location_permission_description"
+        style="@style/Pretendard_Regular_12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_small"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/iv_location"
+        app:layout_constraintStart_toEndOf="@id/iv_location"
+        app:layout_constraintTop_toBottomOf="@id/tv_location_permission"
+        tools:text="현재 위치 수신" />
+
+    <TextView
+        android:id="@+id/tv_permission_description"
+        style="@style/Pretendard_Regular_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_x_large"
+        android:text="@string/common_permission_description_text"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_location" />
+
+    <TextView
+        android:id="@+id/btn_permission_check"
+        style="@style/Pretendard_SemiBold_16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_x_large"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:backgroundTint="@color/primary"
+        android:gravity="center"
+        android:paddingVertical="@dimen/space_small"
+        android:text="@string/common_permission_check_btn_text"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_permission_description" />
+</androidx.constraintlayout.widget.ConstraintLayout>
