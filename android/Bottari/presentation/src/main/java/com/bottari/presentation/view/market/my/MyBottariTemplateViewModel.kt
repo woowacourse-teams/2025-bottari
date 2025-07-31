@@ -36,6 +36,8 @@ class MyBottariTemplateViewModel(
     }
 
     fun deleteBottariTemplate(bottariTemplateId: Long) {
+        _uiState.update { copy(isLoading = true) }
+
         viewModelScope.launch {
             deleteMyBottariTemplateUseCase(ssaid, bottariTemplateId)
                 .onSuccess {
@@ -44,6 +46,8 @@ class MyBottariTemplateViewModel(
                 }.onFailure {
                     _uiEvent.value = MyBottariTemplateUiEvent.DeleteMyTemplateFailure
                 }
+
+            _uiState.update { copy(isLoading = false) }
         }
     }
 
@@ -61,7 +65,7 @@ class MyBottariTemplateViewModel(
 
     companion object {
         private const val KEY_SSAID = "KEY_SSAID"
-        private const val ERROR_SSAID_MISSING = "SSAID를 확인할 수 없습니다"
+        private const val ERROR_SSAID_MISSING = "[ERROR] SSAID를 확인할 수 없습니다"
 
         fun Factory(ssaid: String): ViewModelProvider.Factory =
             viewModelFactory {
