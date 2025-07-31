@@ -29,12 +29,24 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
             updateToolbar(true)
         }
         binding.btnSwipe.setOnClickListener { navigateToChecklist(false) }
+        supportFragmentManager.addOnBackStackChangedListener {
+            val isMain = supportFragmentManager.findFragmentById(R.id.fcv_checklist) is MainChecklistFragment
+            updateToolbar(isMain)
+        }
     }
 
     private fun navigateToChecklist(isMain: Boolean) {
         val bottariId = getBottariId()
-        val fragment = if (isMain) MainChecklistFragment::class.java else SwipeChecklistFragment::class.java
-        val bundle = if (isMain) MainChecklistFragment.newBundle(bottariId) else SwipeChecklistFragment.newBundle(bottariId)
+        val fragment =
+            if (isMain) MainChecklistFragment::class.java else SwipeChecklistFragment::class.java
+        val bundle =
+            if (isMain) {
+                MainChecklistFragment.newBundle(bottariId)
+            } else {
+                SwipeChecklistFragment.newBundle(
+                    bottariId,
+                )
+            }
         supportFragmentManager.beginTransaction().apply {
             setSlideFastAnimation()
             replace(R.id.fcv_checklist, fragment, bundle, fragment.name)
