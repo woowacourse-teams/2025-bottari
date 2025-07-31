@@ -40,6 +40,8 @@ class MarketBottariDetailViewModel(
     }
 
     fun takeBottariTemplate() {
+        _uiState.update { copy(isLoading = true) }
+
         viewModelScope.launch {
             takeBottariTemplateDetailUseCase(ssaid, _uiState.value!!.templateId)
                 .onSuccess { bottariId ->
@@ -48,20 +50,24 @@ class MarketBottariDetailViewModel(
                 }.onFailure {
                     _uiEvent.value = MarketBottariDetailUiEvent.TakeBottariTemplateFailure
                 }
+
+            _uiState.update { copy(isLoading = false) }
         }
     }
 
     private fun fetchBottariTemplateDetail() {
         _uiState.update { copy(isLoading = true) }
+
         viewModelScope.launch {
             fetchBottariTemplateDetailUseCase(_uiState.value!!.templateId)
                 .onSuccess { template ->
                     val itemUiModels = template.items.map { it.toUiModel() }
-                    _uiState.update { copy(isLoading = false, items = itemUiModels) }
+                    _uiState.update { copy(items = itemUiModels) }
                 }.onFailure {
-                    _uiState.update { copy(isLoading = false) }
                     _uiEvent.value = MarketBottariDetailUiEvent.FetchBottariDetailFailure
                 }
+
+            _uiState.update { copy(isLoading = false) }
         }
     }
 
