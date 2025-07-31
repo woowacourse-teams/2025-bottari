@@ -19,7 +19,7 @@
             android:id="@+id/btn_previous"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="@string/previous_button_description"
+            android:contentDescription="@string/common_previous_btn_description"
             android:padding="@dimen/space_small"
             android:src="@drawable/btn_previous" />
 
@@ -37,7 +37,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="end"
-            android:contentDescription="@string/checklist_swipe_button_description"
+            android:contentDescription="@string/checklist_swipe_btn_description"
             android:padding="@dimen/space_small"
             android:src="@drawable/btn_swipe" />
 

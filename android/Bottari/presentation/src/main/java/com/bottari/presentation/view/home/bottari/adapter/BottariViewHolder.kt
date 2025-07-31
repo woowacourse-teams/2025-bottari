@@ -32,9 +32,9 @@ class BottariViewHolder private constructor(
     private val binding: ItemBottariBinding,
     private val onBottariClickListener: OnBottariClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
-    private val dateFormat: String = getString(R.string.bottari_item_alarm_date_format)
-    private val timeFormat: String = getString(R.string.bottari_item_alarm_time_format)
-    private val separator: String = getString(R.string.bottari_item_alarm_info_separator)
+    private val dateFormat: String = getString(R.string.common_format_date_alarm)
+    private val timeFormat: String = getString(R.string.common_format_time_alarm)
+    private val separator: String = getString(R.string.common_separator_text)
     private var bottariId: Long? = null
 
     init {
@@ -67,7 +67,7 @@ class BottariViewHolder private constructor(
         checked: Int,
         total: Int,
     ): String {
-        val formatPattern = getString(R.string.bottari_item_quantity_status_format)
+        val formatPattern = getString(R.string.bottari_item_status_format)
         return formatPattern.format(checked, total)
     }
 
@@ -116,7 +116,7 @@ class BottariViewHolder private constructor(
         buildString {
             append(time.formatWithPattern(timeFormat))
             append(separator)
-            append(getString(R.string.bottari_item_alarm_type_everyday_repeat))
+            append(getString(R.string.bottari_item_alarm_repeat_everyday_text))
         }
 
     private fun formatEveryWeekRepeat(
@@ -127,7 +127,7 @@ class BottariViewHolder private constructor(
         return buildString {
             append(time.formatWithPattern(timeFormat))
             append(separator)
-            append(getString(R.string.bottari_item_alarm_type_everyweek_repeat))
+            append(getString(R.string.bottari_item_alarm_repeat_everyweek_text))
             append(separator)
             append(
                 checkedDays.joinToString { dayOfWeek ->

@@ -22,7 +22,7 @@
         android:layout_marginHorizontal="@dimen/space_large"
         android:layout_marginBottom="@dimen/space_median"
         android:background="@drawable/bg_primary_oval"
-        android:contentDescription="@string/bottari_create_button_description"
+        android:contentDescription="@string/bottari_create_btn_description"
         android:elevation="2dp"
         android:padding="@dimen/space_large"
         android:src="@drawable/btn_plus"

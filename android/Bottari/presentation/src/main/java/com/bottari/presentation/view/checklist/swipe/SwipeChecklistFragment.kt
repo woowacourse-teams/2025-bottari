@@ -78,7 +78,7 @@ class SwipeChecklistFragment :
             adapter.submitList(uiState.nonCheckedItems)
             binding.tvSwipeChecklistStatus.text =
                 getString(
-                    R.string.swipe_checklist_status_text,
+                    R.string.common_format_checklist_swipe_status,
                     uiState.totalQuantity,
                     uiState.totalQuantity - uiState.checkedQuantity,
                 )
@@ -87,7 +87,7 @@ class SwipeChecklistFragment :
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
                 ChecklistUiEvent.FetchChecklistFailure -> showSnackbar(R.string.checklist_fetch_failure_text)
-                ChecklistUiEvent.CheckItemFailure -> showSnackbar(R.string.checklist_check_faliure_text)
+                ChecklistUiEvent.CheckItemFailure -> showSnackbar(R.string.checklist_check_failure_text)
             }
         }
     }

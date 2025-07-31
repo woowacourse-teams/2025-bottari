@@ -24,7 +24,7 @@
                 android:id="@+id/btn_previous"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:contentDescription="@string/previous_button_description"
+                android:contentDescription="@string/common_previous_btn_description"
                 android:padding="@dimen/space_small"
                 android:src="@drawable/btn_previous" />
 
@@ -42,7 +42,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="end"
-                android:contentDescription="@string/bottari_item_more_button_description"
+                android:contentDescription="@string/common_option_btn_description"
                 android:padding="@dimen/space_small"
                 android:src="@drawable/btn_more" />
 
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_x_small"
-                android:text="@string/bottari_edit_add_item_description"
+                android:text="@string/bottari_edit_add_item_description_text"
                 android:textColor="@color/gray_a6a6a6"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +123,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/bottari_edit_add_item_description"
+                android:text="@string/bottari_edit_add_item_description_text"
                 android:textColor="@color/gray_a6a6a6"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -160,7 +160,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_x_small"
-                android:text="@string/bottari_edit_add_alarm_description"
+                android:text="@string/bottari_edit_add_alarm_description_text"
                 android:textColor="@color/gray_a6a6a6"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
@@ -221,7 +221,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/bottari_edit_add_alarm_description"
+                android:text="@string/bottari_edit_add_alarm_description_text"
                 android:textColor="@color/gray_a6a6a6"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

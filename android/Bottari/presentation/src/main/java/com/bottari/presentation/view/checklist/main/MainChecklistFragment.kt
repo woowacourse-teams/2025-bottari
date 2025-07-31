@@ -41,7 +41,7 @@ class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChe
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
                 ChecklistUiEvent.FetchChecklistFailure -> showSnackbar(R.string.checklist_fetch_failure_text)
-                ChecklistUiEvent.CheckItemFailure -> showSnackbar(R.string.checklist_check_faliure_text)
+                ChecklistUiEvent.CheckItemFailure -> showSnackbar(R.string.checklist_check_failure_text)
             }
         }
     }

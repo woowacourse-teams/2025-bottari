@@ -22,7 +22,7 @@ class BottariCreateDialog :
     DialogFragment(),
     TextWatcher {
     private val viewModel: BottariCreateViewModel by viewModels {
-        BottariCreateViewModel.Factory(getString(R.string.default_bottari_title))
+        BottariCreateViewModel.Factory(getString(R.string.bottari_create_default_title_text))
     }
     private var _binding: DialogBottariCreateBinding? = null
     val binding: DialogBottariCreateBinding get() = _binding!!
@@ -89,7 +89,7 @@ class BottariCreateDialog :
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
                 is BottariCreateUiEvent.CreateBottariSuccess -> navigateToScreen(uiEvent.bottariId)
-                BottariCreateUiEvent.CreateBottariFailure -> showSnackBar(R.string.create_bottari_failure)
+                BottariCreateUiEvent.CreateBottariFailure -> showSnackBar(R.string.bottari_create_failure_text)
             }
         }
     }

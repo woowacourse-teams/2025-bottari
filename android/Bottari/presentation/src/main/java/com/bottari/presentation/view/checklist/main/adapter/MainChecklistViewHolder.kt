@@ -25,7 +25,7 @@ class MainChecklistViewHolder private constructor(
     fun bind(item: BottariItemUiModel) {
         itemId = item.id
         binding.tvChecklistItemTitle.text =
-            itemView.context.getString(R.string.checklist_item_title_prefix, item.name)
+            itemView.context.getString(R.string.common_item_title_prefix_format, item.name)
         updateCheckedState(item.isChecked)
     }
 

@@ -74,7 +74,7 @@ class PersonalItemEditFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
-                PersonalItemEditUiEvent.SaveBottariItemsFailure -> showSnackbar(R.string.checklist_item_title_prefix)
+                PersonalItemEditUiEvent.SaveBottariItemsFailure -> showSnackbar(R.string.common_save_failure_text)
                 PersonalItemEditUiEvent.SaveBottariItemsSuccess -> requireActivity().onBackPressedDispatcher.onBackPressed()
             }
         }

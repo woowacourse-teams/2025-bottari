@@ -51,7 +51,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 if (PermissionUtil.isPermanentlyDenied(this)) {
                     showSettingsDialog()
                 } else {
-                    showSnackbar(R.string.alarm_edit_permission_failure_text)
+                    showSnackbar(R.string.common_permission_failure_text)
                 }
             }
         }
@@ -79,17 +79,9 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                PersonalBottariEditUiEvent.CreateTemplateFailure ->
-                    showSnackbar(
-                        R.string.personal_bottari_edit_create_template_failure_text,
-                    )
-
-                PersonalBottariEditUiEvent.CreateTemplateSuccess ->
-                    showSnackbar(
-                        R.string.personal_bottari_edit_create_template_success_text,
-                    )
-
-                PersonalBottariEditUiEvent.FetchBottariFailure -> showSnackbar(R.string.personal_bottari_edit_fetch_failure_text)
+                PersonalBottariEditUiEvent.FetchBottariFailure -> showSnackbar(R.string.bottari_edit_fetch_failure_text)
+                PersonalBottariEditUiEvent.CreateTemplateFailure -> showSnackbar(R.string.bottari_edit_create_template_failure_text)
+                PersonalBottariEditUiEvent.CreateTemplateSuccess -> showSnackbar(R.string.bottari_edit_create_template_success_text)
             }
         }
     }
@@ -243,24 +235,24 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     private fun showSettingsDialog() {
         AlertDialog
             .Builder(requireContext())
-            .setTitle(R.string.alarm_edit_permission_dialog_title_text)
-            .setMessage(R.string.alarm_edit_permission_dialog_message_text)
-            .setPositiveButton(R.string.alarm_edit_permission_dialog_positive_btn_text) { _, _ ->
+            .setTitle(R.string.common_permission_dialog_title_text)
+            .setMessage(R.string.common_permission_dialog_message_text)
+            .setPositiveButton(R.string.common_permission_dialog_positive_btn_text) { _, _ ->
                 PermissionUtil.openAppSettings(requireContext())
-            }.setNegativeButton(R.string.alarm_edit_permission_dialog_negative_btn_text, null)
+            }.setNegativeButton(R.string.common_permission_dialog_negative_btn_text, null)
             .show()
     }
 
     private fun showExactAlarmSettingsDialog() {
         AlertDialog
             .Builder(requireContext())
-            .setTitle(R.string.alarm_edit_permission_dialog_title_text)
+            .setTitle(R.string.common_permission_dialog_title_text)
             .setMessage(R.string.alarm_edit_exact_alarm_permission_dialog_message_text)
-            .setPositiveButton(R.string.alarm_edit_permission_dialog_positive_btn_text) { _, _ ->
+            .setPositiveButton(R.string.common_permission_dialog_positive_btn_text) { _, _ ->
                 PermissionUtil.requestExactAlarmPermission(
                     requireContext(),
                 )
-            }.setNegativeButton(R.string.alarm_edit_permission_dialog_negative_btn_text, null)
+            }.setNegativeButton(R.string.common_permission_dialog_negative_btn_text, null)
             .show()
     }
 

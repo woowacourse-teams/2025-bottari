@@ -36,7 +36,7 @@ class PersonalBottariEditActivity : BaseActivity<ActivityPersonalBottariEditBind
     private fun showWelcomeMessage() {
         if (!intent.getBooleanExtra(EXTRA_IS_NEW_BOTTARI, false)) return
         Snackbar
-            .make(binding.root, R.string.new_bottari_welcome_message, Snackbar.LENGTH_SHORT)
+            .make(binding.root, R.string.bottari_create_success_text, Snackbar.LENGTH_SHORT)
             .show()
     }
 

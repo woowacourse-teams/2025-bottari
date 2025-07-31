@@ -37,8 +37,8 @@ class MarketBottariDetailFragment : BaseFragment<FragmentMarketBottariDetailBind
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                MarketBottariDetailUiEvent.FetchBottariDetailFailure -> showSnackbar(R.string.bottari_template_detail_fetch_failure_text)
-                MarketBottariDetailUiEvent.TakeBottariTemplateFailure -> showSnackbar(R.string.bottari_template_take_failure_text)
+                MarketBottariDetailUiEvent.FetchBottariDetailFailure -> showSnackbar(R.string.market_detail_fetch_failure_text)
+                MarketBottariDetailUiEvent.TakeBottariTemplateFailure -> showSnackbar(R.string.market_detail_take_failure_text)
                 is MarketBottariDetailUiEvent.TakeBottariTemplateSuccess ->
                     navigateBottariEdit(
                         uiEvent.bottariId,

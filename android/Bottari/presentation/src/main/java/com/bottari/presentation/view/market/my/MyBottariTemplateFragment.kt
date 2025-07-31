@@ -46,9 +46,9 @@ class MyBottariTemplateFragment :
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                MyBottariTemplateUiEvent.FetchMyTemplateFailure -> showSnackbar(R.string.my_bottari_template_screen_fetch_failure)
-                MyBottariTemplateUiEvent.DeleteMyTemplateFailure -> showSnackbar(R.string.my_bottari_template_screen_delete_failure)
-                MyBottariTemplateUiEvent.DeleteMyTemplateSuccess -> showSnackbar(R.string.my_bottari_template_screen_delete_success)
+                MyBottariTemplateUiEvent.FetchMyTemplateFailure -> showSnackbar(R.string.market_my_template_fetch_failure_text)
+                MyBottariTemplateUiEvent.DeleteMyTemplateFailure -> showSnackbar(R.string.market_my_template_delete_failure_text)
+                MyBottariTemplateUiEvent.DeleteMyTemplateSuccess -> showSnackbar(R.string.market_my_template_delete_success_text)
             }
         }
     }

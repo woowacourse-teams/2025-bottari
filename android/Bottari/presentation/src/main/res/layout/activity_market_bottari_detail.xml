@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-      <Toolbar
+
+    <Toolbar
         android:id="@+id/toolbar_edit"
         style="@style/Pretendard_Medium_20"
         android:layout_width="match_parent"
@@ -17,7 +18,7 @@
             android:id="@+id/btn_previous"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="@string/previous_button_description"
+            android:contentDescription="@string/common_previous_btn_description"
             android:padding="@dimen/space_small"
             android:src="@drawable/btn_previous" />
 
@@ -29,8 +30,6 @@
             android:layout_gravity="center"
             android:textColor="@color/black"
             tools:text="나의 보따리" />
-
-
     </Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView

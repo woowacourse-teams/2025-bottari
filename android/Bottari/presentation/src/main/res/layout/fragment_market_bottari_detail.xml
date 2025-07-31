@@ -18,7 +18,7 @@
             android:id="@+id/btn_previous"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="@string/previous_button_description"
+            android:contentDescription="@string/common_previous_btn_description"
             android:padding="@dimen/space_small"
             android:src="@drawable/btn_previous" />
 
@@ -54,8 +54,7 @@
         android:background="@drawable/bg_primary_radius_16dp"
         android:gravity="center"
         android:paddingVertical="@dimen/space_median"
-        android:text="@string/btn_bottari_template_detail_receive"
+        android:text="@string/market_detail_template_btn_text"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -65,9 +65,9 @@ class BottariFragment :
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             val message =
                 when (uiEvent) {
-                    BottariUiEvent.BottariDeleteFailure -> R.string.bottari_delete_failure_text
-                    BottariUiEvent.BottariDeleteSuccess -> R.string.bottari_delete_success_text
-                    BottariUiEvent.FetchBottariesFailure -> R.string.bottari_fetch_failure_text
+                    BottariUiEvent.BottariDeleteFailure -> R.string.bottari_home_delete_failure_text
+                    BottariUiEvent.BottariDeleteSuccess -> R.string.bottari_home_delete_success_text
+                    BottariUiEvent.FetchBottariesFailure -> R.string.bottari_home_fetch_failure_text
                 }
             showSnackbar(message)
         }

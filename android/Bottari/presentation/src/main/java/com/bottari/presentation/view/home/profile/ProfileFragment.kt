@@ -59,10 +59,10 @@ class ProfileFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                ProfileUiEvent.FetchMemberInfoFailure -> showSnackbar(R.string.fetch_member_info_failure)
-                ProfileUiEvent.SaveMemberNicknameSuccess -> showSnackbar(R.string.save_nickname_success)
-                ProfileUiEvent.SaveMemberNicknameFailure -> showSnackbar(R.string.save_nickname_failure)
-                ProfileUiEvent.InvalidNicknameRule -> showSnackbar(R.string.invalid_nickname_rule)
+                ProfileUiEvent.FetchMemberInfoFailure -> showSnackbar(R.string.profile_fetch_failure_text)
+                ProfileUiEvent.SaveMemberNicknameSuccess -> showSnackbar(R.string.profile_nickname_save_success_text)
+                ProfileUiEvent.SaveMemberNicknameFailure -> showSnackbar(R.string.profile_nickname_save_failure_text)
+                ProfileUiEvent.InvalidNicknameRule -> showSnackbar(R.string.profile_invalid_nickname_rule_text)
             }
         }
     }
