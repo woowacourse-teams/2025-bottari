@@ -9,7 +9,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityHomeBinding
 import com.bottari.presentation.view.home.bottari.BottariFragment
-import com.bottari.presentation.view.home.market.MarketFragment
+import com.bottari.presentation.view.home.market.TemplateFragment
 import com.bottari.presentation.view.home.profile.ProfileFragment
 import com.bottari.presentation.view.setting.SettingActivity
 
@@ -35,7 +35,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
         binding.bnvHome.setOnItemSelectedListener { item ->
             if (isSameNavItem(item)) return@setOnItemSelectedListener false
             when (item.itemId) {
-                R.id.menu_template -> showFragment(MarketFragment::class.java)
+                R.id.menu_template -> showFragment(TemplateFragment::class.java)
                 R.id.menu_bottari -> showFragment(BottariFragment::class.java)
                 R.id.menu_profile -> showFragment(ProfileFragment::class.java)
             }
