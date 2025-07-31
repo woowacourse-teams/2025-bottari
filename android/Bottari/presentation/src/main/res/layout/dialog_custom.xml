@@ -33,7 +33,7 @@
         tools:text="상세설명입니다" />
 
     <TextView
-        android:id="@+id/btn_dialog_custom_yes"
+        android:id="@+id/btn_dialog_custom_positive"
         style="@style/Pretendard_SemiBold_16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -48,13 +48,13 @@
         android:textColor="@color/white"
         android:elevation="1dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_dialog_custom_no"
+        app:layout_constraintEnd_toStartOf="@id/btn_dialog_custom_negative"
         app:layout_constraintTop_toBottomOf="@id/tv_dialog_custom_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread" />
 
     <TextView
-        android:id="@+id/btn_dialog_custom_no"
+        android:id="@+id/btn_dialog_custom_negative"
         style="@style/Pretendard_SemiBold_16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
         android:text="@string/bottari_create_dialog_btn_text"
         android:textColor="@color/gray_787878"
         android:elevation="1dp"
-        app:layout_constraintStart_toEndOf="@id/btn_dialog_custom_yes"
+        app:layout_constraintStart_toEndOf="@id/btn_dialog_custom_positive"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_dialog_custom_description"
         app:layout_constraintBottom_toBottomOf="parent" />
