@@ -1,12 +1,12 @@
 package com.bottari.data.source.remote
 
-import com.bottari.data.extension.extractIdFromHeader
+import com.bottari.data.common.extension.extractIdFromHeader
+import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.bottari.BottariResponse
 import com.bottari.data.model.bottari.CreateBottariRequest
 import com.bottari.data.model.bottari.FetchBottariesResponse
 import com.bottari.data.model.bottari.UpdateBottariTitleRequest
 import com.bottari.data.service.BottariService
-import com.bottari.data.util.safeApiCall
 
 class BottariRemoteDataSourceImpl(
     private val bottariService: BottariService,
