@@ -13,7 +13,7 @@ interface BottariRemoteDataSource {
         createBottariRequest: CreateBottariRequest,
     ): Result<Long?>
 
-    suspend fun findBottari(
+    suspend fun fetchBottariDetail(
         id: Long,
         ssaid: String,
     ): Result<BottariResponse>

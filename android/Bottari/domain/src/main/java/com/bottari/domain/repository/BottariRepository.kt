@@ -6,7 +6,7 @@ import com.bottari.domain.model.bottari.BottariDetail
 interface BottariRepository {
     suspend fun fetchBottaries(ssaid: String): Result<List<Bottari>>
 
-    suspend fun findBottari(
+    suspend fun fetchBottariDetail(
         id: Long,
         ssaid: String,
     ): Result<BottariDetail>
