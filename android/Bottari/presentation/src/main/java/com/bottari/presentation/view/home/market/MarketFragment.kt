@@ -58,6 +58,7 @@ class MarketFragment :
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            toggleLoadingIndicator(uiState.isLoading)
             adapter.submitList(uiState.templates)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiState ->
