@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
                 .message(exception.getMessage())
                 .at(request.getRequestURI())
                 .build();
-        log.info(logEntry.toLogString());
+        log.warn(logEntry.toLogString());
     }
 
     private void doLog(
@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
                 .at(request.getRequestURI())
                 .stackTrace(getStackTrace(exception))
                 .build();
-        log.info(logEntry.toLogString());
+        log.error(logEntry.toLogString());
     }
 
     private String getStackTrace(final Exception exception) {
