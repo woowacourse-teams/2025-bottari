@@ -9,6 +9,7 @@ import android.view.Window
 import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.isVisible
 import com.bottari.presentation.databinding.DialogCustomBinding
 
 class CustomAlertDialog private constructor(
@@ -73,7 +74,7 @@ class CustomAlertDialog private constructor(
     ): CustomAlertDialog {
         binding.btnDialogCustomPositive.apply {
             setText(resId)
-            visibility = if (visible) View.VISIBLE else View.GONE
+            isVisible = visible
             textColor?.let { setTextColor(it) }
             backgroundColor?.let { setBackgroundColor(it) }
         }
