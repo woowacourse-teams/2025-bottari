@@ -67,6 +67,11 @@
 
     <!-- Common: 공통 버튼 텍스트 -->
     <string name="common_confirm_btn_text">확인</string>
+    <string name="common_yes_btn_text">예</string>
+    <string name="common_no_btn_text">아니오</string>
+
+    <!-- Common: 공통 다이얼로그 텍스트-->
+    <string name="common_alert_title_text">경고</string>
 
     <!-- Common: 접근성 -->
     <string name="common_previous_btn_description">뒤로가기 버튼</string>
@@ -89,6 +94,10 @@
     <string name="bottari_item_alarm_repeat_everyday_text">매일 알람</string>
     <string name="bottari_item_alarm_repeat_everyweek_text">매주 알람</string>
     <string name="bottari_item_status_format">%d/%d</string>
+
+    <!-- bottari Item unsaved dialog-->
+    <string name="bottari_item_unsaved_dialog_description_text">저장하지 않고 나가시겠습니까?</string>
+
 
     <!-- Setting -->
     <string name="setting_toolbar_title_text">설정</string>
