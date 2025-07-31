@@ -12,59 +12,66 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
-import com.bottari.presentation.base.UiState
+import com.bottari.presentation.common.event.SingleLiveEvent
+import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
-import com.bottari.presentation.model.BottariUiModel
 import kotlinx.coroutines.launch
 
 class BottariViewModel(
     stateHandle: SavedStateHandle,
     private val fetchBottariesUseCase: FetchBottariesUseCase,
-    private val deleteBottarieUseCase: DeleteBottariUseCase,
+    private val deleteBottariUseCase: DeleteBottariUseCase,
 ) : ViewModel() {
-    private val ssaid: String by lazy { stateHandle.get<String>(EXTRA_SSAID)!! }
-    private val _bottaries: MutableLiveData<UiState<List<BottariUiModel>>> =
-        MutableLiveData(UiState.Loading)
-    val bottaries: LiveData<UiState<List<BottariUiModel>>> get() = _bottaries
+    private val ssaid: String = stateHandle.get<String>(KEY_SSAID)!!
+    private val _uiState: MutableLiveData<BottariUiState> = MutableLiveData(BottariUiState())
+    val uiState: LiveData<BottariUiState> get() = _uiState
 
-    private val _deleteBottariState: MutableLiveData<UiState<Unit>> = MutableLiveData(UiState.Loading)
-    val deleteBottariState: LiveData<UiState<Unit>> get() = _deleteBottariState
+    private val _uiEvent: SingleLiveEvent<BottariUiEvent> = SingleLiveEvent()
+    val uiEvent: LiveData<BottariUiEvent> get() = _uiEvent
 
     init {
         fetchBottaries()
     }
 
     fun fetchBottaries() {
+        _uiState.update { copy(isLoading = true) }
+
         viewModelScope.launch {
             fetchBottariesUseCase(ssaid)
                 .onSuccess { bottaries ->
-                    val bottariUiModels = bottaries.map { bottari -> bottari.toUiModel() }
-                    _bottaries.value = UiState.Success(bottariUiModels)
+                    _uiState.update {
+                        copy(
+                            isLoading = false,
+                            bottaries = bottaries.map { bottari -> bottari.toUiModel() },
+                        )
+                    }
                 }.onFailure {
-                    _bottaries.value = UiState.Failure(it.message)
+                    _uiEvent.value = BottariUiEvent.FetchBottariesFailure
                 }
         }
     }
 
     fun deleteBottari(bottariId: Long) {
         viewModelScope.launch {
-            deleteBottarieUseCase(ssaid, bottariId)
+            deleteBottariUseCase(ssaid, bottariId)
                 .onSuccess {
-                    _deleteBottariState.value = UiState.Success(Unit)
+                    fetchBottaries()
+                    _uiEvent.value = BottariUiEvent.BottariDeleteSuccess
                 }.onFailure {
-                    _deleteBottariState.value = UiState.Failure(it.message)
+                    _uiEvent.value = BottariUiEvent.BottariDeleteFailure
                 }
         }
     }
 
     companion object {
-        private const val EXTRA_SSAID = "SSAID"
+        private const val KEY_SSAID = "KEY_SSAID"
 
         fun Factory(ssaid: String): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
-                    stateHandle[EXTRA_SSAID] = ssaid
+                    stateHandle[KEY_SSAID] = ssaid
+
                     BottariViewModel(
                         stateHandle,
                         UseCaseProvider.fetchBottariesUseCase,

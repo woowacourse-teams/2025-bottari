@@ -1,7 +1,7 @@
 package com.bottari.data.network
 
 import com.bottari.data.BuildConfig
-import com.bottari.data.util.PrettyJsonLogger
+import com.bottari.data.common.util.PrettyJsonLogger
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType

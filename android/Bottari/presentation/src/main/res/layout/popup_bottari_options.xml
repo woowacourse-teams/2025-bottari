@@ -3,30 +3,32 @@
     android:id="@+id/layoutPopup"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:background="@drawable/bg_white_radius_12dp"
-    android:padding="8dp"
-    android:elevation="2dp">
+    android:elevation="2dp"
+    android:orientation="horizontal"
+    android:padding="8dp">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/btn_edit"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_edit"
-        android:contentDescription="@string/menu_title_edit" />
+        android:contentDescription="@string/menu_edit_title_text"
+        android:padding="@dimen/space_small"
+        android:src="@drawable/ic_edit" />
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="@color/gray_f8f8f8"
-        android:layout_marginHorizontal="@dimen/space_small"/>
+        android:layout_marginHorizontal="@dimen/space_small"
+        android:background="@color/gray_f8f8f8" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/btn_delete"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_delete"
-        android:contentDescription="@string/menu_title_delete" />
+        android:contentDescription="@string/menu_delete_title_text"
+        android:padding="@dimen/space_small"
+        android:src="@drawable/ic_delete" />
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.bottari.presentation.util.permission
+package com.bottari.presentation.util
 
 import android.Manifest
 import android.app.AlarmManager

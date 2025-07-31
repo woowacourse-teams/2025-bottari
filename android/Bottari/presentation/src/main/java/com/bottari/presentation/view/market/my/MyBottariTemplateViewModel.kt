@@ -12,11 +12,9 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
-import com.bottari.presentation.base.UiState
 import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.extension.takeSuccess
+import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
-import com.bottari.presentation.model.BottariTemplateUiModel
 import kotlinx.coroutines.launch
 
 class MyBottariTemplateViewModel(
@@ -24,13 +22,14 @@ class MyBottariTemplateViewModel(
     private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
     private val deleteMyBottariTemplateUseCase: DeleteMyBottariTemplateUseCase,
 ) : ViewModel() {
+    private val _uiState: MutableLiveData<MyBottariTemplateUiState> =
+        MutableLiveData(MyBottariTemplateUiState())
+    val uiState: LiveData<MyBottariTemplateUiState> get() = _uiState
+
+    private val _uiEvent: SingleLiveEvent<MyBottariTemplateUiEvent> = SingleLiveEvent()
+    val uiEvent: LiveData<MyBottariTemplateUiEvent> get() = _uiEvent
+
     private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_SSAID_MISSING)
-
-    val uiEvent: SingleLiveEvent<MyBottariTemplateUiEvent> = SingleLiveEvent()
-
-    private val _myBottariTemplates: MutableLiveData<UiState<List<BottariTemplateUiModel>>> =
-        MutableLiveData(UiState.Loading)
-    val myBottariTemplates: LiveData<UiState<List<BottariTemplateUiModel>>> get() = _myBottariTemplates
 
     init {
         fetchMyBottariTemplates()
@@ -40,29 +39,25 @@ class MyBottariTemplateViewModel(
         viewModelScope.launch {
             deleteMyBottariTemplateUseCase(ssaid, bottariTemplateId)
                 .onSuccess {
-                    val newTemplates = currentTemplates().filterNot { it.id == bottariTemplateId }
-                    _myBottariTemplates.value = UiState.Success(newTemplates)
-                    uiEvent.emit(MyBottariTemplateUiEvent.DELETE_MY_TEMPLATE_SUCCESS)
+                    _uiState.update { copy(bottariTemplates = bottariTemplates.filterNot { it.id == bottariTemplateId }) }
+                    _uiEvent.value = MyBottariTemplateUiEvent.DeleteMyTemplateSuccess
                 }.onFailure {
-                    uiEvent.emit(MyBottariTemplateUiEvent.DELETE_MY_TEMPLATE_FAILURE)
+                    _uiEvent.value = MyBottariTemplateUiEvent.DeleteMyTemplateFailure
                 }
         }
     }
 
     private fun fetchMyBottariTemplates() {
-        _myBottariTemplates.value = UiState.Loading
+        _uiState.update { copy(isLoading = true) }
 
         viewModelScope.launch {
             fetchMyBottariTemplatesUseCase(ssaid)
-                .onSuccess { templates ->
-                    _myBottariTemplates.value = UiState.Success(templates.map { it.toUiModel() })
-                }.onFailure { error ->
-                    _myBottariTemplates.value = UiState.Failure(error.message)
-                }
+                .onSuccess { _uiState.update { copy(bottariTemplates = it.map { it.toUiModel() }) } }
+                .onFailure { _uiEvent.value = MyBottariTemplateUiEvent.FetchMyTemplateFailure }
+
+            _uiState.update { copy(isLoading = false) }
         }
     }
-
-    private fun currentTemplates(): List<BottariTemplateUiModel> = _myBottariTemplates.value?.takeSuccess() ?: emptyList()
 
     companion object {
         private const val KEY_SSAID = "KEY_SSAID"

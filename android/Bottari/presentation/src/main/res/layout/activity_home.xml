@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:contentInsetStart="@dimen/space_x_large"
-        android:title="@string/home_nav_bottari_title"
+        android:title="@string/home_nav_bottari_title_text"
         android:titleTextColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/fcv_home"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,7 +23,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="end"
-            android:contentDescription="@string/setting_button_description"
+            android:contentDescription="@string/common_setting_btn_description"
             android:padding="@dimen/space_small"
             android:src="@drawable/btn_setting" />
     </Toolbar>

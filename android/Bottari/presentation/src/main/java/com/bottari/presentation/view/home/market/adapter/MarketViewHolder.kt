@@ -52,7 +52,7 @@ class MarketViewHolder private constructor(
             return fullText
         }
         val totalItemCount = itemNames.size
-        val suffix = context.getString(R.string.template_items_name_text, totalItemCount)
+        val suffix = context.getString(R.string.common_format_template_items, totalItemCount)
         val fittingNames =
             itemNames
                 .indices

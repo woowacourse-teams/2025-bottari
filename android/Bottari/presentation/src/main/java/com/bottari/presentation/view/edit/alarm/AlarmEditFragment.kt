@@ -9,16 +9,14 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseFragment
-import com.bottari.presentation.base.UiState
 import com.bottari.presentation.common.ItemSpacingDecoration
+import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.getParcelableCompat
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentAlarmEditBinding
-import com.bottari.presentation.extension.getParcelableCompat
-import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.view.edit.alarm.adapter.DayOfWeekAdapter
-import com.google.android.material.snackbar.Snackbar
 import com.shawnlin.numberpicker.NumberPicker
 import java.time.LocalDate
 import java.time.LocalTime
@@ -69,12 +67,10 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
     private inline fun <T> Fragment.safeArgument(block: Bundle.() -> T): T? = runCatching { requireArguments().block() }.getOrNull()
 
     private fun setupObserver() {
-        viewModel.alarm.observe(viewLifecycleOwner) { alarm ->
-            updateAlarmTimePickers(alarm.time)
-            updateAlarmDatePickers(alarm.date)
-            adapter.submitList(alarm.daysOfWeek)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            handleAlarmState(uiState.alarm)
         }
-        viewModel.saveState.observe(viewLifecycleOwner, ::handleSaveState)
+        viewModel.uiEvent.observe(viewLifecycleOwner, ::handleAlarmEvent)
     }
 
     private fun setupUI() {
@@ -99,6 +95,29 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
         setupAlarmTypeSwitchers()
     }
 
+    private fun handleAlarmState(alarm: AlarmUiModel) {
+        updateAlarmTimePickers(alarm.time)
+        updateAlarmDatePickers(alarm.date)
+        adapter.submitList(alarm.daysOfWeek)
+    }
+
+    private fun handleAlarmEvent(uiEvent: AlarmUiEvent) {
+        when (uiEvent) {
+            AlarmUiEvent.AlarmCreateSuccess -> {
+                showSnackbar(R.string.alarm_edit_create_success_text)
+                parentFragmentManager.popBackStack()
+            }
+
+            AlarmUiEvent.AlarmCreateFailure -> showSnackbar(R.string.alarm_edit_create_failure_text)
+            AlarmUiEvent.AlarmSaveSuccess -> {
+                showSnackbar(R.string.alarm_edit_save_success_text)
+                parentFragmentManager.popBackStack()
+            }
+
+            AlarmUiEvent.AlarmSaveFailure -> showSnackbar(R.string.alarm_edit_save_failure_text)
+        }
+    }
+
     private fun updateAlarmTimePickers(alarmTime: LocalTime) {
         val hour = alarmTime.hour
         val minute = alarmTime.minute
@@ -120,18 +139,6 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
                     minutePicker,
                 )
             }
-    }
-
-    private fun handleSaveState(uiState: UiState<Unit>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> {
-                showSnackbar(R.string.alarm_edit_save_success_text, Snackbar.LENGTH_SHORT)
-                parentFragmentManager.popBackStack()
-            }
-
-            is UiState.Failure -> Unit
-        }
     }
 
     private fun setupAlarmDatePickers() {

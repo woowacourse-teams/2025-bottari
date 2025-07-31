@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_median"
         android:layout_marginTop="@dimen/space_median"
-        android:text="@string/alarm_time_text"
+        android:text="@string/alarm_edit_time_title"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

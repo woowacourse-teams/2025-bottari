@@ -13,7 +13,8 @@ import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.usecase.alarm.CreateAlarmUseCase
 import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
-import com.bottari.presentation.base.UiState
+import com.bottari.presentation.common.event.SingleLiveEvent
+import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.AlarmMapper.toDomain
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
@@ -27,18 +28,18 @@ class AlarmEditViewModel(
     private val createAlarmUseCase: CreateAlarmUseCase,
     private val saveAlarmUseCase: SaveAlarmUseCase,
 ) : ViewModel() {
-    private val _alarm: MutableLiveData<AlarmUiModel> =
-        MutableLiveData(stateHandle[EXTRA_ALARM] ?: AlarmUiModel.DEFAULT_ALARM_UI_MODEL)
-    val alarm: LiveData<AlarmUiModel> get() = _alarm
+    private val _uiState: MutableLiveData<AlarmUiState> =
+        MutableLiveData(AlarmUiState(stateHandle[KEY_ALARM] ?: AlarmUiModel.DEFAULT_ALARM_UI_MODEL))
+    val uiState: LiveData<AlarmUiState> get() = _uiState
 
-    private val _saveState: MutableLiveData<UiState<Unit>> = MutableLiveData()
-    val saveState: LiveData<UiState<Unit>> get() = _saveState
+    private val _uiEvent: SingleLiveEvent<AlarmUiEvent> = SingleLiveEvent()
+    val uiEvent: LiveData<AlarmUiEvent> get() = _uiEvent
 
-    private val ssaid: String = stateHandle[EXTRA_SSAID] ?: error(ERROR_REQUIRE_SSAID)
-    private val bottariId: Long = stateHandle[EXTRA_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
+    private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
+    private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
     fun updateAlarm() {
-        val currentAlarm = _alarm.value ?: return
+        val currentAlarm = _uiState.value?.alarm ?: return
         if (currentAlarm.type == AlarmTypeUiModel.EVERYWEEK_REPEAT &&
             currentAlarm.daysOfWeek.all { it.isChecked.not() }
         ) {
@@ -53,40 +54,48 @@ class AlarmEditViewModel(
     }
 
     fun updateAlarmType(alarmTypeUiModel: AlarmTypeUiModel) {
-        val currentAlarm = _alarm.value ?: return
-        _alarm.value = currentAlarm.copy(type = alarmTypeUiModel)
+        _uiState.update {
+            val newAlarm = alarm.copy(type = alarmTypeUiModel)
+            copy(alarm = newAlarm)
+        }
     }
 
     fun updateAlarmTime(time: LocalTime) {
-        val currentAlarm = _alarm.value ?: return
-        _alarm.value = currentAlarm.copy(time = time)
+        _uiState.update {
+            val newAlarm = alarm.copy(time = time)
+            copy(alarm = newAlarm)
+        }
     }
 
     fun updateAlarmDate(date: LocalDate) {
-        val currentAlarm = _alarm.value ?: return
-        if (currentAlarm.type != AlarmTypeUiModel.NON_REPEAT) return
-        _alarm.value = currentAlarm.copy(date = date)
+        _uiState.update {
+            if (alarm.type != AlarmTypeUiModel.NON_REPEAT) return
+            val newAlarm = alarm.copy(date = date)
+            copy(alarm = newAlarm)
+        }
     }
 
     fun updateDaysOfWeek(dayOfWeek: DayOfWeekUiModel) {
-        val currentAlarm = _alarm.value ?: return
-        _alarm.value =
-            currentAlarm.copy(
-                daysOfWeek =
-                    currentAlarm.daysOfWeek.map {
-                        if (it.dayOfWeek != dayOfWeek.dayOfWeek) return@map it
-                        it.copy(isChecked = !it.isChecked)
-                    },
-            )
+        _uiState.update {
+            val newAlarm =
+                alarm.copy(
+                    daysOfWeek =
+                        alarm.daysOfWeek.map {
+                            if (it.dayOfWeek != dayOfWeek.dayOfWeek) return@map it
+                            it.copy(isChecked = !it.isChecked)
+                        },
+                )
+            copy(alarm = newAlarm)
+        }
     }
 
     private fun createAlarm(alarm: Alarm) {
         viewModelScope.launch {
             createAlarmUseCase(ssaid, bottariId, alarm)
                 .onSuccess {
-                    _saveState.value = UiState.Success(Unit)
-                }.onFailure { error ->
-                    _saveState.value = UiState.Failure(error.message)
+                    _uiEvent.value = AlarmUiEvent.AlarmCreateSuccess
+                }.onFailure {
+                    _uiEvent.value = AlarmUiEvent.AlarmCreateFailure
                 }
         }
     }
@@ -95,17 +104,17 @@ class AlarmEditViewModel(
         viewModelScope.launch {
             saveAlarmUseCase(ssaid, alarm.id!!, alarm)
                 .onSuccess {
-                    _saveState.value = UiState.Success(Unit)
-                }.onFailure { error ->
-                    _saveState.value = UiState.Failure(error.message)
+                    _uiEvent.value = AlarmUiEvent.AlarmSaveSuccess
+                }.onFailure {
+                    _uiEvent.value = AlarmUiEvent.AlarmSaveFailure
                 }
         }
     }
 
     companion object {
-        private const val EXTRA_SSAID = "EXTRA_SSAID"
-        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
-        private const val EXTRA_ALARM = "EXTRA_ALARM"
+        private const val KEY_SSAID = "KEY_SSAID"
+        private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
+        private const val KEY_ALARM = "KEY_ALARM"
         private const val ERROR_REQUIRE_SSAID = "[ERROR] SSAID가 존재하지 않습니다."
         private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
 
@@ -117,9 +126,9 @@ class AlarmEditViewModel(
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
-                    stateHandle[EXTRA_ALARM] = alarm
-                    stateHandle[EXTRA_SSAID] = ssaid
-                    stateHandle[EXTRA_BOTTARI_ID] = bottariId
+                    stateHandle[KEY_ALARM] = alarm
+                    stateHandle[KEY_SSAID] = ssaid
+                    stateHandle[KEY_BOTTARI_ID] = bottariId
                     AlarmEditViewModel(
                         stateHandle = stateHandle,
                         createAlarmUseCase = UseCaseProvider.createAlarmUseCase,

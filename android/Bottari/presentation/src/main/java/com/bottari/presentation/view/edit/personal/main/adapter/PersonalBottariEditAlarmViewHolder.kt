@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
+import com.bottari.presentation.common.extension.formatWithPattern
 import com.bottari.presentation.databinding.ItemChecklistAlarmBinding
-import com.bottari.presentation.extension.formatWithPattern
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import java.time.format.TextStyle
@@ -15,13 +15,13 @@ class PersonalBottariEditAlarmViewHolder private constructor(
     private val binding: ItemChecklistAlarmBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val dateFormat: String by lazy {
-        itemView.context.getString(R.string.bottari_item_alarm_date_format)
+        itemView.context.getString(R.string.common_format_date_alarm)
     }
     private val timeFormat: String by lazy {
-        itemView.context.getString(R.string.bottari_item_alarm_time_format)
+        itemView.context.getString(R.string.common_format_time_alarm)
     }
     private val separator: String by lazy {
-        itemView.context.getString(R.string.bottari_item_alarm_info_separator)
+        itemView.context.getString(R.string.common_separator_text)
     }
 
     fun bind(item: AlarmUiModel) {
@@ -33,7 +33,7 @@ class PersonalBottariEditAlarmViewHolder private constructor(
 
             AlarmTypeUiModel.EVERYDAY_REPEAT -> {
                 binding.tvChecklistAlarmType.text =
-                    itemView.context.getString(R.string.bottari_item_alarm_type_everyday_repeat)
+                    itemView.context.getString(R.string.bottari_item_alarm_repeat_everyday_text)
                 binding.tvChecklistAlarmTime.text = item.time.formatWithPattern(timeFormat)
             }
 
@@ -47,7 +47,7 @@ class PersonalBottariEditAlarmViewHolder private constructor(
     private fun AlarmUiModel.formatted(): String {
         val checkedDays = daysOfWeek.filter { it.isChecked }
         return buildString {
-            append(itemView.context.getString(R.string.bottari_item_alarm_type_everyweek_repeat))
+            append(itemView.context.getString(R.string.bottari_item_alarm_repeat_everyweek_text))
             append(separator)
             append(
                 checkedDays.joinToString { dayOfWeek ->

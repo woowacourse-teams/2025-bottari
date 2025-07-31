@@ -1,4 +1,4 @@
-package com.bottari.presentation.extension
+package com.bottari.presentation.common.extension
 
 import android.content.Intent
 import android.os.Build
@@ -26,3 +26,11 @@ inline fun <reified T : Parcelable> Bundle?.getParcelableCompat(key: String): T 
         }
     return result ?: error("Parcelable extra '$key' not found in bundle")
 }
+
+inline fun <reified T : Parcelable> Bundle?.getParcelableArrayListCompat(key: String): ArrayList<T>? =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        this?.getParcelableArrayList(key, T::class.java)
+    } else {
+        @Suppress("DEPRECATION")
+        this?.getParcelableArrayList(key)
+    }

@@ -1,7 +1,7 @@
 package com.bottari.data.model.bottari
 
-import com.bottari.data.util.LocalDateSerializer
-import com.bottari.data.util.LocalTimeSerializer
+import com.bottari.data.common.util.LocalDateSerializer
+import com.bottari.data.common.util.LocalTimeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDate

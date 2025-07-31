@@ -1,8 +1,8 @@
 package com.bottari.data.source.remote
 
+import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.bottari.AlarmRequest
 import com.bottari.data.service.AlarmService
-import com.bottari.data.util.safeApiCall
 
 class AlarmRemoteDataSourceImpl(
     private val alarmService: AlarmService,

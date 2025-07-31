@@ -12,9 +12,9 @@ import android.view.ViewGroup
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import com.bottari.presentation.base.UiState
+import com.bottari.presentation.R
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.DialogBottariRenameBinding
-import com.bottari.presentation.extension.getSSAID
 import com.google.android.material.snackbar.Snackbar
 
 class BottariRenameDialog :
@@ -46,6 +46,7 @@ class BottariRenameDialog :
         super.onViewCreated(view, savedInstanceState)
         setupObserver()
         setupListener()
+        binding.etBottariRenameName.setText(viewModel.uiState.value?.title)
     }
 
     override fun onStart() {
@@ -78,10 +79,19 @@ class BottariRenameDialog :
         val alphaValue = if (isEnabled) ENABLED_ALPHA_VALUE else DISABLED_ALPHA_VALUE
         binding.btnBottariRename.isClickable = isEnabled
         binding.btnBottariRename.alpha = alphaValue
+        viewModel.cacheTitleInput(s.toString())
     }
 
     private fun setupObserver() {
-        viewModel.saveBottariTitleSuccess.observe(viewLifecycleOwner, ::handleRenameState)
+        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+            when (uiEvent) {
+                BottariRenameUiEvent.SaveBottariTitleSuccess -> handleRenameState()
+                BottariRenameUiEvent.SaveBottariTitleFailure ->
+                    Snackbar
+                        .make(binding.root, getString(R.string.bottari_rename_failure_text), Snackbar.LENGTH_SHORT)
+                        .show()
+            }
+        }
     }
 
     private fun setupListener() {
@@ -106,22 +116,12 @@ class BottariRenameDialog :
         }
     }
 
-    private fun handleRenameState(uiState: UiState<Unit?>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> {
-                parentFragmentManager.setFragmentResult(
-                    SAVE_BOTTARI_TITLE_RESULT_KEY,
-                    Bundle(),
-                )
-                dismiss()
-            }
-            is UiState.Failure -> {
-                Snackbar
-                    .make(binding.root, uiState.message.toString(), Snackbar.LENGTH_SHORT)
-                    .show()
-            }
-        }
+    private fun handleRenameState() {
+        parentFragmentManager.setFragmentResult(
+            SAVE_BOTTARI_TITLE_RESULT_KEY,
+            Bundle(),
+        )
+        dismiss()
     }
 
     companion object {

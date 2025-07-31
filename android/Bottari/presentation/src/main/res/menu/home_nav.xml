@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_market" android:icon="@drawable/btn_market" android:title="@string/home_nav_market_title"/>
-    <item android:id="@+id/menu_bottari" android:icon="@drawable/btn_home" android:title="@string/home_nav_bottari_title"/>
-    <item android:id="@+id/menu_profile" android:icon="@drawable/btn_person" android:title="@string/home_nav_profile_title"/>
+    <item android:id="@+id/menu_market" android:icon="@drawable/btn_market" android:title="@string/home_nav_market_title_text"/>
+    <item android:id="@+id/menu_bottari" android:icon="@drawable/btn_home" android:title="@string/home_nav_bottari_title_text"/>
+    <item android:id="@+id/menu_profile" android:icon="@drawable/btn_person" android:title="@string/home_nav_profile_title_text"/>
 </menu>

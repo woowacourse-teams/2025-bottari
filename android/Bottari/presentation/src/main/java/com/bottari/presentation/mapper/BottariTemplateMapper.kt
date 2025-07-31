@@ -14,7 +14,7 @@ object BottariTemplateMapper {
             author = author,
         )
 
-    private fun BottariTemplateItem.toUiModel(): BottariTemplateItemUiModel =
+    fun BottariTemplateItem.toUiModel(): BottariTemplateItemUiModel =
         BottariTemplateItemUiModel(
             id = id,
             name = name,

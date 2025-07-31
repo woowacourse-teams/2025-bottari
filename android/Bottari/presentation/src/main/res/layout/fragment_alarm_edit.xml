@@ -16,7 +16,7 @@
             android:id="@+id/btn_close"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="@string/alarm_edit_close_button_description"
+            android:contentDescription="@string/common_close_btn_description"
             android:padding="@dimen/space_small"
             android:src="@drawable/btn_close" />
 
@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/alarm_edit_text"
+            android:text="@string/alarm_edit_title_text"
             android:textColor="@color/black" />
 
         <TextView
@@ -36,7 +36,7 @@
             android:layout_height="48dp"
             android:layout_gravity="end"
             android:gravity="center"
-            android:text="@string/alarm_edit_confirm_btn_text"
+            android:text="@string/common_confirm_btn_text"
             android:textColor="@color/black" />
     </Toolbar>
 
@@ -71,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/space_x_small"
-                    android:text="@string/alarm_edit_type_text"
+                    android:text="@string/alarm_edit_type_title_text"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -86,7 +86,7 @@
                     android:paddingVertical="@dimen/space_median"
                     android:paddingStart="@dimen/space_median"
                     android:paddingEnd="0dp"
-                    android:text="@string/alarm_edit_type_no_repeat_text"
+                    android:text="@string/alarm_edit_type_none_text"
                     android:textColor="@color/black"
                     app:layout_constraintTop_toBottomOf="@id/tv_alarm_type" />
 
@@ -104,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_median"
                     android:layout_marginTop="@dimen/space_median"
-                    android:text="@string/alarm_date_text"
+                    android:text="@string/alarm_edit_date_title_text"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_alarm_type_no_repeat" />
@@ -151,7 +151,7 @@
                     android:paddingVertical="@dimen/space_median"
                     android:paddingStart="@dimen/space_median"
                     android:paddingEnd="0dp"
-                    android:text="@string/alarm_edit_type_everyday_repeat_text"
+                    android:text="@string/alarm_edit_type_everyday_text"
                     android:textColor="@color/black"
                     app:layout_constraintTop_toBottomOf="@id/layout_no_repeat_alarm_time" />
 
@@ -179,7 +179,7 @@
                     android:paddingVertical="@dimen/space_median"
                     android:paddingStart="@dimen/space_median"
                     android:paddingEnd="0dp"
-                    android:text="@string/alarm_edit_type_everyweek_repeat_text"
+                    android:text="@string/alarm_edit_type_everyweek_text"
                     android:textColor="@color/black"
                     app:layout_constraintTop_toBottomOf="@id/layout_everyday_repeat_alarm_time" />
 
@@ -197,7 +197,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_median"
                     android:layout_marginTop="@dimen/space_median"
-                    android:text="@string/alarm_day_of_week_text"
+                    android:text="@string/alarm_edit_day_of_week_title_text"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_alarm_type_everyweek_repeat" />
@@ -238,7 +238,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/space_x_small"
-                    android:text="@string/alarm_location_text"
+                    android:text="@string/alarm_edit_location_title_text"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -247,7 +247,7 @@
                     android:id="@+id/btn_alarm_current_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/current_location_button_description"
+                    android:contentDescription="@string/alarm_edit_location_btn_description"
                     android:src="@drawable/btn_location"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

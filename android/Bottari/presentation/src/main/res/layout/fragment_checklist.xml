@@ -12,5 +12,4 @@
         android:fadingEdgeLength="8dp"
         android:requiresFadingEdge="vertical"
         tools:listitem="@layout/item_checklist" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

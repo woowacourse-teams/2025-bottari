@@ -1,4 +1,4 @@
-package com.bottari.data.extension
+package com.bottari.data.common.extension
 
 import retrofit2.Response
 

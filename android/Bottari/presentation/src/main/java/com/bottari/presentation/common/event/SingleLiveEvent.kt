@@ -2,31 +2,29 @@ package com.bottari.presentation.common.event
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import java.util.concurrent.atomic.AtomicBoolean
 
-class SingleLiveEvent<T> : MutableLiveData<Event<T>>() {
-    fun observeEvent(
+class SingleLiveEvent<T> : MutableLiveData<T>() {
+    private val pending = AtomicBoolean(false)
+
+    override fun observe(
         owner: LifecycleOwner,
-        action: (T) -> Unit,
+        observer: Observer<in T>,
     ) {
-        observe(owner) { event ->
-            event.getContentIfNotHandled()?.let(action)
+        super.observe(owner) { t ->
+            if (pending.compareAndSet(true, false)) {
+                observer.onChanged(t)
+            }
         }
     }
 
-    fun observeAlways(
-        owner: LifecycleOwner,
-        action: (T) -> Unit,
-    ) {
-        observe(owner) { event ->
-            event.peekContent()?.let(action)
-        }
+    override fun setValue(value: T?) {
+        pending.set(true)
+        super.setValue(value)
     }
 
-    fun emit(value: T?) {
-        this.value = Event(value)
-    }
-
-    fun postEmit(value: T?) {
-        postValue(Event(value))
+    fun call() {
+        value = null
     }
 }

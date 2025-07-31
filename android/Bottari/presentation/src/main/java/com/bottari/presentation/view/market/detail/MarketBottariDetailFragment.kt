@@ -2,12 +2,12 @@ package com.bottari.presentation.view.market.detail
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import com.bottari.presentation.base.BaseFragment
-import com.bottari.presentation.base.UiState
+import com.bottari.presentation.R
+import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentMarketBottariDetailBinding
-import com.bottari.presentation.extension.getSSAID
-import com.bottari.presentation.model.BottariTemplateUiModel
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.market.detail.adapter.MarketBottariDetailAdapter
 
@@ -15,7 +15,7 @@ class MarketBottariDetailFragment : BaseFragment<FragmentMarketBottariDetailBind
     private val viewModel: MarketBottariDetailViewModel by viewModels {
         MarketBottariDetailViewModel.Factory(
             ssaid = requireContext().getSSAID(),
-            bottarID = getBottariId(),
+            templateId = getBottariId(),
         )
     }
     private val adapter by lazy { MarketBottariDetailAdapter() }
@@ -31,13 +31,25 @@ class MarketBottariDetailFragment : BaseFragment<FragmentMarketBottariDetailBind
     }
 
     private fun setupObserver() {
-        viewModel.bottariTemplate.observe(viewLifecycleOwner, ::handleBottariTemplateState)
-        viewModel.createSuccess.observe(viewLifecycleOwner, ::handleTakeSuccess)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            binding.tvBottariTitle.text = uiState.title
+            adapter.submitList(uiState.items)
+        }
+        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+            when (uiEvent) {
+                MarketBottariDetailUiEvent.FetchBottariDetailFailure -> showSnackbar(R.string.market_detail_fetch_failure_text)
+                MarketBottariDetailUiEvent.TakeBottariTemplateFailure -> showSnackbar(R.string.market_detail_take_failure_text)
+                is MarketBottariDetailUiEvent.TakeBottariTemplateSuccess ->
+                    navigateBottariEdit(
+                        uiEvent.bottariId,
+                    )
+            }
+        }
     }
 
     private fun setupUI() {
         binding.rvMarketBottariDetail.adapter = adapter
-        if (getIsMyTemplate()) binding.btnTakeTemplate.visibility = View.GONE
+        if (getIsMyTemplate()) binding.btnTakeTemplate.isVisible = false
     }
 
     private fun setupListener() {
@@ -45,7 +57,7 @@ class MarketBottariDetailFragment : BaseFragment<FragmentMarketBottariDetailBind
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         binding.btnTakeTemplate.setOnClickListener {
-            takeBottariTemplate()
+            viewModel.takeBottariTemplate()
         }
     }
 
@@ -53,34 +65,10 @@ class MarketBottariDetailFragment : BaseFragment<FragmentMarketBottariDetailBind
 
     private fun getIsMyTemplate(): Boolean = requireArguments().getBoolean(ARG_IS_MY_TEMPLATE, false)
 
-    private fun takeBottariTemplate() {
-        viewModel.takeBottariTemplate()
-    }
-
     private fun navigateBottariEdit(bottariId: Long?) {
         if (bottariId == null) return
-        startActivity(PersonalBottariEditActivity.newIntent(requireContext(), bottariId))
+        startActivity(PersonalBottariEditActivity.newIntent(requireContext(), bottariId, true))
         requireActivity().finish()
-    }
-
-    private fun handleBottariTemplateState(uiState: UiState<BottariTemplateUiModel>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> {
-                binding.tvBottariTitle.text = uiState.data.title
-                adapter.submitList(uiState.data.items)
-            }
-
-            is UiState.Failure -> Unit
-        }
-    }
-
-    private fun handleTakeSuccess(uiState: UiState<Long?>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> navigateBottariEdit(uiState.data)
-            is UiState.Failure -> Unit
-        }
     }
 
     companion object {

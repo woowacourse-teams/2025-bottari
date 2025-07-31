@@ -1,112 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--  Home Bottom Navigation  -->
-    <string name="home_nav_market_title">마켓플레이스</string>
-    <string name="home_nav_bottari_title">나의 보따리</string>
-    <string name="home_nav_profile_title">프로필</string>
+
+    <!--
+        [String Resource 네이밍 컨벤션]
+
+        이름 형식: [접두사]_[기능 요소]_[의미 접미사]
+
+        - 접두사(화면 또는 범위):
+            alarm, bottari, checklist, market, profile, common 등
+        - 기능 요소(역할 또는 위치):
+            btn (버튼), title (타이틀), text (일반 문구), description (접근성/설명),
+            hint (입력 안내), dialog (다이얼로그), format (포맷), item (리스트 항목) 등
+        - 의미 접미사:
+            success, failure, hint, text, description 등 맥락에 맞게 부착
+
+        예시:
+            - bottari_create_dialog_title_text
+            - common_permission_dialog_message_text
+            - checklist_check_failure_text
+            - item_delete_btn_description
+
+        ※ 공통 요소는 common_ 접두사 사용
+        ※ 접근성 설명은 [접두사]_[기능 요소]_description
+        ※ Home Navigation은 home_nav_ 접두사 사용
+
+        [라이팅 컨벤션]
+
+        - 톤 & 매너: 따뜻하고 친절한 말투 (부담 없이 안내하는 어조)
+        - 실패/성공 메시지:
+            ✗ 저장에 실패했어요 → ✔ 저장하지 못했어요
+            ✗ 저장되었습니다 → ✔ 저장했어요!
+        - 사용자 행위 유도 시:
+            ✗ 이름을 작성해주세요 → ✔ 이름을 입력해 주세요
+        - 다이얼로그 메시지:
+            ✗ 이동하시겠어요? → ✔ 설정 화면으로 이동할까요?
+        - 텍스트는 모두 ‘말하듯 자연스럽게’ 작성
+        - 중복되는 표현 최소화, 지나치게 기계적인 단어 사용 지양
+
+        예시:
+            - common_fetch_failure_text: 정보 불러오지 못했어요
+            - profile_nickname_hint_text: 닉네임을 입력해 주세요
+            - alarm_edit_confirm_btn_text: 알람 저장
+            - bottari_create_btn_description: 보따리 만들기 버튼
+    -->
+
+    <!-- Common: 실패/성공 메시지 -->
+    <string name="common_save_failure_text">저장하지 못했어요</string>
+    <string name="common_save_success_text">저장했어요!</string>
+    <string name="common_fetch_failure_text">정보를 불러오지 못했어요</string>
+    <string name="common_permission_failure_text">권한 요청이 실패했어요</string>
+
+    <!-- Common: 권한 다이얼로그 -->
+    <string name="common_permission_dialog_title_text">권한이 필요해요</string>
+    <string name="common_permission_dialog_message_text">앱 기능을 사용하려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
+    <string name="common_permission_dialog_positive_btn_text">설정으로 가기</string>
+    <string name="common_permission_dialog_negative_btn_text">나중에 하기</string>
+
+    <!-- Common: 포맷 -->
+    <string name="common_format_quantity_status">%d개 중 %d개</string>
+    <string name="common_format_date_alarm">M월 d일</string>
+    <string name="common_format_time_alarm">HH:mm</string>
+    <string name="common_format_template_items">\u00A0외 %d개</string>
+    <string name="common_format_checklist_swipe_status">%d개 중 %d개 남았어요!</string>
+    <string name="common_item_title_prefix_format">•\u00A0\u00A0%s</string>
+    <string name="common_separator_text">\u00A0|\u00A0</string>
+
+    <!-- Common: 공통 버튼 텍스트 -->
+    <string name="common_confirm_btn_text">확인</string>
+
+    <!-- Common: 접근성 -->
+    <string name="common_previous_btn_description">뒤로가기 버튼</string>
+    <string name="common_setting_btn_description">설정 버튼</string>
+    <string name="common_close_btn_description">닫기 버튼</string>
+    <string name="common_option_btn_description">옵션 버튼</string>
+
+    <!-- Home Navigation -->
+    <string name="home_nav_market_title_text">모두의 보따리</string>
+    <string name="home_nav_bottari_title_text">나의 보따리</string>
+    <string name="home_nav_profile_title_text">내 정보</string>
 
     <!-- Bottari Home -->
-    <string name="bottari_fetch_bottaries_failure_text">보따리 불러오기에 실패했어요</string>
-    <string name="bottari_delete_failure_text">보따리 삭제에 실패했어요</string>"
+    <string name="bottari_home_fetch_failure_text">보따리 목록을 불러오지 못했어요</string>
+    <string name="bottari_home_fetch_bottari_failure_text">보따리를 불러오지 못했어요</string>
+    <string name="bottari_home_delete_success_text">보따리를 삭제했어요</string>
+    <string name="bottari_home_delete_failure_text">보따리를 삭제하지 못했어요</string>
 
-    <!--  Bottari Item  -->
-    <string name="bottari_item_quantity_status_format">%d/%d</string>
-    <string name="bottari_item_alarm_date_format">M월 d일</string>
-    <string name="bottari_item_alarm_time_format">HH:mm</string>
-    <string name="bottari_item_alarm_type_everyday_repeat">매일 반복</string>
-    <string name="bottari_item_alarm_type_everyweek_repeat">매주 반복</string>
-    <string name="bottari_item_alarm_info_separator">\u00A0|\u00A0</string>
-
-    <!-- Bottari Checklist -->
-    <string name="checklist_item_title_prefix">•\u00A0\u00A0%s</string>
-    <string name="swipe_checklist_not_btn_text">아직이에요</string>
-    <string name="swipe_checklist_yes_btn_text">챙겼어요</string>
-    <string name="swipe_checklist_status_text">%d개 중 %d개 남았어요!</string>
-
-    <!--  Bottari Create Dialog -->
-    <string name="dialog_bottari_create_title_text">보따리 이름 작성</string>
-    <string name="dialog_bottari_create_description_text">이름은 언제든지 수정할 수 있어요</string>
-    <string name="dialog_bottari_create_name_hint">이름을 입력하세요</string>
-    <string name="dialog_bottari_create_btn_text">생성하기</string>
-
-    <!-- Personal Bottari Item Edit -->
-    <string name="personal_item_edit_confirm_btn_text">확인</string>
-    <string name="personal_item_edit_hint_text">추가할 물건을 입력하세요</string>
-
-    <!--  Alarm Edit  -->
-    <string name="alarm_edit_text">알람 설정</string>
-    <string name="alarm_edit_type_text">유형</string>
-    <string name="alarm_edit_type_no_repeat_text">반복 안함</string>
-    <string name="alarm_edit_type_everyday_repeat_text">매일</string>
-    <string name="alarm_edit_type_everyweek_repeat_text">매주</string>
-    <string name="alarm_date_text">날짜</string>
-    <string name="alarm_time_text">시간</string>
-    <string name="alarm_day_of_week_text">요일</string>
-    <string name="alarm_location_text">위치</string>
-    <string name="alarm_edit_confirm_btn_text">확인</string>
-    <string name="alarm_edit_save_success_text">알람이 저장되었어요.</string>
-
-    <!-- Bottari edit item -->
-    <string name="bottari_edit_item_list_title">물건 목록</string>
-    <string name="bottari_edit_add_item_title">물건 추가</string>
-    <string name="bottari_edit_add_item_description">여기를 눌러 보따리에 물건을 추가하세요</string>
-    <string name="bottari_edit_alarm_list_title">알람</string>
-    <string name="bottari_edit_add_alarm_description">여기를 눌러 알람을 설정하세요</string>
-    <string name="bottari_edit_add_alarm_title">알람 설정</string>
-    <string name="current_location_button_description">현재 위치 버튼</string>
-    <string name="alarm_edit_close_button_description">편집 종료 버튼</string>
-    <string name="alarm_edit_permission_dialog_title_text">권한 알림</string>
-    <string name="alarm_edit_permission_dialog_message_text">"앱 기능을 사용하려면 권한이 필요해요.\n설정 화면으로 이동하시겠어요?"</string>
-    <string name="alarm_edit_exact_alarm_permission_dialog_message_text">보따리 알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동하시겠어요?</string>
-    <string name="alarm_edit_permission_dialog_positive_btn_text">이동</string>
-    <string name="alarm_edit_permission_dialog_negative_btn_text">취소</string>
-    <string name="alarm_edit_permission_failure_text">권한 요청에 실패했어요.</string>
-    <string name="personal_bottari_edit_create_template_success_text">마켓에 등록되었어요</string>
-    <string name="personal_bottari_edit_create_template_failure_text">마켓 등록에 실패했어요</string>
+    <!-- Bottari Item -->
+    <string name="bottari_item_alarm_repeat_everyday_text">매일 알람</string>
+    <string name="bottari_item_alarm_repeat_everyweek_text">매주 알람</string>
+    <string name="bottari_item_status_format">%d/%d</string>
 
     <!-- Setting -->
-    <string name="setting_toolbar_title">설정</string>
-    <string name="setting_privacy_policy">개인정보 처리 방침</string>
+    <string name="setting_toolbar_title_text">설정</string>
+    <string name="setting_privacy_policy_title_text">개인정보 처리 방침</string>
 
-    <!--  Market  -->
-    <string name="template_items_name_text">\u00A0등 %d개의 물건</string>
-    <string name="market_place_edit_text_hint">원하시는 보따리를 검색하세요!</string>
-    <string name="btn_navigate_my_bottari_template"><![CDATA[내가 올린 보따리 >]]></string>
+    <!-- Checklist -->
+    <string name="checklist_swipe_not_btn_text">아직이에요</string>
+    <string name="checklist_swipe_yes_btn_text">챙겼어요</string>
+    <string name="checklist_fetch_failure_text">체크리스트를 불러오지 못했어요</string>
+    <string name="checklist_check_failure_text">체크에 실패했어요</string>
 
-    <!-- Market Detail -->
-    <string name="btn_bottari_template_detail_receive">가져오기</string>
+    <!-- Bottari Create Dialog -->
+    <string name="bottari_create_dialog_title_text">보따리 이름을 입력해 주세요</string>
+    <string name="bottari_create_dialog_description_text">이름은 나중에 언제든지 바꿀 수 있어요</string>
+    <string name="bottari_create_dialog_name_hint_text">보따리 이름을 입력해 주세요</string>
+    <string name="bottari_create_dialog_btn_text">보따리 만들기</string>
+    <string name="bottari_create_failure_text">보따리를 만들지 못했어요</string>
+    <string name="bottari_create_default_title_text">새 보따리</string>
+    <string name="bottari_create_success_text">보따리를 만들었어요</string>
+
+    <!-- Bottari Edit Item -->
+    <string name="bottari_edit_item_list_title">내 물건</string>
+    <string name="bottari_edit_add_item_title">물건 추가하기</string>
+    <string name="bottari_edit_add_item_description_text">보따리에 물건을 추가하려면 눌러주세요</string>
+    <string name="bottari_edit_alarm_list_title">알람 목록</string>
+    <string name="bottari_edit_add_alarm_title">알람 추가하기</string>
+    <string name="bottari_edit_add_alarm_description_text">알람을 추가하려면 눌러주세요</string>
+    <string name="bottari_edit_fetch_failure_text">보따리를 불러오지 못했어요</string>
+    <string name="bottari_edit_create_template_success_text">마켓에 등록했어요</string>
+    <string name="bottari_edit_create_template_failure_text">마켓에 등록하지 못했어요</string>
+
+    <!-- Bottari Personal Item Edit -->
+    <string name="bottari_personal_item_edit_confirm_btn_text">추가하기</string>
+    <string name="bottari_personal_item_edit_hint_text">추가할 물건을 입력해 주세요</string>
+
+    <!-- Bottari Rename -->
+    <string name="bottari_rename_failure_text">이름을 바꾸지 못했어요</string>
+    <string name="bottari_rename_dialog_title_text">보따리 이름 바꾸기</string>
+    <string name="bottari_rename_dialog_btn_text">이름 저장</string>
+    <string name="bottari_rename_dialog_hint_text">새 이름을 입력해 주세요</string>
+
+    <!-- Alarm Edit -->
+    <string name="alarm_edit_title_text">알람 설정</string>
+    <string name="alarm_edit_type_title_text">반복 설정</string>
+    <string name="alarm_edit_type_none_text">반복 없음</string>
+    <string name="alarm_edit_type_everyday_text">매일</string>
+    <string name="alarm_edit_type_everyweek_text">매주</string>
+    <string name="alarm_edit_date_title_text">알람 날짜</string>
+    <string name="alarm_edit_time_title">알람 시간</string>
+    <string name="alarm_edit_day_of_week_title_text">요일 선택</string>
+    <string name="alarm_edit_location_title_text">알람 장소</string>
+    <string name="alarm_edit_save_success_text">알람을 저장했어요</string>
+    <string name="alarm_edit_save_failure_text">알람을 저장하지 못했어요</string>
+    <string name="alarm_edit_create_success_text">알람을 만들었어요</string>
+    <string name="alarm_edit_create_failure_text">알람을 만들지 못했어요</string>
+    <string name="alarm_edit_exact_alarm_permission_dialog_message_text">보따리 알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
+
+    <!-- Market -->
+    <string name="market_search_hint_text">찾고 싶은 보따리를 입력해 보세요</string>
+    <string name="market_my_template_btn"><![CDATA[내 보따리 보기 >]]></string>
+    <string name="market_fetch_template_failure_text">보따리 템플릿을 불러오지 못했어요</string>
+    <string name="market_detail_template_btn_text">이 보따리 가져오기</string>
+    <string name="market_detail_fetch_failure_text">템플릿 상세 조회에 실패했어요</string>
+    <string name="market_detail_take_failure_text">나의 보따리로 가져오는데 실패했어요</string>
 
     <!-- My Bottari Template -->
-    <string name="my_bottari_template_screen_title">내가 공유한 보따리</string>
-    <string name="my_bottari_template_screen_delete_success">내 보따리 삭제 성공</string>
-    <string name="my_bottari_template_screen_delete_failure">내 보따리 삭제 실패</string>
+    <string name="market_my_template_title">내가 등록한 보따리</string>
+    <string name="market_my_template_delete_success_text">보따리를 삭제했어요</string>
+    <string name="market_my_template_delete_failure_text">보따리를 삭제하지 못했어요</string>
+    <string name="market_my_template_fetch_failure_text">내가 올린 보따리를 불러오지 못했어요</string>
 
     <!-- Profile -->
-    <string name="profile_screen_nickname_title">닉네임</string>
-    <string name="nickname_edit_hint_text">닉네임을 입력하세요</string>
+    <string name="profile_nickname_title">닉네임</string>
+    <string name="profile_nickname_hint_text">닉네임을 입력해 주세요</string>
+    <string name="profile_fetch_failure_text">프로필 정보를 불러오지 못했어요</string>
+    <string name="profile_nickname_save_success_text">닉네임을 저장했어요</string>
+    <string name="profile_nickname_save_failure_text">닉네임을 저장하지 못했어요</string>
+    <string name="profile_invalid_nickname_rule_text">닉네임은 3~10자로 입력해 주세요</string>
 
-    <!--  Description  -->
-    <string name="bottari_item_more_button_description">보따리 옵션 버튼</string>
-    <string name="bottari_create_button_description">보따리 생성 버튼</string>
-    <string name="previous_button_description">뒤로가기 버튼</string>
-    <string name="checklist_swipe_button_description">스와이프 화면 전환 버튼</string>
-    <string name="dialog_bottari_create_close_button_description">보따리 생성 다이얼로그 닫기 버튼</string>
-    <string name="item_delete_button_description">제거 버튼</string>
-    <string name="send_button_description">전송 버튼</string>
-    <string name="setting_button_description">설정 버튼</string>
-    <string name="bottari_template_option_button_description">보따리 템플릿 옵션 버튼</string>
-    <string name="bottari_template_delete_button_description">보따리 템플릿 제거 버튼</string>
-    <string name="nickname_edit_button_description">닉네임 수정 버튼</string>
+    <!-- Description 접근성 -->
+    <string name="bottari_create_btn_description">보따리 만들기 버튼</string>
+    <string name="checklist_swipe_btn_description">스와이프 전환 버튼</string>
+    <string name="item_delete_btn_description">물건 삭제 버튼</string>
+    <string name="bottari_template_delete_btn_description">보따리 템플릿 삭제 버튼</string>
+    <string name="nickname_edit_btn_description">닉네임 수정 버튼</string>
+    <string name="alarm_edit_location_btn_description">위치 설정 버튼</string>
+    <string name="bottari_personal_item_add_btn_description">물건 추가 버튼</string>
 
     <!-- Menu -->
-    <string name="menu_title_create_market">마켓에 등록하기</string>
-    <string name="menu_title_rename">이름 변경하기</string>
-    <string name="menu_title_edit">편집하기</string>
-    <string name="menu_title_delete">삭제하기</string>
-
-    <!--  Bottari Rename Dialog -->
-    <string name="dialog_bottari_rename_title_text">보따리 이름 수정</string>
-    <string name="dialog_bottari_rename_btn_text">수정하기</string>
-    <string name="dialog_bottari_rename_name_hint">이름을 입력하세요</string>
-    <string name="dialog_bottari_rename_close_button_description">보따리 이름 수정 다이얼로그 닫기 버튼</string>
-
+    <string name="menu_create_market_title_text">마켓에 등록하기</string>
+    <string name="menu_rename_title_text">이름 바꾸기</string>
+    <string name="menu_edit_title_text">내용 편집하기</string>
+    <string name="menu_delete_title_text">삭제하기</string>
 </resources>

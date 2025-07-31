@@ -1,10 +1,10 @@
 package com.bottari.data.source.remote
 
+import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.member.CheckRegisteredMemberResponse
 import com.bottari.data.model.member.RegisterMemberRequest
 import com.bottari.data.model.member.SaveMemberNicknameRequest
 import com.bottari.data.service.MemberService
-import com.bottari.data.util.safeApiCall
 
 class MemberRemoteDataSourceImpl(
     private val memberService: MemberService,

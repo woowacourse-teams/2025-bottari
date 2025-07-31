@@ -10,9 +10,9 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.template.FetchBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
-import com.bottari.presentation.base.UiState
+import com.bottari.presentation.common.event.SingleLiveEvent
+import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
-import com.bottari.presentation.model.BottariTemplateUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.launch
 
@@ -20,13 +20,15 @@ class MarketViewModel(
     private val bottariTemplatesUseCase: FetchBottariTemplatesUseCase,
     private val searchBottariTemplatesUseCase: SearchBottariTemplatesUseCase,
 ) : ViewModel() {
-    private val _bottariTemplates: MutableLiveData<UiState<List<BottariTemplateUiModel>>> =
-        MutableLiveData(UiState.Loading)
-    val bottariTemplates: LiveData<UiState<List<BottariTemplateUiModel>>> get() = _bottariTemplates
+    private val _uiState: MutableLiveData<MarketUiState> = MutableLiveData(MarketUiState())
+    val uiState: LiveData<MarketUiState> get() = _uiState
+
+    private val _uiEvent: SingleLiveEvent<MarketUiEvent> = SingleLiveEvent()
+    val uiEvent: LiveData<MarketUiEvent> get() = _uiEvent
 
     private val debouncedSearch: (String) -> Unit =
         debounce(
-            timeMillis = TIME_MILLIS,
+            timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
         ) { searchWord -> performSearch(searchWord) }
 
@@ -39,14 +41,15 @@ class MarketViewModel(
     }
 
     private fun fetchBottariTemplates() {
-        _bottariTemplates.value = UiState.Loading
+        _uiState.update { copy(isLoading = true) }
         viewModelScope.launch {
             bottariTemplatesUseCase()
                 .onSuccess { templates ->
-                    _bottariTemplates.value =
-                        UiState.Success(templates.map { template -> template.toUiModel() })
-                }.onFailure { error ->
-                    _bottariTemplates.value = UiState.Failure(error.message)
+                    val templateUiModels = templates.map { it.toUiModel() }
+                    _uiState.update { copy(isLoading = false, templates = templateUiModels) }
+                }.onFailure {
+                    _uiState.update { copy(isLoading = false) }
+                    _uiEvent.value = MarketUiEvent.FetchBottariTemplatesFailure
                 }
         }
     }
@@ -56,20 +59,21 @@ class MarketViewModel(
             fetchBottariTemplates()
             return
         }
-        _bottariTemplates.value = UiState.Loading
         viewModelScope.launch {
+            _uiState.update { copy(isLoading = true) }
             searchBottariTemplatesUseCase(searchWord)
                 .onSuccess { templates ->
-                    _bottariTemplates.value =
-                        UiState.Success(templates.map { template -> template.toUiModel() })
-                }.onFailure { error ->
-                    _bottariTemplates.value = UiState.Failure(error.message)
+                    val templateUiModels = templates.map { it.toUiModel() }
+                    _uiState.update { copy(isLoading = false, templates = templateUiModels) }
+                }.onFailure {
+                    _uiState.update { copy(isLoading = false) }
+                    _uiEvent.value = MarketUiEvent.FetchBottariTemplatesFailure
                 }
         }
     }
 
     companion object {
-        private const val TIME_MILLIS = 500L
+        private const val DEBOUNCE_DELAY = 500L
 
         fun Factory(): ViewModelProvider.Factory =
             viewModelFactory {

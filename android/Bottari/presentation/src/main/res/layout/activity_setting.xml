@@ -18,7 +18,7 @@
             android:id="@+id/btn_previous"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="@string/previous_button_description"
+            android:contentDescription="@string/common_previous_btn_description"
             android:padding="@dimen/space_small"
             android:src="@drawable/btn_previous" />
 
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/setting_toolbar_title"
+            android:text="@string/setting_toolbar_title_text"
             android:textColor="@color/black" />
     </Toolbar>
 
@@ -43,7 +43,7 @@
         android:elevation="2dp"
         android:paddingHorizontal="@dimen/space_median"
         android:paddingVertical="@dimen/space_small"
-        android:text="@string/setting_privacy_policy"
+        android:text="@string/setting_privacy_policy_title_text"
         android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/toolbar_setting" />
 

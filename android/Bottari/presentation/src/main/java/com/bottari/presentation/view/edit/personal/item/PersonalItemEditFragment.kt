@@ -10,13 +10,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseFragment
-import com.bottari.presentation.base.UiState
+import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.dpToPx
+import com.bottari.presentation.common.extension.getParcelableArrayListCompat
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
-import com.bottari.presentation.extension.dpToPx
-import com.bottari.presentation.extension.getParcelableCompat
-import com.bottari.presentation.extension.getSSAID
-import com.bottari.presentation.model.BottariDetailUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.edit.personal.item.adapter.PersonalItemEditAdapter
 
@@ -24,9 +22,13 @@ class PersonalItemEditFragment :
     BaseFragment<FragmentPersonalItemEditBinding>(FragmentPersonalItemEditBinding::inflate),
     TextWatcher {
     private val viewModel: PersonalItemEditViewModel by viewModels {
-        val bottariDetail =
-            arguments.getParcelableCompat<BottariDetailUiModel>(EXTRA_BOTTARI_DETAIL)
-        PersonalItemEditViewModel.Factory(requireContext().getSSAID(), bottariDetail)
+        val arguments = requireArguments()
+        PersonalItemEditViewModel.Factory(
+            ssaid = requireContext().getSSAID(),
+            bottariId = arguments.getLong(ARG_EXTRA_BOTTARI_ID),
+            title = arguments.getString(ARG_BOTTARI_TITLE) ?: "",
+            items = arguments.getParcelableArrayListCompat(ARG_BOTTARI_ITEMS) ?: emptyList(),
+        )
     }
 
     private val adapter by lazy {
@@ -66,9 +68,16 @@ class PersonalItemEditFragment :
     }
 
     private fun setupObserver() {
-        viewModel.bottariName.observe(viewLifecycleOwner, ::handleBottariNameState)
-        viewModel.bottariItems.observe(viewLifecycleOwner, ::handleItemState)
-        viewModel.saveState.observe(viewLifecycleOwner, ::handleSaveState)
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            handleBottariNameState(state.title)
+            handleItemState(state.items)
+        }
+        viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
+            when (event) {
+                PersonalItemEditUiEvent.SaveBottariItemsFailure -> showSnackbar(R.string.common_save_failure_text)
+                PersonalItemEditUiEvent.SaveBottariItemsSuccess -> requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
+        }
     }
 
     private fun setupUI() {
@@ -128,24 +137,23 @@ class PersonalItemEditFragment :
         adapter.submitList(bottariItems)
     }
 
-    private fun handleSaveState(uiState: UiState<Unit>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> requireActivity().onBackPressedDispatcher.onBackPressed()
-            is UiState.Failure -> showSnackbar(R.string.checklist_item_title_prefix)
-        }
-    }
-
     companion object {
-        private const val EXTRA_BOTTARI_DETAIL = "EXTRA_BOTTARI_DETAIL"
+        private const val ARG_EXTRA_BOTTARI_ID = "ARG_EXTRA_BOTTARI_ID"
+        private const val ARG_BOTTARI_TITLE = "ARG_BOTTARI_TITLE"
+        private const val ARG_BOTTARI_ITEMS = "ARG_BOTTARI_ITEMS"
 
         private const val DUPLICATE_BORDER_WIDTH_DP = 2
         private const val DISABLED_ALPHA = 0.3f
         private const val ENABLED_ALPHA = 1f
 
-        fun newBundle(bottariDetail: BottariDetailUiModel) =
-            Bundle().apply {
-                putParcelable(EXTRA_BOTTARI_DETAIL, bottariDetail)
-            }
+        fun newBundle(
+            id: Long,
+            title: String,
+            items: List<BottariItemUiModel>,
+        ) = Bundle().apply {
+            putLong(ARG_EXTRA_BOTTARI_ID, id)
+            putString(ARG_BOTTARI_TITLE, title)
+            putParcelableArrayList(ARG_BOTTARI_ITEMS, ArrayList(items))
+        }
     }
 }

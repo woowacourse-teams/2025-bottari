@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/space_large"
         android:background="@drawable/bg_gray_radius_20dp"
-        android:hint="@string/market_place_edit_text_hint"
+        android:hint="@string/market_search_hint_text"
         android:importantForAutofill="no"
         android:inputType="text"
         android:paddingVertical="@dimen/space_median"
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_small"
-        android:text="@string/btn_navigate_my_bottari_template"
+        android:text="@string/market_my_template_btn"
         android:textColor="@color/gray_787878"
         app:layout_constraintEnd_toEndOf="@id/et_bottari_template_title"
         app:layout_constraintTop_toBottomOf="@id/et_bottari_template_title" />

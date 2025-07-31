@@ -58,7 +58,7 @@
         android:id="@+id/btn_bottari_more"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:contentDescription="@string/bottari_item_more_button_description"
+        android:contentDescription="@string/common_option_btn_description"
         android:padding="@dimen/space_small"
         android:src="@drawable/btn_more"
         app:layout_constraintBottom_toBottomOf="parent"

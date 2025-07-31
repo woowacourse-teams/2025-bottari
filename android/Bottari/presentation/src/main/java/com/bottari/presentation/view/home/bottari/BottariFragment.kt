@@ -7,14 +7,12 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseFragment
-import com.bottari.presentation.base.UiState
 import com.bottari.presentation.common.BottomPaddingDecoration
+import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.fadeIn
+import com.bottari.presentation.common.extension.fadeOut
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentBottariBinding
-import com.bottari.presentation.extension.fadeIn
-import com.bottari.presentation.extension.fadeOut
-import com.bottari.presentation.extension.getSSAID
-import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.view.checklist.ChecklistActivity
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.home.bottari.adapter.BottariAdapter
@@ -60,8 +58,19 @@ class BottariFragment :
     }
 
     private fun setupObserver() {
-        viewModel.bottaries.observe(viewLifecycleOwner, ::handleBottariState)
-        viewModel.deleteBottariState.observe(viewLifecycleOwner, ::handleDeleteBottariState)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            adapter.submitList(uiState.bottaries)
+        }
+
+        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+            val message =
+                when (uiEvent) {
+                    BottariUiEvent.BottariDeleteFailure -> R.string.bottari_home_delete_failure_text
+                    BottariUiEvent.BottariDeleteSuccess -> R.string.bottari_home_delete_success_text
+                    BottariUiEvent.FetchBottariesFailure -> R.string.bottari_home_fetch_failure_text
+                }
+            showSnackbar(message)
+        }
     }
 
     private fun setupUI() {
@@ -90,14 +99,6 @@ class BottariFragment :
         }
     }
 
-    private fun handleBottariState(uiState: UiState<List<BottariUiModel>>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> adapter.submitList(uiState.data)
-            is UiState.Failure -> showSnackbar(R.string.bottari_fetch_bottaries_failure_text)
-        }
-    }
-
     private fun handleScrollState(state: Int) {
         when (state) {
             RecyclerView.SCROLL_STATE_DRAGGING,
@@ -112,14 +113,6 @@ class BottariFragment :
         }
     }
 
-    private fun handleDeleteBottariState(uiState: UiState<Unit>) {
-        when (uiState) {
-            is UiState.Loading -> Unit
-            is UiState.Success -> viewModel.fetchBottaries()
-            is UiState.Failure -> showSnackbar(R.string.bottari_delete_failure_text)
-        }
-    }
-
     private fun navigateToChecklist(
         bottariId: Long,
         bottariTitle: String,
@@ -129,7 +122,7 @@ class BottariFragment :
     }
 
     private fun navigateToEdit(bottariId: Long) {
-        val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId)
+        val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId, false)
         startActivity(intent)
     }
 
