@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
+import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.core.graphics.drawable.toDrawable
 import com.bottari.presentation.databinding.DialogCustomBinding
@@ -33,12 +34,12 @@ class CustomAlertDialog private constructor(
     }
 
     private fun setupListener() {
-        binding.btnDialogCustomYes.setOnClickListener {
+        binding.btnDialogCustomPositive.setOnClickListener {
             onPositiveClick?.invoke()
             dialog.dismiss()
         }
 
-        binding.btnDialogCustomNo.setOnClickListener {
+        binding.btnDialogCustomNegative.setOnClickListener {
             onNegativeClick?.invoke()
             dialog.dismiss()
         }
@@ -66,11 +67,15 @@ class CustomAlertDialog private constructor(
     fun setPositiveButton(
         @StringRes resId: Int,
         visible: Boolean = true,
+        @ColorInt textColor: Int? = null,
+        @ColorInt backgroundColor: Int? = null,
         onClick: (() -> Unit)? = null,
     ): CustomAlertDialog {
-        binding.btnDialogCustomYes.apply {
+        binding.btnDialogCustomPositive.apply {
             setText(resId)
             visibility = if (visible) View.VISIBLE else View.GONE
+            textColor?.let { setTextColor(it) }
+            backgroundColor?.let { setBackgroundColor(it) }
         }
         onPositiveClick = onClick
         return this
@@ -79,11 +84,15 @@ class CustomAlertDialog private constructor(
     fun setNegativeButton(
         @StringRes resId: Int,
         visible: Boolean = true,
+        @ColorInt textColor: Int? = null,
+        @ColorInt backgroundColor: Int? = null,
         onClick: (() -> Unit)? = null,
     ): CustomAlertDialog {
-        binding.btnDialogCustomNo.apply {
+        binding.btnDialogCustomNegative.apply {
             setText(resId)
             visibility = if (visible) View.VISIBLE else View.GONE
+            textColor?.let { setTextColor(it) }
+            backgroundColor?.let { setBackgroundColor(it) }
         }
         onNegativeClick = onClick
         return this
@@ -100,10 +109,18 @@ class CustomAlertDialog private constructor(
         @StringRes positiveBtnDescResId: Int? = null,
         @StringRes negativeBtnDescResId: Int? = null,
     ): CustomAlertDialog {
-        titleDescResId?.let { binding.tvDialogCustomTitle.contentDescription = context.getString(it) }
-        subTitleDescResId?.let { binding.tvDialogCustomDescription.contentDescription = context.getString(it) }
-        positiveBtnDescResId?.let { binding.btnDialogCustomYes.contentDescription = context.getString(it) }
-        negativeBtnDescResId?.let { binding.btnDialogCustomNo.contentDescription = context.getString(it) }
+        titleDescResId?.let {
+            binding.tvDialogCustomTitle.contentDescription = context.getString(it)
+        }
+        subTitleDescResId?.let {
+            binding.tvDialogCustomDescription.contentDescription = context.getString(it)
+        }
+        positiveBtnDescResId?.let {
+            binding.btnDialogCustomPositive.contentDescription = context.getString(it)
+        }
+        negativeBtnDescResId?.let {
+            binding.btnDialogCustomNegative.contentDescription = context.getString(it)
+        }
         return this
     }
 
