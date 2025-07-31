@@ -1,4 +1,4 @@
-package com.bottari.presentation.common.component
+package com.bottari.presentation.view.common
 
 import android.app.Dialog
 import android.os.Bundle
