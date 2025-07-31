@@ -86,15 +86,17 @@ class ChecklistViewModel(
 
     private fun fetchChecklist(bottariId: Long) {
         _uiState.update { copy(isLoading = true) }
+
         viewModelScope.launch {
             fetchChecklistUseCase(ssaid, bottariId)
                 .onSuccess { items ->
                     val itemUiModels = items.map { it.toUiModel() }
-                    _uiState.update { copy(isLoading = false, bottariItems = itemUiModels) }
+                    _uiState.update { copy(bottariItems = itemUiModels) }
                 }.onFailure {
-                    _uiState.update { copy(isLoading = false) }
                     _uiEvent.value = ChecklistUiEvent.FetchChecklistFailure
                 }
+
+            _uiState.update { copy(isLoading = false) }
         }
     }
 
