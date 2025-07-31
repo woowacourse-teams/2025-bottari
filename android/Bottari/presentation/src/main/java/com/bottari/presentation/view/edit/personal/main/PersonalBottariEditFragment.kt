@@ -101,7 +101,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                     true
                 }
 
-                R.id.rename -> {
+                R.id.action_rename -> {
                     showRenameDialog()
                     true
                 }

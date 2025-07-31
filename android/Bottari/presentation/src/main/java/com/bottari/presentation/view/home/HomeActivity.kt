@@ -35,7 +35,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
         binding.bnvHome.setOnItemSelectedListener { item ->
             if (isSameNavItem(item)) return@setOnItemSelectedListener false
             when (item.itemId) {
-                R.id.menu_market -> showFragment(MarketFragment::class.java)
+                R.id.menu_template -> showFragment(MarketFragment::class.java)
                 R.id.menu_bottari -> showFragment(BottariFragment::class.java)
                 R.id.menu_profile -> showFragment(ProfileFragment::class.java)
             }

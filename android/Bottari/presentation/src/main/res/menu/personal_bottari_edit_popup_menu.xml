@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_market"
-        android:title="@string/menu_create_market_title_text" />
+        android:title="@string/menu_create_template_title_text" />
     <item
-        android:id="@+id/rename"
-        android:title="@string/menu_rename_title_text" />
+        android:id="@+id/action_rename"
+        android:title="@string/menu_bottari_rename_title_text" />
 </menu>
