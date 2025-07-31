@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_radius_12dp"
+    android:elevation="2dp"
+    android:paddingHorizontal="@dimen/space_large"
+    android:paddingVertical="@dimen/space_median"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <TextView
+        android:id="@+id/tv_dialog_custom_title"
+        style="@style/Pretendard_SemiBold_20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="제목입니다" />
+
+    <TextView
+        android:id="@+id/tv_dialog_custom_description"
+        style="@style/Pretendard_Regular_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_custom_title"
+        tools:text="상세설명입니다" />
+
+    <TextView
+        android:id="@+id/btn_dialog_custom_yes"
+        style="@style/Pretendard_SemiBold_16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="@dimen/space_x_large"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:backgroundTint="@color/primary"
+        android:clickable="false"
+        android:gravity="center"
+        android:paddingVertical="@dimen/space_small"
+        android:text="@string/bottari_create_dialog_btn_text"
+        android:textColor="@color/white"
+        android:elevation="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_dialog_custom_no"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_custom_description"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread" />
+
+    <TextView
+        android:id="@+id/btn_dialog_custom_no"
+        style="@style/Pretendard_SemiBold_16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="@dimen/space_x_large"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:clickable="false"
+        android:gravity="center"
+        android:paddingVertical="@dimen/space_small"
+        android:text="@string/bottari_create_dialog_btn_text"
+        android:textColor="@color/gray_787878"
+        android:elevation="1dp"
+        app:layout_constraintStart_toEndOf="@id/btn_dialog_custom_yes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_custom_description"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/btn_dialog_custom_close"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="@string/common_close_btn_description"
+        android:paddingStart="@dimen/space_x_large"
+        android:paddingEnd="0dp"
+        android:paddingBottom="@dimen/space_x_large"
+        android:src="@drawable/btn_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
