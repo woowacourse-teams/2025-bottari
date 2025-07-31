@@ -89,6 +89,8 @@
 
     <!-- Market Detail -->
     <string name="btn_bottari_template_detail_receive">가져오기</string>
+    <string name="bottari_template_detail_fetch_failure_text">템플릿 상세 조회에 실패했어요</string>
+    <string name="bottari_template_take_failure_text">나의 보따리로 가져오는데 실패했어요</string>
 
     <!-- My Bottari Template -->
     <string name="my_bottari_template_screen_title">내가 공유한 보따리</string>

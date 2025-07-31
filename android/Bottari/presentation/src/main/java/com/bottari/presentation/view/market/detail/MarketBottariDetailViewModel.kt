@@ -12,28 +12,29 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
 import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
-import com.bottari.presentation.base.UiState
+import com.bottari.presentation.common.event.SingleLiveEvent
+import com.bottari.presentation.extension.requireValue
+import com.bottari.presentation.extension.update
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
-import com.bottari.presentation.model.BottariTemplateUiModel
 import kotlinx.coroutines.launch
 
 class MarketBottariDetailViewModel(
-    private val savedStateHandle: SavedStateHandle,
+    stateHandle: SavedStateHandle,
     private val fetchBottariTemplateDetailUseCase: FetchBottariTemplateDetailUseCase,
     private val takeBottariTemplateDetailUseCase: TakeBottariTemplateDetailUseCase,
 ) : ViewModel() {
-    private val _bottariTemplate: MutableLiveData<UiState<BottariTemplateUiModel>> =
-        MutableLiveData(UiState.Loading)
-    val bottariTemplate: LiveData<UiState<BottariTemplateUiModel>> get() = _bottariTemplate
+    private val _uiState: MutableLiveData<MarketBottariDetailUiState> =
+        MutableLiveData(
+            MarketBottariDetailUiState(
+                templateId = stateHandle[KEY_TEMPLATE_ID] ?: error(ERROR_REQUIRE_TEMPLATE_ID),
+            ),
+        )
+    val uiState: LiveData<MarketBottariDetailUiState> get() = _uiState
 
-    private val bottariId: Long =
-        savedStateHandle.get<Long>(EXTRA_BOTTARI_ID) ?: error(ERROR_BOTTARI_ID_MISSING)
+    private val _uiEvent: SingleLiveEvent<MarketBottariDetailUiEvent> = SingleLiveEvent()
+    val uiEvent: LiveData<MarketBottariDetailUiEvent> get() = _uiEvent
 
-    private val ssaid: String =
-        savedStateHandle.get<String>(EXTRA_SSAID) ?: error(ERROR_SSAID_MISSING)
-
-    private val _createSuccess = MutableLiveData<UiState<Long?>>()
-    val createSuccess: MutableLiveData<UiState<Long?>> = _createSuccess
+    private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
 
     init {
         fetchBottariTemplateDetail()
@@ -41,42 +42,47 @@ class MarketBottariDetailViewModel(
 
     fun takeBottariTemplate() {
         viewModelScope.launch {
-            takeBottariTemplateDetailUseCase(ssaid, bottariId)
-                .onSuccess {
-                    _createSuccess.value = UiState.Success(it)
-                }.onFailure { _createSuccess.value = UiState.Failure(it.message) }
+            takeBottariTemplateDetailUseCase(ssaid, _uiState.requireValue().templateId)
+                .onSuccess { bottariId ->
+                    _uiEvent.value =
+                        MarketBottariDetailUiEvent.TakeBottariTemplateSuccess(bottariId)
+                }.onFailure {
+                    _uiEvent.value = MarketBottariDetailUiEvent.TakeBottariTemplateFailure
+                }
         }
     }
 
     private fun fetchBottariTemplateDetail() {
-        _bottariTemplate.value = UiState.Loading
+        _uiState.update { copy(isLoading = true) }
         viewModelScope.launch {
-            fetchBottariTemplateDetailUseCase(bottariId)
+            fetchBottariTemplateDetailUseCase(_uiState.requireValue().templateId)
                 .onSuccess { template ->
-                    _bottariTemplate.value = UiState.Success(template.toUiModel())
-                }.onFailure { error ->
-                    _bottariTemplate.value = UiState.Failure(error.message)
+                    val itemUiModels = template.items.map { it.toUiModel() }
+                    _uiState.update { copy(isLoading = false, items = itemUiModels) }
+                }.onFailure {
+                    _uiState.update { copy(isLoading = false) }
+                    _uiEvent.value = MarketBottariDetailUiEvent.FetchBottariDetailFailure
                 }
         }
     }
 
     companion object {
-        private const val EXTRA_SSAID = "EXTRA_SSAID"
-        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
-        private const val ERROR_BOTTARI_ID_MISSING = "보따리 Id가 없습니다"
-        private const val ERROR_SSAID_MISSING = "SSAID를 확인할 수 없습니다"
+        private const val KEY_SSAID = "KEY_SSAID"
+        private const val KEY_TEMPLATE_ID = "KEY_BOTTARI_ID"
+        private const val ERROR_REQUIRE_TEMPLATE_ID = "[ERROR] 템플릿 ID가 존재하지 않습니다."
+        private const val ERROR_REQUIRE_SSAID = "[ERROR] SSAID가 존재하지 않습니다."
 
         fun Factory(
             ssaid: String,
-            bottarID: Long,
+            templateId: Long,
         ): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val savedStateHandle = this.createSavedStateHandle()
-                    savedStateHandle[EXTRA_BOTTARI_ID] = bottarID
-                    savedStateHandle[EXTRA_SSAID] = ssaid
+                    savedStateHandle[KEY_TEMPLATE_ID] = templateId
+                    savedStateHandle[KEY_SSAID] = ssaid
                     MarketBottariDetailViewModel(
-                        savedStateHandle = savedStateHandle,
+                        stateHandle = savedStateHandle,
                         fetchBottariTemplateDetailUseCase = UseCaseProvider.fetchBottariTemplateDetailUseCase,
                         takeBottariTemplateDetailUseCase = UseCaseProvider.takeBottariTemplateDetailUseCase,
                     )
