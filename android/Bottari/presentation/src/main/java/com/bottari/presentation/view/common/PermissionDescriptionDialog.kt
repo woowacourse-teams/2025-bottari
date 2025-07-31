@@ -36,6 +36,11 @@ class PermissionDescriptionDialog : DialogFragment() {
         setupDialog()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun setupListener() {
         binding.btnPermissionCheck.setOnClickListener { dismiss() }
     }
