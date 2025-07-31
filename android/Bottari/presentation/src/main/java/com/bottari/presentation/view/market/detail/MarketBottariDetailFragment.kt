@@ -32,6 +32,7 @@ class MarketBottariDetailFragment : BaseFragment<FragmentMarketBottariDetailBind
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            toggleLoadingIndicator(uiState.isLoading)
             binding.tvBottariTitle.text = uiState.title
             adapter.submitList(uiState.items)
         }
