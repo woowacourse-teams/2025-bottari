@@ -68,6 +68,7 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            toggleLoadingIndicator(uiState.isLoading)
             handleAlarmState(uiState.alarm)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner, ::handleAlarmEvent)
