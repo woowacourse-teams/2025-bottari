@@ -15,6 +15,14 @@
         android:requiresFadingEdge="vertical"
         tools:listitem="@layout/item_bottari" />
 
+    <include
+        android:id="@+id/empty_view"
+        layout="@layout/view_home_empty"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/rv_bottari"
+        app:layout_constraintBottom_toBottomOf="@id/rv_bottari" />
+
     <ImageView
         android:id="@+id/btn_bottari_create"
         android:layout_width="64dp"
