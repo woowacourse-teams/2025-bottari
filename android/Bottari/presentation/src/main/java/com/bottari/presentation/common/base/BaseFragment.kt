@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.bottari.presentation.common.component.LoadingDialog
 import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseFragment<VB : ViewBinding>(
@@ -16,6 +17,8 @@ abstract class BaseFragment<VB : ViewBinding>(
 ) : Fragment() {
     private var _binding: VB? = null
     val binding: VB get() = _binding!!
+
+    private val loadingDialog: LoadingDialog by lazy { LoadingDialog() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +47,19 @@ abstract class BaseFragment<VB : ViewBinding>(
         duration: Int = Snackbar.LENGTH_SHORT,
     ) {
         view?.let { Snackbar.make(it, message, duration).show() }
+    }
+
+    protected fun toggleLoadingIndicator(isShow: Boolean) {
+        if (isShow) {
+            if (loadingDialog.isAdded || loadingDialog.isVisible || loadingDialog.isRemoving) return
+            if (childFragmentManager.isStateSaved) return
+
+            loadingDialog.show(childFragmentManager, LoadingDialog::class.java.name)
+            return
+        }
+
+        if (!loadingDialog.isAdded) return
+        loadingDialog.dismissAllowingStateLoss()
     }
 
     private fun setupWindowInsets() {
