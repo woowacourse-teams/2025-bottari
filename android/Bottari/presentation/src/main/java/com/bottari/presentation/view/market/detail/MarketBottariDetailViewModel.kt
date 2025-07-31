@@ -13,7 +13,6 @@ import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
 import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
 import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.common.extension.requireValue
 import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
 import kotlinx.coroutines.launch
@@ -42,7 +41,7 @@ class MarketBottariDetailViewModel(
 
     fun takeBottariTemplate() {
         viewModelScope.launch {
-            takeBottariTemplateDetailUseCase(ssaid, _uiState.requireValue().templateId)
+            takeBottariTemplateDetailUseCase(ssaid, _uiState.value!!.templateId)
                 .onSuccess { bottariId ->
                     _uiEvent.value =
                         MarketBottariDetailUiEvent.TakeBottariTemplateSuccess(bottariId)
@@ -55,7 +54,7 @@ class MarketBottariDetailViewModel(
     private fun fetchBottariTemplateDetail() {
         _uiState.update { copy(isLoading = true) }
         viewModelScope.launch {
-            fetchBottariTemplateDetailUseCase(_uiState.requireValue().templateId)
+            fetchBottariTemplateDetailUseCase(_uiState.value!!.templateId)
                 .onSuccess { template ->
                     val itemUiModels = template.items.map { it.toUiModel() }
                     _uiState.update { copy(isLoading = false, items = itemUiModels) }

@@ -11,7 +11,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
-import com.bottari.presentation.common.extension.requireValue
 import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.model.BottariItemUiModel
 import kotlinx.coroutines.launch
@@ -37,10 +36,10 @@ class PersonalItemEditViewModel(
 
     private val newItemNames = mutableSetOf<String>()
     private val pendingDeleteItems = mutableSetOf<BottariItemUiModel>()
-    private val initialItemIds: List<Long> = _uiState.requireValue().items.map { it.id }
+    private val initialItemIds: List<Long> = _uiState.value!!.items.map { it.id }
 
     private val currentItemList: List<BottariItemUiModel>
-        get() = _uiState.requireValue().items
+        get() = _uiState.value!!.items
 
     fun addNewItemIfNeeded(itemName: String) {
         if (itemName.isBlank() || isDuplicateItem(itemName)) return
@@ -70,7 +69,7 @@ class PersonalItemEditViewModel(
         viewModelScope.launch {
             saveBottariItemsUseCase(
                 ssaid = ssaid,
-                bottariId = _uiState.requireValue().bottariId,
+                bottariId = _uiState.value!!.bottariId,
                 deleteItemIds = pendingDeleteItems.map { it.id },
                 createItemNames = newItemNames.toList(),
             ).onSuccess {
