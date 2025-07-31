@@ -24,8 +24,7 @@ class MainChecklistViewHolder private constructor(
 
     fun bind(item: BottariItemUiModel) {
         itemId = item.id
-        binding.tvChecklistItemTitle.text =
-            itemView.context.getString(R.string.common_item_title_prefix_format, item.name)
+        binding.ctvChecklistItemTitle.text = item.name
         updateCheckedState(item.isChecked)
     }
 
@@ -37,7 +36,8 @@ class MainChecklistViewHolder private constructor(
         val textColor = ContextCompat.getColor(itemView.context, textColorRes)
 
         binding.clChecklistItem.backgroundTintList = ColorStateList.valueOf(bgColor)
-        binding.tvChecklistItemTitle.setTextColor(textColor)
+        binding.ctvChecklistItemTitle.setTextColor(textColor)
+        binding.ctvChecklistItemTitle.isChecked = isChecked
     }
 
     companion object {
