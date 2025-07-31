@@ -9,7 +9,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginBottom="@dimen/space_small"
-        android:contentDescription="@string/test"
+        android:contentDescription="@string/bottari_home_icon_description"
         android:src="@drawable/ic_bottari"
         app:layout_constraintBottom_toTopOf="@+id/tv_empty_view_title"
         app:layout_constraintEnd_toEndOf="parent"
