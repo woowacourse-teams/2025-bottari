@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
@@ -71,6 +72,7 @@ class PersonalItemEditFragment :
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
             handleBottariNameState(state.title)
             handleItemState(state.items)
+            handleEmptyView(state.items.isEmpty())
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
@@ -135,6 +137,10 @@ class PersonalItemEditFragment :
 
     private fun handleItemState(bottariItems: List<BottariItemUiModel>) {
         adapter.submitList(bottariItems)
+    }
+
+    private fun handleEmptyView(isEmpty: Boolean) {
+        binding.emptyView.clPersonalBottariItemEmptyView.isVisible = isEmpty
     }
 
     companion object {

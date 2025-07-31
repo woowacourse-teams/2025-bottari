@@ -176,10 +176,13 @@
     <string name="nickname_edit_btn_description">닉네임 수정 버튼</string>
     <string name="alarm_edit_location_btn_description">위치 설정 버튼</string>
     <string name="bottari_personal_item_add_btn_description">물건 추가 버튼</string>
+    <string name="bottari_personal_item_empty_icon_description">빈 물건 아이콘</string>
 
     <!-- Menu -->
     <string name="menu_create_market_title_text">마켓에 등록하기</string>
     <string name="menu_rename_title_text">이름 바꾸기</string>
     <string name="menu_edit_title_text">내용 편집하기</string>
     <string name="menu_delete_title_text">삭제하기</string>
+    <string name="bottari_edit_item_empty_view_title">보따리 안에 물건이 없어요</string>
+    <string name="bottari_edit_item_empty_view_text">여행, 일상, 이벤트… \n어떤 순간이든 꼭 챙겨야 할 것들을 넣어보아요</string>
 </resources>
