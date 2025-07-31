@@ -12,7 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.extension.update
+import com.bottari.presentation.common.extension.update
 import kotlinx.coroutines.launch
 
 class BottariCreateViewModel(

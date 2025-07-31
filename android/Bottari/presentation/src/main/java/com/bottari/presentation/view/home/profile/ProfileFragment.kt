@@ -9,9 +9,9 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseFragment
+import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentProfileBinding
-import com.bottari.presentation.extension.getSSAID
 
 class ProfileFragment :
     BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate),

@@ -3,8 +3,8 @@ package com.bottari.bottari.view
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.bottari.bottari.databinding.ActivityMainBinding
-import com.bottari.presentation.base.BaseActivity
-import com.bottari.presentation.extension.getSSAID
+import com.bottari.presentation.common.base.BaseActivity
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.view.home.HomeActivity
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {

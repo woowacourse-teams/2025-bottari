@@ -6,9 +6,9 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseFragment
+import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentSwipeChecklistBinding
-import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.view.checklist.ChecklistUiEvent
 import com.bottari.presentation.view.checklist.ChecklistUiState
 import com.bottari.presentation.view.checklist.ChecklistViewModel

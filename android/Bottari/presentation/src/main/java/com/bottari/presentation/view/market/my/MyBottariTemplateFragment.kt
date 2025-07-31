@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseFragment
+import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentMyBottariTemplateBinding
-import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.view.market.MarketNavigator
 import com.bottari.presentation.view.market.my.adapter.MyBottariTemplateAdapter
 import com.bottari.presentation.view.market.my.listener.MyBottariTemplateEventListener

@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseActivity
+import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityChecklistBinding
 import com.bottari.presentation.view.checklist.main.MainChecklistFragment
 import com.bottari.presentation.view.checklist.swipe.SwipeChecklistFragment

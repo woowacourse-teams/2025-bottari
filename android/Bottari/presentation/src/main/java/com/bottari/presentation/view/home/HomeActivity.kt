@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseActivity
+import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityHomeBinding
 import com.bottari.presentation.view.home.bottari.BottariFragment
 import com.bottari.presentation.view.home.market.MarketFragment

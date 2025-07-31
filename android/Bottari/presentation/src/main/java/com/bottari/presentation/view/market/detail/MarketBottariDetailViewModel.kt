@@ -13,8 +13,8 @@ import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
 import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
 import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.extension.requireValue
-import com.bottari.presentation.extension.update
+import com.bottari.presentation.common.extension.requireValue
+import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
 import kotlinx.coroutines.launch
 

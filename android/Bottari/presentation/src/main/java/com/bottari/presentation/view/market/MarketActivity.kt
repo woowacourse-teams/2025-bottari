@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseActivity
+import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityMarketBinding
 import com.bottari.presentation.view.market.detail.MarketBottariDetailFragment
 import com.bottari.presentation.view.market.my.MyBottariTemplateFragment

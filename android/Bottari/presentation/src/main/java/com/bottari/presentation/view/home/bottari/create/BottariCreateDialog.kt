@@ -13,8 +13,8 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.DialogBottariCreateBinding
-import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.google.android.material.snackbar.Snackbar
 

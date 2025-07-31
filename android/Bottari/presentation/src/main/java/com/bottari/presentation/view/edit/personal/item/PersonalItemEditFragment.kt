@@ -10,11 +10,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseFragment
+import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.dpToPx
+import com.bottari.presentation.common.extension.getParcelableArrayListCompat
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
-import com.bottari.presentation.extension.dpToPx
-import com.bottari.presentation.extension.getParcelableArrayListCompat
-import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.edit.personal.item.adapter.PersonalItemEditAdapter
 

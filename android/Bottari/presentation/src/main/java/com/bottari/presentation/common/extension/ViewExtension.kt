@@ -1,4 +1,4 @@
-package com.bottari.presentation.extension
+package com.bottari.presentation.common.extension
 
 import android.view.View
 import androidx.core.view.isVisible

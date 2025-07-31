@@ -1,4 +1,4 @@
-package com.bottari.presentation.extension
+package com.bottari.presentation.common.extension
 
 import android.annotation.SuppressLint
 import android.content.Context

@@ -5,9 +5,9 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseFragment
+import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentChecklistBinding
-import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.view.checklist.ChecklistUiEvent
 import com.bottari.presentation.view.checklist.ChecklistViewModel
 import com.bottari.presentation.view.checklist.main.adapter.MainChecklistAdapter

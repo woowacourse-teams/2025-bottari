@@ -15,9 +15,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
+import com.bottari.presentation.common.extension.formatWithPattern
 import com.bottari.presentation.databinding.ItemBottariBinding
 import com.bottari.presentation.databinding.PopupBottariOptionsBinding
-import com.bottari.presentation.extension.formatWithPattern
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.BottariUiModel

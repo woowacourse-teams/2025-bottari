@@ -12,7 +12,7 @@ import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
 import com.bottari.domain.usecase.bottariDetail.FindBottariDetailUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.extension.update
+import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.util.debounce
 import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditUiEvent

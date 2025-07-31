@@ -14,7 +14,7 @@ import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.usecase.alarm.CreateAlarmUseCase
 import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
 import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.extension.update
+import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.AlarmMapper.toDomain
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel

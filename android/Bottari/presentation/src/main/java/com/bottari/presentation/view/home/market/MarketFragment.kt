@@ -7,7 +7,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseFragment
+import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.databinding.FragmentMarketBinding
 import com.bottari.presentation.view.home.market.adapter.MarketAdapter
 import com.bottari.presentation.view.home.market.listener.OnBottariTemplateClickListener

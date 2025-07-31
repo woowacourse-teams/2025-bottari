@@ -13,13 +13,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseFragment
+import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
-import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.BottariItemUiModel
-import com.bottari.presentation.util.permission.PermissionUtil
-import com.bottari.presentation.util.permission.PermissionUtil.requiredPermissions
+import com.bottari.presentation.util.PermissionUtil
+import com.bottari.presentation.util.PermissionUtil.requiredPermissions
 import com.bottari.presentation.view.edit.alarm.AlarmEditFragment
 import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditAlarmAdapter

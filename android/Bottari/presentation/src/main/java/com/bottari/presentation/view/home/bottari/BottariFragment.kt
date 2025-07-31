@@ -7,12 +7,12 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.common.BottomPaddingDecoration
+import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.fadeIn
+import com.bottari.presentation.common.extension.fadeOut
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentBottariBinding
-import com.bottari.presentation.extension.fadeIn
-import com.bottari.presentation.extension.fadeOut
-import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.view.checklist.ChecklistActivity
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.home.bottari.adapter.BottariAdapter

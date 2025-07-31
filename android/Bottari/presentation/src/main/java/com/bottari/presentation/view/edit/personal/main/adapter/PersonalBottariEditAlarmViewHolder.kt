@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
+import com.bottari.presentation.common.extension.formatWithPattern
 import com.bottari.presentation.databinding.ItemChecklistAlarmBinding
-import com.bottari.presentation.extension.formatWithPattern
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import java.time.format.TextStyle

@@ -10,7 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.bottari.SaveBottariTitleUseCase
 import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.extension.update
+import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.view.edit.personal.main.rename.BottariRenameUiEvent
 import com.bottari.presentation.view.edit.personal.main.rename.BottariRenameUiState
 import kotlinx.coroutines.launch

@@ -9,11 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseFragment
 import com.bottari.presentation.common.ItemSpacingDecoration
+import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.getParcelableCompat
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentAlarmEditBinding
-import com.bottari.presentation.extension.getParcelableCompat
-import com.bottari.presentation.extension.getSSAID
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.view.edit.alarm.adapter.DayOfWeekAdapter

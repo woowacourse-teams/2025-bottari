@@ -11,7 +11,7 @@ import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.template.FetchBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
 import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.extension.update
+import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.launch

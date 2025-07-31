@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.net.toUri
 import com.bottari.presentation.BuildConfig
-import com.bottari.presentation.base.BaseActivity
+import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivitySettingBinding
 
 class SettingActivity : BaseActivity<ActivitySettingBinding>(ActivitySettingBinding::inflate) {

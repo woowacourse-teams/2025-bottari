@@ -1,4 +1,4 @@
-package com.bottari.presentation.extension
+package com.bottari.presentation.common.extension
 
 import android.content.Intent
 import android.os.Build

@@ -1,4 +1,4 @@
-package com.bottari.presentation.extension
+package com.bottari.presentation.common.extension
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

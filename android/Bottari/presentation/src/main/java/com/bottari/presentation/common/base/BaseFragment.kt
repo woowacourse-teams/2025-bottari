@@ -1,4 +1,4 @@
-package com.bottari.presentation.base
+package com.bottari.presentation.common.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

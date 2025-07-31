@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.bottari.presentation.R
-import com.bottari.presentation.base.BaseActivity
+import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityPersonalBottariEditBinding
 import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditFragment
 import com.google.android.material.snackbar.Snackbar

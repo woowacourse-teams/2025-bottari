@@ -14,7 +14,7 @@ import com.bottari.domain.model.member.RegisteredMember
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.extension.update
+import com.bottari.presentation.common.extension.update
 import kotlinx.coroutines.launch
 
 class MainViewModel(

@@ -11,8 +11,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
-import com.bottari.presentation.extension.requireValue
-import com.bottari.presentation.extension.update
+import com.bottari.presentation.common.extension.requireValue
+import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.model.BottariItemUiModel
 import kotlinx.coroutines.launch
 
