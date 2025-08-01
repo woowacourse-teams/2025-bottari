@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_small"
         android:gravity="center"
-        android:text="@string/bottari_home_empty_view_sub_title_text"
+        android:text="@string/bottari_home_empty_view_description_text"
         android:textColor="@color/gray_a6a6a6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
