@@ -51,12 +51,12 @@
     <string name="common_permission_failure_text">권한 요청이 실패했어요</string>
 
     <!-- Common: 권한 다이얼로그 -->
-    <string name="common_permission_notice_dialog_title_text">보따리를 편하게 싸려면\n다음과 같은 권한이 필요해요</string>
+    <string name="common_permission_notice_dialog_title_text">보따리를 편하게 챙기려면\n다음과 같은 권한이 필요해요</string>
     <string name="common_notification_permission_text">알림 (선택)</string>
     <string name="common_alarm_permission_text">알람 및 리마인더 (선택)</string>
     <string name="common_notification_permission_description_text">보따리 관련 알림 수신</string>
     <string name="common_alarm_permission_description_text">설정한 날짜 및 시간에 알람 생성</string>
-    <string name="common_permission_description_text">권한 접근을 허용하지 않아도 보따리를 쌀 수 있어요.\n하지만 알림 등 일부 기능이 제한될 수 있어요.</string>
+    <string name="common_permission_description_text">권한 접근을 허용하지 않아도 보따리를 챙길 수 있어요.\n하지만 알림 등 일부 기능이 제한될 수 있어요.</string>
     <string name="common_permission_check_btn_text">확인했어요</string>
     <string name="common_permission_dialog_title_text">권한 안내</string>
     <string name="common_notification_permission_dialog_message_text">알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
