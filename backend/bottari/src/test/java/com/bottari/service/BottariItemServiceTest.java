@@ -380,7 +380,7 @@ class BottariItemServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariItemService.check(notExistsBottariItemId))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("보따리 물품을 찾을 수 없습니다.");
     }
 
@@ -420,7 +420,7 @@ class BottariItemServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariItemService.uncheck(notExistsBottariItemId))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("보따리 물품을 찾을 수 없습니다.");
     }
 }

@@ -74,14 +74,14 @@ public class BottariItemService {
     @Transactional
     public void check(final Long id) {
         final BottariItem bottariItem = bottariItemRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("보따리 물품을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_ITEM_NOT_FOUND));
         bottariItem.check();
     }
 
     @Transactional
     public void uncheck(final Long id) {
         final BottariItem bottariItem = bottariItemRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("보따리 물품을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_ITEM_NOT_FOUND));
         bottariItem.uncheck();
     }
 
