@@ -1,4 +1,4 @@
-package com.bottari.log;
+package com.bottari.log.entry;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +14,7 @@ public class ExceptionLogEntry {
 
     public String toLogString() {
         return String.format("""
-                        
+
                         ==================== EXCEPTION LOG ====================
                         Exception Type : %s
                         Message        : %s

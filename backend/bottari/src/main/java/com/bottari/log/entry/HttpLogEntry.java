@@ -1,4 +1,4 @@
-package com.bottari.log;
+package com.bottari.log.entry;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ public class HttpLogEntry {
 
     public String toLogString() {
         return String.format("""
-                        
+
                         ==================== HTTP LOG ====================
                         Duration       : %d ms
                         

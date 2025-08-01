@@ -1,5 +1,6 @@
 package com.bottari.log;
 
+import com.bottari.log.entry.HttpLogEntry;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
@@ -9,6 +10,8 @@ import java.io.IOException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -62,6 +65,7 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
                 .responseHeaders(formatter.toResponseHeadersLog(response))
                 .responseBody(formatter.toResponseBodyLog(response))
                 .build();
-        log.info(logEntry.toLogString());
+        final Marker httpLogMarker = MarkerFactory.getMarker("HTTP-LOG");
+        log.info(httpLogMarker, logEntry.toLogString());
     }
 }

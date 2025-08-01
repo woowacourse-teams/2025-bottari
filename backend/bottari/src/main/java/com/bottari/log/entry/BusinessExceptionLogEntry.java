@@ -1,11 +1,11 @@
-package com.bottari.log;
+package com.bottari.log.entry;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class RuntimeExceptionLogEntry {
+public class BusinessExceptionLogEntry {
 
     private String exceptionType;
     private String message;
@@ -14,7 +14,7 @@ public class RuntimeExceptionLogEntry {
     public String toLogString() {
         return String.format("""
                         
-                        ================ RUNTIME EXCEPTION LOG ================
+                        ================ BUSINESS EXCEPTION LOG ===============
                         Exception Type : %s
                         Message        : %s
                         At             : %s

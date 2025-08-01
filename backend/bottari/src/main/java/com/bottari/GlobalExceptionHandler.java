@@ -1,11 +1,13 @@
 package com.bottari;
 
-import com.bottari.log.ExceptionLogEntry;
+import com.bottari.log.entry.ExceptionLogEntry;
 import com.bottari.log.LogFormatter;
-import com.bottari.log.RuntimeExceptionLogEntry;
+import com.bottari.log.entry.BusinessExceptionLogEntry;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -51,12 +53,13 @@ public class GlobalExceptionHandler {
             final RuntimeException exception,
             final HttpServletRequest request
     ) {
-        final RuntimeExceptionLogEntry logEntry = RuntimeExceptionLogEntry.builder()
+        final BusinessExceptionLogEntry logEntry = BusinessExceptionLogEntry.builder()
                 .exceptionType(exception.getClass().getName())
                 .message(exception.getMessage())
                 .at(request.getRequestURI())
                 .build();
-        log.warn(logEntry.toLogString());
+        final Marker businessExceptionLogMarker = MarkerFactory.getMarker("BUSINESS-EXCEPTION-LOG");
+        log.warn(businessExceptionLogMarker, logEntry.toLogString());
     }
 
     private void doLog(
@@ -69,6 +72,7 @@ public class GlobalExceptionHandler {
                 .at(request.getRequestURI())
                 .stackTrace(formatter.toStackTraceLog(exception))
                 .build();
-        log.error(logEntry.toLogString());
+        final Marker exceptionLogMarker = MarkerFactory.getMarker("EXCEPTION-LOG");
+        log.error(exceptionLogMarker, logEntry.toLogString());
     }
 }
