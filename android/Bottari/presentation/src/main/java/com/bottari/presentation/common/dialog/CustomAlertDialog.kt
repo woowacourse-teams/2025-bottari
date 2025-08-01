@@ -79,8 +79,8 @@ class CustomAlertDialog : DialogFragment() {
     }
 
     private fun setupExitWithoutSave() {
-        binding.tvDialogCustomTitle.setText(R.string.common_alert_title_text)
-        binding.tvDialogCustomDescription.setText(R.string.bottari_item_unsaved_dialog_description_text)
+        binding.tvDialogCustomTitle.setText(R.string.common_alert_dialog_title_text)
+        binding.tvDialogCustomDescription.setText(R.string.common_alert_unsaved_dialog_message_text)
         setPositiveBtn(
             nameId = R.string.common_yes_btn_text,
             backgroundColor = R.color.primary,
