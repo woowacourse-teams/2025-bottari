@@ -37,7 +37,7 @@ public class BottariTemplateService {
 
     public ReadBottariTemplateResponse getById(final Long id) {
         final BottariTemplate bottariTemplate = bottariTemplateRepository.findByIdWithMember(id)
-                .orElseThrow(() -> new IllegalArgumentException("보따리 템플릿을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_TEMPLATE_NOT_FOUND));
         final List<BottariTemplateItem> bottariTemplateItems =
                 bottariTemplateItemRepository.findAllByBottariTemplateId(bottariTemplate.getId());
 
@@ -87,9 +87,9 @@ public class BottariTemplateService {
             final String ssaid
     ) {
         final BottariTemplate bottariTemplate = bottariTemplateRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 보따리 템플릿을 찾을 수 없습니다."));
-        final List<BottariTemplateItem> bottariTemplateItems = bottariTemplateItemRepository.findAllByBottariTemplateId(
-                id);
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_TEMPLATE_NOT_FOUND));
+        final List<BottariTemplateItem> bottariTemplateItems =
+                bottariTemplateItemRepository.findAllByBottariTemplateId(id);
         final Member member = memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         final Bottari bottari = new Bottari(bottariTemplate.getTitle(), member);
@@ -108,7 +108,7 @@ public class BottariTemplateService {
             final String ssaid
     ) {
         final BottariTemplate bottariTemplate = bottariTemplateRepository.findByIdWithMember(id)
-                .orElseThrow(() -> new IllegalArgumentException("보따리 템플릿을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_TEMPLATE_NOT_FOUND));
         validateOwner(ssaid, bottariTemplate);
         bottariTemplateItemRepository.deleteByBottariTemplateId(id);
         bottariTemplateRepository.deleteById(id);

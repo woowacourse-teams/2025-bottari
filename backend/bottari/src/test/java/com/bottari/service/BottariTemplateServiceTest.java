@@ -70,7 +70,7 @@ class BottariTemplateServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariTemplateService.getById(notExistsBottariTemplateId))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("보따리 템플릿을 찾을 수 없습니다.");
     }
 
@@ -106,15 +106,15 @@ class BottariTemplateServiceTest {
 
         // then
         assertAll(() -> {
-                      assertThat(actual).hasSize(2);
-                      assertThat(actual.get(0).title()).isEqualTo("A_template2");
-                      assertThat(actual.get(0).items()).hasSize(1);
-                      assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3");
-                      assertThat(actual.get(1).title()).isEqualTo("A_template1");
-                      assertThat(actual.get(1).items()).hasSize(2);
-                      assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
-                      assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
-                  }
+                    assertThat(actual).hasSize(2);
+                    assertThat(actual.get(0).title()).isEqualTo("A_template2");
+                    assertThat(actual.get(0).items()).hasSize(1);
+                    assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3");
+                    assertThat(actual.get(1).title()).isEqualTo("A_template1");
+                    assertThat(actual.get(1).items()).hasSize(2);
+                    assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
+                    assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
+                }
         );
     }
 
@@ -326,8 +326,8 @@ class BottariTemplateServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariTemplateService.createBottari(notExistsTemplateId, "ssaid"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당 보따리 템플릿을 찾을 수 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("보따리 템플릿을 찾을 수 없습니다.");
     }
 
     @DisplayName("보따리 생성 시 사용자가 존재하지 않는다면, 예외를 던진다.")
@@ -399,7 +399,7 @@ class BottariTemplateServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariTemplateService.deleteById(invalidId, "ssaid"))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("보따리 템플릿을 찾을 수 없습니다.");
     }
 
