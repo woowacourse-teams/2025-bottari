@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_small"
-        android:text="@string/template_my_template_btn"
+        android:text="@string/template_my_template_btn_text"
         android:textColor="@color/gray_787878"
         app:layout_constraintEnd_toEndOf="@id/et_bottari_template_title"
         app:layout_constraintTop_toBottomOf="@id/et_bottari_template_title" />
@@ -43,4 +43,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_my_bottari_template" />
+
+    <TextView
+        android:id="@+id/btn_template_create"
+        style="@style/Pretendard_SemiBold_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_large"
+        android:layout_marginBottom="@dimen/space_median"
+        android:background="@drawable/bg_primary_radius_16dp"
+        android:elevation="2dp"
+        android:padding="@dimen/space_median"
+        android:text="@string/template_create_btn_text"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
