@@ -58,8 +58,9 @@
     <string name="common_alarm_permission_description_text">설정한 날짜 및 시간에 알람 생성</string>
     <string name="common_permission_description_text">권한 접근을 허용하지 않아도 보따리를 쌀 수 있어요.\n하지만 알림 등 일부 기능이 제한될 수 있어요.</string>
     <string name="common_permission_check_btn_text">확인했어요</string>
-    <string name="common_permission_dialog_title_text">권한이 필요해요</string>
-    <string name="common_permission_dialog_message_text">앱 기능을 사용하려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
+    <string name="common_permission_dialog_title_text">권한 안내</string>
+    <string name="common_notification_permission_dialog_message_text">알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
+    <string name="common_alarm_permission_dialog_message_text">알람을 설정하려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
     <string name="common_permission_dialog_positive_btn_text">설정으로 가기</string>
     <string name="common_permission_dialog_negative_btn_text">나중에 하기</string>
 
