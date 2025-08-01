@@ -18,7 +18,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 @Component
 @WebFilter("/*")
 @RequiredArgsConstructor
-public class LoggingFilter extends OncePerRequestFilter {
+public class HttpLoggingFilter extends OncePerRequestFilter {
 
     private final LogFormatter formatter;
 
