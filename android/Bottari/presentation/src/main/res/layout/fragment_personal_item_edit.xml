@@ -54,10 +54,10 @@
     <include
         android:id="@+id/empty_view"
         layout="@layout/view_bottari_item_empty"
-        android:layout_height="0dp"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toTopOf="@id/toolbar_personal_item_edit"
-        app:layout_constraintBottom_toTopOf="@id/et_personal_item"/>
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/et_personal_item"
+        app:layout_constraintTop_toTopOf="@id/toolbar_personal_item_edit" />
 
     <EditText
         android:id="@+id/et_personal_item"
