@@ -94,8 +94,8 @@ class BottariServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariService.getById("invalid_ssaid", bottari.getId()))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("본인의 보따리가 아닙니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("해당 보따리에 접근할 수 있는 권한이 없습니다. - 본인의 보따리가 아닙니다.");
     }
 
     @DisplayName("존재하지 않는 id로 보따리를 조회할 경우, 예외를 던진다.")
@@ -287,8 +287,8 @@ class BottariServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariService.update(request, bottari.getId(), "invalid_ssaid"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("본인의 보따리가 아닙니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("해당 보따리에 접근할 수 있는 권한이 없습니다. - 본인의 보따리가 아닙니다.");
     }
 
     @DisplayName("존재하지 않는 id로 보따리를 수정할 경우, 예외를 던진다.")
@@ -332,7 +332,7 @@ class BottariServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariService.deleteById(anotherMemberBottari.getId(), "ssaid"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("본인의 보따리가 아닙니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("해당 보따리에 접근할 수 있는 권한이 없습니다. - 본인의 보따리가 아닙니다.");
     }
 }

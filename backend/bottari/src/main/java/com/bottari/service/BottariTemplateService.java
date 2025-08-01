@@ -157,7 +157,7 @@ public class BottariTemplateService {
             final BottariTemplate bottariTemplate
     ) {
         if (!bottariTemplate.isOwner(ssaid)) {
-            throw new IllegalArgumentException("본인의 보따리 템플릿이 아닙니다.");
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_NOT_OWNED, "본인의 보따리 템플릿이 아닙니다.");
         }
     }
 }

@@ -22,6 +22,8 @@ public enum ErrorCode {
     BOTTARI_TEMPLATE_ITEM_DUPLICATED_IN_REQUEST(HttpStatus.BAD_REQUEST, "요청에 중복된 보따리 템플릿 물품이 있습니다."),
 
     BOTTARI_ITEM_MAXIMUM_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "보따리 물품의 최대 개수를 초과했습니다."),
+    BOTTARI_NOT_OWNED(HttpStatus.FORBIDDEN, "해당 보따리에 접근할 수 있는 권한이 없습니다."),
+    BOTTARI_TEMPLATE_NOT_OWNED(HttpStatus.FORBIDDEN, "해당 보따리 템플릿에 접근할 수 있는 권한이 없습니다."),
     ;
 
     private final HttpStatus status;

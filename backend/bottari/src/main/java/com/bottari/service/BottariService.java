@@ -142,7 +142,7 @@ public class BottariService {
             final Bottari bottari
     ) {
         if (!bottari.isOwner(ssaid)) {
-            throw new IllegalArgumentException("본인의 보따리가 아닙니다.");
+            throw new BusinessException(ErrorCode.BOTTARI_NOT_OWNED, "본인의 보따리가 아닙니다.");
         }
     }
 }

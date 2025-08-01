@@ -415,7 +415,7 @@ class BottariTemplateServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariTemplateService.deleteById(bottariTemplate.getId(), anotherSsaid))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("본인의 보따리 템플릿이 아닙니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("해당 보따리 템플릿에 접근할 수 있는 권한이 없습니다. - 본인의 보따리 템플릿이 아닙니다.");
     }
 }
