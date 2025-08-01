@@ -1,4 +1,4 @@
-package com.bottari;
+package com.bottari.error;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,22 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST,
                 exception.getMessage()
         );
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ProblemDetail handleBusinessException(
+            final BusinessException exception,
+            final HttpServletRequest request
+    ) {
+        log.warn("Request URL: {} | Exception: {}", request.getRequestURI(), exception.getMessage());
+        final ErrorCode errorCode = exception.getErrorCode();
+        final ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                errorCode.getStatus(),
+                exception.getMessage()
+        );
+        problemDetail.setTitle(errorCode.name());
+
+        return problemDetail;
     }
 
     @ExceptionHandler(Exception.class)
