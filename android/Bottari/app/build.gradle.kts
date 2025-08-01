@@ -52,9 +52,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":presentation"))
-    implementation(project(":domain"))
     implementation(project(":di"))
+    implementation(project(":presentation"))
 
     implementation(libs.timber)
     implementation(libs.androidx.core.ktx)
