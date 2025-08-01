@@ -91,6 +91,7 @@ class CustomAlertDialog : DialogFragment() {
             backgroundColor = R.color.white,
             textColor = R.color.gray_787878,
         ) { listener?.onClickNegative() }
+        setCloseBtn()
     }
 
     private fun setPositiveBtn(
@@ -152,6 +153,10 @@ class CustomAlertDialog : DialogFragment() {
                 }
             }
         }
+    }
+
+    private fun setCloseBtn() {
+        binding.btnDialogCustomClose.setOnClickListener { dismiss() }
     }
 
     companion object {
