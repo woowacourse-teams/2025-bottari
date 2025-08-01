@@ -184,5 +184,5 @@
     <string name="menu_edit_title_text">내용 편집하기</string>
     <string name="menu_delete_title_text">삭제하기</string>
     <string name="bottari_edit_item_empty_view_title">보따리 안에 물건이 없어요</string>
-    <string name="bottari_edit_item_empty_view_text">여행, 일상, 이벤트… \n어떤 순간이든 꼭 챙겨야 할 것들을 넣어보아요</string>
+    <string name="bottari_edit_item_empty_view_text">무엇을 챙겨야 할지 모르겠다면,\n‘모두의 보따리’를 살펴보세요! </string>
 </resources>
