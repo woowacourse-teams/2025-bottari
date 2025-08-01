@@ -81,8 +81,7 @@ class PersonalItemEditFragment :
             toggleLoadingIndicator(uiState.isLoading)
             handleBottariNameState(uiState.title)
             handleItemState(uiState.items)
-            handleEmptyView(state.items.isEmpty())
-
+            handleEmptyView(uiState.items.isEmpty())
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
@@ -159,6 +158,7 @@ class PersonalItemEditFragment :
 
     private fun handleEmptyView(isEmpty: Boolean) {
         binding.emptyView.clPersonalBottariItemEmptyView.isVisible = isEmpty
+    }
 
     private fun showExitConfirmationDialog() {
         val existingDialog =
