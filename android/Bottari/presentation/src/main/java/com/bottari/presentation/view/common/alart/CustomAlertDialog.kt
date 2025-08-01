@@ -14,14 +14,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
+import com.bottari.presentation.common.extension.safeArgument
 import com.bottari.presentation.databinding.DialogCustomBinding
-import com.bottari.presentation.view.common.safeArgument
 
 class CustomAlertDialog : DialogFragment() {
     private var _binding: DialogCustomBinding? = null
     val binding get() = requireNotNull(_binding)
 
-    var listener: DialogListener? = null
+    private var listener: DialogListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,12 +49,10 @@ class CustomAlertDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val typeStr = safeArgument { getString(ARG_DIALOG_TYPE) }
-        val preset = runCatching { DialogPresetType.valueOf(typeStr ?: "") }.getOrNull()
-
-        if (preset == null) {
-            dismiss()
-            return
-        }
+        val preset =
+            typeStr?.let {
+                runCatching { DialogPresetType.valueOf(it) }.getOrNull()
+            } ?: return dismiss()
 
         preset.applyTo(this)
     }
@@ -82,14 +80,13 @@ class CustomAlertDialog : DialogFragment() {
         @StringRes textRes: Int,
         @ColorRes textColorRes: Int,
         @ColorRes backgroundColorRes: Int,
-        onClick: () -> Unit,
     ) {
         setupButton(
             binding.btnDialogCustomPositive,
             textRes,
             textColorRes,
             backgroundColorRes,
-            onClick,
+            { listener?.onClickPositive() },
         )
     }
 
@@ -97,14 +94,13 @@ class CustomAlertDialog : DialogFragment() {
         @StringRes textRes: Int,
         @ColorRes textColorRes: Int,
         @ColorRes backgroundColorRes: Int,
-        onClick: () -> Unit,
     ) {
         setupButton(
             binding.btnDialogCustomNegative,
             textRes,
             textColorRes,
             backgroundColorRes,
-            onClick,
+            { listener?.onClickNegative() },
         )
     }
 
@@ -113,7 +109,7 @@ class CustomAlertDialog : DialogFragment() {
     }
 
     private fun setupButton(
-        button: View,
+        button: TextView,
         @StringRes textRes: Int?,
         @ColorRes textColorRes: Int?,
         @ColorRes backgroundColorRes: Int?,
@@ -124,7 +120,7 @@ class CustomAlertDialog : DialogFragment() {
             return
         }
 
-        (button as? TextView)?.apply {
+        button.apply {
             setText(textRes)
             textColorRes?.let { setTextColor(ContextCompat.getColor(context, it)) }
             backgroundTintList =

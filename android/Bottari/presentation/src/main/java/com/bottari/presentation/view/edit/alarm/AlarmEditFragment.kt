@@ -12,10 +12,10 @@ import com.bottari.presentation.common.ItemSpacingDecoration
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getParcelableCompat
 import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.safeArgument
 import com.bottari.presentation.databinding.FragmentAlarmEditBinding
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
-import com.bottari.presentation.view.common.safeArgument
 import com.bottari.presentation.view.edit.alarm.adapter.DayOfWeekAdapter
 import com.shawnlin.numberpicker.NumberPicker
 import java.time.LocalDate
