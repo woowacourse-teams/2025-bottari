@@ -47,6 +47,14 @@ class MainViewModel(
         }
     }
 
+    fun savePermissionFlag() {
+        viewModelScope.launch {
+            savePermissionFlagUseCase(true)
+                .onSuccess { _uiState.update { copy(hasPermissionFlag = true) } }
+                .onFailure { _uiEvent.value = MainUiEvent.SavePermissionFlagFailure }
+        }
+    }
+
     private fun checkPermissionFlag() {
         viewModelScope.launch {
             getPermissionFlagUseCase()
@@ -58,7 +66,7 @@ class MainViewModel(
     private fun handleCheckRegistrationResult(result: RegisteredMember) {
         if (result.isRegistered) {
             _uiState.update { copy(isLoading = false) }
-            _uiEvent.value = MainUiEvent.LoginSuccess
+            _uiEvent.value = MainUiEvent.LoginSuccess(_uiState.value!!.hasPermissionFlag)
             return
         }
         registerMember(ssaid)
@@ -66,6 +74,7 @@ class MainViewModel(
 
     private fun handlePermissionFlag(permissionFlag: Boolean) {
         if (permissionFlag) {
+            _uiState.update { copy(hasPermissionFlag = true) }
             checkRegisteredMember()
             return
         }
@@ -77,7 +86,7 @@ class MainViewModel(
             registerMemberUseCase(ssaid)
                 .onSuccess {
                     _uiState.update { copy(isLoading = false) }
-                    _uiEvent.value = MainUiEvent.LoginSuccess
+                    _uiEvent.value = MainUiEvent.LoginSuccess(_uiState.value!!.hasPermissionFlag)
                 }.onFailure { _uiEvent.value = MainUiEvent.RegisterFailure }
         }
     }

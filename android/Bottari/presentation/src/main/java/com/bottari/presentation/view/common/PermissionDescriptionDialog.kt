@@ -10,7 +10,9 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import com.bottari.presentation.databinding.DialogPermissionDescriptionBinding
 
-class PermissionDescriptionDialog : DialogFragment() {
+class PermissionDescriptionDialog(
+    private val onDismissed: () -> Unit,
+) : DialogFragment() {
     private var _binding: DialogPermissionDescriptionBinding? = null
     val binding: DialogPermissionDescriptionBinding get() = _binding!!
 
@@ -42,7 +44,10 @@ class PermissionDescriptionDialog : DialogFragment() {
     }
 
     private fun setupListener() {
-        binding.btnPermissionCheck.setOnClickListener { dismiss() }
+        binding.btnPermissionCheck.setOnClickListener {
+            dismiss()
+            onDismissed()
+        }
     }
 
     private fun setupDialog() {

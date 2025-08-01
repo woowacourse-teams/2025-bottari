@@ -87,6 +87,9 @@
     <string name="common_close_btn_description">닫기 버튼</string>
     <string name="common_option_btn_description">옵션 버튼</string>
 
+    <!--  Splash Screen  -->
+    <string name="splash_screen_permission_denied_text">권한이 거부되어 일부 기능이 제한돼요.\n기능 사용 시 다시 요청드릴게요.</string>
+
     <!-- Home Navigation -->
     <string name="home_nav_template_title_text">모두의 보따리</string>
     <string name="home_nav_bottari_title_text">나의 보따리</string>
