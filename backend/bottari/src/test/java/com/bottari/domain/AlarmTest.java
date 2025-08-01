@@ -3,6 +3,7 @@ package com.bottari.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.bottari.error.BusinessException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
@@ -21,8 +22,8 @@ class AlarmTest {
 
         // when & then
         assertThatThrownBy(() -> new Alarm(false, null, locationAlarm, bottari))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("루틴 알람이 존재하지 않으면 위치 알람을 설정할 수 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("루틴 알람이 설정되지 않으면 위치 알람을 설정할 수 없습니다.");
     }
 
     @DisplayName("알람을 수정할 때, 위치 알람 없이 루틴 알람을 설정하는 경우, 예외를 던진다.")
@@ -42,8 +43,8 @@ class AlarmTest {
 
         // when & then
         assertThatThrownBy(() -> alarm.update(null, locationAlarm))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("루틴 알람이 존재하지 않으면 위치 알람을 설정할 수 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("루틴 알람이 설정되지 않으면 위치 알람을 설정할 수 없습니다.");
     }
 
     @DisplayName("알람을 활성화한다.")
@@ -85,7 +86,7 @@ class AlarmTest {
 
         // when & then
         assertThatThrownBy(alarm::active)
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("알람이 이미 활성화되어 있습니다.");
     }
 
@@ -128,7 +129,7 @@ class AlarmTest {
 
         // when & then
         assertThatThrownBy(alarm::inactive)
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("알람이 이미 비활성화되어 있습니다.");
     }
 }

@@ -1,5 +1,7 @@
 package com.bottari.domain;
 
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,15 +41,18 @@ public class Member {
 
     public void updateName(final String newName) {
         if (name.equals(newName)) {
-            throw new IllegalArgumentException("기존 이름과 동일한 이름으로는 변경할 수 없습니다.");
+            throw new BusinessException(ErrorCode.MEMBER_NAME_IS_SAME);
         }
         validateName(newName);
         this.name = newName;
     }
 
     private void validateName(final String name) {
-        if (name.length() < 3 || name.length() > 10) {
-            throw new IllegalArgumentException("사용자 이름은 3글자 이상 10글자 이하여야 합니다.");
+        if (name.length() < 3) {
+            throw new BusinessException(ErrorCode.MEMBER_NAME_IS_SHORT, "최소 3자 이상 입력 가능합니다.");
+        }
+        if (name.length() > 10) {
+            throw new BusinessException(ErrorCode.MEMBER_NAME_TOO_LONG, "최대 10자까지 입력 가능합니다.");
         }
     }
 }

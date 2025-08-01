@@ -25,6 +25,24 @@ public enum ErrorCode {
     BOTTARI_ITEM_NOT_IN_BOTTARI(HttpStatus.BAD_REQUEST, "보따리 안에 없는 물품입니다."),
     BOTTARI_NOT_OWNED(HttpStatus.FORBIDDEN, "해당 보따리에 접근할 수 있는 권한이 없습니다."),
     BOTTARI_TEMPLATE_NOT_OWNED(HttpStatus.FORBIDDEN, "해당 보따리 템플릿에 접근할 수 있는 권한이 없습니다."),
+
+    MEMBER_NAME_IS_SAME(HttpStatus.BAD_REQUEST, "기존의 사용자 이름과 동일한 이름으로는 변경할 수 없습니다."),
+    MEMBER_NAME_IS_SHORT(HttpStatus.BAD_REQUEST, "사용자 이름이 너무 짧습니다."),
+    MEMBER_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "사용자 이름이 너무 깁니다."),
+    BOTTARI_TITLE_IS_SAME(HttpStatus.BAD_REQUEST, "기존의 보따리 이름과 동일한 이름으로는 변경할 수 없습니다."),
+    BOTTARI_TITLE_IS_BLANK(HttpStatus.BAD_REQUEST, "보따리 제목은 공백일 수 없습니다."),
+    BOTTARI_TITLE_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 제목이 너무 깁니다."),
+    BOTTARI_ITEM_ALREADY_CHECKED(HttpStatus.BAD_REQUEST, "해당 보따리 물품은 이미 체크되어 있습니다."),
+    BOTTARI_ITEM_ALREADY_UNCHECKED(HttpStatus.BAD_REQUEST, "해당 보따리 물품은 이미 체크 해제되어 있습니다."),
+    BOTTARI_ITEM_NAME_IS_BLANK(HttpStatus.BAD_REQUEST, "보따리 물품명은 공백일 수 없습니다."),
+    BOTTARI_ITEM_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 물품명이 너무 깁니다."),
+    BOTTARI_TEMPLATE_TITLE_IS_BLANK(HttpStatus.BAD_REQUEST, "보따리 템플릿 제목은 공백일 수 없습니다."),
+    BOTTARI_TEMPLATE_TITLE_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 템플릿 제목이 너무 깁니다."),
+    BOTTARI_TEMPLATE_ITEM_NAME_IS_BLANK(HttpStatus.BAD_REQUEST, "보따리 템플릿 물품명은 공백일 수 없습니다."),
+    BOTTARI_TEMPLATE_ITEM_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 템플릿 물품명이 너무 깁니다."),
+    ALARM_ALREADY_ACTIVE(HttpStatus.BAD_REQUEST, "알람이 이미 활성화되어 있습니다."),
+    ALARM_ALREADY_INACTIVE(HttpStatus.BAD_REQUEST, "알람이 이미 비활성화되어 있습니다."),
+    LOCATION_ALARM_WITHOUT_ROUTINE(HttpStatus.BAD_REQUEST, "루틴 알람이 설정되지 않으면 위치 알람을 설정할 수 없습니다."),
     ;
 
     private final HttpStatus status;

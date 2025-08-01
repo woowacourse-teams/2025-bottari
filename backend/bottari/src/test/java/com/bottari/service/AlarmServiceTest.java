@@ -236,7 +236,7 @@ class AlarmServiceTest {
 
         // when & then
         assertThatThrownBy(() -> alarmService.active(activeAlarm.getId()))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("알람이 이미 활성화되어 있습니다.");
     }
 
@@ -292,7 +292,7 @@ class AlarmServiceTest {
 
         // when & then
         assertThatThrownBy(() -> alarmService.inactive(inactiveAlarm.getId()))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("알람이 이미 비활성화되어 있습니다.");
     }
 }
