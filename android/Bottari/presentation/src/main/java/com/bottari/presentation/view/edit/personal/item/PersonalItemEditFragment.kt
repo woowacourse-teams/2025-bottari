@@ -12,8 +12,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
-import com.bottari.presentation.common.CustomAlertDialog
 import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.dialog.CustomAlertDialog
+import com.bottari.presentation.common.dialog.DialogListener
+import com.bottari.presentation.common.dialog.DialogPresetType
 import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.extension.getParcelableArrayListCompat
 import com.bottari.presentation.common.extension.getSSAID
@@ -153,15 +155,27 @@ class PersonalItemEditFragment :
     }
 
     private fun showExitConfirmationDialog() {
-        CustomAlertDialog
-            .create(requireContext())
-            .setTitleText(R.string.common_alert_title_text)
-            .setSubTitleText(R.string.bottari_item_unsaved_dialog_description_text)
-            .setPositiveButton(R.string.common_yes_btn_text) {
-                onBackPressedCallback.isEnabled = false
-                requireActivity().onBackPressedDispatcher.onBackPressed()
-            }.setNegativeButton(R.string.common_no_btn_text)
-            .show()
+        val tag = CustomAlertDialog::class.java.name
+        val existingDialog = parentFragmentManager.findFragmentByTag(tag) as? CustomAlertDialog
+        if (existingDialog != null && existingDialog.dialog?.isShowing == true) {
+            return
+        }
+
+        val dialog =
+            existingDialog ?: CustomAlertDialog
+                .newInstance(DialogPresetType.EXIT_WITHOUT_SAVE)
+                .setDialogListener(
+                    object : DialogListener {
+                        override fun onClickPositive() {
+                            onBackPressedCallback.isEnabled = false
+                            requireActivity().onBackPressedDispatcher.onBackPressed()
+                        }
+
+                        override fun onClickNegative() {}
+                    },
+                )
+
+        dialog.show(parentFragmentManager, tag)
     }
 
     companion object {
