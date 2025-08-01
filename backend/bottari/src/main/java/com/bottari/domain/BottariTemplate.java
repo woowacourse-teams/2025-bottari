@@ -34,6 +34,8 @@ public class BottariTemplate {
     @CreatedDate
     private LocalDateTime createdAt;
 
+    private int takenCount;
+
     public BottariTemplate(
             final String title,
             final Member member
@@ -41,6 +43,11 @@ public class BottariTemplate {
         validateTitle(title);
         this.title = title;
         this.member = member;
+        this.takenCount = 0;
+    }
+
+    public void increaseTakenCount() {
+        takenCount++;
     }
 
     public boolean isOwner(final String ssaid) {

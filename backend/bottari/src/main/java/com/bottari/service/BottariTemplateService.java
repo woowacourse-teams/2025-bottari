@@ -3,12 +3,14 @@ package com.bottari.service;
 import com.bottari.domain.Bottari;
 import com.bottari.domain.BottariItem;
 import com.bottari.domain.BottariTemplate;
+import com.bottari.domain.BottariTemplateHistory;
 import com.bottari.domain.BottariTemplateItem;
 import com.bottari.domain.Member;
 import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.repository.BottariItemRepository;
 import com.bottari.repository.BottariRepository;
+import com.bottari.repository.BottariTemplateHistoryRepository;
 import com.bottari.repository.BottariTemplateItemRepository;
 import com.bottari.repository.BottariTemplateRepository;
 import com.bottari.repository.MemberRepository;
@@ -29,6 +31,7 @@ public class BottariTemplateService {
 
     private final BottariTemplateRepository bottariTemplateRepository;
     private final BottariTemplateItemRepository bottariTemplateItemRepository;
+    private final BottariTemplateHistoryRepository bottariTemplateHistoryRepository;
     private final BottariRepository bottariRepository;
     private final BottariItemRepository bottariItemRepository;
     private final MemberRepository memberRepository;
@@ -95,8 +98,19 @@ public class BottariTemplateService {
                 .map(item -> new BottariItem(item.getName(), bottari))
                 .toList();
         bottariItemRepository.saveAll(bottariItems);
-
+        increaseTakenCount(bottariTemplate, member);
         return savedBottari.getId();
+    }
+
+    private void increaseTakenCount(
+            final BottariTemplate bottariTemplate,
+            final Member member
+    ) {
+        if(!bottariTemplateHistoryRepository.existsByBottariTemplateIdAndMemberId(bottariTemplate.getId(), member.getId())){
+            bottariTemplate.increaseTakenCount();
+            BottariTemplateHistory bottariTemplateHistory = new BottariTemplateHistory(member, bottariTemplate);
+            bottariTemplateHistoryRepository.save(bottariTemplateHistory);
+        }
     }
 
     @Transactional

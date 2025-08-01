@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -42,5 +43,19 @@ class BottariTemplateTest {
 
         // then
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @DisplayName("보따리 가져간 횟수를 증가시킨다.")
+    @Test
+    void increaseTakenCount(){
+        // given
+        Member owner = new Member("ssaid","name");
+        BottariTemplate bottariTemplate = new BottariTemplate("title",owner);
+
+        // when
+        bottariTemplate.increaseTakenCount();
+
+        // then
+        assertThat(bottariTemplate.getTakenCount()).isEqualTo(1);
     }
 }
