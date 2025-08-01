@@ -61,9 +61,9 @@ class BottariViewModel(
                 }.onFailure {
                     _uiEvent.value = BottariUiEvent.BottariDeleteFailure
                 }
-        }
 
-        _uiState.update { copy(isLoading = false) }
+            _uiState.update { copy(isLoading = false) }
+        }
     }
 
     companion object {
