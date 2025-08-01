@@ -48,7 +48,8 @@ class BottariTemplateControllerTest {
                         new BottariTemplateItemResponse(1L, "item_1"),
                         new BottariTemplateItemResponse(2L, "item_2")
                 ),
-                "author_1"
+                "author_1",
+                0
         );
         given(bottariTemplateService.getById(1L))
                 .willReturn(response);
@@ -72,7 +73,8 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(1L, "item_1"),
                                 new BottariTemplateItemResponse(2L, "item_2")
                         ),
-                        "author_1"
+                        "author_1",
+                        0
                 ),
                 new ReadBottariTemplateResponse(
                         2L,
@@ -80,7 +82,8 @@ class BottariTemplateControllerTest {
                         List.of(
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
-                        "author_2"
+                        "author_2",
+                        0
                 )
         );
         given(bottariTemplateService.getBySsaid("ssaid"))
@@ -105,7 +108,8 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(1L, "item_1"),
                                 new BottariTemplateItemResponse(2L, "item_2")
                         ),
-                        "author_1"
+                        "author_1",
+                        0
                 ),
                 new ReadBottariTemplateResponse(
                         2L,
@@ -113,7 +117,8 @@ class BottariTemplateControllerTest {
                         List.of(
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
-                        "author_2"
+                        "author_2",
+                        0
                 )
         );
         given(bottariTemplateService.getAll(anyString()))

@@ -58,7 +58,8 @@ class BottariTemplateServiceTest {
                 () -> assertThat(actual.title()).isEqualTo("title_1"),
                 () -> assertThat(actual.items()).hasSize(2),
                 () -> assertThat(actual.items().get(0).name()).isEqualTo("item_1"),
-                () -> assertThat(actual.items().get(1).name()).isEqualTo("item_2")
+                () -> assertThat(actual.items().get(1).name()).isEqualTo("item_2"),
+                () -> assertThat(actual.takenCount()).isEqualTo(0)
         );
     }
 
@@ -109,11 +110,13 @@ class BottariTemplateServiceTest {
                       assertThat(actual).hasSize(2);
                       assertThat(actual.get(0).title()).isEqualTo("A_template2");
                       assertThat(actual.get(0).items()).hasSize(1);
+                      assertThat(actual.get(0).takenCount()).isEqualTo(0);
                       assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3");
                       assertThat(actual.get(1).title()).isEqualTo("A_template1");
                       assertThat(actual.get(1).items()).hasSize(2);
                       assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
                       assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
+                      assertThat(actual.get(1).takenCount()).isEqualTo(0);
                   }
         );
     }
@@ -160,10 +163,12 @@ class BottariTemplateServiceTest {
                 () -> assertThat(actual.get(0).title()).isEqualTo("newer_template"),
                 () -> assertThat(actual.get(0).items()).hasSize(1),
                 () -> assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3"),
+                () -> assertThat(actual.get(0).takenCount()).isEqualTo(0),
                 () -> assertThat(actual.get(1).title()).isEqualTo("older_template"),
                 () -> assertThat(actual.get(1).items()).hasSize(2),
                 () -> assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1"),
-                () -> assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2")
+                () -> assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2"),
+                () -> assertThat(actual.get(1).takenCount()).isEqualTo(0)
         );
     }
 
@@ -203,9 +208,11 @@ class BottariTemplateServiceTest {
                 () -> assertThat(actual.get(1).items()).hasSize(2),
                 () -> assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1"),
                 () -> assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2"),
+                () -> assertThat(actual.get(1).takenCount()).isEqualTo(0),
                 () -> assertThat(actual.getFirst().title()).isEqualTo("title_2"),
                 () -> assertThat(actual.getFirst().items()).hasSize(1),
-                () -> assertThat(actual.getFirst().items().getFirst().name()).isEqualTo("item_3")
+                () -> assertThat(actual.getFirst().items().getFirst().name()).isEqualTo("item_3"),
+                () -> assertThat(actual.getFirst().takenCount()).isEqualTo(0)
         );
     }
 
