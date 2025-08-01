@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
@@ -13,6 +12,7 @@ import com.bottari.presentation.common.ItemSpacingDecoration
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getParcelableCompat
 import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.safeArgument
 import com.bottari.presentation.databinding.FragmentAlarmEditBinding
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
@@ -64,10 +64,9 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
         setupListener()
     }
 
-    private inline fun <T> Fragment.safeArgument(block: Bundle.() -> T): T? = runCatching { requireArguments().block() }.getOrNull()
-
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            toggleLoadingIndicator(uiState.isLoading)
             handleAlarmState(uiState.alarm)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner, ::handleAlarmEvent)

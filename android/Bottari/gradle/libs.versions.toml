@@ -16,6 +16,7 @@ material = "1.12.0"
 cardstackview = "3.0.0"
 flexbox = "3.0.0"
 numberPicker = "2.4.13"
+spinkit = "1.4.0"
 
 # Network
 retrofit = "3.0.0"
@@ -55,6 +56,7 @@ cardstackview = { module = "com.github.jens-muenker:CardStackView", version.ref 
 flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 number-picker = { module = "io.github.ShawnLin013:number-picker", version.ref = "numberPicker" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+spinkit = { module = "com.github.ybq:Android-SpinKit", version.ref = "spinkit" }
 
 # --- Network ---
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }

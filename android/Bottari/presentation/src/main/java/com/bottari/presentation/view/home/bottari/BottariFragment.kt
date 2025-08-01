@@ -3,6 +3,7 @@ package com.bottari.presentation.view.home.bottari
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -59,6 +60,8 @@ class BottariFragment :
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            binding.emptyView.clBottariEmptyView.isVisible = uiState.bottaries.isEmpty()
+            toggleLoadingIndicator(uiState.isLoading)
             adapter.submitList(uiState.bottaries)
         }
 

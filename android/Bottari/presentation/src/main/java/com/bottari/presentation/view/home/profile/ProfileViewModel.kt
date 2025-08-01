@@ -58,6 +58,8 @@ class ProfileViewModel(
     }
 
     private fun fetchMemberInfo() {
+        _uiState.update { copy(isLoading = true) }
+
         viewModelScope.launch {
             checkRegisteredMemberUseCase(ssaid)
                 .onSuccess {
@@ -68,6 +70,8 @@ class ProfileViewModel(
                         )
                     }
                 }.onFailure { _uiEvent.value = ProfileUiEvent.FetchMemberInfoFailure }
+
+            _uiState.update { copy(isLoading = false) }
         }
     }
 

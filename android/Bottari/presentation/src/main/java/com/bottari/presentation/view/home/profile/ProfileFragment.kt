@@ -52,6 +52,7 @@ class ProfileFragment :
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            toggleLoadingIndicator(uiState.isLoading)
             if (binding.etNicknameEdit.text.toString() != uiState.editingNickname) {
                 binding.etNicknameEdit.setText(uiState.editingNickname)
                 binding.etNicknameEdit.setSelection(uiState.editingNickname.length)
