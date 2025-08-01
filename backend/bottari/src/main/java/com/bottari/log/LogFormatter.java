@@ -3,8 +3,6 @@ package com.bottari.log;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
