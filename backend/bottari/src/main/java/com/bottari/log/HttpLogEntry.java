@@ -42,9 +42,16 @@ public class HttpLogEntry {
                         %s
                         ==================================================
                         """,
-                startTime, endTime, duration,
-                httpMethod, requestUri, requestHeaders, requestBody,
-                statusCode, responseHeaders, responseBody
+                startTime,
+                endTime,
+                duration,
+                httpMethod,
+                requestUri,
+                requestHeaders,
+                requestBody,
+                statusCode,
+                responseHeaders,
+                responseBody
         );
     }
 }

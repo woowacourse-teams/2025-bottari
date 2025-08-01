@@ -1,11 +1,10 @@
 package com.bottari;
 
 import com.bottari.log.ExceptionLogEntry;
+import com.bottari.log.LogFormatter;
+import com.bottari.log.RuntimeExceptionLogEntry;
 import jakarta.servlet.http.HttpServletRequest;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -14,7 +13,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
+    private final LogFormatter formatter;
 
     @ExceptionHandler({
             IllegalArgumentException.class,
@@ -49,8 +51,8 @@ public class GlobalExceptionHandler {
             final RuntimeException exception,
             final HttpServletRequest request
     ) {
-        final ExceptionLogEntry logEntry = ExceptionLogEntry.builder()
-                .timestamp(toIsoTime(System.currentTimeMillis()))
+        final RuntimeExceptionLogEntry logEntry = RuntimeExceptionLogEntry.builder()
+                .timestamp(formatter.toIsoTimeLog(System.currentTimeMillis()))
                 .exceptionType(exception.getClass().getName())
                 .message(exception.getMessage())
                 .at(request.getRequestURI())
@@ -63,29 +65,12 @@ public class GlobalExceptionHandler {
             final HttpServletRequest request
     ) {
         final ExceptionLogEntry logEntry = ExceptionLogEntry.builder()
-                .timestamp(toIsoTime(System.currentTimeMillis()))
+                .timestamp(formatter.toIsoTimeLog(System.currentTimeMillis()))
                 .exceptionType(exception.getClass().getName())
                 .message(exception.getMessage())
                 .at(request.getRequestURI())
-                .stackTrace(getStackTrace(exception))
+                .stackTrace(formatter.toStackTraceLog(exception))
                 .build();
         log.error(logEntry.toLogString());
-    }
-
-    private String getStackTrace(final Exception exception) {
-        return Arrays.stream(exception.getStackTrace())
-                .map(StackTraceElement::toString)
-                .collect(Collectors.joining("\n"));
-    }
-
-    private String toIsoTime(final Long epochMilli) {
-        if (epochMilli == null) {
-            return "null";
-        }
-
-        return Instant.ofEpochMilli(epochMilli)
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime()
-                .toString();
     }
 }

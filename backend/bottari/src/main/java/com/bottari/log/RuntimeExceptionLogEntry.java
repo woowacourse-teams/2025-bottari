@@ -5,30 +5,27 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ExceptionLogEntry {
+public class RuntimeExceptionLogEntry {
 
     private String timestamp;
     private String exceptionType;
     private String message;
     private String at;
-    private String stackTrace;
 
     public String toLogString() {
         return String.format("""
                         
-                        ==================== EXCEPTION LOG ====================
+                        ================ RUNTIME EXCEPTION LOG ================
                         Timestamp      : %s
                         Exception Type : %s
                         Message        : %s
                         At             : %s
-                        Stack Trace    : %s
                         =======================================================
                         """,
                 timestamp,
                 exceptionType,
                 message,
-                at,
-                stackTrace
+                at
         );
     }
 }
