@@ -67,6 +67,12 @@
 
     <!-- Common: 공통 버튼 텍스트 -->
     <string name="common_confirm_btn_text">확인</string>
+    <string name="common_yes_btn_text">예</string>
+    <string name="common_no_btn_text">아니오</string>
+
+    <!-- Common: 공통 다이얼로그 텍스트-->
+    <string name="common_alert_dialog_title_text">주의</string>
+    <string name="common_alert_unsaved_dialog_message_text">저장하지 않고 나가시겠습니까?</string>
 
     <!-- Common: 접근성 -->
     <string name="common_previous_btn_description">뒤로가기 버튼</string>
@@ -75,7 +81,7 @@
     <string name="common_option_btn_description">옵션 버튼</string>
 
     <!-- Home Navigation -->
-    <string name="home_nav_market_title_text">모두의 보따리</string>
+    <string name="home_nav_template_title_text">모두의 보따리</string>
     <string name="home_nav_bottari_title_text">나의 보따리</string>
     <string name="home_nav_profile_title_text">내 정보</string>
 
@@ -111,7 +117,7 @@
     <string name="bottari_create_default_title_text">새 보따리</string>
     <string name="bottari_create_success_text">보따리를 만들었어요</string>
 
-    <!-- Bottari Edit Item -->
+    <!-- Bottari Edit -->
     <string name="bottari_edit_item_list_title">내 물건</string>
     <string name="bottari_edit_add_item_title">물건 추가하기</string>
     <string name="bottari_edit_add_item_description_text">보따리에 물건을 추가하려면 눌러주세요</string>
@@ -119,8 +125,9 @@
     <string name="bottari_edit_add_alarm_title">알람 추가하기</string>
     <string name="bottari_edit_add_alarm_description_text">알람을 추가하려면 눌러주세요</string>
     <string name="bottari_edit_fetch_failure_text">보따리를 불러오지 못했어요</string>
-    <string name="bottari_edit_create_template_success_text">마켓에 등록했어요</string>
-    <string name="bottari_edit_create_template_failure_text">마켓에 등록하지 못했어요</string>
+    <string name="bottari_edit_create_template_success_text">모두의 보따리에 등록했어요</string>
+    <string name="bottari_edit_create_template_failure_text">머두의 보따리에 등록하지 못했어요</string>
+    <string name="bottari_edit_toggle_alarm_state_failure_text">알람 상태를 변경하지 못했어요</string>
 
     <!-- Bottari Personal Item Edit -->
     <string name="bottari_personal_item_edit_confirm_btn_text">추가하기</string>
@@ -148,19 +155,19 @@
     <string name="alarm_edit_create_failure_text">알람을 만들지 못했어요</string>
     <string name="alarm_edit_exact_alarm_permission_dialog_message_text">보따리 알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
 
-    <!-- Market -->
-    <string name="market_search_hint_text">찾고 싶은 보따리를 입력해 보세요</string>
-    <string name="market_my_template_btn"><![CDATA[내 보따리 보기 >]]></string>
-    <string name="market_fetch_template_failure_text">보따리 템플릿을 불러오지 못했어요</string>
-    <string name="market_detail_template_btn_text">이 보따리 가져오기</string>
-    <string name="market_detail_fetch_failure_text">템플릿 상세 조회에 실패했어요</string>
-    <string name="market_detail_take_failure_text">나의 보따리로 가져오는데 실패했어요</string>
+    <!-- Bottari Template -->
+    <string name="template_search_hint_text">찾고 싶은 보따리를 입력해 보세요</string>
+    <string name="template_my_template_btn"><![CDATA[내 보따리 보기 >]]></string>
+    <string name="template_fetch_template_failure_text">보따리 템플릿을 불러오지 못했어요</string>
+    <string name="template_detail_template_btn_text">이 보따리 가져오기</string>
+    <string name="template_detail_fetch_failure_text">템플릿 상세 조회에 실패했어요</string>
+    <string name="template_detail_take_failure_text">나의 보따리로 가져오는데 실패했어요</string>
 
     <!-- My Bottari Template -->
-    <string name="market_my_template_title">내가 등록한 보따리</string>
-    <string name="market_my_template_delete_success_text">보따리를 삭제했어요</string>
-    <string name="market_my_template_delete_failure_text">보따리를 삭제하지 못했어요</string>
-    <string name="market_my_template_fetch_failure_text">내가 올린 보따리를 불러오지 못했어요</string>
+    <string name="template_my_template_title">내가 등록한 보따리</string>
+    <string name="template_my_template_delete_success_text">보따리를 삭제했어요</string>
+    <string name="template_my_template_delete_failure_text">보따리를 삭제하지 못했어요</string>
+    <string name="template_my_template_fetch_failure_text">내가 올린 보따리를 불러오지 못했어요</string>
 
     <!-- Profile -->
     <string name="profile_nickname_title">닉네임</string>
@@ -181,8 +188,8 @@
     <string name="bottari_home_icon_description">보따리 아이콘 이미지</string>
 
     <!-- Menu -->
-    <string name="menu_create_market_title_text">마켓에 등록하기</string>
-    <string name="menu_rename_title_text">이름 바꾸기</string>
+    <string name="menu_create_template_title_text">모두의 보따리에 등록하기</string>
+    <string name="menu_bottari_rename_title_text">보따리 이름 바꾸기</string>
     <string name="menu_edit_title_text">내용 편집하기</string>
     <string name="menu_delete_title_text">삭제하기</string>
 </resources>

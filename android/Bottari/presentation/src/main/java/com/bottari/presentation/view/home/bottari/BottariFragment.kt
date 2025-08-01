@@ -61,6 +61,7 @@ class BottariFragment :
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             binding.emptyView.clBottariEmptyView.isVisible = uiState.bottaries.isEmpty()
+            toggleLoadingIndicator(uiState.isLoading)
             adapter.submitList(uiState.bottaries)
         }
 

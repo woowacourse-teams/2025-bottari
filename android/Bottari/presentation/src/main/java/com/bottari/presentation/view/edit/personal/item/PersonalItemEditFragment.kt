@@ -6,6 +6,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,11 +18,16 @@ import com.bottari.presentation.common.extension.getParcelableArrayListCompat
 import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.view.common.alart.CustomAlertDialog
+import com.bottari.presentation.view.common.alart.DialogListener
+import com.bottari.presentation.view.common.alart.DialogPresetType
 import com.bottari.presentation.view.edit.personal.item.adapter.PersonalItemEditAdapter
 
 class PersonalItemEditFragment :
     BaseFragment<FragmentPersonalItemEditBinding>(FragmentPersonalItemEditBinding::inflate),
     TextWatcher {
+    private lateinit var onBackPressedCallback: OnBackPressedCallback
+
     private val viewModel: PersonalItemEditViewModel by viewModels {
         val arguments = requireArguments()
         PersonalItemEditViewModel.Factory(
@@ -33,6 +40,7 @@ class PersonalItemEditFragment :
 
     private val adapter by lazy {
         PersonalItemEditAdapter {
+            onBackPressedCallback.isEnabled = true
             viewModel.markItemAsDeleted(it)
         }
     }
@@ -68,14 +76,18 @@ class PersonalItemEditFragment :
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            handleBottariNameState(state.title)
-            handleItemState(state.items)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            toggleLoadingIndicator(uiState.isLoading)
+            handleBottariNameState(uiState.title)
+            handleItemState(uiState.items)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
                 PersonalItemEditUiEvent.SaveBottariItemsFailure -> showSnackbar(R.string.common_save_failure_text)
-                PersonalItemEditUiEvent.SaveBottariItemsSuccess -> requireActivity().onBackPressedDispatcher.onBackPressed()
+                PersonalItemEditUiEvent.SaveBottariItemsSuccess -> {
+                    onBackPressedCallback.isEnabled = false
+                    requireActivity().onBackPressedDispatcher.onBackPressed()
+                }
             }
         }
     }
@@ -96,15 +108,20 @@ class PersonalItemEditFragment :
 
         binding.etPersonalItem.setOnEditorActionListener { _, actionId, _ ->
             if (actionId != EditorInfo.IME_ACTION_SEND) return@setOnEditorActionListener false
-
             addItemFromInput()
             true
         }
+        onBackPressedCallback =
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+                showExitConfirmationDialog()
+            }
+        onBackPressedCallback.isEnabled = false
     }
 
     private fun addItemFromInput() {
         viewModel.addNewItemIfNeeded(binding.etPersonalItem.text.toString())
         binding.etPersonalItem.text.clear()
+        onBackPressedCallback.isEnabled = true
     }
 
     private fun updateDuplicateStateUI(text: String) {
@@ -135,6 +152,29 @@ class PersonalItemEditFragment :
 
     private fun handleItemState(bottariItems: List<BottariItemUiModel>) {
         adapter.submitList(bottariItems)
+    }
+
+    private fun showExitConfirmationDialog() {
+        val existingDialog =
+            parentFragmentManager.findFragmentByTag(tag) as? CustomAlertDialog
+
+        if (existingDialog?.dialog?.isShowing == true) return
+
+        val dialog =
+            CustomAlertDialog
+                .newInstance(DialogPresetType.EXIT_WITHOUT_SAVE)
+                .setDialogListener(
+                    object : DialogListener {
+                        override fun onClickPositive() {
+                            onBackPressedCallback.isEnabled = false
+                            requireActivity().onBackPressedDispatcher.onBackPressed()
+                        }
+
+                        override fun onClickNegative() {}
+                    },
+                )
+
+        dialog.show(parentFragmentManager, tag)
     }
 
     companion object {
