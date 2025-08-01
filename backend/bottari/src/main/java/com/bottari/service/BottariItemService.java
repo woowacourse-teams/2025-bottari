@@ -104,7 +104,7 @@ public class BottariItemService {
         final Set<Long> uniqueDeleteIds = new HashSet<>();
         for (final Long deleteId : deleteIds) {
             if (!uniqueDeleteIds.add(deleteId)) {
-                throw new BusinessException(ErrorCode.BOTTARI_ITEM_DUPLICATED_IN_REQUEST, "삭제하려는 아이템 id가 중복되었습니다.");
+                throw new BusinessException(ErrorCode.BOTTARI_ITEM_DUPLICATED_IN_REQUEST, "삭제하려는 물품 id가 중복되었습니다.");
             }
         }
     }
@@ -115,7 +115,7 @@ public class BottariItemService {
     ) {
         final int countItemInBottari = bottariItemRepository.countAllByBottariIdAndIdIn(bottariId, itemIds);
         if (countItemInBottari != itemIds.size()) {
-            throw new IllegalArgumentException("보따리 안에 없는 물품은 삭제할 수 없습니다.");
+            throw new BusinessException(ErrorCode.BOTTARI_ITEM_NOT_IN_BOTTARI, "삭제할 수 없습니다.");
         }
     }
 

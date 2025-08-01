@@ -118,7 +118,7 @@ class BottariItemServiceTest {
         // when & then
         assertThatThrownBy(() -> bottariItemService.update(bottari.getId(), request))
                 .isInstanceOf(BusinessException.class)
-                .hasMessage("요청에 중복된 보따리 물품이 있습니다. - 삭제하려는 아이템 id가 중복되었습니다.");
+                .hasMessage("요청에 중복된 보따리 물품이 있습니다. - 삭제하려는 물품 id가 중복되었습니다.");
     }
 
     @DisplayName("같은 보따리 내에 해당 물품명이 이미 존재할 경우, 예외를 던진다.")
@@ -236,8 +236,8 @@ class BottariItemServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariItemService.update(bottariId, request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("보따리 안에 없는 물품은 삭제할 수 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("보따리 안에 없는 물품입니다. - 삭제할 수 없습니다.");
     }
 
     @DisplayName("수정 시 추가하려는 물품명에 중복이 존재하는 경우, 예외를 던진다.")
