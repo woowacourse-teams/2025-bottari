@@ -13,14 +13,14 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.dialog.CustomAlertDialog
-import com.bottari.presentation.common.dialog.DialogListener
-import com.bottari.presentation.common.dialog.DialogPresetType
 import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.extension.getParcelableArrayListCompat
 import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.view.common.alart.CustomAlertDialog
+import com.bottari.presentation.view.common.alart.DialogListener
+import com.bottari.presentation.view.common.alart.DialogPresetType
 import com.bottari.presentation.view.edit.personal.item.adapter.PersonalItemEditAdapter
 
 class PersonalItemEditFragment :
@@ -155,14 +155,13 @@ class PersonalItemEditFragment :
     }
 
     private fun showExitConfirmationDialog() {
-        val tag = CustomAlertDialog::class.java.name
-        val existingDialog = parentFragmentManager.findFragmentByTag(tag) as? CustomAlertDialog
-        if (existingDialog != null && existingDialog.dialog?.isShowing == true) {
-            return
-        }
+        val existingDialog =
+            parentFragmentManager.findFragmentByTag(tag) as? CustomAlertDialog
+
+        if (existingDialog?.dialog?.isShowing == true) return
 
         val dialog =
-            existingDialog ?: CustomAlertDialog
+            CustomAlertDialog
                 .newInstance(DialogPresetType.EXIT_WITHOUT_SAVE)
                 .setDialogListener(
                     object : DialogListener {
