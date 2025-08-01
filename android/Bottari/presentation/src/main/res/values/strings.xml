@@ -67,6 +67,12 @@
 
     <!-- Common: 공통 버튼 텍스트 -->
     <string name="common_confirm_btn_text">확인</string>
+    <string name="common_yes_btn_text">예</string>
+    <string name="common_no_btn_text">아니오</string>
+
+    <!-- Common: 공통 다이얼로그 텍스트-->
+    <string name="common_alert_dialog_title_text">주의</string>
+    <string name="common_alert_unsaved_dialog_message_text">저장하지 않고 나가시겠습니까?</string>
 
     <!-- Common: 접근성 -->
     <string name="common_previous_btn_description">뒤로가기 버튼</string>
