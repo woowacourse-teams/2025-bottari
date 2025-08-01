@@ -67,8 +67,8 @@ class MemberServiceTest {
 
         // when & then
         assertThatThrownBy(() -> memberService.create(request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("중복된 ssaid입니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("이미 사용 중인 ssaid입니다.");
     }
 
     @DisplayName("사용자 회원가입 여부를 확인할 때 가입된 ssaid라면, true와 사용자 이름을 반환한다.")
@@ -153,7 +153,7 @@ class MemberServiceTest {
 
         // when & then
         assertThatThrownBy(() -> memberService.updateName(requesterSsaid, updateRequest))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("이미 사용 중인 이름입니다.");
     }
 }

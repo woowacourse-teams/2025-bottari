@@ -96,7 +96,7 @@ public class BottariItemService {
             final String name
     ) {
         if (bottariItemRepository.existsByBottariIdAndName(bottariId, name)) {
-            throw new IllegalArgumentException("중복된 보따리 물품명입니다.");
+            throw new BusinessException(ErrorCode.BOTTARI_ITEM_ALREADY_EXISTS);
         }
     }
 
@@ -104,7 +104,7 @@ public class BottariItemService {
         final Set<Long> uniqueDeleteIds = new HashSet<>();
         for (final Long deleteId : deleteIds) {
             if (!uniqueDeleteIds.add(deleteId)) {
-                throw new IllegalArgumentException("삭제하려는 아이템에 중복이 있습니다.");
+                throw new BusinessException(ErrorCode.BOTTARI_ITEM_DUPLICATED_IN_REQUEST, "삭제하려는 아이템 id가 중복되었습니다.");
             }
         }
     }
@@ -132,7 +132,7 @@ public class BottariItemService {
             final List<String> itemNames
     ) {
         if (bottariItemRepository.existsByBottariIdAndNameIn(bottariId, itemNames)) {
-            throw new IllegalArgumentException("중복된 물품이 존재합니다.");
+            throw new BusinessException(ErrorCode.BOTTARI_ITEM_ALREADY_EXISTS);
         }
     }
 
@@ -140,7 +140,7 @@ public class BottariItemService {
         final Set<String> uniqueItemNames = new HashSet<>();
         for (final String itemName : itemNames) {
             if (!uniqueItemNames.add(itemName)) {
-                throw new IllegalArgumentException("중복된 물품이 존재합니다.");
+                throw new BusinessException(ErrorCode.BOTTARI_ITEM_DUPLICATED_IN_REQUEST);
             }
         }
     }

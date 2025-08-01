@@ -75,19 +75,20 @@ public class MemberService {
 
     private void validateDuplicateSsaid(final String ssaid) {
         if (memberRepository.existsBySsaid(ssaid)) {
-            throw new IllegalArgumentException("중복된 ssaid입니다.");
+            throw new BusinessException(ErrorCode.MEMBER_SSAID_ALREADY_EXISTS);
         }
     }
 
     private String generatedRandomCandidateName() {
-        String word = NAME_POOL[ThreadLocalRandom.current().nextInt(NAME_POOL.length)];
-        int suffix = ThreadLocalRandom.current().nextInt(10_000);
+        final String word = NAME_POOL[ThreadLocalRandom.current().nextInt(NAME_POOL.length)];
+        final int suffix = ThreadLocalRandom.current().nextInt(10_000);
+
         return "%s-%04d".formatted(word, suffix);
     }
 
     private void validateDuplicateName(final UpdateMemberRequest request) {
         if (memberRepository.existsByName(request.name())) {
-            throw new IllegalArgumentException("이미 사용 중인 이름입니다.");
+            throw new BusinessException(ErrorCode.MEMBER_NAME_ALREADY_EXISTS);
         }
     }
 }

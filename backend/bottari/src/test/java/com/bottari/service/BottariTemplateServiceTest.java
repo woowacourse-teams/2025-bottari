@@ -274,8 +274,8 @@ class BottariTemplateServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariTemplateService.create(ssaid, request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("중복된 물품이 존재합니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("요청에 중복된 보따리 템플릿 물품이 있습니다.");
     }
 
     @DisplayName("보따리 템플릿으로 보따리를 생성한다.")

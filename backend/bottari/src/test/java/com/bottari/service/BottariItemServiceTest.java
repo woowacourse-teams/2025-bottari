@@ -117,11 +117,11 @@ class BottariItemServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariItemService.update(bottari.getId(), request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("삭제하려는 아이템에 중복이 있습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("요청에 중복된 보따리 물품이 있습니다. - 삭제하려는 아이템 id가 중복되었습니다.");
     }
 
-    @DisplayName("같은 보따리 내에 중복되는 물품명이 존재할 경우, 예외를 던진다.")
+    @DisplayName("같은 보따리 내에 해당 물품명이 이미 존재할 경우, 예외를 던진다.")
     @Test
     void create_Exception_DuplicateName() {
         // given
@@ -140,8 +140,8 @@ class BottariItemServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariItemService.create(bottari.getId(), request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("중복된 보따리 물품명입니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("이미 존재하는 보따리 물품입니다.");
     }
 
     @DisplayName("보따리 물품을 수정한다.")
@@ -262,8 +262,8 @@ class BottariItemServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariItemService.update(bottariId, request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("중복된 물품이 존재합니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("요청에 중복된 보따리 물품이 있습니다.");
     }
 
     @DisplayName("수정 시 추가하려는 물품이 이미 존재하는 경우, 예외를 던진다.")
@@ -293,8 +293,8 @@ class BottariItemServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariItemService.update(bottariId, request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("중복된 물품이 존재합니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("이미 존재하는 보따리 물품입니다.");
     }
 
     @DisplayName("아이템 추가 시 총 보따리 물품이 200개가 넘어가는 경우, 예외가 발생한다.")
