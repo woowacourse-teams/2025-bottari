@@ -25,7 +25,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".view.market.MarketActivity"
+            android:name=".view.template.TemplateActivity"
             android:exported="false"/>
     </application>
 

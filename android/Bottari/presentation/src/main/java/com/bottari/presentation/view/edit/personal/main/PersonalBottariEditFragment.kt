@@ -1,6 +1,5 @@
 package com.bottari.presentation.view.edit.personal.main
 
-import PersonalBottariEditViewModel
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.Gravity
@@ -73,6 +72,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            toggleLoadingIndicator(uiState.isLoading)
             setupTitle(uiState.title)
             setupItems(uiState.items)
             setupAlarm(uiState.alarm)
@@ -82,6 +82,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 PersonalBottariEditUiEvent.FetchBottariFailure -> showSnackbar(R.string.bottari_edit_fetch_failure_text)
                 PersonalBottariEditUiEvent.CreateTemplateFailure -> showSnackbar(R.string.bottari_edit_create_template_failure_text)
                 PersonalBottariEditUiEvent.CreateTemplateSuccess -> showSnackbar(R.string.bottari_edit_create_template_success_text)
+                is PersonalBottariEditUiEvent.ToggleAlarmStateFailure -> showSnackbar(R.string.bottari_edit_toggle_alarm_state_failure_text)
             }
         }
     }
@@ -95,12 +96,12 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     private fun setupListener() {
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.action_market -> {
+                R.id.action_template -> {
                     viewModel.createBottariTemplate()
                     true
                 }
 
-                R.id.rename -> {
+                R.id.action_rename -> {
                     showRenameDialog()
                     true
                 }
@@ -128,8 +129,8 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             }
             permissionLauncher.launch(requiredPermissions)
         }
-        binding.switchAlarm.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.debouncedAlarmState(isChecked)
+        binding.switchAlarm.setOnClickListener {
+            viewModel.updateAlarmState()
         }
         parentFragmentManager.setFragmentResultListener(
             BottariRenameDialog.SAVE_BOTTARI_TITLE_RESULT_KEY,
