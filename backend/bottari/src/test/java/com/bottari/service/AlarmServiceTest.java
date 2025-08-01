@@ -180,8 +180,8 @@ class AlarmServiceTest {
 
         // when & then
         assertThatThrownBy(() -> alarmService.update(invalidAlarmId, updateRequest))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("존재하지 않는 알람입니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("알람을 찾을 수 없습니다.");
     }
 
     @DisplayName("알람을 활성화 시킨다.")
