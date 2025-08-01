@@ -35,7 +35,7 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
             chain.doFilter(wrappedRequest, wrappedResponse);
         } finally {
             final long endTime = System.currentTimeMillis();
-            doLog(startTime, endTime, wrappedRequest, wrappedResponse);
+            doLog(endTime - startTime, wrappedRequest, wrappedResponse);
             wrappedResponse.copyBodyToResponse();
         }
     }
@@ -48,15 +48,12 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
     }
 
     private void doLog(
-            final long startTime,
-            final long endTime,
+            final long duration,
             final ContentCachingRequestWrapper request,
             final ContentCachingResponseWrapper response
     ) {
         final HttpLogEntry logEntry = HttpLogEntry.builder()
-                .startTime(formatter.toIsoTimeLog(startTime))
-                .endTime(formatter.toIsoTimeLog(endTime))
-                .duration(endTime - startTime)
+                .duration(duration)
                 .httpMethod(request.getMethod())
                 .requestUri(formatter.toUriWithQueryParamsLog(request))
                 .requestHeaders(formatter.toRequestHeadersLog(request))

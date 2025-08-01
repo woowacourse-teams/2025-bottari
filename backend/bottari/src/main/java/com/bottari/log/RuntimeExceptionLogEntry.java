@@ -7,7 +7,6 @@ import lombok.Getter;
 @Builder
 public class RuntimeExceptionLogEntry {
 
-    private String timestamp;
     private String exceptionType;
     private String message;
     private String at;
@@ -16,13 +15,11 @@ public class RuntimeExceptionLogEntry {
         return String.format("""
                         
                         ================ RUNTIME EXCEPTION LOG ================
-                        Timestamp      : %s
                         Exception Type : %s
                         Message        : %s
                         At             : %s
                         =======================================================
                         """,
-                timestamp,
                 exceptionType,
                 message,
                 at

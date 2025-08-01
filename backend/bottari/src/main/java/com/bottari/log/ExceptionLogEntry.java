@@ -7,7 +7,6 @@ import lombok.Getter;
 @Builder
 public class ExceptionLogEntry {
 
-    private String timestamp;
     private String exceptionType;
     private String message;
     private String at;
@@ -17,14 +16,12 @@ public class ExceptionLogEntry {
         return String.format("""
                         
                         ==================== EXCEPTION LOG ====================
-                        Timestamp      : %s
                         Exception Type : %s
                         Message        : %s
                         At             : %s
                         Stack Trace    : %s
                         =======================================================
                         """,
-                timestamp,
                 exceptionType,
                 message,
                 at,

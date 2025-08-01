@@ -7,8 +7,6 @@ import lombok.Builder;
 @AllArgsConstructor
 public class HttpLogEntry {
 
-    private final String startTime;
-    private final String endTime;
     private final long duration;
     private final String httpMethod;
     private final String requestUri;
@@ -22,8 +20,6 @@ public class HttpLogEntry {
         return String.format("""
                         
                         ==================== HTTP LOG ====================
-                        Start Time     : %s
-                        End Time       : %s
                         Duration       : %d ms
                         
                         [ Request ]
@@ -42,8 +38,6 @@ public class HttpLogEntry {
                         %s
                         ==================================================
                         """,
-                startTime,
-                endTime,
                 duration,
                 httpMethod,
                 requestUri,

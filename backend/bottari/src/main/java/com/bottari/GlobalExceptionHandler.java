@@ -52,7 +52,6 @@ public class GlobalExceptionHandler {
             final HttpServletRequest request
     ) {
         final RuntimeExceptionLogEntry logEntry = RuntimeExceptionLogEntry.builder()
-                .timestamp(formatter.toIsoTimeLog(System.currentTimeMillis()))
                 .exceptionType(exception.getClass().getName())
                 .message(exception.getMessage())
                 .at(request.getRequestURI())
@@ -65,7 +64,6 @@ public class GlobalExceptionHandler {
             final HttpServletRequest request
     ) {
         final ExceptionLogEntry logEntry = ExceptionLogEntry.builder()
-                .timestamp(formatter.toIsoTimeLog(System.currentTimeMillis()))
                 .exceptionType(exception.getClass().getName())
                 .message(exception.getMessage())
                 .at(request.getRequestURI())

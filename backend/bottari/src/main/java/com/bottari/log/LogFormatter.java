@@ -16,17 +16,6 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 @Component
 public class LogFormatter {
 
-    public String toIsoTimeLog(final Long epochMilli) {
-        if (epochMilli == null) {
-            return "null";
-        }
-
-        return Instant.ofEpochMilli(epochMilli)
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime()
-                .toString();
-    }
-
     public String toStackTraceLog(final Exception exception) {
         return Arrays.stream(exception.getStackTrace())
                 .map(StackTraceElement::toString)
