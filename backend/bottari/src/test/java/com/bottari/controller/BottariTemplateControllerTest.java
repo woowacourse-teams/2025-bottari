@@ -14,6 +14,7 @@ import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.dto.ReadBottariTemplateResponse.BottariTemplateItemResponse;
 import com.bottari.service.BottariTemplateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,8 @@ class BottariTemplateControllerTest {
                         new BottariTemplateItemResponse(1L, "item_1"),
                         new BottariTemplateItemResponse(2L, "item_2")
                 ),
-                "author_1"
+                "author_1",
+                LocalDateTime.now()
         );
         given(bottariTemplateService.getById(1L))
                 .willReturn(response);
@@ -72,7 +74,8 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(1L, "item_1"),
                                 new BottariTemplateItemResponse(2L, "item_2")
                         ),
-                        "author_1"
+                        "author_1",
+                        LocalDateTime.now()
                 ),
                 new ReadBottariTemplateResponse(
                         2L,
@@ -80,7 +83,8 @@ class BottariTemplateControllerTest {
                         List.of(
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
-                        "author_2"
+                        "author_2",
+                        LocalDateTime.now()
                 )
         );
         given(bottariTemplateService.getBySsaid("ssaid"))
@@ -105,7 +109,8 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(1L, "item_1"),
                                 new BottariTemplateItemResponse(2L, "item_2")
                         ),
-                        "author_1"
+                        "author_1",
+                        LocalDateTime.now()
                 ),
                 new ReadBottariTemplateResponse(
                         2L,
@@ -113,7 +118,8 @@ class BottariTemplateControllerTest {
                         List.of(
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
-                        "author_2"
+                        "author_2",
+                        LocalDateTime.now()
                 )
         );
         given(bottariTemplateService.getAll(anyString()))
@@ -174,8 +180,8 @@ class BottariTemplateControllerTest {
                 .deleteById(id, ssaid);
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.delete("/templates/"+id)
-                        .header("ssaid",ssaid))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/templates/" + id)
+                        .header("ssaid", ssaid))
                 .andExpect(status().isNoContent());
     }
 }
