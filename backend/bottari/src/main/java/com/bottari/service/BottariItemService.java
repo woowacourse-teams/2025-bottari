@@ -152,7 +152,7 @@ public class BottariItemService {
         final int bottariItemCount = bottariItemRepository.countAllByBottariId(bottariId);
         final int totalItemCount = bottariItemCount + itemNames.size();
         if (totalItemCount > MAX_BOTTARI_ITEMS_COUNT) {
-            throw new IllegalArgumentException("물품은 최대 200개까지 보따리에 넣을 수 있습니다.");
+            throw new BusinessException(ErrorCode.BOTTARI_ITEM_MAXIMUM_SIZE_EXCEEDED, MAX_BOTTARI_ITEMS_COUNT + "개 초과");
         }
     }
 }

@@ -319,8 +319,8 @@ class BottariItemServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariItemService.update(bottari.getId(), request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("물품은 최대 200개까지 보따리에 넣을 수 있습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("보따리 물품의 최대 개수를 초과했습니다. - 200개 초과");
     }
 
     @DisplayName("보따리 물품을 삭제한다.")
