@@ -174,8 +174,8 @@ class BottariTemplateControllerTest {
                 .deleteById(id, ssaid);
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.delete("/templates/"+id)
-                        .header("ssaid",ssaid))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/templates/" + id)
+                        .header("ssaid", ssaid))
                 .andExpect(status().isNoContent());
     }
 }

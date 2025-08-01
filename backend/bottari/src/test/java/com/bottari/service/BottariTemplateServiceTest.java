@@ -243,9 +243,9 @@ class BottariTemplateServiceTest {
 
             // then
             final List<BottariTemplateItem> actualItems = entityManager.createQuery("""
-                        select i from BottariTemplateItem i
-                        where i.bottariTemplate.id =: bottariTemplateId
-                        """, BottariTemplateItem.class)
+                            select i from BottariTemplateItem i
+                            where i.bottariTemplate.id =: bottariTemplateId
+                            """, BottariTemplateItem.class)
                     .setParameter("bottariTemplateId", actual)
                     .getResultList();
 
