@@ -50,7 +50,6 @@ class MainViewModel(
     fun savePermissionFlag() {
         viewModelScope.launch {
             savePermissionFlagUseCase(true)
-                .onSuccess { _uiState.update { copy(hasPermissionFlag = true) } }
                 .onFailure { _uiEvent.value = MainUiEvent.SavePermissionFlagFailure }
         }
     }
@@ -73,12 +72,12 @@ class MainViewModel(
     }
 
     private fun handlePermissionFlag(permissionFlag: Boolean) {
-        if (permissionFlag) {
-            _uiState.update { copy(hasPermissionFlag = true) }
-            checkRegisteredMember()
+        _uiState.update { copy(hasPermissionFlag = permissionFlag) }
+        if (!permissionFlag) {
+            _uiEvent.value = MainUiEvent.IncompletePermissionFlow
             return
         }
-        _uiEvent.value = MainUiEvent.IncompletePermissionFlow
+        checkRegisteredMember()
     }
 
     private fun registerMember(ssaid: String) {

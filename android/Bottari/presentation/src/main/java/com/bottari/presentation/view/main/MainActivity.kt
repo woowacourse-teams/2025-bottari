@@ -18,7 +18,6 @@ import com.bottari.presentation.view.common.PermissionDescriptionDialog
 import com.bottari.presentation.view.home.HomeActivity
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import kotlin.system.exitProcess
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
     private val viewModel: MainViewModel by viewModels { MainViewModel.Factory(this.getSSAID()) }
@@ -46,7 +45,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             when (uiEvent) {
                 is MainUiEvent.LoginSuccess -> checkPermissionAndNavigate(uiEvent.permissionFlag)
                 MainUiEvent.LoginFailure -> Unit
-                MainUiEvent.RegisterFailure -> exitProcess(-1)
+                MainUiEvent.RegisterFailure -> finishAffinity()
                 MainUiEvent.GetPermissionFlagFailure -> Unit
                 MainUiEvent.SavePermissionFlagFailure -> Unit
                 MainUiEvent.IncompletePermissionFlow -> showPermissionDescriptionDialog()
@@ -65,7 +64,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun checkPermissionAndNavigate(permissionFlag: Boolean) {
-        if ((!hasAllRuntimePermissions(this) || !hasExactAlarmPermission(this)) && !permissionFlag.not()) {
+        if (permissionFlag.not() && (!hasAllRuntimePermissions(this) || !hasExactAlarmPermission(this))) {
             showSnackbar(R.string.splash_screen_permission_denied_text, ::navigateToHome)
             return
         }
