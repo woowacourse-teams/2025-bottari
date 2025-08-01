@@ -4,6 +4,8 @@ import com.bottari.domain.Alarm;
 import com.bottari.domain.Bottari;
 import com.bottari.dto.CreateAlarmRequest;
 import com.bottari.dto.UpdateAlarmRequest;
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import com.bottari.repository.AlarmRepository;
 import com.bottari.repository.BottariRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,7 @@ public class AlarmService {
             final CreateAlarmRequest request
     ) {
         final Bottari bottari = bottariRepository.findById(bottariId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보따리입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_NOT_FOUND));
         final Alarm alarm = new Alarm(
                 true,
                 request.toRoutineAlarm(),

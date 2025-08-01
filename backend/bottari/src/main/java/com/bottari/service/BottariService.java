@@ -39,7 +39,7 @@ public class BottariService {
             final Long id
     ) {
         final Bottari bottari = bottariRepository.findByIdWithMember(id)
-                .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_NOT_FOUND));
         validateOwner(ssaid, bottari);
         final List<BottariItem> bottariItems = bottariItemRepository.findAllByBottariId(id);
         final Alarm alarm = alarmRepository.findByBottariId(id)
@@ -76,7 +76,7 @@ public class BottariService {
             final String ssaid
     ) {
         final Bottari bottari = bottariRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_NOT_FOUND));
         validateOwner(ssaid, bottari);
         bottari.updateTitle(request.title());
     }
@@ -87,7 +87,7 @@ public class BottariService {
             final String ssaid
     ) {
         final Bottari bottari = bottariRepository.findByIdWithMember(id)
-                .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_NOT_FOUND));
         validateOwner(ssaid, bottari);
         bottariItemRepository.deleteByBottariId(id);
         alarmRepository.deleteByBottariId(id);

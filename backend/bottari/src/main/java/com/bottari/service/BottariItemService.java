@@ -5,6 +5,8 @@ import com.bottari.domain.BottariItem;
 import com.bottari.dto.CreateBottariItemRequest;
 import com.bottari.dto.EditBottariItemsRequest;
 import com.bottari.dto.ReadBottariItemResponse;
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import com.bottari.repository.BottariItemRepository;
 import com.bottari.repository.BottariRepository;
 import java.util.HashSet;
@@ -38,7 +40,7 @@ public class BottariItemService {
             final CreateBottariItemRequest request
     ) {
         final Bottari bottari = bottariRepository.findById(bottariId)
-                .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_NOT_FOUND));
         validateDuplicateName(bottariId, request.name());
         final BottariItem bottariItem = new BottariItem(request.name(), bottari);
         final BottariItem savedBottariItem = bottariItemRepository.save(bottariItem);
@@ -52,7 +54,7 @@ public class BottariItemService {
             final EditBottariItemsRequest request
     ) {
         final Bottari bottari = bottariRepository.findById(bottariId)
-                .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_NOT_FOUND));
         validateDuplicateDeleteItemIds(request.deleteItemIds());
         validateAllItemsInBottari(bottariId, request.deleteItemIds());
         bottariItemRepository.deleteByIdIn(request.deleteItemIds());
@@ -85,7 +87,7 @@ public class BottariItemService {
 
     private void validateExistsBottari(final Long bottariId) {
         if (!bottariRepository.existsById(bottariId)) {
-            throw new IllegalArgumentException("보따리를 찾을 수 없습니다.");
+            throw new BusinessException(ErrorCode.BOTTARI_NOT_FOUND);
         }
     }
 
@@ -147,8 +149,8 @@ public class BottariItemService {
             final Long bottariId,
             final List<String> itemNames
     ) {
-        int bottariItemCount = bottariItemRepository.countAllByBottariId(bottariId);
-        int totalItemCount = bottariItemCount + itemNames.size();
+        final int bottariItemCount = bottariItemRepository.countAllByBottariId(bottariId);
+        final int totalItemCount = bottariItemCount + itemNames.size();
         if (totalItemCount > MAX_BOTTARI_ITEMS_COUNT) {
             throw new IllegalArgumentException("물품은 최대 200개까지 보따리에 넣을 수 있습니다.");
         }

@@ -10,6 +10,7 @@ import com.bottari.domain.Member;
 import com.bottari.dto.CreateBottariItemRequest;
 import com.bottari.dto.EditBottariItemsRequest;
 import com.bottari.dto.ReadBottariItemResponse;
+import com.bottari.error.BusinessException;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -64,7 +65,7 @@ class BottariItemServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariItemService.getAllByBottariId(notFoundBottariId))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("보따리를 찾을 수 없습니다.");
     }
 
@@ -97,7 +98,7 @@ class BottariItemServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariItemService.create(notFoundBottariId, request))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("보따리를 찾을 수 없습니다.");
     }
 
@@ -202,7 +203,7 @@ class BottariItemServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariItemService.update(invalidBottariId, request))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("보따리를 찾을 수 없습니다.");
     }
 

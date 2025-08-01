@@ -103,7 +103,7 @@ class BottariServiceTest {
     void getById_Exception_NotFound() {
         // when & then
         assertThatThrownBy(() -> bottariService.getById("ssaid", 1L))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("보따리를 찾을 수 없습니다.");
     }
 
@@ -300,7 +300,7 @@ class BottariServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariService.update(request, invalid_bottari_id, "ssaid"))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("보따리를 찾을 수 없습니다.");
     }
 
@@ -312,7 +312,7 @@ class BottariServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariService.deleteById(invalid_bottari_id, "ssaid"))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("보따리를 찾을 수 없습니다.");
     }
 

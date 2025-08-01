@@ -12,6 +12,7 @@ import com.bottari.domain.RepeatType;
 import com.bottari.domain.RoutineAlarm;
 import com.bottari.dto.CreateAlarmRequest;
 import com.bottari.dto.UpdateAlarmRequest;
+import com.bottari.error.BusinessException;
 import jakarta.persistence.EntityManager;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -89,8 +90,8 @@ class AlarmServiceTest {
 
         // when & then
         assertThatThrownBy(() -> alarmService.create(invalidBottariId, request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("존재하지 않는 보따리입니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("보따리를 찾을 수 없습니다.");
     }
 
     @DisplayName("알람을 수정한다.")
