@@ -16,6 +16,7 @@ import com.bottari.dto.CreateBottariRequest;
 import com.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.dto.ReadBottariResponse;
 import com.bottari.dto.UpdateBottariRequest;
+import com.bottari.error.BusinessException;
 import jakarta.persistence.EntityManager;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -166,8 +167,8 @@ class BottariServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariService.getAllBySsaidSortedByLatest(ssaid))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
     }
 
     @DisplayName("보따리를 생성한다.")
@@ -195,8 +196,8 @@ class BottariServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariService.create(ssaid, request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
     }
 
     @DisplayName("아이디를 통해 보따리를 삭제한다.")

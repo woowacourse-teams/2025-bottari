@@ -4,6 +4,8 @@ import com.bottari.domain.Member;
 import com.bottari.dto.CheckRegistrationResponse;
 import com.bottari.dto.CreateMemberRequest;
 import com.bottari.dto.UpdateMemberRequest;
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import com.bottari.repository.MemberRepository;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -66,7 +68,7 @@ public class MemberService {
             final UpdateMemberRequest request
     ) {
         final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         validateDuplicateName(request);
         member.updateName(request.name());
     }

@@ -8,6 +8,7 @@ import com.bottari.domain.Member;
 import com.bottari.dto.CheckRegistrationResponse;
 import com.bottari.dto.CreateMemberRequest;
 import com.bottari.dto.UpdateMemberRequest;
+import com.bottari.error.BusinessException;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -132,8 +133,8 @@ class MemberServiceTest {
 
         // when & then
         assertThatThrownBy(() -> memberService.updateName(ssaid, request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
     }
 
     @DisplayName("이미 사용 중인 이름으로 사용자의 이름을 수정할 경우, 예외를 던진다.")

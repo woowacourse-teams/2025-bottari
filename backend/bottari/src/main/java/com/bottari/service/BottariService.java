@@ -9,6 +9,8 @@ import com.bottari.dto.CreateBottariRequest;
 import com.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.dto.ReadBottariResponse;
 import com.bottari.dto.UpdateBottariRequest;
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import com.bottari.repository.AlarmRepository;
 import com.bottari.repository.BottariItemRepository;
 import com.bottari.repository.BottariRepository;
@@ -46,10 +48,9 @@ public class BottariService {
         return ReadBottariResponse.of(bottari, bottariItems, alarm);
     }
 
-
     public List<ReadBottariPreviewResponse> getAllBySsaidSortedByLatest(final String ssaid) {
         final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         final List<Bottari> bottaries = bottariRepository.findAllByMemberIdOrderByCreatedAtDesc(member.getId());
 
         return buildReadBottariPreviewResponses(bottaries);
@@ -61,7 +62,7 @@ public class BottariService {
             final CreateBottariRequest request
     ) {
         final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         final Bottari bottari = new Bottari(request.title(), member);
         final Bottari savedBottari = bottariRepository.save(bottari);
 

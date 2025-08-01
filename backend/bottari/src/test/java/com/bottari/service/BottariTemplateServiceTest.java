@@ -12,6 +12,7 @@ import com.bottari.domain.BottariTemplateItem;
 import com.bottari.domain.Member;
 import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.dto.ReadBottariTemplateResponse;
+import com.bottari.error.BusinessException;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -125,8 +126,8 @@ class BottariTemplateServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariTemplateService.getBySsaid(invalidSsaid))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
     }
 
     @DisplayName("검색어가 없을 시, 모든 보따리 템플릿을 최신순으로 조회한다.")
@@ -253,8 +254,8 @@ class BottariTemplateServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariTemplateService.create(invalidSsaid, request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
     }
 
     @DisplayName("생성 시 추가하려는 물품명에 중복이 존재하는 경우, 예외를 던진다.")
@@ -342,8 +343,8 @@ class BottariTemplateServiceTest {
 
         // when & then
         assertThatThrownBy(() -> bottariTemplateService.createBottari(bottariTemplate.getId(), notExistsSsaid))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
     }
 
     @DisplayName("보따리 템플릿 아이디로 해당 보따리 템플릿을 삭제한다.")

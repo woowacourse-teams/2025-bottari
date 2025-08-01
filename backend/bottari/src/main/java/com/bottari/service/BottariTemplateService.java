@@ -7,6 +7,8 @@ import com.bottari.domain.BottariTemplateItem;
 import com.bottari.domain.Member;
 import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.dto.ReadBottariTemplateResponse;
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import com.bottari.repository.BottariItemRepository;
 import com.bottari.repository.BottariRepository;
 import com.bottari.repository.BottariTemplateItemRepository;
@@ -44,7 +46,7 @@ public class BottariTemplateService {
 
     public List<ReadBottariTemplateResponse> getBySsaid(final String ssaid) {
         final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         final List<BottariTemplate> bottariTemplateItems =
                 bottariTemplateRepository.findAllByMemberIdWithMember(member.getId());
         final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate =
@@ -67,7 +69,7 @@ public class BottariTemplateService {
             final CreateBottariTemplateRequest request
     ) {
         final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         final BottariTemplate bottariTemplate = new BottariTemplate(request.title(), member);
         final BottariTemplate savedBottariTemplate = bottariTemplateRepository.save(bottariTemplate);
         validateDuplicateItemNames(request.bottariTemplateItems());
@@ -86,9 +88,10 @@ public class BottariTemplateService {
     ) {
         final BottariTemplate bottariTemplate = bottariTemplateRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 보따리 템플릿을 찾을 수 없습니다."));
-        final List<BottariTemplateItem> bottariTemplateItems = bottariTemplateItemRepository.findAllByBottariTemplateId(id);
+        final List<BottariTemplateItem> bottariTemplateItems = bottariTemplateItemRepository.findAllByBottariTemplateId(
+                id);
         final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         final Bottari bottari = new Bottari(bottariTemplate.getTitle(), member);
         final Bottari savedBottari = bottariRepository.save(bottari);
         final List<BottariItem> bottariItems = bottariTemplateItems.stream()
