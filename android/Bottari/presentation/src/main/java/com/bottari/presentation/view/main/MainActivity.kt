@@ -1,6 +1,5 @@
 package com.bottari.presentation.view.main
 
-import android.app.AlertDialog
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,6 +14,9 @@ import com.bottari.presentation.util.PermissionUtil.hasAllRuntimePermissions
 import com.bottari.presentation.util.PermissionUtil.hasExactAlarmPermission
 import com.bottari.presentation.util.PermissionUtil.requiredPermissions
 import com.bottari.presentation.view.common.PermissionDescriptionDialog
+import com.bottari.presentation.view.common.alart.CustomAlertDialog
+import com.bottari.presentation.view.common.alart.DialogListener
+import com.bottari.presentation.view.common.alart.DialogPresetType
 import com.bottari.presentation.view.home.HomeActivity
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -64,7 +66,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun checkPermissionAndNavigate(permissionFlag: Boolean) {
-        if (permissionFlag.not() && (!hasAllRuntimePermissions(this) || !hasExactAlarmPermission(this))) {
+        if (permissionFlag.not() &&
+            (
+                !hasAllRuntimePermissions(this) ||
+                    !hasExactAlarmPermission(
+                        this,
+                    )
+            )
+        ) {
             showSnackbar(R.string.splash_screen_permission_denied_text, ::navigateToHome)
             return
         }
@@ -72,15 +81,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun showExactAlarmSettingsDialog() {
-        AlertDialog
-            .Builder(this)
-            .setTitle(R.string.common_permission_dialog_title_text)
-            .setMessage(R.string.alarm_edit_exact_alarm_permission_dialog_message_text)
-            .setPositiveButton(R.string.common_permission_dialog_positive_btn_text) { _, _ ->
-                PermissionUtil.requestExactAlarmPermission(this)
-                isNavigatedToSettings = true
-            }.setNegativeButton(R.string.common_permission_dialog_negative_btn_text) { _, _ -> viewModel.checkRegisteredMember() }
-            .show()
+        CustomAlertDialog
+            .newInstance(DialogPresetType.NAVIGATE_TO_SETTINGS)
+            .setDialogListener(
+                object : DialogListener {
+                    override fun onClickNegative() {
+                        viewModel.checkRegisteredMember()
+                    }
+
+                    override fun onClickPositive() {
+                        PermissionUtil.requestExactAlarmPermission(this@MainActivity)
+                        isNavigatedToSettings = true
+                    }
+                },
+            ).show(supportFragmentManager, DialogPresetType.NAVIGATE_TO_SETTINGS.name)
     }
 
     private fun showSnackbar(
