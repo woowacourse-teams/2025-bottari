@@ -10,7 +10,7 @@
         android:layout_height="80dp"
         android:layout_marginBottom="@dimen/space_small"
         android:contentDescription="@string/bottari_personal_item_empty_icon_description"
-        android:src="@drawable/ic_box"
+        android:src="@drawable/ic_bottari_item_empty_view"
         app:layout_constraintBottom_toTopOf="@+id/tv_personal_bottari_item_empty_view_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
