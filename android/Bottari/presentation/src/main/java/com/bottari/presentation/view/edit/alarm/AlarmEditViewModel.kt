@@ -29,7 +29,11 @@ class AlarmEditViewModel(
     private val saveAlarmUseCase: SaveAlarmUseCase,
 ) : ViewModel() {
     private val _uiState: MutableLiveData<AlarmUiState> =
-        MutableLiveData(AlarmUiState(stateHandle[KEY_ALARM] ?: AlarmUiModel.DEFAULT_ALARM_UI_MODEL))
+        MutableLiveData(
+            AlarmUiState(
+                alarm = stateHandle[KEY_ALARM] ?: AlarmUiModel.DEFAULT_ALARM_UI_MODEL,
+            ),
+        )
     val uiState: LiveData<AlarmUiState> get() = _uiState
 
     private val _uiEvent: SingleLiveEvent<AlarmUiEvent> = SingleLiveEvent()
@@ -45,6 +49,8 @@ class AlarmEditViewModel(
         ) {
             return
         }
+
+        _uiState.update { copy(isLoading = true) }
         val alarmDomain = currentAlarm.toDomain()
         if (currentAlarm.id == null) {
             createAlarm(alarmDomain)
@@ -98,6 +104,8 @@ class AlarmEditViewModel(
                     _uiEvent.value = AlarmUiEvent.AlarmCreateFailure
                 }
         }
+
+        _uiState.update { copy(isLoading = false) }
     }
 
     private fun saveAlarm(alarm: Alarm) {
@@ -109,6 +117,8 @@ class AlarmEditViewModel(
                     _uiEvent.value = AlarmUiEvent.AlarmSaveFailure
                 }
         }
+
+        _uiState.update { copy(isLoading = false) }
     }
 
     companion object {

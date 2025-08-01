@@ -68,9 +68,10 @@ class PersonalItemEditFragment :
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            handleBottariNameState(state.title)
-            handleItemState(state.items)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            toggleLoadingIndicator(uiState.isLoading)
+            handleBottariNameState(uiState.title)
+            handleItemState(uiState.items)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {

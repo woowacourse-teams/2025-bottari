@@ -40,18 +40,19 @@ class BottariViewModel(
             fetchBottariesUseCase(ssaid)
                 .onSuccess { bottaries ->
                     _uiState.update {
-                        copy(
-                            isLoading = false,
-                            bottaries = bottaries.map { bottari -> bottari.toUiModel() },
-                        )
+                        copy(bottaries = bottaries.map { bottari -> bottari.toUiModel() })
                     }
                 }.onFailure {
                     _uiEvent.value = BottariUiEvent.FetchBottariesFailure
                 }
+
+            _uiState.update { copy(isLoading = false) }
         }
     }
 
     fun deleteBottari(bottariId: Long) {
+        _uiState.update { copy(isLoading = true) }
+
         viewModelScope.launch {
             deleteBottariUseCase(ssaid, bottariId)
                 .onSuccess {
@@ -60,6 +61,8 @@ class BottariViewModel(
                 }.onFailure {
                     _uiEvent.value = BottariUiEvent.BottariDeleteFailure
                 }
+
+            _uiState.update { copy(isLoading = false) }
         }
     }
 
