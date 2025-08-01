@@ -185,6 +185,7 @@
     <string name="nickname_edit_btn_description">닉네임 수정 버튼</string>
     <string name="alarm_edit_location_btn_description">위치 설정 버튼</string>
     <string name="bottari_personal_item_add_btn_description">물건 추가 버튼</string>
+    <string name="bottari_personal_item_empty_icon_description">빈 물건 아이콘</string>
     <string name="bottari_home_icon_description">보따리 아이콘 이미지</string>
 
     <!-- Menu -->
@@ -192,4 +193,6 @@
     <string name="menu_bottari_rename_title_text">보따리 이름 바꾸기</string>
     <string name="menu_edit_title_text">내용 편집하기</string>
     <string name="menu_delete_title_text">삭제하기</string>
+    <string name="bottari_edit_item_empty_view_title">보따리 안에 물건이 없어요</string>
+    <string name="bottari_edit_item_empty_view_text">무엇을 챙겨야 할지 모르겠다면,\n‘모두의 보따리’를 살펴보세요! </string>
 </resources>
