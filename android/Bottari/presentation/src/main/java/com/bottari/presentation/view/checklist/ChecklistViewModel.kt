@@ -80,6 +80,16 @@ class ChecklistViewModel(
         }
     }
 
+    fun resetSwipeState() {
+        _uiState.update { this.copy(swipedItemIds = emptySet()) }
+    }
+
+    fun addSwipedItem(itemId: Long) {
+        _uiState.update {
+            this.copy(swipedItemIds = this.swipedItemIds + itemId)
+        }
+    }
+
     private fun recordPendingCheckStatus(item: BottariItemUiModel) {
         pendingCheckStatusMap[item.id] = item
     }

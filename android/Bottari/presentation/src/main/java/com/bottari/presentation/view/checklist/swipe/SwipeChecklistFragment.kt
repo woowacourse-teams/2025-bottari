@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
@@ -43,9 +44,10 @@ class SwipeChecklistFragment :
     }
 
     override fun onCardSwiped(direction: Direction?) {
-        if (direction != Direction.Right) return
         val index = cardStackLayoutManager.topPosition - INDEX_OFFSET
         val currentItem = adapter.currentList.getOrNull(index) ?: return
+        viewModel.addSwipedItem(currentItem.id)
+        if (direction != Direction.Right) return
         viewModel.toggleItemChecked(currentItem.id)
     }
 
@@ -84,6 +86,7 @@ class SwipeChecklistFragment :
                     uiState.totalQuantity - uiState.checkedQuantity,
                 )
             handleProgressBar(uiState)
+            handleEmptyView(uiState)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
@@ -107,6 +110,32 @@ class SwipeChecklistFragment :
         }
     }
 
+    private fun handleEmptyView(uiState: ChecklistUiState) {
+        if (uiState.nonSwipedItems.isNotEmpty()) return
+        showDoneButton()
+        if (uiState.nonCheckedItems.isEmpty()) {
+            showCompleteView()
+            return
+        }
+        showNotCompleteView()
+    }
+
+    private fun showDoneButton() {
+        binding.btnSwipeChecklistNot.isVisible = false
+        binding.btnSwipeChecklistYes.isVisible = false
+        binding.btnSwipeChecklistReturn.isVisible = true
+    }
+
+    private fun showNotCompleteView() {
+        binding.viewSwipeCompleteNotAll.clSwipeCompleteNotAll.isVisible = true
+        binding.viewSwipeCompleteAll.clSwipeCompleteAll.isVisible = false
+    }
+
+    private fun showCompleteView() {
+        binding.viewSwipeCompleteNotAll.clSwipeCompleteNotAll.isVisible = false
+        binding.viewSwipeCompleteAll.clSwipeCompleteAll.isVisible = true
+    }
+
     private fun setupCardStackView() {
         cardStackLayoutManager =
             CardStackLayoutManager(requireContext(), this).apply {
@@ -124,6 +153,9 @@ class SwipeChecklistFragment :
         }
         binding.btnSwipeChecklistNot.setOnClickListener {
             swipeCardTo(Direction.Left)
+        }
+        binding.btnSwipeChecklistReturn.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 
