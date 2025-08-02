@@ -18,4 +18,5 @@ tasks.withType<Test>().configureEach {
 
 dependencies {
     testImplementation(libs.bundles.test)
+    implementation(libs.kotlinx.coroutines.core)
 }
