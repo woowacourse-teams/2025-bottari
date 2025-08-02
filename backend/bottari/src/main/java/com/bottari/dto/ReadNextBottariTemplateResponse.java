@@ -1,6 +1,6 @@
 package com.bottari.dto;
 
-import com.bottari.service.SortProperty;
+import com.bottari.domain.SortProperty;
 import java.util.List;
 import org.springframework.data.domain.Slice;
 

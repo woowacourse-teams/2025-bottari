@@ -5,6 +5,7 @@ import com.bottari.domain.BottariItem;
 import com.bottari.domain.BottariTemplate;
 import com.bottari.domain.BottariTemplateItem;
 import com.bottari.domain.Member;
+import com.bottari.domain.SortProperty;
 import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.dto.ReadNextBottariTemplateRequest;

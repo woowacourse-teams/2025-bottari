@@ -1,6 +1,6 @@
 package com.bottari.dto;
 
-import com.bottari.service.SortProperty;
+import com.bottari.domain.SortProperty;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.springframework.data.domain.PageRequest;

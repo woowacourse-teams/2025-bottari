@@ -1,4 +1,4 @@
-package com.bottari.service;
+package com.bottari.domain;
 
 import lombok.Getter;
 
