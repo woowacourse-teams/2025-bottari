@@ -46,10 +46,6 @@ public class BottariTemplate {
         this.takenCount = 0;
     }
 
-    public void increaseTakenCount() {
-        takenCount++;
-    }
-
     public boolean isOwner(final String ssaid) {
         return member.isSameBySsaid(ssaid);
     }

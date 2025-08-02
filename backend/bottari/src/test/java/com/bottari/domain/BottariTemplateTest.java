@@ -44,18 +44,4 @@ class BottariTemplateTest {
         // then
         assertThat(actual).isEqualTo(expected);
     }
-
-    @DisplayName("보따리 가져간 횟수를 증가시킨다.")
-    @Test
-    void increaseTakenCount(){
-        // given
-        Member owner = new Member("ssaid","name");
-        BottariTemplate bottariTemplate = new BottariTemplate("title",owner);
-
-        // when
-        bottariTemplate.increaseTakenCount();
-
-        // then
-        assertThat(bottariTemplate.getTakenCount()).isEqualTo(1);
-    }
 }

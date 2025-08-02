@@ -89,7 +89,8 @@ public class BottariTemplateService {
     ) {
         final BottariTemplate bottariTemplate = bottariTemplateRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 보따리 템플릿을 찾을 수 없습니다."));
-        final List<BottariTemplateItem> bottariTemplateItems = bottariTemplateItemRepository.findAllByBottariTemplateId(id);
+        final List<BottariTemplateItem> bottariTemplateItems = bottariTemplateItemRepository.findAllByBottariTemplateId(
+                id);
         final Member member = memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
         final Bottari bottari = new Bottari(bottariTemplate.getTitle(), member);
@@ -100,17 +101,6 @@ public class BottariTemplateService {
         bottariItemRepository.saveAll(bottariItems);
         increaseTakenCount(bottariTemplate, member);
         return savedBottari.getId();
-    }
-
-    private void increaseTakenCount(
-            final BottariTemplate bottariTemplate,
-            final Member member
-    ) {
-        if(!bottariTemplateHistoryRepository.existsByBottariTemplateIdAndMemberId(bottariTemplate.getId(), member.getId())){
-            bottariTemplate.increaseTakenCount();
-            BottariTemplateHistory bottariTemplateHistory = new BottariTemplateHistory(member, bottariTemplate);
-            bottariTemplateHistoryRepository.save(bottariTemplateHistory);
-        }
     }
 
     @Transactional
@@ -169,6 +159,18 @@ public class BottariTemplateService {
     ) {
         if (!bottariTemplate.isOwner(ssaid)) {
             throw new IllegalArgumentException("본인의 보따리 템플릿이 아닙니다.");
+        }
+    }
+
+    private void increaseTakenCount(
+            final BottariTemplate bottariTemplate,
+            final Member member
+    ) {
+        if (!bottariTemplateHistoryRepository.existsByBottariTemplateIdAndMemberId(
+                bottariTemplate.getId(), member.getId())) {
+            BottariTemplateHistory bottariTemplateHistory = new BottariTemplateHistory(member, bottariTemplate);
+            bottariTemplateHistoryRepository.save(bottariTemplateHistory);
+            bottariTemplateRepository.plusTakenCountById(bottariTemplate.getId());
         }
     }
 }
