@@ -49,7 +49,7 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     @GetMapping
     @Override
     public ResponseEntity<List<ReadBottariTemplateResponse>> readAll(
-            @RequestParam(required = false, defaultValue = "") String query
+            @RequestParam(required = false, defaultValue = "") final String query
     ) {
         final List<ReadBottariTemplateResponse> responses = bottariTemplateService.getAll(query);
 
