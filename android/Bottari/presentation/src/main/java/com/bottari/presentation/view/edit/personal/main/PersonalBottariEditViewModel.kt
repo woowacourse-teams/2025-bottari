@@ -61,6 +61,7 @@ class PersonalBottariEditViewModel(
             }.onFailure {
                 _uiEvent.value = PersonalBottariEditUiEvent.FetchBottariFailure
             }
+
             _uiState.update { copy(isLoading = false) }
         }
     }

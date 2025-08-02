@@ -7,6 +7,7 @@ import com.bottari.domain.usecase.appConfig.GetPermissionFlagUseCase
 import com.bottari.domain.usecase.appConfig.SavePermissionFlagUseCase
 import com.bottari.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
+import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
 import com.bottari.domain.usecase.bottari.SaveBottariTitleUseCase
 import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
@@ -125,6 +126,11 @@ object UseCaseProvider {
     }
     val SaveBottariTitleUseCase: SaveBottariTitleUseCase by lazy {
         SaveBottariTitleUseCase(
+            RepositoryProvider.bottariRepository,
+        )
+    }
+    val fetchBottariDetailsUseCase by lazy {
+        FetchBottariDetailsUseCase(
             RepositoryProvider.bottariRepository,
         )
     }
