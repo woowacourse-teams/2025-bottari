@@ -175,6 +175,11 @@
     <string name="template_detail_fetch_failure_text">템플릿 상세 조회에 실패했어요</string>
     <string name="template_detail_take_failure_text">나의 보따리로 가져오는데 실패했어요</string>
 
+    <!-- Bottari Template Register -->
+    <string name="template_create_title_text">모두의 보따리 생성</string>
+    <string name="template_register_btn_text">보따리 등록하기</string>
+    <string name="template_fetch_bottari_details_failure_text">나의 보따리 목록 조회에 실패했어요</string>
+
     <!-- My Bottari Template -->
     <string name="template_my_template_title">내가 등록한 보따리</string>
     <string name="template_my_template_delete_success_text">보따리를 삭제했어요</string>

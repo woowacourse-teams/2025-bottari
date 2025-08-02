@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="240dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/space_small"
+    android:background="@drawable/bg_white_radius_12dp_gray_stroke"
+    android:elevation="4dp"
+    android:padding="@dimen/space_small">
+
+    <TextView
+        android:id="@+id/tv_template_create_my_bottari_title"
+        style="@style/Pretendard_SemiBold_16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="보따리는최대15글자입니다다다" />
+
+    <TextView
+        android:id="@+id/tv_template_create_my_bottari_items"
+        style="@style/Pretendard_Medium_14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:maxLines="1"
+        android:textColor="@color/gray_a6a6a6"
+        app:layout_constraintTop_toBottomOf="@id/tv_template_create_my_bottari_title"
+        tools:text="사원증, 노트북, 물통 등 13개의 물건" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
