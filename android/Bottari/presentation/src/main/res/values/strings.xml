@@ -112,6 +112,7 @@
     <string name="checklist_swipe_complete_title">보따리를 모두 점검했어요!</string>
     <string name="checklist_swipe_complete_all_text">모든 준비 완료! 출발만 남았어요!</string>
     <string name="checklist_swipe_complete_not_all_text">아직 챙기지 않은 물건이 있어요. 마저 챙겨볼까요?</string>
+    <string name="checklist_swipe_return_btn_text">돌아가기</string>
 
     <!-- Bottari Create Dialog -->
     <string name="bottari_create_dialog_title_text">보따리 이름을 입력해 주세요</string>
@@ -204,4 +205,5 @@
     <string name="menu_delete_title_text">삭제하기</string>
     <string name="bottari_edit_item_empty_view_title">보따리 안에 물건이 없어요</string>
     <string name="bottari_edit_item_empty_view_text">무엇을 챙겨야 할지 모르겠다면,\n‘모두의 보따리’를 살펴보세요! </string>
+
 </resources>

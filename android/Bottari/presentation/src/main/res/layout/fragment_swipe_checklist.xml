@@ -100,7 +100,7 @@
         android:elevation="2dp"
         android:gravity="center"
         android:paddingVertical="@dimen/space_median"
-        android:text="돌아가기"
+        android:text="@string/checklist_swipe_return_btn_text"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
