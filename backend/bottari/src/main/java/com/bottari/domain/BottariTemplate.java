@@ -34,6 +34,8 @@ public class BottariTemplate {
     @CreatedDate
     private LocalDateTime createdAt;
 
+    private int takenCount;
+
     public BottariTemplate(
             final String title,
             final Member member

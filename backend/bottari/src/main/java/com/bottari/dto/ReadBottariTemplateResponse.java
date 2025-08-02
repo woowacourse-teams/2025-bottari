@@ -10,7 +10,8 @@ public record ReadBottariTemplateResponse(
         String title,
         List<BottariTemplateItemResponse> items,
         String author,
-        LocalDateTime createAt
+        LocalDateTime createAt,
+        int takenCount
 ) {
 
     public static ReadBottariTemplateResponse of(
@@ -26,7 +27,8 @@ public record ReadBottariTemplateResponse(
                 bottariTemplate.getTitle(),
                 items,
                 bottariTemplate.getMember().getName(),
-                bottariTemplate.getCreatedAt()
+                bottariTemplate.getCreatedAt(),
+                bottariTemplate.getTakenCount()
         );
     }
 

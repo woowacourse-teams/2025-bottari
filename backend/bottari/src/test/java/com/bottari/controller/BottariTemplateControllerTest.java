@@ -50,7 +50,8 @@ class BottariTemplateControllerTest {
                         new BottariTemplateItemResponse(2L, "item_2")
                 ),
                 "author_1",
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                0
         );
         given(bottariTemplateService.getById(1L))
                 .willReturn(response);
@@ -75,7 +76,8 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(2L, "item_2")
                         ),
                         "author_1",
-                        LocalDateTime.now()
+                        LocalDateTime.now(),
+                        0
                 ),
                 new ReadBottariTemplateResponse(
                         2L,
@@ -84,7 +86,8 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
                         "author_2",
-                        LocalDateTime.now()
+                        LocalDateTime.now(),
+                        0
                 )
         );
         given(bottariTemplateService.getBySsaid("ssaid"))
@@ -110,7 +113,8 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(2L, "item_2")
                         ),
                         "author_1",
-                        LocalDateTime.now()
+                        LocalDateTime.now(),
+                        0
                 ),
                 new ReadBottariTemplateResponse(
                         2L,
@@ -119,7 +123,8 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
                         "author_2",
-                        LocalDateTime.now()
+                        LocalDateTime.now(),
+                        0
                 )
         );
         given(bottariTemplateService.getAll(anyString()))
