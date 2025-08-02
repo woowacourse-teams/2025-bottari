@@ -9,11 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
-import com.bottari.presentation.common.BottomPaddingDecoration
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.databinding.FragmentTemplateBinding
+import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
 import com.bottari.presentation.view.home.market.adapter.TemplateAdapter
 import com.bottari.presentation.view.home.market.listener.OnTemplateClickListener
 import com.bottari.presentation.view.template.TemplateActivity
@@ -84,7 +84,7 @@ class TemplateFragment :
     private fun setupListener() {
         binding.etBottariTemplateTitle.addTextChangedListener(this)
         binding.btnMyBottariTemplate.setOnClickListener { navigateToMyBottariTemplate() }
-        binding.btnTemplateCreate.setOnClickListener { }
+        binding.btnTemplateCreate.setOnClickListener { navigateToCreateTemplate() }
         binding.rvBottariTemplate.addOnScrollListener(handleScrollState())
     }
 
@@ -95,6 +95,11 @@ class TemplateFragment :
 
     private fun navigateToMyBottariTemplate() {
         val intent = TemplateActivity.newIntentForMyTemplate(requireContext())
+        startActivity(intent)
+    }
+
+    private fun navigateToCreateTemplate() {
+        val intent = TemplateActivity.newIntentForCreateTemplate(requireContext())
         startActivity(intent)
     }
 
