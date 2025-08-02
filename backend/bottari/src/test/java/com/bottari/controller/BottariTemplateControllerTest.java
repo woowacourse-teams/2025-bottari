@@ -136,6 +136,87 @@ class BottariTemplateControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(responses)));
     }
 
+    @DisplayName("검색어를 통해 보따리 템플릿을 조회한다.")
+    @Test
+    void readAll_WithQuery() throws Exception {
+        // given
+        final String query = "여행";
+        final List<ReadBottariTemplateResponse> responses = List.of(
+                new ReadBottariTemplateResponse(
+                        1L,
+                        "여행용 체크리스트",
+                        List.of(
+                                new BottariTemplateItemResponse(1L, "여권"),
+                                new BottariTemplateItemResponse(2L, "항공권")
+                        ),
+                        "author_1",
+                        LocalDateTime.now(),
+                        5
+                )
+        );
+        given(bottariTemplateService.getAll(query))
+                .willReturn(responses);
+
+        // when & then
+        mockMvc.perform(get("/templates")
+                        .param("query", query))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(responses)));
+    }
+
+    @DisplayName("빈 검색어로 조회 시, 모든 보따리 템플릿을 최신순으로 조회한다.")
+    @Test
+    void readAll_WithEmptyQuery() throws Exception {
+        // given
+        final List<ReadBottariTemplateResponse> responses = List.of(
+                new ReadBottariTemplateResponse(
+                        1L,
+                        "캠핑 준비물",
+                        List.of(
+                                new BottariTemplateItemResponse(1L, "텐트"),
+                                new BottariTemplateItemResponse(2L, "침낭")
+                        ),
+                        "author_1",
+                        LocalDateTime.now().minusDays(2),
+                        3
+                ),
+                new ReadBottariTemplateResponse(
+                        2L,
+                        "출장 체크리스트",
+                        List.of(
+                                new BottariTemplateItemResponse(3L, "노트북")
+                        ),
+                        "author_2",
+                        LocalDateTime.now().minusDays(1),
+                        1
+                )
+        );
+        given(bottariTemplateService.getAll(anyString()))
+                .willReturn(responses);
+
+        // when & then
+        mockMvc.perform(get("/templates")
+                        .param("query", ""))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(responses)));
+    }
+
+    @DisplayName("검색 결과가 없다면, 빈 목록을 반환한다.")
+    @Test
+    void readAll_WithNoResults() throws Exception {
+        // given
+        final String query = "존재하지않는검색어";
+        final List<ReadBottariTemplateResponse> responses = List.of();
+        given(bottariTemplateService.getAll(query))
+                .willReturn(responses);
+
+        // when & then
+        mockMvc.perform(get("/templates")
+                        .param("query", query))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(responses)));
+    }
+
     @DisplayName("보따리 템플릿을 생성한다.")
     @Test
     void create() throws Exception {
