@@ -147,7 +147,7 @@ public class BottariTemplateService {
         final Set<String> uniqueItemNames = new HashSet<>();
         for (final String itemName : itemNames) {
             if (!uniqueItemNames.add(itemName)) {
-                throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_ITEM_DUPLICATED_IN_REQUEST);
+                throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_ITEM_DUPLICATE_IN_REQUEST);
             }
         }
     }

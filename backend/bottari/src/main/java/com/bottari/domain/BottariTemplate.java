@@ -51,7 +51,7 @@ public class BottariTemplate {
 
     private void validateTitle(final String title) {
         if (title.isBlank()) {
-            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_TITLE_IS_BLANK);
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_TITLE_BLANK);
         }
         if (title.length() > 15) {
             throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_TITLE_TOO_LONG, "최대 15자까지 입력 가능합니다.");

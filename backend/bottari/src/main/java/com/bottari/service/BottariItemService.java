@@ -104,7 +104,7 @@ public class BottariItemService {
         final Set<Long> uniqueDeleteIds = new HashSet<>();
         for (final Long deleteId : deleteIds) {
             if (!uniqueDeleteIds.add(deleteId)) {
-                throw new BusinessException(ErrorCode.BOTTARI_ITEM_DUPLICATED_IN_REQUEST, "삭제하려는 물품 id가 중복되었습니다.");
+                throw new BusinessException(ErrorCode.BOTTARI_ITEM_DUPLICATE_IN_REQUEST, "삭제하려는 물품 id가 중복되었습니다.");
             }
         }
     }
@@ -140,7 +140,7 @@ public class BottariItemService {
         final Set<String> uniqueItemNames = new HashSet<>();
         for (final String itemName : itemNames) {
             if (!uniqueItemNames.add(itemName)) {
-                throw new BusinessException(ErrorCode.BOTTARI_ITEM_DUPLICATED_IN_REQUEST);
+                throw new BusinessException(ErrorCode.BOTTARI_ITEM_DUPLICATE_IN_REQUEST);
             }
         }
     }
@@ -152,7 +152,7 @@ public class BottariItemService {
         final int bottariItemCount = bottariItemRepository.countAllByBottariId(bottariId);
         final int totalItemCount = bottariItemCount + itemNames.size();
         if (totalItemCount > MAX_BOTTARI_ITEMS_COUNT) {
-            throw new BusinessException(ErrorCode.BOTTARI_ITEM_MAXIMUM_SIZE_EXCEEDED, MAX_BOTTARI_ITEMS_COUNT + "개 초과");
+            throw new BusinessException(ErrorCode.BOTTARI_ITEM_MAXIMUM_EXCEEDED, MAX_BOTTARI_ITEMS_COUNT + "개 초과");
         }
     }
 }

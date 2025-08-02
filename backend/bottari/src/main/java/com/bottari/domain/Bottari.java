@@ -52,7 +52,7 @@ public class Bottari {
 
     public void updateTitle(final String newTitle) {
         if (title.equals(newTitle)) {
-            throw new BusinessException(ErrorCode.BOTTARI_TITLE_IS_SAME);
+            throw new BusinessException(ErrorCode.BOTTARI_TITLE_UNCHANGED);
         }
         validateTitle(newTitle);
         this.title = newTitle;
@@ -60,7 +60,7 @@ public class Bottari {
 
     private void validateTitle(final String title) {
         if (title.isBlank()) {
-            throw new BusinessException(ErrorCode.BOTTARI_TITLE_IS_BLANK);
+            throw new BusinessException(ErrorCode.BOTTARI_TITLE_BLANK);
         }
         if (title.length() > 15) {
             throw new BusinessException(ErrorCode.BOTTARI_TITLE_TOO_LONG, "최대 15자까지 입력 가능합니다.");

@@ -56,7 +56,7 @@ public class BottariItem {
 
     private void validateName(final String name) {
         if (name.isBlank()) {
-            throw new BusinessException(ErrorCode.BOTTARI_ITEM_NAME_IS_BLANK);
+            throw new BusinessException(ErrorCode.BOTTARI_ITEM_NAME_BLANK);
         }
         if (name.length() > 20) {
             throw new BusinessException(ErrorCode.BOTTARI_ITEM_NAME_TOO_LONG, "최대 20자까지 입력 가능합니다.");

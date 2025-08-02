@@ -76,7 +76,7 @@ public class Alarm {
             final LocationAlarm locationAlarm
     ) {
         if (routineAlarm == null && locationAlarm != null) {
-            throw new BusinessException(ErrorCode.LOCATION_ALARM_WITHOUT_ROUTINE);
+            throw new BusinessException(ErrorCode.ALARM_LOCATION_REQUIRES_ROUTINE);
         }
     }
 }
