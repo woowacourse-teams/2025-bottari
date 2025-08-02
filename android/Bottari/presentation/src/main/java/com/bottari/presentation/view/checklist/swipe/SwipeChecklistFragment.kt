@@ -137,6 +137,7 @@ class SwipeChecklistFragment :
     }
 
     private fun setupCardStackView() {
+        viewModel.resetSwipeState()
         cardStackLayoutManager =
             CardStackLayoutManager(requireContext(), this).apply {
                 setStackFrom(StackFrom.Top)
