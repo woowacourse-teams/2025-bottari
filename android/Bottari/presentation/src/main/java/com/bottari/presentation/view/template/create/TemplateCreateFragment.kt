@@ -71,6 +71,7 @@ class TemplateCreateFragment : BaseFragment<FragmentTemplateCreateBinding>(Fragm
     }
 
     private fun setupListeners() {
+        binding.btnPrevious.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.rvTemplateCreateMyBottari.addOnScrollListener(onScrollIdleListener)
         binding.rvTemplateCreateMyBottari.viewTreeObserver.addOnGlobalLayoutListener(
             onGlobalLayoutListener,
