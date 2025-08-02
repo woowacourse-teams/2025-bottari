@@ -17,6 +17,7 @@ import com.bottari.dto.ReadNextBottariTemplateResponse;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -208,6 +209,160 @@ class BottariTemplateServiceTest {
                 () -> assertThat(actual.getFirst().items()).hasSize(1),
                 () -> assertThat(actual.getFirst().items().getFirst().name()).isEqualTo("item_3")
         );
+    }
+
+    @Nested
+    class GetAllNextTest {
+
+        @DisplayName("createdAt 기준으로 다음 페이지 템플릿 목록을 조회한다.")
+        @Test
+        void getNextAll_ByCreatedAt() {
+            // given
+            final Member member = new Member("ssaid", "name");
+            entityManager.persist(member);
+
+            final BottariTemplate template1 = new BottariTemplate("template1", member);
+            final BottariTemplate template2 = new BottariTemplate("template2", member);
+            final BottariTemplate template3 = new BottariTemplate("template3", member);
+            entityManager.persist(template1);
+            entityManager.persist(template2);
+            entityManager.persist(template3);
+
+            final BottariTemplateItem item1 = new BottariTemplateItem("item1", template1);
+            final BottariTemplateItem item2 = new BottariTemplateItem("item2", template2);
+            final BottariTemplateItem item3 = new BottariTemplateItem("item3", template3);
+            entityManager.persist(item1);
+            entityManager.persist(item2);
+            entityManager.persist(item3);
+
+            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
+                    "",
+                    null,
+                    null,
+                    0,
+                    2,
+                    "createdAt"
+            );
+
+            // when
+            final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAll(request);
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.contents()).hasSize(2),
+                    () -> assertThat(actual.currentPage()).isEqualTo(0),
+                    () -> assertThat(actual.size()).isEqualTo(2),
+                    () -> assertThat(actual.hasNext()).isTrue(),
+                    () -> assertThat(actual.first()).isTrue(),
+                    () -> assertThat(actual.last()).isFalse(),
+                    () -> assertThat(actual.lastId()).isNotNull(),
+                    () -> assertThat(actual.lastInfo()).isNotNull()
+            );
+        }
+
+        @DisplayName("takenCount 기준으로 다음 페이지 템플릿 목록을 조회한다.")
+        @Test
+        void getNextAll_ByTakenCount() {
+            // given
+            final Member member = new Member("ssaid", "name");
+            entityManager.persist(member);
+
+            final BottariTemplate template1 = new BottariTemplate("template1", member);
+            final BottariTemplate template2 = new BottariTemplate("template2", member);
+            entityManager.persist(template1);
+            entityManager.persist(template2);
+
+            final BottariTemplateItem item1 = new BottariTemplateItem("item1", template1);
+            final BottariTemplateItem item2 = new BottariTemplateItem("item2", template2);
+            entityManager.persist(item1);
+            entityManager.persist(item2);
+
+            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
+                    "",
+                    null,
+                    "999999",
+                    0,
+                    1,
+                    "takenCount"
+            );
+
+            // when
+            final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAll(request);
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.contents()).hasSize(1),
+                    () -> assertThat(actual.currentPage()).isEqualTo(0),
+                    () -> assertThat(actual.size()).isEqualTo(1),
+                    () -> assertThat(actual.hasNext()).isTrue(),
+                    () -> assertThat(actual.first()).isTrue(),
+                    () -> assertThat(actual.last()).isFalse(),
+                    () -> assertThat(actual.lastId()).isNotNull(),
+                    () -> assertThat(actual.lastInfo()).isNotNull()
+            );
+        }
+
+        @DisplayName("검색어로 필터링하여 다음 페이지 템플릿 목록을 조회한다.")
+        @Test
+        void getNextAll_WithQuery() {
+            // given
+            final Member member = new Member("ssaid", "name");
+            entityManager.persist(member);
+
+            final BottariTemplate template1 = new BottariTemplate("여행용 체크리스트", member);
+            final BottariTemplate template2 = new BottariTemplate("캠핑 준비물", member);
+            final BottariTemplate template3 = new BottariTemplate("출장 체크리스트", member);
+            entityManager.persist(template1);
+            entityManager.persist(template2);
+            entityManager.persist(template3);
+
+            final BottariTemplateItem item1 = new BottariTemplateItem("여권", template1);
+            final BottariTemplateItem item2 = new BottariTemplateItem("텐트", template2);
+            final BottariTemplateItem item3 = new BottariTemplateItem("노트북", template3);
+            entityManager.persist(item1);
+            entityManager.persist(item2);
+            entityManager.persist(item3);
+
+            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
+                    "체크리스트",
+                    null,
+                    null,
+                    0,
+                    2,
+                    "createdAt"
+            );
+
+            // when
+            final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAll(request);
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.contents()).hasSize(2),
+                    () -> assertThat(actual.contents().get(0).title()).contains("체크리스트"),
+                    () -> assertThat(actual.contents().get(1).title()).contains("체크리스트"),
+                    () -> assertThat(actual.hasNext()).isFalse(),
+                    () -> assertThat(actual.last()).isTrue()
+            );
+        }
+
+        @DisplayName("존재하지 않는 정렬 기준으로 조회 시 예외를 던진다.")
+        @Test
+        void getNextAll_Exception_InvalidSortProperty() {
+            // given
+            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
+                    "",
+                    null,
+                    null,
+                    0,
+                    10,
+                    "invalidProperty"
+            );
+
+            // when & then
+            assertThatThrownBy(() -> bottariTemplateService.getNextAll(request))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("존재하지 않는 정렬 기준입니다.");
+        }
     }
 
     @DisplayName("보따리 템플릿을 생성한다.")
@@ -418,137 +573,5 @@ class BottariTemplateServiceTest {
         assertThatThrownBy(() -> bottariTemplateService.deleteById(bottariTemplate.getId(), anotherSsaid))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("본인의 보따리 템플릿이 아닙니다.");
-    }
-
-
-    @DisplayName("createdAt 기준으로 다음 페이지 템플릿 목록을 조회한다.")
-    @Test
-    void getNextAll_ByCreatedAt() {
-        // given
-        final Member member = new Member("ssaid", "name");
-        entityManager.persist(member);
-
-        final BottariTemplate template1 = new BottariTemplate("template1", member);
-        final BottariTemplate template2 = new BottariTemplate("template2", member);
-        final BottariTemplate template3 = new BottariTemplate("template3", member);
-        entityManager.persist(template1);
-        entityManager.persist(template2);
-        entityManager.persist(template3);
-
-        final BottariTemplateItem item1 = new BottariTemplateItem("item1", template1);
-        final BottariTemplateItem item2 = new BottariTemplateItem("item2", template2);
-        final BottariTemplateItem item3 = new BottariTemplateItem("item3", template3);
-        entityManager.persist(item1);
-        entityManager.persist(item2);
-        entityManager.persist(item3);
-
-        final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
-                "",
-                null,
-                null,
-                0,
-                2,
-                "createdAt"
-        );
-
-        // when
-        final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAll(request);
-
-        // then
-        assertAll(
-                () -> assertThat(actual.contents()).hasSize(2),
-                () -> assertThat(actual.currentPage()).isEqualTo(0),
-                () -> assertThat(actual.size()).isEqualTo(2),
-                () -> assertThat(actual.hasNext()).isTrue(),
-                () -> assertThat(actual.first()).isTrue(),
-                () -> assertThat(actual.last()).isFalse(),
-                () -> assertThat(actual.lastId()).isNotNull(),
-                () -> assertThat(actual.lastInfo()).isNotNull()
-        );
-    }
-
-    @DisplayName("takenCount 기준으로 다음 페이지 템플릿 목록을 조회한다.")
-    @Test
-    void getNextAll_ByTakenCount() {
-        // given
-        final Member member = new Member("ssaid", "name");
-        entityManager.persist(member);
-
-        final BottariTemplate template1 = new BottariTemplate("template1", member);
-        final BottariTemplate template2 = new BottariTemplate("template2", member);
-        entityManager.persist(template1);
-        entityManager.persist(template2);
-
-        final BottariTemplateItem item1 = new BottariTemplateItem("item1", template1);
-        final BottariTemplateItem item2 = new BottariTemplateItem("item2", template2);
-        entityManager.persist(item1);
-        entityManager.persist(item2);
-
-        final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
-                "",
-                null,
-                "999999",
-                0,
-                1,
-                "takenCount"
-        );
-
-        // when
-        final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAll(request);
-
-        // then
-        assertAll(
-                () -> assertThat(actual.contents()).hasSize(1),
-                () -> assertThat(actual.currentPage()).isEqualTo(0),
-                () -> assertThat(actual.size()).isEqualTo(1),
-                () -> assertThat(actual.hasNext()).isTrue(),
-                () -> assertThat(actual.first()).isTrue(),
-                () -> assertThat(actual.last()).isFalse(),
-                () -> assertThat(actual.lastId()).isNotNull(),
-                () -> assertThat(actual.lastInfo()).isNotNull()
-        );
-    }
-
-    @DisplayName("검색어로 필터링하여 다음 페이지 템플릿 목록을 조회한다.")
-    @Test
-    void getNextAll_WithQuery() {
-        // given
-        final Member member = new Member("ssaid", "name");
-        entityManager.persist(member);
-
-        final BottariTemplate template1 = new BottariTemplate("여행용 체크리스트", member);
-        final BottariTemplate template2 = new BottariTemplate("캠핑 준비물", member);
-        final BottariTemplate template3 = new BottariTemplate("출장 체크리스트", member);
-        entityManager.persist(template1);
-        entityManager.persist(template2);
-        entityManager.persist(template3);
-
-        final BottariTemplateItem item1 = new BottariTemplateItem("여권", template1);
-        final BottariTemplateItem item2 = new BottariTemplateItem("텐트", template2);
-        final BottariTemplateItem item3 = new BottariTemplateItem("노트북", template3);
-        entityManager.persist(item1);
-        entityManager.persist(item2);
-        entityManager.persist(item3);
-
-        final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
-                "체크리스트",
-                null,
-                null,
-                0,
-                2,
-                "createdAt"
-        );
-
-        // when
-        final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAll(request);
-
-        // then
-        assertAll(
-                () -> assertThat(actual.contents()).hasSize(2),
-                () -> assertThat(actual.contents().get(0).title()).contains("체크리스트"),
-                () -> assertThat(actual.contents().get(1).title()).contains("체크리스트"),
-                () -> assertThat(actual.hasNext()).isFalse(),
-                () -> assertThat(actual.last()).isTrue()
-        );
     }
 }
