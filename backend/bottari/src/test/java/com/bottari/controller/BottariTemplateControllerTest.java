@@ -1,5 +1,6 @@
 package com.bottari.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -12,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.dto.ReadBottariTemplateResponse.BottariTemplateItemResponse;
+import com.bottari.dto.ReadNextBottariTemplateResponse;
 import com.bottari.service.BottariTemplateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
@@ -136,12 +138,11 @@ class BottariTemplateControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(responses)));
     }
 
-    @DisplayName("검색어를 통해 보따리 템플릿을 조회한다.")
+    @DisplayName("보따리 템플릿 목록을 페이징하여 조회한다.")
     @Test
-    void readAll_WithQuery() throws Exception {
+    void readAllByPageable() throws Exception {
         // given
-        final String query = "여행";
-        final List<ReadBottariTemplateResponse> responses = List.of(
+        final List<ReadBottariTemplateResponse> contents = List.of(
                 new ReadBottariTemplateResponse(
                         1L,
                         "여행용 체크리스트",
@@ -150,71 +151,41 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(2L, "항공권")
                         ),
                         "author_1",
-                        LocalDateTime.now(),
-                        5
-                )
-        );
-        given(bottariTemplateService.getAll(query))
-                .willReturn(responses);
-
-        // when & then
-        mockMvc.perform(get("/templates")
-                        .param("query", query))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(responses)));
-    }
-
-    @DisplayName("빈 검색어로 조회 시, 모든 보따리 템플릿을 최신순으로 조회한다.")
-    @Test
-    void readAll_WithEmptyQuery() throws Exception {
-        // given
-        final List<ReadBottariTemplateResponse> responses = List.of(
-                new ReadBottariTemplateResponse(
-                        1L,
-                        "캠핑 준비물",
-                        List.of(
-                                new BottariTemplateItemResponse(1L, "텐트"),
-                                new BottariTemplateItemResponse(2L, "침낭")
-                        ),
-                        "author_1",
                         LocalDateTime.now().minusDays(2),
-                        3
+                        5
                 ),
                 new ReadBottariTemplateResponse(
                         2L,
-                        "출장 체크리스트",
+                        "캠핑 준비물",
                         List.of(
-                                new BottariTemplateItemResponse(3L, "노트북")
+                                new BottariTemplateItemResponse(3L, "텐트")
                         ),
                         "author_2",
                         LocalDateTime.now().minusDays(1),
-                        1
+                        3
                 )
         );
-        given(bottariTemplateService.getAll(anyString()))
-                .willReturn(responses);
+        final ReadNextBottariTemplateResponse response = new ReadNextBottariTemplateResponse(
+                contents,
+                0,
+                2,
+                true,
+                true,
+                false,
+                2L,
+                "2024-12-20T10:30:00Z"
+        );
+        given(bottariTemplateService.getNextAll(any()))
+                .willReturn(response);
 
         // when & then
-        mockMvc.perform(get("/templates")
-                        .param("query", ""))
+        mockMvc.perform(get("/templates/page")
+                        .param("query", "")
+                        .param("page", "0")
+                        .param("size", "2")
+                        .param("property", "createdAt"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(responses)));
-    }
-
-    @DisplayName("검색 결과가 없다면, 빈 목록을 반환한다.")
-    @Test
-    void readAll_WithNoResults() throws Exception {
-        // given
-        final String query = "존재하지않는검색어";
-        final List<ReadBottariTemplateResponse> responses = List.of();
-        given(bottariTemplateService.getAll(query))
-                .willReturn(responses);
-
-        // when & then
-        mockMvc.perform(get("/templates")
-                        .param("query", query))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(responses)));
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
     }
 
     @DisplayName("보따리 템플릿을 생성한다.")
