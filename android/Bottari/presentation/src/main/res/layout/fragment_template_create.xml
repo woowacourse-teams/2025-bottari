@@ -69,4 +69,13 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent" />
 
+    <include
+        android:id="@+id/empty_view"
+        layout="@layout/view_template_create_empty"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tb_template_create"
+        app:layout_constraintBottom_toTopOf="@id/btn_template_create"
+        android:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

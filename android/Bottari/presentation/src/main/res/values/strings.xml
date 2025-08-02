@@ -180,6 +180,8 @@
     <string name="template_fetch_bottari_details_failure_text">나의 보따리 목록 조회에 실패했어요</string>
     <string name="template_create_failure_text">보따리를 등록하지 못했어요</string>
     <string name="template_create_success_text">보따리를 등록했어요</string>
+    <string name="template_create_empty_view_title_text">현재 공유 가능한 보따리가 없습니다</string>
+    <string name="template_create_empty_view_description_text">보따리를 공유하려면 먼저 물건을 담아야 해요\n홈에서 나만의 보따리를 만들어보세요!</string>
 
     <!-- My Bottari Template -->
     <string name="template_my_template_title">내가 등록한 보따리</string>

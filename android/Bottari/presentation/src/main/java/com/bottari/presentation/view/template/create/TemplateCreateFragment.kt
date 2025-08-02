@@ -49,8 +49,10 @@ class TemplateCreateFragment : BaseFragment<FragmentTemplateCreateBinding>(Fragm
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
+            handleEmptyView(uiState.shouldShowEmptyView)
+            handleCreateButtonState(uiState.canCreateTemplate)
             bottariAdapter.submitList(uiState.bottaries)
-            itemAdapter.submitList(uiState.selectedBottari)
+            itemAdapter.submitList(uiState.currentBottariItems)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
@@ -111,7 +113,20 @@ class TemplateCreateFragment : BaseFragment<FragmentTemplateCreateBinding>(Fragm
             .takeIf { it in bottariAdapter.currentList.indices }
     }
 
+    private fun handleEmptyView(shouldShowEmptyView: Boolean) {
+        binding.emptyView.root.visibility = if (shouldShowEmptyView) View.VISIBLE else View.GONE
+    }
+
+    private fun handleCreateButtonState(canCreateTemplate: Boolean) {
+        binding.btnTemplateCreate.isEnabled = canCreateTemplate
+        val alpha =
+            if (canCreateTemplate) CAN_CREATE_TEMPLATE_ALPHA_VALUE else CANNOT_CREATE_TEMPLATE_ALPHA_VALUE
+        binding.btnTemplateCreate.alpha = alpha
+    }
+
     companion object {
         private const val ITEM_SIDE_SPACE_RATIO = 0.3f
+        private const val CAN_CREATE_TEMPLATE_ALPHA_VALUE = 1f
+        private const val CANNOT_CREATE_TEMPLATE_ALPHA_VALUE = 0.5f
     }
 }

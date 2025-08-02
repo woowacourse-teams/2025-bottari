@@ -49,11 +49,12 @@ class TemplateCreateViewModel(
     }
 
     fun createTemplate() {
+        if (!_uiState.value!!.canCreateTemplate) return
         _uiState.update { copy(isLoading = true) }
 
         viewModelScope.launch {
             val title = _uiState.value!!.bottariTitle
-            val items = _uiState.value!!.selectedBottari.map { it.name }
+            val items = _uiState.value!!.currentBottariItems.map { it.name }
             createBottariTemplateUseCase(ssaid, title, items)
                 .onSuccess { _uiEvent.value = TemplateCreateUiEvent.CreateTemplateSuccuss }
                 .onFailure {

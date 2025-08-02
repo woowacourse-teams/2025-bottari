@@ -9,6 +9,10 @@ data class TemplateCreateUiState(
     val selectedBottariId: Long? = null,
     val bottaries: List<MyBottariUiModel> = emptyList(),
 ) {
-    val selectedBottari: List<BottariItemUiModel>
+    val shouldShowEmptyView: Boolean get() = bottaries.isEmpty()
+
+    val currentBottariItems: List<BottariItemUiModel>
         get() = bottaries.find { it.id == selectedBottariId }?.items ?: emptyList()
+
+    val canCreateTemplate: Boolean get() = currentBottariItems.isNotEmpty()
 }
