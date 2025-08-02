@@ -1,10 +1,12 @@
 package com.bottari.config;
 
+import com.bottari.error.ErrorCodeOperationCustomizer;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,6 +19,11 @@ public class SwaggerConfig {
                 .info(apiInfo())
                 .addSecurityItem(getSecurityRequirement())
                 .components(getComponents());
+    }
+
+    @Bean
+    public OperationCustomizer operationCustomizer() {
+        return new ErrorCodeOperationCustomizer();
     }
 
     private Info apiInfo() {
