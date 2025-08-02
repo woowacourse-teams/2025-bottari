@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.bottari.BottariDetail
 import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
+import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.presentation.common.event.SingleLiveEvent
 import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.BottariMapper.toMyBottariUiModel
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 class TemplateCreateViewModel(
     stateHandle: SavedStateHandle,
     private val fetchBottariDetailsUseCase: FetchBottariDetailsUseCase,
+    private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
 ) : ViewModel() {
     private val _uiState: MutableLiveData<TemplateCreateUiState> =
         MutableLiveData(
@@ -43,6 +45,21 @@ class TemplateCreateViewModel(
                 selectedBottariId = bottariId,
                 bottaries = bottaries.updateBottariSelectedState(bottariId),
             )
+        }
+    }
+
+    fun createTemplate() {
+        _uiState.update { copy(isLoading = true) }
+
+        viewModelScope.launch {
+            val title = _uiState.value!!.bottariTitle
+            val items = _uiState.value!!.selectedBottari.map { it.name }
+            createBottariTemplateUseCase(ssaid, title, items)
+                .onSuccess { _uiEvent.value = TemplateCreateUiEvent.CreateTemplateSuccuss }
+                .onFailure {
+                    _uiState.update { copy(isLoading = false) }
+                    _uiEvent.value = TemplateCreateUiEvent.CreateTemplateFailure
+                }
         }
     }
 
@@ -84,6 +101,7 @@ class TemplateCreateViewModel(
                     TemplateCreateViewModel(
                         stateHandle,
                         UseCaseProvider.fetchBottariDetailsUseCase,
+                        UseCaseProvider.createBottariTemplateUseCase,
                     )
                 }
             }

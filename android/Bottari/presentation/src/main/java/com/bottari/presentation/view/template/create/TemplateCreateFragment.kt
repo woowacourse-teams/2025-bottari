@@ -52,10 +52,14 @@ class TemplateCreateFragment : BaseFragment<FragmentTemplateCreateBinding>(Fragm
             bottariAdapter.submitList(uiState.bottaries)
             itemAdapter.submitList(uiState.selectedBottari)
         }
-
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
                 TemplateCreateUiEvent.FetchMyBottariesFailure -> showSnackbar(R.string.template_fetch_bottari_details_failure_text)
+                TemplateCreateUiEvent.CreateTemplateFailure -> showSnackbar(R.string.template_create_failure_text)
+                TemplateCreateUiEvent.CreateTemplateSuccuss ->
+                    showSnackbar(R.string.template_create_success_text) {
+                        requireActivity().onBackPressedDispatcher.onBackPressed()
+                    }
             }
         }
     }
@@ -71,6 +75,7 @@ class TemplateCreateFragment : BaseFragment<FragmentTemplateCreateBinding>(Fragm
     }
 
     private fun setupListeners() {
+        binding.btnTemplateCreate.setOnClickListener { viewModel.createTemplate() }
         binding.btnPrevious.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.rvTemplateCreateMyBottari.addOnScrollListener(onScrollIdleListener)
         binding.rvTemplateCreateMyBottari.viewTreeObserver.addOnGlobalLayoutListener(

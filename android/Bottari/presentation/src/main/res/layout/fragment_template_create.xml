@@ -65,7 +65,7 @@
         android:background="@drawable/bg_primary_radius_16dp"
         android:gravity="center"
         android:padding="@dimen/space_median"
-        android:text="@string/template_register_btn_text"
+        android:text="@string/template_create_btn_text"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent" />
 
