@@ -66,14 +66,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun checkPermissionAndNavigate(permissionFlag: Boolean) {
-        if (permissionFlag.not() &&
-            (
-                !hasAllRuntimePermissions(this) ||
-                    !hasExactAlarmPermission(
-                        this,
-                    )
-            )
-        ) {
+        if (hasRequiredPermission(permissionFlag)) {
             showSnackbar(R.string.splash_screen_permission_denied_text, ::navigateToHome)
             return
         }
@@ -96,6 +89,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 },
             ).show(supportFragmentManager, DialogPresetType.NAVIGATE_TO_SETTINGS.name)
     }
+
+    private fun hasRequiredPermission(permissionFlag: Boolean) =
+        permissionFlag || (hasAllRuntimePermissions(this) && hasExactAlarmPermission(this))
 
     private fun showSnackbar(
         @StringRes resId: Int,
