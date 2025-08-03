@@ -1,4 +1,4 @@
-package com.bottari.fixture;
+package com.bottari.service.fixture;
 
 import com.bottari.domain.Alarm;
 import com.bottari.domain.Bottari;

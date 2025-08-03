@@ -1,4 +1,4 @@
-package com.bottari.fixture;
+package com.bottari.service.fixture;
 
 import com.bottari.domain.Bottari;
 import com.bottari.domain.Member;
