@@ -84,7 +84,8 @@ class MemberServiceTest {
             // given
             final String ssaid = "ssaid";
             final String name = "name";
-            entityManager.persist(new Member(ssaid, name));
+            final Member member = new Member(ssaid, name);
+            entityManager.persist(member);
 
             // when
             final CheckRegistrationResponse actual = memberService.checkRegistration(ssaid);
@@ -92,6 +93,7 @@ class MemberServiceTest {
             // then
             assertAll(() -> {
                 assertThat(actual.isRegistered()).isTrue();
+                assertThat(actual.id()).isEqualTo(member.getId());
                 assertThat(actual.name()).isEqualTo(name);
             });
         }
@@ -108,6 +110,7 @@ class MemberServiceTest {
             // then
             assertAll(() -> {
                 assertThat(actual.isRegistered()).isFalse();
+                assertThat(actual.id()).isNull();
                 assertThat(actual.name()).isNull();
             });
         }

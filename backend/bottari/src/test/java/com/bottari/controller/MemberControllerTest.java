@@ -57,6 +57,7 @@ class MemberControllerTest {
         final String ssaid = "ssaid";
         final CheckRegistrationResponse response = new CheckRegistrationResponse(
                 true,
+                1L,
                 "name"
         );
         given(memberService.checkRegistration(ssaid))
