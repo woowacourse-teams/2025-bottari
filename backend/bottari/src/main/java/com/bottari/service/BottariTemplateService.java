@@ -66,9 +66,7 @@ public class BottariTemplateService {
         return buildReadBottariTemplateResponses(itemsGroupByTemplate);
     }
 
-    public ReadNextBottariTemplateResponse getNextAll(
-            final ReadNextBottariTemplateRequest request
-    ) {
+    public ReadNextBottariTemplateResponse getNextAll(final ReadNextBottariTemplateRequest request) {
         final Pageable pageable = request.toPageable();
         final Slice<BottariTemplate> bottariTemplates = getNextBySortProperty(request, pageable);
         final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate = groupingItemsByTemplate(
@@ -135,16 +133,12 @@ public class BottariTemplateService {
             final Pageable pageable
     ) {
         final SortProperty property = SortProperty.fromProperty(request.property());
-        switch (property) {
-            case SortProperty.CREATED_AT:
-                return bottariTemplateRepository.findNextByCreatedAt(
-                        request.query(), request.getCreatedAt(), request.lastId(), pageable);
-            case SortProperty.TAKEN_COUNT:
-                return bottariTemplateRepository.findNextByTakenCount(
-                        request.query(), request.getTakenCount(), request.lastId(), pageable);
-            default:
-                throw new IllegalArgumentException("존재하지 않는 정렬 기준입니다.");
-        }
+        return switch (property) {
+            case SortProperty.CREATED_AT -> bottariTemplateRepository.findNextByCreatedAt(
+                    request.query(), request.getCreatedAt(), request.lastId(), pageable);
+            case SortProperty.TAKEN_COUNT -> bottariTemplateRepository.findNextByTakenCount(
+                    request.query(), request.getTakenCount(), request.lastId(), pageable);
+        };
     }
 
     private Map<BottariTemplate, List<BottariTemplateItem>> groupingItemsByTemplate(final List<BottariTemplate> bottariTemplates) {
