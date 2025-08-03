@@ -338,8 +338,8 @@ class BottariTemplateServiceTest {
             // then
             assertAll(
                     () -> assertThat(actual.contents()).hasSize(2),
-                    () -> assertThat(actual.contents().get(0).title()).contains("체크리스트"),
-                    () -> assertThat(actual.contents().get(1).title()).contains("체크리스트"),
+                    () -> assertThat(actual.contents().get(0).title()).isEqualTo("출장 체크리스트"),
+                    () -> assertThat(actual.contents().get(1).title()).isEqualTo("여행용 체크리스트"),
                     () -> assertThat(actual.hasNext()).isFalse(),
                     () -> assertThat(actual.last()).isTrue()
             );
