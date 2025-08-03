@@ -24,7 +24,7 @@ public enum LocationAlarmFixture {
         this.radius = radius;
     }
 
-    public LocationAlarm getLocationAlarm() {
+    public LocationAlarm get() {
         return new LocationAlarm(isLocationAlarmActive, latitude, longitude, radius);
     }
 }

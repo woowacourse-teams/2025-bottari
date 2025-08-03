@@ -45,7 +45,7 @@ public enum RoutineAlarmFixture {
         this.dayOfWeeks = dayOfWeeks;
     }
 
-    public RoutineAlarm getRoutineAlarm() {
+    public RoutineAlarm get() {
         return new RoutineAlarm(time, type, date, dayOfWeeks);
     }
 }

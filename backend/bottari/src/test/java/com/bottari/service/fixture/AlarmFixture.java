@@ -16,7 +16,7 @@ public enum AlarmFixture {
         this.isActive = isActive;
     }
 
-    public Alarm getAlarm(
+    public Alarm get(
             final RoutineAlarm routineAlarm,
             final LocationAlarm locationAlarm,
             final Bottari bottari

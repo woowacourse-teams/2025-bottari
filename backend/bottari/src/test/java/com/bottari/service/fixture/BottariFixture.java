@@ -6,6 +6,7 @@ import com.bottari.domain.Member;
 public enum BottariFixture {
 
     BOTTARI("title"),
+    BOTTARI_2("title2"),
     ANOTHER_BOTTARI("another title");
     ;
 
@@ -15,7 +16,7 @@ public enum BottariFixture {
         this.title = title;
     }
 
-    public Bottari getBottari(final Member member) {
+    public Bottari get(final Member member) {
         return new Bottari(title, member);
     }
 }
