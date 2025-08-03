@@ -17,6 +17,7 @@ public record ReadNextBottariTemplateRequest(
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static final int DEFAULT_SIZE = 10;
 
     public ReadNextBottariTemplateRequest {
         query = normalizeQuery(query);
@@ -43,13 +44,15 @@ public record ReadNextBottariTemplateRequest(
         if (query == null || query.isBlank()) {
             return "";
         }
+
         return query;
     }
 
     private int normalizeSize(final int size) {
         if (size <= 0) {
-            return 10;
+            return DEFAULT_SIZE;
         }
+
         return size;
     }
 
@@ -57,6 +60,7 @@ public record ReadNextBottariTemplateRequest(
         if (page < 0) {
             return 0;
         }
+
         return page;
     }
 
@@ -64,6 +68,7 @@ public record ReadNextBottariTemplateRequest(
         if (lastId == null) {
             return Long.MAX_VALUE;
         }
+
         return lastId;
     }
 
@@ -71,6 +76,7 @@ public record ReadNextBottariTemplateRequest(
         if (property == null || property.isBlank()) {
             return SortProperty.CREATED_AT.getProperty();
         }
+
         return property;
     }
 
@@ -84,6 +90,7 @@ public record ReadNextBottariTemplateRequest(
         if (SortProperty.TAKEN_COUNT.equalsProperty(property) && (lastInfo == null || lastInfo.isBlank())) {
             return String.valueOf(Long.MAX_VALUE);
         }
+
         return lastInfo;
     }
 }
