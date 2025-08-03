@@ -12,12 +12,15 @@ import com.bottari.domain.RepeatType;
 import com.bottari.domain.RoutineAlarm;
 import com.bottari.dto.CreateAlarmRequest;
 import com.bottari.dto.UpdateAlarmRequest;
+import com.bottari.service.fixture.AlarmFixture;
+import com.bottari.service.fixture.BottariFixture;
+import com.bottari.service.fixture.LocationAlarmFixture;
+import com.bottari.service.fixture.MemberFixture;
+import com.bottari.service.fixture.RoutineAlarmFixture;
 import jakarta.persistence.EntityManager;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -42,11 +45,10 @@ class AlarmServiceTest {
         @Test
         void create() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
             final CreateAlarmRequest request = new CreateAlarmRequest(
@@ -105,26 +107,15 @@ class AlarmServiceTest {
         @Test
         void update() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
-            final RoutineAlarm routineAlarm = new RoutineAlarm(
-                    LocalTime.now(),
-                    RepeatType.EVERY_WEEK_REPEAT,
-                    null,
-                    Set.of(DayOfWeek.MONDAY)
-            );
-            final LocationAlarm locationAlarm = new LocationAlarm(
-                    true,
-                    37.5,
-                    127.5,
-                    100
-            );
-            final Alarm alarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
+            final RoutineAlarm routineAlarm = RoutineAlarmFixture.EVERY_WEEK_REPEAT_ALARM.get();
+            final LocationAlarm locationAlarm = LocationAlarmFixture.LOCATION_ALARM_ON.get();
+            final Alarm alarm = AlarmFixture.ALARM_ON.get(routineAlarm, locationAlarm, bottari);
             entityManager.persist(alarm);
 
             final UpdateAlarmRequest updateRequest = new UpdateAlarmRequest(
@@ -162,11 +153,10 @@ class AlarmServiceTest {
         @Test
         void update_Exception_NotExistsAlarm() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
             final UpdateAlarmRequest updateRequest = new UpdateAlarmRequest(
@@ -190,7 +180,6 @@ class AlarmServiceTest {
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("존재하지 않는 알람입니다.");
         }
-
     }
 
     @Nested
@@ -200,21 +189,15 @@ class AlarmServiceTest {
         @Test
         void active() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
-            final RoutineAlarm routineAlarm = new RoutineAlarm(
-                    LocalTime.NOON,
-                    RepeatType.NON_REPEAT,
-                    LocalDate.MAX,
-                    Set.of()
-            );
-            final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
-            final Alarm inactiveAlarm = new Alarm(false, routineAlarm, locationAlarm, bottari);
+            final RoutineAlarm routineAlarm = RoutineAlarmFixture.NON_REPEAT_ALARM.get();
+            final LocationAlarm locationAlarm = LocationAlarmFixture.LOCATION_ALARM_OFF.get();
+            final Alarm inactiveAlarm = AlarmFixture.ALARM_OFF.get(routineAlarm, locationAlarm, bottari);
             entityManager.persist(inactiveAlarm);
 
             // when
@@ -229,21 +212,15 @@ class AlarmServiceTest {
         @Test
         void active_Exception_AlreadyActive() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
-            final RoutineAlarm routineAlarm = new RoutineAlarm(
-                    LocalTime.NOON,
-                    RepeatType.NON_REPEAT,
-                    LocalDate.MAX,
-                    Set.of()
-            );
-            final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
-            final Alarm activeAlarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
+            final RoutineAlarm routineAlarm = RoutineAlarmFixture.NON_REPEAT_ALARM.get();
+            final LocationAlarm locationAlarm = LocationAlarmFixture.LOCATION_ALARM_OFF.get();
+            final Alarm activeAlarm = AlarmFixture.ALARM_ON.get(routineAlarm, locationAlarm, bottari);
             entityManager.persist(activeAlarm);
 
             // when & then
@@ -260,21 +237,15 @@ class AlarmServiceTest {
         @Test
         void inactive() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
-            final RoutineAlarm routineAlarm = new RoutineAlarm(
-                    LocalTime.NOON,
-                    RepeatType.NON_REPEAT,
-                    LocalDate.MAX,
-                    Set.of()
-            );
-            final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
-            final Alarm activeAlarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
+            final RoutineAlarm routineAlarm = RoutineAlarmFixture.NON_REPEAT_ALARM.get();
+            final LocationAlarm locationAlarm = LocationAlarmFixture.LOCATION_ALARM_OFF.get();
+            final Alarm activeAlarm = AlarmFixture.ALARM_ON.get(routineAlarm, locationAlarm, bottari);
             entityManager.persist(activeAlarm);
 
             // when
@@ -289,21 +260,15 @@ class AlarmServiceTest {
         @Test
         void inactive_Exception_AlreadyInactive() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
-            final RoutineAlarm routineAlarm = new RoutineAlarm(
-                    LocalTime.NOON,
-                    RepeatType.NON_REPEAT,
-                    LocalDate.MAX,
-                    Set.of()
-            );
-            final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
-            final Alarm inactiveAlarm = new Alarm(false, routineAlarm, locationAlarm, bottari);
+            final RoutineAlarm routineAlarm = RoutineAlarmFixture.NON_REPEAT_ALARM.get();
+            final LocationAlarm locationAlarm = LocationAlarmFixture.LOCATION_ALARM_OFF.get();
+            final Alarm inactiveAlarm = AlarmFixture.ALARM_OFF.get(routineAlarm, locationAlarm, bottari);
             entityManager.persist(inactiveAlarm);
 
             // when & then

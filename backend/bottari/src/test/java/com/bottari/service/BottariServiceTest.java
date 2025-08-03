@@ -16,12 +16,14 @@ import com.bottari.dto.CreateBottariRequest;
 import com.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.dto.ReadBottariResponse;
 import com.bottari.dto.UpdateBottariRequest;
+import com.bottari.service.fixture.AlarmFixture;
+import com.bottari.service.fixture.BottariFixture;
+import com.bottari.service.fixture.BottariItemFixture;
+import com.bottari.service.fixture.LocationAlarmFixture;
+import com.bottari.service.fixture.MemberFixture;
+import com.bottari.service.fixture.RoutineAlarmFixture;
 import jakarta.persistence.EntityManager;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -46,31 +48,25 @@ class BottariServiceTest {
         @Test
         void getById() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
-            final Bottari anotherBottari = new Bottari("another_title", member);
+            final Bottari anotherBottari = BottariFixture.ANOTHER_BOTTARI.get(member);
             entityManager.persist(anotherBottari);
 
-            final BottariItem bottariItem = new BottariItem("item", bottari);
+            final BottariItem bottariItem = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
             entityManager.persist(bottariItem);
 
-            final RoutineAlarm routineAlarm = new RoutineAlarm(
-                    LocalTime.now(),
-                    RepeatType.EVERY_WEEK_REPEAT,
-                    null,
-                    Set.of(DayOfWeek.MONDAY)
-            );
-            final LocationAlarm locationAlarm = new LocationAlarm(true, 37.5, 127.5, 100);
-            final Alarm alarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
+            final RoutineAlarm routineAlarm = RoutineAlarmFixture.EVERY_WEEK_REPEAT_ALARM.get();
+            final LocationAlarm locationAlarm = LocationAlarmFixture.LOCATION_ALARM_ON.get();
+            final Alarm alarm = AlarmFixture.ALARM_ON.get(routineAlarm, locationAlarm, bottari);
             entityManager.persist(alarm);
 
             // when
-            final ReadBottariResponse actual = bottariService.getById(ssaid, bottari.getId());
+            final ReadBottariResponse actual = bottariService.getById(member.getSsaid(), bottari.getId());
 
             // then
             assertAll(
@@ -80,7 +76,7 @@ class BottariServiceTest {
                     () -> assertThat(actual.alarm().id()).isEqualTo(alarm.getId()),
                     () -> assertThat(actual.alarm().isActive()).isTrue(),
                     () -> assertThat(actual.alarm().routine().type()).isEqualTo(RepeatType.EVERY_WEEK_REPEAT),
-                    () -> assertThat(actual.alarm().location().latitude()).isEqualTo(37.5)
+                    () -> assertThat(actual.alarm().location().latitude()).isEqualTo(locationAlarm.latitude())
             );
         }
 
@@ -88,11 +84,10 @@ class BottariServiceTest {
         @Test
         void getById_Exception_NotOwner() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
             // when & then
@@ -118,42 +113,45 @@ class BottariServiceTest {
         @Test
         void getAllBySsaidSortedByLatest() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari1 = new Bottari("title1", member);
-            entityManager.persist(bottari1);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
+            entityManager.persist(bottari);
 
-            final Member anotherMember = new Member("another_ssaid", "another");
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
             entityManager.persist(anotherMember);
 
-            final Bottari anotherBottari = new Bottari("another_title", anotherMember);
+            final Bottari anotherBottari = BottariFixture.ANOTHER_BOTTARI.get(anotherMember);
             entityManager.persist(anotherBottari);
 
-            final BottariItem bottari1Item1 = new BottariItem("item1", bottari1);
+            final BottariItem bottari1Item1 = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
             entityManager.persist(bottari1Item1);
 
-            final BottariItem bottari1Item2 = new BottariItem("item2", bottari1);
+            final BottariItem bottari1Item2 = BottariItemFixture.BOTTARI_ITEM_2.get(bottari);
             bottari1Item2.check();
             entityManager.persist(bottari1Item2);
 
-            final Bottari bottari2 = new Bottari("title2", member);
+            final Bottari bottari2 = BottariFixture.BOTTARI_2.get(member);
             entityManager.persist(bottari2);
 
-            final BottariItem bottari2Item1 = new BottariItem("item1", bottari2);
+            final BottariItem bottari2Item1 = BottariItemFixture.BOTTARI_ITEM_1.get(bottari2);
             entityManager.persist(bottari2Item1);
 
-            final RoutineAlarm routineAlarm = new RoutineAlarm(LocalTime.MAX, RepeatType.NON_REPEAT, LocalDate.now(), null);
-            final Alarm alarm = new Alarm(true, routineAlarm, null, bottari1);
+            final RoutineAlarm routineAlarm = RoutineAlarmFixture.NON_REPEAT_ALARM.get();
+            final LocationAlarm locationAlarm = LocationAlarmFixture.LOCATION_ALARM_OFF.get();
+            final Alarm alarm = AlarmFixture.ALARM_ON.get(routineAlarm, locationAlarm, bottari);
             entityManager.persist(alarm);
 
             // when
-            final List<ReadBottariPreviewResponse> actual = bottariService.getAllBySsaidSortedByLatest(ssaid);
+            final List<ReadBottariPreviewResponse> actual = bottariService.getAllBySsaidSortedByLatest(member.getSsaid());
 
             // then
             assertAll(
-                    () -> assertThat(actual).extracting("title").containsExactly("title2", "title1"),
+                    () -> assertThat(actual).extracting("title").containsExactly(
+                            bottari2.getTitle(),
+                            bottari.getTitle()
+                    ),
                     () -> assertThat(actual).hasSize(2),
                     () -> assertThat(actual.getFirst().totalItemsCount()).isEqualTo(1),
                     () -> assertThat(actual.getFirst().checkedItemsCount()).isEqualTo(0),
@@ -187,12 +185,11 @@ class BottariServiceTest {
         void create() {
             // given
             final CreateBottariRequest request = new CreateBottariRequest("title");
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
             // when
-            final Long actual = bottariService.create(ssaid, request);
+            final Long actual = bottariService.create(member.getSsaid(), request);
 
             // then
             assertThat(actual).isNotNull();
@@ -223,30 +220,20 @@ class BottariServiceTest {
             final Member member = new Member(ssaid, "name");
             entityManager.persist(member);
 
-            final Bottari delete_bottari = new Bottari("delete_bottari", member);
+            final Bottari delete_bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(delete_bottari);
 
-            final Bottari remain_bottari = new Bottari("remain_bottari", member);
+            final Bottari remain_bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(remain_bottari);
 
-            final BottariItem bottariItem1 = new BottariItem("bottari1_item1", delete_bottari);
-            final BottariItem bottariItem2 = new BottariItem("bottari1_item2", delete_bottari);
+            final BottariItem bottariItem1 = BottariItemFixture.BOTTARI_ITEM_1.get(delete_bottari);
+            final BottariItem bottariItem2 = BottariItemFixture.BOTTARI_ITEM_2.get(delete_bottari);
             entityManager.persist(bottariItem1);
             entityManager.persist(bottariItem2);
 
-            final RoutineAlarm routineAlarm = new RoutineAlarm(
-                    LocalTime.now(),
-                    RepeatType.EVERY_WEEK_REPEAT,
-                    null,
-                    Set.of(DayOfWeek.MONDAY)
-            );
-            final LocationAlarm locationAlarm = new LocationAlarm(
-                    true,
-                    37.5,
-                    127.5,
-                    100
-            );
-            final Alarm alarm = new Alarm(true, routineAlarm, locationAlarm, delete_bottari);
+            final RoutineAlarm routineAlarm = RoutineAlarmFixture.EVERY_WEEK_REPEAT_ALARM.get();
+            final LocationAlarm locationAlarm = LocationAlarmFixture.LOCATION_ALARM_ON.get();
+            final Alarm alarm = AlarmFixture.ALARM_ON.get(routineAlarm, locationAlarm, delete_bottari);
             entityManager.persist(alarm);
 
             // when
@@ -259,7 +246,7 @@ class BottariServiceTest {
             assertAll(
                     () -> assertThat(deletedBottari).isNull(),
                     () -> assertThat(remainingBottari).isNotNull(),
-                    () -> assertThat(remainingBottari.getTitle()).isEqualTo("remain_bottari")
+                    () -> assertThat(remainingBottari.getTitle()).isEqualTo(remainingBottari.getTitle())
             );
         }
     }
@@ -271,17 +258,16 @@ class BottariServiceTest {
         @Test
         void update() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("original_title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
             final UpdateBottariRequest request = new UpdateBottariRequest("updated_title");
 
             // when
-            bottariService.update(request, bottari.getId(), ssaid);
+            bottariService.update(request, bottari.getId(), member.getSsaid());
 
             // then
             final Bottari updatedBottari = entityManager.find(Bottari.class, bottari.getId());
@@ -292,14 +278,13 @@ class BottariServiceTest {
         @Test
         void update_Exception_NotMine() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "member_1");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Member anotherMember = new Member("another_ssaid", "member_2");
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
             entityManager.persist(anotherMember);
 
-            final Bottari bottari = new Bottari("title", anotherMember);
+            final Bottari bottari = BottariFixture.BOTTARI.get(anotherMember);
             entityManager.persist(bottari);
 
             final UpdateBottariRequest request = new UpdateBottariRequest("updated_title");
@@ -343,15 +328,15 @@ class BottariServiceTest {
         @Test
         void deleteById_Exception_NotMine() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Member anotherMember = new Member("another_ssaid", "name_2");
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
             entityManager.persist(anotherMember);
 
-            final Bottari anotherMemberBottari = new Bottari("title1", anotherMember);
+            final Bottari anotherMemberBottari = BottariFixture.BOTTARI.get(anotherMember);
             entityManager.persist(anotherMemberBottari);
+
 
             // when & then
             assertThatThrownBy(() -> bottariService.deleteById(anotherMemberBottari.getId(), "ssaid"))
