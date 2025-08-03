@@ -172,4 +172,11 @@ public class BottariTemplateService {
             bottariTemplateRepository.plusTakenCountById(bottariTemplate.getId());
         }
     }
+
+    private boolean alreadyTookBottariTemplate(
+            final BottariTemplate bottariTemplate,
+            final Member member
+    ) {
+        return !bottariTemplateHistoryRepository.existsByBottariTemplateIdAndMemberId(bottariTemplate.getId(), member.getId());
+    }
 }
