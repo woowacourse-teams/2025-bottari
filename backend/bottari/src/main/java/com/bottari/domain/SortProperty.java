@@ -1,9 +1,11 @@
 package com.bottari.domain;
 
+import java.util.Arrays;
 import lombok.Getter;
 
 @Getter
 public enum SortProperty {
+
     CREATED_AT("createdAt"),
     TAKEN_COUNT("takenCount"),
     ;
@@ -14,16 +16,14 @@ public enum SortProperty {
         this.property = property;
     }
 
-    public boolean equalsProperty(final String property) {
-        return this.property.equals(property);
+    public static SortProperty fromProperty(final String property) {
+        return Arrays.stream(SortProperty.values())
+                .filter(value -> value.equalsProperty(property))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 정렬 기준입니다."));
     }
 
-    public static SortProperty fromProperty(final String property) {
-        for (final SortProperty value : SortProperty.values()) {
-            if (value.equalsProperty(property)) {
-                return value;
-            }
-        }
-        throw new IllegalArgumentException("존재하지 않는 정렬 기준입니다.");
+    public boolean equalsProperty(final String property) {
+        return this.property.equals(property);
     }
 }
