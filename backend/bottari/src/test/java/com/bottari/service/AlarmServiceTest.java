@@ -19,6 +19,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -34,264 +35,281 @@ class AlarmServiceTest {
     @Autowired
     private EntityManager entityManager;
 
-    @DisplayName("알람을 추가한다.")
-    @Test
-    void create() {
-        // given
-        final String ssaid = "ssaid";
-        final Member member = new Member(ssaid, "name");
-        entityManager.persist(member);
+    @Nested
+    class CreateTest {
 
-        final Bottari bottari = new Bottari("title", member);
-        entityManager.persist(bottari);
+        @DisplayName("알람을 추가한다.")
+        @Test
+        void create() {
+            // given
+            final String ssaid = "ssaid";
+            final Member member = new Member(ssaid, "name");
+            entityManager.persist(member);
 
-        final CreateAlarmRequest request = new CreateAlarmRequest(
-                new CreateAlarmRequest.RoutineAlarmRequest(
-                        LocalTime.MAX,
-                        RepeatType.EVERY_WEEK_REPEAT,
-                        null,
-                        List.of(1, 4, 7) // 월, 목, 일
-                ),
-                new CreateAlarmRequest.LocationAlarmRequest(
-                        true,
-                        1.23,
-                        1.23,
-                        100
-                )
-        );
+            final Bottari bottari = new Bottari("title", member);
+            entityManager.persist(bottari);
 
-        // when
-        final Long actual = alarmService.create(bottari.getId(), request);
+            final CreateAlarmRequest request = new CreateAlarmRequest(
+                    new CreateAlarmRequest.RoutineAlarmRequest(
+                            LocalTime.MAX,
+                            RepeatType.EVERY_WEEK_REPEAT,
+                            null,
+                            List.of(1, 4, 7) // 월, 목, 일
+                    ),
+                    new CreateAlarmRequest.LocationAlarmRequest(
+                            true,
+                            1.23,
+                            1.23,
+                            100
+                    )
+            );
 
-        // then
-        assertThat(actual).isNotNull();
+            // when
+            final Long actual = alarmService.create(bottari.getId(), request);
+
+            // then
+            assertThat(actual).isNotNull();
+        }
+
+        @DisplayName("존재하지 않는 보따리에 알람을 추가할 경우, 예외를 던진다.")
+        @Test
+        void create_Exception_NotExistsBottari() {
+            // given
+            final CreateAlarmRequest request = new CreateAlarmRequest(
+                    new CreateAlarmRequest.RoutineAlarmRequest(
+                            LocalTime.MAX,
+                            RepeatType.EVERY_WEEK_REPEAT,
+                            null,
+                            List.of(1, 4, 7) // 월, 목, 일
+                    ),
+                    new CreateAlarmRequest.LocationAlarmRequest(
+                            true,
+                            1.23,
+                            1.23,
+                            100
+                    )
+            );
+            final Long invalidBottariId = 1L;
+
+            // when & then
+            assertThatThrownBy(() -> alarmService.create(invalidBottariId, request))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("존재하지 않는 보따리입니다.");
+        }
     }
 
-    @DisplayName("존재하지 않는 보따리에 알람을 추가할 경우, 예외를 던진다.")
-    @Test
-    void create_Exception_NotExistsBottari() {
-        // given
-        final CreateAlarmRequest request = new CreateAlarmRequest(
-                new CreateAlarmRequest.RoutineAlarmRequest(
-                        LocalTime.MAX,
-                        RepeatType.EVERY_WEEK_REPEAT,
-                        null,
-                        List.of(1, 4, 7) // 월, 목, 일
-                ),
-                new CreateAlarmRequest.LocationAlarmRequest(
-                        true,
-                        1.23,
-                        1.23,
-                        100
-                )
-        );
-        final Long invalidBottariId = 1L;
+    @Nested
+    class UpdateTest {
 
-        // when & then
-        assertThatThrownBy(() -> alarmService.create(invalidBottariId, request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("존재하지 않는 보따리입니다.");
+        @DisplayName("알람을 수정한다.")
+        @Test
+        void update() {
+            // given
+            final String ssaid = "ssaid";
+            final Member member = new Member(ssaid, "name");
+            entityManager.persist(member);
+
+            final Bottari bottari = new Bottari("title", member);
+            entityManager.persist(bottari);
+
+            final RoutineAlarm routineAlarm = new RoutineAlarm(
+                    LocalTime.now(),
+                    RepeatType.EVERY_WEEK_REPEAT,
+                    null,
+                    Set.of(DayOfWeek.MONDAY)
+            );
+            final LocationAlarm locationAlarm = new LocationAlarm(
+                    true,
+                    37.5,
+                    127.5,
+                    100
+            );
+            final Alarm alarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
+            entityManager.persist(alarm);
+
+            final UpdateAlarmRequest updateRequest = new UpdateAlarmRequest(
+                    new UpdateAlarmRequest.RoutineAlarmRequest(
+                            LocalTime.NOON,
+                            RepeatType.NON_REPEAT,
+                            LocalDate.MAX,
+                            List.of()
+                    ),
+                    new UpdateAlarmRequest.LocationAlarmRequest(
+                            false,
+                            1.23,
+                            1.23,
+                            100
+                    )
+            );
+
+            // when
+            alarmService.update(alarm.getId(), updateRequest);
+
+            // then
+            final Alarm actual = entityManager.find(Alarm.class, alarm.getId());
+            assertAll(() -> {
+                assertThat(actual.getRoutineAlarm().getTime()).isEqualTo(LocalTime.NOON);
+                assertThat(actual.getRoutineAlarm().getType()).isEqualTo(RepeatType.NON_REPEAT);
+                assertThat(actual.getRoutineAlarm().getDate()).isEqualTo(LocalDate.MAX);
+                assertThat(actual.getRoutineAlarm().getRepeatDayOfWeeksBitmask()).isEqualTo(0);
+                assertThat(actual.getLocationAlarm().isLocationAlarmActive()).isFalse();
+                assertThat(actual.getLocationAlarm().latitude()).isEqualTo(1.23);
+                assertThat(actual.getLocationAlarm().longitude()).isEqualTo(1.23);
+            });
+        }
+
+        @DisplayName("존재하지 않는 알람을 수정할 경우, 예외를 던진다.")
+        @Test
+        void update_Exception_NotExistsAlarm() {
+            // given
+            final String ssaid = "ssaid";
+            final Member member = new Member(ssaid, "name");
+            entityManager.persist(member);
+
+            final Bottari bottari = new Bottari("title", member);
+            entityManager.persist(bottari);
+
+            final UpdateAlarmRequest updateRequest = new UpdateAlarmRequest(
+                    new UpdateAlarmRequest.RoutineAlarmRequest(
+                            LocalTime.NOON,
+                            RepeatType.NON_REPEAT,
+                            LocalDate.MAX,
+                            List.of()
+                    ),
+                    new UpdateAlarmRequest.LocationAlarmRequest(
+                            false,
+                            1.23,
+                            1.23,
+                            100
+                    )
+            );
+            final Long invalidAlarmId = 1L;
+
+            // when & then
+            assertThatThrownBy(() -> alarmService.update(invalidAlarmId, updateRequest))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage("존재하지 않는 알람입니다.");
+        }
+
     }
 
-    @DisplayName("알람을 수정한다.")
-    @Test
-    void update() {
-        // given
-        final String ssaid = "ssaid";
-        final Member member = new Member(ssaid, "name");
-        entityManager.persist(member);
+    @Nested
+    class ActiveTest {
 
-        final Bottari bottari = new Bottari("title", member);
-        entityManager.persist(bottari);
+        @DisplayName("알람을 활성화 시킨다.")
+        @Test
+        void active() {
+            // given
+            final String ssaid = "ssaid";
+            final Member member = new Member(ssaid, "name");
+            entityManager.persist(member);
 
-        final RoutineAlarm routineAlarm = new RoutineAlarm(
-                LocalTime.now(),
-                RepeatType.EVERY_WEEK_REPEAT,
-                null,
-                Set.of(DayOfWeek.MONDAY)
-        );
-        final LocationAlarm locationAlarm = new LocationAlarm(
-                true,
-                37.5,
-                127.5,
-                100
-        );
-        final Alarm alarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
-        entityManager.persist(alarm);
+            final Bottari bottari = new Bottari("title", member);
+            entityManager.persist(bottari);
 
-        final UpdateAlarmRequest updateRequest = new UpdateAlarmRequest(
-                new UpdateAlarmRequest.RoutineAlarmRequest(
-                        LocalTime.NOON,
-                        RepeatType.NON_REPEAT,
-                        LocalDate.MAX,
-                        List.of()
-                ),
-                new UpdateAlarmRequest.LocationAlarmRequest(
-                        false,
-                        1.23,
-                        1.23,
-                        100
-                )
-        );
+            final RoutineAlarm routineAlarm = new RoutineAlarm(
+                    LocalTime.NOON,
+                    RepeatType.NON_REPEAT,
+                    LocalDate.MAX,
+                    Set.of()
+            );
+            final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
+            final Alarm inactiveAlarm = new Alarm(false, routineAlarm, locationAlarm, bottari);
+            entityManager.persist(inactiveAlarm);
 
-        // when
-        alarmService.update(alarm.getId(), updateRequest);
+            // when
+            alarmService.active(inactiveAlarm.getId());
 
-        // then
-        final Alarm actual = entityManager.find(Alarm.class, alarm.getId());
-        assertAll(() -> {
-            assertThat(actual.getRoutineAlarm().getTime()).isEqualTo(LocalTime.NOON);
-            assertThat(actual.getRoutineAlarm().getType()).isEqualTo(RepeatType.NON_REPEAT);
-            assertThat(actual.getRoutineAlarm().getDate()).isEqualTo(LocalDate.MAX);
-            assertThat(actual.getRoutineAlarm().getRepeatDayOfWeeksBitmask()).isEqualTo(0);
-            assertThat(actual.getLocationAlarm().isLocationAlarmActive()).isFalse();
-            assertThat(actual.getLocationAlarm().latitude()).isEqualTo(1.23);
-            assertThat(actual.getLocationAlarm().longitude()).isEqualTo(1.23);
-        });
+            // then
+            final Alarm actual = entityManager.find(Alarm.class, inactiveAlarm.getId());
+            assertThat(actual.isActive()).isTrue();
+        }
+
+        @DisplayName("이미 활성화된 알람을 활성화 시키면, 예외를 던진다.")
+        @Test
+        void active_Exception_AlreadyActive() {
+            // given
+            final String ssaid = "ssaid";
+            final Member member = new Member(ssaid, "name");
+            entityManager.persist(member);
+
+            final Bottari bottari = new Bottari("title", member);
+            entityManager.persist(bottari);
+
+            final RoutineAlarm routineAlarm = new RoutineAlarm(
+                    LocalTime.NOON,
+                    RepeatType.NON_REPEAT,
+                    LocalDate.MAX,
+                    Set.of()
+            );
+            final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
+            final Alarm activeAlarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
+            entityManager.persist(activeAlarm);
+
+            // when & then
+            assertThatThrownBy(() -> alarmService.active(activeAlarm.getId()))
+                    .isInstanceOf(IllegalStateException.class)
+                    .hasMessage("알람이 이미 활성화되어 있습니다.");
+        }
     }
 
-    @DisplayName("존재하지 않는 알람을 수정할 경우, 예외를 던진다.")
-    @Test
-    void update_Exception_NotExistsAlarm() {
-        // given
-        final String ssaid = "ssaid";
-        final Member member = new Member(ssaid, "name");
-        entityManager.persist(member);
+    @Nested
+    class InactiveTest {
 
-        final Bottari bottari = new Bottari("title", member);
-        entityManager.persist(bottari);
+        @DisplayName("알람을 비활성화 시킨다.")
+        @Test
+        void inactive() {
+            // given
+            final String ssaid = "ssaid";
+            final Member member = new Member(ssaid, "name");
+            entityManager.persist(member);
 
-        final UpdateAlarmRequest updateRequest = new UpdateAlarmRequest(
-                new UpdateAlarmRequest.RoutineAlarmRequest(
-                        LocalTime.NOON,
-                        RepeatType.NON_REPEAT,
-                        LocalDate.MAX,
-                        List.of()
-                ),
-                new UpdateAlarmRequest.LocationAlarmRequest(
-                        false,
-                        1.23,
-                        1.23,
-                        100
-                )
-        );
-        final Long invalidAlarmId = 1L;
+            final Bottari bottari = new Bottari("title", member);
+            entityManager.persist(bottari);
 
-        // when & then
-        assertThatThrownBy(() -> alarmService.update(invalidAlarmId, updateRequest))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("존재하지 않는 알람입니다.");
-    }
+            final RoutineAlarm routineAlarm = new RoutineAlarm(
+                    LocalTime.NOON,
+                    RepeatType.NON_REPEAT,
+                    LocalDate.MAX,
+                    Set.of()
+            );
+            final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
+            final Alarm activeAlarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
+            entityManager.persist(activeAlarm);
 
-    @DisplayName("알람을 활성화 시킨다.")
-    @Test
-    void active() {
-        // given
-        final String ssaid = "ssaid";
-        final Member member = new Member(ssaid, "name");
-        entityManager.persist(member);
+            // when
+            alarmService.inactive(activeAlarm.getId());
 
-        final Bottari bottari = new Bottari("title", member);
-        entityManager.persist(bottari);
+            // then
+            final Alarm actual = entityManager.find(Alarm.class, activeAlarm.getId());
+            assertThat(actual.isActive()).isFalse();
+        }
 
-        final RoutineAlarm routineAlarm = new RoutineAlarm(
-                LocalTime.NOON,
-                RepeatType.NON_REPEAT,
-                LocalDate.MAX,
-                Set.of()
-        );
-        final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
-        final Alarm inactiveAlarm = new Alarm(false, routineAlarm, locationAlarm, bottari);
-        entityManager.persist(inactiveAlarm);
+        @DisplayName("이미 비활성화된 알람을 비활성화 시키면, 예외를 던진다.")
+        @Test
+        void inactive_Exception_AlreadyInactive() {
+            // given
+            final String ssaid = "ssaid";
+            final Member member = new Member(ssaid, "name");
+            entityManager.persist(member);
 
-        // when
-        alarmService.active(inactiveAlarm.getId());
+            final Bottari bottari = new Bottari("title", member);
+            entityManager.persist(bottari);
 
-        // then
-        final Alarm actual = entityManager.find(Alarm.class, inactiveAlarm.getId());
-        assertThat(actual.isActive()).isTrue();
-    }
+            final RoutineAlarm routineAlarm = new RoutineAlarm(
+                    LocalTime.NOON,
+                    RepeatType.NON_REPEAT,
+                    LocalDate.MAX,
+                    Set.of()
+            );
+            final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
+            final Alarm inactiveAlarm = new Alarm(false, routineAlarm, locationAlarm, bottari);
+            entityManager.persist(inactiveAlarm);
 
-    @DisplayName("이미 활성화된 알람을 활성화 시키면, 예외를 던진다.")
-    @Test
-    void active_Exception_AlreadyActive() {
-        // given
-        final String ssaid = "ssaid";
-        final Member member = new Member(ssaid, "name");
-        entityManager.persist(member);
-
-        final Bottari bottari = new Bottari("title", member);
-        entityManager.persist(bottari);
-
-        final RoutineAlarm routineAlarm = new RoutineAlarm(
-                LocalTime.NOON,
-                RepeatType.NON_REPEAT,
-                LocalDate.MAX,
-                Set.of()
-        );
-        final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
-        final Alarm activeAlarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
-        entityManager.persist(activeAlarm);
-
-        // when & then
-        assertThatThrownBy(() -> alarmService.active(activeAlarm.getId()))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("알람이 이미 활성화되어 있습니다.");
-    }
-
-    @DisplayName("알람을 비활성화 시킨다.")
-    @Test
-    void inactive() {
-        // given
-        final String ssaid = "ssaid";
-        final Member member = new Member(ssaid, "name");
-        entityManager.persist(member);
-
-        final Bottari bottari = new Bottari("title", member);
-        entityManager.persist(bottari);
-
-        final RoutineAlarm routineAlarm = new RoutineAlarm(
-                LocalTime.NOON,
-                RepeatType.NON_REPEAT,
-                LocalDate.MAX,
-                Set.of()
-        );
-        final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
-        final Alarm activeAlarm = new Alarm(true, routineAlarm, locationAlarm, bottari);
-        entityManager.persist(activeAlarm);
-
-        // when
-        alarmService.inactive(activeAlarm.getId());
-
-        // then
-        final Alarm actual = entityManager.find(Alarm.class, activeAlarm.getId());
-        assertThat(actual.isActive()).isFalse();
-    }
-
-    @DisplayName("이미 비활성화된 알람을 비활성화 시키면, 예외를 던진다.")
-    @Test
-    void inactive_Exception_AlreadyInactive() {
-        // given
-        final String ssaid = "ssaid";
-        final Member member = new Member(ssaid, "name");
-        entityManager.persist(member);
-
-        final Bottari bottari = new Bottari("title", member);
-        entityManager.persist(bottari);
-
-        final RoutineAlarm routineAlarm = new RoutineAlarm(
-                LocalTime.NOON,
-                RepeatType.NON_REPEAT,
-                LocalDate.MAX,
-                Set.of()
-        );
-        final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
-        final Alarm inactiveAlarm = new Alarm(false, routineAlarm, locationAlarm, bottari);
-        entityManager.persist(inactiveAlarm);
-
-        // when & then
-        assertThatThrownBy(() -> alarmService.inactive(inactiveAlarm.getId()))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("알람이 이미 비활성화되어 있습니다.");
+            // when & then
+            assertThatThrownBy(() -> alarmService.inactive(inactiveAlarm.getId()))
+                    .isInstanceOf(IllegalStateException.class)
+                    .hasMessage("알람이 이미 비활성화되어 있습니다.");
+        }
     }
 }

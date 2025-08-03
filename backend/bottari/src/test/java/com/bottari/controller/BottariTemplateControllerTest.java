@@ -198,7 +198,7 @@ class BottariTemplateControllerTest {
 
         // when & then
         mockMvc.perform(MockMvcRequestBuilders.delete("/templates/" + id)
-                                .header("ssaid", ssaid))
+                        .header("ssaid", ssaid))
                 .andExpect(status().isNoContent());
     }
 }

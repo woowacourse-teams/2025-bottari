@@ -35,7 +35,7 @@ class BottariTemplateTest {
     ) {
         // given
         final Member member = new Member("same_ssaid", "name");
-        final BottariTemplate bottariTemplate = new BottariTemplate("title",member);
+        final BottariTemplate bottariTemplate = new BottariTemplate("title", member);
 
         // when
         final boolean actual = bottariTemplate.isOwner(ssaid);

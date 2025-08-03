@@ -71,11 +71,11 @@ public class BottariController implements BottariApiDocs {
     ) {
         final String ssaid = httpServletRequest.getHeader("ssaid");
         bottariService.update(request, id, ssaid);
-      
+
         return ResponseEntity.noContent().build();
     }
 
-  @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public ResponseEntity<Void> delete(
             @PathVariable final Long id,
