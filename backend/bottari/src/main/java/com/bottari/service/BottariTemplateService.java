@@ -3,6 +3,7 @@ package com.bottari.service;
 import com.bottari.domain.Bottari;
 import com.bottari.domain.BottariItem;
 import com.bottari.domain.BottariTemplate;
+import com.bottari.domain.BottariTemplateCursor;
 import com.bottari.domain.BottariTemplateItem;
 import com.bottari.domain.Member;
 import com.bottari.domain.SortProperty;
@@ -67,14 +68,15 @@ public class BottariTemplateService {
     }
 
     public ReadNextBottariTemplateResponse getNextAll(final ReadNextBottariTemplateRequest request) {
-        final Pageable pageable = request.toPageable();
-        final Slice<BottariTemplate> bottariTemplates = getNextBySortProperty(request, pageable);
+        final BottariTemplateCursor cursor = BottariTemplateCursor.from(request);
+        final Pageable pageable = cursor.toPageable();
+        final Slice<BottariTemplate> bottariTemplates = getNextBySortProperty(cursor, pageable);
         final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate = groupingItemsByTemplate(
                 bottariTemplates.getContent());
         final List<ReadBottariTemplateResponse> responses = buildReadBottariTemplateResponses(itemsGroupByTemplate);
 
         return ReadNextBottariTemplateResponse.of(
-                new SliceImpl<>(responses, pageable, bottariTemplates.hasNext()), request.property());
+                new SliceImpl<>(responses, pageable, bottariTemplates.hasNext()), cursor.property());
     }
 
     @Transactional
@@ -129,15 +131,15 @@ public class BottariTemplateService {
     }
 
     private Slice<BottariTemplate> getNextBySortProperty(
-            final ReadNextBottariTemplateRequest request,
+            final BottariTemplateCursor cursor,
             final Pageable pageable
     ) {
-        final SortProperty property = SortProperty.fromProperty(request.property());
+        final SortProperty property = SortProperty.fromProperty(cursor.property());
         return switch (property) {
             case SortProperty.CREATED_AT -> bottariTemplateRepository.findNextByCreatedAt(
-                    request.query(), request.getCreatedAt(), request.lastId(), pageable);
+                    cursor.query(), cursor.getCreatedAt(), cursor.lastId(), pageable);
             case SortProperty.TAKEN_COUNT -> bottariTemplateRepository.findNextByTakenCount(
-                    request.query(), request.getTakenCount(), request.lastId(), pageable);
+                    cursor.query(), cursor.getTakenCount(), cursor.lastId(), pageable);
         };
     }
 
