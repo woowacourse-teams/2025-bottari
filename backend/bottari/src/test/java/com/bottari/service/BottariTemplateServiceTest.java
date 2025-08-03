@@ -324,7 +324,7 @@ class BottariTemplateServiceTest {
         );
     }
 
-    @DisplayName("보따리를 처음 생성하는 경우, 보따리 히스토리에 기록된다.")
+    @DisplayName("보따리를 처음 생성하는 경우, 보따리 히스토리에 기록되고 템플릿 가져간 횟수를 1 증가시킨다.")
     @Test
     void createBottari_WhenCreateBottariFirst() {
         // given
