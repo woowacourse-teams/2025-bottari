@@ -12,7 +12,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.dto.ReadBottariTemplateResponse.BottariTemplateItemResponse;
+import com.bottari.dto.ReportBottariTemplateRequest;
 import com.bottari.service.BottariTemplateService;
+import com.bottari.service.ReportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +35,9 @@ class BottariTemplateControllerTest {
 
     @MockitoBean
     private BottariTemplateService bottariTemplateService;
+
+    @MockitoBean
+    private ReportService reportService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -164,6 +169,24 @@ class BottariTemplateControllerTest {
                 .andExpect(header().string(HttpHeaders.LOCATION, "/bottaries/1"));
     }
 
+    @DisplayName("보따리 템플릿을 신고한다.")
+    @Test
+    void report() throws Exception {
+        // given
+        final Long id = 1L;
+        final String ssaid = "ssaid";
+        final ReportBottariTemplateRequest request = new ReportBottariTemplateRequest("reason");
+        willDoNothing().given(reportService)
+                .reportBottariTemplate(ssaid, id, request);
+
+        // when & then
+        mockMvc.perform(post("/templates/" + id + "/report")
+                         .header("ssaid", ssaid)
+                         .contentType(MediaType.APPLICATION_JSON)
+                         .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+    }
+
     @DisplayName("보따리를 삭제한다.")
     @Test
     void delete() throws Exception {
@@ -174,8 +197,8 @@ class BottariTemplateControllerTest {
                 .deleteById(id, ssaid);
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.delete("/templates/"+id)
-                        .header("ssaid",ssaid))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/templates/" + id)
+                                .header("ssaid", ssaid))
                 .andExpect(status().isNoContent());
     }
 }
