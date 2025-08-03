@@ -350,8 +350,8 @@ class BottariTemplateServiceTest {
         final BottariTemplateHistory acutalBottariTemplateHistory = entityManager.createQuery("""
                          SELECT bh
                          FROM BottariTemplateHistory bh
-                         WHERE bh.member.id = :memberId
-                         AND bh.bottariTemplate.id = :bottariTemplateId
+                         WHERE bh.memberId = :memberId
+                         AND bh.bottariTemplateId = :bottariTemplateId
         """, BottariTemplateHistory.class)
                 .setParameter("memberId", member.getId())
                 .setParameter("bottariTemplateId", bottariTemplate.getId())
@@ -391,8 +391,8 @@ class BottariTemplateServiceTest {
         final Long actualHistoryCount = entityManager.createQuery("""
                          SELECT COUNT(bh)
                          FROM BottariTemplateHistory bh
-                         WHERE bh.member.id = :memberId
-                         AND bh.bottariTemplate.id = :bottariTemplateId
+                         WHERE bh.memberId = :memberId
+                         AND bh.bottariTemplateId = :bottariTemplateId
         """, Long.class)
                 .setParameter("memberId", member.getId())
                 .setParameter("bottariTemplateId", bottariTemplate.getId())

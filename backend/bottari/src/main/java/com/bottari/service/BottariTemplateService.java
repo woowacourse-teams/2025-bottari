@@ -166,9 +166,8 @@ public class BottariTemplateService {
             final BottariTemplate bottariTemplate,
             final Member member
     ) {
-        if (!bottariTemplateHistoryRepository.existsByBottariTemplateIdAndMemberId(
-                bottariTemplate.getId(), member.getId())) {
-            BottariTemplateHistory bottariTemplateHistory = new BottariTemplateHistory(member, bottariTemplate);
+        if (alreadyTookBottariTemplate(bottariTemplate, member)) {
+            final BottariTemplateHistory bottariTemplateHistory = new BottariTemplateHistory(member.getId(), bottariTemplate.getId());
             bottariTemplateHistoryRepository.save(bottariTemplateHistory);
             bottariTemplateRepository.plusTakenCountById(bottariTemplate.getId());
         }

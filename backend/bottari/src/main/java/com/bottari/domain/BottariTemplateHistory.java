@@ -1,11 +1,10 @@
 package com.bottari.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,19 +18,17 @@ public class BottariTemplateHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "receiver_id")
-    private Member member;
+    @Column(name = "receiver_id")
+    private Long memberId;
 
-    @ManyToOne
-    @JoinColumn(name = "template_id")
-    private BottariTemplate bottariTemplate;
+    @Column(name = "template_id")
+    private Long bottariTemplateId;
 
     public BottariTemplateHistory(
-            final Member member,
-            final BottariTemplate bottariTemplate
+            final Long memberId,
+            final Long bottariTemplateId
     ) {
-        this.member = member;
-        this.bottariTemplate = bottariTemplate;
+        this.memberId = memberId;
+        this.bottariTemplateId = bottariTemplateId;
     }
 }
