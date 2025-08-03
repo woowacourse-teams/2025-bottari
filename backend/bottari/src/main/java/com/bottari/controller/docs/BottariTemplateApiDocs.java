@@ -2,6 +2,7 @@ package com.bottari.controller.docs;
 
 import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.dto.ReadBottariTemplateResponse;
+import com.bottari.dto.ReportBottariTemplateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -46,6 +47,16 @@ public interface BottariTemplateApiDocs {
     })
     ResponseEntity<Void> createBottari(
             final Long id,
+            final HttpServletRequest httpServletRequest
+    );
+
+    @Operation(summary = "보따리 템플릿을 신고")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "보따리 템플릿 신고 성공")
+    })
+    ResponseEntity<Void> report(
+            final Long id,
+            final ReportBottariTemplateRequest request,
             final HttpServletRequest httpServletRequest
     );
 

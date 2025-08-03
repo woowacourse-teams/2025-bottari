@@ -84,6 +84,7 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     }
 
     @PostMapping("/{id}/report")
+    @Override
     public ResponseEntity<Void> report(
             @PathVariable final Long id,
             final ReportBottariTemplateRequest request,
