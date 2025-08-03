@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.bottari.domain.SortProperty;
 import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.dto.ReadBottariTemplateResponse.BottariTemplateItemResponse;
@@ -172,6 +173,7 @@ class BottariTemplateControllerTest {
                 true,
                 true,
                 false,
+                SortProperty.CREATED_AT.getProperty(),
                 2L,
                 "2024-12-20T10:30:00Z"
         );
