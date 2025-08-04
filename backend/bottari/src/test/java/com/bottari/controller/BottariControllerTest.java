@@ -13,6 +13,7 @@ import com.bottari.dto.CreateBottariRequest;
 import com.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.dto.ReadBottariResponse;
 import com.bottari.dto.UpdateBottariRequest;
+import com.bottari.log.LogFormatter;
 import com.bottari.service.BottariService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -27,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(BottariController.class)
+@Import(LogFormatter.class)
 class BottariControllerTest {
 
     @Autowired
