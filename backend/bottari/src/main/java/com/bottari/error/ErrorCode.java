@@ -52,6 +52,9 @@ public enum ErrorCode {
     ALARM_ALREADY_ACTIVE(HttpStatus.CONFLICT, "알람이 이미 활성화되어 있습니다."),
     ALARM_ALREADY_INACTIVE(HttpStatus.CONFLICT, "알람이 이미 비활성화되어 있습니다."),
     ALARM_LOCATION_REQUIRES_ROUTINE(HttpStatus.BAD_REQUEST, "루틴 알람이 설정되지 않으면 위치 알람을 설정할 수 없습니다."),
+
+    // ===== REPORT 관련 =====
+    REPORT_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 해당 템플릿에 대한 신고 기록이 있습니다."),
     ;
 
     private final HttpStatus status;

@@ -4,6 +4,8 @@ import com.bottari.domain.BottariTemplate;
 import com.bottari.domain.Member;
 import com.bottari.domain.Report;
 import com.bottari.dto.ReportBottariTemplateRequest;
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import com.bottari.repository.BottariTemplateRepository;
 import com.bottari.repository.MemberRepository;
 import com.bottari.repository.ReportRepository;
@@ -26,9 +28,9 @@ public class ReportService {
             final ReportBottariTemplateRequest request
     ) {
         final BottariTemplate bottariTemplate = bottariTemplateRepository.findById(bottariTemplateId)
-                .orElseThrow(() -> new IllegalArgumentException("보따리 템플릿을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_TEMPLATE_NOT_FOUND));
         final Member reporter = memberRepository.findBySsaid(reporterSsaid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         checkAlreadyReportedBottariTemplate(bottariTemplate, reporter);
         final Report report = new Report(bottariTemplate, reporter, request.reason());
         reportRepository.save(report);
@@ -39,7 +41,7 @@ public class ReportService {
             final Member reporter
     ) {
         if (reportRepository.existsByBottariTemplateIdAndReporterId(bottariTemplate.getId(), reporter.getId())) {
-            throw new IllegalArgumentException("이미 해당 템플릿에 대한 신고 기록이 있습니다.");
+            throw new BusinessException(ErrorCode.REPORT_ALREADY_EXISTS);
         }
     }
 }

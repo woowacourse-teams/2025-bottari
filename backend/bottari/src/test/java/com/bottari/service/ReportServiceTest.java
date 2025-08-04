@@ -8,6 +8,7 @@ import com.bottari.domain.BottariTemplate;
 import com.bottari.domain.Member;
 import com.bottari.domain.Report;
 import com.bottari.dto.ReportBottariTemplateRequest;
+import com.bottari.error.BusinessException;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -48,16 +49,16 @@ class ReportServiceTest {
             final ReportBottariTemplateRequest request = new ReportBottariTemplateRequest(reportReason);
 
             // when
-            reportService.reportBottariTemplate(reporter.getSsaid(), bottariTemplateToReport.getId() ,request);
+            reportService.reportBottariTemplate(reporter.getSsaid(), bottariTemplateToReport.getId(), request);
 
             // then
             final Report actual = entityManager.createQuery(
-            """
-                 SELECT r
-                 FROM Report r
-                 WHERE r.reporter.id = :reporterId
-                 AND r.bottariTemplate.id = : bottariTemplateId
-            """, Report.class)
+                            """
+                                         SELECT r
+                                         FROM Report r
+                                         WHERE r.reporter.id = :reporterId
+                                         AND r.bottariTemplate.id = : bottariTemplateId
+                                    """, Report.class)
                     .setParameter("reporterId", reporter.getId())
                     .setParameter("bottariTemplateId", bottariTemplateToReport.getId())
                     .getSingleResult();
@@ -84,9 +85,10 @@ class ReportServiceTest {
             final ReportBottariTemplateRequest request = new ReportBottariTemplateRequest("reason");
 
             // when & then
-            assertThatThrownBy(() -> reportService.reportBottariTemplate(invalidSSsaid,bottariTemplate.getId() ,request))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
+            assertThatThrownBy(
+                    () -> reportService.reportBottariTemplate(invalidSSsaid, bottariTemplate.getId(), request))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
         }
 
         @DisplayName("보따리 템플릿을 신고할 경우, 신고하려는 보따리 템플릿이 존재하지 않으면 예외가 발생한다.")
@@ -100,8 +102,9 @@ class ReportServiceTest {
             final ReportBottariTemplateRequest request = new ReportBottariTemplateRequest("reason");
 
             // when & then
-            assertThatThrownBy(() -> reportService.reportBottariTemplate(reporter.getSsaid(), invalidBottariTemplateId ,request))
-                    .isInstanceOf(IllegalArgumentException.class)
+            assertThatThrownBy(
+                    () -> reportService.reportBottariTemplate(reporter.getSsaid(), invalidBottariTemplateId, request))
+                    .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리 템플릿을 찾을 수 없습니다.");
         }
 
@@ -121,11 +124,12 @@ class ReportServiceTest {
             final Report report = new Report(bottariTemplate, reporter, "reason");
             entityManager.persist(report);
 
-            final ReportBottariTemplateRequest request = new ReportBottariTemplateRequest( "reason2");
+            final ReportBottariTemplateRequest request = new ReportBottariTemplateRequest("reason2");
 
             // when & then
-            assertThatThrownBy(() -> reportService.reportBottariTemplate(reporter.getSsaid(),bottariTemplate.getId(), request))
-                    .isInstanceOf(IllegalArgumentException.class)
+            assertThatThrownBy(
+                    () -> reportService.reportBottariTemplate(reporter.getSsaid(), bottariTemplate.getId(), request))
+                    .isInstanceOf(BusinessException.class)
                     .hasMessage("이미 해당 템플릿에 대한 신고 기록이 있습니다.");
         }
     }
