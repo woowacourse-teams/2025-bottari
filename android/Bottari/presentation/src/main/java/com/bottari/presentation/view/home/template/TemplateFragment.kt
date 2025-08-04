@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.market
+package com.bottari.presentation.view.home.template
 
 import android.os.Bundle
 import android.text.Editable
@@ -14,8 +14,8 @@ import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.databinding.FragmentTemplateBinding
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
-import com.bottari.presentation.view.home.market.adapter.TemplateAdapter
-import com.bottari.presentation.view.home.market.listener.OnTemplateClickListener
+import com.bottari.presentation.view.home.template.adapter.TemplateAdapter
+import com.bottari.presentation.view.home.template.listener.OnTemplateClickListener
 import com.bottari.presentation.view.template.TemplateActivity
 
 class TemplateFragment :
