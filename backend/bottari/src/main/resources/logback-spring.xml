@@ -4,16 +4,27 @@
     <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
     <property name="LOG_PATTERN"
               value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) %replace(%marker){'^\s*$','DEFAULT_LOG'} - %msg%n"/>
-    <include resource="appender/console-appender.xml"/>
-    <include resource="appender/file-business-exception-log-appender.xml"/>
-    <include resource="appender/file-exception-log-appender.xml"/>
-    <include resource="appender/file-http-log-appender.xml"/>
 
-    <root level="INFO">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE-HTTP"/>
-        <appender-ref ref="FILE-EXCEPTION"/>
-        <appender-ref ref="FILE-BUSINESS-EXCEPTION"/>
-    </root>
+    <springProfile name="local">
+        <include resource="appender/console-appender.xml"/>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="!local">
+        <include resource="appender/console-appender.xml"/>
+        <include resource="appender/file-business-exception-log-appender.xml"/>
+        <include resource="appender/file-exception-log-appender.xml"/>
+        <include resource="appender/file-http-log-appender.xml"/>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE-HTTP"/>
+            <appender-ref ref="FILE-EXCEPTION"/>
+            <appender-ref ref="FILE-BUSINESS-EXCEPTION"/>
+        </root>
+    </springProfile>
 
 </configuration>
