@@ -181,7 +181,7 @@ class BottariTemplateControllerTest {
                 .willReturn(response);
 
         // when & then
-        mockMvc.perform(get("/templates/page")
+        mockMvc.perform(get("/templates/cursor")
                         .param("query", "")
                         .param("page", "0")
                         .param("size", "2")
