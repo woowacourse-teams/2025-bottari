@@ -3,6 +3,7 @@ package com.bottari.data.repository
 import com.bottari.data.model.member.CheckRegisteredMemberResponse
 import com.bottari.data.model.member.RegisterMemberRequest
 import com.bottari.data.model.member.SaveMemberNicknameRequest
+import com.bottari.data.source.local.UserInfoLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.data.testFixture.memberFixture
 import com.bottari.domain.repository.MemberRepository
@@ -24,6 +25,7 @@ import retrofit2.Response
 
 class MemberRepositoryImplTest {
     private lateinit var remoteDataSource: MemberRemoteDataSource
+    private lateinit var userInfoLocalDataSource: UserInfoLocalDataSource
     private lateinit var repository: MemberRepository
     private val errorResponseBody =
         """{"message":"잘못된 요청입니다."}""".toResponseBody("application/json".toMediaType())
@@ -31,7 +33,8 @@ class MemberRepositoryImplTest {
     @BeforeEach
     fun setUp() {
         remoteDataSource = mockk<MemberRemoteDataSource>()
-        repository = MemberRepositoryImpl(remoteDataSource)
+        userInfoLocalDataSource = mockk<UserInfoLocalDataSource>()
+        repository = MemberRepositoryImpl(remoteDataSource, userInfoLocalDataSource)
     }
 
     @DisplayName("회원 등록에 성공하면 Success를 반환한다")
@@ -41,7 +44,7 @@ class MemberRepositoryImplTest {
             // given
             val ssaid = "ssaid"
             val request = RegisterMemberRequest(ssaid)
-            coEvery { remoteDataSource.registerMember(request) } returns Result.success(Unit)
+            coEvery { remoteDataSource.registerMember(request) } returns Result.success(1)
 
             // when
             val result = repository.registerMember(ssaid)
@@ -128,7 +131,7 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val ssaid = "ssaid"
-            val response = CheckRegisteredMemberResponse(true, "test")
+            val response = CheckRegisteredMemberResponse(true, 1, "test")
             coEvery { remoteDataSource.checkRegisteredMember(ssaid) } returns
                 Result.success(
                     response,
@@ -141,6 +144,7 @@ class MemberRepositoryImplTest {
             assertSoftly(result) {
                 shouldBeSuccess()
                 getOrThrow().isRegistered shouldBe true
+                getOrThrow().id shouldBe 1
                 getOrThrow().name shouldBe "test"
             }
 
@@ -154,7 +158,7 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val ssaid = "ssaid"
-            val response = CheckRegisteredMemberResponse(false, "test")
+            val response = CheckRegisteredMemberResponse(false, 1, "test")
             coEvery { remoteDataSource.checkRegisteredMember(ssaid) } returns
                 Result.success(
                     response,
@@ -167,6 +171,7 @@ class MemberRepositoryImplTest {
             assertSoftly(result) {
                 shouldBeSuccess()
                 getOrThrow().isRegistered shouldBe false
+                getOrThrow().id shouldBe 1
                 getOrThrow().name shouldBe "test"
             }
         }
