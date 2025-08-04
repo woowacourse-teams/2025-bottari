@@ -30,11 +30,6 @@ abstract class BaseActivity<VB : ViewBinding>(
         setupNavigationBar()
     }
 
-    override fun onResume() {
-        super.onResume()
-        CrashlyticsLogger.setScreen(this)
-    }
-
     private fun setWindowInsets() {
         enableEdgeToEdge()
 

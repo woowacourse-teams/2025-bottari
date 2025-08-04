@@ -44,11 +44,6 @@ abstract class BaseFragment<VB : ViewBinding>(
         setupWindowInsets()
     }
 
-    override fun onResume() {
-        super.onResume()
-        CrashlyticsLogger.setScreen(this)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
