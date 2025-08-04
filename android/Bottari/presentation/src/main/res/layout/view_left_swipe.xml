@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/left_overlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gray_c4_radius_16dp"
+    tools:showIn="@layout/item_swipe_checklist">
+
+    <ImageView
+        android:id="@+id/iv_swipe_item_un_check"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/space_x_large"
+        android:contentDescription="@string/checklist_swipe_overlay_uncheck_icon"
+        android:src="@drawable/ic_swipe_not_checked"
+        app:layout_constraintBottom_toTopOf="@+id/tv_swipe_item_un_check"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_swipe_item_un_check"
+        style="@style/Pretendard_Bold_32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/space_x_large"
+        android:layout_marginBottom="@dimen/space_x_large"
+        android:text="@string/checklist_swipe_no_overlay_view_text"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
