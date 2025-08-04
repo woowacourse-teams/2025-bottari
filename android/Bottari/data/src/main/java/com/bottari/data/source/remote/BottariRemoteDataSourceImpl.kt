@@ -16,7 +16,7 @@ class BottariRemoteDataSourceImpl(
             bottariService.fetchBottaries(ssaid)
         }
 
-    override suspend fun findBottari(
+    override suspend fun fetchBottariDetail(
         id: Long,
         ssaid: String,
     ): Result<BottariResponse> =

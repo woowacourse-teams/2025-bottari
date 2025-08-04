@@ -11,7 +11,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
-import com.bottari.domain.usecase.bottariDetail.FindBottariDetailUseCase
+import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.presentation.common.event.SingleLiveEvent
 import com.bottari.presentation.common.extension.update
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class PersonalBottariEditViewModel(
     savedStateHandle: SavedStateHandle,
-    private val findBottariDetailUseCase: FindBottariDetailUseCase,
+    private val fetchBottariDetailUseCase: FetchBottariDetailUseCase,
     private val toggleAlarmStateUseCase: ToggleAlarmStateUseCase,
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
 ) : ViewModel() {
@@ -53,7 +53,7 @@ class PersonalBottariEditViewModel(
         _uiState.update { copy(isLoading = true) }
 
         viewModelScope.launch {
-            findBottariDetailUseCase(
+            fetchBottariDetailUseCase(
                 _uiState.value?.id ?: error(ERROR_BOTTARI_ID_MISSING),
                 ssaid,
             ).onSuccess {
@@ -61,7 +61,6 @@ class PersonalBottariEditViewModel(
             }.onFailure {
                 _uiEvent.value = PersonalBottariEditUiEvent.FetchBottariFailure
             }
-
             _uiState.update { copy(isLoading = false) }
         }
     }
@@ -127,7 +126,7 @@ class PersonalBottariEditViewModel(
 
                     PersonalBottariEditViewModel(
                         stateHandle,
-                        UseCaseProvider.findBottariDetailUseCase,
+                        UseCaseProvider.fetchBottariDetailUseCase,
                         UseCaseProvider.toggleAlarmStateUseCase,
                         UseCaseProvider.createBottariTemplateUseCase,
                     )

@@ -237,7 +237,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         AlertDialog
             .Builder(requireContext())
             .setTitle(R.string.common_permission_dialog_title_text)
-            .setMessage(R.string.common_permission_dialog_message_text)
+            .setMessage(R.string.common_notification_permission_dialog_message_text)
             .setPositiveButton(R.string.common_permission_dialog_positive_btn_text) { _, _ ->
                 PermissionUtil.openAppSettings(requireContext())
             }.setNegativeButton(R.string.common_permission_dialog_negative_btn_text, null)

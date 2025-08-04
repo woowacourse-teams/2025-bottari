@@ -52,16 +52,16 @@ class BottariRepositoryImplTest {
 
     @DisplayName("보따리 단건 조회에 성공하면 도메인 모델로 매핑된다")
     @Test
-    fun findBottariSuccessReturnsMappedDetail() =
+    fun fetchBottariDetailSuccessReturnsMappedDetail() =
         runTest {
             // given
             val ssaid = "ssaid123"
             val bottariId = 100L
             val detailResponse = bottariResponseFixture()
-            coEvery { remoteDataSource.findBottari(bottariId, ssaid) } returns Result.success(detailResponse)
+            coEvery { remoteDataSource.fetchBottariDetail(bottariId, ssaid) } returns Result.success(detailResponse)
 
             // when
-            val result = repository.findBottari(bottariId, ssaid)
+            val result = repository.fetchBottariDetail(bottariId, ssaid)
 
             // then
             result.shouldBeSuccess {
@@ -69,7 +69,7 @@ class BottariRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.findBottari(bottariId, ssaid) }
+            coVerify { remoteDataSource.fetchBottariDetail(bottariId, ssaid) }
         }
 
     @DisplayName("보따리 생성을 성공하면 ID를 반환한다")
@@ -164,16 +164,16 @@ class BottariRepositoryImplTest {
 
     @DisplayName("보따리 단건 조회 실패 시 예외를 반환한다")
     @Test
-    fun findBottariFailureReturnsException() =
+    fun fetchBottariDetailFailureReturnsException() =
         runTest {
             // given
             val ssaid = "ssaid_error"
             val id = 1L
             val exception = RuntimeException("단건 조회 실패")
-            coEvery { remoteDataSource.findBottari(id, ssaid) } returns Result.failure(exception)
+            coEvery { remoteDataSource.fetchBottariDetail(id, ssaid) } returns Result.failure(exception)
 
             // when
-            val result = repository.findBottari(id, ssaid)
+            val result = repository.fetchBottariDetail(id, ssaid)
 
             // then
             result.shouldBeFailure {
@@ -181,7 +181,7 @@ class BottariRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.findBottari(id, ssaid) }
+            coVerify { remoteDataSource.fetchBottariDetail(id, ssaid) }
         }
 
     @DisplayName("보따리 생성 실패 시 예외를 반환한다")
