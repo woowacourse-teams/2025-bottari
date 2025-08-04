@@ -1,8 +1,12 @@
 <included>
     <appender name="FILE-HTTP" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>./log/http/http-${BY_DATE}.log</file>
-        <filter class="com.bottari.log.MarkerFilter">
-            <marker>HTTP-LOG</marker>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>HTTP-LOG</marker>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
         </filter>
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>

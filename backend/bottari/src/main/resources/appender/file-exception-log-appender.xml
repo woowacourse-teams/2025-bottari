@@ -1,8 +1,12 @@
 <included>
     <appender name="FILE-EXCEPTION" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>./log/exception/exception-${BY_DATE}.log</file>
-        <filter class="com.bottari.log.MarkerFilter">
-            <marker>EXCEPTION-LOG</marker>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>EXCEPTION-LOG</marker>
+            </evaluator>
+            <OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
         </filter>
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
