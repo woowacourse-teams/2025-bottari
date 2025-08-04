@@ -43,6 +43,8 @@ class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChe
             when (uiEvent) {
                 ChecklistUiEvent.FetchChecklistFailure -> showSnackbar(R.string.checklist_fetch_failure_text)
                 ChecklistUiEvent.CheckItemFailure -> showSnackbar(R.string.checklist_check_failure_text)
+                ChecklistUiEvent.AllSwipedAllChecked -> {}
+                ChecklistUiEvent.AllSwipedNotAllChecked -> {}
             }
         }
     }

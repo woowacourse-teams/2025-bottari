@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.observeOnce
 import com.bottari.presentation.databinding.FragmentSwipeChecklistBinding
 import com.bottari.presentation.view.checklist.ChecklistUiEvent
 import com.bottari.presentation.view.checklist.ChecklistUiState
@@ -46,9 +47,8 @@ class SwipeChecklistFragment :
     override fun onCardSwiped(direction: Direction?) {
         val index = cardStackLayoutManager.topPosition - INDEX_OFFSET
         val currentItem = adapter.currentList.getOrNull(index) ?: return
+        if (direction == Direction.Right) viewModel.toggleItemChecked(currentItem.id)
         viewModel.addSwipedItem(currentItem.id)
-        if (direction != Direction.Right) return
-        viewModel.toggleItemChecked(currentItem.id)
     }
 
     override fun onCardAppeared(
@@ -78,7 +78,6 @@ class SwipeChecklistFragment :
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
-            adapter.submitList(uiState.nonCheckedItems)
             binding.tvSwipeChecklistStatus.text =
                 getString(
                     R.string.common_format_checklist_swipe_status,
@@ -86,12 +85,22 @@ class SwipeChecklistFragment :
                     uiState.totalQuantity - uiState.checkedQuantity,
                 )
             handleProgressBar(uiState)
-            handleEmptyView(uiState)
+        }
+        viewModel.uiState.observeOnce(viewLifecycleOwner) { uiState ->
+            adapter.submitList(uiState.nonCheckedItems)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
                 ChecklistUiEvent.FetchChecklistFailure -> showSnackbar(R.string.checklist_fetch_failure_text)
                 ChecklistUiEvent.CheckItemFailure -> showSnackbar(R.string.checklist_check_failure_text)
+                ChecklistUiEvent.AllSwipedAllChecked -> {
+                    showDoneButton()
+                    showCompleteView()
+                }
+                ChecklistUiEvent.AllSwipedNotAllChecked -> {
+                    showDoneButton()
+                    showNotCompleteView()
+                }
             }
         }
     }
@@ -108,16 +117,6 @@ class SwipeChecklistFragment :
             val primaryColor = ContextCompat.getColor(requireContext(), R.color.primary)
             progressTintList = ColorStateList.valueOf(primaryColor)
         }
-    }
-
-    private fun handleEmptyView(uiState: ChecklistUiState) {
-        if (uiState.nonSwipedItems.isNotEmpty()) return
-        showDoneButton()
-        if (uiState.nonCheckedItems.isEmpty()) {
-            showCompleteView()
-            return
-        }
-        showNotCompleteView()
     }
 
     private fun showDoneButton() {
