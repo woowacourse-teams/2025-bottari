@@ -37,7 +37,6 @@ class ChecklistViewModel(
     private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val pendingCheckStatusMap = mutableMapOf<Long, BottariItemUiModel>()
-    private lateinit var swipeableList: List<BottariItemUiModel>
 
     private val debouncedCheck: (List<BottariItemUiModel>) -> Unit =
         debounce(
@@ -50,25 +49,11 @@ class ChecklistViewModel(
     }
 
     fun resetSwipeState() {
-        swipeableList = _uiState.value?.nonCheckedItems ?: return
-        if (swipeableList.isNotEmpty()) return
-        if (uiState.value?.nonCheckedItems?.isEmpty() == true) {
-            _uiEvent.value =
-                ChecklistUiEvent.AllSwipedAllChecked
-            return
-        }
-        _uiEvent.value = ChecklistUiEvent.AllSwipedNotAllChecked
+        _uiState.update { copy(swipedItemIds = emptySet()) }
     }
 
     fun addSwipedItem(itemId: Long) {
-        swipeableList = swipeableList.filter { it.id != itemId }
-        if (swipeableList.isNotEmpty()) return
-        if (uiState.value?.nonCheckedItems?.isEmpty() == true) {
-            _uiEvent.value =
-                ChecklistUiEvent.AllSwipedAllChecked
-            return
-        }
-        _uiEvent.value = ChecklistUiEvent.AllSwipedNotAllChecked
+        _uiState.update { copy(swipedItemIds = this.swipedItemIds + itemId) }
     }
 
     fun toggleItemChecked(itemId: Long) {

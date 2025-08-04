@@ -9,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getSSAID
-import com.bottari.presentation.common.extension.observeOnce
 import com.bottari.presentation.databinding.FragmentSwipeChecklistBinding
 import com.bottari.presentation.view.checklist.ChecklistUiEvent
 import com.bottari.presentation.view.checklist.ChecklistUiState
@@ -85,9 +84,10 @@ class SwipeChecklistFragment :
                     uiState.totalQuantity - uiState.checkedQuantity,
                 )
             handleProgressBar(uiState)
-        }
-        viewModel.uiState.observeOnce(viewLifecycleOwner) { uiState ->
-            adapter.submitList(uiState.nonCheckedItems)
+            adapter.submitList(uiState.nonSwipedItems)
+            if (uiState.nonSwipedItems.isEmpty()) {
+                showCompleteState(isComplete = uiState.nonCheckedItems.isEmpty())
+            }
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
