@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.bottari.dto.ReadNextBottariTemplateRequest;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,110 +13,124 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.data.domain.Pageable;
 
-@DisplayName("BottariTemplateCursor 테스트")
 class BottariTemplateCursorTest {
 
     @Nested
-    class FromTest {
+    class NormalizationTest {
 
-        @DisplayName("커서를 생성한다.")
-        @ParameterizedTest
-        @CsvSource({
-                "createdAt, 2024-01-01T00:00:00Z",
-                "takenCount, 1"
-        })
-        void from(
-                final String property,
-                final String lastInfo
-        ) {
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
-                    "검색어",
+        @DisplayName("query 정규화 테스트")
+        @Test
+        void normalizeQuery() {
+            // given
+            final String blankQuery = " ";
+            final String expected = "";
+
+            // when
+            final BottariTemplateCursor actual = new BottariTemplateCursor(
+                    blankQuery,
                     1L,
-                    lastInfo,
+                    "info",
                     0,
                     10,
-                    property
+                    "createdAt"
             );
-
-            // when
-            final BottariTemplateCursor actual = BottariTemplateCursor.from(request);
 
             // then
-            assertAll(
-                    () -> assertThat(actual.query()).isEqualTo("검색어"),
-                    () -> assertThat(actual.lastId()).isEqualTo(1L),
-                    () -> assertThat(actual.lastInfo()).isEqualTo(lastInfo),
-                    () -> assertThat(actual.page()).isEqualTo(0),
-                    () -> assertThat(actual.size()).isEqualTo(10),
-                    () -> assertThat(actual.property()).isEqualTo(property)
-            );
+            assertThat(actual.query()).isEqualTo(expected);
         }
 
-        @DisplayName("null 및 빈 값들이 기본값으로 할당된다.")
-        @Test
-        void from_Normalize() {
-            // given
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
-                    null,          // query
-                    null,          // lastId
-                    null,          // lastInfo
-                    -1,            // page
-                    0,             // size
-                    null           // property
-            );
-
+        @DisplayName("page 정규화 테스트")
+        @ParameterizedTest
+        @CsvSource({
+                "-1, 0",
+                "-100, 0",
+                "0, 0",
+                "1, 1",
+                "100, 100"
+        })
+        void normalizePage(
+                final int page,
+                final int expected
+        ) {
             // when
-            final BottariTemplateCursor actual = BottariTemplateCursor.from(request);
-
-            // then
-            assertAll(
-                    () -> assertThat(actual.query()).isEqualTo(""),
-                    () -> assertThat(actual.lastId()).isEqualTo(Long.MAX_VALUE),
-                    () -> assertThat(actual.page()).isEqualTo(0),
-                    () -> assertThat(actual.size()).isEqualTo(10),
-                    () -> assertThat(actual.property()).isEqualTo("createdAt"),
-                    () -> assertThat(actual.lastInfo()).isNotNull()
-            );
-        }
-
-        @DisplayName("createdAt property일 때 기본 lastInfo가 미래 날짜로 설정된다.")
-        @Test
-        void from_SetDefaultCreatedAt() {
-            // given
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
+            final BottariTemplateCursor actual = new BottariTemplateCursor(
                     "",
+                    1L,
+                    "info",
+                    page,
+                    10,
+                    "createdAt"
+            );
+
+            // then
+            assertThat(actual.page()).isEqualTo(expected);
+        }
+
+        @DisplayName("size 정규화 테스트")
+        @ParameterizedTest
+        @CsvSource({
+                "-1, 10",
+                "0, 10",
+                "1, 1",
+                "50, 50"
+        })
+        void normalizeSize(
+                final int size,
+                final int expected
+        ) {
+            // when
+            final BottariTemplateCursor actual = new BottariTemplateCursor(
+                    "",
+                    1L,
                     null,
+                    0,
+                    size,
+                    "createdAt"
+            );
+
+            // then
+            assertThat(actual.size()).isEqualTo(expected);
+        }
+
+        @DisplayName("lastId 정규화 테스트")
+        @Test
+        void normalizeLastId() {
+            // given
+            final Long nullLastId = null;
+
+            // when
+            final BottariTemplateCursor actual = new BottariTemplateCursor(
+                    "",
+                    nullLastId,
                     null,
                     0,
                     10,
                     "createdAt"
             );
 
-            // when
-            final BottariTemplateCursor actual = BottariTemplateCursor.from(request);
-
             // then
-            assertThat(actual.getCreatedAt()).isAfter(LocalDateTime.now());
+            assertThat(actual.lastId()).isEqualTo(Long.MAX_VALUE);
         }
 
-        @DisplayName("takenCount property일 때 기본 lastInfo가 Long.MAX_VALUE로 설정된다.")
-        @Test
-        void from_SetDefaultTakenCount() {
+        @DisplayName("property 정규화 테스트")
+        @ParameterizedTest
+        @ValueSource(strings = {" ", "\t", "\n"})
+        void normalizeProperty(final String input) {
             // given
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
-                    "",
-                    null,
-                    null,
-                    0,
-                    10,
-                    "takenCount"
-            );
+            final String expected = "createdAt";
 
             // when
-            final BottariTemplateCursor actual = BottariTemplateCursor.from(request);
+            final BottariTemplateCursor actual = new BottariTemplateCursor(
+                    "",
+                    1L,
+                    "info",
+                    0,
+                    10,
+                    input
+            );
 
             // then
-            assertThat(actual.getTakenCount()).isEqualTo(Long.MAX_VALUE);
+            assertThat(actual.property()).isEqualTo(expected);
         }
     }
 
@@ -154,10 +167,12 @@ class BottariTemplateCursorTest {
                     () -> assertThat(actual.getPageSize()).isEqualTo(size)
             );
         }
+
     }
 
     @Nested
     class GetCreatedAtTest {
+
 
         @DisplayName("LocalDateTime으로 파싱한다.")
         @ParameterizedTest
@@ -207,10 +222,12 @@ class BottariTemplateCursorTest {
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("날짜 형태가 올바르지 않습니다.");
         }
+
     }
 
     @Nested
     class GetTakenCountTest {
+
 
         @DisplayName("유효한 숫자 문자열을 Long으로 파싱한다.")
         @ParameterizedTest
@@ -257,135 +274,6 @@ class BottariTemplateCursorTest {
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("숫자 형태가 올바르지 않습니다.");
         }
-    }
 
-    @Nested
-    class NormalizationTest {
-
-        @DisplayName("query 정규화 테스트")
-        @Test
-        void normalizeQuery() {
-            // given
-            final String blankQuery = " ";
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
-                    blankQuery,
-                    1L,
-                    "info",
-                    0,
-                    10,
-                    "createdAt"
-            );
-
-            final String expected = "";
-
-            // when
-            final BottariTemplateCursor actual = BottariTemplateCursor.from(request);
-
-            // then
-            assertThat(actual.query()).isEqualTo(expected);
-        }
-
-        @DisplayName("page 정규화 테스트")
-        @ParameterizedTest
-        @CsvSource({
-                "-1, 0",
-                "-100, 0",
-                "0, 0",
-                "1, 1",
-                "100, 100"
-        })
-        void normalizePage(
-                final int page,
-                final int expected
-        ) {
-            // given
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
-                    "",
-                    1L,
-                    "info",
-                    page,
-                    10,
-                    "createdAt"
-            );
-
-            // when
-            final BottariTemplateCursor actual = BottariTemplateCursor.from(request);
-
-            // then
-            assertThat(actual.page()).isEqualTo(expected);
-        }
-
-        @DisplayName("size 정규화 테스트")
-        @ParameterizedTest
-        @CsvSource({
-                "-1, 10",
-                "0, 10",
-                "1, 1",
-                "50, 50"
-        })
-        void normalizeSize(
-                final int size,
-                final int expected
-        ) {
-            // given
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
-                    "",
-                    1L,
-                    null,
-                    0,
-                    size,
-                    "createdAt"
-            );
-
-            // when
-            final BottariTemplateCursor actual = BottariTemplateCursor.from(request);
-
-            // then
-            assertThat(actual.size()).isEqualTo(expected);
-        }
-
-        @DisplayName("lastId 정규화 테스트")
-        @Test
-        void normalizeLastId() {
-            // given
-            final Long nullLastId = null;
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
-                    "",
-                    nullLastId,
-                    null,
-                    0,
-                    10,
-                    "createdAt"
-            );
-
-            // when
-            final BottariTemplateCursor actual = BottariTemplateCursor.from(request);
-
-            // then
-            assertThat(actual.lastId()).isEqualTo(Long.MAX_VALUE);
-        }
-
-        @DisplayName("property 정규화 테스트")
-        @ParameterizedTest
-        @ValueSource(strings = {" ", "\t", "\n"})
-        void normalizeProperty(final String input) {
-            // given
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
-                    "",
-                    1L,
-                    "info",
-                    0,
-                    10,
-                    input
-            );
-
-            final String expected = "createdAt";
-
-            // when
-            final BottariTemplateCursor actual = BottariTemplateCursor.from(request);
-
-            // then
-            assertThat(actual.property()).isEqualTo(expected);
-        }
     }
 }

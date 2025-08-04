@@ -68,7 +68,7 @@ public class BottariTemplateService {
     }
 
     public ReadNextBottariTemplateResponse getNextAll(final ReadNextBottariTemplateRequest request) {
-        final BottariTemplateCursor cursor = BottariTemplateCursor.from(request);
+        final BottariTemplateCursor cursor = request.toCursor();
         final Pageable pageable = cursor.toPageable();
         final Slice<BottariTemplate> bottariTemplates = getNextBySortProperty(cursor, pageable);
         final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate = groupingItemsByTemplate(

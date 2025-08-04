@@ -1,6 +1,5 @@
 package com.bottari.domain;
 
-import com.bottari.dto.ReadNextBottariTemplateRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -20,22 +19,13 @@ public record BottariTemplateCursor(
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     private static final int DEFAULT_SIZE = 10;
 
-    public static BottariTemplateCursor from(final ReadNextBottariTemplateRequest request) {
-        final String query = normalizeQuery(request.query());
-        final int size = normalizeSize(request.size());
-        final int page = normalizePage(request.page());
-        final Long lastId = normalizeLastId(request.lastId());
-        final String property = normalizeProperty(request.property());
-        final String lastInfo = normalizeLastInfo(property, request.lastInfo());
-
-        return new BottariTemplateCursor(
-                query,
-                lastId,
-                lastInfo,
-                page,
-                size,
-                property
-        );
+    public BottariTemplateCursor {
+        query = normalizeQuery(query);
+        size = normalizeSize(size);
+        page = normalizePage(page);
+        lastId = normalizeLastId(lastId);
+        property = normalizeProperty(property);
+        lastInfo = normalizeLastInfo(property, lastInfo);
     }
 
     public Pageable toPageable() {

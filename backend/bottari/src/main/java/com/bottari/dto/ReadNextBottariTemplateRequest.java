@@ -1,5 +1,7 @@
 package com.bottari.dto;
 
+import com.bottari.domain.BottariTemplateCursor;
+
 public record ReadNextBottariTemplateRequest(
         String query,
         Long lastId,
@@ -8,4 +10,15 @@ public record ReadNextBottariTemplateRequest(
         int size,
         String property
 ) {
+
+    public BottariTemplateCursor toCursor() {
+        return new BottariTemplateCursor(
+                query,
+                lastId,
+                lastInfo,
+                page,
+                size,
+                property
+        );
+    }
 }
