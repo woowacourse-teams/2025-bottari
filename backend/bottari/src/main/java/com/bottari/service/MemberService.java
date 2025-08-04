@@ -54,10 +54,10 @@ public class MemberService {
         if (optionalMember.isPresent()) {
             final Member member = optionalMember.get();
 
-            return new CheckRegistrationResponse(true, member.getName());
+            return new CheckRegistrationResponse(true, member.getId(), member.getName());
         }
 
-        return new CheckRegistrationResponse(false, null);
+        return new CheckRegistrationResponse(false, null, null);
     }
 
     @Transactional
