@@ -22,6 +22,10 @@ android {
         val privacyPolicyUrl =
             gradleLocalProperties(rootDir, providers).getProperty("PRIVACY_POLICY_URL") ?: ""
         buildConfigField("String", "PRIVACY_POLICY_URL", "\"$privacyPolicyUrl\"")
+
+        val userFeedbackUrl =
+            gradleLocalProperties(rootDir, providers).getProperty("USER_FEEDBACK_URL") ?: ""
+        buildConfigField("String", "USER_FEEDBACK_URL", "\"$userFeedbackUrl\"")
     }
 
     buildTypes {
