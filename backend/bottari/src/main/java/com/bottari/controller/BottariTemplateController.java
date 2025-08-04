@@ -3,9 +3,7 @@ package com.bottari.controller;
 import com.bottari.controller.docs.BottariTemplateApiDocs;
 import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.dto.ReadBottariTemplateResponse;
-import com.bottari.dto.ReportBottariTemplateRequest;
 import com.bottari.service.BottariTemplateService;
-import com.bottari.service.ReportService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.List;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class BottariTemplateController implements BottariTemplateApiDocs {
 
     private final BottariTemplateService bottariTemplateService;
-    private final ReportService reportService;
 
     @GetMapping("/{id}")
     @Override
@@ -81,19 +78,6 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
         final Long bottariId = bottariTemplateService.createBottari(id, ssaid);
 
         return ResponseEntity.created(URI.create("/bottaries/" + bottariId)).build();
-    }
-
-    @PostMapping("/{id}/report")
-    @Override
-    public ResponseEntity<Void> report(
-            @PathVariable final Long id,
-            final ReportBottariTemplateRequest request,
-            final HttpServletRequest httpServletRequest
-    ) {
-        final String ssaid = httpServletRequest.getHeader("ssaid");
-        reportService.reportBottariTemplate(ssaid, id, request);
-
-        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
