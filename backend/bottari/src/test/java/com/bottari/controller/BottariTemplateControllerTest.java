@@ -1,5 +1,6 @@
 package com.bottari.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -9,12 +10,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.bottari.domain.SortProperty;
 import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.dto.ReadBottariTemplateResponse.BottariTemplateItemResponse;
 import com.bottari.log.LogFormatter;
+import com.bottari.dto.ReadNextBottariTemplateResponse;
 import com.bottari.service.BottariTemplateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,6 +56,7 @@ class BottariTemplateControllerTest {
                         new BottariTemplateItemResponse(2L, "item_2")
                 ),
                 "author_1",
+                LocalDateTime.now(),
                 0
         );
         given(bottariTemplateService.getById(1L))
@@ -77,6 +82,7 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(2L, "item_2")
                         ),
                         "author_1",
+                        LocalDateTime.now(),
                         0
                 ),
                 new ReadBottariTemplateResponse(
@@ -86,6 +92,7 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
                         "author_2",
+                        LocalDateTime.now(),
                         0
                 )
         );
@@ -112,6 +119,7 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(2L, "item_2")
                         ),
                         "author_1",
+                        LocalDateTime.now(),
                         0
                 ),
                 new ReadBottariTemplateResponse(
@@ -121,6 +129,7 @@ class BottariTemplateControllerTest {
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
                         "author_2",
+                        LocalDateTime.now(),
                         0
                 )
         );
@@ -131,6 +140,57 @@ class BottariTemplateControllerTest {
         mockMvc.perform(get("/templates"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(responses)));
+    }
+
+    @DisplayName("보따리 템플릿 목록을 페이징하여 조회한다.")
+    @Test
+    void readNextAll() throws Exception {
+        // given
+        final List<ReadBottariTemplateResponse> contents = List.of(
+                new ReadBottariTemplateResponse(
+                        1L,
+                        "여행용 체크리스트",
+                        List.of(
+                                new BottariTemplateItemResponse(1L, "여권"),
+                                new BottariTemplateItemResponse(2L, "항공권")
+                        ),
+                        "author_1",
+                        LocalDateTime.now().minusDays(2),
+                        5
+                ),
+                new ReadBottariTemplateResponse(
+                        2L,
+                        "캠핑 준비물",
+                        List.of(
+                                new BottariTemplateItemResponse(3L, "텐트")
+                        ),
+                        "author_2",
+                        LocalDateTime.now().minusDays(1),
+                        3
+                )
+        );
+        final ReadNextBottariTemplateResponse response = new ReadNextBottariTemplateResponse(
+                contents,
+                0,
+                2,
+                true,
+                true,
+                false,
+                SortProperty.CREATED_AT.getProperty(),
+                2L,
+                "2024-12-20T10:30:00Z"
+        );
+        given(bottariTemplateService.getNextAll(any()))
+                .willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/templates/cursor")
+                        .param("query", "")
+                        .param("page", "0")
+                        .param("size", "2")
+                        .param("property", "createdAt"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
     }
 
     @DisplayName("보따리 템플릿을 생성한다.")
