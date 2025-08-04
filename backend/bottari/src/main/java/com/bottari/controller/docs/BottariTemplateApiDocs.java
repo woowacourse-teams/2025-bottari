@@ -51,7 +51,14 @@ public interface BottariTemplateApiDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "커서 기반 보따리 템플릿 목록 조회 성공"),
     })
-    ResponseEntity<ReadNextBottariTemplateResponse> readNextAll(final ReadNextBottariTemplateRequest request);
+    @ApiErrorCodes({
+            ErrorCode.DATE_FORMAT_INVALID,
+            ErrorCode.NUMBER_FORMAT_INVALID,
+            ErrorCode.BOTTARI_TEMPLATE_INVALID_SORT_TYPE
+    })
+    ResponseEntity<ReadNextBottariTemplateResponse> readNextAll(
+            final ReadNextBottariTemplateRequest request
+    );
 
     @Operation(summary = "보따리 템플릿 생성")
     @ApiResponses(value = {

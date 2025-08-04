@@ -1,5 +1,7 @@
 package com.bottari.domain;
 
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import java.util.Arrays;
 import lombok.Getter;
 
@@ -20,7 +22,7 @@ public enum SortProperty {
         return Arrays.stream(SortProperty.values())
                 .filter(value -> value.equalsProperty(property))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 정렬 기준입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_TEMPLATE_INVALID_SORT_TYPE));
     }
 
     public boolean equalsProperty(final String property) {

@@ -3,6 +3,7 @@ package com.bottari.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.bottari.error.BusinessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -34,8 +35,8 @@ class SortPropertyTest {
     void fromProperty_Exception_WhenInvalidProperty(final String property) {
         // when & then
         assertThatThrownBy(() -> SortProperty.fromProperty(property))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("존재하지 않는 정렬 기준입니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("유효하지 않은 보따리 템플릿 정렬 타입입니다.");
     }
 
     @DisplayName("property가 동일한지 판별한다.")

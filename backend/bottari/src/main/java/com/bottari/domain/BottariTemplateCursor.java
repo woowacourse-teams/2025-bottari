@@ -1,5 +1,7 @@
 package com.bottari.domain;
 
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -15,8 +17,8 @@ public record BottariTemplateCursor(
         String property
 ) {
 
-    private static final DateTimeFormatter DATE_TIME_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+    private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
     private static final int DEFAULT_SIZE = 10;
 
     public BottariTemplateCursor {
@@ -26,26 +28,6 @@ public record BottariTemplateCursor(
         lastId = normalizeLastId(lastId);
         property = normalizeProperty(property);
         lastInfo = normalizeLastInfo(property, lastInfo);
-    }
-
-    public Pageable toPageable() {
-        return PageRequest.of(page, size);
-    }
-
-    public LocalDateTime getCreatedAt() {
-        try {
-            return LocalDateTime.parse(lastInfo, DATE_TIME_FORMATTER);
-        } catch (final DateTimeParseException e) {
-            throw new IllegalArgumentException("날짜 형태가 올바르지 않습니다.");
-        }
-    }
-
-    public Long getTakenCount() {
-        try {
-            return Long.parseLong(lastInfo);
-        } catch (final NumberFormatException e) {
-            throw new IllegalArgumentException("숫자 형태가 올바르지 않습니다.");
-        }
     }
 
     private static String normalizeQuery(final String query) {
@@ -100,5 +82,28 @@ public record BottariTemplateCursor(
         }
 
         return lastInfo;
+    }
+
+    public Pageable toPageable() {
+        return PageRequest.of(page, size);
+    }
+
+    public LocalDateTime getCreatedAt() {
+        try {
+            return LocalDateTime.parse(lastInfo, DATE_TIME_FORMATTER);
+        } catch (final DateTimeParseException e) {
+            throw new BusinessException(
+                    ErrorCode.DATE_FORMAT_INVALID,
+                    "보따리 템플릿의 생성일자는 (%s) 형식이어야 합니다.".formatted(DATE_TIME_PATTERN)
+            );
+        }
+    }
+
+    public Long getTakenCount() {
+        try {
+            return Long.parseLong(lastInfo);
+        } catch (final NumberFormatException e) {
+            throw new BusinessException(ErrorCode.NUMBER_FORMAT_INVALID, "보따리 템플릿의 가져간 횟수는 숫자여야 합니다.");
+        }
     }
 }

@@ -41,6 +41,7 @@ public enum ErrorCode {
     BOTTARI_TEMPLATE_NOT_OWNED(HttpStatus.FORBIDDEN, "해당 보따리 템플릿에 접근할 수 있는 권한이 없습니다."),
     BOTTARI_TEMPLATE_TITLE_BLANK(HttpStatus.BAD_REQUEST, "보따리 템플릿 제목은 공백일 수 없습니다."),
     BOTTARI_TEMPLATE_TITLE_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 템플릿 제목이 너무 깁니다."),
+    BOTTARI_TEMPLATE_INVALID_SORT_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 보따리 템플릿 정렬 타입입니다."),
 
     // ===== BOTTARI_TEMPLATE_ITEM 관련 =====
     BOTTARI_TEMPLATE_ITEM_DUPLICATE_IN_REQUEST(HttpStatus.BAD_REQUEST, "요청에 중복된 보따리 템플릿 물품이 있습니다."),
@@ -55,6 +56,10 @@ public enum ErrorCode {
 
     // ===== REPORT 관련 =====
     REPORT_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 해당 템플릿에 대한 신고 기록이 있습니다."),
+
+    // ===== 기타 =====
+    DATE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 날짜 형식입니다."),
+    NUMBER_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 숫자 형식입니다."),
     ;
 
     private final HttpStatus status;
