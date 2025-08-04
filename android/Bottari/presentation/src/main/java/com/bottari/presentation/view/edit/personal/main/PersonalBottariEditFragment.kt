@@ -10,7 +10,6 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getSSAID
@@ -21,7 +20,6 @@ import com.bottari.presentation.util.PermissionUtil
 import com.bottari.presentation.util.PermissionUtil.requiredPermissions
 import com.bottari.presentation.view.edit.alarm.AlarmEditFragment
 import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
-import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditAlarmAdapter
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditItemAdapter
 import com.bottari.presentation.view.edit.personal.main.rename.BottariRenameDialog
 import com.google.android.flexbox.FlexDirection
@@ -36,7 +34,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
     private val popupMenu: PopupMenu by lazy { createPopupMenu() }
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
-    private val alarmAdapter: PersonalBottariEditAlarmAdapter by lazy { PersonalBottariEditAlarmAdapter() }
     private val permissionLauncher = getPermissionLauncher()
 
     private fun getPermissionLauncher() =
@@ -54,6 +51,8 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 }
             }
         }
+
+    private lateinit var alarmViewBinder: AlarmViewBinder
 
     override fun onViewCreated(
         view: View,
@@ -90,7 +89,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     private fun setupUI() {
         setupPopupMenu()
         setupItemRecyclerView()
-        setupAlarmRecyclerView()
+        setupAlarmView()
     }
 
     private fun setupListener() {
@@ -170,6 +169,8 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         binding.switchAlarm.isChecked = alarm?.isActive ?: false
         if (isAlarmExist.not()) return
         alarmAdapter.submitList(listOf(alarm))
+        alarmViewBinder.bind(alarm, binding.switchAlarm.isChecked)
+    }
     }
 
     private fun toggleItemSection(hasItems: Boolean) {
@@ -199,9 +200,12 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             }
     }
 
-    private fun setupAlarmRecyclerView() {
-        binding.rvEditAlarm.adapter = alarmAdapter
-        binding.rvEditAlarm.layoutManager = LinearLayoutManager(requireContext())
+    private fun setupAlarmView() {
+        alarmViewBinder =
+            AlarmViewBinder(
+                binding,
+                requireContext(),
+            )
     }
 
     private fun navigateToScreen(
