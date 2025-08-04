@@ -29,7 +29,7 @@ class FetchBottariDetailsUseCase(
         ssaid: String,
         bottariId: Long,
     ): BottariDetail? {
-        val result = bottariRepository.findBottari(bottariId, ssaid).getOrNull() ?: return null
+        val result = bottariRepository.fetchBottariDetail(bottariId, ssaid).getOrNull() ?: return null
         if (result.items.isEmpty()) return null
 
         return BottariDetail(
