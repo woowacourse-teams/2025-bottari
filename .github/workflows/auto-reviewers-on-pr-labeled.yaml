@@ -1,0 +1,81 @@
+name: Label Based Review Assign
+
+on:
+  pull_request:
+    types: [labeled, unlabeled]
+
+jobs:
+  assign-reviewers-by-label:
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Assign reviewers by label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const androidReviewers = ['moondev03', 'Leeyerin0210', 'cucumber99'];
+            const backendReviewers = ['Sung-june27', 'YehyeokBang', 'jaehyeon2650', 'unh6unh6'];
+            const allReviewers = [...new Set([...androidReviewers, ...backendReviewers])];
+
+            const labelToReviewers = {
+              '🤖 android': androidReviewers,
+              '💻 backend': backendReviewers,
+              '🌐 all': allReviewers
+            };
+
+            const pr = context.payload.pull_request;
+            const currentUser = pr.user.login;
+            const { owner, repo } = context.repo;
+            const pull_number = pr.number;
+
+            const labels = pr.labels.map(label => label.name.toLowerCase().trim());
+
+            let reviewersToAssign = new Set();
+
+            for (const label of labels) {
+              const reviewers = labelToReviewers[label];
+              if (reviewers) {
+                reviewers.forEach(r => {
+                  if (r !== currentUser) reviewersToAssign.add(r);
+                });
+              }
+            }
+
+            reviewersToAssign = [...reviewersToAssign];
+
+            const currentReviewersRes = await github.rest.pulls.listRequestedReviewers({
+              owner,
+              repo,
+              pull_number
+            });
+
+            const currentReviewers = currentReviewersRes.data.users.map(u => u.login);
+
+            const reviewersToRemove = currentReviewers.filter(r => !reviewersToAssign.includes(r));
+            const reviewersToAdd = reviewersToAssign.filter(r => !currentReviewers.includes(r));
+
+            console.log('👉 남아있는 라벨:', labels);
+            console.log('👤 PR 작성자:', currentUser);
+            console.log('➕ 추가될 리뷰어:', reviewersToAdd);
+            console.log('➖ 제거될 리뷰어:', reviewersToRemove);
+
+            if (reviewersToRemove.length > 0) {
+              await github.rest.pulls.removeRequestedReviewers({
+                owner,
+                repo,
+                pull_number,
+                reviewers: reviewersToRemove
+              });
+            }
+
+            if (reviewersToAdd.length > 0) {
+              await github.rest.pulls.requestReviewers({
+                owner,
+                repo,
+                pull_number,
+                reviewers: reviewersToAdd
+              });
+            }
