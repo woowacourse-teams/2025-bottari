@@ -10,6 +10,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import androidx.viewbinding.ViewBinding
+import com.bottari.presentation.util.CrashlyticsLogger
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 abstract class BaseActivity<VB : ViewBinding>(
@@ -20,11 +21,18 @@ abstract class BaseActivity<VB : ViewBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        CrashlyticsLogger.setScreen(this)
+
         binding = bindingFactory(layoutInflater)
         setContentView(binding.root)
         setWindowInsets()
         setupStatusBar()
         setupNavigationBar()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        CrashlyticsLogger.setScreen(this)
     }
 
     private fun setWindowInsets() {
