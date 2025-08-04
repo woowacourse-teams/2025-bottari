@@ -33,10 +33,10 @@ jobs:
         run: chmod +x gradlew
 
       - name: Create google-services.json
-        run: echo "$GOOGLE_SERVICES_JSON" > ./app/presentation/google-services.json
+        run: echo "$GOOGLE_SERVICES_JSON" > ./app/google-services.json
 
       - name: Create local.properties
-        run: echo "$LOCAL_PROPERTIES_CONTENTS" > ./app/local.properties
+        run: echo "$LOCAL_PROPERTIES_CONTENTS" > ./local.properties
 
       - name: Run ktlint Check
         run: ./gradlew ktlintCheck
