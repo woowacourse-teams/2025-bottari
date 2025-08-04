@@ -17,6 +17,7 @@ import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.presentation.common.event.SingleLiveEvent
 import com.bottari.presentation.common.extension.update
+import com.bottari.presentation.util.CrashlyticsLogger
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -42,8 +43,10 @@ class MainViewModel(
         _uiState.update { copy(isLoading = true) }
         viewModelScope.launch {
             checkRegisteredMemberUseCase(ssaid)
-                .onSuccess { result -> handleCheckRegistrationResult(result) }
-                .onFailure { _uiEvent.value = MainUiEvent.LoginFailure }
+                .onSuccess { result ->
+                    setupUserId(result.id)
+                    handleCheckRegistrationResult(result)
+                }.onFailure { _uiEvent.value = MainUiEvent.LoginFailure }
         }
     }
 
@@ -83,12 +86,15 @@ class MainViewModel(
     private fun registerMember(ssaid: String) {
         viewModelScope.launch {
             registerMemberUseCase(ssaid)
-                .onSuccess {
+                .onSuccess { result ->
+                    setupUserId(result)
                     _uiState.update { copy(isLoading = false) }
                     _uiEvent.value = MainUiEvent.LoginSuccess(_uiState.value!!.hasPermissionFlag)
                 }.onFailure { _uiEvent.value = MainUiEvent.RegisterFailure }
         }
     }
+
+    private fun setupUserId(userId: Long?) = CrashlyticsLogger.setUserId(userId.toString())
 
     companion object {
         private const val KEY_SSAID = "KEY_SSAID"

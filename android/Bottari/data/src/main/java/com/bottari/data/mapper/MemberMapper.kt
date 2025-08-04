@@ -4,5 +4,5 @@ import com.bottari.data.model.member.CheckRegisteredMemberResponse
 import com.bottari.domain.model.member.RegisteredMember
 
 object MemberMapper {
-    fun CheckRegisteredMemberResponse.toDomain(): RegisteredMember = RegisteredMember(name = name, isRegistered = isRegistered)
+    fun CheckRegisteredMemberResponse.toDomain(): RegisteredMember = RegisteredMember(name = name, id = id, isRegistered = isRegistered)
 }

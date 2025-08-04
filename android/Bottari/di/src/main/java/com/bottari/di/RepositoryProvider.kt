@@ -14,7 +14,12 @@ import com.bottari.domain.repository.BottariTemplateRepository
 import com.bottari.domain.repository.MemberRepository
 
 object RepositoryProvider {
-    val memberRepository: MemberRepository by lazy { MemberRepositoryImpl(DataSourceProvider.memberRemoteDataSource) }
+    val memberRepository: MemberRepository by lazy {
+        MemberRepositoryImpl(
+            DataSourceProvider.memberRemoteDataSource,
+            DataSourceProvider.userInfoLocalDataSource,
+        )
+    }
     val bottariRepository: BottariRepository by lazy { BottariRepositoryImpl(DataSourceProvider.bottariRemoteDataSource) }
     val alarmRepository: AlarmRepository by lazy { AlarmRepositoryImpl(DataSourceProvider.alarmRemoteDataSource) }
     val bottariItemRepository: BottariItemRepository by lazy {
