@@ -112,6 +112,7 @@
     <!-- Setting -->
     <string name="setting_toolbar_title_text">설정</string>
     <string name="setting_privacy_policy_title_text">개인정보 처리 방침</string>
+    <string name="setting_user_feedback_title_text">의견 보내기</string>
 
     <!-- Checklist -->
     <string name="checklist_swipe_not_btn_text">아직이에요</string>

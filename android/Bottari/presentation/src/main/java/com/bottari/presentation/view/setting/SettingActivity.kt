@@ -18,6 +18,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>(ActivitySettingBind
     private fun setupListener() {
         binding.btnPrevious.setOnClickListener { finish() }
         binding.btnPrivacyPolicy.setOnClickListener { launchInBrowser(BuildConfig.PRIVACY_POLICY_URL) }
+        binding.btnUserFeedback.setOnClickListener { launchInBrowser(BuildConfig.USER_FEEDBACK_URL) }
     }
 
     private fun launchInBrowser(url: String) {
