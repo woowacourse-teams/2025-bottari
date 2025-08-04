@@ -10,6 +10,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentSwipeChecklistBinding
+import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.checklist.ChecklistUiEvent
 import com.bottari.presentation.view.checklist.ChecklistUiState
 import com.bottari.presentation.view.checklist.ChecklistViewModel
@@ -75,28 +76,15 @@ class SwipeChecklistFragment :
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
-            binding.tvSwipeChecklistStatus.text =
-                getString(
-                    R.string.common_format_checklist_swipe_status,
-                    uiState.totalQuantity,
-                    uiState.totalQuantity - uiState.checkedQuantity,
-                )
+            handleSwipeChecklistStatus(uiState)
             handleProgressBar(uiState)
-            adapter.submitList(uiState.nonSwipedItems)
-            if (uiState.nonSwipedItems.isEmpty()) {
-                showCompleteState(isComplete = uiState.nonCheckedItems.isEmpty())
-            }
+            updateSwipeList(uiState.nonSwipedItems)
+            handleCompleteView(uiState)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
                 ChecklistUiEvent.FetchChecklistFailure -> showSnackbar(R.string.checklist_fetch_failure_text)
                 ChecklistUiEvent.CheckItemFailure -> showSnackbar(R.string.checklist_check_failure_text)
-                ChecklistUiEvent.AllSwipedAllChecked -> {
-                    showCompleteState(true)
-                }
-                ChecklistUiEvent.AllSwipedNotAllChecked -> {
-                    showCompleteState(false)
-                }
             }
         }
     }
@@ -112,6 +100,25 @@ class SwipeChecklistFragment :
             if (uiState.nonCheckedItems.isNotEmpty()) return@apply
             val primaryColor = ContextCompat.getColor(requireContext(), R.color.primary)
             progressTintList = ColorStateList.valueOf(primaryColor)
+        }
+    }
+
+    private fun updateSwipeList(items: List<BottariItemUiModel>) {
+        adapter.submitList(items)
+    }
+
+    private fun handleSwipeChecklistStatus(uiState: ChecklistUiState) {
+        binding.tvSwipeChecklistStatus.text =
+            getString(
+                R.string.common_format_checklist_swipe_status,
+                uiState.totalQuantity,
+                uiState.totalQuantity - uiState.checkedQuantity,
+            )
+    }
+
+    private fun handleCompleteView(uiState: ChecklistUiState) {
+        if (uiState.isAllSwiped) {
+            showCompleteState(isComplete = uiState.isAllChecked)
         }
     }
 
