@@ -71,21 +71,24 @@ class ChecklistViewModel(
 
     private fun performCheck(items: List<BottariItemUiModel>) {
         viewModelScope.launch {
-            val deferred =
+            val jobs =
                 items.map { item ->
-                    async {
-                        val result =
-                            if (item.isChecked) {
-                                checkBottariItemUseCase(ssaid, item.id)
-                            } else {
-                                unCheckBottariItemUseCase(ssaid, item.id)
-                            }
-
-                        result.onFailure { _uiEvent.value = ChecklistUiEvent.CheckItemFailure }
-                    }
+                    async { processItemCheck(item) }
                 }
-            deferred.awaitAll()
+            jobs.awaitAll()
             pendingCheckStatusMap.clear()
+        }
+    }
+
+    private suspend fun processItemCheck(item: BottariItemUiModel) {
+        val result =
+            if (item.isChecked) {
+                checkBottariItemUseCase(ssaid, item.id)
+            } else {
+                unCheckBottariItemUseCase(ssaid, item.id)
+            }
+        result.onFailure {
+            _uiEvent.value = ChecklistUiEvent.CheckItemFailure
         }
     }
 
