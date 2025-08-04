@@ -11,22 +11,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({
-            IllegalArgumentException.class,
-            IllegalStateException.class
-    })
-    public ProblemDetail handleIllegalException(
-            final RuntimeException exception,
-            final HttpServletRequest request
-    ) {
-        log.warn("Request URL: {} | Exception: {}", request.getRequestURI(), exception.getMessage());
-
-        return ProblemDetail.forStatusAndDetail(
-                HttpStatus.BAD_REQUEST,
-                exception.getMessage()
-        );
-    }
-
     @ExceptionHandler(BusinessException.class)
     public ProblemDetail handleBusinessException(
             final BusinessException exception,
