@@ -48,7 +48,7 @@ public class MemberService {
             final DataIntegrityViolationException exception,
             final CreateMemberRequest request
     ) {
-        throw new IllegalStateException("고유한 임시 닉네임을 생성하고 저장하는 데 실패했습니다. (관리자 문의 필요)");
+        throw new BusinessException(ErrorCode.MEMBER_NAME_GENERATION_FAILED);
     }
 
     public CheckRegistrationResponse checkRegistration(final String ssaid) {
