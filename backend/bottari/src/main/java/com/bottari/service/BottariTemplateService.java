@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -167,9 +168,14 @@ public class BottariTemplateService {
             final Member member
     ) {
         if (alreadyTookBottariTemplate(bottariTemplate, member)) {
+            return;
+        }
+        try {
             final BottariTemplateHistory bottariTemplateHistory = new BottariTemplateHistory(member.getId(), bottariTemplate.getId());
             bottariTemplateHistoryRepository.save(bottariTemplateHistory);
             bottariTemplateRepository.plusTakenCountById(bottariTemplate.getId());
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalStateException("단기간 내 보따리 템플릿 가져갈 수 없습니다.");
         }
     }
 
@@ -177,6 +183,6 @@ public class BottariTemplateService {
             final BottariTemplate bottariTemplate,
             final Member member
     ) {
-        return !bottariTemplateHistoryRepository.existsByBottariTemplateIdAndMemberId(bottariTemplate.getId(), member.getId());
+        return bottariTemplateHistoryRepository.existsByBottariTemplateIdAndMemberId(bottariTemplate.getId(), member.getId());
     }
 }

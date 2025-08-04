@@ -35,7 +35,7 @@ public interface BottariTemplateRepository extends JpaRepository<BottariTemplate
             """)
     Optional<BottariTemplate> findByIdWithMember(final Long id);
 
-    @Modifying(clearAutomatically = true)
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
             UPDATE BottariTemplate bt
             SET bt.takenCount = bt.takenCount + 1

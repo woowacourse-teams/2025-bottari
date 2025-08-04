@@ -1,10 +1,7 @@
 package com.bottari.domain;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,21 +11,13 @@ import lombok.NoArgsConstructor;
 @Getter
 public class BottariTemplateHistory {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "receiver_id")
-    private Long memberId;
-
-    @Column(name = "template_id")
-    private Long bottariTemplateId;
+    @EmbeddedId
+    private BottariTemplateHistoryId id;
 
     public BottariTemplateHistory(
             final Long memberId,
             final Long bottariTemplateId
     ) {
-        this.memberId = memberId;
-        this.bottariTemplateId = bottariTemplateId;
+        this.id = new BottariTemplateHistoryId(memberId, bottariTemplateId);
     }
 }
