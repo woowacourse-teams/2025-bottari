@@ -3,6 +3,7 @@ package com.bottari.repository;
 import com.bottari.domain.Bottari;
 import com.bottari.domain.BottariItem;
 import java.util.List;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +12,7 @@ public interface BottariItemRepository extends JpaRepository<BottariItem, Long> 
 
     List<BottariItem> findAllByBottariId(final Long bottariId);
 
+    @EntityGraph(attributePaths = {"bottari"})
     List<BottariItem> findAllByBottariIn(final List<Bottari> bottaries);
 
     boolean existsByBottariIdAndName(
