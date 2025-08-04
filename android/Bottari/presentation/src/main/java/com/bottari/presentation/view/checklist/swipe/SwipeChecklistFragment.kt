@@ -94,12 +94,10 @@ class SwipeChecklistFragment :
                 ChecklistUiEvent.FetchChecklistFailure -> showSnackbar(R.string.checklist_fetch_failure_text)
                 ChecklistUiEvent.CheckItemFailure -> showSnackbar(R.string.checklist_check_failure_text)
                 ChecklistUiEvent.AllSwipedAllChecked -> {
-                    showDoneButton()
-                    showCompleteView()
+                    showCompleteState(true)
                 }
                 ChecklistUiEvent.AllSwipedNotAllChecked -> {
-                    showDoneButton()
-                    showNotCompleteView()
+                    showCompleteState(false)
                 }
             }
         }
@@ -119,20 +117,16 @@ class SwipeChecklistFragment :
         }
     }
 
+    private fun showCompleteState(isComplete: Boolean) {
+        showDoneButton()
+        binding.viewSwipeCompleteNotAll.clSwipeCompleteNotAll.isVisible = !isComplete
+        binding.viewSwipeCompleteAll.clSwipeCompleteAll.isVisible = isComplete
+    }
+
     private fun showDoneButton() {
         binding.btnSwipeChecklistNot.isVisible = false
         binding.btnSwipeChecklistYes.isVisible = false
         binding.btnSwipeChecklistReturn.isVisible = true
-    }
-
-    private fun showNotCompleteView() {
-        binding.viewSwipeCompleteNotAll.clSwipeCompleteNotAll.isVisible = true
-        binding.viewSwipeCompleteAll.clSwipeCompleteAll.isVisible = false
-    }
-
-    private fun showCompleteView() {
-        binding.viewSwipeCompleteNotAll.clSwipeCompleteNotAll.isVisible = false
-        binding.viewSwipeCompleteAll.clSwipeCompleteAll.isVisible = true
     }
 
     private fun setupCardStackView() {
