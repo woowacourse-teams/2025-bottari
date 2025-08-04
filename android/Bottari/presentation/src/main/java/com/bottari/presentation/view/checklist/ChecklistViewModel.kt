@@ -37,6 +37,7 @@ class ChecklistViewModel(
     private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val pendingCheckStatusMap = mutableMapOf<Long, BottariItemUiModel>()
+
     private val debouncedCheck: (List<BottariItemUiModel>) -> Unit =
         debounce(
             timeMillis = DEBOUNCE_DELAY,
@@ -45,6 +46,14 @@ class ChecklistViewModel(
 
     init {
         fetchChecklist(bottariId)
+    }
+
+    fun resetSwipeState() {
+        _uiState.update { copy(swipedItemIds = emptySet()) }
+    }
+
+    fun addSwipedItem(itemId: Long) {
+        _uiState.update { copy(swipedItemIds = this.swipedItemIds + itemId) }
     }
 
     fun toggleItemChecked(itemId: Long) {
@@ -62,21 +71,24 @@ class ChecklistViewModel(
 
     private fun performCheck(items: List<BottariItemUiModel>) {
         viewModelScope.launch {
-            val deferred =
+            val jobs =
                 items.map { item ->
-                    async {
-                        val result =
-                            if (item.isChecked) {
-                                checkBottariItemUseCase(ssaid, item.id)
-                            } else {
-                                unCheckBottariItemUseCase(ssaid, item.id)
-                            }
-
-                        result.onFailure { _uiEvent.value = ChecklistUiEvent.CheckItemFailure }
-                    }
+                    async { processItemCheck(item) }
                 }
-            deferred.awaitAll()
+            jobs.awaitAll()
             pendingCheckStatusMap.clear()
+        }
+    }
+
+    private suspend fun processItemCheck(item: BottariItemUiModel) {
+        val result =
+            if (item.isChecked) {
+                checkBottariItemUseCase(ssaid, item.id)
+            } else {
+                unCheckBottariItemUseCase(ssaid, item.id)
+            }
+        result.onFailure {
+            _uiEvent.value = ChecklistUiEvent.CheckItemFailure
         }
     }
 

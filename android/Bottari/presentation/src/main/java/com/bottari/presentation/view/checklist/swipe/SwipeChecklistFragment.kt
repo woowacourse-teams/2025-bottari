@@ -4,11 +4,13 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentSwipeChecklistBinding
+import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.checklist.ChecklistUiEvent
 import com.bottari.presentation.view.checklist.ChecklistUiState
 import com.bottari.presentation.view.checklist.ChecklistViewModel
@@ -26,7 +28,7 @@ class SwipeChecklistFragment :
     private val viewModel: ChecklistViewModel by activityViewModels {
         ChecklistViewModel.Factory(
             requireContext().getSSAID(),
-            getBottariId(),
+            requireArguments().getLong(ARG_BOTTARI_ID),
         )
     }
     private val adapter: SwipeCheckListAdapter by lazy { SwipeCheckListAdapter() }
@@ -43,10 +45,10 @@ class SwipeChecklistFragment :
     }
 
     override fun onCardSwiped(direction: Direction?) {
-        if (direction != Direction.Right) return
         val index = cardStackLayoutManager.topPosition - INDEX_OFFSET
         val currentItem = adapter.currentList.getOrNull(index) ?: return
-        viewModel.toggleItemChecked(currentItem.id)
+        if (direction == Direction.Right) viewModel.toggleItemChecked(currentItem.id)
+        viewModel.addSwipedItem(currentItem.id)
     }
 
     override fun onCardAppeared(
@@ -71,19 +73,13 @@ class SwipeChecklistFragment :
 
     override fun onCardRewound() {}
 
-    private fun getBottariId(): Long = requireArguments().getLong(EXTRA_BOTTARI_ID)
-
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
-            adapter.submitList(uiState.nonCheckedItems)
-            binding.tvSwipeChecklistStatus.text =
-                getString(
-                    R.string.common_format_checklist_swipe_status,
-                    uiState.totalQuantity,
-                    uiState.totalQuantity - uiState.checkedQuantity,
-                )
+            handleSwipeChecklistStatus(uiState)
             handleProgressBar(uiState)
+            updateSwipeList(uiState.nonSwipedItems)
+            handleCompleteView(uiState)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
@@ -101,13 +97,45 @@ class SwipeChecklistFragment :
         binding.pbChecklistSwipe.apply {
             progress = uiState.checkedQuantity
             max = uiState.totalQuantity
-            if (uiState.isAllChecked) return@apply
+            if (uiState.nonCheckedItems.isNotEmpty()) return@apply
             val primaryColor = ContextCompat.getColor(requireContext(), R.color.primary)
             progressTintList = ColorStateList.valueOf(primaryColor)
         }
     }
 
+    private fun updateSwipeList(items: List<BottariItemUiModel>) {
+        adapter.submitList(items)
+    }
+
+    private fun handleSwipeChecklistStatus(uiState: ChecklistUiState) {
+        binding.tvSwipeChecklistStatus.text =
+            getString(
+                R.string.common_format_checklist_swipe_status,
+                uiState.totalQuantity,
+                uiState.totalQuantity - uiState.checkedQuantity,
+            )
+    }
+
+    private fun handleCompleteView(uiState: ChecklistUiState) {
+        if (uiState.isAllSwiped) {
+            showCompleteState(isComplete = uiState.isAllChecked)
+        }
+    }
+
+    private fun showCompleteState(isComplete: Boolean) {
+        showDoneButton()
+        binding.viewSwipeCompleteNotAll.clSwipeCompleteNotAll.isVisible = !isComplete
+        binding.viewSwipeCompleteAll.clSwipeCompleteAll.isVisible = isComplete
+    }
+
+    private fun showDoneButton() {
+        binding.btnSwipeChecklistNot.isVisible = false
+        binding.btnSwipeChecklistYes.isVisible = false
+        binding.btnSwipeChecklistReturn.isVisible = true
+    }
+
     private fun setupCardStackView() {
+        viewModel.resetSwipeState()
         cardStackLayoutManager =
             CardStackLayoutManager(requireContext(), this).apply {
                 setStackFrom(StackFrom.Top)
@@ -125,6 +153,9 @@ class SwipeChecklistFragment :
         binding.btnSwipeChecklistNot.setOnClickListener {
             swipeCardTo(Direction.Left)
         }
+        binding.btnSwipeChecklistReturn.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun swipeCardTo(direction: Direction) {
@@ -140,12 +171,12 @@ class SwipeChecklistFragment :
     }
 
     companion object {
-        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
+        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
         private const val INDEX_OFFSET = 1
 
         fun newBundle(bottariId: Long): Bundle =
             Bundle().apply {
-                putLong(EXTRA_BOTTARI_ID, bottariId)
+                putLong(ARG_BOTTARI_ID, bottariId)
             }
     }
 }

@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     android:background="@color/gray_f8f8f8">
 
+    <include
+        android:id="@+id/view_swipe_complete_not_all"
+        layout="@layout/view_swipe_complete_not_all"
+        android:visibility="gone"/>
+
+    <include
+        android:id="@+id/view_swipe_complete_all"
+        layout="@layout/view_swipe_complete_all"
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/pb_checklist_swipe"
         style="?android:attr/progressBarStyleHorizontal"
@@ -77,5 +87,24 @@
         app:layout_constraintStart_toEndOf="@id/btn_swipe_checklist_not"
         app:layout_constraintTop_toTopOf="@id/btn_swipe_checklist_not" />
 
+
+    <TextView
+        android:id="@+id/btn_swipe_checklist_return"
+        style="@style/Pretendard_Medium_20"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_large"
+        android:layout_marginVertical="@dimen/space_x_large"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:backgroundTint="@color/primary"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:paddingVertical="@dimen/space_median"
+        android:text="@string/checklist_swipe_return_btn_text"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

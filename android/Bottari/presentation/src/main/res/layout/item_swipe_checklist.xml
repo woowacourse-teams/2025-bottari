@@ -20,4 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="목걸이" />
+
+    <include layout="@layout/view_right_swipe" />
+    <include layout="@layout/view_left_swipe" />
 </androidx.constraintlayout.widget.ConstraintLayout>

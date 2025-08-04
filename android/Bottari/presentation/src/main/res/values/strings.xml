@@ -118,6 +118,12 @@
     <string name="checklist_swipe_yes_btn_text">챙겼어요</string>
     <string name="checklist_fetch_failure_text">체크리스트를 불러오지 못했어요</string>
     <string name="checklist_check_failure_text">체크에 실패했어요</string>
+    <string name="checklist_swipe_yes_overlay_view_text">챙겼어요!</string>
+    <string name="checklist_swipe_no_overlay_view_text">아직이에요</string>
+    <string name="checklist_swipe_complete_title">보따리를 모두 점검했어요!</string>
+    <string name="checklist_swipe_complete_all_text">모든 준비 완료! 출발만 남았어요!</string>
+    <string name="checklist_swipe_complete_not_all_text">아직 챙기지 않은 물건이 있어요. 마저 챙겨볼까요?</string>
+    <string name="checklist_swipe_return_btn_text">돌아가기</string>
 
     <!-- Bottari Create Dialog -->
     <string name="bottari_create_dialog_title_text">보따리 이름을 입력해 주세요</string>
@@ -207,6 +213,10 @@
     <string name="bottari_personal_item_add_btn_description">물건 추가 버튼</string>
     <string name="bottari_personal_item_empty_icon_description">빈 물건 아이콘</string>
     <string name="bottari_home_icon_description">보따리 아이콘 이미지</string>
+    <string name="checklist_swipe_check_not_all_icon">보따리 일부 품목 미체크 이미지</string>
+    <string name="checklist_swipe_check_all_icon">보따리 모든 품목 체크 이미지</string>
+    <string name="checklist_swipe_overlay_uncheck_icon">미체크 오버레이 아이콘</string>
+    <string name="checklist_swipe_overlay_check_icon">체크 오버레이 아이콘</string>
     <string name="notification_permission_iv_description">알림 권한 이미지</string>
     <string name="alarm_permission_iv_description">알람 및 리마인더 권한 이미지</string>
     <string name="location_permission_iv_description">위치 권한 이미지</string>
@@ -218,4 +228,5 @@
     <string name="menu_delete_title_text">삭제하기</string>
     <string name="bottari_edit_item_empty_view_title">보따리 안에 물건이 없어요</string>
     <string name="bottari_edit_item_empty_view_text">무엇을 챙겨야 할지 모르겠다면,\n‘모두의 보따리’를 살펴보세요! </string>
+
 </resources>
