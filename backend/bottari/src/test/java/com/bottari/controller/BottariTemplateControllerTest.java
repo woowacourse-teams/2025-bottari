@@ -141,7 +141,7 @@ class BottariTemplateControllerTest {
 
     @DisplayName("보따리 템플릿 목록을 페이징하여 조회한다.")
     @Test
-    void readAllByPageable() throws Exception {
+    void readNextAll() throws Exception {
         // given
         final List<ReadBottariTemplateResponse> contents = List.of(
                 new ReadBottariTemplateResponse(

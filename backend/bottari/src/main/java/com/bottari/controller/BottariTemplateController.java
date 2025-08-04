@@ -60,8 +60,9 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     }
 
     // TODO: 연동 후, readAll로 대치
-    @GetMapping("/page")
-    public ResponseEntity<ReadNextBottariTemplateResponse> readAllByPageable(
+    @GetMapping("/cursor")
+    @Override
+    public ResponseEntity<ReadNextBottariTemplateResponse> readNextAll(
             @ModelAttribute final ReadNextBottariTemplateRequest request
     ) {
         final ReadNextBottariTemplateResponse response = bottariTemplateService.getNextAll(request);
