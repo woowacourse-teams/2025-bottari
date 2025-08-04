@@ -8,13 +8,13 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
-import com.bottari.presentation.common.BottomPaddingDecoration
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.FragmentBottariBinding
 import com.bottari.presentation.view.checklist.ChecklistActivity
+import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.home.bottari.adapter.BottariAdapter
 import com.bottari.presentation.view.home.bottari.create.BottariCreateDialog
@@ -85,34 +85,9 @@ class BottariFragment :
     }
 
     private fun setupListener() {
-        binding.rvBottari.addOnScrollListener(
-            object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(
-                    recyclerView: RecyclerView,
-                    newState: Int,
-                ) {
-                    super.onScrollStateChanged(recyclerView, newState)
-                    handleScrollState(newState)
-                }
-            },
-        )
-
+        binding.rvBottari.addOnScrollListener(handleScrollState())
         binding.btnBottariCreate.setOnClickListener {
             BottariCreateDialog().show(parentFragmentManager, BottariCreateDialog::class.java.name)
-        }
-    }
-
-    private fun handleScrollState(state: Int) {
-        when (state) {
-            RecyclerView.SCROLL_STATE_DRAGGING,
-            RecyclerView.SCROLL_STATE_SETTLING,
-            -> {
-                binding.btnBottariCreate.fadeOut()
-            }
-
-            RecyclerView.SCROLL_STATE_IDLE -> {
-                binding.btnBottariCreate.fadeIn()
-            }
         }
     }
 
@@ -128,6 +103,23 @@ class BottariFragment :
         val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId, false)
         startActivity(intent)
     }
+
+    private fun handleScrollState(): RecyclerView.OnScrollListener =
+        object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(
+                recyclerView: RecyclerView,
+                newState: Int,
+            ) {
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_DRAGGING,
+                    RecyclerView.SCROLL_STATE_SETTLING,
+                    -> binding.btnBottariCreate.fadeOut()
+
+                    RecyclerView.SCROLL_STATE_IDLE ->
+                        binding.btnBottariCreate.fadeIn()
+                }
+            }
+        }
 
     companion object {
         private const val PADDING_HEIGHT_RATIO = 1.2f

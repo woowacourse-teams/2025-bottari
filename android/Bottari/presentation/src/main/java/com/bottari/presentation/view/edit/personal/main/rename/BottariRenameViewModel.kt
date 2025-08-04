@@ -88,7 +88,7 @@ class BottariRenameViewModel(
 
                     BottariRenameViewModel(
                         handle,
-                        UseCaseProvider.renameBottariUseCase,
+                        UseCaseProvider.SaveBottariTitleUseCase,
                     )
                 }
             }

@@ -51,8 +51,16 @@
     <string name="common_permission_failure_text">권한 요청이 실패했어요</string>
 
     <!-- Common: 권한 다이얼로그 -->
-    <string name="common_permission_dialog_title_text">권한이 필요해요</string>
-    <string name="common_permission_dialog_message_text">앱 기능을 사용하려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
+    <string name="common_permission_notice_dialog_title_text">보따리를 편하게 챙기려면\n다음과 같은 권한이 필요해요</string>
+    <string name="common_notification_permission_text">알림 (선택)</string>
+    <string name="common_alarm_permission_text">알람 및 리마인더 (선택)</string>
+    <string name="common_notification_permission_description_text">보따리 관련 알림 수신</string>
+    <string name="common_alarm_permission_description_text">설정한 날짜 및 시간에 알람 생성</string>
+    <string name="common_permission_description_text">권한 접근을 허용하지 않아도 보따리를 챙길 수 있어요.\n하지만 알림 등 일부 기능이 제한될 수 있어요.</string>
+    <string name="common_permission_check_btn_text">확인했어요</string>
+    <string name="common_permission_dialog_title_text">권한 안내</string>
+    <string name="common_notification_permission_dialog_message_text">알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
+    <string name="common_alarm_permission_dialog_message_text">알람을 설정하려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
     <string name="common_permission_dialog_positive_btn_text">설정으로 가기</string>
     <string name="common_permission_dialog_negative_btn_text">나중에 하기</string>
 
@@ -79,6 +87,9 @@
     <string name="common_setting_btn_description">설정 버튼</string>
     <string name="common_close_btn_description">닫기 버튼</string>
     <string name="common_option_btn_description">옵션 버튼</string>
+
+    <!--  Splash Screen  -->
+    <string name="splash_screen_permission_denied_text">권한이 거부되어 일부 기능이 제한돼요.\n기능 사용 시 다시 요청드릴게요.</string>
 
     <!-- Home Navigation -->
     <string name="home_nav_template_title_text">모두의 보따리</string>
@@ -163,11 +174,20 @@
 
     <!-- Bottari Template -->
     <string name="template_search_hint_text">찾고 싶은 보따리를 입력해 보세요</string>
-    <string name="template_my_template_btn"><![CDATA[내 보따리 보기 >]]></string>
+    <string name="template_my_template_btn_text"><![CDATA[내 보따리 보기 >]]></string>
     <string name="template_fetch_template_failure_text">보따리 템플릿을 불러오지 못했어요</string>
     <string name="template_detail_template_btn_text">이 보따리 가져오기</string>
     <string name="template_detail_fetch_failure_text">템플릿 상세 조회에 실패했어요</string>
     <string name="template_detail_take_failure_text">나의 보따리로 가져오는데 실패했어요</string>
+    <string name="template_create_btn_text">보따리 등록하기</string>
+
+    <!-- Bottari Template Create -->
+    <string name="template_create_title_text">모두의 보따리 생성</string>
+    <string name="template_fetch_bottari_details_failure_text">나의 보따리 목록 조회에 실패했어요</string>
+    <string name="template_create_failure_text">보따리를 등록하지 못했어요</string>
+    <string name="template_create_success_text">보따리를 등록했어요</string>
+    <string name="template_create_empty_view_title_text">현재 공유 가능한 보따리가 없습니다</string>
+    <string name="template_create_empty_view_description_text">보따리를 공유하려면 먼저 물건을 담아야 해요\n홈에서 나만의 보따리를 만들어보세요!</string>
 
     <!-- My Bottari Template -->
     <string name="template_my_template_title">내가 등록한 보따리</string>
@@ -197,6 +217,9 @@
     <string name="checklist_swipe_check_all_icon">보따리 모든 품목 체크 이미지</string>
     <string name="checklist_swipe_overlay_uncheck_icon">미체크 오버레이 아이콘</string>
     <string name="checklist_swipe_overlay_check_icon">체크 오버레이 아이콘</string>
+    <string name="notification_permission_iv_description">알림 권한 이미지</string>
+    <string name="alarm_permission_iv_description">알람 및 리마인더 권한 이미지</string>
+    <string name="location_permission_iv_description">위치 권한 이미지</string>
 
     <!-- Menu -->
     <string name="menu_create_template_title_text">모두의 보따리에 등록하기</string>

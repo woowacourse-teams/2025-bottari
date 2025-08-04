@@ -3,11 +3,14 @@ package com.bottari.di
 import com.bottari.domain.usecase.alarm.CreateAlarmUseCase
 import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
 import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
+import com.bottari.domain.usecase.appConfig.GetPermissionFlagUseCase
+import com.bottari.domain.usecase.appConfig.SavePermissionFlagUseCase
 import com.bottari.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
+import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
 import com.bottari.domain.usecase.bottari.SaveBottariTitleUseCase
-import com.bottari.domain.usecase.bottariDetail.FindBottariDetailUseCase
+import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
 import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
 import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
@@ -24,106 +27,117 @@ import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
 
 object UseCaseProvider {
-    val registerMemberUseCase by lazy {
+    val registerMemberUseCase: RegisterMemberUseCase by lazy {
         RegisterMemberUseCase(
             RepositoryProvider.memberRepository,
         )
     }
-    val checkRegisteredMemberUseCase by lazy {
+    val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase by lazy {
         CheckRegisteredMemberUseCase(
             RepositoryProvider.memberRepository,
         )
     }
-    val saveMemberNicknameUseCase by lazy {
+    val saveMemberNicknameUseCase: SaveMemberNicknameUseCase by lazy {
         SaveMemberNicknameUseCase(
             RepositoryProvider.memberRepository,
         )
     }
-    val fetchBottariesUseCase by lazy {
+    val fetchBottariesUseCase: FetchBottariesUseCase by lazy {
         FetchBottariesUseCase(
             RepositoryProvider.bottariRepository,
         )
     }
-    val findBottariDetailUseCase by lazy {
-        FindBottariDetailUseCase(RepositoryProvider.bottariRepository)
+    val fetchBottariDetailUseCase: FetchBottariDetailUseCase by lazy {
+        FetchBottariDetailUseCase(RepositoryProvider.bottariRepository)
     }
-    val saveAlarmUseCase by lazy {
+    val saveAlarmUseCase: SaveAlarmUseCase by lazy {
         SaveAlarmUseCase(RepositoryProvider.alarmRepository)
     }
-    val createAlarmUseCase by lazy {
+    val createAlarmUseCase: CreateAlarmUseCase by lazy {
         CreateAlarmUseCase(RepositoryProvider.alarmRepository)
     }
-    val toggleAlarmStateUseCase by lazy {
+    val toggleAlarmStateUseCase: ToggleAlarmStateUseCase by lazy {
         ToggleAlarmStateUseCase(RepositoryProvider.alarmRepository)
     }
-    val fetchChecklistUseCase by lazy {
+    val fetchChecklistUseCase: FetchChecklistUseCase by lazy {
         FetchChecklistUseCase(
             RepositoryProvider.bottariItemRepository,
         )
     }
-    val unCheckBottariItemUseCase by lazy {
+    val unCheckBottariItemUseCase: UnCheckBottariItemUseCase by lazy {
         UnCheckBottariItemUseCase(
             RepositoryProvider.bottariItemRepository,
         )
     }
-    val checkBottariItemUseCase by lazy {
+    val checkBottariItemUseCase: CheckBottariItemUseCase by lazy {
         CheckBottariItemUseCase(
             RepositoryProvider.bottariItemRepository,
         )
     }
-    val createBottariUseCase by lazy {
+    val createBottariUseCase: CreateBottariUseCase by lazy {
         CreateBottariUseCase(
             RepositoryProvider.bottariRepository,
         )
     }
-    val fetchBottariTemplatesUseCase by lazy {
+    val fetchBottariTemplatesUseCase: FetchBottariTemplatesUseCase by lazy {
         FetchBottariTemplatesUseCase(
             RepositoryProvider.bottariTemplateRepository,
         )
     }
-    val searchBottariTemplatesUseCase by lazy {
+    val searchBottariTemplatesUseCase: SearchBottariTemplatesUseCase by lazy {
         SearchBottariTemplatesUseCase(
             RepositoryProvider.bottariTemplateRepository,
         )
     }
-    val createBottariTemplateUseCase by lazy {
+    val createBottariTemplateUseCase: CreateBottariTemplateUseCase by lazy {
         CreateBottariTemplateUseCase(
             RepositoryProvider.bottariTemplateRepository,
         )
     }
-    val fetchBottariTemplateDetailUseCase by lazy {
+    val fetchBottariTemplateDetailUseCase: FetchBottariTemplateDetailUseCase by lazy {
         FetchBottariTemplateDetailUseCase(
             RepositoryProvider.bottariTemplateRepository,
         )
     }
-    val takeBottariTemplateDetailUseCase by lazy {
+    val takeBottariTemplateDetailUseCase: TakeBottariTemplateDetailUseCase by lazy {
         TakeBottariTemplateDetailUseCase(
             RepositoryProvider.bottariTemplateRepository,
         )
     }
-    val saveBottariItemsUseCase by lazy {
+    val saveBottariItemsUseCase: SaveBottariItemsUseCase by lazy {
         SaveBottariItemsUseCase(
             RepositoryProvider.bottariItemRepository,
         )
     }
-    val fetchMyBottariTemplatesUseCase by lazy {
+    val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase by lazy {
         FetchMyBottariTemplatesUseCase(
             RepositoryProvider.bottariTemplateRepository,
         )
     }
-    val deleteMyBottariTemplateUseCase by lazy {
+    val deleteMyBottariTemplateUseCase: DeleteMyBottariTemplateUseCase by lazy {
         DeleteMyBottariTemplateUseCase(
             RepositoryProvider.bottariTemplateRepository,
         )
     }
-    val deleteBottariUseCase by lazy {
+    val deleteBottariUseCase: DeleteBottariUseCase by lazy {
         DeleteBottariUseCase(
             RepositoryProvider.bottariRepository,
         )
     }
-    val renameBottariUseCase by lazy {
+    val SaveBottariTitleUseCase: SaveBottariTitleUseCase by lazy {
         SaveBottariTitleUseCase(
             RepositoryProvider.bottariRepository,
         )
+    }
+    val fetchBottariDetailsUseCase by lazy {
+        FetchBottariDetailsUseCase(
+            RepositoryProvider.bottariRepository,
+        )
+    }
+    val savePermissionFlagUseCase: SavePermissionFlagUseCase by lazy {
+        SavePermissionFlagUseCase(RepositoryProvider.appConfigRepository)
+    }
+    val getPermissionFlagUseCase: GetPermissionFlagUseCase by lazy {
+        GetPermissionFlagUseCase(RepositoryProvider.appConfigRepository)
     }
 }

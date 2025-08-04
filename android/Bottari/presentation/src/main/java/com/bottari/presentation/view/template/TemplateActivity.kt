@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityTemplateBinding
+import com.bottari.presentation.view.template.create.TemplateCreateFragment
 import com.bottari.presentation.view.template.detail.TemplateDetailFragment
 import com.bottari.presentation.view.template.my.MyTemplateFragment
 
@@ -14,7 +15,6 @@ class TemplateActivity :
     TemplateNavigator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         navigateToScreen()
     }
 
@@ -48,6 +48,7 @@ class TemplateActivity :
         when (type) {
             TemplateDestinationType.MY_TEMPLATE -> navigateToMyTemplate()
             TemplateDestinationType.DETAIL -> navigateToDetailScreen()
+            TemplateDestinationType.CREATE -> navigateToCreateTemplate()
         }
     }
 
@@ -56,6 +57,13 @@ class TemplateActivity :
         if (bottariTemplateId == -1L) finish()
 
         navigateToDetail(bottariTemplateId)
+    }
+
+    private fun navigateToCreateTemplate() {
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fcv_template, TemplateCreateFragment::class.java, null)
+            commit()
+        }
     }
 
     companion object {
@@ -74,6 +82,11 @@ class TemplateActivity :
         fun newIntentForMyTemplate(context: Context): Intent =
             Intent(context, TemplateActivity::class.java).apply {
                 putExtra(EXTRA_DESTINATION_TYPE, TemplateDestinationType.MY_TEMPLATE.name)
+            }
+
+        fun newIntentForCreateTemplate(context: Context): Intent =
+            Intent(context, TemplateActivity::class.java).apply {
+                putExtra(EXTRA_DESTINATION_TYPE, TemplateDestinationType.CREATE.name)
             }
     }
 }

@@ -14,10 +14,10 @@ class BottariRepositoryImpl(
     override suspend fun fetchBottaries(ssaid: String): Result<List<Bottari>> =
         bottariRemoteDataSource.fetchBottaries(ssaid).mapCatching { bottari -> bottari.toDomain() }
 
-    override suspend fun findBottari(
+    override suspend fun fetchBottariDetail(
         id: Long,
         ssaid: String,
-    ): Result<BottariDetail> = bottariRemoteDataSource.findBottari(id, ssaid).mapCatching { it.toDomain() }
+    ): Result<BottariDetail> = bottariRemoteDataSource.fetchBottariDetail(id, ssaid).mapCatching { it.toDomain() }
 
     override suspend fun createBottari(
         ssaid: String,
