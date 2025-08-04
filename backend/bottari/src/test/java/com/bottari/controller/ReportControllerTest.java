@@ -38,7 +38,7 @@ public class ReportControllerTest {
                 .reportBottariTemplate(ssaid, bottariTemplateId, request);
 
         // when & then
-        mockMvc.perform(post("/report/templates/" + bottariTemplateId)
+        mockMvc.perform(post("/reports/templates/" + bottariTemplateId)
                         .header("ssaid", ssaid)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
