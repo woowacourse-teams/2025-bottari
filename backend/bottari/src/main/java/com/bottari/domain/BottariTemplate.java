@@ -62,6 +62,7 @@ public class BottariTemplate {
         if (!(o instanceof final BottariTemplate bottariTemplate)) {
             return false;
         }
+
         return Objects.equals(getId(), bottariTemplate.getId());
     }
 
