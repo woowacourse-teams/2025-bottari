@@ -4,6 +4,7 @@ import com.bottari.domain.BottariTemplate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface BottariTemplateRepository extends JpaRepository<BottariTemplate, Long> {
@@ -33,4 +34,12 @@ public interface BottariTemplateRepository extends JpaRepository<BottariTemplate
             WHERE bt.id = :id
             """)
     Optional<BottariTemplate> findByIdWithMember(final Long id);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("""
+            UPDATE BottariTemplate bt
+            SET bt.takenCount = bt.takenCount + 1
+            WHERE bt.id = :id
+            """)
+    void plusTakenCountById(final Long id);
 }
