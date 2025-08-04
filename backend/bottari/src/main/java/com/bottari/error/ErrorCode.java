@@ -42,6 +42,7 @@ public enum ErrorCode {
     BOTTARI_TEMPLATE_TITLE_BLANK(HttpStatus.BAD_REQUEST, "보따리 템플릿 제목은 공백일 수 없습니다."),
     BOTTARI_TEMPLATE_TITLE_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 템플릿 제목이 너무 깁니다."),
     BOTTARI_TEMPLATE_INVALID_SORT_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 보따리 템플릿 정렬 타입입니다."),
+    BOTTARI_TEMPLATE_ALREADY_TAKEN_RECENTLY(HttpStatus.CONFLICT, "최근에 해당 보따리 템플릿을 가져온 기록이 있습니다. 잠시 후 다시 시도해주세요."),
 
     // ===== BOTTARI_TEMPLATE_ITEM 관련 =====
     BOTTARI_TEMPLATE_ITEM_DUPLICATE_IN_REQUEST(HttpStatus.BAD_REQUEST, "요청에 중복된 보따리 템플릿 물품이 있습니다."),
