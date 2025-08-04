@@ -2,6 +2,7 @@ package com.bottari.presentation.util
 
 import android.app.Activity
 import androidx.fragment.app.Fragment
+import com.bottari.presentation.BuildConfig
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 object CrashlyticsLogger {
@@ -15,6 +16,10 @@ object CrashlyticsLogger {
 
     private val crashlytics: FirebaseCrashlytics
         get() = FirebaseCrashlytics.getInstance()
+
+    init {
+        crashlytics.isCrashlyticsCollectionEnabled = !BuildConfig.DEBUG
+    }
 
     fun setUserId(userId: String) {
         crashlytics.setUserId(userId)
