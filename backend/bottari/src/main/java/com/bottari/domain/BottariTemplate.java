@@ -31,10 +31,10 @@ public class BottariTemplate {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    private int takenCount;
+
     @CreatedDate
     private LocalDateTime createdAt;
-
-    private int takenCount;
 
     public BottariTemplate(
             final String title,
@@ -43,6 +43,7 @@ public class BottariTemplate {
         validateTitle(title);
         this.title = title;
         this.member = member;
+        this.takenCount = 0;
     }
 
     public boolean isOwner(final String ssaid) {

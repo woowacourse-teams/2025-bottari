@@ -27,7 +27,7 @@ public record ReadNextBottariTemplateResponse(
         }
         final Long lastId = content.getLast().id();
         final String lastInfo = switch (sortProperty) {
-            case CREATED_AT -> content.getLast().createAt().toString();
+            case CREATED_AT -> content.getLast().createdAt().toString();
             case TAKEN_COUNT -> String.valueOf(content.getLast().takenCount());
         };
 

@@ -10,7 +10,7 @@ public record ReadBottariTemplateResponse(
         String title,
         List<BottariTemplateItemResponse> items,
         String author,
-        LocalDateTime createAt,
+        LocalDateTime createdAt,
         int takenCount
 ) {
 

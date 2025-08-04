@@ -4,3 +4,5 @@ spring:
   sql:
     init:
       mode: never
+  profiles:
+    active: test
