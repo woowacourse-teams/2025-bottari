@@ -141,7 +141,7 @@
     <string name="bottari_edit_add_item_description_text">보따리에 물건을 추가하려면 눌러주세요</string>
     <string name="bottari_edit_alarm_list_title">알람 목록</string>
     <string name="bottari_edit_add_alarm_title">알람 추가하기</string>
-    <string name="bottari_edit_add_alarm_description_text">알람을 추가하려면 눌러주세요</string>
+    <string name="bottari_edit_add_alarm_description_text">알람을 수정하려면 눌러주세요</string>
     <string name="bottari_edit_fetch_failure_text">보따리를 불러오지 못했어요</string>
     <string name="bottari_edit_create_template_success_text">모두의 보따리에 등록했어요</string>
     <string name="bottari_edit_create_template_failure_text">머두의 보따리에 등록하지 못했어요</string>
