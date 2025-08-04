@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.market
+package com.bottari.presentation.view.home.template
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

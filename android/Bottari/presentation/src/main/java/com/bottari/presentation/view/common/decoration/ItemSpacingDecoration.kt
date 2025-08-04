@@ -1,4 +1,4 @@
-package com.bottari.presentation.common
+package com.bottari.presentation.view.common.decoration
 
 import android.graphics.Rect
 import android.view.View

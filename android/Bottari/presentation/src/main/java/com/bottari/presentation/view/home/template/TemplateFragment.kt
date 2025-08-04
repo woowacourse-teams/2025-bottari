@@ -1,16 +1,21 @@
-package com.bottari.presentation.view.home.market
+package com.bottari.presentation.view.home.template
 
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.fadeIn
+import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.databinding.FragmentTemplateBinding
-import com.bottari.presentation.view.home.market.adapter.TemplateAdapter
-import com.bottari.presentation.view.home.market.listener.OnTemplateClickListener
+import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
+import com.bottari.presentation.view.home.template.adapter.TemplateAdapter
+import com.bottari.presentation.view.home.template.listener.OnTemplateClickListener
 import com.bottari.presentation.view.template.TemplateActivity
 
 class TemplateFragment :
@@ -71,11 +76,16 @@ class TemplateFragment :
     private fun setupUI() {
         binding.rvBottariTemplate.adapter = adapter
         binding.rvBottariTemplate.layoutManager = LinearLayoutManager(requireContext())
+        binding.btnTemplateCreate.doOnPreDraw {
+            binding.rvBottariTemplate.addItemDecoration(BottomPaddingDecoration((it.height * PADDING_HEIGHT_RATIO).toInt()))
+        }
     }
 
     private fun setupListener() {
         binding.etBottariTemplateTitle.addTextChangedListener(this)
         binding.btnMyBottariTemplate.setOnClickListener { navigateToMyBottariTemplate() }
+        binding.btnTemplateCreate.setOnClickListener { navigateToCreateTemplate() }
+        binding.rvBottariTemplate.addOnScrollListener(handleScrollState())
     }
 
     private fun navigateToDetail(bottariTemplateId: Long) {
@@ -86,5 +96,30 @@ class TemplateFragment :
     private fun navigateToMyBottariTemplate() {
         val intent = TemplateActivity.newIntentForMyTemplate(requireContext())
         startActivity(intent)
+    }
+
+    private fun navigateToCreateTemplate() {
+        val intent = TemplateActivity.newIntentForCreateTemplate(requireContext())
+        startActivity(intent)
+    }
+
+    private fun handleScrollState(): RecyclerView.OnScrollListener =
+        object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(
+                recyclerView: RecyclerView,
+                newState: Int,
+            ) {
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_DRAGGING,
+                    RecyclerView.SCROLL_STATE_SETTLING,
+                    -> binding.btnTemplateCreate.fadeOut()
+
+                    RecyclerView.SCROLL_STATE_IDLE -> binding.btnTemplateCreate.fadeIn()
+                }
+            }
+        }
+
+    companion object {
+        private const val PADDING_HEIGHT_RATIO = 1.4f
     }
 }

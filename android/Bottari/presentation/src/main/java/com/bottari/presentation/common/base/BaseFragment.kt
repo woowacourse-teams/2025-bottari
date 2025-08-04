@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.bottari.presentation.view.common.LoadingDialog
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseFragment<VB : ViewBinding>(
@@ -45,8 +46,12 @@ abstract class BaseFragment<VB : ViewBinding>(
     protected fun showSnackbar(
         @StringRes message: Int,
         duration: Int = Snackbar.LENGTH_SHORT,
+        onDismissAction: (() -> Unit)? = null,
     ) {
-        view?.let { Snackbar.make(it, message, duration).show() }
+        val rootView = view ?: return
+        val snackbar = Snackbar.make(rootView, message, duration)
+        onDismissAction?.let { snackbar.onDismiss(it) }
+        snackbar.show()
     }
 
     protected fun toggleLoadingIndicator(isShow: Boolean) {
@@ -81,6 +86,17 @@ abstract class BaseFragment<VB : ViewBinding>(
         val systemBarInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
 
         return (imeInset - systemBarInset).coerceAtLeast(0)
+    }
+
+    private fun Snackbar.onDismiss(action: () -> Unit) {
+        val callback =
+            object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                override fun onDismissed(
+                    transientBottomBar: Snackbar?,
+                    event: Int,
+                ) = action()
+            }
+        addCallback(callback)
     }
 
     companion object {

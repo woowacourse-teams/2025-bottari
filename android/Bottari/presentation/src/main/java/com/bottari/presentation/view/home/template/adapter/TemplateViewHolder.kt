@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.market.adapter
+package com.bottari.presentation.view.home.template.adapter
 
 import android.content.Context
 import android.text.TextPaint
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTemplateBinding
 import com.bottari.presentation.model.BottariTemplateUiModel
-import com.bottari.presentation.view.home.market.listener.OnTemplateClickListener
+import com.bottari.presentation.view.home.template.listener.OnTemplateClickListener
 
 class TemplateViewHolder private constructor(
     private val binding: ItemTemplateBinding,

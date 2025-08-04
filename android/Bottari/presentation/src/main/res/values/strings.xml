@@ -168,11 +168,20 @@
 
     <!-- Bottari Template -->
     <string name="template_search_hint_text">찾고 싶은 보따리를 입력해 보세요</string>
-    <string name="template_my_template_btn"><![CDATA[내 보따리 보기 >]]></string>
+    <string name="template_my_template_btn_text"><![CDATA[내 보따리 보기 >]]></string>
     <string name="template_fetch_template_failure_text">보따리 템플릿을 불러오지 못했어요</string>
     <string name="template_detail_template_btn_text">이 보따리 가져오기</string>
     <string name="template_detail_fetch_failure_text">템플릿 상세 조회에 실패했어요</string>
     <string name="template_detail_take_failure_text">나의 보따리로 가져오는데 실패했어요</string>
+    <string name="template_create_btn_text">보따리 등록하기</string>
+
+    <!-- Bottari Template Create -->
+    <string name="template_create_title_text">모두의 보따리 생성</string>
+    <string name="template_fetch_bottari_details_failure_text">나의 보따리 목록 조회에 실패했어요</string>
+    <string name="template_create_failure_text">보따리를 등록하지 못했어요</string>
+    <string name="template_create_success_text">보따리를 등록했어요</string>
+    <string name="template_create_empty_view_title_text">현재 공유 가능한 보따리가 없습니다</string>
+    <string name="template_create_empty_view_description_text">보따리를 공유하려면 먼저 물건을 담아야 해요\n홈에서 나만의 보따리를 만들어보세요!</string>
 
     <!-- My Bottari Template -->
     <string name="template_my_template_title">내가 등록한 보따리</string>
