@@ -24,10 +24,13 @@ class TemplateViewHolder private constructor(
 
     fun bind(bottariTemplate: BottariTemplateUiModel) {
         bottariTemplateId = bottariTemplate.id
+        binding.tvBottariTemplateAuthor.text = bottariTemplate.author
+        binding.tvBottariTemplateTakenCount.text =
+            itemView.context.getString(R.string.template_taken_count_prefix, bottariTemplate.takenCount)
         binding.tvBottariTemplateTitle.text = bottariTemplate.title
-        binding.tvBottariTemplateItemsTitle.post {
-            val context = binding.tvBottariTemplateItemsTitle.context
-            val paint = binding.tvBottariTemplateItemsTitle.paint
+        binding.tvBottariTemplateItems.post {
+            val context = binding.tvBottariTemplateItems.context
+            val paint = binding.tvBottariTemplateItems.paint
             val width = binding.root.width
             val summary =
                 generateSummaryTextFitting(
@@ -36,7 +39,7 @@ class TemplateViewHolder private constructor(
                     availableWidth = width - TEXT_PADDING_OFFSET_PX,
                     itemNames = bottariTemplate.items.map { item -> item.name },
                 )
-            binding.tvBottariTemplateItemsTitle.text = summary
+            binding.tvBottariTemplateItems.text = summary
         }
     }
 
@@ -68,7 +71,7 @@ class TemplateViewHolder private constructor(
     }
 
     companion object {
-        private const val TEXT_PADDING_OFFSET_PX = 300
+        private const val TEXT_PADDING_OFFSET_PX = 200
 
         fun from(
             parent: ViewGroup,

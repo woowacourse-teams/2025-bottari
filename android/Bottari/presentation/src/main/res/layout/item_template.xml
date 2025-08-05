@@ -9,45 +9,61 @@
     android:layout_marginTop="@dimen/space_2x_small"
     android:layout_marginBottom="@dimen/space_x_small"
     android:background="@drawable/bg_white_radius_12dp"
-    android:elevation="2dp">
+    android:elevation="2dp"
+    android:paddingHorizontal="@dimen/space_large"
+    android:paddingVertical="@dimen/space_median">
 
     <TextView
         android:id="@+id/tv_bottari_template_title"
         style="@style/Pretendard_Medium_20"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_large"
-        android:layout_marginTop="@dimen/space_small"
-        android:layout_marginBottom="@dimen/space_x_small"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/tv_bottari_template_items_title"
-        app:layout_constraintEnd_toStartOf="@id/btn_bottari_template_more"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="우테코출근보따리글자수열다섯자" />
 
     <TextView
-        android:id="@+id/tv_bottari_template_items_title"
-        style="@style/Pretendard_Medium_14"
-        android:layout_width="0dp"
+        android:id="@+id/tv_bottari_template_items"
+        style="@style/Pretendard_Medium_16"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_large"
-        android:layout_marginBottom="@dimen/space_small"
+        android:layout_marginTop="@dimen/space_2x_small"
         android:maxLines="1"
         android:textColor="@color/gray_a6a6a6"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_bottari_template_title"
-        tools:text="사원증, 노트북, 물통 등 13개의 물건" />
+        tools:text="사원증, 노트북, 물통, 지갑 등 13개의 물건" />
 
-    <ImageView
-        android:id="@+id/btn_bottari_template_more"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:contentDescription="@string/common_option_btn_description"
-        android:padding="@dimen/space_small"
-        android:src="@drawable/btn_more"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tv_bottari_template_author"
+        style="@style/Pretendard_Medium_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:drawableStart="@drawable/ic_person"
+        android:drawablePadding="@dimen/space_2x_small"
+        android:maxLines="1"
+        android:textColor="#FF999999"
+        app:layout_constraintEnd_toStartOf="@id/tv_bottari_template_taken_count"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_bottari_template_items"
+        tools:text="다이스" />
+
+    <TextView
+        android:id="@+id/tv_bottari_template_taken_count"
+        style="@style/Pretendard_Medium_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_x_small"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:drawableStart="@drawable/ic_download"
+        android:drawablePadding="@dimen/space_2x_small"
+        android:maxLines="1"
+        android:textColor="#FF999999"
+        app:layout_constraintStart_toEndOf="@id/tv_bottari_template_author"
+        app:layout_constraintTop_toBottomOf="@id/tv_bottari_template_items"
+        tools:text="100024회" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
