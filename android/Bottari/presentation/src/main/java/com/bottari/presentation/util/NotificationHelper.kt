@@ -29,26 +29,8 @@ class NotificationHelper(
     }
 
     private fun createNotificationChannel() {
-        val audioAttributes =
-            AudioAttributes
-                .Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                .build()
-        val channel =
-            NotificationChannel(
-                BOTTARI_CHANNEL_ID,
-                context.getString(R.string.common_bottari_notification_channel_name),
-                NotificationManager.IMPORTANCE_HIGH,
-            ).apply {
-                enableLights(true)
-                enableVibration(true)
-                vibrationPattern = VIBRATION_PATTERN
-                setSound(
-                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
-                    audioAttributes,
-                )
-            }
+        val audioAttributes = createAudioAttributes()
+        val channel = createBottariNotificationChannel(audioAttributes)
         manager.createNotificationChannel(channel)
     }
 
@@ -84,6 +66,28 @@ class NotificationHelper(
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .build()
+
+    private fun createAudioAttributes(): AudioAttributes =
+        AudioAttributes
+            .Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .build()
+
+    private fun createBottariNotificationChannel(audioAttributes: AudioAttributes): NotificationChannel =
+        NotificationChannel(
+            BOTTARI_CHANNEL_ID,
+            context.getString(R.string.common_bottari_notification_channel_name),
+            NotificationManager.IMPORTANCE_HIGH,
+        ).apply {
+            enableLights(true)
+            enableVibration(true)
+            vibrationPattern = VIBRATION_PATTERN
+            setSound(
+                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
+                audioAttributes,
+            )
+        }
 
     companion object {
         private const val BOTTARI_CHANNEL_ID = "BOTTARI_CHANNEL_ID"
