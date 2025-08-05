@@ -10,6 +10,9 @@ import com.bottari.domain.Member;
 import com.bottari.dto.CreateBottariItemRequest;
 import com.bottari.dto.EditBottariItemsRequest;
 import com.bottari.dto.ReadBottariItemResponse;
+import com.bottari.service.fixture.BottariFixture;
+import com.bottari.service.fixture.BottariItemFixture;
+import com.bottari.service.fixture.MemberFixture;
 import com.bottari.error.BusinessException;
 import jakarta.persistence.EntityManager;
 import java.util.List;
@@ -37,17 +40,16 @@ class BottariItemServiceTest {
         @Test
         void getAllByBottariId() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari1 = new Bottari("title", member);
-            final Bottari bottari2 = new Bottari("title", member);
+            final Bottari bottari1 = BottariFixture.BOTTARI.get(member);
+            final Bottari bottari2 = BottariFixture.ANOTHER_BOTTARI.get(member);
             entityManager.persist(bottari1);
             entityManager.persist(bottari2);
 
-            final BottariItem bottariItem1 = new BottariItem("bottari1_item", bottari1);
-            final BottariItem bottariItem2 = new BottariItem("bottari2_item", bottari2);
+            final BottariItem bottariItem1 = BottariItemFixture.BOTTARI_ITEM_1.get(bottari1);
+            final BottariItem bottariItem2 = BottariItemFixture.BOTTARI_ITEM_2.get(bottari2);
             entityManager.persist(bottariItem1);
             entityManager.persist(bottariItem2);
 
@@ -80,11 +82,10 @@ class BottariItemServiceTest {
         @Test
         void create() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
             final CreateBottariItemRequest request = new CreateBottariItemRequest("itemName");
@@ -113,16 +114,16 @@ class BottariItemServiceTest {
         @Test
         void create_Exception_DuplicateName() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
-            final String duplicateItemName = "name";
-            final BottariItem bottariItem = new BottariItem(duplicateItemName, bottari);
+            final BottariItem bottariItem = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
             entityManager.persist(bottariItem);
+
+            final String duplicateItemName = bottariItem.getName();
 
             final CreateBottariItemRequest request = new CreateBottariItemRequest(duplicateItemName);
 
@@ -140,20 +141,20 @@ class BottariItemServiceTest {
         @Test
         void update() {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
-            final BottariItem bottariItem_1 = new BottariItem("name_1", bottari);
-            final BottariItem bottariItem_2 = new BottariItem("name_2", bottari);
-            final BottariItem bottariItem_3 = new BottariItem("name_3", bottari);
+            final BottariItem bottariItem_1 = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
+            final BottariItem bottariItem_2 = BottariItemFixture.BOTTARI_ITEM_2.get(bottari);
+            final BottariItem bottariItem_3 = BottariItemFixture.BOTTARI_ITEM_3.get(bottari);
             entityManager.persist(bottariItem_1);
             entityManager.persist(bottariItem_2);
             entityManager.persist(bottariItem_3);
 
-            final Bottari anotherBottari = new Bottari("another_title", member);
+            final Bottari anotherBottari = BottariFixture.ANOTHER_BOTTARI.get(member);
             entityManager.persist(anotherBottari);
 
             final BottariItem anotherBottariItem = new BottariItem("another_name", anotherBottari);
@@ -180,7 +181,8 @@ class BottariItemServiceTest {
                     .getResultList();
 
             assertAll(
-                    () -> assertThat(actual).extracting("name").containsExactly("name_3", "newName_1", "newName_2"),
+                    () -> assertThat(actual).extracting("name")
+                            .containsExactly(bottariItem_3.getName(), "newName_1", "newName_2"),
                     () -> assertThat(anotherActual).hasSize(1),
                     () -> assertThat(anotherActual.getFirst().getName()).isEqualTo("another_name")
             );
@@ -190,10 +192,10 @@ class BottariItemServiceTest {
         @Test
         void update_Exception_DuplicateDeleteIds() {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
             final List<Long> duplicateDeleteIds = List.of(1L, 1L, 2L);
@@ -222,15 +224,15 @@ class BottariItemServiceTest {
         @Test
         void update_Exception_NotExistsItemInBottari() {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
-            final BottariItem bottariItem_1 = new BottariItem("name_1", bottari);
-            final BottariItem bottariItem_2 = new BottariItem("name_2", bottari);
-            final BottariItem bottariItem_3 = new BottariItem("name_3", bottari);
+            final BottariItem bottariItem_1 = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
+            final BottariItem bottariItem_2 = BottariItemFixture.BOTTARI_ITEM_2.get(bottari);
+            final BottariItem bottariItem_3 = BottariItemFixture.BOTTARI_ITEM_3.get(bottari);
             entityManager.persist(bottariItem_1);
             entityManager.persist(bottariItem_2);
             entityManager.persist(bottariItem_3);
@@ -255,10 +257,10 @@ class BottariItemServiceTest {
         @Test
         void update_Exception_DuplicateItemNameInRequest() {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
             final Long bottariId = bottari.getId();
@@ -281,15 +283,15 @@ class BottariItemServiceTest {
         @Test
         void update_Exception_AlreadyExistsItemName() {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
-            final String duplicateName = "duplicateName";
-            final BottariItem bottariItem = new BottariItem(duplicateName, bottari);
+            final BottariItem bottariItem = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
             entityManager.persist(bottariItem);
+            final String duplicateName = bottariItem.getName();
 
             final Long bottariId = bottari.getId();
 
@@ -312,10 +314,10 @@ class BottariItemServiceTest {
         @Test
         void update_Exception_OverMaxBottariItemsCount() {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
             for (int i = 0; i < 198; i++) {
@@ -342,15 +344,13 @@ class BottariItemServiceTest {
         @Test
         void delete() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
-            final String duplicateItemName = "name";
-            final BottariItem bottariItem = new BottariItem(duplicateItemName, bottari);
+            final BottariItem bottariItem = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
             entityManager.persist(bottariItem);
 
             // when
@@ -368,15 +368,13 @@ class BottariItemServiceTest {
         @Test
         void check() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
-            final String duplicateItemName = "name";
-            final BottariItem bottariItem = new BottariItem(duplicateItemName, bottari);
+            final BottariItem bottariItem = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
             entityManager.persist(bottariItem);
 
             // when
@@ -391,8 +389,7 @@ class BottariItemServiceTest {
         @Test
         void check_Exception_NotExistsItem() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
             final Long notExistsBottariItemId = 1L;
@@ -411,15 +408,13 @@ class BottariItemServiceTest {
         @Test
         void uncheck() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final Bottari bottari = new Bottari("title", member);
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
             entityManager.persist(bottari);
 
-            final String duplicateItemName = "name";
-            final BottariItem bottariItem = new BottariItem(duplicateItemName, bottari);
+            final BottariItem bottariItem = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
             bottariItem.check();
             entityManager.persist(bottariItem);
 
@@ -435,8 +430,7 @@ class BottariItemServiceTest {
         @Test
         void uncheck_Exception_NotExistsItem() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
             final Long notExistsBottariItemId = 1L;

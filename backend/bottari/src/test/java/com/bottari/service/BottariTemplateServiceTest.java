@@ -13,6 +13,9 @@ import com.bottari.domain.BottariTemplateItem;
 import com.bottari.domain.Member;
 import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.dto.ReadBottariTemplateResponse;
+import com.bottari.service.fixture.BottariTemplateFixture;
+import com.bottari.service.fixture.BottariTemplateItemFixture;
+import com.bottari.service.fixture.MemberFixture;
 import com.bottari.dto.ReadNextBottariTemplateRequest;
 import com.bottari.dto.ReadNextBottariTemplateResponse;
 import com.bottari.error.BusinessException;
@@ -42,18 +45,18 @@ class BottariTemplateServiceTest {
         @Test
         void getById() {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final BottariTemplate template1 = new BottariTemplate("title_1", member);
-            final BottariTemplateItem item1 = new BottariTemplateItem("item_1", template1);
-            final BottariTemplateItem item2 = new BottariTemplateItem("item_2", template1);
+            final BottariTemplate template1 = BottariTemplateFixture.BOTTARI_TEMPLATE.get(member);
+            final BottariTemplateItem item1 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_1.get(template1);
+            final BottariTemplateItem item2 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_2.get(template1);
             entityManager.persist(template1);
             entityManager.persist(item1);
             entityManager.persist(item2);
 
-            final BottariTemplate template2 = new BottariTemplate("title_2", member);
-            final BottariTemplateItem item3 = new BottariTemplateItem("item_3", template2);
+            final BottariTemplate template2 = BottariTemplateFixture.BOTTARI_TEMPLATE_2.get(member);
+            final BottariTemplateItem item3 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_3.get(template2);
             entityManager.persist(template2);
             entityManager.persist(item3);
 
@@ -62,10 +65,10 @@ class BottariTemplateServiceTest {
 
             // then
             assertAll(
-                    () -> assertThat(actual.title()).isEqualTo("title_1"),
+                    () -> assertThat(actual.title()).isEqualTo(template1.getTitle()),
                     () -> assertThat(actual.items()).hasSize(2),
-                    () -> assertThat(actual.items().get(0).name()).isEqualTo("item_1"),
-                    () -> assertThat(actual.items().get(1).name()).isEqualTo("item_2")
+                    () -> assertThat(actual.items().get(0).name()).isEqualTo(item1.getName()),
+                    () -> assertThat(actual.items().get(1).name()).isEqualTo(item2.getName())
             );
         }
 
@@ -89,44 +92,43 @@ class BottariTemplateServiceTest {
         @Test
         void getBySsaid() {
             // given
-            final String memberASsaid = "memberA_ssaid";
-            final Member memberA = new Member(memberASsaid, "memberA");
-            entityManager.persist(memberA);
-            final Member memberB = new Member("memberB_ssaid", "memberB");
-            entityManager.persist(memberB);
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(anotherMember);
 
-            final BottariTemplate memberATemplate1 = new BottariTemplate("A_template1", memberA);
-            final BottariTemplateItem item1 = new BottariTemplateItem("item_1", memberATemplate1);
-            final BottariTemplateItem item2 = new BottariTemplateItem("item_2", memberATemplate1);
-            entityManager.persist(memberATemplate1);
+            final BottariTemplate memberTemplate1 = BottariTemplateFixture.BOTTARI_TEMPLATE.get(member);
+            final BottariTemplateItem item1 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_1.get(memberTemplate1);
+            final BottariTemplateItem item2 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_2.get(memberTemplate1);
+            entityManager.persist(memberTemplate1);
             entityManager.persist(item1);
             entityManager.persist(item2);
 
-            final BottariTemplate memberATemplate2 = new BottariTemplate("A_template2", memberA);
-            final BottariTemplateItem item3 = new BottariTemplateItem("item_3", memberATemplate2);
-            entityManager.persist(memberATemplate2);
+            final BottariTemplate memberTemplate2 = BottariTemplateFixture.BOTTARI_TEMPLATE_2.get(member);
+            final BottariTemplateItem item3 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_3.get(memberTemplate2);
+            entityManager.persist(memberTemplate2);
             entityManager.persist(item3);
 
-            final BottariTemplate memberBTemplate = new BottariTemplate("B_template", memberB);
-            final BottariTemplateItem item4 = new BottariTemplateItem("item_4", memberBTemplate);
-            entityManager.persist(memberBTemplate);
+            final BottariTemplate anotherMemberBottariTemplate = BottariTemplateFixture.BOTTARI_TEMPLATE.get(
+                    anotherMember);
+            final BottariTemplateItem item4 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_4.get(
+                    anotherMemberBottariTemplate);
+            entityManager.persist(anotherMemberBottariTemplate);
             entityManager.persist(item4);
 
             // when
-            final List<ReadBottariTemplateResponse> actual = bottariTemplateService.getBySsaid(memberASsaid);
+            final List<ReadBottariTemplateResponse> actual = bottariTemplateService.getBySsaid(member.getSsaid());
 
             // then
             assertAll(() -> {
                         assertThat(actual).hasSize(2);
-                        assertThat(actual.get(0).title()).isEqualTo("A_template2");
+                        assertThat(actual.get(0).title()).isEqualTo(memberTemplate2.getTitle());
                         assertThat(actual.get(0).items()).hasSize(1);
-                        assertThat(actual.get(0).takenCount()).isEqualTo(0);
-                        assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3");
-                        assertThat(actual.get(1).title()).isEqualTo("A_template1");
+                        assertThat(actual.get(0).items().getFirst().name()).isEqualTo(item3.getName());
+                        assertThat(actual.get(1).title()).isEqualTo(memberTemplate1.getTitle());
                         assertThat(actual.get(1).items()).hasSize(2);
-                        assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1");
-                        assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2");
-                        assertThat(actual.get(1).takenCount()).isEqualTo(0);
+                        assertThat(actual.get(1).items().get(0).name()).isEqualTo(item1.getName());
+                        assertThat(actual.get(1).items().get(1).name()).isEqualTo(item2.getName());
                     }
             );
         }
@@ -153,19 +155,19 @@ class BottariTemplateServiceTest {
             // given
             final String empty_query = "";
 
-            final Member member = new Member("ssaid", "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final BottariTemplate template1 = new BottariTemplate("older_template", member);
-            final BottariTemplateItem item1 = new BottariTemplateItem("item_1", template1);
-            final BottariTemplateItem item2 = new BottariTemplateItem("item_2", template1);
-            entityManager.persist(template1);
+            final BottariTemplate olderTemplate = BottariTemplateFixture.BOTTARI_TEMPLATE.get(member);
+            final BottariTemplateItem item1 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_1.get(olderTemplate);
+            final BottariTemplateItem item2 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_2.get(olderTemplate);
+            entityManager.persist(olderTemplate);
             entityManager.persist(item1);
             entityManager.persist(item2);
 
-            final BottariTemplate template2 = new BottariTemplate("newer_template", member);
-            final BottariTemplateItem item3 = new BottariTemplateItem("item_3", template2);
-            entityManager.persist(template2);
+            final BottariTemplate newerTemplate = BottariTemplateFixture.ANOTHER_BOTTARI_TEMPLATE.get(member);
+            final BottariTemplateItem item3 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_3.get(newerTemplate);
+            entityManager.persist(newerTemplate);
             entityManager.persist(item3);
 
             // when
@@ -174,15 +176,13 @@ class BottariTemplateServiceTest {
             // then
             assertAll(
                     () -> assertThat(actual).hasSize(2),
-                    () -> assertThat(actual.get(0).title()).isEqualTo("newer_template"),
+                    () -> assertThat(actual.get(0).title()).isEqualTo(newerTemplate.getTitle()),
                     () -> assertThat(actual.get(0).items()).hasSize(1),
-                    () -> assertThat(actual.get(0).items().getFirst().name()).isEqualTo("item_3"),
-                    () -> assertThat(actual.get(0).takenCount()).isEqualTo(0),
-                    () -> assertThat(actual.get(1).title()).isEqualTo("older_template"),
+                    () -> assertThat(actual.get(0).items().getFirst().name()).isEqualTo(item3.getName()),
+                    () -> assertThat(actual.get(1).title()).isEqualTo(olderTemplate.getTitle()),
                     () -> assertThat(actual.get(1).items()).hasSize(2),
-                    () -> assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1"),
-                    () -> assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2"),
-                    () -> assertThat(actual.get(1).takenCount()).isEqualTo(0)
+                    () -> assertThat(actual.get(1).items().get(0).name()).isEqualTo(item1.getName()),
+                    () -> assertThat(actual.get(1).items().get(1).name()).isEqualTo(item2.getName())
             );
         }
 
@@ -192,23 +192,23 @@ class BottariTemplateServiceTest {
             // given
             final String query = "title";
 
-            final Member member = new Member("ssaid", "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final BottariTemplate template1 = new BottariTemplate("title_1", member);
-            final BottariTemplateItem item1 = new BottariTemplateItem("item_1", template1);
-            final BottariTemplateItem item2 = new BottariTemplateItem("item_2", template1);
+            final BottariTemplate template1 = BottariTemplateFixture.BOTTARI_TEMPLATE.get(member);
+            final BottariTemplateItem item1 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_1.get(template1);
+            final BottariTemplateItem item2 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_2.get(template1);
             entityManager.persist(template1);
             entityManager.persist(item1);
             entityManager.persist(item2);
 
-            final BottariTemplate template2 = new BottariTemplate("title_2", member);
-            final BottariTemplateItem item3 = new BottariTemplateItem("item_3", template2);
+            final BottariTemplate template2 = BottariTemplateFixture.BOTTARI_TEMPLATE_2.get(member);
+            final BottariTemplateItem item3 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_3.get(template2);
             entityManager.persist(template2);
             entityManager.persist(item3);
 
             final BottariTemplate template3 = new BottariTemplate("subject", member);
-            final BottariTemplateItem item4 = new BottariTemplateItem("item_4", template3);
+            final BottariTemplateItem item4 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_4.get(template3);
             entityManager.persist(template3);
             entityManager.persist(item4);
 
@@ -218,13 +218,13 @@ class BottariTemplateServiceTest {
             // then
             assertAll(
                     () -> assertThat(actual).hasSize(2),
-                    () -> assertThat(actual.get(1).title()).isEqualTo("title_1"),
+                    () -> assertThat(actual.get(1).title()).isEqualTo(template1.getTitle()),
                     () -> assertThat(actual.get(1).items()).hasSize(2),
-                    () -> assertThat(actual.get(1).items().get(0).name()).isEqualTo("item_1"),
-                    () -> assertThat(actual.get(1).items().get(1).name()).isEqualTo("item_2"),
-                    () -> assertThat(actual.getFirst().title()).isEqualTo("title_2"),
+                    () -> assertThat(actual.get(1).items().get(0).name()).isEqualTo(item1.getName()),
+                    () -> assertThat(actual.get(1).items().get(1).name()).isEqualTo(item2.getName()),
+                    () -> assertThat(actual.getFirst().title()).isEqualTo(template2.getTitle()),
                     () -> assertThat(actual.getFirst().items()).hasSize(1),
-                    () -> assertThat(actual.getFirst().items().getFirst().name()).isEqualTo("item_3")
+                    () -> assertThat(actual.getFirst().items().getFirst().name()).isEqualTo(item3.getName())
             );
         }
     }
@@ -390,8 +390,7 @@ class BottariTemplateServiceTest {
         @Test
         void create() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
             final List<String> bottariTemplateItems = List.of("item1", "item2", "item3");
@@ -401,7 +400,7 @@ class BottariTemplateServiceTest {
             );
 
             // when
-            final Long actual = bottariTemplateService.create(ssaid, request);
+            final Long actual = bottariTemplateService.create(member.getSsaid(), request);
 
             // then
             final List<BottariTemplateItem> actualItems = entityManager.createQuery("""
@@ -440,8 +439,7 @@ class BottariTemplateServiceTest {
         @Test
         void create_Exception_DuplicateItemNameInRequest() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
             final List<String> bottariTemplateItems = List.of("item1", "duplicate_item", "duplicate_item");
@@ -451,7 +449,7 @@ class BottariTemplateServiceTest {
             );
 
             // when & then
-            assertThatThrownBy(() -> bottariTemplateService.create(ssaid, request))
+            assertThatThrownBy(() -> bottariTemplateService.create(member.getSsaid(), request))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("요청에 중복된 보따리 템플릿 물품이 있습니다.");
         }
@@ -464,23 +462,25 @@ class BottariTemplateServiceTest {
         @Test
         void createBottari() {
             // given
-            final Member templateOwner = new Member("owner_ssaid", "owner_name");
+            final Member templateOwner = MemberFixture.ANOTHER_MEMBER.get();
             entityManager.persist(templateOwner);
 
-            final BottariTemplate bottariTemplate = new BottariTemplate("title", templateOwner);
+            final BottariTemplate bottariTemplate = BottariTemplateFixture.BOTTARI_TEMPLATE.get(templateOwner);
             entityManager.persist(bottariTemplate);
 
-            final BottariTemplateItem bottariTemplateItem1 = new BottariTemplateItem("item1", bottariTemplate);
-            final BottariTemplateItem bottariTemplateItem2 = new BottariTemplateItem("item2", bottariTemplate);
+            final BottariTemplateItem bottariTemplateItem1 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_1.get(
+                    bottariTemplate);
+            final BottariTemplateItem bottariTemplateItem2 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_2.get(
+                    bottariTemplate);
             entityManager.persist(bottariTemplateItem1);
             entityManager.persist(bottariTemplateItem2);
 
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
             // when
-            final Long actualBottariId = bottariTemplateService.createBottari(bottariTemplate.getId(), ssaid);
+            final Long actualBottariId = bottariTemplateService.createBottari(bottariTemplate.getId(),
+                    member.getSsaid());
             final Bottari actualBottari = entityManager.find(Bottari.class, actualBottariId);
             final List<BottariItem> actualBottariItems = entityManager.createQuery(
                             "SELECT i FROM BottariItem i WHERE i.bottari.id = :bottariId",
@@ -584,7 +584,7 @@ class BottariTemplateServiceTest {
         @Test
         void createBottari_Exception_NotExistsTemplate() {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
             final Long notExistsTemplateId = 1L;
 
@@ -598,9 +598,9 @@ class BottariTemplateServiceTest {
         @Test
         void createBottari_Exception_NotExistsMember() {
             // given
-            final Member templateOwner = new Member("owner_ssaid", "owner_name");
+            final Member templateOwner = MemberFixture.MEMBER.get();
             entityManager.persist(templateOwner);
-            final BottariTemplate bottariTemplate = new BottariTemplate("title", templateOwner);
+            final BottariTemplate bottariTemplate = BottariTemplateFixture.BOTTARI_TEMPLATE.get(templateOwner);
             entityManager.persist(bottariTemplate);
 
             final String notExistsSsaid = "invalid_ssaid";
@@ -619,24 +619,26 @@ class BottariTemplateServiceTest {
         @Test
         void deleteById() {
             // given
-            final String ssaid = "ssaid";
-            final Member member = new Member("ssaid", "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final BottariTemplate bottariTemplate1 = new BottariTemplate("title1", member);
-            final BottariTemplate bottariTemplate2 = new BottariTemplate("title2", member);
+            final BottariTemplate bottariTemplate1 = BottariTemplateFixture.BOTTARI_TEMPLATE.get(member);
+            final BottariTemplate bottariTemplate2 = BottariTemplateFixture.BOTTARI_TEMPLATE_2.get(member);
             entityManager.persist(bottariTemplate1);
             entityManager.persist(bottariTemplate2);
 
-            final BottariTemplateItem bottariTemplate1Item1 = new BottariTemplateItem("name1", bottariTemplate1);
-            final BottariTemplateItem bottariTemplate1Item2 = new BottariTemplateItem("name2", bottariTemplate1);
-            final BottariTemplateItem bottariTemplate2Item1 = new BottariTemplateItem("name3", bottariTemplate2);
+            final BottariTemplateItem bottariTemplate1Item1 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_1.get(
+                    bottariTemplate1);
+            final BottariTemplateItem bottariTemplate1Item2 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_2.get(
+                    bottariTemplate1);
+            final BottariTemplateItem bottariTemplate2Item1 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_3.get(
+                    bottariTemplate2);
             entityManager.persist(bottariTemplate1Item1);
             entityManager.persist(bottariTemplate1Item2);
             entityManager.persist(bottariTemplate2Item1);
 
             // when
-            bottariTemplateService.deleteById(bottariTemplate1.getId(), ssaid);
+            bottariTemplateService.deleteById(bottariTemplate1.getId(), member.getSsaid());
 
             // then
             final List<BottariTemplate> remainingTemplates = entityManager
@@ -675,11 +677,12 @@ class BottariTemplateServiceTest {
         @Test
         void deleteById_Exception_NotOwner() {
             // given
-            final String anotherSsaid = "another_ssaid";
-            final Member member = new Member("ssaid", "name");
+            final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
-            final BottariTemplate bottariTemplate = new BottariTemplate("title", member);
+            final BottariTemplate bottariTemplate = BottariTemplateFixture.BOTTARI_TEMPLATE.get(member);
             entityManager.persist(bottariTemplate);
+
+            final String anotherSsaid = "another_ssaid";
 
             // when & then
             assertThatThrownBy(() -> bottariTemplateService.deleteById(bottariTemplate.getId(), anotherSsaid))
