@@ -25,9 +25,6 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
             INVALID_BOTTARI_ID,
         )
     }
-    private val bottariTitle: String by lazy {
-        intent.getStringExtra(EXTRA_BOTTARI_TITLE).orEmpty()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +33,7 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
     }
 
     private fun setupUI(savedInstanceState: Bundle?) {
-        binding.tvBottariTitle.text = bottariTitle
+        binding.tvBottariTitle.text = intent.getStringExtra(EXTRA_BOTTARI_TITLE).orEmpty()
         if (savedInstanceState != null) return
         if (notificationFlag) {
             navigateToChecklistForNotification()
