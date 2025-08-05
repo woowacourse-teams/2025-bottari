@@ -77,12 +77,10 @@ class NotificationHelper(
         NotificationCompat
             .Builder(context, BOTTARI_CHANNEL_ID)
             .setSmallIcon(R.drawable.bottari)
-            .setContentTitle(context.getString(R.string.common_bottari_notification_title))
-            .setContentText(
-                context
-                    .getString(R.string.common_bottari_notification_message)
-                    .format(bottariTitle),
-            ).setContentIntent(intent)
+            .setContentTitle(
+                context.getString(R.string.common_bottari_notification_title).format(bottariTitle),
+            ).setContentText(context.getString(R.string.common_bottari_notification_message))
+            .setContentIntent(intent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .build()

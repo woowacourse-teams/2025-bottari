@@ -90,8 +90,8 @@
     
     <!--  Common: 보따리 알림  -->
     <string name="common_bottari_notification_channel_name">보따리 알림</string>
-    <string name="common_bottari_notification_title">보따리 알림</string>
-    <string name="common_bottari_notification_message">%s 챙길 시간이에요!</string>
+    <string name="common_bottari_notification_title">%s 챙길 시간이에요!</string>
+    <string name="common_bottari_notification_message">보따리를 열어보고 준비 완료했는지 확인해보세요!</string>
 
     <!--  Splash Screen  -->
     <string name="splash_screen_permission_denied_text">권한이 거부되어 일부 기능이 제한돼요.\n기능 사용 시 다시 요청드릴게요.</string>
