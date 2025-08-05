@@ -449,7 +449,7 @@ class BottariTemplateServiceTest {
             );
 
             // when & then
-            assertThatThrownBy(() -> bottariTemplateService.create(ssaid, request))
+            assertThatThrownBy(() -> bottariTemplateService.create(member.getSsaid(), request))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("요청에 중복된 보따리 템플릿 물품이 있습니다.");
         }
