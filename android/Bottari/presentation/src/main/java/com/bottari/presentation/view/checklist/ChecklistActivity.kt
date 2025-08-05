@@ -39,7 +39,7 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
         binding.tvBottariTitle.text = bottariTitle
         if (savedInstanceState != null) return
         if (notificationFlag) {
-            openChecklistForNotification()
+            navigateToChecklistForNotification()
             return
         }
         navigateToMainChecklist()
@@ -67,21 +67,9 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
         }
     }
 
-    private fun openChecklistForNotification() {
-        supportFragmentManager.commit {
-            replace(
-                R.id.fcv_checklist,
-                MainChecklistFragment.newInstance(bottariId),
-            )
-        }
-        supportFragmentManager.commit {
-            setSlideFastAnimation()
-            replace(
-                R.id.fcv_checklist,
-                SwipeChecklistFragment.newInstance(bottariId),
-            )
-            addToBackStack(SwipeChecklistFragment::class.simpleName)
-        }
+    private fun navigateToChecklistForNotification() {
+        replaceChecklistFragment(MainChecklistFragment.newInstance(bottariId), false)
+        replaceChecklistFragment(SwipeChecklistFragment.newInstance(bottariId), true)
         updateToolbar(false)
     }
 
