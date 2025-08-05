@@ -228,6 +228,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             AlarmEditFragment::class.java,
             AlarmEditFragment.newBundle(
                 bottariId = uiState.id,
+                bottariTitle = uiState.title,
                 alarm = uiState.alarm,
             ),
         )

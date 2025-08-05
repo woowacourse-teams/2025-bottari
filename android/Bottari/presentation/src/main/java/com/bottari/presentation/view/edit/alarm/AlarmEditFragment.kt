@@ -15,6 +15,7 @@ import com.bottari.presentation.common.extension.safeArgument
 import com.bottari.presentation.databinding.FragmentAlarmEditBinding
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
+import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.view.common.decoration.ItemSpacingDecoration
 import com.bottari.presentation.view.edit.alarm.adapter.DayOfWeekAdapter
 import com.shawnlin.numberpicker.NumberPicker
@@ -27,11 +28,13 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
     private val viewModel: AlarmEditViewModel by viewModels {
         AlarmEditViewModel.Factory(
             ssaid = requireContext().getSSAID(),
-            bottariId = safeArgument { getLong(EXTRA_BOTTARI_ID) },
-            alarm = safeArgument { getParcelableCompat(EXTRA_ALARM) },
+            bottariId = safeArgument { getLong(ARG_BOTTARI_ID) },
+            bottariTitle = safeArgument { getString(ARG_BOTTARI_TITLE) },
+            alarm = safeArgument { getParcelableCompat(ARG_ALARM) },
         )
     }
     private val adapter: DayOfWeekAdapter by lazy { DayOfWeekAdapter(viewModel::updateDaysOfWeek) }
+    private val scheduler: AlarmScheduler by lazy { AlarmScheduler() }
     private val hourPickers: List<NumberPicker> by lazy {
         listOf(
             binding.layoutNoRepeatAlarmTime.npAlarmTimeHour,
@@ -102,17 +105,19 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
 
     private fun handleAlarmEvent(uiEvent: AlarmUiEvent) {
         when (uiEvent) {
-            AlarmUiEvent.AlarmCreateSuccess -> {
+            is AlarmUiEvent.AlarmCreateSuccess -> {
+                scheduler.scheduleAlarm(uiEvent.notification)
                 showSnackbar(R.string.alarm_edit_create_success_text)
                 parentFragmentManager.popBackStack()
             }
 
-            AlarmUiEvent.AlarmCreateFailure -> showSnackbar(R.string.alarm_edit_create_failure_text)
-            AlarmUiEvent.AlarmSaveSuccess -> {
+            is AlarmUiEvent.AlarmSaveSuccess -> {
+                scheduler.scheduleAlarm(uiEvent.notification)
                 showSnackbar(R.string.alarm_edit_save_success_text)
                 parentFragmentManager.popBackStack()
             }
 
+            AlarmUiEvent.AlarmCreateFailure -> showSnackbar(R.string.alarm_edit_create_failure_text)
             AlarmUiEvent.AlarmSaveFailure -> showSnackbar(R.string.alarm_edit_save_failure_text)
         }
     }
@@ -216,15 +221,18 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
     }
 
     companion object {
-        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
-        private const val EXTRA_ALARM = "EXTRA_ALARM"
+        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
+        private const val ARG_BOTTARI_TITLE = "ARG_BOTTARI_TITLE"
+        private const val ARG_ALARM = "ARG_ALARM"
 
         fun newBundle(
             bottariId: Long,
+            bottariTitle: String,
             alarm: AlarmUiModel?,
         ) = Bundle().apply {
-            putLong(EXTRA_BOTTARI_ID, bottariId)
-            putParcelable(EXTRA_ALARM, alarm)
+            putLong(ARG_BOTTARI_ID, bottariId)
+            putString(ARG_BOTTARI_TITLE, bottariTitle)
+            putParcelable(ARG_ALARM, alarm)
         }
     }
 }

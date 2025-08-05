@@ -19,6 +19,7 @@ import com.bottari.presentation.mapper.AlarmMapper.toDomain
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.DayOfWeekUiModel
+import com.bottari.presentation.model.NotificationUiModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
@@ -30,9 +31,7 @@ class AlarmEditViewModel(
 ) : ViewModel() {
     private val _uiState: MutableLiveData<AlarmUiState> =
         MutableLiveData(
-            AlarmUiState(
-                alarm = stateHandle[KEY_ALARM] ?: AlarmUiModel.DEFAULT_ALARM_UI_MODEL,
-            ),
+            AlarmUiState(alarm = stateHandle[KEY_ALARM] ?: AlarmUiModel.DEFAULT_ALARM_UI_MODEL),
         )
     val uiState: LiveData<AlarmUiState> get() = _uiState
 
@@ -41,11 +40,16 @@ class AlarmEditViewModel(
 
     private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
+    private val bottariTitle: String =
+        stateHandle[KEY_BOTTARI_TITLE] ?: error(
+            ERROR_REQUIRE_BOTTARI_TITLE,
+        )
+    private val alarmUiModel: AlarmUiModel get() = _uiState.value!!.alarm
 
     fun updateAlarm() {
-        val currentAlarm = _uiState.value?.alarm ?: return
+        val currentAlarm = alarmUiModel
         if (currentAlarm.type == AlarmTypeUiModel.EVERYWEEK_REPEAT &&
-            currentAlarm.daysOfWeek.all { it.isChecked.not() }
+            currentAlarm.daysOfWeek.none { it.isChecked }
         ) {
             return
         }
@@ -99,7 +103,8 @@ class AlarmEditViewModel(
         viewModelScope.launch {
             createAlarmUseCase(ssaid, bottariId, alarm)
                 .onSuccess {
-                    _uiEvent.value = AlarmUiEvent.AlarmCreateSuccess
+                    _uiEvent.value =
+                        AlarmUiEvent.AlarmCreateSuccess(createNotification())
                 }.onFailure {
                     _uiEvent.value = AlarmUiEvent.AlarmCreateFailure
                 }
@@ -112,7 +117,8 @@ class AlarmEditViewModel(
         viewModelScope.launch {
             saveAlarmUseCase(ssaid, alarm.id!!, alarm)
                 .onSuccess {
-                    _uiEvent.value = AlarmUiEvent.AlarmSaveSuccess
+                    _uiEvent.value =
+                        AlarmUiEvent.AlarmSaveSuccess(createNotification())
                 }.onFailure {
                     _uiEvent.value = AlarmUiEvent.AlarmSaveFailure
                 }
@@ -121,24 +127,30 @@ class AlarmEditViewModel(
         _uiState.update { copy(isLoading = false) }
     }
 
+    private fun createNotification(): NotificationUiModel = NotificationUiModel(id = bottariId, title = bottariTitle, alarm = alarmUiModel)
+
     companion object {
         private const val KEY_SSAID = "KEY_SSAID"
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
+        private const val KEY_BOTTARI_TITLE = "KEY_BOTTARI_TITLE"
         private const val KEY_ALARM = "KEY_ALARM"
         private const val ERROR_REQUIRE_SSAID = "[ERROR] SSAID가 존재하지 않습니다."
         private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
+        private const val ERROR_REQUIRE_BOTTARI_TITLE = "[ERROR] 보따리 이름이 존재하지 않습니다."
 
         fun Factory(
             ssaid: String,
             bottariId: Long?,
+            bottariTitle: String?,
             alarm: AlarmUiModel?,
         ): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_ALARM] = alarm
                     stateHandle[KEY_SSAID] = ssaid
                     stateHandle[KEY_BOTTARI_ID] = bottariId
+                    stateHandle[KEY_BOTTARI_TITLE] = bottariTitle
+                    stateHandle[KEY_ALARM] = alarm
                     AlarmEditViewModel(
                         stateHandle = stateHandle,
                         createAlarmUseCase = UseCaseProvider.createAlarmUseCase,
