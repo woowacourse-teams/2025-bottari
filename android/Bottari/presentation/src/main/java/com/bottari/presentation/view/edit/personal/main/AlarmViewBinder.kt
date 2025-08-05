@@ -61,7 +61,7 @@ class AlarmViewBinder(
     }
 
     private fun formatEveryWeek(alarm: AlarmUiModel): String {
-        val checkedDays = alarm.daysOfWeek.filter { it.isChecked }
+        val checkedDays = alarm.daysOfWeek.filter { dayOfWeek -> dayOfWeek.isChecked }
         return buildString {
             append(context.getString(R.string.bottari_item_alarm_repeat_everyweek_text))
             append(separator)
