@@ -17,7 +17,7 @@ class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChe
     private val viewModel: ChecklistViewModel by activityViewModels {
         ChecklistViewModel.Factory(
             requireContext().getSSAID(),
-            getBottariId(),
+            requireArguments().getLong(ARG_BOTTARI_ID),
         )
     }
     private val adapter: MainChecklistAdapter by lazy {
@@ -32,8 +32,6 @@ class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChe
         setupObserver()
         setupUI()
     }
-
-    private fun getBottariId(): Long = requireArguments().getLong(ARG_BOTTARI_ID)
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->

@@ -29,7 +29,7 @@ class SwipeChecklistFragment :
     private val viewModel: ChecklistViewModel by activityViewModels {
         ChecklistViewModel.Factory(
             requireContext().getSSAID(),
-            getBottariId(),
+            requireArguments().getLong(ARG_BOTTARI_ID),
         )
     }
     private val adapter: SwipeCheckListAdapter by lazy { SwipeCheckListAdapter() }
@@ -73,8 +73,6 @@ class SwipeChecklistFragment :
     }
 
     override fun onCardRewound() {}
-
-    private fun getBottariId(): Long = requireArguments().getLong(ARG_BOTTARI_ID)
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
