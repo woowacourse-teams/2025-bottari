@@ -11,7 +11,6 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 class AlarmViewBinder(
-    private val binding: FragmentPersonalBottariEditBinding,
     private val context: Context,
 ) {
     private val dateFormat: String by lazy {
@@ -25,12 +24,13 @@ class AlarmViewBinder(
     }
 
     fun bind(
+        binding: FragmentPersonalBottariEditBinding,
         alarm: AlarmUiModel?,
-        isSwitchChecked: Boolean,
     ) {
+        val isSwitchChecked = binding.switchAlarm.isChecked
         val hasAlarm = alarm != null
         binding.switchAlarm.isChecked = alarm?.isActive ?: false
-        toggleAlarmView(isSwitchChecked, hasAlarm)
+        toggleAlarmView(binding, isSwitchChecked, hasAlarm)
 
         if (alarm == null) return
 
@@ -46,6 +46,7 @@ class AlarmViewBinder(
     }
 
     private fun toggleAlarmView(
+        binding: FragmentPersonalBottariEditBinding,
         isActive: Boolean,
         hasAlarm: Boolean,
     ) {

@@ -175,7 +175,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun setupAlarm(alarm: AlarmUiModel?) {
-        alarmViewBinder.bind(alarm, binding.switchAlarm.isChecked)
+        alarmViewBinder.bind(binding, alarm)
     }
 
     private fun toggleAlarmSelection(
@@ -213,7 +213,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     private fun setupAlarmView() {
         alarmViewBinder =
             AlarmViewBinder(
-                binding,
                 requireContext(),
             )
     }
