@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Toolbar
+        android:id="@+id/toolbar_alarm_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentInsetStart="0dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btn_close"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/common_close_btn_description"
+            android:padding="@dimen/space_small"
+            android:src="@drawable/btn_close" />
+
+        <TextView
+            android:id="@+id/tv_alarm_edit_title"
+            style="@style/Pretendard_Bold_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/alarm_edit_title_text"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/btn_confirm"
+            style="@style/Pretendard_SemiBold_16"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:gravity="center"
+            android:text="@string/common_confirm_btn_text"
+            android:textColor="@color/black" />
+    </Toolbar>
+
+    <ScrollView
+        android:id="@+id/sv_alarm_edit"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/gray_f8f8f8"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_alarm_edit">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_alarm_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/space_median"
+                android:background="@drawable/bg_white_radius_12dp"
+                android:elevation="2dp"
+                android:padding="@dimen/space_median">
+
+                <TextView
+                    android:id="@+id/tv_alarm_type"
+                    style="@style/Pretendard_Bold_20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/space_x_small"
+                    android:text="@string/alarm_edit_type_title_text"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_alarm_type_no_repeat"
+                    style="@style/Pretendard_Medium_14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_median"
+                    android:background="@drawable/bg_white_radius_12dp_gray_stroke"
+                    android:paddingVertical="@dimen/space_median"
+                    android:paddingStart="@dimen/space_median"
+                    android:paddingEnd="0dp"
+                    android:text="@string/alarm_edit_type_none_text"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/tv_alarm_type" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group_alarm_no_repeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:constraint_referenced_ids="tv_no_repeat_alarm_date, np_no_repeat_alarm_date_day, np_no_repeat_alarm_date_month, layout_no_repeat_alarm_time" />
+
+                <TextView
+                    android:id="@+id/tv_no_repeat_alarm_date"
+                    style="@style/Pretendard_Bold_20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_median"
+                    android:layout_marginTop="@dimen/space_median"
+                    android:text="@string/alarm_edit_date_title_text"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_alarm_type_no_repeat" />
+
+                <com.shawnlin.numberpicker.NumberPicker
+                    android:id="@+id/np_no_repeat_alarm_date_month"
+                    style="@style/CustomNumberPicker"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_x_large"
+                    app:layout_constraintEnd_toStartOf="@id/np_no_repeat_alarm_date_day"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_no_repeat_alarm_date"
+                    app:np_max="12"
+                    app:np_min="1" />
+
+                <com.shawnlin.numberpicker.NumberPicker
+                    android:id="@+id/np_no_repeat_alarm_date_day"
+                    style="@style/CustomNumberPicker"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/space_x_large"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/np_no_repeat_alarm_date_month"
+                    app:layout_constraintTop_toBottomOf="@id/tv_no_repeat_alarm_date"
+                    app:np_max="31"
+                    app:np_min="1" />
+
+                <include
+                    android:id="@+id/layout_no_repeat_alarm_time"
+                    layout="@layout/layout_alarm_edit_time_picker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/np_no_repeat_alarm_date_month" />
+
+                <TextView
+                    android:id="@+id/tv_alarm_type_everyday_repeat"
+                    style="@style/Pretendard_Medium_14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_median"
+                    android:background="@drawable/bg_white_radius_12dp_gray_stroke"
+                    android:paddingVertical="@dimen/space_median"
+                    android:paddingStart="@dimen/space_median"
+                    android:paddingEnd="0dp"
+                    android:text="@string/alarm_edit_type_everyday_text"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/layout_no_repeat_alarm_time" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group_alarm_everyday_repeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:constraint_referenced_ids="layout_everyday_repeat_alarm_time" />
+
+                <include
+                    android:id="@+id/layout_everyday_repeat_alarm_time"
+                    layout="@layout/layout_alarm_edit_time_picker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/tv_alarm_type_everyday_repeat" />
+
+                <TextView
+                    android:id="@+id/tv_alarm_type_everyweek_repeat"
+                    style="@style/Pretendard_Medium_14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_median"
+                    android:background="@drawable/bg_white_radius_12dp_gray_stroke"
+                    android:paddingVertical="@dimen/space_median"
+                    android:paddingStart="@dimen/space_median"
+                    android:paddingEnd="0dp"
+                    android:text="@string/alarm_edit_type_everyweek_text"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/layout_everyday_repeat_alarm_time" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group_alarm_everyweek_repeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:constraint_referenced_ids="tv_everyweek_repeat_alarm_day_of_week ,rv_day_of_week, layout_everyweek_repeat_alarm_time" />
+
+                <TextView
+                    android:id="@+id/tv_everyweek_repeat_alarm_day_of_week"
+                    style="@style/Pretendard_Bold_20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_median"
+                    android:layout_marginTop="@dimen/space_median"
+                    android:text="@string/alarm_edit_day_of_week_title_text"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_alarm_type_everyweek_repeat" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_day_of_week"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/space_small"
+                    android:layout_marginStart="@dimen/space_x_small"
+                    android:fadingEdgeLength="@dimen/space_2x_small"
+                    android:requiresFadingEdge="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/tv_everyweek_repeat_alarm_day_of_week"
+                    tools:listitem="@layout/item_day_of_week" />
+
+                <include
+                    android:id="@+id/layout_everyweek_repeat_alarm_time"
+                    layout="@layout/layout_alarm_edit_time_picker"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintTop_toBottomOf="@id/rv_day_of_week" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_alarm_location_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_median"
+                android:layout_marginTop="@dimen/space_2x_small"
+                android:layout_marginBottom="@dimen/space_2x_small"
+                android:background="@drawable/bg_white_radius_12dp"
+                android:elevation="2dp"
+                android:padding="@dimen/space_median">
+
+                <TextView
+                    android:id="@+id/tv_alarm_location"
+                    style="@style/Pretendard_Bold_20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/space_x_small"
+                    android:text="@string/alarm_edit_location_title_text"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/btn_alarm_current_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/alarm_edit_location_btn_description"
+                    android:src="@drawable/btn_location"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

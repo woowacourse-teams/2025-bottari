@@ -16,8 +16,15 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://jitpack.io")
+        }
     }
 }
 
 rootProject.name = "Bottari"
 include(":app")
+include(":di")
+include(":domain")
+include(":presentation")
+include(":data")

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application>
+        <activity
+            android:name=".view.main.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".view.home.HomeActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustNothing"
+            android:launchMode="singleTask"/>
+
+        <activity
+            android:name=".view.checklist.ChecklistActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.edit.personal.PersonalBottariEditActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.setting.SettingActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.template.TemplateActivity"
+            android:exported="false" />
+
+        <receiver android:name=".receiver.AlarmReceiver" />
+    </application>
+
+</manifest>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.home.HomeActivity">
+
+    <Toolbar
+        android:id="@+id/toolbar_home"
+        style="@style/Pretendard_Medium_20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentInsetStart="@dimen/space_x_large"
+        android:title="@string/home_nav_bottari_title_text"
+        android:titleTextColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/fcv_home"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btn_setting"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:contentDescription="@string/common_setting_btn_description"
+            android:padding="@dimen/space_small"
+            android:src="@drawable/btn_setting" />
+    </Toolbar>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_home"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bnv_home"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_home" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bnv_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_home_nav"
+        android:elevation="4dp"
+        app:itemIconSize="34dp"
+        app:itemIconTint="@color/bottom_nav_selector"
+        app:itemPaddingTop="@dimen/space_median"
+        app:itemTextAppearanceActive="@style/Bottari.BottomNavigation.TextAppearance"
+        app:itemTextAppearanceInactive="@style/Bottari.BottomNavigation.TextAppearance"
+        app:itemTextColor="@color/bottom_nav_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/home_nav" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

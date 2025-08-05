@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_personal_bottari_item_empty_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="@dimen/space_small"
+        android:contentDescription="@string/bottari_personal_item_empty_icon_description"
+        android:src="@drawable/ic_bottari_item_empty_view"
+        app:layout_constraintBottom_toTopOf="@+id/tv_personal_bottari_item_empty_view_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/gray_a6a6a6" />
+
+    <TextView
+        android:id="@+id/tv_personal_bottari_item_empty_view_title"
+        style="@style/Pretendard_Bold_20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bottari_edit_item_empty_view_title"
+        android:textColor="@color/gray_a6a6a6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_personal_bottari_item_empty_view_text"
+        style="@style/Pretendard_Medium_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_small"
+        android:gravity="center"
+        android:text="@string/bottari_edit_item_empty_view_text"
+        android:textColor="@color/gray_a6a6a6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_personal_bottari_item_empty_view_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

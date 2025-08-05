@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.setting.SettingActivity">
+
+    <Toolbar
+        android:id="@+id/toolbar_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentInsetStart="0dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btn_previous"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/common_previous_btn_description"
+            android:padding="@dimen/space_small"
+            android:src="@drawable/btn_previous" />
+
+        <TextView
+            android:id="@+id/tv_bottari_title"
+            style="@style/Pretendard_Bold_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/setting_toolbar_title_text"
+            android:textColor="@color/black" />
+    </Toolbar>
+
+    <TextView
+        android:id="@+id/btn_privacy_policy"
+        style="@style/Pretendard_Medium_16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_median"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:elevation="2dp"
+        android:paddingHorizontal="@dimen/space_median"
+        android:paddingVertical="@dimen/space_small"
+        android:text="@string/setting_privacy_policy_title_text"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_setting" />
+
+    <TextView
+        android:id="@+id/btn_user_feedback"
+        style="@style/Pretendard_Medium_16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_median"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:elevation="2dp"
+        android:paddingHorizontal="@dimen/space_median"
+        android:paddingVertical="@dimen/space_small"
+        android:text="@string/setting_user_feedback_title_text"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/btn_privacy_policy" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

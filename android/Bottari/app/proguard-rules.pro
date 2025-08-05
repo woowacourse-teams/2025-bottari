@@ -1,21 +1,41 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# ===== 기본 유지 설정 =====
+# 애플리케이션의 모든 클래스 및 메서드 이름은 난독화되더라도 앱의 진입점은 유지해야 함
+-keep class com.bottari.** { *; }
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# ===== Android 필수 =====
+-keepclassmembers class * extends android.app.Activity {
+    public void *(android.view.View);
+}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# ViewBinding 유지 (예: XxxBinding)
+-keep class **_ViewBinding { *; }
+-keep class **Binding { *; }
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# ===== Retrofit / OkHttp =====
+# Retrofit 인터페이스와 모델 클래스 보존
+-keepattributes Signature
+-keepattributes RuntimeVisibleAnnotations
+-keep class retrofit2.** { *; }
+-keep interface retrofit2.** { *; }
+-keep class kotlinx.serialization.** { *; }
+
+# ===== Firebase Crashlytics =====
+# stack trace 정확히 보고하기 위한 유지 설정
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
+
+# ===== Kotlin =====
+-keepclassmembers class kotlin.Metadata { *; }
+-dontwarn kotlin.**
+-dontnote kotlin.**
+
+# ===== Timber (로그는 제거 가능) =====
+-assumenosideeffects class timber.log.Timber {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+    public static *** w(...);
+}
+
+# ===== 기타 =====
+-dontwarn org.jetbrains.annotations.**

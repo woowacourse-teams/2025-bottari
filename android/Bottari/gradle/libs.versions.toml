@@ -1,26 +1,131 @@
 [versions]
+# Android Gradle Plugin & Kotlin
 agp = "8.9.0"
 kotlin = "2.0.21"
+jetbrainsKotlinJvm = "2.0.21"
+kotlinxCoroutinesCore = "1.10.2"
+
+# AndroidX
 coreKtx = "1.16.0"
-junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
 appcompat = "1.7.1"
-material = "1.12.0"
 activity = "1.10.1"
+fragment = "1.8.8"
 constraintlayout = "2.2.1"
 
+# UI Components
+material = "1.12.0"
+cardstackview = "3.0.0"
+flexbox = "3.0.0"
+numberPicker = "2.4.13"
+spinkit = "1.4.0"
+
+# Network
+retrofit = "3.0.0"
+okhttp = "4.12.0"
+kotlinxSerializationJson = "1.8.1"
+retrofit2-kotlinx-serialization-converter = "1.0.0"
+
+# Local DB
+room = "2.7.2"
+datastore = "1.1.7"
+
+# Testing
+junit = "4.13.2"
+junit-jupiter = "5.12.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+kotestVersion = "5.9.1"
+mockk = "1.14.4"
+
+# Code Quality
+ktlint = "13.0.0"
+
+# Logging
+timber = "5.0.1"
+
+# Firebase
+firebaseBom = "34.0.0"
+googleGmsGoogleServices = "4.4.3"
+googleFirebaseCrashlytics = "3.0.5"
+
 [libraries]
+# --- AndroidX Core ---
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+
+# --- UI ---
+cardstackview = { module = "com.github.jens-muenker:CardStackView", version.ref = "cardstackview" }
+flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
+number-picker = { module = "io.github.ShawnLin013:number-picker", version.ref = "numberPicker" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+spinkit = { module = "com.github.ybq:Android-SpinKit", version.ref = "spinkit" }
+
+# --- Network ---
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2-kotlinx-serialization-converter" }
+
+# --- Local DB ---
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+
+# --- Logging ---
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
+# --- Testing (Unit & Instrumented) ---
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit-jupiter" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotestVersion" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotestVersion" }
+
+# --- Firebase ---
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk" }
 
 [plugins]
+# --- Android Plugins ---
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 
+# --- Kotlin Plugins ---
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+# --- Code Quality Plugins ---
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+
+# --- Firebase ---
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
+
+[bundles]
+test = [
+    "junit",
+    "junit-jupiter",
+    "kotest-runner-junit5",
+    "mockk"
+]
+
+network = [
+    "retrofit",
+    "logging-interceptor",
+    "retrofit2-kotlinx-serialization-converter",
+    "kotlinx-serialization-json"
+]
+
+local = [
+    "androidx-room-runtime",
+    "androidx-datastore-preferences"
+]

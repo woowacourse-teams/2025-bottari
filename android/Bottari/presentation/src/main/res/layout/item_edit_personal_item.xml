@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/space_large"
+    android:layout_marginTop="@dimen/space_2x_small"
+    android:layout_marginBottom="@dimen/space_x_small"
+    android:background="@drawable/bg_white_radius_12dp"
+    android:elevation="2dp">
+
+    <TextView
+        android:id="@+id/tv_personal_item_name"
+        style="@style/Pretendard_Medium_16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_small"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_personal_item_delete"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="•  시계" />
+
+    <ImageView
+        android:id="@+id/btn_personal_item_delete"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="@string/item_delete_btn_description"
+        android:padding="@dimen/space_small"
+        android:src="@drawable/btn_delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_personal_item_name"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

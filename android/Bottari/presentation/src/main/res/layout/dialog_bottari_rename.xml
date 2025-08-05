@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_radius_12dp"
+    android:elevation="2dp"
+    android:paddingHorizontal="@dimen/space_large"
+    android:paddingVertical="@dimen/space_median">
+
+    <TextView
+        android:id="@+id/tv_bottari_rename_title"
+        style="@style/Pretendard_Medium_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bottari_rename_dialog_title_text"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+        android:id="@+id/et_bottari_rename_name"
+        style="@style/Pretendard_Regular_14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_small"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:backgroundTint="@color/gray_eeeeee"
+        android:hint="@string/bottari_rename_dialog_hint_text"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:maxLength="15"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/space_median"
+        android:paddingVertical="@dimen/space_small"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray_a6a6a6"
+        app:layout_constraintTop_toBottomOf="@id/tv_bottari_rename_title" />
+
+    <TextView
+        android:id="@+id/btn_bottari_rename"
+        style="@style/Pretendard_SemiBold_16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_median"
+        android:alpha="0.4"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:backgroundTint="@color/primary"
+        android:clickable="false"
+        android:gravity="center"
+        android:paddingVertical="@dimen/space_small"
+        android:text="@string/bottari_rename_dialog_btn_text"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_bottari_rename_name" />
+
+    <ImageView
+        android:id="@+id/btn_bottari_rename_close"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="@string/common_close_btn_description"
+        android:paddingStart="@dimen/space_x_large"
+        android:paddingEnd="0dp"
+        android:paddingBottom="@dimen/space_x_large"
+        android:src="@drawable/btn_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

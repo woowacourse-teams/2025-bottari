@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_bottari_template"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/space_large"
+    android:layout_marginTop="@dimen/space_2x_small"
+    android:layout_marginBottom="@dimen/space_x_small"
+    android:background="@drawable/bg_white_radius_12dp"
+    android:elevation="2dp"
+    android:paddingHorizontal="@dimen/space_large"
+    android:paddingVertical="@dimen/space_median">
+
+    <TextView
+        android:id="@+id/tv_bottari_template_title"
+        style="@style/Pretendard_Medium_20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="우테코출근보따리글자수열다섯자" />
+
+    <TextView
+        android:id="@+id/tv_bottari_template_items"
+        style="@style/Pretendard_Medium_16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2x_small"
+        android:maxLines="1"
+        android:textColor="@color/gray_a6a6a6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_bottari_template_title"
+        tools:text="사원증, 노트북, 물통, 지갑 등 13개의 물건" />
+
+    <TextView
+        android:id="@+id/tv_bottari_template_author"
+        style="@style/Pretendard_Medium_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:drawablePadding="@dimen/space_2x_small"
+        android:maxLines="1"
+        android:textColor="@color/gray_999999"
+        app:drawableStartCompat="@drawable/ic_person"
+        app:layout_constraintEnd_toStartOf="@id/tv_bottari_template_taken_count"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_bottari_template_items"
+        tools:text="다이스" />
+
+    <TextView
+        android:id="@+id/tv_bottari_template_taken_count"
+        style="@style/Pretendard_Medium_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_x_small"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:drawablePadding="@dimen/space_2x_small"
+        android:maxLines="1"
+        android:textColor="@color/gray_999999"
+        app:drawableStartCompat="@drawable/ic_download"
+        app:layout_constraintStart_toEndOf="@id/tv_bottari_template_author"
+        app:layout_constraintTop_toBottomOf="@id/tv_bottari_template_items"
+        tools:text="100024회" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

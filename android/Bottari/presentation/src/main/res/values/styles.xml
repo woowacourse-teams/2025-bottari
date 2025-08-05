@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Bottari.BottomNavigation.TextAppearance" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+        <item name="android:fontWeight">400</item>
+    </style>
+
+    <style name="CustomSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="trackColor">@color/primary</item>
+        <item name="thumbColor">@color/white</item>
+    </style>
+
+    <style name="CustomNumberPicker">
+        <item name="np_dividerColor">@color/white</item>
+        <item name="np_itemSpacing">-12dp</item>
+        <item name="np_selectedTextColor">@color/black</item>
+        <item name="np_selectedTextSize">16sp</item>
+        <item name="np_selectedTypeface">@font/pretendard_bold</item>
+        <item name="np_textColor">@color/gray_a6a6a6</item>
+        <item name="np_textSize">16sp</item>
+        <item name="np_typeface">@font/pretendard_bold</item>
+        <item name="np_formatter">%02d</item>
+    </style>
+
+    <style name="CustomPopupMenu" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/white</item>
+    </style>
+
+    <style name="CustomPopupMenuText">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/pretendard_medium</item>
+    </style>
+</resources>
