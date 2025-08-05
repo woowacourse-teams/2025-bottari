@@ -3,8 +3,7 @@
 
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application>
         <activity
@@ -19,7 +18,8 @@
         <activity
             android:name=".view.home.HomeActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing"
+            android:launchMode="singleTask"/>
 
         <activity
             android:name=".view.checklist.ChecklistActivity"
@@ -35,7 +35,9 @@
 
         <activity
             android:name=".view.template.TemplateActivity"
-            android:exported="false"/>
+            android:exported="false" />
+
+        <receiver android:name=".receiver.AlarmReceiver" />
     </application>
 
 </manifest>
