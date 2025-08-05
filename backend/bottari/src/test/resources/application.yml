@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: bottari
+  sql:
+    init:
+      mode: never
+  profiles:
+    active: test

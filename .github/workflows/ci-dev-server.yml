@@ -1,0 +1,28 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - be/develop
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Grant Execute Permission for Gradlew
+        run: chmod +x ./backend/bottari/gradlew
+
+      - name: Build and Run Tests
+        working-directory: ./backend/bottari
+        run: ./gradlew clean build --no-daemon
+        

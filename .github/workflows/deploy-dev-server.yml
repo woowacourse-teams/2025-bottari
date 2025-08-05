@@ -1,0 +1,55 @@
+name: deploy-dev-server
+
+on:
+  push:
+    branches: be/develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout pository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Build Jar
+        working-directory: ./backend/bottari
+        run: ./gradlew clean build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bottari-jar
+          path: backend/bottari/build/libs/*SNAPSHOT.jar
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+
+    steps:
+      - name: Download Uploaded Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: bottari-jar
+          path: ./artifacts
+
+      - name: Kill Existing Server On Port 8080
+        run: |
+          PID=$(lsof -t -i :8080 || true)
+          if [ -n "$PID" ]; then
+            echo "Killing existing process: $PID"
+            kill -9 $PID
+          fi
+
+      - name: Run App On Port 8080
+        run: |
+          JAR_FILE=$(find ./artifacts -name "*.jar" | head -n 1)
+          echo "Starting server with $JAR_FILE"
+          RUNNER_TRACKING_ID=""
+          nohup java -Duser.timezone=Asia/Seoul -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
