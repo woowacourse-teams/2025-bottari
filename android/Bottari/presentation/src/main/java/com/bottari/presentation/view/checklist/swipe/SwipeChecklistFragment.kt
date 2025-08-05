@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.bottari.presentation.R
@@ -28,7 +29,7 @@ class SwipeChecklistFragment :
     private val viewModel: ChecklistViewModel by activityViewModels {
         ChecklistViewModel.Factory(
             requireContext().getSSAID(),
-            requireArguments().getLong(ARG_BOTTARI_ID),
+            getBottariId(),
         )
     }
     private val adapter: SwipeCheckListAdapter by lazy { SwipeCheckListAdapter() }
@@ -72,6 +73,8 @@ class SwipeChecklistFragment :
     }
 
     override fun onCardRewound() {}
+
+    private fun getBottariId(): Long = requireArguments().getLong(ARG_BOTTARI_ID)
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
@@ -174,9 +177,10 @@ class SwipeChecklistFragment :
         private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
         private const val INDEX_OFFSET = 1
 
-        fun newBundle(bottariId: Long): Bundle =
-            Bundle().apply {
-                putLong(ARG_BOTTARI_ID, bottariId)
+        @JvmStatic
+        fun newInstance(bottariId: Long): SwipeChecklistFragment =
+            SwipeChecklistFragment().apply {
+                arguments = bundleOf(ARG_BOTTARI_ID to bottariId)
             }
     }
 }

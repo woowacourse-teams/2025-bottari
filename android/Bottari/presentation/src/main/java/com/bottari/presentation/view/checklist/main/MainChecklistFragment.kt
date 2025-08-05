@@ -2,6 +2,7 @@ package com.bottari.presentation.view.checklist.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
@@ -32,7 +33,7 @@ class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChe
         setupUI()
     }
 
-    private fun getBottariId(): Long = requireArguments().getLong(EXTRA_BOTTARI_ID)
+    private fun getBottariId(): Long = requireArguments().getLong(ARG_BOTTARI_ID)
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
@@ -53,11 +54,12 @@ class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChe
     }
 
     companion object {
-        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
+        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
 
-        fun newBundle(bottariId: Long): Bundle =
-            Bundle().apply {
-                putLong(EXTRA_BOTTARI_ID, bottariId)
+        @JvmStatic
+        fun newInstance(bottariId: Long): MainChecklistFragment =
+            MainChecklistFragment().apply {
+                arguments = bundleOf(ARG_BOTTARI_ID to bottariId)
             }
     }
 }
