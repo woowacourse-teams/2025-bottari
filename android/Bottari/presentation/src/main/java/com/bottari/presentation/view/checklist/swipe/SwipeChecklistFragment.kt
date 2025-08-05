@@ -100,7 +100,7 @@ class SwipeChecklistFragment :
         binding.pbChecklistSwipe.apply {
             progress = uiState.checkedQuantity
             max = uiState.totalQuantity
-            if (uiState.nonCheckedItems.isNotEmpty()) return@apply
+            if (uiState.isAllChecked.not()) return@apply
             val primaryColor = ContextCompat.getColor(requireContext(), R.color.primary)
             progressTintList = ColorStateList.valueOf(primaryColor)
         }
