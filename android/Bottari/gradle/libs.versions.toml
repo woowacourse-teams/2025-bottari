@@ -43,6 +43,11 @@ ktlint = "13.0.0"
 # Logging
 timber = "5.0.1"
 
+# Firebase
+firebaseBom = "34.0.0"
+googleGmsGoogleServices = "4.4.3"
+googleFirebaseCrashlytics = "3.0.5"
+
 [libraries]
 # --- AndroidX Core ---
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -83,6 +88,11 @@ kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", ver
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotestVersion" }
 
+# --- Firebase ---
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk" }
+
 [plugins]
 # --- Android Plugins ---
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -95,6 +105,10 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 
 # --- Code Quality Plugins ---
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+
+# --- Firebase ---
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
 
 [bundles]
 test = [

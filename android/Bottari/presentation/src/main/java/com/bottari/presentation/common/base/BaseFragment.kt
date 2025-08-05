@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.bottari.presentation.util.CrashlyticsLogger
 import com.bottari.presentation.view.common.LoadingDialog
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -20,6 +21,11 @@ abstract class BaseFragment<VB : ViewBinding>(
     val binding: VB get() = _binding!!
 
     private val loadingDialog: LoadingDialog by lazy { LoadingDialog() }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        CrashlyticsLogger.setScreen(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
