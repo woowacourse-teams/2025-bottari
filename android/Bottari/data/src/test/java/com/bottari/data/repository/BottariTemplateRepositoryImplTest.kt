@@ -182,8 +182,8 @@ class BottariTemplateRepositoryImplTest {
             // given
             val successResponse =
                 listOf(
-                    FetchMyBottariTemplatesResponse("다이스", 1L, listOf(), "template1"),
-                    FetchMyBottariTemplatesResponse("다이스", 2L, listOf(), "template2"),
+                    FetchMyBottariTemplatesResponse("다이스", 1L, listOf(), "template1", "12:00", 3),
+                    FetchMyBottariTemplatesResponse("다이스", 2L, listOf(), "template2", "12:00", 4),
                 )
             coEvery { remoteDataSource.fetchMyBottariTemplates(ssaid) } returns Result.success(successResponse)
 
