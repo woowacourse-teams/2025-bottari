@@ -20,7 +20,10 @@ data class ChecklistUiState(
         get() = nonCheckedItems.filter { it.id !in swipedItemIds }
 
     val isAllSwiped: Boolean
-        get() = nonSwipedItems.isEmpty()
+        get() {
+            if (bottariItems.isEmpty()) return false
+            return nonSwipedItems.isEmpty()
+        }
 
     val isAllChecked: Boolean
         get() = nonCheckedItems.isEmpty()
