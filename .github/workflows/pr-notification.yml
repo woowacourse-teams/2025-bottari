@@ -18,20 +18,28 @@ jobs:
       # ---------------------------
       # 1. 리뷰 제출 시
       # ---------------------------
+      # 리뷰 제출 시
       - name: Notify Discord - Review Submitted
         if: github.event_name == 'pull_request_review'
         run: |
           AUTHOR=${{ github.event.pull_request.user.login }}
           AUTHOR_ID=$(echo '${{ secrets.DISCORD_USER_MAP }}' | jq -r --arg AUTHOR "$AUTHOR" '.[$AUTHOR]')
+          BASE_BRANCH=${{ github.event.pull_request.base.ref }}
+          HEAD_BRANCH=${{ github.event.pull_request.head.ref }}
 
           MESSAGE='{
-            "content": "<@'"$AUTHOR_ID"'> 📝 리뷰가 등록되었습니다!",
+            "content": "<@'"$AUTHOR_ID"'> 📝 리뷰가 등록되었습니다.",
             "embeds": [
               {
                 "title": "리뷰 등록",
                 "description": "'"${{ github.event.review.body }}"'",
                 "url": "'"${{ github.event.pull_request.html_url }}"'",
-                "color": 3447003
+                "color": 3447003,
+                "fields": [
+                  { "name": "PR 제목", "value": "'"${{ github.event.pull_request.title }}"'" },
+                  { "name": "브랜치", "value": "'"$HEAD_BRANCH → $BASE_BRANCH"'" },
+                  { "name": "리뷰 상태", "value": "'"${{ github.event.review.state }}"'" }
+                ]
               }
             ]
           }'
