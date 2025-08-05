@@ -13,4 +13,8 @@ data class FetchBottariTemplateResponse(
     val items: List<BottariTemplateItemResponse>,
     @SerialName("author")
     val author: String,
+    @SerialName("createdAt")
+    val createdAt: String,
+    @SerialName("takenCount")
+    val takenCount: Int,
 )

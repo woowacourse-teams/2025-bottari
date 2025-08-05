@@ -5,4 +5,5 @@ data class BottariTemplate(
     val title: String,
     val items: List<BottariTemplateItem>,
     val author: String,
+    val takenCount: Int,
 )

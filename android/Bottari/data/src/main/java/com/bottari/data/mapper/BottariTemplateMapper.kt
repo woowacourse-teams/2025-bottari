@@ -14,6 +14,7 @@ object BottariTemplateMapper {
             title = title,
             items = items.map { it.toDomain() },
             author = author,
+            takenCount = takenCount,
         )
 
     fun FetchMyBottariTemplatesResponse.toDomain(): BottariTemplate =
@@ -22,6 +23,7 @@ object BottariTemplateMapper {
             title = title,
             items = items.map { it.toDomain() },
             author = author,
+            takenCount = takenCount,
         )
 
     private fun BottariTemplateItemResponse.toDomain(): BottariTemplateItem =
