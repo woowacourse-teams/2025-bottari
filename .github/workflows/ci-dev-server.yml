@@ -22,7 +22,7 @@ jobs:
           distribution: "temurin"
 
       - name: Grant Execute Permission for Gradlew
-        run: chmod +x ./gradlew
+        run: chmod +x ./backend/bottari/gradlew
 
       # 라벨 기반 Webhook 결정
       - name: Determine Webhook
