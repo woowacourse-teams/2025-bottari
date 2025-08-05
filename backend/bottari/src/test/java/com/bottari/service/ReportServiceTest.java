@@ -68,7 +68,6 @@ class ReportServiceTest {
                     () -> assertThat(actual.getReporter().getId()).isEqualTo(reporter.getId()),
                     () -> assertThat(actual.getReason()).isEqualTo(reportReason)
             );
-
         }
 
         @DisplayName("보따리 템플릿을 신고할 경우, 신고자 ssaid가 존재하지 않으면 예외가 발생한다.")
