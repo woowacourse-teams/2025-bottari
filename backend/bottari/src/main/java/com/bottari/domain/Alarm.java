@@ -1,5 +1,7 @@
 package com.bottari.domain;
 
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -57,14 +59,14 @@ public class Alarm {
 
     public void active() {
         if (isActive) {
-            throw new IllegalStateException("알람이 이미 활성화되어 있습니다.");
+            throw new BusinessException(ErrorCode.ALARM_ALREADY_ACTIVE);
         }
         this.isActive = true;
     }
 
     public void inactive() {
         if (!isActive) {
-            throw new IllegalStateException("알람이 이미 비활성화되어 있습니다.");
+            throw new BusinessException(ErrorCode.ALARM_ALREADY_INACTIVE);
         }
         this.isActive = false;
     }
@@ -74,7 +76,7 @@ public class Alarm {
             final LocationAlarm locationAlarm
     ) {
         if (routineAlarm == null && locationAlarm != null) {
-            throw new IllegalArgumentException("루틴 알람이 존재하지 않으면 위치 알람을 설정할 수 없습니다.");
+            throw new BusinessException(ErrorCode.ALARM_LOCATION_REQUIRES_ROUTINE);
         }
     }
 }

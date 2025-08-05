@@ -1,5 +1,7 @@
 package com.bottari.domain;
 
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -36,8 +38,11 @@ public class BottariTemplateItem {
     }
 
     private void validateName(final String name) {
-        if (name.isBlank() || name.length() > 20) {
-            throw new IllegalArgumentException("보따리 템플릿 물품명은 공백이거나 20자를 넘을 수 없습니다.");
+        if (name.isBlank()) {
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_ITEM_NAME_BLANK);
+        }
+        if (name.length() > 20) {
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_ITEM_NAME_TOO_LONG, "최대 20자까지 입력 가능합니다.");
         }
     }
 }

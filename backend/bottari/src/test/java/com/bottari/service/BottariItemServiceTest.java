@@ -13,6 +13,7 @@ import com.bottari.dto.ReadBottariItemResponse;
 import com.bottari.service.fixture.BottariFixture;
 import com.bottari.service.fixture.BottariItemFixture;
 import com.bottari.service.fixture.MemberFixture;
+import com.bottari.error.BusinessException;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -70,7 +71,7 @@ class BottariItemServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariItemService.getAllByBottariId(notFoundBottariId))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리를 찾을 수 없습니다.");
         }
     }
@@ -105,7 +106,7 @@ class BottariItemServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariItemService.create(notFoundBottariId, request))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리를 찾을 수 없습니다.");
         }
 
@@ -128,8 +129,8 @@ class BottariItemServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariItemService.create(bottari.getId(), request))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("중복된 보따리 물품명입니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("이미 존재하는 보따리 물품입니다.");
         }
     }
 
@@ -202,8 +203,8 @@ class BottariItemServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariItemService.update(bottari.getId(), request))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("삭제하려는 아이템에 중복이 있습니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("요청에 중복된 보따리 물품이 있습니다. - 삭제하려는 물품 id가 중복되었습니다.");
         }
 
         @DisplayName("수정 시 보따리가 존재하지 않는 경우, 예외를 던진다.")
@@ -215,7 +216,7 @@ class BottariItemServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariItemService.update(invalidBottariId, request))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리를 찾을 수 없습니다.");
         }
 
@@ -248,8 +249,8 @@ class BottariItemServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariItemService.update(bottariId, request))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("보따리 안에 없는 물품은 삭제할 수 없습니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("보따리 안에 없는 물품입니다. - 삭제할 수 없습니다.");
         }
 
         @DisplayName("수정 시 추가하려는 물품명에 중복이 존재하는 경우, 예외를 던진다.")
@@ -274,8 +275,8 @@ class BottariItemServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariItemService.update(bottariId, request))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("중복된 물품이 존재합니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("요청에 중복된 보따리 물품이 있습니다.");
         }
 
         @DisplayName("수정 시 추가하려는 물품이 이미 존재하는 경우, 예외를 던진다.")
@@ -305,8 +306,8 @@ class BottariItemServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariItemService.update(bottariId, request))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("중복된 물품이 존재합니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("이미 존재하는 보따리 물품입니다.");
         }
 
         @DisplayName("수정 시 총 보따리 물품이 200개가 넘어가는 경우, 예외가 발생한다.")
@@ -331,8 +332,8 @@ class BottariItemServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariItemService.update(bottari.getId(), request))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("물품은 최대 200개까지 보따리에 넣을 수 있습니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("보따리 물품의 최대 개수를 초과했습니다. - 200개 초과");
         }
     }
 
@@ -395,7 +396,7 @@ class BottariItemServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariItemService.check(notExistsBottariItemId))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리 물품을 찾을 수 없습니다.");
         }
     }
@@ -436,7 +437,7 @@ class BottariItemServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariItemService.uncheck(notExistsBottariItemId))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리 물품을 찾을 수 없습니다.");
         }
     }

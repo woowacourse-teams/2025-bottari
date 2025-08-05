@@ -2,13 +2,16 @@ package com.bottari.dto;
 
 import com.bottari.domain.BottariTemplate;
 import com.bottari.domain.BottariTemplateItem;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record ReadBottariTemplateResponse(
         Long id,
         String title,
         List<BottariTemplateItemResponse> items,
-        String author
+        String author,
+        LocalDateTime createdAt,
+        int takenCount
 ) {
 
     public static ReadBottariTemplateResponse of(
@@ -23,7 +26,9 @@ public record ReadBottariTemplateResponse(
                 bottariTemplate.getId(),
                 bottariTemplate.getTitle(),
                 items,
-                bottariTemplate.getMember().getName()
+                bottariTemplate.getMember().getName(),
+                bottariTemplate.getCreatedAt(),
+                bottariTemplate.getTakenCount()
         );
     }
 

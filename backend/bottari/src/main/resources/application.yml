@@ -5,6 +5,7 @@ spring:
     hibernate:
       ddl-auto: create
     defer-datasource-initialization: true
+    open-in-view: true
   sql:
     init:
       mode: always
