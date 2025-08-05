@@ -66,7 +66,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun checkPermissionAndNavigate(permissionFlag: Boolean) {
-        if (hasRequiredPermission(permissionFlag)) {
+        if (!hasRequiredPermission(permissionFlag)) {
             showSnackbar(R.string.splash_screen_permission_denied_text, ::navigateToHome)
             return
         }
