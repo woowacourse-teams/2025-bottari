@@ -1,4 +1,4 @@
-package com.bottari;
+package com.bottari.error;
 
 import com.bottari.log.entry.ExceptionLogEntry;
 import com.bottari.log.LogFormatter;
@@ -20,20 +20,20 @@ public class GlobalExceptionHandler {
 
     private final LogFormatter formatter;
 
-    @ExceptionHandler({
-            IllegalArgumentException.class,
-            IllegalStateException.class
-    })
-    public ProblemDetail handleIllegalException(
-            final RuntimeException exception,
+    @ExceptionHandler(BusinessException.class)
+    public ProblemDetail handleBusinessException(
+            final BusinessException exception,
             final HttpServletRequest request
     ) {
         doLog(exception, request);
-
-        return ProblemDetail.forStatusAndDetail(
-                HttpStatus.BAD_REQUEST,
+        final ErrorCode errorCode = exception.getErrorCode();
+        final ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                errorCode.getStatus(),
                 exception.getMessage()
         );
+        problemDetail.setTitle(errorCode.name());
+
+        return problemDetail;
     }
 
     @ExceptionHandler(Exception.class)

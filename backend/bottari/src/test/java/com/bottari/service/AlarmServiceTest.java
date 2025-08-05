@@ -12,6 +12,7 @@ import com.bottari.domain.RepeatType;
 import com.bottari.domain.RoutineAlarm;
 import com.bottari.dto.CreateAlarmRequest;
 import com.bottari.dto.UpdateAlarmRequest;
+import com.bottari.error.BusinessException;
 import jakarta.persistence.EntityManager;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -93,8 +94,8 @@ class AlarmServiceTest {
 
             // when & then
             assertThatThrownBy(() -> alarmService.create(invalidBottariId, request))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("존재하지 않는 보따리입니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("보따리를 찾을 수 없습니다.");
         }
     }
 
@@ -187,8 +188,8 @@ class AlarmServiceTest {
 
             // when & then
             assertThatThrownBy(() -> alarmService.update(invalidAlarmId, updateRequest))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("존재하지 않는 알람입니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("알람을 찾을 수 없습니다.");
         }
 
     }
@@ -248,7 +249,7 @@ class AlarmServiceTest {
 
             // when & then
             assertThatThrownBy(() -> alarmService.active(activeAlarm.getId()))
-                    .isInstanceOf(IllegalStateException.class)
+                    .isInstanceOf(BusinessException.class)
                     .hasMessage("알람이 이미 활성화되어 있습니다.");
         }
     }
@@ -308,7 +309,7 @@ class AlarmServiceTest {
 
             // when & then
             assertThatThrownBy(() -> alarmService.inactive(inactiveAlarm.getId()))
-                    .isInstanceOf(IllegalStateException.class)
+                    .isInstanceOf(BusinessException.class)
                     .hasMessage("알람이 이미 비활성화되어 있습니다.");
         }
     }

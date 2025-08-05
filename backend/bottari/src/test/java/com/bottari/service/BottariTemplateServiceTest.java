@@ -15,6 +15,7 @@ import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.dto.ReadNextBottariTemplateRequest;
 import com.bottari.dto.ReadNextBottariTemplateResponse;
+import com.bottari.error.BusinessException;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -76,7 +77,7 @@ class BottariTemplateServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariTemplateService.getById(notExistsBottariTemplateId))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리 템플릿을 찾을 수 없습니다.");
         }
     }
@@ -138,8 +139,8 @@ class BottariTemplateServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariTemplateService.getBySsaid(invalidSsaid))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
         }
     }
 
@@ -377,8 +378,8 @@ class BottariTemplateServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariTemplateService.getNextAll(request))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("존재하지 않는 정렬 기준입니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("유효하지 않은 보따리 템플릿 정렬 타입입니다.");
         }
     }
 
@@ -402,14 +403,14 @@ class BottariTemplateServiceTest {
             // when
             final Long actual = bottariTemplateService.create(ssaid, request);
 
-        // then
-        final List<BottariTemplateItem> actualItems = entityManager.createQuery("""
-                        SELECT i
-                        FROM BottariTemplateItem i
-                        WHERE i.bottariTemplate.id =: bottariTemplateId
-                        """, BottariTemplateItem.class)
-                .setParameter("bottariTemplateId", actual)
-                .getResultList();
+            // then
+            final List<BottariTemplateItem> actualItems = entityManager.createQuery("""
+                            SELECT i
+                            FROM BottariTemplateItem i
+                            WHERE i.bottariTemplate.id =: bottariTemplateId
+                            """, BottariTemplateItem.class)
+                    .setParameter("bottariTemplateId", actual)
+                    .getResultList();
 
             assertAll(
                     () -> assertThat(actual).isNotNull(),
@@ -431,8 +432,8 @@ class BottariTemplateServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariTemplateService.create(invalidSsaid, request))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
         }
 
         @DisplayName("생성 시 추가하려는 물품명에 중복이 존재하는 경우, 예외를 던진다.")
@@ -451,8 +452,8 @@ class BottariTemplateServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariTemplateService.create(ssaid, request))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("중복된 물품이 존재합니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("요청에 중복된 보따리 템플릿 물품이 있습니다.");
         }
     }
 
@@ -522,11 +523,11 @@ class BottariTemplateServiceTest {
 
             // then
             final BottariTemplateHistory acutalBottariTemplateHistory = entityManager.createQuery("""
-                             SELECT bh
-                             FROM BottariTemplateHistory bh
-                             WHERE bh.id.memberId = :memberId
-                             AND bh.id.bottariTemplateId = :bottariTemplateId
-            """, BottariTemplateHistory.class)
+                                             SELECT bh
+                                             FROM BottariTemplateHistory bh
+                                             WHERE bh.id.memberId = :memberId
+                                             AND bh.id.bottariTemplateId = :bottariTemplateId
+                            """, BottariTemplateHistory.class)
                     .setParameter("memberId", member.getId())
                     .setParameter("bottariTemplateId", bottariTemplate.getId())
                     .getSingleResult();
@@ -563,15 +564,16 @@ class BottariTemplateServiceTest {
 
             // then
             final Long actualHistoryCount = entityManager.createQuery("""
-                             SELECT COUNT(bh)
-                             FROM BottariTemplateHistory bh
-                             WHERE bh.id.memberId = :memberId
-                             AND bh.id.bottariTemplateId = :bottariTemplateId
-            """, Long.class)
+                                             SELECT COUNT(bh)
+                                             FROM BottariTemplateHistory bh
+                                             WHERE bh.id.memberId = :memberId
+                                             AND bh.id.bottariTemplateId = :bottariTemplateId
+                            """, Long.class)
                     .setParameter("memberId", member.getId())
                     .setParameter("bottariTemplateId", bottariTemplate.getId())
                     .getSingleResult();
-            final BottariTemplate actualBottariTemplate = entityManager.find(BottariTemplate.class, bottariTemplate.getId());
+            final BottariTemplate actualBottariTemplate = entityManager.find(BottariTemplate.class,
+                    bottariTemplate.getId());
             assertAll(
                     () -> assertThat(actualBottariTemplate.getTakenCount()).isEqualTo(1),
                     () -> assertThat(actualHistoryCount).isEqualTo(1L)
@@ -588,8 +590,8 @@ class BottariTemplateServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariTemplateService.createBottari(notExistsTemplateId, "ssaid"))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("해당 보따리 템플릿을 찾을 수 없습니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("보따리 템플릿을 찾을 수 없습니다.");
         }
 
         @DisplayName("보따리 생성 시 사용자가 존재하지 않는다면, 예외를 던진다.")
@@ -605,8 +607,8 @@ class BottariTemplateServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariTemplateService.createBottari(bottariTemplate.getId(), notExistsSsaid))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("해당 ssaid로 가입된 사용자가 없습니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
         }
     }
 
@@ -665,7 +667,7 @@ class BottariTemplateServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariTemplateService.deleteById(invalidId, "ssaid"))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리 템플릿을 찾을 수 없습니다.");
         }
 
@@ -681,8 +683,8 @@ class BottariTemplateServiceTest {
 
             // when & then
             assertThatThrownBy(() -> bottariTemplateService.deleteById(bottariTemplate.getId(), anotherSsaid))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("본인의 보따리 템플릿이 아닙니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 보따리 템플릿에 접근할 수 있는 권한이 없습니다. - 본인의 보따리 템플릿이 아닙니다.");
         }
     }
 }

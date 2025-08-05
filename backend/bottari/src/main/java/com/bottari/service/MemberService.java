@@ -4,6 +4,8 @@ import com.bottari.domain.Member;
 import com.bottari.dto.CheckRegistrationResponse;
 import com.bottari.dto.CreateMemberRequest;
 import com.bottari.dto.UpdateMemberRequest;
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import com.bottari.repository.MemberRepository;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -46,7 +48,7 @@ public class MemberService {
             final DataIntegrityViolationException exception,
             final CreateMemberRequest request
     ) {
-        throw new IllegalStateException("고유한 임시 닉네임을 생성하고 저장하는 데 실패했습니다. (관리자 문의 필요)");
+        throw new BusinessException(ErrorCode.MEMBER_NAME_GENERATION_FAILED);
     }
 
     public CheckRegistrationResponse checkRegistration(final String ssaid) {
@@ -66,26 +68,27 @@ public class MemberService {
             final UpdateMemberRequest request
     ) {
         final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         validateDuplicateName(request);
         member.updateName(request.name());
     }
 
     private void validateDuplicateSsaid(final String ssaid) {
         if (memberRepository.existsBySsaid(ssaid)) {
-            throw new IllegalArgumentException("중복된 ssaid입니다.");
+            throw new BusinessException(ErrorCode.MEMBER_SSAID_ALREADY_EXISTS);
         }
     }
 
     private String generatedRandomCandidateName() {
-        String word = NAME_POOL[ThreadLocalRandom.current().nextInt(NAME_POOL.length)];
-        int suffix = ThreadLocalRandom.current().nextInt(10_000);
+        final String word = NAME_POOL[ThreadLocalRandom.current().nextInt(NAME_POOL.length)];
+        final int suffix = ThreadLocalRandom.current().nextInt(10_000);
+
         return "%s-%04d".formatted(word, suffix);
     }
 
     private void validateDuplicateName(final UpdateMemberRequest request) {
         if (memberRepository.existsByName(request.name())) {
-            throw new IllegalArgumentException("이미 사용 중인 이름입니다.");
+            throw new BusinessException(ErrorCode.MEMBER_NAME_ALREADY_EXISTS);
         }
     }
 }

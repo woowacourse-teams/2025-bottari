@@ -3,6 +3,7 @@ package com.bottari.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.bottari.error.BusinessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,17 +12,30 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class BottariTest {
 
-    @DisplayName("보따리 이름이 공백이거나 15자 초과인 경우, 예외를 던진다.")
+    @DisplayName("보따리 제목이 공백인 경우, 예외를 던진다.")
     @ParameterizedTest
-    @ValueSource(strings = {"", "   ", "열다섯글자가넘는보따리이름입니다"})
-    void validateTitle(final String title) {
+    @ValueSource(strings = {"", "     "})
+    void validateTitle_Blank(final String title) {
         // given
         final Member member = new Member("ssaid", "name");
 
         // when & then
         assertThatThrownBy(() -> new Bottari(title, member))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("보따리 이름은 공백이거나 15자를 넘을 수 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("보따리 제목은 공백일 수 없습니다.");
+    }
+
+    @DisplayName("보따리 제목이 15자를 초과하는 경우, 예외를 던진다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"열다섯글자가넘는보따리이름입니다", "열다섯글자가넘는보따리이름입니다!"})
+    void validateTitle_TooLong(final String title) {
+        // given
+        final Member member = new Member("ssaid", "name");
+
+        // when & then
+        assertThatThrownBy(() -> new Bottari(title, member))
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("보따리 제목이 너무 깁니다. - 최대 15자까지 입력 가능합니다.");
     }
 
     @DisplayName("본인의 보따리인지 확인한다.")
@@ -69,21 +83,35 @@ class BottariTest {
 
         // when & then
         assertThatThrownBy(() -> bottari.updateTitle("title"))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(BusinessException.class)
                 .hasMessage("기존의 보따리 이름과 동일한 이름으로는 변경할 수 없습니다.");
     }
 
-    @DisplayName("공백이거나 15자 초과인 제목으로 수정할 경우, 예외를 던진다.")
+    @DisplayName("공백인 제목으로 수정할 경우, 예외를 던진다.")
     @ParameterizedTest
-    @ValueSource(strings = {"", "   ", "열다섯글자가넘는보따리이름입니다"})
-    void updateTitle_Exception_InvalidTitle(final String invalidTitle) {
+    @ValueSource(strings = {"", "   "})
+    void updateTitle_Exception_Blank(final String invalidTitle) {
         // given
         final Member member = new Member("ssaid", "name");
         final Bottari bottari = new Bottari("title", member);
 
         // when & then
         assertThatThrownBy(() -> bottari.updateTitle(invalidTitle))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("보따리 이름은 공백이거나 15자를 넘을 수 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("보따리 제목은 공백일 수 없습니다.");
+    }
+
+    @DisplayName("15자가 넘는 제목으로 수정할 경우, 예외를 던진다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"열다섯글자가넘는보따리이름입니다", "열다섯글자가넘는보따리이름입니다!"})
+    void updateTitle_Exception_TooLongTitle(final String tooLongTitle) {
+        // given
+        final Member member = new Member("ssaid", "name");
+        final Bottari bottari = new Bottari("title", member);
+
+        // when & then
+        assertThatThrownBy(() -> bottari.updateTitle(tooLongTitle))
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("보따리 제목이 너무 깁니다. - 최대 15자까지 입력 가능합니다.");
     }
 }

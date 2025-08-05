@@ -9,6 +9,8 @@ import com.bottari.dto.CreateBottariRequest;
 import com.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.dto.ReadBottariResponse;
 import com.bottari.dto.UpdateBottariRequest;
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import com.bottari.repository.AlarmRepository;
 import com.bottari.repository.BottariItemRepository;
 import com.bottari.repository.BottariRepository;
@@ -37,7 +39,7 @@ public class BottariService {
             final Long id
     ) {
         final Bottari bottari = bottariRepository.findByIdWithMember(id)
-                .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_NOT_FOUND));
         validateOwner(ssaid, bottari);
         final List<BottariItem> bottariItems = bottariItemRepository.findAllByBottariId(id);
         final Alarm alarm = alarmRepository.findByBottariId(id)
@@ -46,10 +48,9 @@ public class BottariService {
         return ReadBottariResponse.of(bottari, bottariItems, alarm);
     }
 
-
     public List<ReadBottariPreviewResponse> getAllBySsaidSortedByLatest(final String ssaid) {
         final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         final List<Bottari> bottaries = bottariRepository.findAllByMemberIdOrderByCreatedAtDesc(member.getId());
 
         return buildReadBottariPreviewResponses(bottaries);
@@ -61,7 +62,7 @@ public class BottariService {
             final CreateBottariRequest request
     ) {
         final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         final Bottari bottari = new Bottari(request.title(), member);
         final Bottari savedBottari = bottariRepository.save(bottari);
 
@@ -75,7 +76,7 @@ public class BottariService {
             final String ssaid
     ) {
         final Bottari bottari = bottariRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_NOT_FOUND));
         validateOwner(ssaid, bottari);
         bottari.updateTitle(request.title());
     }
@@ -86,7 +87,7 @@ public class BottariService {
             final String ssaid
     ) {
         final Bottari bottari = bottariRepository.findByIdWithMember(id)
-                .orElseThrow(() -> new IllegalArgumentException("보따리를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_NOT_FOUND));
         validateOwner(ssaid, bottari);
         bottariItemRepository.deleteByBottariId(id);
         alarmRepository.deleteByBottariId(id);
@@ -141,7 +142,7 @@ public class BottariService {
             final Bottari bottari
     ) {
         if (!bottari.isOwner(ssaid)) {
-            throw new IllegalArgumentException("본인의 보따리가 아닙니다.");
+            throw new BusinessException(ErrorCode.BOTTARI_NOT_OWNED, "본인의 보따리가 아닙니다.");
         }
     }
 }

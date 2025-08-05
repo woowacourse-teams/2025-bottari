@@ -1,5 +1,7 @@
 package com.bottari.domain;
 
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
@@ -50,15 +52,18 @@ public class Bottari {
 
     public void updateTitle(final String newTitle) {
         if (title.equals(newTitle)) {
-            throw new IllegalArgumentException("기존의 보따리 이름과 동일한 이름으로는 변경할 수 없습니다.");
+            throw new BusinessException(ErrorCode.BOTTARI_TITLE_UNCHANGED);
         }
         validateTitle(newTitle);
         this.title = newTitle;
     }
 
     private void validateTitle(final String title) {
-        if (title.isBlank() || title.length() > 15) {
-            throw new IllegalArgumentException("보따리 이름은 공백이거나 15자를 넘을 수 없습니다.");
+        if (title.isBlank()) {
+            throw new BusinessException(ErrorCode.BOTTARI_TITLE_BLANK);
+        }
+        if (title.length() > 15) {
+            throw new BusinessException(ErrorCode.BOTTARI_TITLE_TOO_LONG, "최대 15자까지 입력 가능합니다.");
         }
     }
 

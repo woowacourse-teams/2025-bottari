@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.bottari.error.BusinessException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -167,12 +168,10 @@ class BottariTemplateCursorTest {
                     () -> assertThat(actual.getPageSize()).isEqualTo(size)
             );
         }
-
     }
 
     @Nested
     class GetCreatedAtTest {
-
 
         @DisplayName("LocalDateTime으로 파싱한다.")
         @ParameterizedTest
@@ -219,15 +218,13 @@ class BottariTemplateCursorTest {
 
             // when & then
             assertThatThrownBy(cursor::getCreatedAt)
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("날짜 형태가 올바르지 않습니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("유효하지 않은 날짜 형식입니다. - 보따리 템플릿의 생성일자는 (yyyy-MM-dd'T'HH:mm:ss) 형식이어야 합니다.");
         }
-
     }
 
     @Nested
     class GetTakenCountTest {
-
 
         @DisplayName("유효한 숫자 문자열을 Long으로 파싱한다.")
         @ParameterizedTest
@@ -271,9 +268,8 @@ class BottariTemplateCursorTest {
 
             // when & then
             assertThatThrownBy(cursor::getTakenCount)
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage("숫자 형태가 올바르지 않습니다.");
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("유효하지 않은 숫자 형식입니다. - 보따리 템플릿의 가져간 횟수는 숫자여야 합니다.");
         }
-
     }
 }

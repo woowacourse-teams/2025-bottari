@@ -3,8 +3,8 @@ package com.bottari.service;
 import com.bottari.domain.Bottari;
 import com.bottari.domain.BottariItem;
 import com.bottari.domain.BottariTemplate;
-import com.bottari.domain.BottariTemplateHistory;
 import com.bottari.domain.BottariTemplateCursor;
+import com.bottari.domain.BottariTemplateHistory;
 import com.bottari.domain.BottariTemplateItem;
 import com.bottari.domain.Member;
 import com.bottari.domain.SortProperty;
@@ -12,6 +12,8 @@ import com.bottari.dto.CreateBottariTemplateRequest;
 import com.bottari.dto.ReadBottariTemplateResponse;
 import com.bottari.dto.ReadNextBottariTemplateRequest;
 import com.bottari.dto.ReadNextBottariTemplateResponse;
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import com.bottari.repository.BottariItemRepository;
 import com.bottari.repository.BottariRepository;
 import com.bottari.repository.BottariTemplateHistoryRepository;
@@ -25,10 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +47,7 @@ public class BottariTemplateService {
 
     public ReadBottariTemplateResponse getById(final Long id) {
         final BottariTemplate bottariTemplate = bottariTemplateRepository.findByIdWithMember(id)
-                .orElseThrow(() -> new IllegalArgumentException("보따리 템플릿을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_TEMPLATE_NOT_FOUND));
         final List<BottariTemplateItem> bottariTemplateItems =
                 bottariTemplateItemRepository.findAllByBottariTemplateId(bottariTemplate.getId());
 
@@ -54,7 +56,7 @@ public class BottariTemplateService {
 
     public List<ReadBottariTemplateResponse> getBySsaid(final String ssaid) {
         final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         final List<BottariTemplate> bottariTemplateItems =
                 bottariTemplateRepository.findAllByMemberIdWithMember(member.getId());
         final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate =
@@ -89,7 +91,7 @@ public class BottariTemplateService {
             final CreateBottariTemplateRequest request
     ) {
         final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         final BottariTemplate bottariTemplate = new BottariTemplate(request.title(), member);
         final BottariTemplate savedBottariTemplate = bottariTemplateRepository.save(bottariTemplate);
         validateDuplicateItemNames(request.bottariTemplateItems());
@@ -107,11 +109,11 @@ public class BottariTemplateService {
             final String ssaid
     ) {
         final BottariTemplate bottariTemplate = bottariTemplateRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 보따리 템플릿을 찾을 수 없습니다."));
-        final List<BottariTemplateItem> bottariTemplateItems = bottariTemplateItemRepository.findAllByBottariTemplateId(
-                id);
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_TEMPLATE_NOT_FOUND));
+        final List<BottariTemplateItem> bottariTemplateItems =
+                bottariTemplateItemRepository.findAllByBottariTemplateId(id);
         final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ssaid로 가입된 사용자가 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         final Bottari bottari = new Bottari(bottariTemplate.getTitle(), member);
         final Bottari savedBottari = bottariRepository.save(bottari);
         final List<BottariItem> bottariItems = bottariTemplateItems.stream()
@@ -129,7 +131,7 @@ public class BottariTemplateService {
             final String ssaid
     ) {
         final BottariTemplate bottariTemplate = bottariTemplateRepository.findByIdWithMember(id)
-                .orElseThrow(() -> new IllegalArgumentException("보따리 템플릿을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_TEMPLATE_NOT_FOUND));
         validateOwner(ssaid, bottariTemplate);
         bottariTemplateItemRepository.deleteByBottariTemplateId(id);
         bottariTemplateRepository.deleteById(id);
@@ -182,7 +184,7 @@ public class BottariTemplateService {
         final Set<String> uniqueItemNames = new HashSet<>();
         for (final String itemName : itemNames) {
             if (!uniqueItemNames.add(itemName)) {
-                throw new IllegalArgumentException("중복된 물품이 존재합니다.");
+                throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_ITEM_DUPLICATE_IN_REQUEST);
             }
         }
     }
@@ -192,7 +194,7 @@ public class BottariTemplateService {
             final BottariTemplate bottariTemplate
     ) {
         if (!bottariTemplate.isOwner(ssaid)) {
-            throw new IllegalArgumentException("본인의 보따리 템플릿이 아닙니다.");
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_NOT_OWNED, "본인의 보따리 템플릿이 아닙니다.");
         }
     }
 
@@ -204,11 +206,12 @@ public class BottariTemplateService {
             return;
         }
         try {
-            final BottariTemplateHistory bottariTemplateHistory = new BottariTemplateHistory(member.getId(), bottariTemplate.getId());
+            final BottariTemplateHistory bottariTemplateHistory =
+                    new BottariTemplateHistory(member.getId(), bottariTemplate.getId());
             bottariTemplateHistoryRepository.save(bottariTemplateHistory);
             bottariTemplateRepository.plusTakenCountById(bottariTemplate.getId());
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalStateException("단기간 내 보따리 템플릿 가져갈 수 없습니다.");
+        } catch (final DataIntegrityViolationException exception) {
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_ALREADY_TAKEN_RECENTLY);
         }
     }
 
@@ -216,6 +219,7 @@ public class BottariTemplateService {
             final BottariTemplate bottariTemplate,
             final Member member
     ) {
-        return bottariTemplateHistoryRepository.existsByBottariTemplateIdAndMemberId(bottariTemplate.getId(), member.getId());
+        return bottariTemplateHistoryRepository.existsByBottariTemplateIdAndMemberId(bottariTemplate.getId(),
+                member.getId());
     }
 }
