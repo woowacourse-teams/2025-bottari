@@ -35,6 +35,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     private val popupMenu: PopupMenu by lazy { createPopupMenu() }
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val permissionLauncher = getPermissionLauncher()
+    private val alarmViewBinder: AlarmViewBinder by lazy { AlarmViewBinder(requireContext()) }
 
     private fun getPermissionLauncher() =
         registerForActivityResult(
@@ -51,8 +52,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 }
             }
         }
-
-    private lateinit var alarmViewBinder: AlarmViewBinder
 
     override fun onViewCreated(
         view: View,
@@ -89,7 +88,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     private fun setupUI() {
         setupPopupMenu()
         setupItemRecyclerView()
-        setupAlarmView()
     }
 
     private fun setupListener() {
@@ -208,13 +206,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 flexWrap = FlexWrap.WRAP
                 justifyContent = JustifyContent.FLEX_START
             }
-    }
-
-    private fun setupAlarmView() {
-        alarmViewBinder =
-            AlarmViewBinder(
-                requireContext(),
-            )
     }
 
     private fun navigateToScreen(
