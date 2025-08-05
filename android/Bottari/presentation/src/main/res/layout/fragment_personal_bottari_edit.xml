@@ -160,7 +160,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_x_small"
-                android:text="@string/bottari_edit_add_alarm_description_text"
+                android:text="@string/bottari_edit_alarm_description_text"
                 android:textColor="@color/gray_a6a6a6"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
@@ -191,17 +191,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_edit_alarm" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_edit_alarm"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_median"
-                android:nestedScrollingEnabled="false"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_click_edit_alarm_description_not_empty" />
-
             <TextView
                 android:id="@+id/tv_click_edit_alarm_title"
                 style="@style/Pretendard_Bold_18"
@@ -221,14 +210,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/bottari_edit_add_alarm_description_text"
+                android:text="@string/bottari_edit_alarm_description_text"
                 android:textColor="@color/gray_a6a6a6"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_click_edit_alarm_title" />
 
+            <include
+                android:id="@+id/view_alarm_item"
+                layout="@layout/item_checklist_alarm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_median"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_click_edit_alarm_description_not_empty" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

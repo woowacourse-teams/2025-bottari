@@ -10,7 +10,6 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getSSAID
@@ -21,7 +20,6 @@ import com.bottari.presentation.util.PermissionUtil
 import com.bottari.presentation.util.PermissionUtil.requiredPermissions
 import com.bottari.presentation.view.edit.alarm.AlarmEditFragment
 import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
-import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditAlarmAdapter
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditItemAdapter
 import com.bottari.presentation.view.edit.personal.main.rename.BottariRenameDialog
 import com.google.android.flexbox.FlexDirection
@@ -36,8 +34,8 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
     private val popupMenu: PopupMenu by lazy { createPopupMenu() }
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
-    private val alarmAdapter: PersonalBottariEditAlarmAdapter by lazy { PersonalBottariEditAlarmAdapter() }
     private val permissionLauncher = getPermissionLauncher()
+    private val alarmViewBinder: AlarmViewBinder by lazy { AlarmViewBinder(requireContext()) }
 
     private fun getPermissionLauncher() =
         registerForActivityResult(
@@ -90,7 +88,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     private fun setupUI() {
         setupPopupMenu()
         setupItemRecyclerView()
-        setupAlarmRecyclerView()
     }
 
     private fun setupListener() {
@@ -122,7 +119,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 PersonalItemEditFragment.newBundle(uiState.id, uiState.title, uiState.items),
             )
         }
-        binding.clEditAlarm.setOnClickListener {
+        binding.viewClickEditAlarm.setOnClickListener {
             if (PermissionUtil.hasAllRuntimePermissions(requireContext())) {
                 checkAndRequestSpecialPermission()
                 return@setOnClickListener
@@ -131,6 +128,17 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         }
         binding.switchAlarm.setOnClickListener {
             viewModel.updateAlarmState()
+            toggleAlarmSelection(
+                binding.switchAlarm.isChecked,
+                viewModel.uiState.value?.alarm != null,
+            )
+        }
+        binding.viewAlarmItem.clAlarmItem.setOnClickListener {
+            if (PermissionUtil.hasAllRuntimePermissions(requireContext())) {
+                checkAndRequestSpecialPermission()
+                return@setOnClickListener
+            }
+            permissionLauncher.launch(requiredPermissions)
         }
         parentFragmentManager.setFragmentResultListener(
             BottariRenameDialog.SAVE_BOTTARI_TITLE_RESULT_KEY,
@@ -165,11 +173,21 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun setupAlarm(alarm: AlarmUiModel?) {
-        val isAlarmExist = alarm != null
-        toggleAlarmSelection(isAlarmExist)
-        binding.switchAlarm.isChecked = alarm?.isActive ?: false
-        if (isAlarmExist.not()) return
-        alarmAdapter.submitList(listOf(alarm))
+        alarmViewBinder.bind(binding, alarm)
+    }
+
+    private fun toggleAlarmSelection(
+        isActive: Boolean,
+        hasAlarm: Boolean,
+    ) {
+        val showEmptyState = isActive && !hasAlarm
+        val showAlarm = isActive && hasAlarm
+
+        binding.tvClickEditAlarmTitle.isVisible = showEmptyState
+        binding.tvClickEditAlarmDescription.isVisible = showEmptyState
+        binding.viewClickEditAlarm.isVisible = showEmptyState
+        binding.tvClickEditAlarmDescriptionNotEmpty.isVisible = showAlarm
+        binding.viewAlarmItem.clAlarmItem.isVisible = showAlarm
     }
 
     private fun toggleItemSection(hasItems: Boolean) {
@@ -180,15 +198,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         binding.rvEditItem.isVisible = hasItems
     }
 
-    private fun toggleAlarmSelection(hasAlarms: Boolean) {
-        binding.tvClickEditAlarmTitle.isVisible = !hasAlarms
-        binding.tvClickEditAlarmDescription.isVisible = !hasAlarms
-        binding.viewClickEditAlarm.isVisible = !hasAlarms
-        binding.tvClickEditAlarmDescriptionNotEmpty.isVisible = hasAlarms
-        binding.rvEditAlarm.isVisible = hasAlarms
-        binding.switchAlarm.isVisible = hasAlarms
-    }
-
     private fun setupItemRecyclerView() {
         binding.rvEditItem.adapter = itemAdapter
         binding.rvEditItem.layoutManager =
@@ -197,11 +206,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 flexWrap = FlexWrap.WRAP
                 justifyContent = JustifyContent.FLEX_START
             }
-    }
-
-    private fun setupAlarmRecyclerView() {
-        binding.rvEditAlarm.adapter = alarmAdapter
-        binding.rvEditAlarm.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun navigateToScreen(
