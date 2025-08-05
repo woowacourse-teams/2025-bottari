@@ -1,8 +1,6 @@
 package com.bottari.presentation.view.template.create.adapter
 
-import android.content.Context
 import android.graphics.drawable.GradientDrawable
-import android.text.TextPaint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -12,6 +10,7 @@ import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.listener.OnItemClickListener
 import com.bottari.presentation.databinding.ItemTemplateCreateMyBottariBinding
 import com.bottari.presentation.model.MyBottariUiModel
+import com.bottari.presentation.util.ItemSummaryUtil.setSummaryItems
 
 class TemplateCreateMyBottariViewHolder(
     private val binding: ItemTemplateCreateMyBottariBinding,
@@ -26,18 +25,15 @@ class TemplateCreateMyBottariViewHolder(
     fun bind(bottari: MyBottariUiModel) {
         updateSelectedStateUI(bottari.isSelected)
         binding.tvTemplateCreateMyBottariTitle.text = bottari.title
+
+        val itemNames = bottari.items.map { it.name }
+        val suffixText = itemView.context.getString(R.string.common_format_template_items)
+
         binding.tvTemplateCreateMyBottariItems.post {
-            val context = binding.tvTemplateCreateMyBottariItems.context
-            val paint = binding.tvTemplateCreateMyBottariItems.paint
-            val width = binding.root.width
-            val summary =
-                generateSummaryTextFitting(
-                    context = context,
-                    paint = paint,
-                    availableWidth = width - TEXT_PADDING_OFFSET_PX,
-                    itemNames = bottari.items.map { item -> item.name },
-                )
-            binding.tvTemplateCreateMyBottariItems.text = summary
+            binding.tvTemplateCreateMyBottariItems.setSummaryItems(
+                itemNames = itemNames,
+                suffixFormat = suffixText,
+            )
         }
     }
 
@@ -61,35 +57,7 @@ class TemplateCreateMyBottariViewHolder(
         binding.root.scaleY = scale
     }
 
-    private fun generateSummaryTextFitting(
-        context: Context,
-        paint: TextPaint,
-        availableWidth: Int,
-        itemNames: List<String>,
-    ): String {
-        if (itemNames.isEmpty()) return ""
-        val fullText = itemNames.joinToString()
-        if (paint.measureText(fullText) <= availableWidth) {
-            return fullText
-        }
-        val totalItemCount = itemNames.size
-        val suffix = context.getString(R.string.common_format_template_items, totalItemCount)
-        val fittingNames =
-            itemNames
-                .indices
-                .asSequence()
-                .map { endIndex -> itemNames.subList(0, endIndex + 1) }
-                .takeWhile { names ->
-                    val text = names.joinToString() + suffix
-                    paint.measureText(text) < availableWidth
-                }.lastOrNull()
-                ?: emptyList()
-        val prefix = fittingNames.joinToString()
-        return prefix + suffix
-    }
-
     companion object {
-        private const val TEXT_PADDING_OFFSET_PX = 50
         private const val SELECTED_STATE_STROKE_WIDTH_DP = 2
 
         fun from(

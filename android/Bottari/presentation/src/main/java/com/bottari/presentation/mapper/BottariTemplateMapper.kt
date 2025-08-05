@@ -12,6 +12,7 @@ object BottariTemplateMapper {
             title = title,
             items = items.map { item -> item.toUiModel() },
             author = author,
+            takenCount = takenCount,
         )
 
     fun BottariTemplateItem.toUiModel(): BottariTemplateItemUiModel =

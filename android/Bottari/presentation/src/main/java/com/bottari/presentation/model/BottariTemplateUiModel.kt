@@ -5,4 +5,5 @@ data class BottariTemplateUiModel(
     val title: String,
     val items: List<BottariTemplateItemUiModel>,
     val author: String,
+    val takenCount: Int,
 )
