@@ -181,13 +181,13 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         hasAlarm: Boolean,
     ) {
         val showEmptyState = isActive && !hasAlarm
-        val showAlarmList = isActive && hasAlarm
+        val showAlarm = isActive && hasAlarm
 
         binding.tvClickEditAlarmTitle.isVisible = showEmptyState
         binding.tvClickEditAlarmDescription.isVisible = showEmptyState
         binding.viewClickEditAlarm.isVisible = showEmptyState
-        binding.tvClickEditAlarmDescriptionNotEmpty.isVisible = showAlarmList
-        binding.viewAlarmItem.clAlarmItem.isVisible = showAlarmList
+        binding.tvClickEditAlarmDescriptionNotEmpty.isVisible = showAlarm
+        binding.viewAlarmItem.clAlarmItem.isVisible = showAlarm
     }
 
     private fun toggleItemSection(hasItems: Boolean) {
