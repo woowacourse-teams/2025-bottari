@@ -1,0 +1,172 @@
+name: BE PR CI & NOTIFICATION
+
+on:
+  pull_request:
+    branches:
+      - be/develop
+    types: [ opened, synchronize, reopened, closed ]
+  pull_request_review:
+    types: [ submitted ]
+
+jobs:
+  ci-and-notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Grant Execute Permission for Gradlew
+        run: chmod +x ./gradlew
+
+      # 라벨 기반 Webhook 결정
+      - name: Determine Webhook
+        id: webhook
+        run: |
+          echo "WEBHOOK=${{ secrets.DISCORD_BACKEND_WEBHOOK }}" >> $GITHUB_ENV
+
+      - name: Build and Test
+        id: test
+        run: ./gradlew clean build --no-daemon
+        continue-on-error: true
+
+      # 테스트 성공 시 리뷰어만 멘션
+      - name: Notify Discord (Test Success)
+        if: success()
+        run: |
+          BASE_BRANCH=${{ github.event.pull_request.base.ref }}
+          HEAD_BRANCH=${{ github.event.pull_request.head.ref }}
+
+          # 리뷰어 멘션 & 리스트 생성
+          REVIEWERS=$(jq -r '.pull_request.requested_reviewers[].login' <<< '${{ toJson(github.event) }}')
+          MENTIONS=""
+          REVIEWER_NAMES=""
+          for r in $REVIEWERS; do
+            ID=$(echo '${{ secrets.DISCORD_USER_MAP }}' | jq -r --arg r "$r" '.[$r]')
+            if [ "$ID" != "null" ]; then
+              MENTIONS="$MENTIONS <@$ID>"
+              if [ -z "$REVIEWER_NAMES" ]; then
+                REVIEWER_NAMES="$r"
+              else
+                REVIEWER_NAMES="$REVIEWER_NAMES, $r"
+              fi
+            fi
+          done
+
+          if [ -z "$MENTIONS" ]; then
+            MENTIONS="리뷰어가 지정되지 않았습니다."
+          fi
+
+          MESSAGE='{
+            "content": "'"$MENTIONS"' 테스트가 성공했습니다. 코드 리뷰 부탁드립니다!",
+            "embeds": [
+              {
+                "title": "✅ 테스트 성공 - 리뷰 요청",
+                "description": "테스트가 통과했습니다. 아래 PR 정보를 확인해주세요.",
+                "url": "'"${{ github.event.pull_request.html_url }}"'",
+                "color": 65280,
+                "fields": [
+                  { "name": "PR 제목", "value": "'"${{ github.event.pull_request.title }}"'" },
+                  { "name": "브랜치", "value": "'"$HEAD_BRANCH → $BASE_BRANCH"'" },
+                  { "name": "작성자", "value": "'"${{ github.event.pull_request.user.login }}"'" },
+                  { "name": "리뷰어", "value": "'"$REVIEWER_NAMES"'" }
+                ]
+              }
+            ]
+          }'
+          echo "$MESSAGE" > payload.json
+          curl -H "Content-Type: application/json" -d @payload.json $WEBHOOK
+
+      # 테스트 실패 시 PR 작성자만 멘션 + 로그 링크
+      - name: Notify Discord (Test Failure)
+        if: failure()
+        run: |
+          AUTHOR=${{ github.event.pull_request.user.login }}
+          AUTHOR_ID=$(echo '${{ secrets.DISCORD_USER_MAP }}' | jq -r --arg AUTHOR "$AUTHOR" '.[$AUTHOR]')
+          BASE_BRANCH=${{ github.event.pull_request.base.ref }}
+          HEAD_BRANCH=${{ github.event.pull_request.head.ref }}
+          LOG_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          MESSAGE='{
+            "content": "<@'"$AUTHOR_ID"'> 테스트가 실패했습니다. PR을 확인해주세요!",
+            "embeds": [
+              {
+                "title": "❌ 테스트 실패",
+                "description": "테스트가 실패했습니다. [로그 확인하기]('"$LOG_URL"')",
+                "url": "'"${{ github.event.pull_request.html_url }}"'",
+                "color": 16711680,
+                "fields": [
+                  { "name": "PR 제목", "value": "'"${{ github.event.pull_request.title }}"'" },
+                  { "name": "브랜치", "value": "'"$HEAD_BRANCH → $BASE_BRANCH"'" },
+                  { "name": "작성자", "value": "'"$AUTHOR"'" }
+                ]
+              }
+            ]
+          }'
+          echo "$MESSAGE" > payload.json
+          curl -H "Content-Type: application/json" -d @payload.json $WEBHOOK
+
+      # 리뷰가 달리면 PR 작성자 멘션
+      - name: Notify Discord - Review
+        if: github.event_name == 'pull_request_review'
+        run: |
+          AUTHOR=${{ github.event.pull_request.user.login }}
+          AUTHOR_ID=$(echo '${{ secrets.DISCORD_USER_MAP }}' | jq -r --arg AUTHOR "$AUTHOR" '.[$AUTHOR]')
+          BASE_BRANCH=${{ github.event.pull_request.base.ref }}
+          HEAD_BRANCH=${{ github.event.pull_request.head.ref }}
+
+          MESSAGE='{
+            "content": "<@'"$AUTHOR_ID"'> 📝 리뷰가 등록되었습니다!",
+            "embeds": [
+              {
+                "title": "리뷰 등록",
+                "description": "'"${{ github.event.review.body }}"'",
+                "url": "'"${{ github.event.pull_request.html_url }}"'",
+                "color": 3447003,
+                "fields": [
+                  { "name": "PR 제목", "value": "'"${{ github.event.pull_request.title }}"'" },
+                  { "name": "브랜치", "value": "'"$HEAD_BRANCH → $BASE_BRANCH"'" },
+                  { "name": "리뷰 상태", "value": "'"${{ github.event.review.state }}"'" }
+                ]
+              }
+            ]
+          }'
+          echo "$MESSAGE" > payload.json
+          curl -H "Content-Type: application/json" -d @payload.json $WEBHOOK
+
+      # PR 닫힘/머지 알림
+      - name: Notify Discord - PR Closed/Merged
+        if: github.event_name == 'pull_request' && github.event.action == 'closed'
+        run: |
+          BASE_BRANCH=${{ github.event.pull_request.base.ref }}
+          HEAD_BRANCH=${{ github.event.pull_request.head.ref }}
+
+          if [ "${{ github.event.pull_request.merged }}" = "true" ]; then
+            STATUS="🎉 PR 머지 완료"
+            COLOR=16766720 # 금색 (#FFD700)
+          else
+            STATUS="⚠️ PR 닫힘 (머지 안됨)"
+            COLOR=15105570
+          fi
+
+          MESSAGE='{
+            "embeds": [
+              {
+                "title": "'"$STATUS"'",
+                "url": "'"${{ github.event.pull_request.html_url }}"'",
+                "color": '$COLOR',
+                "fields": [
+                  { "name": "PR 제목", "value": "'"${{ github.event.pull_request.title }}"'" },
+                  { "name": "브랜치", "value": "'"$HEAD_BRANCH → $BASE_BRANCH"'" },
+                  { "name": "작성자", "value": "'"${{ github.event.pull_request.user.login }}"'" }
+                ]
+              }
+            ]
+          }'
+          echo "$MESSAGE" > payload.json
+          curl -H "Content-Type: application/json" -d @payload.json $WEBHOOK
