@@ -168,7 +168,7 @@ public class BottariItemService {
             final String ssaid,
             final BottariItem bottariItem
     ) {
-        if (!bottariItem.getBottari().isOwner(ssaid)) {
+        if (!bottariItem.isOwner(ssaid)) {
             throw new BusinessException(ErrorCode.BOTTARI_ITEM_NOT_OWNED, "본인의 보따리 물품이 아닙니다.");
         }
     }
