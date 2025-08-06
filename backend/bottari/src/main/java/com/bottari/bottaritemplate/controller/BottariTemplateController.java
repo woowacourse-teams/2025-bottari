@@ -1,11 +1,10 @@
 package com.bottari.bottaritemplate.controller;
 
-import com.bottari.bottaritemplate.service.BottariTemplateService;
 import com.bottari.bottaritemplate.dto.CreateBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
-import jakarta.servlet.http.HttpServletRequest;
+import com.bottari.bottaritemplate.service.BottariTemplateService;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,9 +40,8 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     @GetMapping("/me")
     @Override
     public ResponseEntity<List<ReadBottariTemplateResponse>> readMine(
-            final HttpServletRequest httpServletRequest
+            @RequestHeader("ssaid") final String ssaid
     ) {
-        final String ssaid = httpServletRequest.getHeader("ssaid");
         final List<ReadBottariTemplateResponse> responses = bottariTemplateService.getBySsaid(ssaid);
 
         return ResponseEntity.ok(responses);
@@ -73,9 +72,8 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     @Override
     public ResponseEntity<Void> create(
             @RequestBody final CreateBottariTemplateRequest request,
-            final HttpServletRequest httpServletRequest
+            @RequestHeader("ssaid") final String ssaid
     ) {
-        final String ssaid = httpServletRequest.getHeader("ssaid");
         final Long id = bottariTemplateService.create(ssaid, request);
 
         return ResponseEntity.created(URI.create("/templates/" + id)).build();
@@ -85,9 +83,8 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     @Override
     public ResponseEntity<Void> createBottari(
             @PathVariable final Long id,
-            final HttpServletRequest httpServletRequest
+            @RequestHeader("ssaid") final String ssaid
     ) {
-        final String ssaid = httpServletRequest.getHeader("ssaid");
         final Long bottariId = bottariTemplateService.createBottari(id, ssaid);
 
         return ResponseEntity.created(URI.create("/bottaries/" + bottariId)).build();
@@ -97,9 +94,8 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     @Override
     public ResponseEntity<Void> delete(
             @PathVariable final Long id,
-            final HttpServletRequest httpServletRequest
+            @RequestHeader("ssaid") final String ssaid
     ) {
-        final String ssaid = httpServletRequest.getHeader("ssaid");
         bottariTemplateService.deleteById(id, ssaid);
 
         return ResponseEntity.noContent().build();

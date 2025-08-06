@@ -7,10 +7,10 @@ import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 
@@ -36,7 +36,7 @@ public interface BottariTemplateApiDocs {
             ErrorCode.MEMBER_NOT_FOUND
     })
     ResponseEntity<List<ReadBottariTemplateResponse>> readMine(
-            final HttpServletRequest httpServletRequest
+            @Parameter(hidden = true) final String ssaid
     );
 
     @Operation(summary = "보따리 템플릿 목록 조회")
@@ -74,7 +74,7 @@ public interface BottariTemplateApiDocs {
     })
     ResponseEntity<Void> create(
             final CreateBottariTemplateRequest request,
-            final HttpServletRequest httpServletRequest
+            @Parameter(hidden = true) final String ssaid
     );
 
     @Operation(summary = "보따리 템플릿으로 보따리 생성")
@@ -91,7 +91,7 @@ public interface BottariTemplateApiDocs {
     })
     ResponseEntity<Void> createBottari(
             final Long id,
-            final HttpServletRequest httpServletRequest
+            @Parameter(hidden = true) final String ssaid
     );
 
     @Operation(summary = "보따리 템플릿 삭제")
@@ -104,6 +104,6 @@ public interface BottariTemplateApiDocs {
     })
     ResponseEntity<Void> delete(
             final Long id,
-            final HttpServletRequest httpServletRequest
+            @Parameter(hidden = true) final String ssaid
     );
 }
