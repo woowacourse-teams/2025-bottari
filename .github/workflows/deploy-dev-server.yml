@@ -53,7 +53,8 @@ jobs:
           echo "Starting server with $JAR_FILE"
           RUNNER_TRACKING_ID=""
 
-          DB_PASSWORD='${{ secrets.DB_PASSWORD }}' \
-          API_KEY='${{ secrets.API_KEY }}' \
+          DATABASE_URL='${{ secrets.DATABASE_URL }}' \
+          DATABASE_USERNAME='${{ secrets.DATABASE_USERNAME }}' \
+          DATABASE_PASSWORD='${{ secrets.DATABASE_PASSWORD }}' \
           SPRING_PROFILES_ACTIVE=dev \
           nohup java -Duser.timezone=Asia/Seoul -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
