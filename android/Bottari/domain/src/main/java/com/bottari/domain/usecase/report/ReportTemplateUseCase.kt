@@ -8,5 +8,6 @@ class ReportTemplateUseCase(
     suspend operator fun invoke(
         ssaid: String,
         bottariTemplateId: Long,
-    ): Result<Unit> = reportRepository.reportTemplate(ssaid, bottariTemplateId)
+        reason: String,
+    ): Result<Unit> = reportRepository.reportTemplate(ssaid, bottariTemplateId, reason)
 }

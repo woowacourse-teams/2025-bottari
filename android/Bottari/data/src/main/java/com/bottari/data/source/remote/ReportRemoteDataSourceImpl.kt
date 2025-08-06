@@ -9,5 +9,6 @@ class ReportRemoteDataSourceImpl(
     override suspend fun reportTemplate(
         ssaid: String,
         bottariTemplateId: Long,
-    ): Result<Unit> = safeApiCall { reportService.reportTemplate(ssaid, bottariTemplateId) }
+        reason: String,
+    ): Result<Unit> = safeApiCall { reportService.reportTemplate(ssaid, bottariTemplateId, reason) }
 }

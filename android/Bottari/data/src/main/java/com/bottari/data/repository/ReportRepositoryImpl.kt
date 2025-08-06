@@ -9,5 +9,6 @@ class ReportRepositoryImpl(
     override suspend fun reportTemplate(
         ssaid: String,
         bottariTemplateId: Long,
-    ): Result<Unit> = reportRemoteDataSource.reportTemplate(ssaid, bottariTemplateId)
+        reason: String,
+    ): Result<Unit> = reportRemoteDataSource.reportTemplate(ssaid, bottariTemplateId, reason)
 }
