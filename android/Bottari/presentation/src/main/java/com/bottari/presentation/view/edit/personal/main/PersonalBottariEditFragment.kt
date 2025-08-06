@@ -32,7 +32,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         val bottariId = requireArguments().getLong(ARG_BOTTARI_ID)
         PersonalBottariEditViewModel.Factory(requireContext().getSSAID(), bottariId)
     }
-    private val popupMenu: PopupMenu by lazy { createPopupMenu() }
+    private lateinit var popupMenu: PopupMenu
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val permissionLauncher = getPermissionLauncher()
     private val alarmViewBinder: AlarmViewBinder by lazy { AlarmViewBinder(requireContext()) }
@@ -149,6 +149,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun setupPopupMenu() {
+        popupMenu = createPopupMenu()
         popupMenu.menuInflater.inflate(R.menu.personal_bottari_edit_popup_menu, popupMenu.menu)
     }
 
