@@ -17,7 +17,7 @@ data class AlarmUiModel(
     val locationAlarm: LocationAlarmUiModel? = null,
 ) : Parcelable {
     val isRepeatEveryDay: Boolean
-        get() = repeatDays.size == DAYS_IN_WEEK
+        get() = repeatDays.count { repeatDay -> repeatDay.isChecked } == DAYS_IN_WEEK
 
     companion object {
         private const val DAYS_IN_WEEK = 7
