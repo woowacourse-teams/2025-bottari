@@ -51,8 +51,8 @@ class BottariControllerTest {
                 .willReturn(response);
 
         // when & then
-        mockMvc.perform(get("/bottaries/1"))
-//                        .header("ssaid", ssaid))
+        mockMvc.perform(get("/bottaries/1")
+                        .header("ssaid", ssaid))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(response)));
     }
