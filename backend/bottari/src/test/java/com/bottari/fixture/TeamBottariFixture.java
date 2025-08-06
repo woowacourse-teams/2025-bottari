@@ -5,7 +5,6 @@ import com.bottari.teambottari.domain.TeamBottari;
 
 public enum TeamBottariFixture {
 
-
     TEAM_BOTTARI("title"),
     TEAM_BOTTARI_2("title2"),
     ANOTHER_TEAM_BOTTARI("another title"),

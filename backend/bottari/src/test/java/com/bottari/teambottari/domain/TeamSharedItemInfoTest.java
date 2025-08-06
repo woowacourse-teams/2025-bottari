@@ -16,7 +16,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class TeamSharedItemInfoTest {
 
-    @DisplayName("팀 보따리 물품명이 공백인 경우, 예외를 던진다.")
+    @DisplayName("팀 공유 보따리 물품명이 공백인 경우, 예외를 던진다.")
     @ParameterizedTest
     @ValueSource(strings = {"", "   "})
     void validateName_Blank(final String name) {
@@ -30,7 +30,7 @@ class TeamSharedItemInfoTest {
                 .hasMessage("팀 보따리 물품명은 공백일 수 없습니다.");
     }
 
-    @DisplayName("팀 보따리 물품명이 20자를 초과하는 경우, 예외를 던진다.")
+    @DisplayName("팀 공유 보따리 물품명이 20자를 초과하는 경우, 예외를 던진다.")
     @ParameterizedTest
     @ValueSource(strings = {"이름이너무길어서보따리물품명으로사용할수없습니다", "이름이너무길어서보따리물품명으로사용할수없습니다!"})
     void validateName_TooLong(final String name) {
