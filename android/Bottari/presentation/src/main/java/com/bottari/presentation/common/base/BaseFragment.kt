@@ -49,17 +49,6 @@ abstract class BaseFragment<VB : ViewBinding>(
         _binding = null
     }
 
-    protected fun showSnackbar(
-        @StringRes message: Int,
-        duration: Int = Snackbar.LENGTH_SHORT,
-        onDismissAction: (() -> Unit)? = null,
-    ) {
-        val rootView = view ?: return
-        val snackbar = Snackbar.make(rootView, message, duration)
-        onDismissAction?.let { snackbar.onDismiss(it) }
-        snackbar.show()
-    }
-
     protected fun toggleLoadingIndicator(isShow: Boolean) {
         if (isShow) {
             if (loadingDialog.isAdded || loadingDialog.isVisible || loadingDialog.isRemoving) return
@@ -92,17 +81,6 @@ abstract class BaseFragment<VB : ViewBinding>(
         val systemBarInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
 
         return (imeInset - systemBarInset).coerceAtLeast(0)
-    }
-
-    private fun Snackbar.onDismiss(action: () -> Unit) {
-        val callback =
-            object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                override fun onDismissed(
-                    transientBottomBar: Snackbar?,
-                    event: Int,
-                ) = action()
-            }
-        addCallback(callback)
     }
 
     companion object {
