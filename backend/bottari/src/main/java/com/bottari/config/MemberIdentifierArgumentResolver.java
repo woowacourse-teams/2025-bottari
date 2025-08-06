@@ -30,6 +30,7 @@ public class MemberIdentifierArgumentResolver implements HandlerMethodArgumentRe
         if (memberIdentifier == null || memberIdentifier.isBlank()) {
             throw new BusinessException(ErrorCode.MEMBER_IDENTIFIER_NOT_FOUND_IN_REQUEST, MEMBER_IDENTIFIER_HEADER);
         }
+        
         return memberIdentifier;
     }
 }
