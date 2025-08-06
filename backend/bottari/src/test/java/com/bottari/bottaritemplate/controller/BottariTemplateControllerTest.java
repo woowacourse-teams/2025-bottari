@@ -1,4 +1,4 @@
-package com.bottari.bottaritemplate;
+package com.bottari.bottaritemplate.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -10,14 +10,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.bottari.bottaritemplate.controller.BottariTemplateController;
 import com.bottari.bottaritemplate.domain.SortProperty;
 import com.bottari.bottaritemplate.dto.CreateBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse;
 import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse.BottariTemplateItemResponse;
+import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
 import com.bottari.bottaritemplate.service.BottariTemplateService;
 import com.bottari.log.LogFormatter;
-import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;

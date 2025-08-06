@@ -1,4 +1,4 @@
-package com.bottari.alarm;
+package com.bottari.alarm.controller;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.bottari.alarm.controller.AlarmController;
 import com.bottari.alarm.domain.RepeatType;
 import com.bottari.alarm.dto.CreateAlarmRequest;
 import com.bottari.alarm.dto.UpdateAlarmRequest;

@@ -1,4 +1,4 @@
-package com.bottari.support;
+package com.bottari.report.controller;
 
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.bottari.bottaritemplate.dto.ReportBottariTemplateRequest;
 import com.bottari.log.LogFormatter;
-import com.bottari.report.controller.ReportController;
 import com.bottari.report.service.ReportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;

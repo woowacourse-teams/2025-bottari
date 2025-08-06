@@ -1,10 +1,9 @@
-package com.bottari.bottaritemplate;
+package com.bottari.bottaritemplate.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.bottari.bottaritemplate.domain.BottariTemplateCursor;
 import com.bottari.error.BusinessException;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;

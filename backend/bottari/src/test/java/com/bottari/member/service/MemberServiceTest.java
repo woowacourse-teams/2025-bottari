@@ -1,15 +1,14 @@
-package com.bottari.member;
+package com.bottari.member.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.bottari.error.BusinessException;
 import com.bottari.member.domain.Member;
 import com.bottari.member.dto.CheckRegistrationResponse;
 import com.bottari.member.dto.CreateMemberRequest;
 import com.bottari.member.dto.UpdateMemberRequest;
-import com.bottari.error.BusinessException;
-import com.bottari.member.service.MemberService;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

@@ -1,29 +1,28 @@
-package com.bottari.bottari;
+package com.bottari.bottari.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.bottari.bottari.service.BottariService;
-import com.bottari.config.JpaAuditingConfig;
 import com.bottari.alarm.domain.Alarm;
-import com.bottari.bottari.domain.Bottari;
-import com.bottari.bottari.domain.BottariItem;
 import com.bottari.alarm.domain.LocationAlarm;
-import com.bottari.member.domain.Member;
 import com.bottari.alarm.domain.RepeatType;
 import com.bottari.alarm.domain.RoutineAlarm;
+import com.bottari.bottari.domain.Bottari;
+import com.bottari.bottari.domain.BottariItem;
 import com.bottari.bottari.dto.CreateBottariRequest;
 import com.bottari.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.bottari.dto.ReadBottariResponse;
 import com.bottari.bottari.dto.UpdateBottariRequest;
+import com.bottari.config.JpaAuditingConfig;
+import com.bottari.error.BusinessException;
 import com.bottari.fixture.AlarmFixture;
 import com.bottari.fixture.BottariFixture;
 import com.bottari.fixture.BottariItemFixture;
 import com.bottari.fixture.LocationAlarmFixture;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.RoutineAlarmFixture;
-import com.bottari.error.BusinessException;
+import com.bottari.member.domain.Member;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -146,7 +145,8 @@ class BottariServiceTest {
             entityManager.persist(alarm);
 
             // when
-            final List<ReadBottariPreviewResponse> actual = bottariService.getAllBySsaidSortedByLatest(member.getSsaid());
+            final List<ReadBottariPreviewResponse> actual = bottariService.getAllBySsaidSortedByLatest(
+                    member.getSsaid());
 
             // then
             assertAll(
@@ -338,7 +338,6 @@ class BottariServiceTest {
 
             final Bottari anotherMemberBottari = BottariFixture.BOTTARI.get(anotherMember);
             entityManager.persist(anotherMemberBottari);
-
 
             // when & then
             assertThatThrownBy(() -> bottariService.deleteById(anotherMemberBottari.getId(), "ssaid"))

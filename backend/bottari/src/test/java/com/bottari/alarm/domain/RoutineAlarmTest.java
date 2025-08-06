@@ -1,9 +1,7 @@
-package com.bottari.alarm;
+package com.bottari.alarm.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.bottari.alarm.domain.RepeatType;
-import com.bottari.alarm.domain.RoutineAlarm;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,6 +15,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 class RoutineAlarmTest {
+
+    private static Stream<Arguments> provideTypeAndBitmask() {
+        return Stream.of(
+                Arguments.of(RepeatType.NON_REPEAT, 0),
+                Arguments.of(RepeatType.EVERY_DAY_REPEAT, 0b1111111)
+        );
+    }
 
     @DisplayName("요일에 따라 비트마스크를 계산한다.")
     @Test
@@ -88,12 +93,5 @@ class RoutineAlarmTest {
 
         // then
         assertThat(actual).isEqualTo(expected);
-    }
-
-    private static Stream<Arguments> provideTypeAndBitmask() {
-        return Stream.of(
-                Arguments.of(RepeatType.NON_REPEAT, 0),
-                Arguments.of(RepeatType.EVERY_DAY_REPEAT, 0b1111111)
-        );
     }
 }

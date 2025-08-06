@@ -1,4 +1,4 @@
-package com.bottari.bottari;
+package com.bottari.bottari.controller;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.bottari.bottari.controller.BottariItemController;
 import com.bottari.bottari.dto.CreateBottariItemRequest;
 import com.bottari.bottari.dto.EditBottariItemsRequest;
 import com.bottari.bottari.dto.ReadBottariItemResponse;

@@ -1,9 +1,8 @@
-package com.bottari.bottaritemplate;
+package com.bottari.bottaritemplate.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.bottari.bottaritemplate.domain.SortProperty;
 import com.bottari.error.BusinessException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;

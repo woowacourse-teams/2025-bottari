@@ -7,7 +7,7 @@ public enum BottariItemFixture {
 
     BOTTARI_ITEM_1("name1"),
     BOTTARI_ITEM_2("name2"),
-    BOTTARI_ITEM_3("name3")
+    BOTTARI_ITEM_3("name3"),
     ;
 
     private final String name;

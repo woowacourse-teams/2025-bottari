@@ -5,7 +5,7 @@ import com.bottari.member.domain.Member;
 public enum MemberFixture {
 
     MEMBER("ssaid", "name"),
-    ANOTHER_MEMBER("another_ssaid", "another")
+    ANOTHER_MEMBER("another_ssaid", "another"),
     ;
 
     private final String ssaid;

@@ -1,4 +1,4 @@
-package com.bottari.bottari;
+package com.bottari.bottari.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -6,15 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.bottari.domain.Bottari;
 import com.bottari.bottari.domain.BottariItem;
-import com.bottari.bottari.service.BottariItemService;
-import com.bottari.member.domain.Member;
 import com.bottari.bottari.dto.CreateBottariItemRequest;
 import com.bottari.bottari.dto.EditBottariItemsRequest;
 import com.bottari.bottari.dto.ReadBottariItemResponse;
+import com.bottari.error.BusinessException;
 import com.bottari.fixture.BottariFixture;
 import com.bottari.fixture.BottariItemFixture;
 import com.bottari.fixture.MemberFixture;
-import com.bottari.error.BusinessException;
+import com.bottari.member.domain.Member;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

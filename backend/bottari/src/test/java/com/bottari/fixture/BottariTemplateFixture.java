@@ -7,7 +7,7 @@ public enum BottariTemplateFixture {
 
     BOTTARI_TEMPLATE("title"),
     BOTTARI_TEMPLATE_2("title2"),
-    ANOTHER_BOTTARI_TEMPLATE("another title");
+    ANOTHER_BOTTARI_TEMPLATE("another title"),
     ;
 
     private final String title;

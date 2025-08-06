@@ -1,24 +1,23 @@
-package com.bottari.alarm;
+package com.bottari.alarm.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.alarm.domain.Alarm;
-import com.bottari.alarm.service.AlarmService;
-import com.bottari.bottari.domain.Bottari;
 import com.bottari.alarm.domain.LocationAlarm;
-import com.bottari.member.domain.Member;
 import com.bottari.alarm.domain.RepeatType;
 import com.bottari.alarm.domain.RoutineAlarm;
 import com.bottari.alarm.dto.CreateAlarmRequest;
 import com.bottari.alarm.dto.UpdateAlarmRequest;
+import com.bottari.bottari.domain.Bottari;
+import com.bottari.error.BusinessException;
 import com.bottari.fixture.AlarmFixture;
 import com.bottari.fixture.BottariFixture;
 import com.bottari.fixture.LocationAlarmFixture;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.RoutineAlarmFixture;
-import com.bottari.error.BusinessException;
+import com.bottari.member.domain.Member;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalTime;

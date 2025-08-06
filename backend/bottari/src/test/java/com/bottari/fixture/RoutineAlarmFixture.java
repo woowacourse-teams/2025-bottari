@@ -26,7 +26,8 @@ public enum RoutineAlarmFixture {
             RepeatType.EVERY_WEEK_REPEAT,
             null,
             Set.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)
-    );
+    ),
+    ;
 
     private final LocalTime time;
     private final RepeatType type;

@@ -1,25 +1,24 @@
-package com.bottari.bottaritemplate;
+package com.bottari.bottaritemplate.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.bottari.bottaritemplate.service.BottariTemplateService;
-import com.bottari.config.JpaAuditingConfig;
 import com.bottari.bottari.domain.Bottari;
 import com.bottari.bottari.domain.BottariItem;
 import com.bottari.bottaritemplate.domain.BottariTemplate;
 import com.bottari.bottaritemplate.domain.BottariTemplateHistory;
 import com.bottari.bottaritemplate.domain.BottariTemplateItem;
-import com.bottari.member.domain.Member;
 import com.bottari.bottaritemplate.dto.CreateBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse;
+import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateRequest;
+import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
+import com.bottari.config.JpaAuditingConfig;
+import com.bottari.error.BusinessException;
 import com.bottari.fixture.BottariTemplateFixture;
 import com.bottari.fixture.BottariTemplateItemFixture;
 import com.bottari.fixture.MemberFixture;
-import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateRequest;
-import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
-import com.bottari.error.BusinessException;
+import com.bottari.member.domain.Member;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

@@ -5,7 +5,8 @@ import com.bottari.alarm.domain.LocationAlarm;
 public enum LocationAlarmFixture {
 
     LOCATION_ALARM_ON(true, 37.5665, 126.9780, 100),
-    LOCATION_ALARM_OFF(false, null, null, 0);
+    LOCATION_ALARM_OFF(false, null, null, 0),
+    ;
 
     private final boolean isLocationAlarmActive;
     private final Double latitude;

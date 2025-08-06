@@ -1,10 +1,8 @@
-package com.bottari.bottari;
+package com.bottari.bottari.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.bottari.bottari.domain.Bottari;
-import com.bottari.bottari.domain.BottariItem;
 import com.bottari.error.BusinessException;
 import com.bottari.member.domain.Member;
 import org.junit.jupiter.api.DisplayName;

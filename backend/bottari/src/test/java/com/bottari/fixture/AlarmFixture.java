@@ -1,14 +1,15 @@
 package com.bottari.fixture;
 
 import com.bottari.alarm.domain.Alarm;
-import com.bottari.bottari.domain.Bottari;
 import com.bottari.alarm.domain.LocationAlarm;
 import com.bottari.alarm.domain.RoutineAlarm;
+import com.bottari.bottari.domain.Bottari;
 
 public enum AlarmFixture {
 
     ALARM_ON(true),
-    ALARM_OFF(false);
+    ALARM_OFF(false),
+    ;
 
     private final boolean isActive;
 

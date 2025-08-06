@@ -1,4 +1,4 @@
-package com.bottari.member;
+package com.bottari.member.controller;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -8,11 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.bottari.log.LogFormatter;
 import com.bottari.member.dto.CheckRegistrationResponse;
 import com.bottari.member.dto.CreateMemberRequest;
 import com.bottari.member.dto.UpdateMemberRequest;
-import com.bottari.log.LogFormatter;
-import com.bottari.member.controller.MemberController;
 import com.bottari.member.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;

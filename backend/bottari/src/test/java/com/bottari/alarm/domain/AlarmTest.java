@@ -1,12 +1,8 @@
-package com.bottari.alarm;
+package com.bottari.alarm.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.bottari.alarm.domain.Alarm;
-import com.bottari.alarm.domain.LocationAlarm;
-import com.bottari.alarm.domain.RepeatType;
-import com.bottari.alarm.domain.RoutineAlarm;
 import com.bottari.bottari.domain.Bottari;
 import com.bottari.error.BusinessException;
 import com.bottari.member.domain.Member;
