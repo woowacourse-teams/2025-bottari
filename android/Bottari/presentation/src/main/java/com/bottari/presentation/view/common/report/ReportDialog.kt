@@ -6,32 +6,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioGroup
+import androidx.annotation.StringRes
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.getSSAID
-import com.bottari.presentation.common.extension.showCustomSnackbar
 import com.bottari.presentation.databinding.DialogReportBinding
 
 class ReportDialog : DialogFragment() {
+    private var _binding: DialogReportBinding? = null
+    val binding get() = _binding!!
+
     private val viewModel: ReportViewModel by viewModels {
         ReportViewModel.Factory(
             ssaid = requireContext().getSSAID(),
-            templateId = arguments?.getLong(ARG_TEMPLATE_ID)!!,
+            templateId = requireArguments().getLong(ARG_TEMPLATE_ID),
         )
     }
-
-    private var _binding: DialogReportBinding? = null
-    val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = DialogReportBinding.inflate(layoutInflater)
+        _binding = DialogReportBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -40,39 +41,10 @@ class ReportDialog : DialogFragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setupObserver()
-        setupUI()
-        setupListener()
-    }
-
-    override fun onStart() {
-        super.onStart()
         setupDialog()
-    }
-
-    private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            binding.btnDialogReport.isEnabled = uiState.reason.isNotEmpty()
-        }
-
-        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
-            when (uiEvent) {
-                ReportUiEvent.ReportTemplateSuccess -> {
-                    binding.root.showCustomSnackbar(R.string.common_report_dialog_submit_success_text)
-                    dismiss()
-                }
-
-                ReportUiEvent.ReportTemplateFailure -> binding.root.showCustomSnackbar(R.string.common_report_dialog_submit_failure_text)
-            }
-        }
-    }
-
-    private fun setupUI() {}
-
-    private fun setupListener() {
-        binding.btnDialogReportClose.setOnClickListener { dismiss() }
-        binding.rgReportReason.setOnCheckedChangeListener(::handleReasonChange)
-        binding.btnDialogReport.setOnClickListener { viewModel.reportTemplate() }
+        setupObserver()
+        setupListeners()
+        setupInitialReason(savedInstanceState)
     }
 
     override fun onDestroyView() {
@@ -80,41 +52,84 @@ class ReportDialog : DialogFragment() {
         _binding = null
     }
 
-    private fun handleReasonChange(
-        view: RadioGroup,
-        checkedId: Int,
-    ) {
-        val reason =
+    private fun setupDialog() {
+        dialog?.apply {
+            setCancelable(false)
+            window?.apply {
+                setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+                val width = (Resources.getSystem().displayMetrics.widthPixels * WIDTH_RATIO).toInt()
+                setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+            }
+        }
+    }
+
+    private fun setupInitialReason(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) binding.rbSpamOrAd.isChecked = true
+    }
+
+    private fun setupObserver() {
+        viewModel.uiState.observe(viewLifecycleOwner, ::handleUiState)
+        viewModel.uiEvent.observe(viewLifecycleOwner, ::handleUiEvent)
+    }
+
+    private fun handleUiState(state: ReportUiState) {
+        binding.btnDialogReport.isEnabled = state.isButtonEnabled
+    }
+
+    private fun handleUiEvent(event: ReportUiEvent) {
+        val messageRes =
+            when (event) {
+                ReportUiEvent.ReportTemplateSuccess -> R.string.common_report_dialog_submit_success_text
+                ReportUiEvent.ReportTemplateFailure -> R.string.common_report_dialog_submit_failure_text
+            }
+        sendResult(messageRes)
+    }
+
+    private fun setupListeners() {
+        binding.btnDialogReportClose.setOnClickListener {
+            dismiss()
+        }
+
+        binding.rgReportReason.setOnCheckedChangeListener { _, checkedId ->
+            handleReasonChange(checkedId)
+        }
+
+        binding.btnDialogReport.setOnClickListener {
+            viewModel.reportTemplate()
+        }
+    }
+
+    private fun handleReasonChange(checkedId: Int) {
+        val selectedText =
             when (checkedId) {
                 binding.rbSpamOrAd.id -> binding.rbSpamOrAd.text
                 binding.rbPrivacyExposure.id -> binding.rbPrivacyExposure.text
                 binding.rbFalseInformation.id -> binding.rbFalseInformation.text
                 binding.rbInappropriateContent.id -> binding.rbInappropriateContent.text
-                else -> ""
+                else -> return
             }
-        viewModel.updateSelectedReason(reason.toString())
+        viewModel.updateSelectedReason(selectedText.toString())
     }
 
-    private fun setupDialog() {
-        val metrics = Resources.getSystem().displayMetrics
-        val width = (metrics.widthPixels * WIDTH_RATIO).toInt()
-        dialog?.run {
-            setCancelable(false)
-            window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
-            window?.setLayout(
-                width,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-            )
-        }
+    private fun sendResult(
+        @StringRes messageRes: Int,
+    ) {
+        setFragmentResult(
+            REQUEST_KEY_REPORT,
+            bundleOf(ARG_REPORT_RESULT to messageRes),
+        )
+        dismiss()
     }
 
     companion object {
-        private const val WIDTH_RATIO = 0.9
+        const val REQUEST_KEY_REPORT = "REQUEST_KEY_REPORT"
+        const val ARG_REPORT_RESULT = "ARG_REPORT_RESULT"
         private const val ARG_TEMPLATE_ID = "ARG_TEMPLATE_ID"
+        private const val WIDTH_RATIO = 0.9
 
         fun newInstance(templateId: Long): ReportDialog =
             ReportDialog().apply {
-                arguments = Bundle().apply { putLong(ARG_TEMPLATE_ID, templateId) }
+                arguments = bundleOf(ARG_TEMPLATE_ID to templateId)
             }
     }
 }

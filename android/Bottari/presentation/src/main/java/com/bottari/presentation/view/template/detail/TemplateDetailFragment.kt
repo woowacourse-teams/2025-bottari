@@ -11,10 +11,11 @@ import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTemplateDetailBinding
+import com.bottari.presentation.view.common.report.ReportDialog
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.template.detail.adapter.TemplateDetailAdapter
-import timber.log.Timber
 
 class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(FragmentTemplateDetailBinding::inflate) {
     private val viewModel: TemplateDetailViewModel by viewModels {
@@ -23,54 +24,30 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
             templateId = requireArguments().getLong(ARG_TEMPLATE_ID, INVALID_BOTTARI_ID),
         )
     }
+
+    private val isMyTemplate: Boolean by lazy {
+        requireArguments().getBoolean(
+            ARG_IS_MY_TEMPLATE,
+            false,
+        )
+    }
     private val adapter by lazy { TemplateDetailAdapter() }
-    private val popupMenu: PopupMenu by lazy { createPopupMenu() }
+    private val popupMenu by lazy { createPopupMenu() }
 
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setupObserver()
         setupUI()
-        setupListener()
-    }
-
-    private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            toggleLoadingIndicator(uiState.isLoading)
-            binding.tvBottariTitle.text = uiState.title
-            adapter.submitList(uiState.items)
-        }
-        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
-            when (uiEvent) {
-                TemplateDetailUiEvent.FetchBottariDetailFailure -> showSnackbar(R.string.template_detail_fetch_failure_text)
-                TemplateDetailUiEvent.TakeBottariTemplateFailure -> showSnackbar(R.string.template_detail_take_failure_text)
-                is TemplateDetailUiEvent.TakeBottariTemplateSuccess ->
-                    navigateBottariEdit(
-                        uiEvent.bottariId,
-                    )
-            }
-        }
+        setupObservers()
+        setupListeners()
     }
 
     private fun setupUI() {
-        setupPopupMenu()
         binding.rvTemplateDetail.adapter = adapter
-        if (getIsMyTemplate()) binding.btnTakeTemplate.isVisible = false
-    }
-
-    private fun setupListener() {
-        binding.btnPrevious.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
-        binding.btnTakeTemplate.setOnClickListener {
-            viewModel.takeBottariTemplate()
-        }
-        binding.btnTemplateMore.setOnClickListener {
-            popupMenu.show()
-        }
-        popupMenu.setOnMenuItemClickListener(::handleMenuItemClick)
+        binding.btnTakeTemplate.isVisible = !isMyTemplate
+        popupMenu.menuInflater.inflate(R.menu.template_popup_menu, popupMenu.menu)
     }
 
     private fun createPopupMenu(): PopupMenu {
@@ -84,24 +61,78 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
         )
     }
 
-    private fun setupPopupMenu() {
-        popupMenu.menuInflater.inflate(R.menu.template_popup_menu, popupMenu.menu)
+    private fun setupObservers() {
+        viewModel.uiState.observe(viewLifecycleOwner, ::handleUiState)
+        viewModel.uiEvent.observe(viewLifecycleOwner, ::handleUiEvent)
     }
 
-    private fun handleMenuItemClick(menuItem: MenuItem) =
-        when (menuItem.itemId) {
+    private fun handleUiState(state: TemplateDetailUiState) {
+        toggleLoadingIndicator(state.isLoading)
+        binding.tvBottariTitle.text = state.title
+        adapter.submitList(state.items)
+    }
+
+    private fun handleUiEvent(event: TemplateDetailUiEvent) {
+        when (event) {
+            TemplateDetailUiEvent.FetchBottariDetailFailure -> {
+                requireView().showSnackbar(R.string.template_detail_fetch_failure_text)
+            }
+
+            TemplateDetailUiEvent.TakeBottariTemplateFailure -> {
+                requireView().showSnackbar(R.string.template_detail_take_failure_text)
+            }
+
+            is TemplateDetailUiEvent.TakeBottariTemplateSuccess -> {
+                navigateToBottariEdit(event.bottariId)
+            }
+        }
+    }
+
+    private fun setupListeners() {
+        binding.btnPrevious.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.btnTakeTemplate.setOnClickListener {
+            viewModel.takeBottariTemplate()
+        }
+
+        binding.btnTemplateMore.setOnClickListener {
+            popupMenu.show()
+        }
+
+        popupMenu.setOnMenuItemClickListener(::handleMenuItemClick)
+
+        parentFragmentManager.setFragmentResultListener(
+            ReportDialog.REQUEST_KEY_REPORT,
+            viewLifecycleOwner,
+        ) { _, bundle -> handleFragmentResult(bundle) }
+    }
+
+    private fun handleFragmentResult(bundle: Bundle) {
+        val messageRes = bundle.getInt(ReportDialog.ARG_REPORT_RESULT)
+        requireView().showSnackbar(messageRes)
+    }
+
+    private fun handleMenuItemClick(item: MenuItem): Boolean =
+        when (item.itemId) {
             R.id.action_report -> {
-                Timber.v("Report Template")
+                showReportDialog()
                 true
             }
 
             else -> false
         }
 
-    private fun getIsMyTemplate(): Boolean = requireArguments().getBoolean(ARG_IS_MY_TEMPLATE, false)
+    private fun showReportDialog() {
+        val templateId = viewModel.uiState.value?.templateId ?: return
+        ReportDialog
+            .newInstance(templateId)
+            .show(parentFragmentManager, ReportDialog::class.simpleName)
+    }
 
-    private fun navigateBottariEdit(bottariId: Long?) {
-        if (bottariId == null) return
+    private fun navigateToBottariEdit(bottariId: Long?) {
+        bottariId ?: return
         startActivity(PersonalBottariEditActivity.newIntent(requireContext(), bottariId, true))
         requireActivity().finish()
     }
