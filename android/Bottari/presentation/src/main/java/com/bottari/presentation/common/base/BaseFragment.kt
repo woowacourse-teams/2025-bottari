@@ -4,15 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.bottari.presentation.util.CrashlyticsLogger
 import com.bottari.presentation.view.common.LoadingDialog
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseFragment<VB : ViewBinding>(
     private val bindingFactory: (LayoutInflater, ViewGroup?, Boolean) -> VB,
