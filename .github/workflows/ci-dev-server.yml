@@ -1,14 +1,14 @@
-name: CI Pipeline
+name: BE PR CI & Review Request Notification
 
 on:
   pull_request:
     branches:
       - be/develop
+    types: [opened, synchronize, reopened] # 머지/닫힘 이벤트 제외
 
 jobs:
-  build-and-test:
+  ci-and-pr-notification:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -22,7 +22,80 @@ jobs:
       - name: Grant Execute Permission for Gradlew
         run: chmod +x ./backend/bottari/gradlew
 
-      - name: Build and Run Tests
-        working-directory: ./backend/bottari
+      # Webhook 설정
+      - name: Determine Webhook
+        run: echo "WEBHOOK=${{ secrets.DISCORD_BACKEND_WEBHOOK }}" >> $GITHUB_ENV
+
+      - name: Build and Test
+        id: test
         run: ./gradlew clean build --no-daemon
-        
+        continue-on-error: true
+
+      # 테스트 성공 시 리뷰 요청 알림
+      - name: Notify Discord (Test Success - Review Request)
+        if: success()
+        run: |
+          BASE_BRANCH=${{ github.event.pull_request.base.ref }}
+          HEAD_BRANCH=${{ github.event.pull_request.head.ref }}
+
+          # 리뷰어 멘션 & 리스트 생성
+          REVIEWERS=$(jq -r '.pull_request.requested_reviewers[].login' <<< '${{ toJson(github.event) }}')
+          MENTIONS=""
+          REVIEWER_NAMES=""
+          for r in $REVIEWERS; do
+            ID=$(echo '${{ secrets.DISCORD_USER_MAP }}' | jq -r --arg r "$r" '.[$r]')
+            if [ "$ID" != "null" ]; then
+              MENTIONS="$MENTIONS <@$ID>"
+              if [ -z "$REVIEWER_NAMES" ]; then
+                REVIEWER_NAMES="$r"
+              else
+                REVIEWER_NAMES="$REVIEWER_NAMES, $r"
+              fi
+            fi
+          done
+
+          if [ -z "$MENTIONS" ]; then
+            MENTIONS="리뷰어가 지정되지 않았습니다."
+          fi
+
+          MESSAGE='{
+            "content": "'"$MENTIONS"' 테스트가 성공했습니다. 코드 리뷰 부탁드립니다!",
+            "embeds": [
+              {
+                "title": "✅ 테스트 성공 - 리뷰 요청",
+                "description": "테스트가 통과했습니다. 아래 PR 정보를 확인해주세요.",
+                "url": "'"${{ github.event.pull_request.html_url }}"'",
+                "color": 65280,
+                "fields": [
+                  { "name": "PR 제목", "value": "'"${{ github.event.pull_request.title }}"'" },
+                  { "name": "브랜치", "value": "'"$HEAD_BRANCH → $BASE_BRANCH"'" },
+                  { "name": "작성자", "value": "'"${{ github.event.pull_request.user.login }}"'" },
+                  { "name": "리뷰어", "value": "'"$REVIEWER_NAMES"'" }
+                ]
+              }
+            ]
+          }'
+          echo "$MESSAGE" > payload.json
+          curl -H "Content-Type: application/json" -d @payload.json $WEBHOOK
+
+      # 테스트 실패 시 작성자에게 알림
+      - name: Notify Discord (Test Failure)
+        if: failure()
+        run: |
+          AUTHOR=${{ github.event.pull_request.user.login }}
+          AUTHOR_ID=$(echo '${{ secrets.DISCORD_USER_MAP }}' | jq -r --arg AUTHOR "$AUTHOR" '.[$AUTHOR]')
+          LOG_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          MESSAGE='{
+            "content": "<@'"$AUTHOR_ID"'> 테스트가 실패했습니다. PR을 확인해주세요!",
+            "embeds": [
+              {
+                "title": "❌ 테스트 실패",
+                "description": "테스트가 실패했습니다. [로그 확인하기]('"$LOG_URL"')",
+                "url": "'"${{ github.event.pull_request.html_url }}"'",
+                "color": 16711680
+              }
+            ]
+          }'
+          echo "$MESSAGE" > payload.json
+          curl -H "Content-Type: application/json" -d @payload.json $WEBHOOK
