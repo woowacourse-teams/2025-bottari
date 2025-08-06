@@ -4,25 +4,23 @@ import android.view.View
 import androidx.annotation.StringRes
 import com.google.android.material.snackbar.Snackbar
 
-fun View.showSnackbar(
-    @StringRes messageRes: Int,
-    onDismiss: (() -> Unit)? = null,
+enum class SnackBarDuration(
+    val value: Long,
 ) {
-    Snackbar
-        .make(this, messageRes, Snackbar.LENGTH_SHORT)
-        .apply { onDismiss?.let { addDismissCallback(it) } }
-        .show()
+    LONG_DELAY(3500L),
+    SHORT_DELAY(2000L),
+    VERY_SHORT_DELAY(1500L),
 }
 
-fun View.showCustomSnackbar(
+fun View.showSnackbar(
     @StringRes messageRes: Int,
-    durationMillis: Long = 2000L,
+    duration: SnackBarDuration = SnackBarDuration.SHORT_DELAY,
     onDismiss: (() -> Unit)? = null,
 ) {
     Snackbar.make(this, messageRes, Snackbar.LENGTH_INDEFINITE).apply {
         onDismiss?.let { addDismissCallback(it) }
         show()
-        this.view.postDelayed({ dismiss() }, durationMillis)
+        this.view.postDelayed({ dismiss() }, duration.value)
     }
 }
 
