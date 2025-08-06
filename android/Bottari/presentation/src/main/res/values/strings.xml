@@ -87,7 +87,7 @@
     <string name="common_setting_btn_description">설정 버튼</string>
     <string name="common_close_btn_description">닫기 버튼</string>
     <string name="common_option_btn_description">옵션 버튼</string>
-    
+
     <!--  Common: 보따리 알림  -->
     <string name="common_bottari_notification_channel_name">보따리 알림</string>
     <string name="common_bottari_notification_title">%s 챙길 시간이에요!</string>
@@ -155,6 +155,8 @@
     <!-- Bottari Personal Item Edit -->
     <string name="bottari_personal_item_edit_confirm_btn_text">추가하기</string>
     <string name="bottari_personal_item_edit_hint_text">추가할 물건을 입력해 주세요</string>
+    <string name="bottari_personal_item_empty_view_title">보따리 안에 물건이 없어요</string>
+    <string name="bottari_personal_item_empty_view_text">무엇을 챙겨야 할지 모르겠다면,\n‘모두의 보따리’를 살펴보세요! </string>
 
     <!-- Bottari Rename -->
     <string name="bottari_rename_failure_text">이름을 바꾸지 못했어요</string>
