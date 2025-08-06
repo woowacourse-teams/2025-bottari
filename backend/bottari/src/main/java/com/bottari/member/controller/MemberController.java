@@ -1,5 +1,6 @@
 package com.bottari.member.controller;
 
+import com.bottari.config.MemberIdentifier;
 import com.bottari.member.dto.CheckRegistrationResponse;
 import com.bottari.member.dto.CreateMemberRequest;
 import com.bottari.member.dto.UpdateMemberRequest;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,7 +35,7 @@ public class MemberController implements MemberApiDocs {
     @GetMapping("/check")
     @Override
     public ResponseEntity<CheckRegistrationResponse> checkRegistration(
-            @RequestHeader("ssaid") final String ssaid
+            @MemberIdentifier final String ssaid
     ) {
         final CheckRegistrationResponse response = memberService.checkRegistration(ssaid);
 
@@ -46,7 +46,7 @@ public class MemberController implements MemberApiDocs {
     @Override
     public ResponseEntity<Void> updateName(
             @RequestBody final UpdateMemberRequest request,
-            @RequestHeader("ssaid") final String ssaid
+            @MemberIdentifier final String ssaid
     ) {
         memberService.updateName(ssaid, request);
 

@@ -5,6 +5,7 @@ import com.bottari.bottari.dto.ReadBottariPreviewResponse;
 import com.bottari.bottari.dto.ReadBottariResponse;
 import com.bottari.bottari.dto.UpdateBottariRequest;
 import com.bottari.bottari.service.BottariService;
+import com.bottari.config.MemberIdentifier;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,7 +30,7 @@ public class BottariController implements BottariApiDocs {
     @Override
     public ResponseEntity<ReadBottariResponse> read(
             @PathVariable final Long id,
-            @RequestHeader("ssaid") final String ssaid
+            @MemberIdentifier final String ssaid
     ) {
         final ReadBottariResponse response = bottariService.getById(ssaid, id);
 
@@ -40,7 +40,7 @@ public class BottariController implements BottariApiDocs {
     @GetMapping
     @Override
     public ResponseEntity<List<ReadBottariPreviewResponse>> readPreviews(
-            @RequestHeader("ssaid") final String ssaid
+            @MemberIdentifier final String ssaid
     ) {
         final List<ReadBottariPreviewResponse> responses = bottariService.getAllBySsaidSortedByLatest(ssaid);
 
@@ -51,7 +51,7 @@ public class BottariController implements BottariApiDocs {
     @Override
     public ResponseEntity<Void> create(
             @RequestBody final CreateBottariRequest request,
-            @RequestHeader("ssaid") final String ssaid
+            @MemberIdentifier final String ssaid
     ) {
         final Long id = bottariService.create(ssaid, request);
 
@@ -63,7 +63,7 @@ public class BottariController implements BottariApiDocs {
     public ResponseEntity<Void> update(
             @PathVariable final Long id,
             @RequestBody final UpdateBottariRequest request,
-            @RequestHeader("ssaid") final String ssaid
+            @MemberIdentifier final String ssaid
     ) {
         bottariService.update(request, id, ssaid);
 
@@ -74,7 +74,7 @@ public class BottariController implements BottariApiDocs {
     @Override
     public ResponseEntity<Void> delete(
             @PathVariable final Long id,
-            @RequestHeader("ssaid") final String ssaid
+            @MemberIdentifier final String ssaid
     ) {
         bottariService.deleteById(id, ssaid);
 

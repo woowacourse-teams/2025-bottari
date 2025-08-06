@@ -5,6 +5,7 @@ import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
 import com.bottari.bottaritemplate.service.BottariTemplateService;
+import com.bottari.config.MemberIdentifier;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +40,7 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     @GetMapping("/me")
     @Override
     public ResponseEntity<List<ReadBottariTemplateResponse>> readMine(
-            @RequestHeader("ssaid") final String ssaid
+            @MemberIdentifier final String ssaid
     ) {
         final List<ReadBottariTemplateResponse> responses = bottariTemplateService.getBySsaid(ssaid);
 
@@ -72,7 +72,7 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     @Override
     public ResponseEntity<Void> create(
             @RequestBody final CreateBottariTemplateRequest request,
-            @RequestHeader("ssaid") final String ssaid
+            @MemberIdentifier final String ssaid
     ) {
         final Long id = bottariTemplateService.create(ssaid, request);
 
@@ -83,7 +83,7 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     @Override
     public ResponseEntity<Void> createBottari(
             @PathVariable final Long id,
-            @RequestHeader("ssaid") final String ssaid
+            @MemberIdentifier final String ssaid
     ) {
         final Long bottariId = bottariTemplateService.createBottari(id, ssaid);
 
@@ -94,7 +94,7 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     @Override
     public ResponseEntity<Void> delete(
             @PathVariable final Long id,
-            @RequestHeader("ssaid") final String ssaid
+            @MemberIdentifier final String ssaid
     ) {
         bottariTemplateService.deleteById(id, ssaid);
 
