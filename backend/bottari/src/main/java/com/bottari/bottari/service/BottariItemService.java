@@ -2,11 +2,11 @@ package com.bottari.bottari.service;
 
 import com.bottari.bottari.domain.Bottari;
 import com.bottari.bottari.domain.BottariItem;
-import com.bottari.bottari.repository.BottariItemRepository;
-import com.bottari.bottari.repository.BottariRepository;
 import com.bottari.bottari.dto.CreateBottariItemRequest;
 import com.bottari.bottari.dto.EditBottariItemsRequest;
 import com.bottari.bottari.dto.ReadBottariItemResponse;
+import com.bottari.bottari.repository.BottariItemRepository;
+import com.bottari.bottari.repository.BottariRepository;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import java.util.HashSet;
@@ -72,16 +72,24 @@ public class BottariItemService {
     }
 
     @Transactional
-    public void check(final Long id) {
-        final BottariItem bottariItem = bottariItemRepository.findById(id)
+    public void check(
+            final Long id,
+            final String ssaid
+    ) {
+        final BottariItem bottariItem = bottariItemRepository.findByIdWithBottari(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_ITEM_NOT_FOUND));
+        validateOwner(ssaid, bottariItem);
         bottariItem.check();
     }
 
     @Transactional
-    public void uncheck(final Long id) {
-        final BottariItem bottariItem = bottariItemRepository.findById(id)
+    public void uncheck(
+            final Long id,
+            final String ssaid
+    ) {
+        final BottariItem bottariItem = bottariItemRepository.findByIdWithBottari(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_ITEM_NOT_FOUND));
+        validateOwner(ssaid, bottariItem);
         bottariItem.uncheck();
     }
 
@@ -153,6 +161,15 @@ public class BottariItemService {
         final int totalItemCount = bottariItemCount + itemNames.size();
         if (totalItemCount > MAX_BOTTARI_ITEMS_COUNT) {
             throw new BusinessException(ErrorCode.BOTTARI_ITEM_MAXIMUM_EXCEEDED, MAX_BOTTARI_ITEMS_COUNT + "개 초과");
+        }
+    }
+
+    private void validateOwner(
+            final String ssaid,
+            final BottariItem bottariItem
+    ) {
+        if (!bottariItem.getBottari().isOwner(ssaid)) {
+            throw new BusinessException(ErrorCode.BOTTARI_ITEM_NOT_OWNED, "본인의 보따리 물품이 아닙니다.");
         }
     }
 }

@@ -378,11 +378,32 @@ class BottariItemServiceTest {
             entityManager.persist(bottariItem);
 
             // when
-            bottariItemService.check(bottariItem.getId());
+            bottariItemService.check(bottariItem.getId(), member.getSsaid());
 
             // then
             final BottariItem actual = entityManager.find(BottariItem.class, bottariItem.getId());
             assertThat(actual.isChecked()).isTrue();
+        }
+
+        @DisplayName("물품 체크 시, 보따리 물품 주인이 아니라면, 예외를 던진다.")
+        @Test
+        void check_Exception_NotOwned() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
+            entityManager.persist(bottari);
+
+            final BottariItem bottariItem = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
+            entityManager.persist(bottariItem);
+
+            final String invalidSsaid = "invalid_ssaid";
+
+            // when & then
+            assertThatThrownBy(() -> bottariItemService.check(bottariItem.getId(), invalidSsaid))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 보따리 물품에 접근할 수 있는 권한이 없습니다. - 본인의 보따리 물품이 아닙니다.");
         }
 
         @DisplayName("물품 체크 시, 보따리 물품을 찾을 수 없다면, 예외를 던진다.")
@@ -395,7 +416,7 @@ class BottariItemServiceTest {
             final Long notExistsBottariItemId = 1L;
 
             // when & then
-            assertThatThrownBy(() -> bottariItemService.check(notExistsBottariItemId))
+            assertThatThrownBy(() -> bottariItemService.check(notExistsBottariItemId, member.getSsaid()))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리 물품을 찾을 수 없습니다.");
         }
@@ -419,11 +440,32 @@ class BottariItemServiceTest {
             entityManager.persist(bottariItem);
 
             // when
-            bottariItemService.uncheck(bottariItem.getId());
+            bottariItemService.uncheck(bottariItem.getId(), member.getSsaid());
 
             // then
             final BottariItem actual = entityManager.find(BottariItem.class, bottariItem.getId());
             assertThat(actual.isChecked()).isFalse();
+        }
+
+        @DisplayName("물품 체크 해제 시, 보따리 물품 주인이 아니라면, 예외를 던진다.")
+        @Test
+        void uncheck_Exception_NotOwned() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
+            entityManager.persist(bottari);
+
+            final BottariItem bottariItem = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
+            entityManager.persist(bottariItem);
+
+            final String invalidSsaid = "invalid_ssaid";
+
+            // when & then
+            assertThatThrownBy(() -> bottariItemService.uncheck(bottariItem.getId(), invalidSsaid))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 보따리 물품에 접근할 수 있는 권한이 없습니다. - 본인의 보따리 물품이 아닙니다.");
         }
 
         @DisplayName("물품 체크 해제 시, 보따리 물품을 찾을 수 없다면, 예외를 던진다.")
@@ -436,7 +478,7 @@ class BottariItemServiceTest {
             final Long notExistsBottariItemId = 1L;
 
             // when & then
-            assertThatThrownBy(() -> bottariItemService.uncheck(notExistsBottariItemId))
+            assertThatThrownBy(() -> bottariItemService.uncheck(notExistsBottariItemId, member.getSsaid()))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리 물품을 찾을 수 없습니다.");
         }
