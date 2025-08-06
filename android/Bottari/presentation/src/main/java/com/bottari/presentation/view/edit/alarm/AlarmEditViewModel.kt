@@ -18,8 +18,8 @@ import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.AlarmMapper.toDomain
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
-import com.bottari.presentation.model.DayOfWeekUiModel
 import com.bottari.presentation.model.NotificationUiModel
+import com.bottari.presentation.model.RepeatDayUiModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
@@ -48,8 +48,8 @@ class AlarmEditViewModel(
 
     fun updateAlarm() {
         val currentAlarm = alarmUiModel
-        if (currentAlarm.type == AlarmTypeUiModel.EVERYWEEK_REPEAT &&
-            currentAlarm.daysOfWeek.none { it.isChecked }
+        if (currentAlarm.type == AlarmTypeUiModel.REPEAT &&
+            currentAlarm.repeatDays.none { it.isChecked }
         ) {
             return
         }
@@ -85,12 +85,12 @@ class AlarmEditViewModel(
         }
     }
 
-    fun updateDaysOfWeek(dayOfWeek: DayOfWeekUiModel) {
+    fun updateDaysOfWeek(dayOfWeek: RepeatDayUiModel) {
         _uiState.update {
             val newAlarm =
                 alarm.copy(
-                    daysOfWeek =
-                        alarm.daysOfWeek.map {
+                    repeatDays =
+                        alarm.repeatDays.map {
                             if (it.dayOfWeek != dayOfWeek.dayOfWeek) return@map it
                             it.copy(isChecked = !it.isChecked)
                         },

@@ -18,7 +18,7 @@ import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.view.common.decoration.ItemSpacingDecoration
-import com.bottari.presentation.view.edit.alarm.adapter.DayOfWeekAdapter
+import com.bottari.presentation.view.edit.alarm.adapter.RepeatDayAdapter
 import com.shawnlin.numberpicker.NumberPicker
 import java.time.LocalDate
 import java.time.LocalTime
@@ -34,7 +34,7 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
             alarm = safeArgument { getParcelableCompat(ARG_ALARM) },
         )
     }
-    private val adapter: DayOfWeekAdapter by lazy { DayOfWeekAdapter(viewModel::updateDaysOfWeek) }
+    private val adapter: RepeatDayAdapter by lazy { RepeatDayAdapter(viewModel::updateDaysOfWeek) }
     private val scheduler: AlarmScheduler by lazy { AlarmScheduler() }
     private val hourPickers: List<NumberPicker> by lazy {
         listOf(
@@ -101,7 +101,7 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
     private fun handleAlarmState(alarm: AlarmUiModel) {
         updateAlarmTimePickers(alarm.time)
         updateAlarmDatePickers(alarm.date)
-        adapter.submitList(alarm.daysOfWeek)
+        adapter.submitList(alarm.repeatDays)
     }
 
     private fun handleAlarmEvent(uiEvent: AlarmUiEvent) {
@@ -168,11 +168,11 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
         }
         binding.tvAlarmTypeEverydayRepeat.setOnClickListener {
             showOnly(binding.groupAlarmEverydayRepeat)
-            viewModel.updateAlarmType(AlarmTypeUiModel.EVERYDAY_REPEAT)
+            viewModel.updateAlarmType(AlarmTypeUiModel.REPEAT)
         }
         binding.tvAlarmTypeEveryweekRepeat.setOnClickListener {
             showOnly(binding.groupAlarmEveryweekRepeat)
-            viewModel.updateAlarmType(AlarmTypeUiModel.EVERYWEEK_REPEAT)
+            viewModel.updateAlarmType(AlarmTypeUiModel.REPEAT)
         }
     }
 

@@ -13,17 +13,22 @@ data class AlarmUiModel(
     val type: AlarmTypeUiModel,
     val time: LocalTime,
     val date: LocalDate,
-    val daysOfWeek: List<DayOfWeekUiModel>,
+    val repeatDays: List<RepeatDayUiModel>,
     val locationAlarm: LocationAlarmUiModel? = null,
 ) : Parcelable {
+    val isRepeatEveryDay: Boolean
+        get() = repeatDays.size == DAYS_IN_WEEK
+
     companion object {
+        private const val DAYS_IN_WEEK = 7
+
         val DEFAULT_ALARM_UI_MODEL =
             AlarmUiModel(
                 type = AlarmTypeUiModel.NON_REPEAT,
                 isActive = true,
                 time = LocalTime.now(),
                 date = LocalDate.now(),
-                daysOfWeek = DayOfWeek.entries.map { DayOfWeekUiModel(it, false) },
+                repeatDays = DayOfWeek.entries.map { RepeatDayUiModel(it, false) },
             )
     }
 }
