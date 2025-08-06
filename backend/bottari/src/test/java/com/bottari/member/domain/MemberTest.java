@@ -12,14 +12,14 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class MemberTest {
 
-    @DisplayName("이름이 3글자 미만인 경우, 예외를 던진다.")
+    @DisplayName("이름이 2글자 미만인 경우, 예외를 던진다.")
     @ParameterizedTest
-    @ValueSource(strings = {"1", "12"})
+    @ValueSource(strings = {"1", "훌", "라"})
     void validateName_TooShort(final String name) {
         // when & then
         assertThatThrownBy(() -> new Member("ssaid", name))
                 .isInstanceOf(BusinessException.class)
-                .hasMessage("사용자 이름이 너무 짧습니다. - 최소 3자 이상 입력 가능합니다.");
+                .hasMessage("사용자 이름이 너무 짧습니다. - 최소 2자 이상 입력 가능합니다.");
     }
 
     @DisplayName("이름이 10글자를 초과하는 경우, 예외를 던진다.")
