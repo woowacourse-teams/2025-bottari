@@ -52,4 +52,8 @@ jobs:
           JAR_FILE=$(find ./artifacts -name "*.jar" | head -n 1)
           echo "Starting server with $JAR_FILE"
           RUNNER_TRACKING_ID=""
+
+          DB_PASSWORD='${{ secrets.DB_PASSWORD }}' \
+          API_KEY='${{ secrets.API_KEY }}' \
+          SPRING_PROFILES_ACTIVE=dev \
           nohup java -Duser.timezone=Asia/Seoul -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
