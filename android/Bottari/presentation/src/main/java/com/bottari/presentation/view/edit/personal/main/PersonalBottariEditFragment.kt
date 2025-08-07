@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.BottariItemUiModel
@@ -48,7 +49,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 if (PermissionUtil.isPermanentlyDenied(this)) {
                     showSettingsDialog()
                 } else {
-                    showSnackbar(R.string.common_permission_failure_text)
+                    requireView().showSnackbar(R.string.common_permission_failure_text)
                 }
             }
         }
@@ -77,10 +78,19 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                PersonalBottariEditUiEvent.FetchBottariFailure -> showSnackbar(R.string.bottari_edit_fetch_failure_text)
-                PersonalBottariEditUiEvent.CreateTemplateFailure -> showSnackbar(R.string.bottari_edit_create_template_failure_text)
-                PersonalBottariEditUiEvent.CreateTemplateSuccess -> showSnackbar(R.string.bottari_edit_create_template_success_text)
-                is PersonalBottariEditUiEvent.ToggleAlarmStateFailure -> showSnackbar(R.string.bottari_edit_toggle_alarm_state_failure_text)
+                PersonalBottariEditUiEvent.FetchBottariFailure -> requireView().showSnackbar(R.string.bottari_edit_fetch_failure_text)
+                PersonalBottariEditUiEvent.CreateTemplateFailure ->
+                    requireView().showSnackbar(
+                        R.string.bottari_edit_create_template_failure_text,
+                    )
+                PersonalBottariEditUiEvent.CreateTemplateSuccess ->
+                    requireView().showSnackbar(
+                        R.string.bottari_edit_create_template_success_text,
+                    )
+                is PersonalBottariEditUiEvent.ToggleAlarmStateFailure ->
+                    requireView().showSnackbar(
+                        R.string.bottari_edit_toggle_alarm_state_failure_text,
+                    )
             }
         }
     }

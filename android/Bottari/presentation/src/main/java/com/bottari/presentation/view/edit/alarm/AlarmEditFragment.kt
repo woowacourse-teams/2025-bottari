@@ -12,6 +12,7 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getParcelableCompat
 import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.common.extension.safeArgument
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentAlarmEditBinding
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
@@ -107,18 +108,18 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
         when (uiEvent) {
             is AlarmUiEvent.AlarmCreateSuccess -> {
                 scheduler.scheduleAlarm(uiEvent.notification)
-                showSnackbar(R.string.alarm_edit_create_success_text)
+                requireView().showSnackbar(R.string.alarm_edit_create_success_text)
                 parentFragmentManager.popBackStack()
             }
 
             is AlarmUiEvent.AlarmSaveSuccess -> {
                 scheduler.scheduleAlarm(uiEvent.notification)
-                showSnackbar(R.string.alarm_edit_save_success_text)
+                requireView().showSnackbar(R.string.alarm_edit_save_success_text)
                 parentFragmentManager.popBackStack()
             }
 
-            AlarmUiEvent.AlarmCreateFailure -> showSnackbar(R.string.alarm_edit_create_failure_text)
-            AlarmUiEvent.AlarmSaveFailure -> showSnackbar(R.string.alarm_edit_save_failure_text)
+            AlarmUiEvent.AlarmCreateFailure -> requireView().showSnackbar(R.string.alarm_edit_create_failure_text)
+            AlarmUiEvent.AlarmSaveFailure -> requireView().showSnackbar(R.string.alarm_edit_save_failure_text)
         }
     }
 
