@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.bottari.logger.BottariLogger
+import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.view.common.LoadingDialog
 
 abstract class BaseFragment<VB : ViewBinding>(
@@ -22,6 +23,7 @@ abstract class BaseFragment<VB : ViewBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         BottariLogger.lifecycle(javaClass.simpleName)
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
     }
 
     override fun onCreateView(
