@@ -31,7 +31,7 @@ class ProfileViewModel(
         if (currentState.isNicknameChanged.not()) return
         val editingNickname = currentState.editingNickname
 
-        viewModelScope.launch {
+        launch {
             saveMemberNicknameUseCase(ssaid, editingNickname)
                 .onSuccess {
                     updateState { copy(nickname = editingNickname) }
@@ -51,7 +51,7 @@ class ProfileViewModel(
     private fun fetchMemberInfo() {
         updateState { copy(isLoading = true) }
 
-        viewModelScope.launch {
+        launch {
             checkRegisteredMemberUseCase(ssaid)
                 .onSuccess {
                     updateState {

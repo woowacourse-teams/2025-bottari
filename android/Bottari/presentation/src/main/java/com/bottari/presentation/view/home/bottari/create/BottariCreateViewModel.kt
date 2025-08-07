@@ -29,7 +29,7 @@ class BottariCreateViewModel(
         val title = uiState.value?.bottariTitle?.trim() ?: return
         if (title.isBlank()) return
 
-        viewModelScope.launch {
+        launch {
             createBottariUseCase(ssaid, title)
                 .onSuccess { emitEvent(BottariCreateUiEvent.CreateBottariSuccess(it)) }
                 .onFailure { emitEvent(BottariCreateUiEvent.CreateBottariFailure) }
