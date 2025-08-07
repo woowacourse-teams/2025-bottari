@@ -4,6 +4,7 @@ import com.bottari.bottari.dto.CreateBottariItemRequest;
 import com.bottari.bottari.dto.EditBottariItemsRequest;
 import com.bottari.bottari.dto.ReadBottariItemResponse;
 import com.bottari.bottari.service.BottariItemService;
+import com.bottari.config.MemberIdentifier;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -69,7 +69,7 @@ public class BottariItemController implements BottariItemApiDocs {
     @Override
     public ResponseEntity<Void> check(
             @PathVariable final Long id,
-            @RequestHeader("ssaid") final String ssaid
+            @MemberIdentifier final String ssaid
     ) {
         bottariItemService.check(id, ssaid);
 
@@ -80,7 +80,7 @@ public class BottariItemController implements BottariItemApiDocs {
     @Override
     public ResponseEntity<Void> uncheck(
             @PathVariable final Long id,
-            @RequestHeader("ssaid") final String ssaid
+            @MemberIdentifier final String ssaid
     ) {
         bottariItemService.uncheck(id, ssaid);
 
