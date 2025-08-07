@@ -32,7 +32,6 @@ jobs:
             "embeds": [
               {
                 "title": "리뷰 등록",
-                "description": "'"${{ github.event.review.body }}"'",
                 "url": "'"${{ github.event.pull_request.html_url }}"'",
                 "color": 3447003,
                 "fields": [
