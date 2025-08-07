@@ -17,6 +17,7 @@ class BottariTree(
 ) : Timber.Tree() {
     init {
         crashlytics.isCrashlyticsCollectionEnabled = !BuildConfig.DEBUG
+        analytics.setAnalyticsCollectionEnabled(!BuildConfig.DEBUG)
         crashlytics.setUserId(userId)
         analytics.setUserId(userId)
     }
