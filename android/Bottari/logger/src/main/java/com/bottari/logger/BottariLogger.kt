@@ -6,6 +6,7 @@ import com.bottari.logger.handler.ConsoleLogHandler
 import com.bottari.logger.handler.CrashlyticsLogHandler
 import com.bottari.logger.model.LogEventData
 import com.bottari.logger.model.LogLevel
+import com.bottari.logger.model.UiEventType
 import com.bottari.logger.policy.DefaultLogPolicy
 import com.bottari.logger.policy.LogPolicy
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -62,6 +63,11 @@ object BottariLogger {
         eventName: String,
         params: Map<String, Any>,
     ) = log(LogLevel.UI, LogEventData(eventName, params).serialize())
+
+    fun ui(
+        type: UiEventType,
+        params: Map<String, Any>,
+    ) = log(LogLevel.UI, LogEventData(type.name, params).serialize())
 
     fun ui(eventData: LogEventData) = log(LogLevel.UI, eventData.serialize())
 
