@@ -11,10 +11,10 @@ import org.springframework.data.jpa.repository.Query;
 public interface BottariItemRepository extends JpaRepository<BottariItem, Long> {
 
     @Query("""
-            SELECT bt
-            FROM BottariItem bt
-            JOIN FETCH Bottari b ON bt.id = b.id
-            WHERE bt.id = :id
+            SELECT bi
+            FROM BottariItem bi
+            JOIN FETCH bi.bottari
+            WHERE bi.id = :id
             """)
     Optional<BottariItem> findByIdWithBottari(final Long id);
 
