@@ -12,6 +12,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTemplateBinding
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
 import com.bottari.presentation.view.home.template.adapter.TemplateAdapter
@@ -68,7 +69,10 @@ class TemplateFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
-                TemplateUiEvent.FetchBottariTemplatesFailure -> showSnackbar(R.string.template_fetch_template_failure_text)
+                TemplateUiEvent.FetchBottariTemplatesFailure ->
+                    requireView().showSnackbar(
+                        R.string.template_fetch_template_failure_text,
+                    )
             }
         }
     }

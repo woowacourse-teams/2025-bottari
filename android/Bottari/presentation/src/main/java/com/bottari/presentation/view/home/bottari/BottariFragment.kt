@@ -12,6 +12,7 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentBottariBinding
 import com.bottari.presentation.view.checklist.ChecklistActivity
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
@@ -72,7 +73,7 @@ class BottariFragment :
                     BottariUiEvent.BottariDeleteSuccess -> R.string.bottari_home_delete_success_text
                     BottariUiEvent.FetchBottariesFailure -> R.string.bottari_home_fetch_failure_text
                 }
-            showSnackbar(message)
+            requireView().showSnackbar(message)
         }
     }
 

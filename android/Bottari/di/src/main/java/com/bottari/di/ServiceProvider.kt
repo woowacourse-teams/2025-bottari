@@ -6,6 +6,7 @@ import com.bottari.data.service.BottariItemService
 import com.bottari.data.service.BottariService
 import com.bottari.data.service.BottariTemplateService
 import com.bottari.data.service.MemberService
+import com.bottari.data.service.ReportService
 
 object ServiceProvider {
     val memberService: MemberService by lazy { RetrofitClient.create() }
@@ -13,4 +14,5 @@ object ServiceProvider {
     val alarmService: AlarmService by lazy { RetrofitClient.create() }
     val bottariItemService: BottariItemService by lazy { RetrofitClient.create() }
     val bottariTemplateService: BottariTemplateService by lazy { RetrofitClient.create() }
+    val reportService: ReportService by lazy { RetrofitClient.create() }
 }
