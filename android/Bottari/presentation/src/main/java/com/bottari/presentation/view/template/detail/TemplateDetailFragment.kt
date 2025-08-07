@@ -40,8 +40,8 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
     ) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        setupObservers()
-        setupListeners()
+        setupObserver()
+        setupListener()
     }
 
     private fun setupUI() {
@@ -61,7 +61,7 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
         )
     }
 
-    private fun setupObservers() {
+    private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner, ::handleUiState)
         viewModel.uiEvent.observe(viewLifecycleOwner, ::handleUiEvent)
     }
@@ -88,7 +88,7 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
         }
     }
 
-    private fun setupListeners() {
+    private fun setupListener() {
         binding.btnPrevious.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
