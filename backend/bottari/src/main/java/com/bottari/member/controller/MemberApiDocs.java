@@ -1,15 +1,15 @@
 package com.bottari.member.controller;
 
+import com.bottari.error.ApiErrorCodes;
+import com.bottari.error.ErrorCode;
 import com.bottari.member.dto.CheckRegistrationResponse;
 import com.bottari.member.dto.CreateMemberRequest;
 import com.bottari.member.dto.UpdateMemberRequest;
-import com.bottari.error.ApiErrorCodes;
-import com.bottari.error.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Member", description = "사용자 API")
@@ -33,7 +33,7 @@ public interface MemberApiDocs {
             @ApiResponse(responseCode = "200", description = "사용자 회원가입 여부 확인 성공"),
     })
     ResponseEntity<CheckRegistrationResponse> checkRegistration(
-            final HttpServletRequest httpServletRequest
+            @Parameter(hidden = true) final String ssaid
     );
 
     @Operation(summary = "사용자 이름 수정")
@@ -49,6 +49,6 @@ public interface MemberApiDocs {
     })
     ResponseEntity<Void> updateName(
             final UpdateMemberRequest request,
-            final HttpServletRequest httpServletRequest
+            @Parameter(hidden = true) final String ssaid
     );
 }

@@ -48,8 +48,8 @@ public class Member {
     }
 
     private void validateName(final String name) {
-        if (name.length() < 3) {
-            throw new BusinessException(ErrorCode.MEMBER_NAME_TOO_SHORT, "최소 3자 이상 입력 가능합니다.");
+        if (name.length() < 2) {
+            throw new BusinessException(ErrorCode.MEMBER_NAME_TOO_SHORT, "최소 2자 이상 입력 가능합니다.");
         }
         if (name.length() > 10) {
             throw new BusinessException(ErrorCode.MEMBER_NAME_TOO_LONG, "최대 10자까지 입력 가능합니다.");

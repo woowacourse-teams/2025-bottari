@@ -4,9 +4,9 @@ import com.bottari.bottaritemplate.dto.ReportBottariTemplateRequest;
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface ReportApiDocs {
@@ -23,6 +23,6 @@ public interface ReportApiDocs {
     ResponseEntity<Void> reportBottariTemplate(
             final Long id,
             final ReportBottariTemplateRequest request,
-            final HttpServletRequest httpServletRequest
+            @Parameter(hidden = true) final String ssaid
     );
 }

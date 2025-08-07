@@ -1,10 +1,10 @@
 package com.bottari.member.controller;
 
-import com.bottari.member.service.MemberService;
+import com.bottari.config.MemberIdentifier;
 import com.bottari.member.dto.CheckRegistrationResponse;
 import com.bottari.member.dto.CreateMemberRequest;
 import com.bottari.member.dto.UpdateMemberRequest;
-import jakarta.servlet.http.HttpServletRequest;
+import com.bottari.member.service.MemberService;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +35,8 @@ public class MemberController implements MemberApiDocs {
     @GetMapping("/check")
     @Override
     public ResponseEntity<CheckRegistrationResponse> checkRegistration(
-            final HttpServletRequest httpServletRequest
+            @MemberIdentifier final String ssaid
     ) {
-        final String ssaid = httpServletRequest.getHeader("ssaid");
         final CheckRegistrationResponse response = memberService.checkRegistration(ssaid);
 
         return ResponseEntity.ok(response);
@@ -47,9 +46,8 @@ public class MemberController implements MemberApiDocs {
     @Override
     public ResponseEntity<Void> updateName(
             @RequestBody final UpdateMemberRequest request,
-            final HttpServletRequest httpServletRequest
+            @MemberIdentifier final String ssaid
     ) {
-        final String ssaid = httpServletRequest.getHeader("ssaid");
         memberService.updateName(ssaid, request);
 
         return ResponseEntity.noContent().build();
