@@ -18,6 +18,7 @@ import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
+import com.bottari.domain.usecase.report.ReportTemplateUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
@@ -139,5 +140,8 @@ object UseCaseProvider {
     }
     val getPermissionFlagUseCase: GetPermissionFlagUseCase by lazy {
         GetPermissionFlagUseCase(RepositoryProvider.appConfigRepository)
+    }
+    val reportTemplateUseCase: ReportTemplateUseCase by lazy {
+        ReportTemplateUseCase(RepositoryProvider.reportRepository)
     }
 }
