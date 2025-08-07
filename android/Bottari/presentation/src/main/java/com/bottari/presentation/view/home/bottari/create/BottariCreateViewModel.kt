@@ -28,14 +28,14 @@ class BottariCreateViewModel(
     private val _uiEvent: SingleLiveEvent<BottariCreateUiEvent> = SingleLiveEvent()
     val uiEvent: LiveData<BottariCreateUiEvent> get() = _uiEvent
 
+    private val ssaid: String = stateHandle[KEY_SSAID]!!
+
     fun updateBottariTitle(title: String) {
         _uiState.update { copy(bottariTitle = title) }
     }
 
-    fun createBottari(
-        ssaid: String,
-        title: String,
-    ) {
+    fun createBottari() {
+        val title = uiState.value?.bottariTitle?.trim() ?: return
         if (title.isBlank()) return
 
         viewModelScope.launch {
@@ -46,13 +46,18 @@ class BottariCreateViewModel(
     }
 
     companion object {
+        private const val KEY_SSAID = "KEY_SSAID"
         private const val KEY_BOTTARI_TITLE = "KEY_BOTTARI_TITLE"
         private const val EMPTY_BOTTARI_TITLE = ""
 
-        fun Factory(defaultTitle: String): ViewModelProvider.Factory =
+        fun Factory(
+            ssaid: String,
+            defaultTitle: String,
+        ): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
+                    stateHandle[KEY_SSAID] = ssaid
                     stateHandle[KEY_BOTTARI_TITLE] = defaultTitle
 
                     BottariCreateViewModel(

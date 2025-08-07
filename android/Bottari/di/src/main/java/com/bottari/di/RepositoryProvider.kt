@@ -6,12 +6,14 @@ import com.bottari.data.repository.BottariItemRepositoryImpl
 import com.bottari.data.repository.BottariRepositoryImpl
 import com.bottari.data.repository.BottariTemplateRepositoryImpl
 import com.bottari.data.repository.MemberRepositoryImpl
+import com.bottari.data.repository.ReportRepositoryImpl
 import com.bottari.domain.repository.AlarmRepository
 import com.bottari.domain.repository.AppConfigRepository
 import com.bottari.domain.repository.BottariItemRepository
 import com.bottari.domain.repository.BottariRepository
 import com.bottari.domain.repository.BottariTemplateRepository
 import com.bottari.domain.repository.MemberRepository
+import com.bottari.domain.repository.ReportRepository
 
 object RepositoryProvider {
     val memberRepository: MemberRepository by lazy {
@@ -35,6 +37,11 @@ object RepositoryProvider {
     val appConfigRepository: AppConfigRepository by lazy {
         AppConfigRepositoryImpl(
             DataSourceProvider.appConfigDataSource,
+        )
+    }
+    val reportRepository: ReportRepository by lazy {
+        ReportRepositoryImpl(
+            DataSourceProvider.reportRemoteDataSource,
         )
     }
 }

@@ -17,6 +17,7 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.extension.getParcelableArrayListCompat
 import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.common.alart.CustomAlertDialog
@@ -85,7 +86,7 @@ class PersonalItemEditFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
-                PersonalItemEditUiEvent.SaveBottariItemsFailure -> showSnackbar(R.string.common_save_failure_text)
+                PersonalItemEditUiEvent.SaveBottariItemsFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
                 PersonalItemEditUiEvent.SaveBottariItemsSuccess -> {
                     onBackPressedCallback.isEnabled = false
                     requireActivity().onBackPressedDispatcher.onBackPressed()

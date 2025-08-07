@@ -62,7 +62,7 @@ class TemplateDetailViewModel(
             fetchBottariTemplateDetailUseCase(_uiState.value!!.templateId)
                 .onSuccess { template ->
                     val itemUiModels = template.items.map { it.toUiModel() }
-                    _uiState.update { copy(items = itemUiModels) }
+                    _uiState.update { copy(title = template.title, items = itemUiModels) }
                 }.onFailure {
                     _uiEvent.value = TemplateDetailUiEvent.FetchBottariDetailFailure
                 }

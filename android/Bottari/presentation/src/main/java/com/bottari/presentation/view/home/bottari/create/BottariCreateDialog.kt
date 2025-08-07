@@ -22,7 +22,10 @@ class BottariCreateDialog :
     DialogFragment(),
     TextWatcher {
     private val viewModel: BottariCreateViewModel by viewModels {
-        BottariCreateViewModel.Factory(getString(R.string.bottari_create_default_title_text))
+        BottariCreateViewModel.Factory(
+            ssaid = requireContext().getSSAID(),
+            defaultTitle = getString(R.string.bottari_create_default_title_text),
+        )
     }
     private var _binding: DialogBottariCreateBinding? = null
     val binding: DialogBottariCreateBinding get() = _binding!!
@@ -64,7 +67,7 @@ class BottariCreateDialog :
     }
 
     override fun afterTextChanged(s: Editable?) {
-        viewModel.updateBottariTitle(s.toString().trim())
+        viewModel.updateBottariTitle(s.toString())
     }
 
     override fun onTextChanged(
@@ -98,8 +101,7 @@ class BottariCreateDialog :
         binding.etBottariCreateName.addTextChangedListener(this)
         binding.btnBottariCreateClose.setOnClickListener { dismiss() }
         binding.btnBottariCreate.setOnClickListener {
-            val title = binding.etBottariCreateName.text.toString()
-            viewModel.createBottari(requireContext().getSSAID(), title)
+            viewModel.createBottari()
         }
     }
 

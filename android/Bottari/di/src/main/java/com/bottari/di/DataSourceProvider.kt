@@ -14,6 +14,8 @@ import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSourceImpl
 import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSourceImpl
+import com.bottari.data.source.remote.ReportRemoteDataSource
+import com.bottari.data.source.remote.ReportRemoteDataSourceImpl
 
 object DataSourceProvider {
     val memberRemoteDataSource: MemberRemoteDataSource by lazy {
@@ -46,5 +48,10 @@ object DataSourceProvider {
     }
     val userInfoLocalDataSource: UserInfoLocalDataSource by lazy {
         UserInfoLocalDataSourceImpl(DataStoreProvider.provideUserInfoDataStore)
+    }
+    val reportRemoteDataSource: ReportRemoteDataSource by lazy {
+        ReportRemoteDataSourceImpl(
+            ServiceProvider.reportService,
+        )
     }
 }
