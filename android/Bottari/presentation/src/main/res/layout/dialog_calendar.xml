@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/space_median"
+    android:background="@drawable/bg_white_radius_12dp"
+    android:elevation="2dp"
+    android:padding="20dp">
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/mcv_alarm_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/CustomCalendarView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mcv_calendarMode="month"
+        app:mcv_dateTextAppearance="@style/CustomCalendarText"
+        app:mcv_firstDayOfWeek="sunday"
+        app:mcv_leftArrow="@drawable/btn_previous"
+        app:mcv_rightArrow="@drawable/btn_next"
+        app:mcv_selectionMode="single"
+        app:mcv_titleAnimationOrientation="horizontal"
+        app:mcv_weekDayTextAppearance="@style/CustomCalendarText" />
+
+    <TextView
+        android:id="@+id/btn_cancel"
+        style="@style/Pretendard_Regular_16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_median"
+        android:gravity="center"
+        android:paddingVertical="@dimen/space_small"
+        android:text="@string/common_cancel_btn_text"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_confirm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mcv_alarm_date"
+        tools:text="취소" />
+
+    <TextView
+        android:id="@+id/btn_confirm"
+        style="@style/Pretendard_Regular_16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingVertical="@dimen/space_small"
+        android:text="@string/common_confirm_btn_text"
+        android:textColor="@color/primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_cancel"
+        app:layout_constraintTop_toTopOf="@id/btn_cancel" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

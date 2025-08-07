@@ -77,7 +77,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_alarm_type_no_repeat"
+                    android:id="@+id/tv_alarm_type_non_repeat"
                     style="@style/Pretendard_Medium_14"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -86,63 +86,60 @@
                     android:paddingVertical="@dimen/space_median"
                     android:paddingStart="@dimen/space_median"
                     android:paddingEnd="0dp"
-                    android:text="@string/alarm_edit_type_none_text"
+                    android:text="@string/alarm_edit_type_non_repeat_text"
                     android:textColor="@color/black"
                     app:layout_constraintTop_toBottomOf="@id/tv_alarm_type" />
 
                 <androidx.constraintlayout.widget.Group
-                    android:id="@+id/group_alarm_no_repeat"
+                    android:id="@+id/group_alarm_non_repeat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    app:constraint_referenced_ids="tv_no_repeat_alarm_date, np_no_repeat_alarm_date_day, np_no_repeat_alarm_date_month, layout_no_repeat_alarm_time" />
+                    app:constraint_referenced_ids="tv_non_repeat_alarm_date_title, tv_non_repeat_alarm_date_title, btn_calendar, tv_non_repeat_alarm_date, layout_non_repeat_alarm_time" />
 
                 <TextView
-                    android:id="@+id/tv_no_repeat_alarm_date"
-                    style="@style/Pretendard_Bold_20"
+                    android:id="@+id/tv_non_repeat_alarm_date_title"
+                    style="@style/Pretendard_SemiBold_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_median"
                     android:layout_marginTop="@dimen/space_median"
-                    android:text="@string/alarm_edit_date_title_text"
+                    android:text="@string/alarm_edit_date_text"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_alarm_type_no_repeat" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_alarm_type_non_repeat" />
 
-                <com.shawnlin.numberpicker.NumberPicker
-                    android:id="@+id/np_no_repeat_alarm_date_month"
-                    style="@style/CustomNumberPicker"
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/tv_non_repeat_alarm_date"
+                    style="@style/Pretendard_Medium_20"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_x_large"
-                    app:layout_constraintEnd_toStartOf="@id/np_no_repeat_alarm_date_day"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_no_repeat_alarm_date"
-                    app:np_max="12"
-                    app:np_min="1" />
+                    android:layout_marginStart="@dimen/space_median"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toStartOf="@id/btn_calendar"
+                    app:layout_constraintTop_toTopOf="@id/tv_non_repeat_alarm_date_title"
+                    tools:text="2025년 8월 8일" />
 
-                <com.shawnlin.numberpicker.NumberPicker
-                    android:id="@+id/np_no_repeat_alarm_date_day"
-                    style="@style/CustomNumberPicker"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/space_x_large"
+                <ImageView
+                    android:id="@+id/btn_calendar"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="@string/alarm_date_edit_btn_description"
+                    android:padding="@dimen/space_small"
+                    android:src="@drawable/btn_calendar"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_non_repeat_alarm_date_title"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/np_no_repeat_alarm_date_month"
-                    app:layout_constraintTop_toBottomOf="@id/tv_no_repeat_alarm_date"
-                    app:np_max="31"
-                    app:np_min="1" />
+                    app:layout_constraintTop_toTopOf="@id/tv_non_repeat_alarm_date_title" />
 
                 <include
-                    android:id="@+id/layout_no_repeat_alarm_time"
+                    android:id="@+id/layout_non_repeat_alarm_time"
                     layout="@layout/layout_alarm_edit_time_picker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/np_no_repeat_alarm_date_month" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_non_repeat_alarm_date_title" />
 
                 <TextView
-                    android:id="@+id/tv_alarm_type_everyday_repeat"
+                    android:id="@+id/tv_alarm_type_repeat"
                     style="@style/Pretendard_Medium_14"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -151,56 +148,28 @@
                     android:paddingVertical="@dimen/space_median"
                     android:paddingStart="@dimen/space_median"
                     android:paddingEnd="0dp"
-                    android:text="@string/alarm_edit_type_everyday_text"
+                    android:text="@string/alarm_edit_type_repeat_text"
                     android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/layout_no_repeat_alarm_time" />
+                    app:layout_constraintTop_toBottomOf="@id/layout_non_repeat_alarm_time" />
 
                 <androidx.constraintlayout.widget.Group
-                    android:id="@+id/group_alarm_everyday_repeat"
+                    android:id="@+id/group_alarm_repeat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    app:constraint_referenced_ids="layout_everyday_repeat_alarm_time" />
-
-                <include
-                    android:id="@+id/layout_everyday_repeat_alarm_time"
-                    layout="@layout/layout_alarm_edit_time_picker"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/tv_alarm_type_everyday_repeat" />
+                    app:constraint_referenced_ids="tv_alarm_day_of_week, rv_day_of_week, layout_repeat_alarm_time" />
 
                 <TextView
-                    android:id="@+id/tv_alarm_type_everyweek_repeat"
-                    style="@style/Pretendard_Medium_14"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_median"
-                    android:background="@drawable/bg_white_radius_12dp_gray_stroke"
-                    android:paddingVertical="@dimen/space_median"
-                    android:paddingStart="@dimen/space_median"
-                    android:paddingEnd="0dp"
-                    android:text="@string/alarm_edit_type_everyweek_text"
-                    android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/layout_everyday_repeat_alarm_time" />
-
-                <androidx.constraintlayout.widget.Group
-                    android:id="@+id/group_alarm_everyweek_repeat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:constraint_referenced_ids="tv_everyweek_repeat_alarm_day_of_week ,rv_day_of_week, layout_everyweek_repeat_alarm_time" />
-
-                <TextView
-                    android:id="@+id/tv_everyweek_repeat_alarm_day_of_week"
-                    style="@style/Pretendard_Bold_20"
+                    android:id="@+id/tv_alarm_day_of_week"
+                    style="@style/Pretendard_SemiBold_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_median"
                     android:layout_marginTop="@dimen/space_median"
-                    android:text="@string/alarm_edit_day_of_week_title_text"
+                    android:text="@string/alarm_edit_day_of_week_text"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_alarm_type_everyweek_repeat" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_alarm_type_repeat" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_day_of_week"
@@ -210,11 +179,11 @@
                     android:layout_marginStart="@dimen/space_x_small"
                     android:fadingEdgeLength="@dimen/space_2x_small"
                     android:requiresFadingEdge="horizontal"
-                    app:layout_constraintTop_toBottomOf="@id/tv_everyweek_repeat_alarm_day_of_week"
+                    app:layout_constraintTop_toBottomOf="@id/tv_alarm_day_of_week"
                     tools:listitem="@layout/item_day_of_week" />
 
                 <include
-                    android:id="@+id/layout_everyweek_repeat_alarm_time"
+                    android:id="@+id/layout_repeat_alarm_time"
                     layout="@layout/layout_alarm_edit_time_picker"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

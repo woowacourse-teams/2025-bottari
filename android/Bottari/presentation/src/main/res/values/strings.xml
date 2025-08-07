@@ -61,6 +61,7 @@
 
     <!-- Common: 공통 버튼 텍스트 -->
     <string name="common_confirm_btn_text">확인</string>
+    <string name="common_cancel_btn_text">취소</string>
     <string name="common_yes_btn_text">예</string>
     <string name="common_no_btn_text">아니오</string>
 
@@ -182,18 +183,20 @@
     <!-- Alarm Edit -->
     <string name="alarm_edit_title_text">알람 설정</string>
     <string name="alarm_edit_type_title_text">반복 설정</string>
-    <string name="alarm_edit_type_none_text">반복 없음</string>
-    <string name="alarm_edit_type_everyday_text">매일</string>
-    <string name="alarm_edit_type_everyweek_text">매주</string>
-    <string name="alarm_edit_date_title_text">알람 날짜</string>
-    <string name="alarm_edit_time_title">알람 시간</string>
-    <string name="alarm_edit_day_of_week_title_text">요일 선택</string>
+    <string name="alarm_edit_type_non_repeat_text">반복 안함</string>
+    <string name="alarm_edit_type_repeat_text">반복</string>
+    <string name="alarm_edit_date_text">날짜</string>
+    <string name="alarm_edit_time_text">시간</string>
+    <string name="alarm_edit_day_of_week_text">요일</string>
     <string name="alarm_edit_location_title_text">알람 장소</string>
     <string name="alarm_edit_save_success_text">알람을 저장했어요</string>
     <string name="alarm_edit_save_failure_text">알람을 저장하지 못했어요</string>
     <string name="alarm_edit_create_success_text">알람을 만들었어요</string>
     <string name="alarm_edit_create_failure_text">알람을 만들지 못했어요</string>
     <string name="alarm_edit_exact_alarm_permission_dialog_message_text">보따리 알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
+
+    <!--  Calendar  -->
+    <string name="calendar_title_format_text">%d년 %d월</string>
 
     <!-- Bottari Template -->
     <string name="template_search_hint_text">찾고 싶은 보따리를 입력해 보세요</string>
@@ -244,6 +247,7 @@
     <string name="notification_permission_iv_description">알림 권한 이미지</string>
     <string name="alarm_permission_iv_description">알람 및 리마인더 권한 이미지</string>
     <string name="location_permission_iv_description">위치 권한 이미지</string>
+    <string name="alarm_date_edit_btn_description">날짜 수정 버튼</string>
 
     <!-- Menu -->
     <string name="menu_create_template_title_text">모두의 보따리에 등록하기</string>
