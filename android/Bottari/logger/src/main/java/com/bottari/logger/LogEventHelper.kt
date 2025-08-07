@@ -1,9 +1,6 @@
 package com.bottari.logger
 
-import android.os.Bundle
 import com.bottari.logger.model.UiEventType
-import com.bottari.logger.util.toBundle
-import com.google.firebase.analytics.FirebaseAnalytics
 
 /**
  * UI 이벤트 로깅 헬퍼

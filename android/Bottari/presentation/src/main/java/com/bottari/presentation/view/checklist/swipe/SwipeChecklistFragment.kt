@@ -6,8 +6,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import com.bottari.logger.BottariLogger
-import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
