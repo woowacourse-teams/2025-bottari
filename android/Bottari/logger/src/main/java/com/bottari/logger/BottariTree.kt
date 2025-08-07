@@ -1,223 +1,36 @@
 package com.bottari.logger
 
-import android.util.Log
-import androidx.core.os.bundleOf
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.bottari.logger.handler.LogHandler
+import com.bottari.logger.model.CallerInfo
+import com.bottari.logger.model.LogLevel
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class BottariTree(
-    userId: String,
-    private val analytics: FirebaseAnalytics,
-    private val crashlytics: FirebaseCrashlytics,
-    private val minLogPriority: Int = if (BuildConfig.DEBUG) Log.VERBOSE else Log.INFO,
+    private val handlers: List<LogHandler>,
 ) : Timber.Tree() {
-    init {
-        crashlytics.isCrashlyticsCollectionEnabled = !BuildConfig.DEBUG
-        analytics.setAnalyticsCollectionEnabled(!BuildConfig.DEBUG)
-        crashlytics.setUserId(userId)
-        analytics.setUserId(userId)
-    }
-
-    override fun isLoggable(
-        tag: String?,
-        priority: Int,
-    ): Boolean = priority >= minLogPriority
-
     override fun log(
         priority: Int,
         tag: String?,
         message: String,
         t: Throwable?,
     ) {
-        if (!isLoggable(tag, priority)) return
+        val level = LogLevel.fromTag(tag)
+        if (level == LogLevel.UNKNOWN) return
 
-        val logLevel = LogLevel.fromTag(tag)
-        if (logLevel == LogLevel.UNKNOWN) {
-            Log.println(priority, tag, message)
-            return
-        }
-
-        val (eventName, eventMessage) = splitMessage(message)
         val callerInfo = CallerInfo.extract()
-        val threadName = Thread.currentThread().name
         val timestamp = currentTimestamp()
-        val fullLog = formatLogMessage(logLevel, eventMessage, threadName, timestamp, callerInfo)
 
-        logToConsole(priority, fullLog)
-
-        if (logLevel.sendToCrashlytics) {
-            logToCrashlytics(fullLog, t)
-        }
-
-        if (logLevel.sendToAnalytics) {
-            logToAnalytics(
-                eventName = eventName,
-                tag = logLevel.label,
-                message = eventMessage,
-                callerInfo = callerInfo,
-                timestamp = timestamp,
-            )
+        handlers.forEach { handler ->
+            handler.handleLog(level, message, callerInfo, timestamp, t)
         }
     }
 
-    private fun splitMessage(message: String): Pair<String, String> =
-        if ("/to/" in message) {
-            val parts = message.split("/to/", limit = 2)
-            parts[0] to parts.getOrElse(1) { "" }
-        } else {
-            EVENT_CUSTOM_LOG to message
-        }
-
-    private fun formatLogMessage(
-        logLevel: LogLevel,
-        message: String,
-        threadName: String,
-        timestamp: String,
-        callerInfo: CallerInfo,
-    ): String =
-        when (logLevel) {
-            LogLevel.NETWORK ->
-                buildNetworkLog(
-                    logLevel.label,
-                    message,
-                    threadName,
-                    timestamp,
-                    callerInfo,
-                )
-
-            LogLevel.LIFECYCLE -> buildLifecycleLog(logLevel.label, message, callerInfo)
-            else -> buildDefaultLog(logLevel.label, message, threadName, timestamp, callerInfo)
-        }
-
-    private fun buildNetworkLog(
-        tag: String,
-        message: String,
-        threadName: String,
-        timestamp: String,
-        callerInfo: CallerInfo,
-    ): String =
-        buildString {
-            appendLine(SHORT_LOG_SEPARATOR)
-            appendLine(
-                message
-                    .replace(NETWORK_REQUEST_PREFIX, NETWORK_REQUEST_REPLACE_PREFIX)
-                    .replace(NETWORK_RESPONSE_PREFIX, NETWORK_RESPONSE_REPLACE_PREFIX),
-            )
-            appendLine(SHORT_LOG_SEPARATOR)
-            appendLine(formatMetaInfo(tag, threadName, timestamp, callerInfo))
-            append(SHORT_LOG_SEPARATOR)
-        }
-
-    private fun buildLifecycleLog(
-        tag: String,
-        message: String,
-        callerInfo: CallerInfo,
-    ): String =
-        buildString {
-            appendLine(SHORT_LOG_SEPARATOR)
-            appendLine("[$tag] $message | ${callerInfo.methodName}")
-            append(SHORT_LOG_SEPARATOR)
-        }
-
-    private fun buildDefaultLog(
-        tag: String,
-        message: String,
-        threadName: String,
-        timestamp: String,
-        callerInfo: CallerInfo,
-    ): String =
-        buildString {
-            appendLine(LOG_SEPARATOR)
-            appendLine(message)
-            appendLine(LOG_SEPARATOR)
-            appendLine(formatMetaInfo(tag, threadName, timestamp, callerInfo))
-            append(LOG_SEPARATOR)
-        }
-
-    private fun formatMetaInfo(
-        tag: String,
-        threadName: String,
-        timestamp: String,
-        callerInfo: CallerInfo,
-    ): String =
-        buildString {
-            append(" Type: $tag")
-            if (tag != LogLevel.NETWORK.label) {
-                append("\t|\tThread: $threadName")
-                append("\t|\tMethod: ${callerInfo.methodName}()")
-                append("\t|\t${callerInfo.display()}")
-            }
-            append("\t|\t$timestamp")
-        }
-
-    private fun logToConsole(
-        priority: Int,
-        log: String,
-    ) {
-        val lines = log.lines()
-        for (line in lines) {
-            if (line.length <= MAX_LOG_LENGTH) {
-                Log.println(priority, LOG_NAME, line)
-            } else {
-                line.chunked(MAX_LOG_LENGTH).forEach { chunk ->
-                    Log.println(priority, LOG_NAME, chunk)
-                }
-            }
-        }
-    }
-
-    private fun logToCrashlytics(
-        log: String,
-        t: Throwable?,
-    ) {
-        crashlytics.log(log)
-        t?.let { crashlytics.recordException(it) }
-    }
-
-    private fun logToAnalytics(
-        eventName: String,
-        tag: String,
-        message: String,
-        callerInfo: CallerInfo,
-        timestamp: String,
-    ) {
-        analytics.logEvent(
-            eventName,
-            bundleOf(
-                PARAM_TAG to tag,
-                PARAM_MESSAGE to message,
-                PARAM_LOCATION to callerInfo.display(),
-                PARAM_TIMESTAMP to timestamp,
-            ),
-        )
-    }
-
-    private fun currentTimestamp(): String = dateFormat.format(Date())
+    private fun currentTimestamp(): String = SimpleDateFormat(TIME_STAMP_FORMAT_PATTERN, Locale.KOREA).format(Date())
 
     companion object {
-        private const val LOG_NAME = "[BOTTARI_LOG]"
-        private const val MAX_LOG_LENGTH = 4000
-
-        private const val SHORT_LOG_SEPARATOR =
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        private const val LOG_SEPARATOR =
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-        private const val EVENT_CUSTOM_LOG = "BOTTARI_EVENT_LOG"
-        private const val PARAM_TAG = "LOG_LEVEL"
-        private const val PARAM_MESSAGE = "LOG_MESSAGE"
-        private const val PARAM_LOCATION = "LOG_LOCATION"
-        private const val PARAM_TIMESTAMP = "LOG_TIMESTAMP"
-
-        private const val NETWORK_REQUEST_PREFIX = "-->"
-        private const val NETWORK_RESPONSE_PREFIX = "<--"
-        private const val NETWORK_REQUEST_REPLACE_PREFIX = "[REQUEST]"
-        private const val NETWORK_RESPONSE_REPLACE_PREFIX = "[RESPONSE]"
-
-        private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.KOREA)
+        private const val TIME_STAMP_FORMAT_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS"
     }
 }
