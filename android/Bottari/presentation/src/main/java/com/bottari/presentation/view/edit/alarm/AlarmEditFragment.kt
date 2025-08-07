@@ -1,8 +1,11 @@
 package com.bottari.presentation.view.edit.alarm
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.constraintlayout.widget.Group
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -74,6 +77,11 @@ class AlarmEditFragment :
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
             handleAlarmState(uiState.alarm)
+            if (uiState.alarm.type == AlarmTypeUiModel.NON_REPEAT) {
+                showOnly(binding.groupAlarmNonRepeat)
+                return@observe
+            }
+            showOnly(binding.groupAlarmRepeat)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner, ::handleAlarmEvent)
     }
@@ -176,29 +184,29 @@ class AlarmEditFragment :
         viewModel.updateAlarmTime(time = updatedTime)
     }
 
-//    private fun handleAlarmDateChange(
-//        month: Int,
-//        day: Int,
-//    ) {
-//        val maxDay = getDayOfMonth(month)
-//        val safeDay = minOf(day, maxDay)
-//        if (binding.npNoRepeatAlarmDateDay.maxValue != maxDay) {
-//            binding.npNoRepeatAlarmDateDay.maxValue = maxDay
-//        }
-//        if (binding.npNoRepeatAlarmDateDay.value != safeDay) {
-//            binding.npNoRepeatAlarmDateDay.value = safeDay
-//        }
-//        val updatedDate = LocalDate.of(Year.now().value, month, safeDay)
-//        viewModel.updateAlarmDate(updatedDate)
-//    }
-//
-//    private fun getDayOfMonth(month: Int): Int {
-//        val yearMonth = YearMonth.of(Year.now().value, month)
-//        return yearMonth.lengthOfMonth()
-//    }
-
     private fun showOnly(visibleView: View) {
-        groups.forEach { it.isVisible = it == visibleView }
+        groups.forEach { group ->
+            val isVisible = group == visibleView
+            group.isVisible = isVisible
+            when (group) {
+                binding.groupAlarmNonRepeat -> updateAlarmTypeText(binding.tvAlarmTypeNonRepeat, isVisible)
+                binding.groupAlarmRepeat -> updateAlarmTypeText(binding.tvAlarmTypeRepeat, isVisible)
+            }
+        }
+    }
+
+    private fun updateAlarmTypeText(
+        textView: TextView,
+        isSelected: Boolean,
+    ) {
+        val bgColorRes = if (isSelected) R.color.primary else R.color.white
+        val bgColor = ContextCompat.getColor(requireContext(), bgColorRes)
+
+        val textColorRes = if (isSelected) R.color.white else R.color.black
+        val textColor = ContextCompat.getColor(requireContext(), textColorRes)
+
+        textView.backgroundTintList = ColorStateList.valueOf(bgColor)
+        textView.setTextColor(textColor)
     }
 
     companion object {

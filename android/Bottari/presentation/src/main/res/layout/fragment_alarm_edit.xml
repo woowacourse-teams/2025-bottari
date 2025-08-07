@@ -63,13 +63,15 @@
                 android:layout_margin="@dimen/space_median"
                 android:background="@drawable/bg_white_radius_12dp"
                 android:elevation="2dp"
-                android:padding="@dimen/space_median">
+                android:padding="@dimen/space_x_small">
 
                 <TextView
                     android:id="@+id/tv_alarm_type"
                     style="@style/Pretendard_Bold_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_x_small"
+                    android:layout_marginTop="@dimen/space_x_small"
                     android:layout_marginBottom="@dimen/space_x_small"
                     android:text="@string/alarm_edit_type_title_text"
                     android:textColor="@color/black"
@@ -78,11 +80,13 @@
 
                 <TextView
                     android:id="@+id/tv_alarm_type_non_repeat"
-                    style="@style/Pretendard_Medium_14"
+                    style="@style/Pretendard_Medium_16"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/space_x_small"
                     android:layout_marginTop="@dimen/space_median"
-                    android:background="@drawable/bg_white_radius_12dp_gray_stroke"
+                    android:background="@drawable/bg_white_radius_12dp"
+                    android:elevation="2dp"
                     android:paddingVertical="@dimen/space_median"
                     android:paddingStart="@dimen/space_median"
                     android:paddingEnd="0dp"
@@ -94,7 +98,7 @@
                     android:id="@+id/group_alarm_non_repeat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:constraint_referenced_ids="tv_non_repeat_alarm_date_title, tv_non_repeat_alarm_date_title, btn_calendar, tv_non_repeat_alarm_date, layout_non_repeat_alarm_time" />
 
                 <TextView
@@ -102,7 +106,7 @@
                     style="@style/Pretendard_SemiBold_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_median"
+                    android:layout_marginHorizontal="@dimen/space_x_large"
                     android:layout_marginTop="@dimen/space_median"
                     android:text="@string/alarm_edit_date_text"
                     android:textColor="@color/black"
@@ -111,10 +115,9 @@
 
                 <TextView
                     android:id="@+id/tv_non_repeat_alarm_date"
-                    style="@style/Pretendard_Medium_20"
+                    style="@style/Pretendard_SemiBold_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_median"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toStartOf="@id/btn_calendar"
                     app:layout_constraintTop_toTopOf="@id/tv_non_repeat_alarm_date_title"
@@ -124,6 +127,7 @@
                     android:id="@+id/btn_calendar"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:layout_marginEnd="@dimen/space_median"
                     android:contentDescription="@string/alarm_date_edit_btn_description"
                     android:padding="@dimen/space_small"
                     android:src="@drawable/btn_calendar"
@@ -136,27 +140,33 @@
                     layout="@layout/layout_alarm_edit_time_picker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/space_x_small"
                     app:layout_constraintTop_toBottomOf="@id/tv_non_repeat_alarm_date_title" />
 
                 <TextView
                     android:id="@+id/tv_alarm_type_repeat"
-                    style="@style/Pretendard_Medium_14"
+                    style="@style/Pretendard_Medium_16"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/space_x_small"
                     android:layout_marginTop="@dimen/space_median"
-                    android:background="@drawable/bg_white_radius_12dp_gray_stroke"
+                    android:background="@drawable/bg_white_radius_12dp"
+                    android:elevation="2dp"
                     android:paddingVertical="@dimen/space_median"
                     android:paddingStart="@dimen/space_median"
                     android:paddingEnd="0dp"
                     android:text="@string/alarm_edit_type_repeat_text"
                     android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/layout_non_repeat_alarm_time" />
+                    app:layout_constraintBottom_toBottomOf="@id/tv_alarm_day_of_week"
+                    app:layout_constraintTop_toBottomOf="@id/layout_non_repeat_alarm_time"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_goneMarginBottom="@dimen/space_median" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/group_alarm_repeat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:constraint_referenced_ids="tv_alarm_day_of_week, rv_day_of_week, layout_repeat_alarm_time" />
 
                 <TextView
@@ -164,7 +174,7 @@
                     style="@style/Pretendard_SemiBold_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_median"
+                    android:layout_marginHorizontal="@dimen/space_x_large"
                     android:layout_marginTop="@dimen/space_median"
                     android:text="@string/alarm_edit_day_of_week_text"
                     android:textColor="@color/black"
@@ -176,7 +186,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/space_small"
-                    android:layout_marginStart="@dimen/space_x_small"
+                    android:layout_marginStart="@dimen/space_median"
                     android:fadingEdgeLength="@dimen/space_2x_small"
                     android:requiresFadingEdge="horizontal"
                     app:layout_constraintTop_toBottomOf="@id/tv_alarm_day_of_week"
@@ -187,6 +197,7 @@
                     layout="@layout/layout_alarm_edit_time_picker"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginHorizontal="@dimen/space_x_small"
                     app:layout_constraintTop_toBottomOf="@id/rv_day_of_week" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
