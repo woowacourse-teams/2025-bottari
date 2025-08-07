@@ -7,10 +7,10 @@ import com.bottari.bottari.dto.UpdateBottariRequest;
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 
@@ -27,7 +27,7 @@ public interface BottariApiDocs {
     })
     ResponseEntity<ReadBottariResponse> read(
             final Long id,
-            final HttpServletRequest httpServletRequest
+            @Parameter(hidden = true) final String ssaid
     );
 
     @Operation(summary = "내 보따리 목록 조회")
@@ -38,7 +38,7 @@ public interface BottariApiDocs {
             ErrorCode.MEMBER_NOT_FOUND
     })
     ResponseEntity<List<ReadBottariPreviewResponse>> readPreviews(
-            final HttpServletRequest httpServletRequest
+            @Parameter(hidden = true) final String ssaid
     );
 
     @Operation(summary = "보따리 생성")
@@ -52,7 +52,7 @@ public interface BottariApiDocs {
     })
     ResponseEntity<Void> create(
             final CreateBottariRequest request,
-            final HttpServletRequest httpServletRequest
+            @Parameter(hidden = true) final String ssaid
     );
 
     @Operation(summary = "보따리 이름 수정")
@@ -69,7 +69,7 @@ public interface BottariApiDocs {
     ResponseEntity<Void> update(
             final Long id,
             final UpdateBottariRequest request,
-            final HttpServletRequest httpServletRequest
+            @Parameter(hidden = true) final String ssaid
     );
 
     @Operation(summary = "보따리 삭제")
@@ -82,6 +82,6 @@ public interface BottariApiDocs {
     })
     ResponseEntity<Void> delete(
             final Long id,
-            final HttpServletRequest httpServletRequest
+            @Parameter(hidden = true) final String ssaid
     );
 }
