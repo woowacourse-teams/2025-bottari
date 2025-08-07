@@ -73,13 +73,4 @@ class MyTemplateFragment :
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
-
-    companion object {
-        private const val ARG_BOTTARI_TEMPLATE_ID = "ARG_BOTTARI_TEMPLATE_ID"
-
-        fun newBundle(bottariTemplateId: Long): Bundle =
-            Bundle().apply {
-                putLong(ARG_BOTTARI_TEMPLATE_ID, bottariTemplateId)
-            }
-    }
 }

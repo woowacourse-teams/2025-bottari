@@ -4,12 +4,10 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentSwipeChecklistBinding
 import com.bottari.presentation.model.BottariItemUiModel
@@ -27,12 +25,7 @@ import com.yuyakaido.android.cardstackview.SwipeAnimationSetting
 class SwipeChecklistFragment :
     BaseFragment<FragmentSwipeChecklistBinding>(FragmentSwipeChecklistBinding::inflate),
     CardStackListener {
-    private val viewModel: ChecklistViewModel by activityViewModels {
-        ChecklistViewModel.Factory(
-            requireContext().getSSAID(),
-            requireArguments().getLong(ARG_BOTTARI_ID),
-        )
-    }
+    private val viewModel: ChecklistViewModel by activityViewModels()
     private val adapter: SwipeCheckListAdapter by lazy { SwipeCheckListAdapter() }
     private lateinit var cardStackLayoutManager: CardStackLayoutManager
 
@@ -173,13 +166,9 @@ class SwipeChecklistFragment :
     }
 
     companion object {
-        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
         private const val INDEX_OFFSET = 1
 
         @JvmStatic
-        fun newInstance(bottariId: Long): SwipeChecklistFragment =
-            SwipeChecklistFragment().apply {
-                arguments = bundleOf(ARG_BOTTARI_ID to bottariId)
-            }
+        fun newInstance(): SwipeChecklistFragment = SwipeChecklistFragment()
     }
 }
