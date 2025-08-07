@@ -102,7 +102,7 @@ class BottariTree(
         buildString {
             appendLine(SHORT_LOG_SEPARATOR)
             appendLine("[${logLevel.label}] $message | ${callerInfo.methodName}")
-            appendLine(SHORT_LOG_SEPARATOR)
+            append(SHORT_LOG_SEPARATOR)
         }
 
     private fun buildDefaultLog(
@@ -145,12 +145,18 @@ class BottariTree(
         priority: Int,
         log: String,
     ) {
-        if (log.length <= MAX_LOG_LENGTH) {
-            Log.println(priority, LOG_NAME, log)
-            return
-        }
+        val lines = log.lines()
 
-        log.chunked(MAX_LOG_LENGTH).forEach { Log.println(priority, LOG_NAME, it) }
+        for (line in lines) {
+            if (line.length <= MAX_LOG_LENGTH) {
+                Log.println(priority, LOG_NAME, line)
+                continue
+            }
+
+            line.chunked(MAX_LOG_LENGTH).forEach { chunk ->
+                Log.println(priority, LOG_NAME, chunk)
+            }
+        }
     }
 
     private fun logToCrashlytics(
