@@ -8,6 +8,7 @@ data class CallerInfo(
     fun display(): String = "$className.kt:$lineNumber"
 
     companion object {
+        private const val UNKNOWN = "Unknown"
         private val EXCLUDED_PREFIXES =
             listOf(
                 "com.bottari.logger",
@@ -30,7 +31,7 @@ data class CallerInfo(
                     methodName = it.methodName,
                     lineNumber = it.lineNumber,
                 )
-            } ?: CallerInfo("Unknown", "Unknown", -1)
+            } ?: CallerInfo(UNKNOWN, UNKNOWN, -1)
         }
     }
 }
