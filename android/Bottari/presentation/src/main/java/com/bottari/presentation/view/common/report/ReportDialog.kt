@@ -18,7 +18,7 @@ import com.bottari.presentation.databinding.DialogReportBinding
 
 class ReportDialog : DialogFragment() {
     private var _binding: DialogReportBinding? = null
-    val binding get() = _binding!!
+    val binding: DialogReportBinding get() = _binding!!
 
     private val viewModel: ReportViewModel by viewModels {
         ReportViewModel.Factory(
