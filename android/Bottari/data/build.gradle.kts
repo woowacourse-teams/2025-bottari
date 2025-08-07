@@ -56,10 +56,10 @@ tasks.withType<Test>().configureEach {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":logger"))
 
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.timber)
     implementation(libs.bundles.network)
     implementation(libs.bundles.local)
     testImplementation(libs.bundles.test)
