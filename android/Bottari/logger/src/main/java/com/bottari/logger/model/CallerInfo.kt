@@ -1,4 +1,4 @@
-package com.bottari.logger
+package com.bottari.logger.model
 
 data class CallerInfo(
     val className: String,
