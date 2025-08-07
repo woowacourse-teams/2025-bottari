@@ -33,8 +33,15 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupObserver()
         setupUI(savedInstanceState)
         setupListener()
+    }
+
+    private fun setupObserver() {
+        viewModel.uiState.observe(this) { uiState ->
+            updateToolbar(isMainChecklist() && uiState.bottariItems.isNotEmpty())
+        }
     }
 
     private fun setupUI(savedInstanceState: Bundle?) {
