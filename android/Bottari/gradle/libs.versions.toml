@@ -19,6 +19,7 @@ flexbox = "3.0.0"
 numberPicker = "2.4.13"
 spinkit = "1.4.0"
 materialCalendarview = "2.0.1"
+threetenabp = "1.4.9"
 
 # Network
 retrofit = "3.0.0"
@@ -66,6 +67,7 @@ flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbo
 number-picker = { module = "io.github.ShawnLin013:number-picker", version.ref = "numberPicker" }
 spinkit = { module = "com.github.ybq:Android-SpinKit", version.ref = "spinkit" }
 material-calendarview = { module = "com.github.prolificinteractive:material-calendarview", version.ref = "materialCalendarview" }
+threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threetenabp" }
 
 # --- Network ---
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
