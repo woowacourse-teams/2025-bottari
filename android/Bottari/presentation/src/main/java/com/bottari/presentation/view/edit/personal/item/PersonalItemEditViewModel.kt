@@ -3,14 +3,12 @@ package com.bottari.presentation.view.edit.personal.item
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.BottariItemUiModel
-import kotlinx.coroutines.launch
 
 class PersonalItemEditViewModel(
     stateHandle: SavedStateHandle,
@@ -53,7 +51,7 @@ class PersonalItemEditViewModel(
     fun saveChanges() {
         updateState { copy(isLoading = true) }
 
-        viewModelScope.launch {
+        launch {
             saveBottariItemsUseCase(
                 ssaid = ssaid,
                 bottariId = currentState.bottariId,
