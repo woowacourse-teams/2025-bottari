@@ -1,10 +1,10 @@
 package com.bottari.data.common.util
 
+import com.bottari.logger.BottariLogger
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import okhttp3.logging.HttpLoggingInterceptor
-import timber.log.Timber
 
 @OptIn(ExperimentalSerializationApi::class)
 class PrettyJsonLogger : HttpLoggingInterceptor.Logger {
@@ -21,23 +21,25 @@ class PrettyJsonLogger : HttpLoggingInterceptor.Logger {
         when {
             trimmed.startsWith(REQUEST_PREFIX) || trimmed.startsWith(RESPONSE_PREFIX) -> {
                 val isLast = isLastLine(trimmed)
-                if (!isLast) Timber.tag(TAG).i(SEPARATOR)
-                Timber.tag(TAG).i(trimmed)
-                if (isLast) Timber.tag(TAG).i(SEPARATOR)
+                if (!isLast) BottariLogger.log(TAG, SEPARATOR)
+                BottariLogger.log(TAG, trimmed)
+                if (isLast) BottariLogger.log(TAG, SEPARATOR)
+
+                if (!isLast) BottariLogger.network(trimmed)
             }
 
             isJson(trimmed) -> {
                 try {
                     val parsed = json.parseToJsonElement(trimmed)
                     val pretty = json.encodeToString(JsonElement.serializer(), parsed)
-                    Timber.tag(TAG).i(pretty)
+                    BottariLogger.log(TAG, pretty)
                 } catch (_: Exception) {
-                    Timber.tag(TAG).i(trimmed)
+                    BottariLogger.log(TAG, trimmed)
                 }
             }
 
             else -> {
-                Timber.tag(TAG).i(trimmed)
+                BottariLogger.log(TAG, trimmed)
             }
         }
     }
@@ -53,7 +55,7 @@ class PrettyJsonLogger : HttpLoggingInterceptor.Logger {
             )
 
     companion object {
-        private const val TAG = "NETWORK"
+        private const val TAG = "LOGGING_INTERCEPTOR"
         private const val JSON_INDENT = "\t"
 
         private const val SEPARATOR =

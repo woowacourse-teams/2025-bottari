@@ -1,8 +1,8 @@
 package com.bottari.data.common.util
 
+import com.bottari.logger.BottariLogger
 import retrofit2.HttpException
 import retrofit2.Response
-import timber.log.Timber
 
 @Suppress("UNCHECKED_CAST")
 inline fun <T> safeApiCall(apiCall: () -> Response<T>): Result<T> =
@@ -15,6 +15,6 @@ inline fun <T> safeApiCall(apiCall: () -> Response<T>): Result<T> =
             Result.failure(HttpException(response))
         }
     } catch (exception: Exception) {
-        Timber.e(exception, exception.message)
+        BottariLogger.error(exception.message, exception)
         Result.failure(exception)
     }

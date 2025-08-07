@@ -8,7 +8,7 @@ import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.domain.model.member.Member
 import com.bottari.domain.model.member.RegisteredMember
 import com.bottari.domain.repository.MemberRepository
-import timber.log.Timber
+import com.bottari.logger.BottariLogger
 
 class MemberRepositoryImpl(
     private val memberRemoteDataSource: MemberRemoteDataSource,
@@ -33,7 +33,7 @@ class MemberRepositoryImpl(
 
     private suspend fun safeSaveUserId(userId: String) {
         runCatching { userInfoLocalDataSource.saveUserId(userId) }
-            .onFailure { Timber.e(it, ERROR_SAVE_USER_ID_MESSAGE) }
+            .onFailure { BottariLogger.error(ERROR_SAVE_USER_ID_MESSAGE, it) }
     }
 
     companion object {
