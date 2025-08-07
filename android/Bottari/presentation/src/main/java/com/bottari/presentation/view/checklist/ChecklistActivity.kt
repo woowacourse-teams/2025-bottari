@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.addCallback
+import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
+import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.ActivityChecklistBinding
 import com.bottari.presentation.view.checklist.main.MainChecklistFragment
 import com.bottari.presentation.view.checklist.swipe.SwipeChecklistFragment
@@ -19,10 +21,13 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
     private val notificationFlag: Boolean by lazy {
         intent.getBooleanExtra(EXTRA_NOTIFICATION_FLAG, false)
     }
-    private val bottariId: Long by lazy {
-        intent.getLongExtra(
-            EXTRA_BOTTARI_ID,
-            INVALID_BOTTARI_ID,
+    private val viewModel: ChecklistViewModel by viewModels {
+        ChecklistViewModel.Factory(
+            this.getSSAID(),
+            intent.getLongExtra(
+                EXTRA_BOTTARI_ID,
+                INVALID_BOTTARI_ID,
+            ),
         )
     }
 
@@ -65,19 +70,19 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
     }
 
     private fun navigateToChecklistForNotification() {
-        replaceChecklistFragment(MainChecklistFragment.newInstance(bottariId), false)
-        replaceChecklistFragment(SwipeChecklistFragment.newInstance(bottariId), true)
+        replaceChecklistFragment(MainChecklistFragment.newInstance(), false)
+        replaceChecklistFragment(SwipeChecklistFragment.newInstance(), true)
         updateToolbar(false)
     }
 
     private fun navigateToMainChecklist() {
-        val fragment = MainChecklistFragment.newInstance(bottariId)
+        val fragment = MainChecklistFragment.newInstance()
         replaceChecklistFragment(fragment, false)
         updateToolbar(true)
     }
 
     private fun navigateToSwipeChecklist() {
-        val fragment = SwipeChecklistFragment.newInstance(bottariId)
+        val fragment = SwipeChecklistFragment.newInstance()
         replaceChecklistFragment(fragment, true)
         updateToolbar(false)
     }
