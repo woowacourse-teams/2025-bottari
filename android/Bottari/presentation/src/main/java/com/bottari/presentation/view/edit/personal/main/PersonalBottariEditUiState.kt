@@ -11,6 +11,8 @@ data class PersonalBottariEditUiState(
     val alarm: AlarmUiModel? = null,
     val items: List<BottariItemUiModel> = emptyList(),
 ) {
+    val isAlarmActive: Boolean = alarm?.isActive ?: false
+
     companion object {
         fun from(bottari: BottariDetailUiModel): PersonalBottariEditUiState =
             PersonalBottariEditUiState(

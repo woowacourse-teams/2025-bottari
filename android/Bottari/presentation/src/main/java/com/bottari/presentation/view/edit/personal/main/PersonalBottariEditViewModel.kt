@@ -1,9 +1,6 @@
 package com.bottari.presentation.view.edit.personal.main
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -13,8 +10,7 @@ import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
 import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
-import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.common.extension.update
+import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.launch
@@ -24,20 +20,12 @@ class PersonalBottariEditViewModel(
     private val fetchBottariDetailUseCase: FetchBottariDetailUseCase,
     private val toggleAlarmStateUseCase: ToggleAlarmStateUseCase,
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
-) : ViewModel() {
-    private val _uiState: MutableLiveData<PersonalBottariEditUiState> =
-        MutableLiveData(
-            PersonalBottariEditUiState(
-                id = savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID_MISSING),
-            ),
-        )
-    val uiState: LiveData<PersonalBottariEditUiState> get() = _uiState
-
-    private val _uiEvent: SingleLiveEvent<PersonalBottariEditUiEvent> = SingleLiveEvent()
-    val uiEvent: LiveData<PersonalBottariEditUiEvent> get() = _uiEvent
-
-    private val ssaid: String =
-        savedStateHandle[KEY_SSAID] ?: error(ERROR_SSAID_MISSING)
+) : BaseViewModel<PersonalBottariEditUiState, PersonalBottariEditUiEvent>(
+        PersonalBottariEditUiState(
+            id = savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID_MISSING),
+        ),
+    ) {
+    private val ssaid: String = savedStateHandle[KEY_SSAID] ?: error(ERROR_SSAID_MISSING)
 
     init {
         fetchBottari()
@@ -50,58 +38,53 @@ class PersonalBottariEditViewModel(
         ) { isActive -> toggleAlarmState(isActive) }
 
     fun fetchBottari() {
-        _uiState.update { copy(isLoading = true) }
+        updateState { copy(isLoading = true) }
 
-        viewModelScope.launch {
+        launch {
             fetchBottariDetailUseCase(
-                _uiState.value?.id ?: error(ERROR_BOTTARI_ID_MISSING),
+                currentState.id,
                 ssaid,
             ).onSuccess {
-                _uiState.update { PersonalBottariEditUiState.from(it.toUiModel()) }
+                updateState { PersonalBottariEditUiState.from(it.toUiModel()) }
             }.onFailure {
-                _uiEvent.value = PersonalBottariEditUiEvent.FetchBottariFailure
+                emitEvent(PersonalBottariEditUiEvent.FetchBottariFailure)
             }
 
-            _uiState.update { copy(isLoading = false) }
+            updateState { copy(isLoading = false) }
         }
     }
 
     fun createBottariTemplate() {
-        val title = _uiState.value?.title ?: return
-        val items = _uiState.value?.items?.map { it.name } ?: return
+        if (currentState.title.isBlank()) return
+        updateState { copy(isLoading = true) }
 
-        _uiState.update { copy(isLoading = true) }
-
-        viewModelScope.launch {
-            createBottariTemplateUseCase(ssaid, title, items)
+        val items = currentState.items.map { it.name }
+        launch {
+            createBottariTemplateUseCase(ssaid, currentState.title, items)
                 .onSuccess {
-                    _uiEvent.value = PersonalBottariEditUiEvent.CreateTemplateSuccess
+                    emitEvent(PersonalBottariEditUiEvent.CreateTemplateSuccess)
                 }.onFailure {
-                    _uiEvent.value = PersonalBottariEditUiEvent.CreateTemplateFailure
+                    emitEvent(PersonalBottariEditUiEvent.CreateTemplateFailure)
                 }
 
-            _uiState.update { copy(isLoading = false) }
+            updateState { copy(isLoading = false) }
         }
     }
 
     fun updateAlarmState() {
-        val isActive =
-            _uiState.value
-                ?.alarm
-                ?.isActive
-                ?.not() ?: return
+        val isActive = currentState.isAlarmActive.not()
         debouncedAlarmState(isActive)
     }
 
     private fun toggleAlarmState(isActive: Boolean) {
-        val alarmId = _uiState.value?.alarm?.id ?: return
+        val alarmId = currentState.alarm?.id ?: return
 
-        viewModelScope.launch {
+        launch {
             toggleAlarmStateUseCase(ssaid, alarmId, isActive)
-                .onSuccess { _uiState.update { copy(alarm = alarm?.copy(isActive = isActive)) } }
+                .onSuccess { updateState { copy(alarm = alarm?.copy(isActive = isActive)) } }
                 .onFailure {
-                    _uiState.update { copy(alarm = alarm?.copy(isActive = isActive.not())) }
-                    _uiEvent.value = PersonalBottariEditUiEvent.ToggleAlarmStateFailure
+                    updateState { copy(alarm = alarm?.copy(isActive = isActive.not())) }
+                    emitEvent(PersonalBottariEditUiEvent.ToggleAlarmStateFailure)
                 }
         }
     }
