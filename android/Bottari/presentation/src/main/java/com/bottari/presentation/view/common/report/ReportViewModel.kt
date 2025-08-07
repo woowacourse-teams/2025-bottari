@@ -24,8 +24,8 @@ class ReportViewModel(
     private val _uiEvent: MutableLiveData<ReportUiEvent> = MutableLiveData()
     val uiEvent: LiveData<ReportUiEvent> = _uiEvent
 
-    private val ssaid: String = stateHandle[KEY_SSAID]!!
-    private val templateId: Long = stateHandle[KEY_TEMPLATE_ID]!!
+    private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_SSAID_EMPTY)
+    private val templateId: Long = stateHandle[KEY_TEMPLATE_ID] ?: error(ERROR_TEMPLATE_ID_EMPTY)
 
     fun updateSelectedReason(reason: String) {
         _uiState.update { copy(reason = reason) }
@@ -44,6 +44,8 @@ class ReportViewModel(
     }
 
     companion object {
+        private const val ERROR_SSAID_EMPTY = "[ERROR] SSAID를 확인할 수 없습니다"
+        private const val ERROR_TEMPLATE_ID_EMPTY = "[ERROR] TemplateId를 확인할 수 없습니다"
         private const val KEY_SSAID = "KEY_SSAID"
         private const val KEY_TEMPLATE_ID = "KEY_TEMPLATE_ID"
 
