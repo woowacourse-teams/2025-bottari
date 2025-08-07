@@ -13,7 +13,6 @@ import com.bottari.domain.usecase.appConfig.SavePermissionFlagUseCase
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import kotlinx.coroutines.launch
 
 class MainViewModel(
     stateHandle: SavedStateHandle,
@@ -31,7 +30,7 @@ class MainViewModel(
     fun checkRegisteredMember() {
         updateState { copy(isLoading = true) }
 
-        viewModelScope.launch {
+        launch {
             checkRegisteredMemberUseCase(ssaid)
                 .onSuccess { result ->
                     handleCheckRegistrationResult(result)
@@ -40,14 +39,14 @@ class MainViewModel(
     }
 
     fun savePermissionFlag() {
-        viewModelScope.launch {
+        launch {
             savePermissionFlagUseCase(true)
                 .onFailure { emitEvent(MainUiEvent.SavePermissionFlagFailure) }
         }
     }
 
     private fun checkPermissionFlag() {
-        viewModelScope.launch {
+        launch {
             getPermissionFlagUseCase()
                 .onSuccess { permissionFlag -> handlePermissionFlag(permissionFlag) }
                 .onFailure { emitEvent(MainUiEvent.GetPermissionFlagFailure) }
@@ -73,7 +72,7 @@ class MainViewModel(
     }
 
     private fun registerMember(ssaid: String) {
-        viewModelScope.launch {
+        launch {
             registerMemberUseCase(ssaid)
                 .onSuccess {
                     updateState { copy(isLoading = false) }
