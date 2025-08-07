@@ -14,6 +14,7 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.DialogCalendarBinding
+import com.bottari.presentation.view.edit.alarm.listener.OnDateClickListener
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
@@ -71,7 +72,14 @@ class CalendarDialog : DialogFragment() {
                 pastDayDecorator,
             )
         }
-        binding.mcvAlarmDate.setOnDateChangedListener { view, date, selected ->
+        binding.btnConfirm.setOnClickListener {
+            val selectedDate =
+                binding.mcvAlarmDate.selectedDate
+                    ?.date
+                    ?.toJavaLocalDate()
+                    ?: return@setOnClickListener
+            (parentFragment as? OnDateClickListener)?.onClick(selectedDate)
+            dismiss()
         }
         binding.btnCancel.setOnClickListener { dismiss() }
     }
@@ -101,6 +109,8 @@ class CalendarDialog : DialogFragment() {
             )
         }
     }
+
+    private fun LocalDate.toJavaLocalDate(): java.time.LocalDate = java.time.LocalDate.of(year, monthValue, dayOfMonth)
 
     private fun formatCalendarTitle(day: CalendarDay): String {
         val date = day.date
