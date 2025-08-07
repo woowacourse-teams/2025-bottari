@@ -3,14 +3,14 @@ package com.bottari.presentation.view.home.profile
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     stateHandle: SavedStateHandle,
@@ -34,6 +34,13 @@ class ProfileViewModel(
         launch {
             saveMemberNicknameUseCase(ssaid, editingNickname)
                 .onSuccess {
+                    BottariLogger.ui(
+                        UiEventType.NICKNAME_EDIT,
+                        mapOf(
+                            "old_nickname" to currentState.nickname,
+                            "new_nickname" to editingNickname,
+                        ),
+                    )
                     updateState { copy(nickname = editingNickname) }
                     emitEvent(ProfileUiEvent.SaveMemberNicknameSuccess)
                 }.onFailure { error ->

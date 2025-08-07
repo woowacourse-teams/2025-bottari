@@ -5,6 +5,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.bottari.SaveBottariTitleUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.view.edit.personal.main.rename.BottariRenameUiEvent
 import com.bottari.presentation.view.edit.personal.main.rename.BottariRenameUiState
@@ -30,6 +32,14 @@ class BottariRenameViewModel(
         launch {
             saveBottariTitleUseCase(bottariId, ssaid, newTitle)
                 .onSuccess {
+                    BottariLogger.ui(
+                        UiEventType.PERSONAL_BOTTARI_TITLE_EDIT,
+                        mapOf(
+                            "bottari_id" to bottariId.toString(),
+                            "old_title" to currentState.initialTitle,
+                            "new_title" to newTitle,
+                        ),
+                    )
                     updateState { copy(title = newTitle) }
                     emitEvent(BottariRenameUiEvent.SaveBottariTitleSuccess)
                 }.onFailure {

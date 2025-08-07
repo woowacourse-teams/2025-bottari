@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.common.extension.showSnackbar
@@ -28,6 +29,11 @@ class BottariRenameDialog :
 
     private var _binding: DialogBottariRenameBinding? = null
     val binding: DialogBottariRenameBinding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -8,6 +8,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
 import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
 
@@ -31,9 +33,18 @@ class TemplateDetailViewModel(
 
         launch {
             takeBottariTemplateDetailUseCase(ssaid, currentState.templateId)
-                .onSuccess { bottariId ->
+                .onSuccess { createdBottariId ->
+                    if (createdBottariId == null) return@onSuccess
+                    BottariLogger.ui(
+                        UiEventType.TEMPLATE_TAKE,
+                        mapOf(
+                            "template_id" to currentState.templateId,
+                            "template_title" to currentState.title,
+                            "template_items" to currentState.items.toString(),
+                        ),
+                    )
                     emitEvent(
-                        TemplateDetailUiEvent.TakeBottariTemplateSuccess(bottariId),
+                        TemplateDetailUiEvent.TakeBottariTemplateSuccess(createdBottariId),
                     )
                 }.onFailure {
                     emitEvent(TemplateDetailUiEvent.TakeBottariTemplateFailure)

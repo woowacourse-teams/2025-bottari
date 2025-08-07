@@ -8,6 +8,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.report.ReportTemplateUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import kotlinx.coroutines.launch
 
@@ -27,8 +29,13 @@ class ReportViewModel(
 
         launch {
             reportTemplateUseCase(ssaid, templateId, currentState.reason)
-                .onSuccess { emitEvent(ReportUiEvent.ReportTemplateSuccess) }
-                .onFailure { emitEvent(ReportUiEvent.ReportTemplateFailure) }
+                .onSuccess {
+                    emitEvent(ReportUiEvent.ReportTemplateSuccess)
+                    BottariLogger.ui(
+                        UiEventType.TEMPLATE_REPORT,
+                        mapOf("template_id" to templateId, "reason" to currentState.reason),
+                    )
+                }.onFailure { emitEvent(ReportUiEvent.ReportTemplateFailure) }
 
             updateState { copy(isLoading = false) }
         }

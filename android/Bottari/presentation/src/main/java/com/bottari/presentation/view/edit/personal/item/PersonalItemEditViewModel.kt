@@ -7,6 +7,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.BottariItemUiModel
 
@@ -24,7 +26,6 @@ class PersonalItemEditViewModel(
 
     private val newItemNames = mutableSetOf<String>()
     private val pendingDeleteItems = mutableSetOf<BottariItemUiModel>()
-    private val initialItemIds: List<Long> = currentState.items.map { it.id }
 
     fun addNewItemIfNeeded(itemName: String) {
         if (itemName.isBlank() || isDuplicateItem(itemName)) return
@@ -39,7 +40,7 @@ class PersonalItemEditViewModel(
         val target = currentState.items.find { it.id == itemId } ?: return
         updateState { copy(items = currentState.items.filterNot { it.id == itemId }) }
 
-        if (initialItemIds.contains(itemId)) {
+        if (currentState.initialItemIds.contains(itemId)) {
             pendingDeleteItems.add(target)
             return
         }
@@ -58,6 +59,14 @@ class PersonalItemEditViewModel(
                 deleteItemIds = pendingDeleteItems.map { it.id },
                 createItemNames = newItemNames.toList(),
             ).onSuccess {
+                BottariLogger.ui(
+                    UiEventType.PERSONAL_BOTTARI_ITEM_EDIT,
+                    mapOf(
+                        "bottari_id" to currentState.bottariId.toString(),
+                        "old_items" to currentState.initialItems.toString(),
+                        "new_items" to currentState.items.toString(),
+                    ),
+                )
                 emitEvent(PersonalItemEditUiEvent.SaveBottariItemsSuccess)
             }.onFailure {
                 emitEvent(PersonalItemEditUiEvent.SaveBottariItemsFailure)

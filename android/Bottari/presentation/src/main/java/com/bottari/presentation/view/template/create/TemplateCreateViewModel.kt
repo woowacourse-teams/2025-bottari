@@ -3,17 +3,17 @@ package com.bottari.presentation.view.template.create
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.bottari.BottariDetail
 import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.BottariMapper.toMyBottariUiModel
 import com.bottari.presentation.model.MyBottariUiModel
-import kotlinx.coroutines.launch
 
 class TemplateCreateViewModel(
     stateHandle: SavedStateHandle,
@@ -43,8 +43,18 @@ class TemplateCreateViewModel(
             val title = currentState.bottariTitle
             val items = currentState.currentBottariItems.map { it.name }
             createBottariTemplateUseCase(ssaid, title, items)
-                .onSuccess { emitEvent(TemplateCreateUiEvent.CreateTemplateSuccuss) }
-                .onFailure {
+                .onSuccess { createdTemplateId ->
+                    if (createdTemplateId == null) return@onSuccess
+                    BottariLogger.ui(
+                        UiEventType.TEMPLATE_UPLOAD,
+                        mapOf(
+                            "template_id" to createdTemplateId,
+                            "template_title" to title,
+                            "template_items" to items.toString(),
+                        ),
+                    )
+                    emitEvent(TemplateCreateUiEvent.CreateTemplateSuccuss)
+                }.onFailure {
                     updateState { copy(isLoading = false) }
                     emitEvent(TemplateCreateUiEvent.CreateTemplateFailure)
                 }

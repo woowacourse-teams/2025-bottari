@@ -8,6 +8,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.bottari.CreateBottariUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import kotlinx.coroutines.launch
 
@@ -31,8 +33,14 @@ class BottariCreateViewModel(
 
         launch {
             createBottariUseCase(ssaid, title)
-                .onSuccess { emitEvent(BottariCreateUiEvent.CreateBottariSuccess(it)) }
-                .onFailure { emitEvent(BottariCreateUiEvent.CreateBottariFailure) }
+                .onSuccess { createdBottariId ->
+                    if (createdBottariId == null) return@onSuccess
+                    BottariLogger.ui(
+                        UiEventType.PERSONAL_BOTTARI_CREATE,
+                        mapOf("bottari_id" to createdBottariId, "bottari_title" to title),
+                    )
+                    emitEvent(BottariCreateUiEvent.CreateBottariSuccess(createdBottariId))
+                }.onFailure { emitEvent(BottariCreateUiEvent.CreateBottariFailure) }
         }
     }
 

@@ -7,6 +7,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.template.FetchBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
 import com.bottari.presentation.util.debounce
@@ -53,6 +55,10 @@ class TemplateViewModel(
         launch {
             searchBottariTemplatesUseCase(searchWord)
                 .onSuccess { templates ->
+                    BottariLogger.ui(
+                        UiEventType.TEMPLATE_SEARCH,
+                        mapOf("query" to searchWord, "result_count" to templates.size),
+                    )
                     val templateUiModels = templates.map { it.toUiModel() }
                     updateState { copy(templates = templateUiModels) }
                 }.onFailure {

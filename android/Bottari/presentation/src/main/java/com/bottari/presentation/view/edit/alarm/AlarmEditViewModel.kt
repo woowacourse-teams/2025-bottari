@@ -1,19 +1,17 @@
 package com.bottari.presentation.view.edit.alarm
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.usecase.alarm.CreateAlarmUseCase
 import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
-import com.bottari.presentation.common.event.SingleLiveEvent
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
+import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.AlarmMapper.toDomain
 import com.bottari.presentation.model.AlarmTypeUiModel
@@ -28,35 +26,22 @@ class AlarmEditViewModel(
     stateHandle: SavedStateHandle,
     private val createAlarmUseCase: CreateAlarmUseCase,
     private val saveAlarmUseCase: SaveAlarmUseCase,
-) : ViewModel() {
-    private val _uiState: MutableLiveData<AlarmUiState> =
-        MutableLiveData(
-            AlarmUiState(alarm = stateHandle[KEY_ALARM] ?: AlarmUiModel.DEFAULT_ALARM_UI_MODEL),
-        )
-    val uiState: LiveData<AlarmUiState> get() = _uiState
-
-    private val _uiEvent: SingleLiveEvent<AlarmUiEvent> = SingleLiveEvent()
-    val uiEvent: LiveData<AlarmUiEvent> get() = _uiEvent
-
+) : BaseViewModel<AlarmUiState, AlarmUiEvent>(
+        AlarmUiState(
+            alarm = stateHandle[KEY_ALARM] ?: AlarmUiModel.DEFAULT_ALARM_UI_MODEL,
+        ),
+    ) {
     private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val bottariTitle: String =
-        stateHandle[KEY_BOTTARI_TITLE] ?: error(
-            ERROR_REQUIRE_BOTTARI_TITLE,
-        )
-    private val alarmUiModel: AlarmUiModel get() = _uiState.value!!.alarm
+        stateHandle[KEY_BOTTARI_TITLE] ?: error(ERROR_REQUIRE_BOTTARI_TITLE)
 
     fun updateAlarm() {
-        val currentAlarm = alarmUiModel
-        if (currentAlarm.type == AlarmTypeUiModel.REPEAT &&
-            currentAlarm.repeatDays.none { it.isChecked }
-        ) {
-            return
-        }
+        currentState.alarm
+        if (isEveryWeekRepeatWithoutSelectedDay()) return
 
-        _uiState.update { copy(isLoading = true) }
-        val alarmDomain = currentAlarm.toDomain()
-        if (currentAlarm.id == null) {
+        val alarmDomain = currentState.alarm.toDomain()
+        if (alarmDomain.id == null) {
             createAlarm(alarmDomain)
             return
         }
@@ -64,70 +49,82 @@ class AlarmEditViewModel(
     }
 
     fun updateAlarmType(alarmTypeUiModel: AlarmTypeUiModel) {
-        _uiState.update {
-            val newAlarm = alarm.copy(type = alarmTypeUiModel)
-            copy(alarm = newAlarm)
-        }
+        updateState { copy(alarm = alarm.copy(type = alarmTypeUiModel)) }
     }
 
     fun updateAlarmTime(time: LocalTime) {
-        _uiState.update {
-            val newAlarm = alarm.copy(time = time)
-            copy(alarm = newAlarm)
-        }
+        updateState { copy(alarm = alarm.copy(time = time)) }
     }
 
     fun updateAlarmDate(date: LocalDate) {
-        _uiState.update {
-            if (alarm.type != AlarmTypeUiModel.NON_REPEAT) return
-            val newAlarm = alarm.copy(date = date)
-            copy(alarm = newAlarm)
-        }
+        if (currentState.alarm.type != AlarmTypeUiModel.NON_REPEAT) return
+        updateState { copy(alarm = alarm.copy(date = date)) }
     }
 
     fun updateDaysOfWeek(dayOfWeek: RepeatDayUiModel) {
-        _uiState.update {
-            val newAlarm =
-                alarm.copy(
-                    repeatDays =
-                        alarm.repeatDays.map {
-                            if (it.dayOfWeek != dayOfWeek.dayOfWeek) return@map it
-                            it.copy(isChecked = !it.isChecked)
-                        },
-                )
-            copy(alarm = newAlarm)
-        }
+        val newRepeatDays =
+            currentState.alarm.repeatDays.map {
+                if (it.dayOfWeek != dayOfWeek.dayOfWeek) return@map it
+                it.copy(isChecked = !it.isChecked)
+            }
+        val newAlarm = currentState.alarm.copy(repeatDays = newRepeatDays)
+        updateState { copy(alarm = newAlarm) }
     }
 
+    private fun isEveryWeekRepeatWithoutSelectedDay(): Boolean =
+        currentState.alarm.type == AlarmTypeUiModel.REPEAT &&
+            currentState.alarm.repeatDays.none {
+                it.isChecked
+            }
+
     private fun createAlarm(alarm: Alarm) {
-        viewModelScope.launch {
+        updateState { copy(isLoading = true) }
+
+        launch {
             createAlarmUseCase(ssaid, bottariId, alarm)
                 .onSuccess {
-                    _uiEvent.value =
-                        AlarmUiEvent.AlarmCreateSuccess(createNotification())
+                    BottariLogger.ui(
+                        UiEventType.ALARM_CREATE,
+                        mapOf("alarm_id" to it, "alarm_info" to alarm.toString()),
+                    )
+                    emitEvent(AlarmUiEvent.AlarmCreateSuccess(createNotification()))
                 }.onFailure {
-                    _uiEvent.value = AlarmUiEvent.AlarmCreateFailure
+                    emitEvent(AlarmUiEvent.AlarmCreateFailure)
                 }
         }
 
-        _uiState.update { copy(isLoading = false) }
+        updateState { copy(isLoading = false) }
     }
 
     private fun saveAlarm(alarm: Alarm) {
-        viewModelScope.launch {
+        updateState { copy(isLoading = true) }
+
+        launch {
             saveAlarmUseCase(ssaid, alarm.id!!, alarm)
                 .onSuccess {
-                    _uiEvent.value =
-                        AlarmUiEvent.AlarmSaveSuccess(createNotification())
+                    BottariLogger.ui(
+                        UiEventType.ALARM_EDIT,
+                        mapOf(
+                            "alarm_id" to alarm.id!!,
+                            "old_alarm_info" to alarm.toString(),
+                            "new_alarm_info" to currentState.alarm.toString(),
+                        ),
+                    )
+                    emitEvent(AlarmUiEvent.AlarmSaveSuccess(createNotification()))
                 }.onFailure {
-                    _uiEvent.value = AlarmUiEvent.AlarmSaveFailure
+                    emitEvent(AlarmUiEvent.AlarmSaveFailure)
                 }
         }
 
-        _uiState.update { copy(isLoading = false) }
+        updateState { copy(isLoading = false) }
     }
 
-    private fun createNotification(): NotificationUiModel = NotificationUiModel(id = bottariId, title = bottariTitle, alarm = alarmUiModel)
+    private fun createNotification(): NotificationUiModel =
+        NotificationUiModel(
+            id = bottariId,
+            title = bottariTitle,
+            alarm = currentState.alarm,
+        )
 
     companion object {
         private const val KEY_SSAID = "KEY_SSAID"

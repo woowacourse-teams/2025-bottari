@@ -10,6 +10,8 @@ import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
 import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.util.debounce
@@ -61,7 +63,16 @@ class PersonalBottariEditViewModel(
         val items = currentState.items.map { it.name }
         launch {
             createBottariTemplateUseCase(ssaid, currentState.title, items)
-                .onSuccess {
+                .onSuccess { createdTemplateId ->
+                    if (createdTemplateId == null) return@onSuccess
+                    BottariLogger.ui(
+                        UiEventType.TEMPLATE_UPLOAD,
+                        mapOf(
+                            "template_id" to createdTemplateId,
+                            "template_title" to currentState.title,
+                            "template_items" to items.toString(),
+                        ),
+                    )
                     emitEvent(PersonalBottariEditUiEvent.CreateTemplateSuccess)
                 }.onFailure {
                     emitEvent(PersonalBottariEditUiEvent.CreateTemplateFailure)
@@ -81,8 +92,13 @@ class PersonalBottariEditViewModel(
 
         launch {
             toggleAlarmStateUseCase(ssaid, alarmId, isActive)
-                .onSuccess { updateState { copy(alarm = alarm?.copy(isActive = isActive)) } }
-                .onFailure {
+                .onSuccess {
+                    BottariLogger.ui(
+                        if (isActive) UiEventType.ALARM_ACTIVE else UiEventType.ALARM_INACTIVE,
+                        mapOf("alarm_id" to alarmId),
+                    )
+                    updateState { copy(alarm = alarm?.copy(isActive = isActive)) }
+                }.onFailure {
                     updateState { copy(alarm = alarm?.copy(isActive = isActive.not())) }
                     emitEvent(PersonalBottariEditUiEvent.ToggleAlarmStateFailure)
                 }

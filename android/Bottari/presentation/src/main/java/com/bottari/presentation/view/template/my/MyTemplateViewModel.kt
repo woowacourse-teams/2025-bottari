@@ -8,6 +8,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
 
@@ -28,6 +30,15 @@ class MyTemplateViewModel(
         launch {
             deleteMyBottariTemplateUseCase(ssaid, bottariTemplateId)
                 .onSuccess {
+                    val template = currentState.bottariTemplates.find { it.id == bottariTemplateId }
+                    BottariLogger.ui(
+                        UiEventType.TEMPLATE_DELETE,
+                        mapOf(
+                            "template_id" to bottariTemplateId,
+                            "template_title" to template?.title.orEmpty(),
+                            "template_items" to template?.items.toString(),
+                        ),
+                    )
                     updateState { copy(bottariTemplates = bottariTemplates.filterNot { it.id == bottariTemplateId }) }
                     emitEvent(MyTemplateUiEvent.DeleteMyTemplateSuccess)
                 }.onFailure {
