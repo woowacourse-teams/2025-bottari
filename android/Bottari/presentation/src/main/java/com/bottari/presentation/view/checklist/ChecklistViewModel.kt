@@ -11,13 +11,11 @@ import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
 
 class ChecklistViewModel(
     stateHandle: SavedStateHandle,

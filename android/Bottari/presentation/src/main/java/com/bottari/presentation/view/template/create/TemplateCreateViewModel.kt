@@ -39,7 +39,7 @@ class TemplateCreateViewModel(
         if (!currentState.canCreateTemplate) return
         updateState { copy(isLoading = true) }
 
-        viewModelScope.launch {
+        launch {
             val title = currentState.bottariTitle
             val items = currentState.currentBottariItems.map { it.name }
             createBottariTemplateUseCase(ssaid, title, items)
@@ -54,7 +54,7 @@ class TemplateCreateViewModel(
     private fun fetchBottariDetails() {
         updateState { copy(isLoading = true) }
 
-        viewModelScope.launch {
+        launch {
             fetchBottariDetailsUseCase(ssaid)
                 .onSuccess { handleFetchBottariDetails(it) }
                 .onFailure { emitEvent(TemplateCreateUiEvent.FetchMyBottariesFailure) }

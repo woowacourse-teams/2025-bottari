@@ -50,7 +50,7 @@ class TemplateViewModel(
             fetchBottariTemplates()
             return
         }
-        viewModelScope.launch {
+        launch {
             searchBottariTemplatesUseCase(searchWord)
                 .onSuccess { templates ->
                     val templateUiModels = templates.map { it.toUiModel() }
