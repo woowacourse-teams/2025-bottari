@@ -54,6 +54,10 @@ public class BottariItem {
         this.isChecked = false;
     }
 
+    public boolean isOwner(final String ssaid) {
+        return bottari.isOwner(ssaid);
+    }
+
     private void validateName(final String name) {
         if (name.isBlank()) {
             throw new BusinessException(ErrorCode.BOTTARI_ITEM_NAME_BLANK);

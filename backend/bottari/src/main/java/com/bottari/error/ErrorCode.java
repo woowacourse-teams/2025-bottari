@@ -36,6 +36,7 @@ public enum ErrorCode {
     BOTTARI_ITEM_CHECK_STATE_INVALID(HttpStatus.BAD_REQUEST, "해당 보따리 물품의 체크 상태가 이미 요청된 상태입니다."),
     BOTTARI_ITEM_NAME_BLANK(HttpStatus.BAD_REQUEST, "보따리 물품명은 공백일 수 없습니다."),
     BOTTARI_ITEM_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 물품명이 너무 깁니다."),
+    BOTTARI_ITEM_NOT_OWNED(HttpStatus.FORBIDDEN, "해당 보따리 물품에 접근할 수 있는 권한이 없습니다."),
 
     // ===== BOTTARI_TEMPLATE 관련 =====
     BOTTARI_TEMPLATE_NOT_FOUND(HttpStatus.NOT_FOUND, "보따리 템플릿을 찾을 수 없습니다."),

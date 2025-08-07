@@ -113,11 +113,13 @@ class BottariItemControllerTest {
     void check() throws Exception {
         // given
         final Long bottariItemId = 1L;
+        final String ssaid = "ssaid";
         willDoNothing().given(bottariItemService)
-                .check(bottariItemId);
+                .check(bottariItemId, ssaid);
 
         // when & then
-        mockMvc.perform(patch("/bottari-items/" + bottariItemId + "/check"))
+        mockMvc.perform(patch("/bottari-items/" + bottariItemId + "/check")
+                        .header("ssaid", ssaid))
                 .andExpect(status().isNoContent());
     }
 
@@ -126,11 +128,13 @@ class BottariItemControllerTest {
     void uncheck() throws Exception {
         // given
         final Long bottariItemId = 1L;
+        final String ssaid = "ssaid";
         willDoNothing().given(bottariItemService)
-                .uncheck(bottariItemId);
+                .uncheck(bottariItemId, ssaid);
 
         // when & then
-        mockMvc.perform(patch("/bottari-items/" + bottariItemId + "/uncheck"))
+        mockMvc.perform(patch("/bottari-items/" + bottariItemId + "/uncheck")
+                        .header("ssaid", ssaid))
                 .andExpect(status().isNoContent());
     }
 }
