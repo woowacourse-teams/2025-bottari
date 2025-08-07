@@ -3,6 +3,7 @@ package com.bottari.teambottari.domain;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +24,7 @@ public class TeamAssignedItemInfo {
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_bottari_id")
     private TeamBottari teamBottari;
 
