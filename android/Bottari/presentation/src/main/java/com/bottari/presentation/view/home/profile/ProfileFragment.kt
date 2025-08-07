@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentProfileBinding
 
 class ProfileFragment :
@@ -60,10 +61,10 @@ class ProfileFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                ProfileUiEvent.FetchMemberInfoFailure -> showSnackbar(R.string.profile_fetch_failure_text)
-                ProfileUiEvent.SaveMemberNicknameSuccess -> showSnackbar(R.string.profile_nickname_save_success_text)
-                ProfileUiEvent.SaveMemberNicknameFailure -> showSnackbar(R.string.profile_nickname_save_failure_text)
-                ProfileUiEvent.InvalidNicknameRule -> showSnackbar(R.string.profile_invalid_nickname_rule_text)
+                ProfileUiEvent.FetchMemberInfoFailure -> requireView().showSnackbar(R.string.profile_fetch_failure_text)
+                ProfileUiEvent.SaveMemberNicknameSuccess -> requireView().showSnackbar(R.string.profile_nickname_save_success_text)
+                ProfileUiEvent.SaveMemberNicknameFailure -> requireView().showSnackbar(R.string.profile_nickname_save_failure_text)
+                ProfileUiEvent.InvalidNicknameRule -> requireView().showSnackbar(R.string.profile_invalid_nickname_rule_text)
             }
         }
     }

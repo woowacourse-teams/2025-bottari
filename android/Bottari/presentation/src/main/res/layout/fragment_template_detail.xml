@@ -30,6 +30,15 @@
             android:layout_gravity="center"
             android:textColor="@color/black"
             tools:text="나의 보따리" />
+
+        <ImageView
+            android:id="@+id/btn_template_more"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:contentDescription="@string/common_option_btn_description"
+            android:padding="@dimen/space_small"
+            android:src="@drawable/btn_more" />
     </Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
