@@ -13,6 +13,7 @@ class PersonalBottariEditActivity : BaseActivity<ActivityPersonalBottariEditBind
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showWelcomeMessage()
+        if (savedInstanceState != null) return
         navigateToScreen()
     }
 
