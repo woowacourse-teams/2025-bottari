@@ -63,8 +63,8 @@ android {
 dependencies {
     implementation(project(":di"))
     implementation(project(":presentation"))
+    implementation(project(":logger"))
 
-    implementation(libs.timber)
     implementation(libs.material)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
