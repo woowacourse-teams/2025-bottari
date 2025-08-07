@@ -16,6 +16,7 @@ import com.bottari.presentation.databinding.ActivityChecklistBinding
 import com.bottari.presentation.view.checklist.main.MainChecklistFragment
 import com.bottari.presentation.view.checklist.swipe.SwipeChecklistFragment
 import com.bottari.presentation.view.home.HomeActivity
+import java.time.LocalDateTime
 
 class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityChecklistBinding::inflate) {
     private val bottariId: Long = intent.getLongExtra(EXTRA_BOTTARI_ID, INVALID_BOTTARI_ID)
@@ -34,6 +35,13 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
         setupObserver()
         setupUI(savedInstanceState)
         setupListener()
+
+        if (notificationFlag) {
+            BottariLogger.ui(
+                UiEventType.NOTIFICATION_CLICK,
+                mapOf("notification_id" to bottariId, "time" to LocalDateTime.now().toString()),
+            )
+        }
     }
 
     private fun setupObserver() {
