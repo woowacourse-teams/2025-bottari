@@ -143,8 +143,8 @@
     <string name="checklist_swipe_complete_not_all_text">아직 챙기지 않은 물건이 있어요. 마저 챙겨볼까요?</string>
     <string name="checklist_swipe_return_btn_text">돌아가기</string>
     <string name="checklist_empty_view_edit_btn_text">편집하기</string>
-    <string name="checklist_empty_view_text">지금 \'편집하기\'를 눌러서\n보따리에 물건을 넣어보세요</string>
-    <string name="checklist_empty_view_title">챙길 물건이 보이지 않아요</string>
+    <string name="checklist_empty_view_title_text">챙길 물건이 보이지 않아요</string>
+    <string name="checklist_empty_view_description_text">지금 \'편집하기\'를 눌러서\n보따리에 물건을 넣어보세요</string>
 
     <!-- Bottari Create Dialog -->
     <string name="bottari_create_dialog_title_text">보따리 이름을 입력해 주세요</string>
