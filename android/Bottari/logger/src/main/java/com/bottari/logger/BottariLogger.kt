@@ -42,7 +42,10 @@ object BottariLogger {
      * UI 관련 로그
      * - 화면 전환, View 상태 변경 등 UI 요소 추적 시 사용
      */
-    fun ui(message: String) = log(LogLevel.UI, message)
+    fun ui(
+        eventName: String,
+        message: String,
+    ) = log(LogLevel.UI, "$eventName/to/$message")
 
     /**
      * 데이터 처리 관련 로그

@@ -33,7 +33,7 @@ class BottariTree(
         message: String,
         t: Throwable?,
     ) {
-        if (priority < minLogPriority) return
+        if (!isLoggable(tag, priority)) return
 
         val logLevel = LogLevel.fromTag(tag)
         if (logLevel == LogLevel.UNKNOWN) {
@@ -41,11 +41,11 @@ class BottariTree(
             return
         }
 
-        val timestamp = dateFormat.format(Date())
-        val threadName = Thread.currentThread().name
+        val (eventName, eventMessage) = splitMessage(message)
         val callerInfo = CallerInfo.extract()
-
-        val fullLog = buildLogMessage(logLevel, message, threadName, timestamp, callerInfo)
+        val threadName = Thread.currentThread().name
+        val timestamp = currentTimestamp()
+        val fullLog = formatLogMessage(logLevel, eventMessage, threadName, timestamp, callerInfo)
 
         logToConsole(priority, fullLog)
 
@@ -54,11 +54,25 @@ class BottariTree(
         }
 
         if (logLevel.sendToAnalytics) {
-            logToAnalytics(logLevel.label, message, callerInfo, timestamp)
+            logToAnalytics(
+                eventName = eventName,
+                tag = logLevel.label,
+                message = eventMessage,
+                callerInfo = callerInfo,
+                timestamp = timestamp,
+            )
         }
     }
 
-    private fun buildLogMessage(
+    private fun splitMessage(message: String): Pair<String, String> =
+        if ("/to/" in message) {
+            val parts = message.split("/to/", limit = 2)
+            parts[0] to parts.getOrElse(1) { "" }
+        } else {
+            EVENT_CUSTOM_LOG to message
+        }
+
+    private fun formatLogMessage(
         logLevel: LogLevel,
         message: String,
         threadName: String,
@@ -68,19 +82,19 @@ class BottariTree(
         when (logLevel) {
             LogLevel.NETWORK ->
                 buildNetworkLog(
-                    logLevel,
+                    logLevel.label,
                     message,
                     threadName,
                     timestamp,
                     callerInfo,
                 )
 
-            LogLevel.LIFECYCLE -> buildLifecycleLog(logLevel, message, callerInfo)
-            else -> buildDefaultLog(logLevel, message, threadName, timestamp, callerInfo)
+            LogLevel.LIFECYCLE -> buildLifecycleLog(logLevel.label, message, callerInfo)
+            else -> buildDefaultLog(logLevel.label, message, threadName, timestamp, callerInfo)
         }
 
     private fun buildNetworkLog(
-        logLevel: LogLevel,
+        tag: String,
         message: String,
         threadName: String,
         timestamp: String,
@@ -88,25 +102,29 @@ class BottariTree(
     ): String =
         buildString {
             appendLine(SHORT_LOG_SEPARATOR)
-            appendLine(convertNetworkKeywords(message))
+            appendLine(
+                message
+                    .replace(NETWORK_REQUEST_PREFIX, NETWORK_REQUEST_REPLACE_PREFIX)
+                    .replace(NETWORK_RESPONSE_PREFIX, NETWORK_RESPONSE_REPLACE_PREFIX),
+            )
             appendLine(SHORT_LOG_SEPARATOR)
-            appendLine(formatMetaInfo(logLevel.label, threadName, timestamp, callerInfo))
+            appendLine(formatMetaInfo(tag, threadName, timestamp, callerInfo))
             append(SHORT_LOG_SEPARATOR)
         }
 
     private fun buildLifecycleLog(
-        logLevel: LogLevel,
+        tag: String,
         message: String,
         callerInfo: CallerInfo,
     ): String =
         buildString {
             appendLine(SHORT_LOG_SEPARATOR)
-            appendLine("[${logLevel.label}] $message | ${callerInfo.methodName}")
+            appendLine("[$tag] $message | ${callerInfo.methodName}")
             append(SHORT_LOG_SEPARATOR)
         }
 
     private fun buildDefaultLog(
-        logLevel: LogLevel,
+        tag: String,
         message: String,
         threadName: String,
         timestamp: String,
@@ -116,7 +134,7 @@ class BottariTree(
             appendLine(LOG_SEPARATOR)
             appendLine(message)
             appendLine(LOG_SEPARATOR)
-            appendLine(formatMetaInfo(logLevel.label, threadName, timestamp, callerInfo))
+            appendLine(formatMetaInfo(tag, threadName, timestamp, callerInfo))
             append(LOG_SEPARATOR)
         }
 
@@ -136,25 +154,18 @@ class BottariTree(
             append("\t|\t$timestamp")
         }
 
-    private fun convertNetworkKeywords(message: String): String =
-        message
-            .replace(NETWORK_REQUEST_PREFIX, NETWORK_REQUEST_REPLACE_PREFIX)
-            .replace(NETWORK_RESPONSE_PREFIX, NETWORK_RESPONSE_REPLACE_PREFIX)
-
     private fun logToConsole(
         priority: Int,
         log: String,
     ) {
         val lines = log.lines()
-
         for (line in lines) {
             if (line.length <= MAX_LOG_LENGTH) {
                 Log.println(priority, LOG_NAME, line)
-                continue
-            }
-
-            line.chunked(MAX_LOG_LENGTH).forEach { chunk ->
-                Log.println(priority, LOG_NAME, chunk)
+            } else {
+                line.chunked(MAX_LOG_LENGTH).forEach { chunk ->
+                    Log.println(priority, LOG_NAME, chunk)
+                }
             }
         }
     }
@@ -168,13 +179,14 @@ class BottariTree(
     }
 
     private fun logToAnalytics(
+        eventName: String,
         tag: String,
         message: String,
         callerInfo: CallerInfo,
         timestamp: String,
     ) {
         analytics.logEvent(
-            EVENT_CUSTOM_LOG,
+            eventName,
             bundleOf(
                 PARAM_TAG to tag,
                 PARAM_MESSAGE to message,
@@ -183,6 +195,8 @@ class BottariTree(
             ),
         )
     }
+
+    private fun currentTimestamp(): String = dateFormat.format(Date())
 
     companion object {
         private const val LOG_NAME = "[BOTTARI_LOG]"
