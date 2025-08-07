@@ -18,6 +18,7 @@ import com.bottari.presentation.view.edit.alarm.listener.OnDateClickListener
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.format.ArrayWeekDayFormatter
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
@@ -62,25 +63,8 @@ class CalendarDialog : DialogFragment() {
     }
 
     private fun setupListener() {
-        binding.mcvAlarmDate.setOnMonthChangedListener { view, date ->
-            view.removeDecorators()
-            view.invalidateDecorators()
-            view.addDecorators(
-                saturdayDecorator,
-                sundayDecorator,
-                selectedDayDecorator,
-                pastDayDecorator,
-            )
-        }
-        binding.btnConfirm.setOnClickListener {
-            val selectedDate =
-                binding.mcvAlarmDate.selectedDate
-                    ?.date
-                    ?.toJavaLocalDate()
-                    ?: return@setOnClickListener
-            (parentFragment as? OnDateClickListener)?.onClick(selectedDate)
-            dismiss()
-        }
+        binding.mcvAlarmDate.setOnMonthChangedListener { view, _ -> resetDecorators(view) }
+        binding.btnConfirm.setOnClickListener { updateAlarmDate() }
         binding.btnCancel.setOnClickListener { dismiss() }
     }
 
@@ -108,6 +92,29 @@ class CalendarDialog : DialogFragment() {
                 pastDayDecorator,
             )
         }
+    }
+
+    private fun resetDecorators(view: MaterialCalendarView) {
+        view.apply {
+            removeDecorators()
+            invalidateDecorators()
+            addDecorators(
+                saturdayDecorator,
+                sundayDecorator,
+                selectedDayDecorator,
+                pastDayDecorator,
+            )
+        }
+    }
+
+    private fun updateAlarmDate() {
+        val selectedDate =
+            binding.mcvAlarmDate.selectedDate
+                ?.date
+                ?.toJavaLocalDate()
+                ?: return
+        (parentFragment as? OnDateClickListener)?.onClick(selectedDate)
+        dismiss()
     }
 
     private fun LocalDate.toJavaLocalDate(): java.time.LocalDate = java.time.LocalDate.of(year, monthValue, dayOfMonth)
