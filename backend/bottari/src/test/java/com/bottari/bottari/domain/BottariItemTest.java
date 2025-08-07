@@ -4,10 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.bottari.error.BusinessException;
+import com.bottari.fixture.BottariFixture;
+import com.bottari.fixture.BottariItemFixture;
 import com.bottari.member.domain.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class BottariItemTest {
@@ -98,5 +101,27 @@ class BottariItemTest {
         assertThatThrownBy(bottariItem::uncheck)
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("해당 보따리 물품은 이미 체크 해제되어 있습니다.");
+    }
+
+    @DisplayName("본인의 보따리 물품인지 확인한다.")
+    @ParameterizedTest
+    @CsvSource({
+            "same_ssaid, true",
+            "diff_ssaid, false"
+    })
+    void isOwner(
+            final String ssaid,
+            final boolean expected
+    ) {
+        // given
+        final Member member = new Member("same_ssaid", "name");
+        final Bottari bottari = BottariFixture.BOTTARI.get(member);
+        final BottariItem bottariItem = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
+
+        // when
+        final boolean actual = bottariItem.isOwner(ssaid);
+
+        // then
+        assertThat(actual).isEqualTo(expected);
     }
 }

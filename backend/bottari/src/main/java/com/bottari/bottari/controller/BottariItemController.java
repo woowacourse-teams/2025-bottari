@@ -1,9 +1,10 @@
 package com.bottari.bottari.controller;
 
-import com.bottari.bottari.service.BottariItemService;
 import com.bottari.bottari.dto.CreateBottariItemRequest;
-import com.bottari.bottari.dto.ReadBottariItemResponse;
 import com.bottari.bottari.dto.EditBottariItemsRequest;
+import com.bottari.bottari.dto.ReadBottariItemResponse;
+import com.bottari.bottari.service.BottariItemService;
+import com.bottari.config.MemberIdentifier;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -67,9 +68,10 @@ public class BottariItemController implements BottariItemApiDocs {
     @PatchMapping("/bottari-items/{id}/check")
     @Override
     public ResponseEntity<Void> check(
-            @PathVariable final Long id
+            @PathVariable final Long id,
+            @MemberIdentifier final String ssaid
     ) {
-        bottariItemService.check(id);
+        bottariItemService.check(id, ssaid);
 
         return ResponseEntity.noContent().build();
     }
@@ -77,9 +79,10 @@ public class BottariItemController implements BottariItemApiDocs {
     @PatchMapping("/bottari-items/{id}/uncheck")
     @Override
     public ResponseEntity<Void> uncheck(
-            @PathVariable final Long id
+            @PathVariable final Long id,
+            @MemberIdentifier final String ssaid
     ) {
-        bottariItemService.uncheck(id);
+        bottariItemService.uncheck(id, ssaid);
 
         return ResponseEntity.noContent().build();
     }

@@ -1,11 +1,12 @@
 package com.bottari.bottari.controller;
 
 import com.bottari.bottari.dto.CreateBottariItemRequest;
-import com.bottari.bottari.dto.ReadBottariItemResponse;
 import com.bottari.bottari.dto.EditBottariItemsRequest;
+import com.bottari.bottari.dto.ReadBottariItemResponse;
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -76,7 +77,8 @@ public interface BottariItemApiDocs {
             ErrorCode.BOTTARI_ITEM_ALREADY_CHECKED
     })
     ResponseEntity<Void> check(
-            final Long id
+            final Long id,
+            @Parameter(hidden = true) final String ssaid
     );
 
     @Operation(summary = "보따리 물품 체크 해제")
@@ -88,6 +90,7 @@ public interface BottariItemApiDocs {
             ErrorCode.BOTTARI_ITEM_ALREADY_UNCHECKED
     })
     ResponseEntity<Void> uncheck(
-            final Long id
+            final Long id,
+            @Parameter(hidden = true) final String ssaid
     );
 }
