@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import androidx.viewbinding.ViewBinding
 import com.bottari.logger.BottariLogger
+import com.bottari.logger.LogEventHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 abstract class BaseActivity<VB : ViewBinding>(
@@ -22,6 +23,7 @@ abstract class BaseActivity<VB : ViewBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         BottariLogger.lifecycle(javaClass.simpleName)
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
 
         binding = bindingFactory(layoutInflater)
         setContentView(binding.root)

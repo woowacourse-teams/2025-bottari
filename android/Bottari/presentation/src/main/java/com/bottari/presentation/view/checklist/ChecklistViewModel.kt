@@ -1,9 +1,6 @@
 package com.bottari.presentation.view.checklist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -13,27 +10,19 @@ import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
-import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.common.extension.update
+import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
 
 class ChecklistViewModel(
     stateHandle: SavedStateHandle,
     private val fetchChecklistUseCase: FetchChecklistUseCase,
     private val checkBottariItemUseCase: CheckBottariItemUseCase,
     private val unCheckBottariItemUseCase: UnCheckBottariItemUseCase,
-) : ViewModel() {
-    private val _uiState: MutableLiveData<ChecklistUiState> = MutableLiveData(ChecklistUiState())
-    val uiState: LiveData<ChecklistUiState> get() = _uiState
-
-    private val _uiEvent: SingleLiveEvent<ChecklistUiEvent> = SingleLiveEvent()
-    val uiEvent: LiveData<ChecklistUiEvent> get() = _uiEvent
-
+) : BaseViewModel<ChecklistUiState, ChecklistUiEvent>(ChecklistUiState()) {
     private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val pendingCheckStatusMap = mutableMapOf<Long, BottariItemUiModel>()
@@ -49,44 +38,43 @@ class ChecklistViewModel(
     }
 
     fun fetchChecklist() {
-        _uiState.update { copy(isLoading = true) }
+        updateState { copy(isLoading = true) }
 
-        viewModelScope.launch {
+        launch {
             fetchChecklistUseCase(ssaid, bottariId)
                 .onSuccess { items ->
                     val itemUiModels = items.map { it.toUiModel() }
-                    _uiState.update { copy(bottariItems = itemUiModels) }
+                    updateState { copy(bottariItems = itemUiModels) }
                 }.onFailure {
-                    _uiEvent.value = ChecklistUiEvent.FetchChecklistFailure
+                    emitEvent(ChecklistUiEvent.FetchChecklistFailure)
                 }
 
-            _uiState.update { copy(isLoading = false) }
+            updateState { copy(isLoading = false) }
         }
     }
 
     fun resetSwipeState() {
-        _uiState.update { copy(swipedItemIds = emptySet()) }
+        updateState { copy(swipedItemIds = emptySet()) }
     }
 
     fun addSwipedItem(itemId: Long) {
-        _uiState.update { copy(swipedItemIds = this.swipedItemIds + itemId) }
+        updateState { copy(swipedItemIds = this.swipedItemIds + itemId) }
     }
 
     fun toggleItemChecked(itemId: Long) {
-        val currentItems = _uiState.value?.bottariItems ?: return
         val updatedItems =
-            currentItems.map { item ->
+            currentState.bottariItems.map { item ->
                 if (item.id != itemId) return@map item
                 val newItem = item.copy(isChecked = item.isChecked.not())
                 recordPendingCheckStatus(newItem)
                 newItem
             }
-        _uiState.update { copy(bottariItems = updatedItems) }
+        updateState { copy(bottariItems = updatedItems) }
         debouncedCheck(pendingCheckStatusMap.values.toList())
     }
 
     private fun performCheck(items: List<BottariItemUiModel>) {
-        viewModelScope.launch {
+        launch {
             val jobs =
                 items.map { item ->
                     async { processItemCheck(item) }
@@ -104,7 +92,7 @@ class ChecklistViewModel(
                 unCheckBottariItemUseCase(ssaid, item.id)
             }
         result.onFailure {
-            _uiEvent.value = ChecklistUiEvent.CheckItemFailure
+            emitEvent(ChecklistUiEvent.CheckItemFailure)
         }
     }
 

@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
+import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.common.extension.safeArgument
 import com.bottari.presentation.databinding.DialogCustomBinding
 
@@ -26,6 +27,7 @@ class CustomAlertDialog : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, 0)
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =

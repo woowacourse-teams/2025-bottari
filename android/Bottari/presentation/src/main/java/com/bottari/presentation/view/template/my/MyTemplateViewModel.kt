@@ -1,34 +1,23 @@
 package com.bottari.presentation.view.template.my
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
-import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.common.extension.update
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
+import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
-import kotlinx.coroutines.launch
 
 class MyTemplateViewModel(
     stateHandle: SavedStateHandle,
     private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
     private val deleteMyBottariTemplateUseCase: DeleteMyBottariTemplateUseCase,
-) : ViewModel() {
-    private val _uiState: MutableLiveData<MyTemplateUiState> =
-        MutableLiveData(MyTemplateUiState())
-    val uiState: LiveData<MyTemplateUiState> get() = _uiState
-
-    private val _uiEvent: SingleLiveEvent<MyTemplateUiEvent> = SingleLiveEvent()
-    val uiEvent: LiveData<MyTemplateUiEvent> get() = _uiEvent
-
+) : BaseViewModel<MyTemplateUiState, MyTemplateUiEvent>(MyTemplateUiState()) {
     private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_SSAID_MISSING)
 
     init {
@@ -36,30 +25,39 @@ class MyTemplateViewModel(
     }
 
     fun deleteBottariTemplate(bottariTemplateId: Long) {
-        _uiState.update { copy(isLoading = true) }
+        updateState { copy(isLoading = true) }
 
-        viewModelScope.launch {
+        launch {
             deleteMyBottariTemplateUseCase(ssaid, bottariTemplateId)
                 .onSuccess {
-                    _uiState.update { copy(bottariTemplates = bottariTemplates.filterNot { it.id == bottariTemplateId }) }
-                    _uiEvent.value = MyTemplateUiEvent.DeleteMyTemplateSuccess
+                    val template = currentState.bottariTemplates.find { it.id == bottariTemplateId }
+                    BottariLogger.ui(
+                        UiEventType.TEMPLATE_DELETE,
+                        mapOf(
+                            "template_id" to bottariTemplateId,
+                            "template_title" to template?.title.orEmpty(),
+                            "template_items" to template?.items.toString(),
+                        ),
+                    )
+                    updateState { copy(bottariTemplates = bottariTemplates.filterNot { it.id == bottariTemplateId }) }
+                    emitEvent(MyTemplateUiEvent.DeleteMyTemplateSuccess)
                 }.onFailure {
-                    _uiEvent.value = MyTemplateUiEvent.DeleteMyTemplateFailure
+                    emitEvent(MyTemplateUiEvent.DeleteMyTemplateFailure)
                 }
 
-            _uiState.update { copy(isLoading = false) }
+            updateState { copy(isLoading = false) }
         }
     }
 
     private fun fetchMyBottariTemplates() {
-        _uiState.update { copy(isLoading = true) }
+        updateState { copy(isLoading = true) }
 
-        viewModelScope.launch {
+        launch {
             fetchMyBottariTemplatesUseCase(ssaid)
-                .onSuccess { _uiState.update { copy(bottariTemplates = it.map { it.toUiModel() }) } }
-                .onFailure { _uiEvent.value = MyTemplateUiEvent.FetchMyTemplateFailure }
+                .onSuccess { updateState { copy(bottariTemplates = it.map { it.toUiModel() }) } }
+                .onFailure { emitEvent(MyTemplateUiEvent.FetchMyTemplateFailure) }
 
-            _uiState.update { copy(isLoading = false) }
+            updateState { copy(isLoading = false) }
         }
     }
 

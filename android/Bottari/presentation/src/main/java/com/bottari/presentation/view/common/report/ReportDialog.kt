@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.DialogReportBinding
@@ -25,6 +26,11 @@ class ReportDialog : DialogFragment() {
             ssaid = requireContext().getSSAID(),
             templateId = requireArguments().getLong(ARG_TEMPLATE_ID),
         )
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
     }
 
     override fun onCreateView(

@@ -1,4 +1,4 @@
-package com.bottari.logger
+package com.bottari.logger.model
 
 import android.util.Log
 

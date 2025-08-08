@@ -12,23 +12,28 @@ import android.view.ViewGroup
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.DialogBottariRenameBinding
-import com.google.android.material.snackbar.Snackbar
 
 class BottariRenameDialog :
     DialogFragment(),
     TextWatcher {
     private val viewModel: BottariRenameViewModel by viewModels {
         val ssaid = requireContext().getSSAID()
-        val bottariId = requireArguments().getLong(EXTRA_BOTTARI_ID)
-        val oldTitle = requireArguments().getString(EXTRA_OLD_TITLE).orEmpty()
-        BottariRenameViewModel.Factory(ssaid, bottariId, oldTitle)
+        val initialTitle = requireArguments().getString(EXTRA_INITIAL_TITLE).orEmpty()
+        BottariRenameViewModel.Factory(ssaid, initialTitle)
     }
 
     private var _binding: DialogBottariRenameBinding? = null
     val binding: DialogBottariRenameBinding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -86,10 +91,7 @@ class BottariRenameDialog :
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
                 BottariRenameUiEvent.SaveBottariTitleSuccess -> handleRenameState()
-                BottariRenameUiEvent.SaveBottariTitleFailure ->
-                    Snackbar
-                        .make(binding.root, getString(R.string.bottari_rename_failure_text), Snackbar.LENGTH_SHORT)
-                        .show()
+                BottariRenameUiEvent.SaveBottariTitleFailure -> requireView().showSnackbar(R.string.bottari_rename_failure_text)
             }
         }
     }
@@ -99,7 +101,8 @@ class BottariRenameDialog :
         binding.btnBottariRenameClose.setOnClickListener { dismiss() }
         binding.btnBottariRename.setOnClickListener {
             val newTitle = binding.etBottariRenameName.text.toString()
-            viewModel.saveBottariTitle(newTitle)
+            val bottariId = requireArguments().getLong(EXTRA_BOTTARI_ID)
+            viewModel.saveBottariTitle(bottariId, newTitle)
         }
     }
 
@@ -132,17 +135,17 @@ class BottariRenameDialog :
         const val SAVE_BOTTARI_TITLE_RESULT_KEY = "RENAME_RESULT_KEY"
 
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
-        private const val EXTRA_OLD_TITLE = "EXTRA_OLD_TITLE"
+        private const val EXTRA_INITIAL_TITLE = "EXTRA_INITIAL_TITLE"
 
         fun newInstance(
             bottariId: Long,
-            oldTitle: String,
+            initialTitle: String,
         ): BottariRenameDialog =
             BottariRenameDialog().apply {
                 arguments =
                     Bundle().apply {
                         putLong(EXTRA_BOTTARI_ID, bottariId)
-                        putString(EXTRA_OLD_TITLE, oldTitle)
+                        putString(EXTRA_INITIAL_TITLE, initialTitle)
                     }
             }
     }

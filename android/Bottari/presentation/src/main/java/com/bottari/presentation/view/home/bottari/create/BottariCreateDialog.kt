@@ -12,6 +12,7 @@ import androidx.annotation.StringRes
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.DialogBottariCreateBinding
@@ -29,6 +30,11 @@ class BottariCreateDialog :
     }
     private var _binding: DialogBottariCreateBinding? = null
     val binding: DialogBottariCreateBinding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
