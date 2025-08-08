@@ -13,6 +13,7 @@ fragment = "1.8.8"
 constraintlayout = "2.2.1"
 
 # UI Components
+coreSplashscreen = "1.0.1"
 material = "1.12.0"
 cardstackview = "3.0.0"
 flexbox = "3.0.0"
@@ -68,6 +69,7 @@ number-picker = { module = "io.github.ShawnLin013:number-picker", version.ref = 
 spinkit = { module = "com.github.ybq:Android-SpinKit", version.ref = "spinkit" }
 material-calendarview = { module = "com.github.prolificinteractive:material-calendarview", version.ref = "materialCalendarview" }
 threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threetenabp" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 
 # --- Network ---
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
