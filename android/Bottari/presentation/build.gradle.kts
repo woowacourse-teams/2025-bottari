@@ -55,6 +55,12 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("net.bytebuddy:byte-buddy:1.14.12")
+    }
+}
+
 dependencies {
     implementation(project(":domain"))
     implementation(project(":di"))
@@ -72,6 +78,8 @@ dependencies {
     implementation(libs.flexbox)
     implementation(libs.number.picker)
     implementation(libs.spinkit)
+    implementation(libs.material.calendarview)
+    implementation(libs.threetenabp)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

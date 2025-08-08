@@ -38,8 +38,13 @@ class AlarmViewBinder(
             tvChecklistAlarmType.text =
                 when (alarm.type) {
                     AlarmTypeUiModel.NON_REPEAT -> alarm.date.formatWithPattern(dateFormat)
-                    AlarmTypeUiModel.EVERYDAY_REPEAT -> context.getString(R.string.bottari_item_alarm_repeat_everyday_text)
-                    AlarmTypeUiModel.EVERYWEEK_REPEAT -> formatEveryWeek(alarm)
+                    AlarmTypeUiModel.REPEAT -> {
+                        if (alarm.isRepeatEveryDay) {
+                            context.getString(R.string.bottari_item_alarm_repeat_everyday_text)
+                        } else {
+                            formatEveryWeek(alarm)
+                        }
+                    }
                 }
             tvChecklistAlarmTime.text = alarm.time.formatWithPattern(timeFormat)
         }
@@ -61,7 +66,7 @@ class AlarmViewBinder(
     }
 
     private fun formatEveryWeek(alarm: AlarmUiModel): String {
-        val checkedDays = alarm.daysOfWeek.filter { dayOfWeek -> dayOfWeek.isChecked }
+        val checkedDays = alarm.repeatDays.filter { dayOfWeek -> dayOfWeek.isChecked }
         return buildString {
             append(context.getString(R.string.bottari_item_alarm_repeat_everyweek_text))
             append(separator)

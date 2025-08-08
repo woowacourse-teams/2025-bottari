@@ -7,28 +7,28 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemDayOfWeekBinding
-import com.bottari.presentation.model.DayOfWeekUiModel
-import com.bottari.presentation.view.edit.alarm.listener.OnDayOfWeekClickListener
+import com.bottari.presentation.model.RepeatDayUiModel
+import com.bottari.presentation.view.edit.alarm.listener.OnRepeatDayClickListener
 import java.time.format.TextStyle
 import java.util.Locale
 
-class DayOfWeekViewHolder private constructor(
+class RepeatDayViewHolder private constructor(
     private val binding: ItemDayOfWeekBinding,
-    private val onDayOfWeekClickListener: OnDayOfWeekClickListener,
+    private val onRepeatDayClickListener: OnRepeatDayClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
-    private lateinit var dayOfWeek: DayOfWeekUiModel
+    private lateinit var repeatDay: RepeatDayUiModel
 
     init {
         binding.btnDayOfWeek.setOnClickListener {
-            onDayOfWeekClickListener.onClick(dayOfWeek)
+            onRepeatDayClickListener.onClick(repeatDay)
         }
     }
 
-    fun bind(dayOfWeek: DayOfWeekUiModel) {
-        this.dayOfWeek = dayOfWeek
+    fun bind(repeatDay: RepeatDayUiModel) {
+        this.repeatDay = repeatDay
         binding.btnDayOfWeek.text =
-            dayOfWeek.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
-        updateDayOfWeekState(dayOfWeek.isChecked)
+            repeatDay.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+        updateDayOfWeekState(repeatDay.isChecked)
     }
 
     private fun updateDayOfWeekState(isChecked: Boolean) {
@@ -45,11 +45,11 @@ class DayOfWeekViewHolder private constructor(
     companion object {
         fun from(
             parent: ViewGroup,
-            onDayOfWeekClickListener: OnDayOfWeekClickListener,
-        ): DayOfWeekViewHolder {
+            onRepeatDayClickListener: OnRepeatDayClickListener,
+        ): RepeatDayViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemDayOfWeekBinding.inflate(inflater, parent, false)
-            return DayOfWeekViewHolder(binding, onDayOfWeekClickListener)
+            return RepeatDayViewHolder(binding, onRepeatDayClickListener)
         }
     }
 }

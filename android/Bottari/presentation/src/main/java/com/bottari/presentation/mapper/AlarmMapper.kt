@@ -5,8 +5,8 @@ import com.bottari.domain.model.alarm.AlarmType
 import com.bottari.domain.model.alarm.LocationAlarm
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
-import com.bottari.presentation.model.DayOfWeekUiModel
 import com.bottari.presentation.model.LocationAlarmUiModel
+import com.bottari.presentation.model.RepeatDayUiModel
 import java.time.DayOfWeek
 import java.time.LocalDate
 
@@ -18,7 +18,7 @@ object AlarmMapper {
             time = time,
             type = alarmType.toUiModel(),
             date = alarmType.getDate(),
-            daysOfWeek = alarmType.getDaysOfWeek().toUiModel(),
+            repeatDays = alarmType.getDaysOfWeek().toUiModel(),
             locationAlarm = location?.toUiModel(),
         )
 
@@ -34,8 +34,7 @@ object AlarmMapper {
     private fun AlarmType.toUiModel(): AlarmTypeUiModel =
         when (this) {
             is AlarmType.NonRepeat -> AlarmTypeUiModel.NON_REPEAT
-            is AlarmType.EveryDayRepeat -> AlarmTypeUiModel.EVERYDAY_REPEAT
-            is AlarmType.EveryWeekRepeat -> AlarmTypeUiModel.EVERYWEEK_REPEAT
+            is AlarmType.Repeat -> AlarmTypeUiModel.REPEAT
         }
 
     private fun AlarmType.getDate(): LocalDate {
@@ -44,14 +43,14 @@ object AlarmMapper {
     }
 
     private fun AlarmType.getDaysOfWeek(): List<Int> {
-        if (this is AlarmType.EveryWeekRepeat) return daysOfWeek
+        if (this is AlarmType.Repeat) return repeatDays
         return emptyList()
     }
 
-    private fun List<Int>.toUiModel(): List<DayOfWeekUiModel> {
+    private fun List<Int>.toUiModel(): List<RepeatDayUiModel> {
         val checkedDays = this.toSet()
         return DayOfWeek.entries.map { dayOfWeek ->
-            DayOfWeekUiModel(
+            RepeatDayUiModel(
                 dayOfWeek = dayOfWeek,
                 isChecked = dayOfWeek.value in checkedDays,
             )
@@ -61,11 +60,10 @@ object AlarmMapper {
     private fun AlarmUiModel.toDomainType(): AlarmType =
         when (type) {
             AlarmTypeUiModel.NON_REPEAT -> AlarmType.NonRepeat(date)
-            AlarmTypeUiModel.EVERYDAY_REPEAT -> AlarmType.EveryDayRepeat
-            AlarmTypeUiModel.EVERYWEEK_REPEAT -> AlarmType.EveryWeekRepeat(daysOfWeek.toDomain())
+            AlarmTypeUiModel.REPEAT -> AlarmType.Repeat(repeatDays.toDomain())
         }
 
-    private fun List<DayOfWeekUiModel>.toDomain(): List<Int> =
+    private fun List<RepeatDayUiModel>.toDomain(): List<Int> =
         this
             .filter { dayOfWeekUiModel -> dayOfWeekUiModel.isChecked }
             .map { dayOfWeekUiModel -> dayOfWeekUiModel.dayOfWeek.value }
