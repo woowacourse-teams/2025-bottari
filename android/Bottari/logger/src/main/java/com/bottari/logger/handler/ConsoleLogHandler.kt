@@ -29,10 +29,10 @@ class ConsoleLogHandler(
         if (!policy.shouldLogToConsole(level)) return
         val lines = fullLog.lines()
 
-        for (line in lines) {
+        lines.forEach { line ->
             if (line.length > MAX_LOG_LENGTH) {
                 logLineFromChunked(level, line)
-                return
+                return@forEach
             }
 
             Log.println(level.priority, LOG_NAME, line)
