@@ -21,15 +21,20 @@ import com.bottari.presentation.view.home.HomeActivity
 import java.time.LocalDateTime
 
 class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityChecklistBinding::inflate) {
-    private val bottariId: Long = intent.getLongExtra(EXTRA_BOTTARI_ID, INVALID_BOTTARI_ID)
-    private val notificationFlag: Boolean by lazy {
-        intent.getBooleanExtra(EXTRA_NOTIFICATION_FLAG, false)
-    }
     private val viewModel: ChecklistViewModel by viewModels {
         ChecklistViewModel.Factory(
             this.getSSAID(),
             bottariId,
         )
+    }
+    private val bottariId: Long by lazy {
+        intent.getLongExtra(
+            EXTRA_BOTTARI_ID,
+            INVALID_BOTTARI_ID,
+        )
+    }
+    private val notificationFlag: Boolean by lazy {
+        intent.getBooleanExtra(EXTRA_NOTIFICATION_FLAG, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
