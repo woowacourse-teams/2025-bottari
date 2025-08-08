@@ -50,12 +50,20 @@ abstract class BaseFragment<VB : ViewBinding>(
     override fun onStart() {
         super.onStart()
         BottariLogger.lifecycle(javaClass.simpleName)
-        enterTime = System.currentTimeMillis()
     }
 
     override fun onResume() {
         super.onResume()
         BottariLogger.lifecycle(javaClass.simpleName)
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            LogEventHelper.logScreenExit(javaClass.simpleName, stayDuration)
+            return
+        }
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
     }
 
     override fun onPause() {
@@ -66,7 +74,6 @@ abstract class BaseFragment<VB : ViewBinding>(
     override fun onStop() {
         super.onStop()
         BottariLogger.lifecycle(javaClass.simpleName)
-        LogEventHelper.logScreenExit(javaClass.simpleName, stayDuration)
     }
 
     override fun onDestroyView() {
