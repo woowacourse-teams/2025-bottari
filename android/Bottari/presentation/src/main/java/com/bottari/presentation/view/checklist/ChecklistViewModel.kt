@@ -45,7 +45,23 @@ class ChecklistViewModel(
         ) { items -> performCheck(items) }
 
     init {
-        fetchChecklist(bottariId)
+        fetchChecklist()
+    }
+
+    fun fetchChecklist() {
+        _uiState.update { copy(isLoading = true) }
+
+        viewModelScope.launch {
+            fetchChecklistUseCase(ssaid, bottariId)
+                .onSuccess { items ->
+                    val itemUiModels = items.map { it.toUiModel() }
+                    _uiState.update { copy(bottariItems = itemUiModels) }
+                }.onFailure {
+                    _uiEvent.value = ChecklistUiEvent.FetchChecklistFailure
+                }
+
+            _uiState.update { copy(isLoading = false) }
+        }
     }
 
     fun resetSwipeState() {
@@ -94,22 +110,6 @@ class ChecklistViewModel(
 
     private fun recordPendingCheckStatus(item: BottariItemUiModel) {
         pendingCheckStatusMap[item.id] = item
-    }
-
-    private fun fetchChecklist(bottariId: Long) {
-        _uiState.update { copy(isLoading = true) }
-
-        viewModelScope.launch {
-            fetchChecklistUseCase(ssaid, bottariId)
-                .onSuccess { items ->
-                    val itemUiModels = items.map { it.toUiModel() }
-                    _uiState.update { copy(bottariItems = itemUiModels) }
-                }.onFailure {
-                    _uiEvent.value = ChecklistUiEvent.FetchChecklistFailure
-                }
-
-            _uiState.update { copy(isLoading = false) }
-        }
     }
 
     companion object {

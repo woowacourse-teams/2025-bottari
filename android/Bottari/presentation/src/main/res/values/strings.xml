@@ -99,6 +99,8 @@
     <string name="common_report_dialog_submit_success_text">신고가 정상적으로 접수되었어요</string>
     <string name="common_report_dialog_submit_failure_text">신고 접수에 실패했어요</string>
     <!--  Notification: 보따리 알림  -->
+
+    <!--  Common: 보따리 알림  -->
     <string name="common_bottari_notification_channel_name">보따리 알림</string>
     <string name="common_bottari_notification_title">%s 챙길 시간이에요!</string>
     <string name="common_bottari_notification_message">보따리를 열어보고 준비 완료했는지 확인해보세요!</string>
@@ -140,6 +142,9 @@
     <string name="checklist_swipe_complete_all_text">모든 준비 완료! 출발만 남았어요!</string>
     <string name="checklist_swipe_complete_not_all_text">아직 챙기지 않은 물건이 있어요. 마저 챙겨볼까요?</string>
     <string name="checklist_swipe_return_btn_text">돌아가기</string>
+    <string name="checklist_empty_view_edit_btn_text">편집하기</string>
+    <string name="checklist_empty_view_title_text">챙길 물건이 보이지 않아요</string>
+    <string name="checklist_empty_view_description_text">지금 \'편집하기\'를 눌러서\n보따리에 물건을 넣어보세요</string>
 
     <!-- Bottari Create Dialog -->
     <string name="bottari_create_dialog_title_text">보따리 이름을 입력해 주세요</string>
