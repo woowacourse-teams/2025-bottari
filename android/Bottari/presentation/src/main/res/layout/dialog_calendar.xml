@@ -38,8 +38,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_confirm"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mcv_alarm_date"
-        tools:text="취소" />
+        app:layout_constraintTop_toBottomOf="@id/mcv_alarm_date" />
 
     <TextView
         android:id="@+id/btn_confirm"
