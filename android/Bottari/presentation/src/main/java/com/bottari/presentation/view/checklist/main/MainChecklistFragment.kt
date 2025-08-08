@@ -41,7 +41,7 @@ class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChe
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
             adapter.submitList(uiState.bottariItems)
-            handleEmptyView(uiState.bottariItems.isEmpty())
+            handleEmptyView(uiState.isItemsEmpty)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
