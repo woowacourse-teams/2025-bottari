@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.flexbox)
     implementation(libs.number.picker)
     implementation(libs.spinkit)
+    implementation(libs.androidx.core.splashscreen)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
