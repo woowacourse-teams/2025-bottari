@@ -18,6 +18,15 @@ enum class UiEventType(
     SCREEN_ENTER("screen_enter"),
 
     /**
+     * 화면 퇴장 이벤트
+     *
+     * 파라미터:
+     * - screen: 퇴장한 화면명
+     * - stay_duration: 머문 시간
+     */
+    SCREEN_EXIT("screen_exit"),
+
+    /**
      * 클릭 이벤트
      *
      * 파라미터:

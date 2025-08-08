@@ -13,8 +13,9 @@ object LogEventHelper {
     /**
      * 공통으로 들어갈 파라미터 키
      */
-    private const val PARAM_SCREEN = "screen"
-    private const val PARAM_TARGET = "target"
+    private const val PARAM_SCREEN = "PARAM_SCREEN"
+    private const val PARAM_TARGET = "PARAM_TARGET"
+    private const val PARAM_STAY_DURATION = "PARAM_STAY_DURATION"
 
     /**
      * 이벤트 로깅
@@ -62,6 +63,22 @@ object LogEventHelper {
         logEvent(
             eventType = UiEventType.SCREEN_ENTER,
             screen = screen,
+        )
+    }
+
+    /**
+     * 화면 진입 이벤트 편의 함수
+     *
+     * @param screen 현재 화면 이름
+     */
+    fun logScreenExit(
+        screen: String,
+        stayDuration: Long,
+    ) {
+        logEvent(
+            eventType = UiEventType.SCREEN_EXIT,
+            screen = screen,
+            additionalParams = mapOf(PARAM_STAY_DURATION to "${stayDuration}ms"),
         )
     }
 }
