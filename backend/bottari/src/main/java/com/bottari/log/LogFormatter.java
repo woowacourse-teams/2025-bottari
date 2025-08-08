@@ -54,6 +54,7 @@ public class LogFormatter {
         if (ssaid == null || ssaid.isEmpty()) {
             return "GUEST";
         }
+        
         return ssaid;
     }
 
