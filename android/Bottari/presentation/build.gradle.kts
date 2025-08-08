@@ -80,6 +80,7 @@ dependencies {
     implementation(libs.spinkit)
     implementation(libs.material.calendarview)
     implementation(libs.threetenabp)
+    implementation(libs.androidx.core.splashscreen)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

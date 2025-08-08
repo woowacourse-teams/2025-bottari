@@ -54,7 +54,7 @@ class MainViewModel(
 
     private fun handleCheckRegistrationResult(result: RegisteredMember) {
         if (result.isRegistered) {
-            updateState { copy(isLoading = false) }
+            updateState { copy(isLoading = false, isReady = true) }
             emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))
             return
         }
@@ -74,7 +74,7 @@ class MainViewModel(
         launch {
             registerMemberUseCase(ssaid)
                 .onSuccess {
-                    updateState { copy(isLoading = false) }
+                    updateState { copy(isLoading = false, isReady = true) }
                     emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))
                 }.onFailure { emitEvent(MainUiEvent.RegisterFailure) }
         }
