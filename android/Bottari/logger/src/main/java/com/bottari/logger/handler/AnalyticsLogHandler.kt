@@ -25,7 +25,7 @@ class AnalyticsLogHandler(
         val baseParams =
             mapOf(
                 PARAM_LOG_LEVEL to level.label,
-                PARAM_MESSAGE to message,
+                PARAM_MESSAGE to logEventData?.params.toString(),
                 PARAM_LOCATION to callerInfo.display(),
                 PARAM_TIMESTAMP to timestamp,
             )

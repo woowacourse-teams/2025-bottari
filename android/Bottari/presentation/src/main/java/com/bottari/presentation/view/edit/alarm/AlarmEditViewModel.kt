@@ -12,13 +12,11 @@ import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.common.extension.update
 import com.bottari.presentation.mapper.AlarmMapper.toDomain
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.NotificationUiModel
 import com.bottari.presentation.model.RepeatDayUiModel
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
