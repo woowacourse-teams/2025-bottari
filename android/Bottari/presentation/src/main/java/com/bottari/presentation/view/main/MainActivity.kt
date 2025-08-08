@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.getSSAID
@@ -28,6 +29,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private var isNavigatedToSettings: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                viewModel.uiState.value?.isReady == false
+            }
+        }
         super.onCreate(savedInstanceState)
         setupObserver()
     }

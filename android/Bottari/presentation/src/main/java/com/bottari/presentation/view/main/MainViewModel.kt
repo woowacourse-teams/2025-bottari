@@ -65,7 +65,7 @@ class MainViewModel(
 
     private fun handleCheckRegistrationResult(result: RegisteredMember) {
         if (result.isRegistered) {
-            _uiState.update { copy(isLoading = false) }
+            _uiState.update { copy(isLoading = false, isReady = true) }
             _uiEvent.value = MainUiEvent.LoginSuccess(_uiState.value!!.hasPermissionFlag)
             return
         }
@@ -85,7 +85,7 @@ class MainViewModel(
         viewModelScope.launch {
             registerMemberUseCase(ssaid)
                 .onSuccess {
-                    _uiState.update { copy(isLoading = false) }
+                    _uiState.update { copy(isLoading = false, isReady = true) }
                     _uiEvent.value = MainUiEvent.LoginSuccess(_uiState.value!!.hasPermissionFlag)
                 }.onFailure { _uiEvent.value = MainUiEvent.RegisterFailure }
         }
