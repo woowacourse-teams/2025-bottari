@@ -12,4 +12,9 @@
         android:fadingEdgeLength="8dp"
         android:requiresFadingEdge="vertical"
         tools:listitem="@layout/item_checklist" />
+
+    <include
+        android:id="@+id/empty_view"
+        layout="@layout/view_checklist_empty"
+        android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

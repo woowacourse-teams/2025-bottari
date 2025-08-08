@@ -18,16 +18,19 @@ import com.bottari.presentation.view.checklist.swipe.SwipeChecklistFragment
 import com.bottari.presentation.view.home.HomeActivity
 
 class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityChecklistBinding::inflate) {
+    private val bottariId: Long by lazy {
+        intent.getLongExtra(
+            EXTRA_BOTTARI_ID,
+            INVALID_BOTTARI_ID,
+        )
+    }
     private val notificationFlag: Boolean by lazy {
         intent.getBooleanExtra(EXTRA_NOTIFICATION_FLAG, false)
     }
     private val viewModel: ChecklistViewModel by viewModels {
         ChecklistViewModel.Factory(
             this.getSSAID(),
-            intent.getLongExtra(
-                EXTRA_BOTTARI_ID,
-                INVALID_BOTTARI_ID,
-            ),
+            bottariId,
         )
     }
 
@@ -77,13 +80,13 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
     }
 
     private fun navigateToChecklistForNotification() {
-        replaceChecklistFragment(MainChecklistFragment.newInstance(), false)
+        replaceChecklistFragment(MainChecklistFragment.newInstance(bottariId), false)
         replaceChecklistFragment(SwipeChecklistFragment.newInstance(), true)
         updateToolbar(false)
     }
 
     private fun navigateToMainChecklist() {
-        val fragment = MainChecklistFragment.newInstance()
+        val fragment = MainChecklistFragment.newInstance(bottariId)
         replaceChecklistFragment(fragment, false)
         updateToolbar(true)
     }
