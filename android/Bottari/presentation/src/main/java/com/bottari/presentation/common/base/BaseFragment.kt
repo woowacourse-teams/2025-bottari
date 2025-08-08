@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.bottari.logger.BottariLogger
+import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.view.common.LoadingDialog
 
 abstract class BaseFragment<VB : ViewBinding>(
@@ -18,10 +19,13 @@ abstract class BaseFragment<VB : ViewBinding>(
     val binding: VB get() = _binding!!
 
     private val loadingDialog: LoadingDialog by lazy { LoadingDialog() }
+    private var enterTime: Long = System.currentTimeMillis()
+    private val stayDuration: Long get() = System.currentTimeMillis() - enterTime
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         BottariLogger.lifecycle(javaClass.simpleName)
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
     }
 
     override fun onCreateView(
@@ -51,6 +55,15 @@ abstract class BaseFragment<VB : ViewBinding>(
     override fun onResume() {
         super.onResume()
         BottariLogger.lifecycle(javaClass.simpleName)
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            LogEventHelper.logScreenExit(javaClass.simpleName, stayDuration)
+            return
+        }
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
     }
 
     override fun onPause() {

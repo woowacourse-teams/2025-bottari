@@ -9,6 +9,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.getSSAID
@@ -16,14 +18,10 @@ import com.bottari.presentation.databinding.ActivityChecklistBinding
 import com.bottari.presentation.view.checklist.main.MainChecklistFragment
 import com.bottari.presentation.view.checklist.swipe.SwipeChecklistFragment
 import com.bottari.presentation.view.home.HomeActivity
+import java.time.LocalDateTime
 
 class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityChecklistBinding::inflate) {
-    private val bottariId: Long by lazy {
-        intent.getLongExtra(
-            EXTRA_BOTTARI_ID,
-            INVALID_BOTTARI_ID,
-        )
-    }
+    private val bottariId: Long = intent.getLongExtra(EXTRA_BOTTARI_ID, INVALID_BOTTARI_ID)
     private val notificationFlag: Boolean by lazy {
         intent.getBooleanExtra(EXTRA_NOTIFICATION_FLAG, false)
     }
@@ -39,11 +37,27 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
         setupObserver()
         setupUI(savedInstanceState)
         setupListener()
+
+        if (notificationFlag) {
+            BottariLogger.ui(
+                UiEventType.NOTIFICATION_CLICK,
+                mapOf("notification_id" to bottariId, "time" to LocalDateTime.now().toString()),
+            )
+        }
     }
 
     private fun setupObserver() {
         viewModel.uiState.observe(this) { uiState ->
             updateToolbar(isMainChecklist() && uiState.bottariItems.isNotEmpty())
+            if (uiState.isAllChecked) {
+                BottariLogger.ui(
+                    UiEventType.CHECKLIST_COMPLETE,
+                    mapOf(
+                        "bottari_id" to bottariId,
+                        "checklist_items" to uiState.bottariItems.toString(),
+                    ),
+                )
+            }
         }
     }
 

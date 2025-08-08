@@ -29,13 +29,5 @@
 -dontwarn kotlin.**
 -dontnote kotlin.**
 
-# ===== Timber (로그는 제거 가능) =====
--assumenosideeffects class timber.log.Timber {
-    public static *** d(...);
-    public static *** v(...);
-    public static *** i(...);
-    public static *** w(...);
-}
-
 # ===== 기타 =====
 -dontwarn org.jetbrains.annotations.**

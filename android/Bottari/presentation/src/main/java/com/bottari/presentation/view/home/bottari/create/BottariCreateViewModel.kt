@@ -1,47 +1,45 @@
 package com.bottari.presentation.view.home.bottari.create
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.bottari.CreateBottariUseCase
-import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.common.extension.update
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
+import com.bottari.presentation.common.base.BaseViewModel
 import kotlinx.coroutines.launch
 
 class BottariCreateViewModel(
     stateHandle: SavedStateHandle,
     private val createBottariUseCase: CreateBottariUseCase,
-) : ViewModel() {
-    private val _uiState: MutableLiveData<BottariCreateUiState> =
-        MutableLiveData(
-            BottariCreateUiState(stateHandle[KEY_BOTTARI_TITLE] ?: EMPTY_BOTTARI_TITLE),
-        )
-    val uiState: LiveData<BottariCreateUiState> get() = _uiState
-
-    private val _uiEvent: SingleLiveEvent<BottariCreateUiEvent> = SingleLiveEvent()
-    val uiEvent: LiveData<BottariCreateUiEvent> get() = _uiEvent
-
+) : BaseViewModel<BottariCreateUiState, BottariCreateUiEvent>(
+        BottariCreateUiState(
+            stateHandle[KEY_BOTTARI_TITLE] ?: EMPTY_BOTTARI_TITLE,
+        ),
+    ) {
     private val ssaid: String = stateHandle[KEY_SSAID]!!
 
     fun updateBottariTitle(title: String) {
-        _uiState.update { copy(bottariTitle = title) }
+        updateState { copy(bottariTitle = title) }
     }
 
     fun createBottari() {
         val title = uiState.value?.bottariTitle?.trim() ?: return
         if (title.isBlank()) return
 
-        viewModelScope.launch {
+        launch {
             createBottariUseCase(ssaid, title)
-                .onSuccess { _uiEvent.value = BottariCreateUiEvent.CreateBottariSuccess(it) }
-                .onFailure { _uiEvent.value = BottariCreateUiEvent.CreateBottariFailure }
+                .onSuccess { createdBottariId ->
+                    if (createdBottariId == null) return@onSuccess
+                    BottariLogger.ui(
+                        UiEventType.PERSONAL_BOTTARI_CREATE,
+                        mapOf("bottari_id" to createdBottariId, "bottari_title" to title),
+                    )
+                    emitEvent(BottariCreateUiEvent.CreateBottariSuccess(createdBottariId))
+                }.onFailure { emitEvent(BottariCreateUiEvent.CreateBottariFailure) }
         }
     }
 
