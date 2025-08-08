@@ -17,6 +17,7 @@ object AlarmMapper {
     private const val NON_REPEAT = "NON_REPEAT"
     private const val EVERY_DAY_REPEAT = "EVERY_DAY_REPEAT"
     private const val EVERY_WEEK_REPEAT = "EVERY_WEEK_REPEAT"
+    private const val DAYS_IN_WEEK = 7
 
     fun Alarm.toRequest(): AlarmRequest =
         AlarmRequest(
@@ -44,8 +45,7 @@ object AlarmMapper {
     private fun AlarmType.toTypeString(): String =
         when (this) {
             is AlarmType.NonRepeat -> NON_REPEAT
-            is AlarmType.EveryDayRepeat -> EVERY_DAY_REPEAT
-            is AlarmType.EveryWeekRepeat -> EVERY_WEEK_REPEAT
+            is AlarmType.Repeat -> if (repeatDays.size == DAYS_IN_WEEK) EVERY_DAY_REPEAT else EVERY_WEEK_REPEAT
         }
 
     private fun AlarmType.getDate(): LocalDate? {
@@ -54,8 +54,8 @@ object AlarmMapper {
     }
 
     private fun AlarmType.getDaysOfWeek(): List<Int> {
-        if (this !is AlarmType.EveryWeekRepeat) return emptyList()
-        return daysOfWeek
+        if (this !is AlarmType.Repeat) return emptyList()
+        return repeatDays
     }
 
     private fun LocationAlarm.toRequest(): LocationRequest =
@@ -73,12 +73,9 @@ object AlarmMapper {
                     date = date ?: throw IllegalArgumentException(ERROR_MISSING_DATE),
                 )
 
-            EVERY_DAY_REPEAT -> AlarmType.EveryDayRepeat
-
-            EVERY_WEEK_REPEAT ->
-                AlarmType.EveryWeekRepeat(
-                    daysOfWeek = dayOfWeeks,
-                )
+            EVERY_DAY_REPEAT,
+            EVERY_WEEK_REPEAT,
+            -> AlarmType.Repeat(dayOfWeeks)
 
             else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
         }

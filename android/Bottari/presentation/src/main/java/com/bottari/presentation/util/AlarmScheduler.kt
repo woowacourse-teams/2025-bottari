@@ -6,8 +6,8 @@ import android.app.PendingIntent
 import android.content.Context
 import com.bottari.di.ApplicationContextProvider
 import com.bottari.presentation.model.AlarmTypeUiModel
-import com.bottari.presentation.model.DayOfWeekUiModel
 import com.bottari.presentation.model.NotificationUiModel
+import com.bottari.presentation.model.RepeatDayUiModel
 import com.bottari.presentation.receiver.AlarmReceiver
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import java.time.DayOfWeek
@@ -33,9 +33,9 @@ class AlarmScheduler(
     fun scheduleNextWeekAlarm(notification: NotificationUiModel) {
         val alarm = notification.alarm
         if (alarm.type == AlarmTypeUiModel.NON_REPEAT) return
-        val availableDays = getAvailableDays(alarm.daysOfWeek)
+        val availableDays = getAvailableDays(alarm.repeatDays)
         val today = LocalDate.now()
-        if (availableDays.contains(today.dayOfWeek)) {
+        if (today.dayOfWeek in availableDays) {
             val nextAlarmDate = today.plusWeeks(WEEKS_TO_ADD)
             scheduleAlarm(notification.copy(alarm = alarm.copy(date = nextAlarmDate)))
         }
@@ -50,9 +50,9 @@ class AlarmScheduler(
     }
 
     private fun scheduleRepeatAlarm(notification: NotificationUiModel) {
-        handleRepeatDays(notification) { dayOfWeek ->
-            val requestCode = generateRequestCode(notification.id, dayOfWeek)
-            val triggerTime = getNextTriggerTime(dayOfWeek, notification.alarm.time)
+        handleRepeatDays(notification) { repeatDay ->
+            val requestCode = generateRequestCode(notification.id, repeatDay)
+            val triggerTime = getNextTriggerTime(repeatDay, notification.alarm.time)
             scheduleAlarmInternal(notification, requestCode, triggerTime)
         }
     }
@@ -64,14 +64,14 @@ class AlarmScheduler(
         scheduleAlarmInternal(notification, requestCode, triggerTime)
     }
 
-    private fun getAvailableDays(daysOfWeek: List<DayOfWeekUiModel>): List<DayOfWeek> =
-        daysOfWeek
-            .filter { dayOfWeekUiModel -> dayOfWeekUiModel.isChecked }
-            .map { daysOfWeekUiModel -> daysOfWeekUiModel.dayOfWeek }
+    private fun getAvailableDays(repeatDays: List<RepeatDayUiModel>): List<DayOfWeek> =
+        repeatDays
+            .filter { repeatDay -> repeatDay.isChecked }
+            .map { repeatDay -> repeatDay.dayOfWeek }
 
     private fun cancelRepeatAlarm(notification: NotificationUiModel) {
-        handleRepeatDays(notification) { dayOfWeek ->
-            val requestCode = generateRequestCode(notification.id, dayOfWeek)
+        handleRepeatDays(notification) { repeatDay ->
+            val requestCode = generateRequestCode(notification.id, repeatDay)
             cancelAlarmInternal(notification, requestCode)
         }
     }
@@ -85,9 +85,9 @@ class AlarmScheduler(
         notification: NotificationUiModel,
         action: (DayOfWeek) -> Unit,
     ) {
-        notification.alarm.daysOfWeek
-            .filter { dayOfWeekUiModel -> dayOfWeekUiModel.isChecked }
-            .forEach { dayOfWeekUiModel -> action(dayOfWeekUiModel.dayOfWeek) }
+        notification.alarm.repeatDays
+            .filter { repeatDay -> repeatDay.isChecked }
+            .forEach { repeatDay -> action(repeatDay.dayOfWeek) }
     }
 
     private fun generateRequestCode(
