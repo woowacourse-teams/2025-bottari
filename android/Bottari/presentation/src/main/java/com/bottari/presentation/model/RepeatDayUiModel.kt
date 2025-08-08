@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 import java.time.DayOfWeek
 
 @Parcelize
-data class DayOfWeekUiModel(
+data class RepeatDayUiModel(
     val dayOfWeek: DayOfWeek,
     val isChecked: Boolean,
 ) : Parcelable

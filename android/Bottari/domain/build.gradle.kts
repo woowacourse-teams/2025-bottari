@@ -16,6 +16,12 @@ tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("net.bytebuddy:byte-buddy:1.14.12")
+    }
+}
+
 dependencies {
     testImplementation(libs.bundles.test)
     implementation(libs.kotlinx.coroutines.core)

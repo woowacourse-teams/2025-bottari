@@ -7,9 +7,7 @@ sealed class AlarmType {
         val date: LocalDate,
     ) : AlarmType()
 
-    data object EveryDayRepeat : AlarmType()
-
-    data class EveryWeekRepeat(
-        val daysOfWeek: List<Int>,
+    data class Repeat(
+        val repeatDays: List<Int>,
     ) : AlarmType()
 }

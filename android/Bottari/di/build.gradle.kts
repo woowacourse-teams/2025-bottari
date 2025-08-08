@@ -32,6 +32,12 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("net.bytebuddy:byte-buddy:1.14.12")
+    }
+}
+
 dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))

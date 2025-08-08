@@ -1,8 +1,11 @@
 package com.bottari.presentation.view.edit.alarm
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.constraintlayout.widget.Group
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,14 +21,15 @@ import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.view.common.decoration.ItemSpacingDecoration
-import com.bottari.presentation.view.edit.alarm.adapter.DayOfWeekAdapter
+import com.bottari.presentation.view.edit.alarm.adapter.RepeatDayAdapter
+import com.bottari.presentation.view.edit.alarm.listener.OnDateClickListener
 import com.shawnlin.numberpicker.NumberPicker
 import java.time.LocalDate
 import java.time.LocalTime
-import java.time.Year
-import java.time.YearMonth
 
-class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEditBinding::inflate) {
+class AlarmEditFragment :
+    BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEditBinding::inflate),
+    OnDateClickListener {
     private val viewModel: AlarmEditViewModel by viewModels {
         AlarmEditViewModel.Factory(
             ssaid = requireContext().getSSAID(),
@@ -34,27 +38,24 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
             alarm = safeArgument { getParcelableCompat(ARG_ALARM) },
         )
     }
-    private val adapter: DayOfWeekAdapter by lazy { DayOfWeekAdapter(viewModel::updateDaysOfWeek) }
+    private val adapter: RepeatDayAdapter by lazy { RepeatDayAdapter(viewModel::updateDaysOfWeek) }
     private val scheduler: AlarmScheduler by lazy { AlarmScheduler() }
     private val hourPickers: List<NumberPicker> by lazy {
         listOf(
-            binding.layoutNoRepeatAlarmTime.npAlarmTimeHour,
-            binding.layoutEverydayRepeatAlarmTime.npAlarmTimeHour,
-            binding.layoutEveryweekRepeatAlarmTime.npAlarmTimeHour,
+            binding.layoutNonRepeatAlarmTime.npAlarmTimeHour,
+            binding.layoutRepeatAlarmTime.npAlarmTimeHour,
         )
     }
     private val minutePickers: List<NumberPicker> by lazy {
         listOf(
-            binding.layoutNoRepeatAlarmTime.npAlarmTimeMinute,
-            binding.layoutEverydayRepeatAlarmTime.npAlarmTimeMinute,
-            binding.layoutEveryweekRepeatAlarmTime.npAlarmTimeMinute,
+            binding.layoutNonRepeatAlarmTime.npAlarmTimeMinute,
+            binding.layoutRepeatAlarmTime.npAlarmTimeMinute,
         )
     }
     private val groups: List<Group> by lazy {
         listOf(
-            binding.groupAlarmNoRepeat,
-            binding.groupAlarmEverydayRepeat,
-            binding.groupAlarmEveryweekRepeat,
+            binding.groupAlarmNonRepeat,
+            binding.groupAlarmRepeat,
         )
     }
 
@@ -68,10 +69,19 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
         setupListener()
     }
 
+    override fun onClick(date: LocalDate) {
+        viewModel.updateAlarmDate(date)
+    }
+
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
             handleAlarmState(uiState.alarm)
+            if (uiState.alarm.type == AlarmTypeUiModel.NON_REPEAT) {
+                showOnly(binding.groupAlarmNonRepeat)
+                return@observe
+            }
+            showOnly(binding.groupAlarmRepeat)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner, ::handleAlarmEvent)
     }
@@ -93,15 +103,17 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
     private fun setupListener() {
         binding.btnClose.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.btnConfirm.setOnClickListener { viewModel.updateAlarm() }
+        binding.btnCalendar.setOnClickListener {
+            CalendarDialog().show(childFragmentManager, CalendarDialog::class.simpleName)
+        }
         setupAlarmTimePickers()
-        setupAlarmDatePickers()
         setupAlarmTypeSwitchers()
     }
 
     private fun handleAlarmState(alarm: AlarmUiModel) {
         updateAlarmTimePickers(alarm.time)
-        updateAlarmDatePickers(alarm.date)
-        adapter.submitList(alarm.daysOfWeek)
+        adapter.submitList(alarm.repeatDays)
+        binding.tvNonRepeatAlarmDate.text = alarm.date.toString()
     }
 
     private fun handleAlarmEvent(uiEvent: AlarmUiEvent) {
@@ -130,11 +142,6 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
         minutePickers.forEach { picker -> picker.value = minute }
     }
 
-    private fun updateAlarmDatePickers(alarmDate: LocalDate) {
-        binding.npNoRepeatAlarmDateMonth.value = alarmDate.monthValue
-        binding.npNoRepeatAlarmDateDay.value = alarmDate.dayOfMonth
-    }
-
     private fun setupAlarmTimePickers() {
         hourPickers
             .zip(minutePickers)
@@ -146,33 +153,14 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
             }
     }
 
-    private fun setupAlarmDatePickers() {
-        binding.npNoRepeatAlarmDateMonth.setOnValueChangedListener { _, _, newVal ->
-            handleAlarmDateChange(
-                month = newVal,
-                day = binding.npNoRepeatAlarmDateDay.value,
-            )
-        }
-        binding.npNoRepeatAlarmDateDay.setOnValueChangedListener { _, _, newVal ->
-            handleAlarmDateChange(
-                month = binding.npNoRepeatAlarmDateMonth.value,
-                day = newVal,
-            )
-        }
-    }
-
     private fun setupAlarmTypeSwitchers() {
-        binding.tvAlarmTypeNoRepeat.setOnClickListener {
-            showOnly(binding.groupAlarmNoRepeat)
+        binding.tvAlarmTypeNonRepeat.setOnClickListener {
+            showOnly(binding.groupAlarmNonRepeat)
             viewModel.updateAlarmType(AlarmTypeUiModel.NON_REPEAT)
         }
-        binding.tvAlarmTypeEverydayRepeat.setOnClickListener {
-            showOnly(binding.groupAlarmEverydayRepeat)
-            viewModel.updateAlarmType(AlarmTypeUiModel.EVERYDAY_REPEAT)
-        }
-        binding.tvAlarmTypeEveryweekRepeat.setOnClickListener {
-            showOnly(binding.groupAlarmEveryweekRepeat)
-            viewModel.updateAlarmType(AlarmTypeUiModel.EVERYWEEK_REPEAT)
+        binding.tvAlarmTypeRepeat.setOnClickListener {
+            showOnly(binding.groupAlarmRepeat)
+            viewModel.updateAlarmType(AlarmTypeUiModel.REPEAT)
         }
     }
 
@@ -196,29 +184,29 @@ class AlarmEditFragment : BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEd
         viewModel.updateAlarmTime(time = updatedTime)
     }
 
-    private fun handleAlarmDateChange(
-        month: Int,
-        day: Int,
-    ) {
-        val maxDay = getDayOfMonth(month)
-        val safeDay = minOf(day, maxDay)
-        if (binding.npNoRepeatAlarmDateDay.maxValue != maxDay) {
-            binding.npNoRepeatAlarmDateDay.maxValue = maxDay
-        }
-        if (binding.npNoRepeatAlarmDateDay.value != safeDay) {
-            binding.npNoRepeatAlarmDateDay.value = safeDay
-        }
-        val updatedDate = LocalDate.of(Year.now().value, month, safeDay)
-        viewModel.updateAlarmDate(updatedDate)
-    }
-
-    private fun getDayOfMonth(month: Int): Int {
-        val yearMonth = YearMonth.of(Year.now().value, month)
-        return yearMonth.lengthOfMonth()
-    }
-
     private fun showOnly(visibleView: View) {
-        groups.forEach { it.isVisible = it == visibleView }
+        groups.forEach { group ->
+            val isVisible = group == visibleView
+            group.isVisible = isVisible
+            when (group) {
+                binding.groupAlarmNonRepeat -> updateAlarmTypeText(binding.tvAlarmTypeNonRepeat, isVisible)
+                binding.groupAlarmRepeat -> updateAlarmTypeText(binding.tvAlarmTypeRepeat, isVisible)
+            }
+        }
+    }
+
+    private fun updateAlarmTypeText(
+        textView: TextView,
+        isSelected: Boolean,
+    ) {
+        val bgColorRes = if (isSelected) R.color.primary else R.color.white
+        val bgColor = ContextCompat.getColor(requireContext(), bgColorRes)
+
+        val textColorRes = if (isSelected) R.color.white else R.color.black
+        val textColor = ContextCompat.getColor(requireContext(), textColorRes)
+
+        textView.backgroundTintList = ColorStateList.valueOf(bgColor)
+        textView.setTextColor(textColor)
     }
 
     companion object {

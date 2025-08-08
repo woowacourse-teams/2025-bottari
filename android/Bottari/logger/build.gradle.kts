@@ -24,6 +24,12 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("net.bytebuddy:byte-buddy:1.14.12")
+    }
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.timber)

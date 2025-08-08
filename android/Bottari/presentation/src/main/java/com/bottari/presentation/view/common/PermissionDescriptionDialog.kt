@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
+import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.databinding.DialogPermissionDescriptionBinding
 
 class PermissionDescriptionDialog(
@@ -15,6 +16,11 @@ class PermissionDescriptionDialog(
 ) : DialogFragment() {
     private var _binding: DialogPermissionDescriptionBinding? = null
     val binding: DialogPermissionDescriptionBinding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
