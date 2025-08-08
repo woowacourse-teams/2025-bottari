@@ -9,8 +9,10 @@ public class ExceptionLogEntry {
 
     private String exceptionType;
     private String message;
-    private String at;
     private String stackTrace;
+    private String httpMethod;
+    private String requestUri;
+    private String ssaid;
 
     public String toLogString() {
         return String.format("""
@@ -18,14 +20,18 @@ public class ExceptionLogEntry {
                         ==================== EXCEPTION LOG ====================
                         Exception Type : %s
                         Message        : %s
-                        At             : %s
                         Stack Trace    : %s
+                        HTTP Method    : %s
+                        Request URI    : %s
+                        Ssaid          : %s
                         =======================================================
                         """,
                 exceptionType,
                 message,
-                at,
-                stackTrace
+                stackTrace,
+                httpMethod,
+                requestUri,
+                ssaid
         );
     }
 }
