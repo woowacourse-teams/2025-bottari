@@ -35,7 +35,6 @@ class AlarmEditViewModel(
         stateHandle[KEY_BOTTARI_TITLE] ?: error(ERROR_REQUIRE_BOTTARI_TITLE)
 
     fun updateAlarm() {
-        currentState.alarm
         if (isEveryWeekRepeatWithoutSelectedDay()) return
 
         val alarmDomain = currentState.alarm.toDomain()
