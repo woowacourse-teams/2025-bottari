@@ -1,8 +1,9 @@
-name: deploy-dev-server
+name: deploy-prod-server
 
 on:
   push:
-    branches: be/develop
+    branches: main
+    paths: backend/**
 
 jobs:
   build:
@@ -30,7 +31,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: [self-hosted, bottari-dev]
+    runs-on: [self-hosted, bottari-prod]
 
     steps:
       - name: Download Uploaded Artifact
@@ -53,8 +54,9 @@ jobs:
           echo "Starting server with $JAR_FILE"
           RUNNER_TRACKING_ID=""
 
-          DATABASE_URL='${{ secrets.DATABASE_DEV_URL }}' \
-          DATABASE_USERNAME='${{ secrets.DATABASE_DEV_USERNAME }}' \
-          DATABASE_PASSWORD='${{ secrets.DATABASE_DEV_PASSWORD }}' \
-          SPRING_PROFILES_ACTIVE=dev \
+          DATABASE_URL='${{ secrets.DATABASE_PROD_URL }}' \
+          DATABASE_USERNAME='${{ secrets.DATABASE_PROD_USERNAME }}' \
+          DATABASE_PASSWORD='${{ secrets.DATABASE_PROD_PASSWORD }}' \
+          SPRING_PROFILES_ACTIVE=prod \
           nohup java -Duser.timezone=Asia/Seoul -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
+          
