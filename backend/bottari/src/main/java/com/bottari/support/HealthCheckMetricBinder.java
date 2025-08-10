@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class HealthCheckMetricBinder implements MeterBinder {
 
+    private static final int STATUS_UP = 1;
+    private static final int STATUS_DOWN = 0;
+
     private final HealthEndpoint healthEndpoint;
 
     @Override
@@ -23,9 +26,10 @@ public class HealthCheckMetricBinder implements MeterBinder {
                     final HealthComponent health = healthEndpoint.health();
                     final Status status = health.getStatus();
                     if (Status.UP.equals(status)) {
-                        return 1;
+                        return STATUS_UP;
                     }
-                    return 0;
+
+                    return STATUS_DOWN;
                 }
         ).register(meterRegistry);
     }
