@@ -28,6 +28,7 @@ public class HealthCheckMetricBinder implements MeterBinder {
                     if (Status.UP.equals(status)) {
                         return STATUS_UP;
                     }
+
                     return STATUS_DOWN;
                 }
         ).register(meterRegistry);
