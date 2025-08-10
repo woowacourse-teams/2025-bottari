@@ -8,9 +8,9 @@ spring:
     open-in-view: true
     database-platform: org.hibernate.dialect.MySQLDialect
   datasource:
-    url: ${DATABASE_PROD_URL}
-    username: ${DATABASE_PROD_USERNAME}
-    password: ${DATABASE_PROD_PASSWORD}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
