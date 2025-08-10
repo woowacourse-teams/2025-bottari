@@ -30,7 +30,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: self-hosted
+    runs-on: [self-hosted, bottari-dev]
 
     steps:
       - name: Download Uploaded Artifact
@@ -53,8 +53,8 @@ jobs:
           echo "Starting server with $JAR_FILE"
           RUNNER_TRACKING_ID=""
 
-          DATABASE_URL='${{ secrets.DATABASE_URL }}' \
-          DATABASE_USERNAME='${{ secrets.DATABASE_USERNAME }}' \
-          DATABASE_PASSWORD='${{ secrets.DATABASE_PASSWORD }}' \
+          DATABASE_URL='${{ secrets.DATABASE_DEV_URL }}' \
+          DATABASE_USERNAME='${{ secrets.DATABASE_DEV_USERNAME }}' \
+          DATABASE_PASSWORD='${{ secrets.DATABASE_DEV_PASSWORD }}' \
           SPRING_PROFILES_ACTIVE=dev \
           nohup java -Duser.timezone=Asia/Seoul -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
