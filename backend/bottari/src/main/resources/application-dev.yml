@@ -15,3 +15,13 @@ spring:
   sql:
     init:
       mode: never
+management:
+  metrics:
+    enable:
+      app.health.status: true
+  cloudwatch:
+    metrics:
+      export:
+        enabled: true
+        step: 1m
+        namespace: EC2/bottari-dev-api
