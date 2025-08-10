@@ -93,7 +93,7 @@ public class BottariTemplateItemDeleteTest {
         // then
         final Optional<BottariTemplateItem> findBottariTemplateItem = entityManager.createNativeQuery(
                         "SELECT * FROM bottari_template_item WHERE id = :id", BottariTemplateItem.class)
-                .setParameter("id", bottariTemplate.getId())
+                .setParameter("id", bottariTemplateItem.getId())
                 .getResultStream()
                 .findFirst();
 
