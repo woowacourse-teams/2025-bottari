@@ -71,4 +71,7 @@ dependencies {
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
     testImplementation(libs.kotest.assertions.core)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.installations)
 }
