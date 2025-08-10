@@ -18,7 +18,6 @@ class BottariTree(
         t: Throwable?,
     ) {
         val level = LogLevel.fromTag(tag)
-        if (level == LogLevel.UNKNOWN) return
 
         val callerInfo = CallerInfo.extract()
         val timestamp = currentTimestamp()
