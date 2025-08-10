@@ -25,6 +25,7 @@ import com.bottari.fixture.RoutineAlarmFixture;
 import com.bottari.member.domain.Member;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -239,16 +240,25 @@ class BottariServiceTest {
             entityManager.persist(alarm);
 
             // when
+            final Long deleteBottariId = delete_bottari.getId();
             bottariService.deleteById(delete_bottari.getId(), ssaid);
 
             // then
             final Bottari remainingBottari = entityManager.find(Bottari.class, remain_bottari.getId());
             final Bottari deletedBottari = entityManager.find(Bottari.class, delete_bottari.getId());
+            final Optional<BottariItem> findBottariItem = entityManager.createNativeQuery(
+                            "SELECT * FROM bottari_item WHERE bottari_id = :id", BottariItem.class)
+                    .setParameter("id", deleteBottariId)
+                    .getResultStream()
+                    .findFirst();
 
             assertAll(
                     () -> assertThat(deletedBottari).isNull(),
                     () -> assertThat(remainingBottari).isNotNull(),
-                    () -> assertThat(remainingBottari.getTitle()).isEqualTo(remainingBottari.getTitle())
+                    () -> assertThat(remainingBottari.getTitle()).isEqualTo(remainingBottari.getTitle()),
+                    () -> assertThat(findBottariItem).isNotEmpty(),
+                    () -> assertThat(findBottariItem.get().isDeleted()).isTrue(),
+                    () -> assertThat(findBottariItem.get().getDeletedAt()).isNotNull()
             );
         }
     }
