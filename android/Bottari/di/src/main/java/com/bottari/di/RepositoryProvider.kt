@@ -19,7 +19,6 @@ object RepositoryProvider {
     val memberRepository: MemberRepository by lazy {
         MemberRepositoryImpl(
             DataSourceProvider.memberRemoteDataSource,
-            DataSourceProvider.userInfoLocalDataSource,
         )
     }
     val bottariRepository: BottariRepository by lazy { BottariRepositoryImpl(DataSourceProvider.bottariRemoteDataSource) }
