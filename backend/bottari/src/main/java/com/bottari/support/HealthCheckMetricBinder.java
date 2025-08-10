@@ -27,6 +27,6 @@ public class HealthCheckMetricBinder implements MeterBinder {
                     }
                     return 0;
                 }
-        );
+        ).register(meterRegistry);
     }
 }
