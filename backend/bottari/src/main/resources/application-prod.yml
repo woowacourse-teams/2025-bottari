@@ -25,4 +25,4 @@ management:
       export:
         enabled: true
         step: 1m
-        namespace: EC2/bottari-dev-api
+        namespace: EC2/bottari-prod-api
