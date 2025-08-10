@@ -47,6 +47,8 @@ class AlarmScheduler(
     }
 
     private fun scheduleNonRepeatAlarm(notification: NotificationUiModel) {
+        val alarm = notification.alarm
+        if (alarm.time.isBefore(LocalTime.now())) return
         val triggerTime =
             LocalDateTime.of(notification.alarm.date, notification.alarm.time).toTimeMillis()
         scheduleAlarmInternal(notification, triggerTime)
