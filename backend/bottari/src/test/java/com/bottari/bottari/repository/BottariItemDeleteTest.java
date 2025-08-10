@@ -62,8 +62,8 @@ public class BottariItemDeleteTest {
         entityManager.flush();
 
         // then
-        final Optional<BottariItem> findBottariItem = entityManager.createQuery(
-                        "SELECT bi FROM BottariItem bi WHERE bi.id = :id", BottariItem.class)
+        final Optional<BottariItem> findBottariItem = entityManager.createNativeQuery(
+                        "SELECT * FROM bottari_item WHERE id = :id", BottariItem.class)
                 .setParameter("id", bottariItem.getId())
                 .getResultStream()
                 .findFirst();
@@ -79,10 +79,8 @@ public class BottariItemDeleteTest {
         entityManager.persist(member);
         final Bottari bottari = BottariFixture.BOTTARI.get(member);
         entityManager.persist(bottari);
-        final BottariItem bottariItem1 = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
-        final BottariItem bottariItem2 = BottariItemFixture.BOTTARI_ITEM_2.get(bottari);
-        entityManager.persist(bottariItem1);
-        entityManager.persist(bottariItem2);
+        final BottariItem bottariItem = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
+        entityManager.persist(bottariItem);
         entityManager.flush();
 
         // when
@@ -90,16 +88,16 @@ public class BottariItemDeleteTest {
         bottariItemRepository.flush();
 
         // then
-        final List<BottariItem> findBottariItem = entityManager.createNativeQuery(
-                        "SELECT * FROM bottari_item WHERE bottari_id = :id", BottariItem.class)
-                .setParameter("id", bottari.getId())
+        final Optional<BottariItem> findBottariItem = entityManager.createNativeQuery(
+                        "SELECT * FROM bottari_item WHERE id = :id", BottariItem.class)
+                .setParameter("id", bottariItem.getId())
                 .getResultStream()
-                .toList();
+                .findFirst();
 
         assertAll(
-                () -> assertThat(findBottariItem).hasSize(2),
-                () -> assertThat(findBottariItem.get(0).isDeleted()).isTrue(),
-                () -> assertThat(findBottariItem.get(0).getDeletedAt()).isNotNull()
+                () -> assertThat(findBottariItem).isPresent(),
+                () -> assertThat(findBottariItem.get().isDeleted()).isTrue(),
+                () -> assertThat(findBottariItem.get().getDeletedAt()).isNotNull()
         );
     }
 

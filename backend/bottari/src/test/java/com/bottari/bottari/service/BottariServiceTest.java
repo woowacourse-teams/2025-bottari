@@ -240,15 +240,14 @@ class BottariServiceTest {
             entityManager.persist(alarm);
 
             // when
-            final Long deleteBottariId = delete_bottari.getId();
             bottariService.deleteById(delete_bottari.getId(), ssaid);
 
             // then
             final Bottari remainingBottari = entityManager.find(Bottari.class, remain_bottari.getId());
             final Bottari deletedBottari = entityManager.find(Bottari.class, delete_bottari.getId());
             final Optional<BottariItem> findBottariItem = entityManager.createNativeQuery(
-                            "SELECT * FROM bottari_item WHERE bottari_id = :id", BottariItem.class)
-                    .setParameter("id", deleteBottariId)
+                            "SELECT * FROM bottari_item WHERE id = :id", BottariItem.class)
+                    .setParameter("id", bottariItem1.getId())
                     .getResultStream()
                     .findFirst();
 
@@ -260,6 +259,37 @@ class BottariServiceTest {
                     () -> assertThat(findBottariItem.get().isDeleted()).isTrue(),
                     () -> assertThat(findBottariItem.get().getDeletedAt()).isNotNull()
             );
+        }
+
+        @DisplayName("존재하지 않는 보따리를 삭제할 경우, 예외를 던진다.")
+        @Test
+        void deleteById_Exception_NotFound() {
+            // given
+            final Long invalid_bottari_id = -1L;
+
+            // when & then
+            assertThatThrownBy(() -> bottariService.deleteById(invalid_bottari_id, "ssaid"))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("보따리를 찾을 수 없습니다.");
+        }
+
+        @DisplayName("본인의 것이 아닌 보따리를 삭제할 경우, 예외를 던진다.")
+        @Test
+        void deleteById_Exception_NotMine() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(anotherMember);
+
+            final Bottari anotherMemberBottari = BottariFixture.BOTTARI.get(anotherMember);
+            entityManager.persist(anotherMemberBottari);
+
+            // when & then
+            assertThatThrownBy(() -> bottariService.deleteById(anotherMemberBottari.getId(), "ssaid"))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 보따리에 접근할 수 있는 권한이 없습니다. - 본인의 보따리가 아닙니다.");
         }
     }
 
@@ -318,41 +348,6 @@ class BottariServiceTest {
             assertThatThrownBy(() -> bottariService.update(request, invalid_bottari_id, "ssaid"))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리를 찾을 수 없습니다.");
-        }
-    }
-
-    @Nested
-    class DeleteByIdTest {
-
-        @DisplayName("존재하지 않는 보따리를 삭제할 경우, 예외를 던진다.")
-        @Test
-        void deleteById_Exception_NotFound() {
-            // given
-            final Long invalid_bottari_id = -1L;
-
-            // when & then
-            assertThatThrownBy(() -> bottariService.deleteById(invalid_bottari_id, "ssaid"))
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessage("보따리를 찾을 수 없습니다.");
-        }
-
-        @DisplayName("본인의 것이 아닌 보따리를 삭제할 경우, 예외를 던진다.")
-        @Test
-        void deleteById_Exception_NotMine() {
-            // given
-            final Member member = MemberFixture.MEMBER.get();
-            entityManager.persist(member);
-
-            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
-            entityManager.persist(anotherMember);
-
-            final Bottari anotherMemberBottari = BottariFixture.BOTTARI.get(anotherMember);
-            entityManager.persist(anotherMemberBottari);
-
-            // when & then
-            assertThatThrownBy(() -> bottariService.deleteById(anotherMemberBottari.getId(), "ssaid"))
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessage("해당 보따리에 접근할 수 있는 권한이 없습니다. - 본인의 보따리가 아닙니다.");
         }
     }
 }
