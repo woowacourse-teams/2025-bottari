@@ -1,4 +1,4 @@
-package com.bottari.bottari;
+package com.bottari.bottari.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -14,14 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
-public class BottariSoftDeleteTest {
+public class BottariDeleteTest {
 
     @Autowired
     private EntityManager entityManager;
 
     @DisplayName("보따리 생성 시 is_deleted는 false이다.")
     @Test
-    void softDelete_create() {
+    void when_create() {
         // given
         final Member member = MemberFixture.MEMBER.get();
         entityManager.persist(member);
@@ -38,7 +38,7 @@ public class BottariSoftDeleteTest {
 
     @DisplayName("보따리 삭제 시, 데이터를 물리적으로 삭제하지 않고 is_deleted를 true로 변경한다.")
     @Test
-    void softDelete_delete() {
+    void when_delete() {
         // given
         final Member member = MemberFixture.MEMBER.get();
         entityManager.persist(member);
@@ -65,7 +65,7 @@ public class BottariSoftDeleteTest {
 
     @DisplayName("보따리 조회 시, 삭제된 보따리는 조회되지 않는다.")
     @Test
-    void softDelete_readAfterDelete() {
+    void when_readAfterDelete() {
         // given
         final Member member = MemberFixture.MEMBER.get();
         entityManager.persist(member);

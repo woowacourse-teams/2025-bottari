@@ -1,4 +1,4 @@
-package com.bottari.member;
+package com.bottari.member.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -13,14 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
-public class MemberSoftDeleteTest {
+public class MemberDeleteTest {
 
     @Autowired
     private EntityManager entityManager;
 
     @DisplayName("멤버 생성 시 is_deleted는 false이다.")
     @Test
-    void softDelete_create() {
+    void when_create() {
         // given
         final Member member = MemberFixture.MEMBER.get();
         entityManager.persist(member);
@@ -35,7 +35,7 @@ public class MemberSoftDeleteTest {
 
     @DisplayName("멤버 삭제 시, 데이터를 물리적으로 삭제하지 않고 is_deleted를 true로 변경한다.")
     @Test
-    void softDelete_delete() {
+    void when_delete() {
         // given
         final Member member = MemberFixture.MEMBER.get();
         entityManager.persist(member);
@@ -60,7 +60,7 @@ public class MemberSoftDeleteTest {
 
     @DisplayName("멤버 조회 시, 삭제된 멤버는 조회되지 않는다.")
     @Test
-    void softDelete_readAfterDelete() {
+    void when_readAfterDelete() {
         // given
         final Member deleteMember = MemberFixture.MEMBER.get();
         entityManager.persist(deleteMember);
@@ -77,7 +77,7 @@ public class MemberSoftDeleteTest {
 
     @DisplayName("멤버 생성 시, 삭제된 멤버의 이름이나 ssaid로 생성할 수 있다.")
     @Test
-    void softDelete_createAfterDelete() {
+    void when_createAfterDelete() {
         // given
         final Member deleteMember = MemberFixture.MEMBER.get();
         entityManager.persist(deleteMember);
