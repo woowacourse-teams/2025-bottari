@@ -12,7 +12,6 @@ import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
 import com.bottari.presentation.util.debounce
-import kotlinx.coroutines.launch
 
 class TemplateViewModel(
     private val fetchBottariTemplatesUseCase: FetchBottariTemplatesUseCase,
@@ -43,7 +42,7 @@ class TemplateViewModel(
                 }.onFailure {
                     emitEvent(TemplateUiEvent.FetchBottariTemplatesFailure)
                 }
-            updateState { copy(isLoading = false) }
+            updateState { copy(isLoading = false, isFetched = true) }
         }
     }
 
