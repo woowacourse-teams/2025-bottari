@@ -213,6 +213,64 @@ class BottariServiceTest {
     }
 
     @Nested
+    class UpdateTest {
+
+        @DisplayName("보따리의 제목을 수정한다.")
+        @Test
+        void update() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
+            entityManager.persist(bottari);
+
+            final UpdateBottariRequest request = new UpdateBottariRequest("updated_title");
+
+            // when
+            bottariService.update(request, bottari.getId(), member.getSsaid());
+
+            // then
+            final Bottari updatedBottari = entityManager.find(Bottari.class, bottari.getId());
+            assertThat(updatedBottari.getTitle()).isEqualTo("updated_title");
+        }
+
+        @DisplayName("본인의 보따리가 아닌 보따리를 수정할 경우, 예외를 던진다.")
+        @Test
+        void update_Exception_NotMine() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(anotherMember);
+
+            final Bottari bottari = BottariFixture.BOTTARI.get(anotherMember);
+            entityManager.persist(bottari);
+
+            final UpdateBottariRequest request = new UpdateBottariRequest("updated_title");
+
+            // when & then
+            assertThatThrownBy(() -> bottariService.update(request, bottari.getId(), "invalid_ssaid"))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 보따리에 접근할 수 있는 권한이 없습니다. - 본인의 보따리가 아닙니다.");
+        }
+
+        @DisplayName("존재하지 않는 id로 보따리를 수정할 경우, 예외를 던진다.")
+        @Test
+        void update_Exception_NotFound() {
+            // given
+            final Long invalid_bottari_id = -1L;
+            final UpdateBottariRequest request = new UpdateBottariRequest("updated_title");
+
+            // when & then
+            assertThatThrownBy(() -> bottariService.update(request, invalid_bottari_id, "ssaid"))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("보따리를 찾을 수 없습니다.");
+        }
+    }
+
+    @Nested
     class DeleteTest {
 
         @DisplayName("아이디를 통해 보따리를 삭제한다.")
@@ -289,64 +347,6 @@ class BottariServiceTest {
             assertThatThrownBy(() -> bottariService.deleteById(anotherMemberBottari.getId(), "ssaid"))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("해당 보따리에 접근할 수 있는 권한이 없습니다. - 본인의 보따리가 아닙니다.");
-        }
-    }
-
-    @Nested
-    class UpdateTest {
-
-        @DisplayName("보따리의 제목을 수정한다.")
-        @Test
-        void update() {
-            // given
-            final Member member = MemberFixture.MEMBER.get();
-            entityManager.persist(member);
-
-            final Bottari bottari = BottariFixture.BOTTARI.get(member);
-            entityManager.persist(bottari);
-
-            final UpdateBottariRequest request = new UpdateBottariRequest("updated_title");
-
-            // when
-            bottariService.update(request, bottari.getId(), member.getSsaid());
-
-            // then
-            final Bottari updatedBottari = entityManager.find(Bottari.class, bottari.getId());
-            assertThat(updatedBottari.getTitle()).isEqualTo("updated_title");
-        }
-
-        @DisplayName("본인의 보따리가 아닌 보따리를 수정할 경우, 예외를 던진다.")
-        @Test
-        void update_Exception_NotMine() {
-            // given
-            final Member member = MemberFixture.MEMBER.get();
-            entityManager.persist(member);
-
-            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
-            entityManager.persist(anotherMember);
-
-            final Bottari bottari = BottariFixture.BOTTARI.get(anotherMember);
-            entityManager.persist(bottari);
-
-            final UpdateBottariRequest request = new UpdateBottariRequest("updated_title");
-
-            // when & then
-            assertThatThrownBy(() -> bottariService.update(request, bottari.getId(), "invalid_ssaid"))
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessage("해당 보따리에 접근할 수 있는 권한이 없습니다. - 본인의 보따리가 아닙니다.");
-        }
-
-        @DisplayName("존재하지 않는 id로 보따리를 수정할 경우, 예외를 던진다.")
-        @Test
-        void update_Exception_NotFound() {
-            // given
-            final Long invalid_bottari_id = -1L;
-            final UpdateBottariRequest request = new UpdateBottariRequest("updated_title");
-
-            // when & then
-            assertThatThrownBy(() -> bottariService.update(request, invalid_bottari_id, "ssaid"))
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessage("보따리를 찾을 수 없습니다.");
         }
     }
 }
