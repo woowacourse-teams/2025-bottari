@@ -16,6 +16,11 @@
         layout="@layout/view_swipe_complete_all"
         android:visibility="gone"/>
 
+    <include
+        android:id="@+id/view_swipe_empty"
+        layout="@layout/view_swipe_empty"
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/pb_checklist_swipe"
         style="?android:attr/progressBarStyleHorizontal"
