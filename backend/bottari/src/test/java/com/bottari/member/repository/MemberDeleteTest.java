@@ -18,7 +18,7 @@ public class MemberDeleteTest {
     @Autowired
     private EntityManager entityManager;
 
-    @DisplayName("멤버 생성 시 is_deleted는 false이다.")
+    @DisplayName("멤버 생성 시 deleted_at은 null이다.")
     @Test
     void when_create() {
         // given
@@ -30,10 +30,10 @@ public class MemberDeleteTest {
         final Member findMember = entityManager.find(Member.class, member.getId());
 
         // then
-        assertThat(findMember.isDeleted()).isFalse();
+        assertThat(findMember.getDeletedAt()).isNull();
     }
 
-    @DisplayName("멤버 삭제 시, 데이터를 물리적으로 삭제하지 않고 is_deleted를 true로 변경한다.")
+    @DisplayName("멤버 삭제 시, 데이터를 물리적으로 삭제하지 않고 deleted_at에 삭제된 시간을 추가한다.")
     @Test
     void when_delete() {
         // given
@@ -47,13 +47,12 @@ public class MemberDeleteTest {
 
         // then
         final Member findMember = (Member) entityManager.createNativeQuery(
-                        "select * from member where id = :id", Member.class)
+                        "SELECT * FROM member WHERE id = :id", Member.class)
                 .setParameter("id", member.getId())
                 .getSingleResult();
 
         assertAll(
                 () -> assertThat(findMember).isNotNull(),
-                () -> assertThat(findMember.isDeleted()).isTrue(),
                 () -> assertThat(findMember.getDeletedAt()).isNotNull()
         );
     }

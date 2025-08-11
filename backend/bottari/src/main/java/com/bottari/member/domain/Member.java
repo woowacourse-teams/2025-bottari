@@ -19,12 +19,12 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Table(
         uniqueConstraints = {
-                @UniqueConstraint(name = "UK_member_ssaid_active", columnNames = {"ssaid", "is_deleted"}),
-                @UniqueConstraint(name = "UK_member_name_active", columnNames = {"name", "is_deleted"})
+                @UniqueConstraint(name = "UK_member_ssaid_active", columnNames = {"ssaid", "deleted_at"}),
+                @UniqueConstraint(name = "UK_member_name_active", columnNames = {"name", "deleted_at"})
         }
 )
-@SQLDelete(sql = "UPDATE member SET is_deleted = true, deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@SQLRestriction("is_deleted = false")
+@SQLDelete(sql = "UPDATE member SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Member {
@@ -38,9 +38,6 @@ public class Member {
 
     @Column(nullable = false)
     private String name;
-
-    @Column(name = "is_deleted", nullable = false)
-    private boolean deleted = false;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
