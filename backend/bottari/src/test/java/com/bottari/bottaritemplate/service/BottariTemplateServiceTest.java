@@ -666,7 +666,6 @@ class BottariTemplateServiceTest {
                             .containsExactly("name3"),
 
                     () -> assertThat(findBottariTemplateItem).isNotEmpty(),
-                    () -> assertThat(findBottariTemplateItem.get().isDeleted()).isTrue(),
                     () -> assertThat(findBottariTemplateItem.get().getDeletedAt()).isNotNull()
             );
         }

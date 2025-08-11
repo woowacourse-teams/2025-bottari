@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@SQLRestriction("is_deleted = false")
+@SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class BottariTemplateItem {
@@ -31,10 +31,6 @@ public class BottariTemplateItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bottari_template_id")
     private BottariTemplate bottariTemplate;
-
-    // Soft Delete 경우에만 사용됨
-    @Column(name = "is_deleted", nullable = false)
-    private boolean deleted = false;
 
     // Soft Delete 경우에만 사용됨
     @Column(name = "deleted_at")
