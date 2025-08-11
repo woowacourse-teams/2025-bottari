@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getParcelableCompat
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.common.extension.safeArgument
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentAlarmEditBinding
@@ -32,7 +31,6 @@ class AlarmEditFragment :
     OnDateClickListener {
     private val viewModel: AlarmEditViewModel by viewModels {
         AlarmEditViewModel.Factory(
-            ssaid = requireContext().getSSAID(),
             bottariId = safeArgument { getLong(ARG_BOTTARI_ID) },
             bottariTitle = safeArgument { getString(ARG_BOTTARI_TITLE) },
             alarm = safeArgument { getParcelableCompat(ARG_ALARM) },

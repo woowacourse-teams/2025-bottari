@@ -27,8 +27,6 @@ class PersonalBottariEditViewModel(
             id = savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID_MISSING),
         ),
     ) {
-    private val ssaid: String = savedStateHandle[KEY_SSAID] ?: error(ERROR_SSAID_MISSING)
-
     init {
         fetchBottari()
     }
@@ -45,7 +43,6 @@ class PersonalBottariEditViewModel(
         launch {
             fetchBottariDetailUseCase(
                 currentState.id,
-                ssaid,
             ).onSuccess {
                 updateState { PersonalBottariEditUiState.from(it.toUiModel()) }
             }.onFailure {
@@ -62,7 +59,7 @@ class PersonalBottariEditViewModel(
 
         val items = currentState.items.map { it.name }
         launch {
-            createBottariTemplateUseCase(ssaid, currentState.title, items)
+            createBottariTemplateUseCase(currentState.title, items)
                 .onSuccess { createdTemplateId ->
                     if (createdTemplateId == null) return@onSuccess
                     BottariLogger.ui(
@@ -91,7 +88,7 @@ class PersonalBottariEditViewModel(
         val alarmId = currentState.alarm?.id ?: return
 
         launch {
-            toggleAlarmStateUseCase(ssaid, alarmId, isActive)
+            toggleAlarmStateUseCase(alarmId, isActive)
                 .onSuccess {
                     BottariLogger.ui(
                         if (isActive) UiEventType.ALARM_ACTIVE else UiEventType.ALARM_INACTIVE,
@@ -106,22 +103,15 @@ class PersonalBottariEditViewModel(
     }
 
     companion object {
-        private const val KEY_SSAID = "KEY_SSAID"
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
+        private const val ERROR_BOTTARI_ID_MISSING = "[ERROR] 보따리 Id가 없습니다"
 
         private const val DEBOUNCE_DELAY = 500L
 
-        private const val ERROR_SSAID_MISSING = "[ERROR] SSAID를 확인할 수 없습니다"
-        private const val ERROR_BOTTARI_ID_MISSING = "[ERROR] 보따리 Id가 없습니다"
-
-        fun Factory(
-            ssaid: String,
-            bottariId: Long,
-        ): ViewModelProvider.Factory =
+        fun Factory(bottariId: Long): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_SSAID] = ssaid
                     stateHandle[KEY_BOTTARI_ID] = bottariId
 
                     PersonalBottariEditViewModel(

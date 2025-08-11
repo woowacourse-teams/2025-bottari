@@ -29,13 +29,15 @@ class BottariItemRepositoryImplTest {
     fun fetchChecklistSuccessReturnsMappedDomainList() =
         runTest {
             // given
-            val ssaid = "ssaid1234"
             val bottariId = 1L
             val responseList = fetchChecklistResponseListFixture()
-            coEvery { remoteDataSource.fetchChecklist(ssaid, bottariId) } returns Result.success(responseList)
+            coEvery { remoteDataSource.fetchChecklist(bottariId) } returns
+                Result.success(
+                    responseList,
+                )
 
             // when
-            val result = repository.fetchChecklist(ssaid, bottariId)
+            val result = repository.fetchChecklist(bottariId)
 
             // then
             result.shouldBeSuccess {
@@ -44,7 +46,7 @@ class BottariItemRepositoryImplTest {
             }
 
             // verify
-            coVerify(exactly = 1) { remoteDataSource.fetchChecklist(ssaid, bottariId) }
+            coVerify(exactly = 1) { remoteDataSource.fetchChecklist(bottariId) }
         }
 
     @DisplayName("체크리스트 조회에 실패하면 실패를 반환한다")
@@ -52,13 +54,15 @@ class BottariItemRepositoryImplTest {
     fun returnFailureIfLoadChecklistFails() =
         runTest {
             // given
-            val ssaid = "ssaid_error"
             val bottariId = 999L
             val expectedException = RuntimeException("서버 오류")
-            coEvery { remoteDataSource.fetchChecklist(ssaid, bottariId) } returns Result.failure(expectedException)
+            coEvery { remoteDataSource.fetchChecklist(bottariId) } returns
+                Result.failure(
+                    expectedException,
+                )
 
             // when
-            val result = repository.fetchChecklist(ssaid, bottariId)
+            val result = repository.fetchChecklist(bottariId)
 
             // then
             result.shouldBeFailure {
@@ -66,7 +70,7 @@ class BottariItemRepositoryImplTest {
             }
 
             // verify
-            coVerify(exactly = 1) { remoteDataSource.fetchChecklist(ssaid, bottariId) }
+            coVerify(exactly = 1) { remoteDataSource.fetchChecklist(bottariId) }
         }
 
     @DisplayName("아이템 체크에 성공하면 성공 결과를 반환한다")
@@ -74,18 +78,17 @@ class BottariItemRepositoryImplTest {
     fun checkItemSuccessReturnsSuccess() =
         runTest {
             // given
-            val ssaid = "ssaid123"
             val itemId = 10L
-            coEvery { remoteDataSource.checkBottariItem(ssaid, itemId) } returns Result.success(Unit)
+            coEvery { remoteDataSource.checkBottariItem(itemId) } returns Result.success(Unit)
 
             // when
-            val result = repository.checkBottariItem(ssaid, itemId)
+            val result = repository.checkBottariItem(itemId)
 
             // then
             result.shouldBeSuccess()
 
             // verify
-            coVerify { remoteDataSource.checkBottariItem(ssaid, itemId) }
+            coVerify { remoteDataSource.checkBottariItem(itemId) }
         }
 
     @DisplayName("아이템 체크에 실패하면 실패를 반환한다")
@@ -93,13 +96,16 @@ class BottariItemRepositoryImplTest {
     fun returnFailureIfCheckItemFails() =
         runTest {
             // given
-            val ssaid = "ssaid123"
+
             val itemId = 10L
             val expectedException = RuntimeException("체크 실패")
-            coEvery { remoteDataSource.checkBottariItem(ssaid, itemId) } returns Result.failure(expectedException)
+            coEvery { remoteDataSource.checkBottariItem(itemId) } returns
+                Result.failure(
+                    expectedException,
+                )
 
             // when
-            val result = repository.checkBottariItem(ssaid, itemId)
+            val result = repository.checkBottariItem(itemId)
 
             // then
             result.shouldBeFailure {
@@ -107,7 +113,7 @@ class BottariItemRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.checkBottariItem(ssaid, itemId) }
+            coVerify { remoteDataSource.checkBottariItem(itemId) }
         }
 
     @DisplayName("아이템 체크 해제에 성공하면 성공 결과를 반환한다")
@@ -115,18 +121,18 @@ class BottariItemRepositoryImplTest {
     fun uncheckItemSuccessReturnsSuccess() =
         runTest {
             // given
-            val ssaid = "ssaid123"
+
             val itemId = 11L
-            coEvery { remoteDataSource.uncheckBottariItem(ssaid, itemId) } returns Result.success(Unit)
+            coEvery { remoteDataSource.uncheckBottariItem(itemId) } returns Result.success(Unit)
 
             // when
-            val result = repository.uncheckBottariItem(ssaid, itemId)
+            val result = repository.uncheckBottariItem(itemId)
 
             // then
             result.shouldBeSuccess()
 
             // verify
-            coVerify { remoteDataSource.uncheckBottariItem(ssaid, itemId) }
+            coVerify { remoteDataSource.uncheckBottariItem(itemId) }
         }
 
     @DisplayName("아이템 체크 해제에 실패하면 실패를 반환한다")
@@ -134,13 +140,16 @@ class BottariItemRepositoryImplTest {
     fun returnFailureIfUncheckItemFails() =
         runTest {
             // given
-            val ssaid = "ssaid123"
+
             val itemId = 11L
             val expectedException = RuntimeException("체크 해제 실패")
-            coEvery { remoteDataSource.uncheckBottariItem(ssaid, itemId) } returns Result.failure(expectedException)
+            coEvery { remoteDataSource.uncheckBottariItem(itemId) } returns
+                Result.failure(
+                    expectedException,
+                )
 
             // when
-            val result = repository.uncheckBottariItem(ssaid, itemId)
+            val result = repository.uncheckBottariItem(itemId)
 
             // then
             result.shouldBeFailure {
@@ -148,6 +157,6 @@ class BottariItemRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.uncheckBottariItem(ssaid, itemId) }
+            coVerify { remoteDataSource.uncheckBottariItem(itemId) }
         }
 }

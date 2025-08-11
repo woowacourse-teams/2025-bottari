@@ -5,8 +5,5 @@ import com.bottari.domain.repository.BottariItemRepository
 class UnCheckBottariItemUseCase(
     private val bottariItemRepository: BottariItemRepository,
 ) {
-    suspend operator fun invoke(
-        ssaid: String,
-        bottariItemId: Long,
-    ): Result<Unit> = bottariItemRepository.uncheckBottariItem(ssaid, bottariItemId)
+    suspend operator fun invoke(bottariItemId: Long): Result<Unit> = bottariItemRepository.uncheckBottariItem(bottariItemId)
 }

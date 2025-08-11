@@ -98,6 +98,7 @@ kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk" }
+firebase-installations = { module = "com.google.firebase:firebase-installations" }
 
 [plugins]
 # --- Android Plugins ---

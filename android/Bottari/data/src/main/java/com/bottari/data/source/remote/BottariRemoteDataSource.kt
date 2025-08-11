@@ -6,26 +6,16 @@ import com.bottari.data.model.bottari.FetchBottariesResponse
 import com.bottari.data.model.bottari.UpdateBottariTitleRequest
 
 interface BottariRemoteDataSource {
-    suspend fun fetchBottaries(ssaid: String): Result<List<FetchBottariesResponse>>
+    suspend fun fetchBottaries(): Result<List<FetchBottariesResponse>>
 
-    suspend fun createBottari(
-        ssaid: String,
-        createBottariRequest: CreateBottariRequest,
-    ): Result<Long?>
+    suspend fun createBottari(createBottariRequest: CreateBottariRequest): Result<Long?>
 
-    suspend fun fetchBottariDetail(
-        id: Long,
-        ssaid: String,
-    ): Result<BottariResponse>
+    suspend fun fetchBottariDetail(id: Long): Result<BottariResponse>
 
-    suspend fun deleteBottari(
-        id: Long,
-        ssaid: String,
-    ): Result<Unit>
+    suspend fun deleteBottari(id: Long): Result<Unit>
 
     suspend fun saveBottariTitle(
         id: Long,
-        ssaid: String,
         request: UpdateBottariTitleRequest,
     ): Result<Unit>
 }

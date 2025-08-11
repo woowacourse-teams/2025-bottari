@@ -16,6 +16,11 @@ class ConsoleLogHandler(
         throwable: Throwable?,
     ) {
         if (!policy.shouldLogToConsole(level)) return
+        if (level == LogLevel.UNKNOWN) {
+            Log.println(level.priority, level.label, message)
+            return
+        }
+
         val fullLog =
             formatLogMessage(level, message, Thread.currentThread().name, timestamp, callerInfo)
 

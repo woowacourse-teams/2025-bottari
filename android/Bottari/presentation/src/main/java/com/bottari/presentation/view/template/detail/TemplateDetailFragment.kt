@@ -10,7 +10,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTemplateDetailBinding
 import com.bottari.presentation.view.common.report.ReportDialog
@@ -20,7 +19,6 @@ import com.bottari.presentation.view.template.detail.adapter.TemplateDetailAdapt
 class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(FragmentTemplateDetailBinding::inflate) {
     private val viewModel: TemplateDetailViewModel by viewModels {
         TemplateDetailViewModel.Factory(
-            ssaid = requireContext().getSSAID(),
             templateId = requireArguments().getLong(ARG_TEMPLATE_ID, INVALID_BOTTARI_ID),
         )
     }

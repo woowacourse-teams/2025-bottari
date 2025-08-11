@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.ActivityMainBinding
 import com.bottari.presentation.util.PermissionUtil
@@ -21,7 +20,7 @@ import com.bottari.presentation.view.common.alart.DialogPresetType
 import com.bottari.presentation.view.home.HomeActivity
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
-    private val viewModel: MainViewModel by viewModels { MainViewModel.Factory(this.getSSAID()) }
+    private val viewModel: MainViewModel by viewModels { MainViewModel.Factory() }
     private val permissionLauncher: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions(),

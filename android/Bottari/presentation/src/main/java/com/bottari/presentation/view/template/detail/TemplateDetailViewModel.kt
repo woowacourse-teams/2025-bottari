@@ -22,8 +22,6 @@ class TemplateDetailViewModel(
             templateId = stateHandle[KEY_TEMPLATE_ID] ?: error(ERROR_REQUIRE_TEMPLATE_ID),
         ),
     ) {
-    private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
-
     init {
         fetchBottariTemplateDetail()
     }
@@ -32,7 +30,7 @@ class TemplateDetailViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            takeBottariTemplateDetailUseCase(ssaid, currentState.templateId)
+            takeBottariTemplateDetailUseCase(currentState.templateId)
                 .onSuccess { createdBottariId ->
                     if (createdBottariId == null) return@onSuccess
                     BottariLogger.ui(
@@ -71,20 +69,14 @@ class TemplateDetailViewModel(
     }
 
     companion object {
-        private const val KEY_SSAID = "KEY_SSAID"
         private const val KEY_TEMPLATE_ID = "KEY_BOTTARI_ID"
-        private const val ERROR_REQUIRE_TEMPLATE_ID = "[ERROR] 템플릿 ID가 존재하지 않습니다."
-        private const val ERROR_REQUIRE_SSAID = "[ERROR] SSAID가 존재하지 않습니다."
+        private const val ERROR_REQUIRE_TEMPLATE_ID = "[ERROR] 템플릿 ID가 존재하지 않습니다"
 
-        fun Factory(
-            ssaid: String,
-            templateId: Long,
-        ): ViewModelProvider.Factory =
+        fun Factory(templateId: Long): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val savedStateHandle = this.createSavedStateHandle()
                     savedStateHandle[KEY_TEMPLATE_ID] = templateId
-                    savedStateHandle[KEY_SSAID] = ssaid
                     TemplateDetailViewModel(
                         stateHandle = savedStateHandle,
                         fetchBottariTemplateDetailUseCase = UseCaseProvider.fetchBottariTemplateDetailUseCase,

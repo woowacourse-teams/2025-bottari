@@ -6,8 +6,5 @@ import com.bottari.domain.repository.BottariRepository
 class FetchBottariDetailUseCase(
     private val bottariRepository: BottariRepository,
 ) {
-    suspend operator fun invoke(
-        id: Long,
-        ssaid: String,
-    ): Result<BottariDetail> = bottariRepository.fetchBottariDetail(id, ssaid)
+    suspend operator fun invoke(id: Long): Result<BottariDetail> = bottariRepository.fetchBottariDetail(id)
 }

@@ -14,7 +14,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.R
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.DialogBottariCreateBinding
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.google.android.material.snackbar.Snackbar
@@ -24,7 +23,6 @@ class BottariCreateDialog :
     TextWatcher {
     private val viewModel: BottariCreateViewModel by viewModels {
         BottariCreateViewModel.Factory(
-            ssaid = requireContext().getSSAID(),
             defaultTitle = getString(R.string.bottari_create_default_title_text),
         )
     }

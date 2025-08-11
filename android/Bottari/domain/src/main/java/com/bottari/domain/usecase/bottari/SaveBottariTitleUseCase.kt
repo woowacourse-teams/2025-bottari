@@ -7,7 +7,6 @@ class SaveBottariTitleUseCase(
 ) {
     suspend operator fun invoke(
         id: Long,
-        ssaid: String,
         title: String,
-    ): Result<Unit> = bottariRepository.saveBottariTitle(id, ssaid, title)
+    ): Result<Unit> = bottariRepository.saveBottariTitle(id, title)
 }

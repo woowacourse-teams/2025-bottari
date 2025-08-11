@@ -23,7 +23,6 @@ class ChecklistViewModel(
     private val checkBottariItemUseCase: CheckBottariItemUseCase,
     private val unCheckBottariItemUseCase: UnCheckBottariItemUseCase,
 ) : BaseViewModel<ChecklistUiState, ChecklistUiEvent>(ChecklistUiState()) {
-    private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val pendingCheckStatusMap = mutableMapOf<Long, BottariItemUiModel>()
 
@@ -41,7 +40,7 @@ class ChecklistViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            fetchChecklistUseCase(ssaid, bottariId)
+            fetchChecklistUseCase(bottariId)
                 .onSuccess { items ->
                     val itemUiModels = items.map { it.toUiModel() }
                     updateState { copy(bottariItems = itemUiModels) }
@@ -87,9 +86,9 @@ class ChecklistViewModel(
     private suspend fun processItemCheck(item: BottariItemUiModel) {
         val result =
             if (item.isChecked) {
-                checkBottariItemUseCase(ssaid, item.id)
+                checkBottariItemUseCase(item.id)
             } else {
-                unCheckBottariItemUseCase(ssaid, item.id)
+                unCheckBottariItemUseCase(item.id)
             }
         result.onFailure {
             emitEvent(ChecklistUiEvent.CheckItemFailure)
@@ -101,20 +100,14 @@ class ChecklistViewModel(
     }
 
     companion object {
-        private const val KEY_SSAID = "KEY_SSAID"
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
-        private const val ERROR_REQUIRE_SSAID = "[ERROR] SSAID가 존재하지 않습니다."
         private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
         private const val DEBOUNCE_DELAY = 250L
 
-        fun Factory(
-            ssaid: String,
-            bottariId: Long,
-        ): ViewModelProvider.Factory =
+        fun Factory(bottariId: Long): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_SSAID] = ssaid
                     stateHandle[KEY_BOTTARI_ID] = bottariId
                     ChecklistViewModel(
                         stateHandle,

@@ -1,8 +1,6 @@
 package com.bottari.presentation.view.main
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
@@ -14,14 +12,11 @@ import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 
 class MainViewModel(
-    stateHandle: SavedStateHandle,
     private val registerMemberUseCase: RegisterMemberUseCase,
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
     private val savePermissionFlagUseCase: SavePermissionFlagUseCase,
     private val getPermissionFlagUseCase: GetPermissionFlagUseCase,
 ) : BaseViewModel<MainUiState, MainUiEvent>(MainUiState()) {
-    private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
-
     init {
         checkPermissionFlag()
     }
@@ -30,7 +25,7 @@ class MainViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            checkRegisteredMemberUseCase(ssaid)
+            checkRegisteredMemberUseCase()
                 .onSuccess { result ->
                     handleCheckRegistrationResult(result)
                 }.onFailure { emitEvent(MainUiEvent.LoginFailure) }
@@ -58,7 +53,7 @@ class MainViewModel(
             emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))
             return
         }
-        registerMember(ssaid)
+        registerMember()
     }
 
     private fun handlePermissionFlag(permissionFlag: Boolean) {
@@ -71,9 +66,9 @@ class MainViewModel(
         checkRegisteredMember()
     }
 
-    private fun registerMember(ssaid: String) {
+    private fun registerMember() {
         launch {
-            registerMemberUseCase(ssaid)
+            registerMemberUseCase()
                 .onSuccess {
                     updateState { copy(isLoading = false, isReady = true) }
                     emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))
@@ -82,16 +77,10 @@ class MainViewModel(
     }
 
     companion object {
-        private const val KEY_SSAID = "KEY_SSAID"
-        private const val ERROR_REQUIRE_SSAID = "[ERROR] SSAID가 존재하지 않습니다."
-
-        fun Factory(ssaid: String): ViewModelProvider.Factory =
+        fun Factory(): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_SSAID] = ssaid
                     MainViewModel(
-                        stateHandle,
                         UseCaseProvider.registerMemberUseCase,
                         UseCaseProvider.checkRegisteredMemberUseCase,
                         UseCaseProvider.savePermissionFlagUseCase,

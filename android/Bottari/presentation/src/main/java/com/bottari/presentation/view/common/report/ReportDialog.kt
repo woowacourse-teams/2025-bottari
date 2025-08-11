@@ -14,7 +14,6 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.R
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.DialogReportBinding
 
 class ReportDialog : DialogFragment() {
@@ -23,7 +22,6 @@ class ReportDialog : DialogFragment() {
 
     private val viewModel: ReportViewModel by viewModels {
         ReportViewModel.Factory(
-            ssaid = requireContext().getSSAID(),
             templateId = requireArguments().getLong(ARG_TEMPLATE_ID),
         )
     }

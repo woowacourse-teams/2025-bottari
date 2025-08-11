@@ -11,6 +11,7 @@ import com.bottari.logger.policy.DefaultLogPolicy
 import com.bottari.logger.policy.LogPolicy
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.installations.FirebaseInstallations
 import timber.log.Timber
 
 /**
@@ -34,15 +35,11 @@ object BottariLogger {
      * - Timber에 커스텀 Tree([BottariTree])를 심는다.
      *
      * @param context 애플리케이션 컨텍스트
-     * @param userId 현재 사용자 ID (Crashlytics/Analytics에 설정됨)
      */
-    fun init(
-        context: Context,
-        userId: String,
-    ) {
+    fun init(context: Context) {
         analytics = FirebaseAnalytics.getInstance(context)
         crashlytics = FirebaseCrashlytics.getInstance()
-        settingFirebase(userId)
+        settingFirebase()
 
         val policy = DefaultLogPolicy(BuildConfig.DEBUG)
         val handlers = createLogHandlers(policy)
@@ -175,13 +172,16 @@ object BottariLogger {
      * - 사용자 ID 설정
      * - 디버그 여부에 따라 수집 활성화 여부 설정
      *
-     * @param userId 현재 사용자 ID
      */
-    private fun settingFirebase(userId: String) {
-        crashlytics.setUserId(userId)
-        analytics.setUserId(userId)
+    private fun settingFirebase() {
         crashlytics.isCrashlyticsCollectionEnabled = !BuildConfig.DEBUG
         analytics.setAnalyticsCollectionEnabled(!BuildConfig.DEBUG)
+
+        FirebaseInstallations.getInstance().id.addOnCompleteListener { task ->
+            if (!task.isSuccessful) return@addOnCompleteListener
+            crashlytics.setUserId(task.result)
+            analytics.setUserId(task.result)
+        }
     }
 
     /**

@@ -13,7 +13,6 @@ import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.ActivityChecklistBinding
 import com.bottari.presentation.view.checklist.main.MainChecklistFragment
 import com.bottari.presentation.view.checklist.swipe.SwipeChecklistFragment
@@ -22,10 +21,7 @@ import java.time.LocalDateTime
 
 class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityChecklistBinding::inflate) {
     private val viewModel: ChecklistViewModel by viewModels {
-        ChecklistViewModel.Factory(
-            this.getSSAID(),
-            bottariId,
-        )
+        ChecklistViewModel.Factory(bottariId)
     }
     private val bottariId: Long by lazy {
         intent.getLongExtra(

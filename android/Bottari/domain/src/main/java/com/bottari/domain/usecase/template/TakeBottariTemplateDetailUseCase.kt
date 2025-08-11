@@ -5,8 +5,5 @@ import com.bottari.domain.repository.BottariTemplateRepository
 class TakeBottariTemplateDetailUseCase(
     private val bottariTemplateRepository: BottariTemplateRepository,
 ) {
-    suspend operator fun invoke(
-        ssaid: String,
-        bottariId: Long,
-    ): Result<Long?> = bottariTemplateRepository.takeBottariTemplate(ssaid, bottariId)
+    suspend operator fun invoke(bottariId: Long): Result<Long?> = bottariTemplateRepository.takeBottariTemplate(bottariId)
 }
