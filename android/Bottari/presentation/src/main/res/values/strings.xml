@@ -221,6 +221,8 @@
     <string name="template_my_template_delete_success_text">보따리를 삭제했어요</string>
     <string name="template_my_template_delete_failure_text">보따리를 삭제하지 못했어요</string>
     <string name="template_my_template_fetch_failure_text">내가 올린 보따리를 불러오지 못했어요</string>
+    <string name="template_my_empty_view_title_text">아직 공유한 보따리가 없어요</string>
+    <string name="template_my_empty_view_description_text">모두의 보따리에서 나만의 보따리를 소개해보세요</string>
 
     <!-- Profile -->
     <string name="profile_nickname_title">닉네임</string>
