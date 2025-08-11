@@ -20,7 +20,7 @@ public class ReportDeleteTest {
     @Autowired
     private EntityManager entityManager;
 
-    @DisplayName("신고 생성 시 is_deleted는 false이다.")
+    @DisplayName("신고 생성 시 deleted_at은 null이다.")
     @Test
     void when_create() {
         // given
@@ -40,10 +40,10 @@ public class ReportDeleteTest {
         final Report findReport = entityManager.find(Report.class, report.getId());
 
         // then
-        assertThat(findReport.isDeleted()).isFalse();
+        assertThat(findReport.getDeletedAt()).isNull();
     }
 
-    @DisplayName("신고 삭제 시, 데이터를 물리적으로 삭제하지 않고 is_deleted를 true로 변경한다.")
+    @DisplayName("신고 삭제 시, 데이터를 물리적으로 삭제하지 않고 deleted_at에 삭제된 시간을 추가한다.")
     @Test
     void when_delete() {
         // given
@@ -71,7 +71,6 @@ public class ReportDeleteTest {
 
         assertAll(
                 () -> assertThat(findReport).isNotNull(),
-                () -> assertThat(findReport.isDeleted()).isTrue(),
                 () -> assertThat(findReport.getDeletedAt()).isNotNull()
         );
     }
