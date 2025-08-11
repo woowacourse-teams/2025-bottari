@@ -7,8 +7,7 @@ class CreateAlarmUseCase(
     private val alarmRepository: AlarmRepository,
 ) {
     suspend operator fun invoke(
-        ssaid: String,
         bottariId: Long,
         alarm: Alarm,
-    ): Result<Unit> = alarmRepository.createAlarm(ssaid, bottariId, alarm)
+    ): Result<Unit> = alarmRepository.createAlarm(bottariId, alarm)
 }

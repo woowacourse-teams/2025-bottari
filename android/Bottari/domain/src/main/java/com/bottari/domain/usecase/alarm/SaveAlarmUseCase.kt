@@ -7,8 +7,7 @@ class SaveAlarmUseCase(
     private val alarmRepository: AlarmRepository,
 ) {
     suspend operator fun invoke(
-        ssaid: String,
         id: Long,
         alarm: Alarm,
-    ): Result<Unit> = alarmRepository.saveAlarm(ssaid, id, alarm)
+    ): Result<Unit> = alarmRepository.saveAlarm(id, alarm)
 }

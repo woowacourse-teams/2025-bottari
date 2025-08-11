@@ -6,13 +6,12 @@ class ToggleAlarmStateUseCase(
     private val alarmRepository: AlarmRepository,
 ) {
     suspend operator fun invoke(
-        ssaid: String,
         bottariId: Long,
         isActive: Boolean,
     ): Result<Unit> {
         if (isActive) {
-            return alarmRepository.activeAlarm(ssaid, bottariId)
+            return alarmRepository.activeAlarm(bottariId)
         }
-        return alarmRepository.inactiveAlarm(ssaid, bottariId)
+        return alarmRepository.inactiveAlarm(bottariId)
     }
 }

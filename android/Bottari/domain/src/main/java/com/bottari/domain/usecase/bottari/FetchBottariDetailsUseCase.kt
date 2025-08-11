@@ -9,27 +9,21 @@ import kotlinx.coroutines.supervisorScope
 class FetchBottariDetailsUseCase(
     private val bottariRepository: BottariRepository,
 ) {
-    suspend operator fun invoke(ssaid: String): Result<List<BottariDetail>> =
+    suspend operator fun invoke(): Result<List<BottariDetail>> =
         runCatching {
-            val bottaries = bottariRepository.fetchBottaries(ssaid).getOrThrow()
-            fetchBottariDetailsWithItems(ssaid, bottaries)
+            val bottaries = bottariRepository.fetchBottaries().getOrThrow()
+            fetchBottariDetailsWithItems(bottaries)
         }
 
-    private suspend fun fetchBottariDetailsWithItems(
-        ssaid: String,
-        bottaries: List<Bottari>,
-    ): List<BottariDetail> =
+    private suspend fun fetchBottariDetailsWithItems(bottaries: List<Bottari>): List<BottariDetail> =
         supervisorScope {
             bottaries
-                .map { bottari -> async { runCatching { fetchBottariItem(ssaid, bottari.id) }.getOrNull() } }
+                .map { bottari -> async { runCatching { fetchBottariItem(bottari.id) }.getOrNull() } }
                 .mapNotNull { it.await() }
         }
 
-    private suspend fun fetchBottariItem(
-        ssaid: String,
-        bottariId: Long,
-    ): BottariDetail? {
-        val result = bottariRepository.fetchBottariDetail(bottariId, ssaid).getOrNull() ?: return null
+    private suspend fun fetchBottariItem(bottariId: Long): BottariDetail? {
+        val result = bottariRepository.fetchBottariDetail(bottariId).getOrNull() ?: return null
         if (result.items.isEmpty()) return null
 
         return BottariDetail(
