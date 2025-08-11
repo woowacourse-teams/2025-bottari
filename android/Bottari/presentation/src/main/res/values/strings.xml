@@ -207,6 +207,7 @@
     <string name="template_detail_take_failure_text">나의 보따리로 가져오는데 실패했어요</string>
     <string name="template_create_btn_text">보따리 등록하기</string>
     <string name="template_taken_count_prefix">%d회</string>
+    <string name="template_empty_view_title_text">검색 결과가 없습니다</string>
 
     <!-- Bottari Template Create -->
     <string name="template_create_title_text">모두의 보따리 생성</string>
@@ -240,6 +241,7 @@
     <string name="bottari_personal_item_add_btn_description">물건 추가 버튼</string>
     <string name="bottari_personal_item_empty_icon_description">빈 물건 아이콘</string>
     <string name="bottari_home_icon_description">보따리 아이콘 이미지</string>
+    <string name="search_icon_description">검색 아이콘</string>
     <string name="checklist_swipe_check_not_all_icon">보따리 일부 품목 미체크 이미지</string>
     <string name="checklist_swipe_check_all_icon">보따리 모든 품목 체크 이미지</string>
     <string name="checklist_swipe_overlay_uncheck_icon">미체크 오버레이 아이콘</string>
