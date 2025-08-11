@@ -25,6 +25,7 @@ import com.bottari.fixture.RoutineAlarmFixture;
 import com.bottari.member.domain.Member;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -212,48 +213,6 @@ class BottariServiceTest {
     }
 
     @Nested
-    class DeleteTest {
-
-        @DisplayName("아이디를 통해 보따리를 삭제한다.")
-        @Test
-        void deleteById() {
-            // given
-            final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
-            entityManager.persist(member);
-
-            final Bottari delete_bottari = BottariFixture.BOTTARI.get(member);
-            entityManager.persist(delete_bottari);
-
-            final Bottari remain_bottari = BottariFixture.BOTTARI.get(member);
-            entityManager.persist(remain_bottari);
-
-            final BottariItem bottariItem1 = BottariItemFixture.BOTTARI_ITEM_1.get(delete_bottari);
-            final BottariItem bottariItem2 = BottariItemFixture.BOTTARI_ITEM_2.get(delete_bottari);
-            entityManager.persist(bottariItem1);
-            entityManager.persist(bottariItem2);
-
-            final RoutineAlarm routineAlarm = RoutineAlarmFixture.EVERY_WEEK_REPEAT_ALARM.get();
-            final LocationAlarm locationAlarm = LocationAlarmFixture.LOCATION_ALARM_ON.get();
-            final Alarm alarm = AlarmFixture.ALARM_ON.get(routineAlarm, locationAlarm, delete_bottari);
-            entityManager.persist(alarm);
-
-            // when
-            bottariService.deleteById(delete_bottari.getId(), ssaid);
-
-            // then
-            final Bottari remainingBottari = entityManager.find(Bottari.class, remain_bottari.getId());
-            final Bottari deletedBottari = entityManager.find(Bottari.class, delete_bottari.getId());
-
-            assertAll(
-                    () -> assertThat(deletedBottari).isNull(),
-                    () -> assertThat(remainingBottari).isNotNull(),
-                    () -> assertThat(remainingBottari.getTitle()).isEqualTo(remainingBottari.getTitle())
-            );
-        }
-    }
-
-    @Nested
     class UpdateTest {
 
         @DisplayName("보따리의 제목을 수정한다.")
@@ -312,7 +271,52 @@ class BottariServiceTest {
     }
 
     @Nested
-    class DeleteByIdTest {
+    class DeleteTest {
+
+        @DisplayName("아이디를 통해 보따리를 삭제한다.")
+        @Test
+        void deleteById() {
+            // given
+            final String ssaid = "ssaid";
+            final Member member = new Member(ssaid, "name");
+            entityManager.persist(member);
+
+            final Bottari delete_bottari = BottariFixture.BOTTARI.get(member);
+            entityManager.persist(delete_bottari);
+
+            final Bottari remain_bottari = BottariFixture.BOTTARI.get(member);
+            entityManager.persist(remain_bottari);
+
+            final BottariItem bottariItem1 = BottariItemFixture.BOTTARI_ITEM_1.get(delete_bottari);
+            final BottariItem bottariItem2 = BottariItemFixture.BOTTARI_ITEM_2.get(delete_bottari);
+            entityManager.persist(bottariItem1);
+            entityManager.persist(bottariItem2);
+
+            final RoutineAlarm routineAlarm = RoutineAlarmFixture.EVERY_WEEK_REPEAT_ALARM.get();
+            final LocationAlarm locationAlarm = LocationAlarmFixture.LOCATION_ALARM_ON.get();
+            final Alarm alarm = AlarmFixture.ALARM_ON.get(routineAlarm, locationAlarm, delete_bottari);
+            entityManager.persist(alarm);
+
+            // when
+            bottariService.deleteById(delete_bottari.getId(), ssaid);
+
+            // then
+            final Bottari remainingBottari = entityManager.find(Bottari.class, remain_bottari.getId());
+            final Bottari deletedBottari = entityManager.find(Bottari.class, delete_bottari.getId());
+            final Optional<BottariItem> findBottariItem = entityManager.createNativeQuery(
+                            "SELECT * FROM bottari_item WHERE id = :id", BottariItem.class)
+                    .setParameter("id", bottariItem1.getId())
+                    .getResultStream()
+                    .findFirst();
+
+            assertAll(
+                    () -> assertThat(deletedBottari).isNull(),
+                    () -> assertThat(remainingBottari).isNotNull(),
+                    () -> assertThat(remainingBottari.getTitle()).isEqualTo(remainingBottari.getTitle()),
+                    () -> assertThat(findBottariItem).isNotEmpty(),
+                    () -> assertThat(findBottariItem.get().getDeletedAt()).isNotNull()
+            );
+        }
 
         @DisplayName("존재하지 않는 보따리를 삭제할 경우, 예외를 던진다.")
         @Test
