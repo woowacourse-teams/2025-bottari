@@ -15,7 +15,6 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
-import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.util.PermissionUtil
 import com.bottari.presentation.util.PermissionUtil.requiredPermissions
@@ -74,7 +73,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             toggleLoadingIndicator(uiState.isLoading)
             setupTitle(uiState.title)
             setupItems(uiState.items)
-            setupAlarm(uiState.alarm)
+            setupAlarm(uiState)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
@@ -183,8 +182,8 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         toggleItemSection(items.isNotEmpty())
     }
 
-    private fun setupAlarm(alarm: AlarmUiModel?) {
-        alarmViewBinder.bind(binding, alarm)
+    private fun setupAlarm(uiState: PersonalBottariEditUiState) {
+        alarmViewBinder.bind(binding, uiState)
     }
 
     private fun toggleAlarmSelection(
