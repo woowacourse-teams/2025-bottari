@@ -65,13 +65,14 @@ dependencies {
     implementation(project(":logger"))
 
     kapt(libs.androidx.room.compiler)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.bundles.network)
     implementation(libs.bundles.local)
-    testImplementation(libs.bundles.test)
-    androidTestImplementation(libs.androidx.junit)
-    testImplementation(libs.kotest.assertions.core)
-
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.installations)
+
+    testImplementation(libs.bundles.test)
+    testImplementation(libs.kotest.assertions.core)
+    androidTestImplementation(libs.androidx.junit)
 }
