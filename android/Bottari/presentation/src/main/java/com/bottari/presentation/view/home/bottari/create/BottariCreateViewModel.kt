@@ -20,8 +20,6 @@ class BottariCreateViewModel(
             stateHandle[KEY_BOTTARI_TITLE] ?: EMPTY_BOTTARI_TITLE,
         ),
     ) {
-    private val ssaid: String = stateHandle[KEY_SSAID]!!
-
     fun updateBottariTitle(title: String) {
         updateState { copy(bottariTitle = title) }
     }
@@ -31,7 +29,7 @@ class BottariCreateViewModel(
         if (title.isBlank()) return
 
         launch {
-            createBottariUseCase(ssaid, title)
+            createBottariUseCase(title)
                 .onSuccess { createdBottariId ->
                     if (createdBottariId == null) return@onSuccess
                     BottariLogger.ui(
@@ -44,18 +42,13 @@ class BottariCreateViewModel(
     }
 
     companion object {
-        private const val KEY_SSAID = "KEY_SSAID"
         private const val KEY_BOTTARI_TITLE = "KEY_BOTTARI_TITLE"
         private const val EMPTY_BOTTARI_TITLE = ""
 
-        fun Factory(
-            ssaid: String,
-            defaultTitle: String,
-        ): ViewModelProvider.Factory =
+        fun Factory(defaultTitle: String): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_SSAID] = ssaid
                     stateHandle[KEY_BOTTARI_TITLE] = defaultTitle
 
                     BottariCreateViewModel(

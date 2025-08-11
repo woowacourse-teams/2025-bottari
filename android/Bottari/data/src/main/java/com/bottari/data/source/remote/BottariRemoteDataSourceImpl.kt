@@ -11,43 +11,33 @@ import com.bottari.data.service.BottariService
 class BottariRemoteDataSourceImpl(
     private val bottariService: BottariService,
 ) : BottariRemoteDataSource {
-    override suspend fun fetchBottaries(ssaid: String): Result<List<FetchBottariesResponse>> =
+    override suspend fun fetchBottaries(): Result<List<FetchBottariesResponse>> =
         safeApiCall {
-            bottariService.fetchBottaries(ssaid)
+            bottariService.fetchBottaries()
         }
 
-    override suspend fun fetchBottariDetail(
-        id: Long,
-        ssaid: String,
-    ): Result<BottariResponse> =
+    override suspend fun fetchBottariDetail(id: Long): Result<BottariResponse> =
         safeApiCall {
-            bottariService.findBottari(id = id, ssaid = ssaid)
+            bottariService.findBottari(id = id)
         }
 
-    override suspend fun createBottari(
-        ssaid: String,
-        createBottariRequest: CreateBottariRequest,
-    ): Result<Long?> =
+    override suspend fun createBottari(createBottariRequest: CreateBottariRequest): Result<Long?> =
         runCatching {
-            val response = bottariService.createBottari(ssaid, createBottariRequest)
+            val response = bottariService.createBottari(createBottariRequest)
             response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)
         }
 
-    override suspend fun deleteBottari(
-        id: Long,
-        ssaid: String,
-    ): Result<Unit> =
+    override suspend fun deleteBottari(id: Long): Result<Unit> =
         safeApiCall {
-            bottariService.deleteBottari(id = id, ssaid = ssaid)
+            bottariService.deleteBottari(id = id)
         }
 
     override suspend fun saveBottariTitle(
         id: Long,
-        ssaid: String,
         request: UpdateBottariTitleRequest,
     ): Result<Unit> =
         safeApiCall {
-            bottariService.saveBottariTitle(id = id, ssaid = ssaid, request = request)
+            bottariService.saveBottariTitle(id = id, request = request)
         }
 
     companion object {

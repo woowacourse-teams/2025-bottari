@@ -17,13 +17,11 @@ class PersonalItemEditViewModel(
     private val saveBottariItemsUseCase: SaveBottariItemsUseCase,
 ) : BaseViewModel<PersonalItemEditUiState, PersonalItemEditUiEvent>(
         PersonalItemEditUiState(
-            bottariId = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_SSAID),
+            bottariId = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID),
             title = stateHandle[KEY_BOTTARI_TITLE] ?: "",
             items = stateHandle[KEY_BOTTARI_ITEMS] ?: emptyList(),
         ),
     ) {
-    private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
-
     private val newItemNames = mutableSetOf<String>()
     private val pendingDeleteItems = mutableSetOf<BottariItemUiModel>()
 
@@ -54,7 +52,6 @@ class PersonalItemEditViewModel(
 
         launch {
             saveBottariItemsUseCase(
-                ssaid = ssaid,
                 bottariId = currentState.bottariId,
                 deleteItemIds = pendingDeleteItems.map { it.id },
                 createItemNames = newItemNames.toList(),
@@ -95,18 +92,15 @@ class PersonalItemEditViewModel(
     private fun nextGeneratedItemId(): Long = (currentState.items.maxOfOrNull { it.id } ?: DEFAULT_ITEM_ID) + ITEM_ID_INCREMENT
 
     companion object {
-        private const val KEY_SSAID = "KEY_SSAID"
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
         private const val KEY_BOTTARI_TITLE = "KEY_BOTTARI_TITLE"
         private const val KEY_BOTTARI_ITEMS = "KEY_BOTTARI_ITEMS"
-
-        private const val ERROR_REQUIRE_SSAID = "[ERROR] SSAID 없습니다"
+        private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 없습니다"
 
         private const val DEFAULT_ITEM_ID = 0L
         private const val ITEM_ID_INCREMENT = 1
 
         fun Factory(
-            ssaid: String,
             bottariId: Long,
             title: String,
             items: List<BottariItemUiModel>,
@@ -114,7 +108,6 @@ class PersonalItemEditViewModel(
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_SSAID] = ssaid
                     stateHandle[KEY_BOTTARI_ID] = bottariId
                     stateHandle[KEY_BOTTARI_TITLE] = title
                     stateHandle[KEY_BOTTARI_ITEMS] = ArrayList(items)

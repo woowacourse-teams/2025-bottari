@@ -7,22 +7,13 @@ import com.bottari.data.model.template.FetchMyBottariTemplatesResponse
 interface BottariTemplateRemoteDataSource {
     suspend fun fetchBottariTemplates(searchWord: String?): Result<List<FetchBottariTemplateResponse>>
 
-    suspend fun createBottariTemplate(
-        ssaid: String,
-        createBottariTemplateRequest: CreateBottariTemplateRequest,
-    ): Result<Long?>
+    suspend fun createBottariTemplate(createBottariTemplateRequest: CreateBottariTemplateRequest): Result<Long?>
 
     suspend fun fetchBottariTemplateDetail(bottariId: Long): Result<FetchBottariTemplateResponse>
 
-    suspend fun takeBottariTemplate(
-        ssaid: String,
-        bottariId: Long,
-    ): Result<Long?>
+    suspend fun takeBottariTemplate(bottariId: Long): Result<Long?>
 
-    suspend fun fetchMyBottariTemplates(ssaid: String): Result<List<FetchMyBottariTemplatesResponse>>
+    suspend fun fetchMyBottariTemplates(): Result<List<FetchMyBottariTemplatesResponse>>
 
-    suspend fun deleteMyBottariTemplate(
-        ssaid: String,
-        bottariTemplateId: Long,
-    ): Result<Unit>
+    suspend fun deleteMyBottariTemplate(bottariTemplateId: Long): Result<Unit>
 }

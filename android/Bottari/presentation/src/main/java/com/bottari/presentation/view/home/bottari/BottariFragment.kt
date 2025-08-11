@@ -11,7 +11,6 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentBottariBinding
 import com.bottari.presentation.view.checklist.ChecklistActivity
@@ -25,7 +24,7 @@ class BottariFragment :
     BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate),
     OnBottariClickListener {
     private val viewModel: BottariViewModel by viewModels {
-        BottariViewModel.Factory(requireContext().getSSAID())
+        BottariViewModel.Factory()
     }
     private val adapter: BottariAdapter by lazy { BottariAdapter(this) }
 

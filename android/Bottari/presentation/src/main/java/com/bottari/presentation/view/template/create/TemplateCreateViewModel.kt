@@ -1,8 +1,6 @@
 package com.bottari.presentation.view.template.create
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
@@ -16,12 +14,9 @@ import com.bottari.presentation.mapper.BottariMapper.toMyBottariUiModel
 import com.bottari.presentation.model.MyBottariUiModel
 
 class TemplateCreateViewModel(
-    stateHandle: SavedStateHandle,
     private val fetchBottariDetailsUseCase: FetchBottariDetailsUseCase,
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
 ) : BaseViewModel<TemplateCreateUiState, TemplateCreateUiEvent>(TemplateCreateUiState()) {
-    private val ssaid: String = stateHandle[KEY_SSAID]!!
-
     init {
         fetchBottariDetails()
     }
@@ -42,7 +37,7 @@ class TemplateCreateViewModel(
         launch {
             val title = currentState.bottariTitle
             val items = currentState.currentBottariItems.map { it.name }
-            createBottariTemplateUseCase(ssaid, title, items)
+            createBottariTemplateUseCase(title, items)
                 .onSuccess { createdTemplateId ->
                     if (createdTemplateId == null) return@onSuccess
                     BottariLogger.ui(
@@ -65,7 +60,7 @@ class TemplateCreateViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            fetchBottariDetailsUseCase(ssaid)
+            fetchBottariDetailsUseCase()
                 .onSuccess { handleFetchBottariDetails(it) }
                 .onFailure { emitEvent(TemplateCreateUiEvent.FetchMyBottariesFailure) }
 
@@ -88,16 +83,10 @@ class TemplateCreateViewModel(
         this.map { if (it.id == bottariId) it.copy(isSelected = true) else it.copy(isSelected = false) }
 
     companion object {
-        private const val KEY_SSAID = "KEY_SSAID"
-
-        fun Factory(ssaid: String): ViewModelProvider.Factory =
+        fun Factory(): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_SSAID] = ssaid
-
                     TemplateCreateViewModel(
-                        stateHandle,
                         UseCaseProvider.fetchBottariDetailsUseCase,
                         UseCaseProvider.createBottariTemplateUseCase,
                     )

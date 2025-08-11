@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
 import com.bottari.presentation.model.BottariItemUiModel
@@ -30,7 +29,7 @@ import com.google.android.flexbox.JustifyContent
 class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
         val bottariId = requireArguments().getLong(ARG_BOTTARI_ID)
-        PersonalBottariEditViewModel.Factory(requireContext().getSSAID(), bottariId)
+        PersonalBottariEditViewModel.Factory(bottariId)
     }
     private lateinit var popupMenu: PopupMenu
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }

@@ -31,22 +31,21 @@ class ReportRepositoryImplTest {
     fun reportTemplateSuccessReturnsSuccess() =
         runTest {
             // given
-            val ssaid = "ssaid"
             val templateId = 1L
             val reason = "reason"
 
             coEvery {
-                remoteDataSource.reportTemplate(ssaid, templateId, reason)
+                remoteDataSource.reportTemplate(templateId, reason)
             } returns Result.success(Unit)
 
             // when
-            val result = repository.reportTemplate(ssaid, templateId, reason)
+            val result = repository.reportTemplate(templateId, reason)
 
             // then
             result.shouldBeSuccess()
 
             // verify
-            coVerify(exactly = 1) { remoteDataSource.reportTemplate(ssaid, templateId, reason) }
+            coVerify(exactly = 1) { remoteDataSource.reportTemplate(templateId, reason) }
         }
 
     @DisplayName("이미 신고한 템플릿을 신고하면 HttpException으로 Failure를 반환한다")
@@ -54,7 +53,6 @@ class ReportRepositoryImplTest {
     fun reportTemplateAlreadyReportedReturnsFailure() =
         runTest {
             // given
-            val ssaid = "ssaid"
             val templateId = 1L
             val reason = "reason"
 
@@ -66,16 +64,16 @@ class ReportRepositoryImplTest {
             val httpException = HttpException(errorResponse)
 
             coEvery {
-                remoteDataSource.reportTemplate(ssaid, templateId, reason)
+                remoteDataSource.reportTemplate(templateId, reason)
             } returns Result.failure(httpException)
 
             // when
-            val result = repository.reportTemplate(ssaid, templateId, reason)
+            val result = repository.reportTemplate(templateId, reason)
 
             // then
             result.shouldBeFailure<HttpException>()
 
             // verify
-            coVerify(exactly = 1) { remoteDataSource.reportTemplate(ssaid, templateId, reason) }
+            coVerify(exactly = 1) { remoteDataSource.reportTemplate(templateId, reason) }
         }
 }

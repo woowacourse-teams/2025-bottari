@@ -17,7 +17,6 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.applyImeBottomPadding
 import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.extension.getParcelableArrayListCompat
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.model.BottariItemUiModel
@@ -34,7 +33,6 @@ class PersonalItemEditFragment :
     private val viewModel: PersonalItemEditViewModel by viewModels {
         val arguments = requireArguments()
         PersonalItemEditViewModel.Factory(
-            ssaid = requireContext().getSSAID(),
             bottariId = arguments.getLong(ARG_EXTRA_BOTTARI_ID),
             title = arguments.getString(ARG_BOTTARI_TITLE) ?: "",
             items = arguments.getParcelableArrayListCompat(ARG_BOTTARI_ITEMS) ?: emptyList(),
