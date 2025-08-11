@@ -44,4 +44,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_my_template"
         tools:listitem="@layout/item_my_template" />
+
+    <include
+        android:id="@+id/view_template_my_empty"
+        layout="@layout/view_my_template_empty"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/rv_my_bottari_template"
+        app:layout_constraintTop_toTopOf="@id/rv_my_bottari_template" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -57,7 +57,7 @@ class MyTemplateViewModel(
                 .onSuccess { updateState { copy(bottariTemplates = it.map { it.toUiModel() }) } }
                 .onFailure { emitEvent(MyTemplateUiEvent.FetchMyTemplateFailure) }
 
-            updateState { copy(isLoading = false) }
+            updateState { copy(isLoading = false, isFetched = true) }
         }
     }
 
