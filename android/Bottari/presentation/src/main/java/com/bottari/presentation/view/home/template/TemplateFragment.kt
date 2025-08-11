@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -66,6 +67,7 @@ class TemplateFragment :
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
             adapter.submitList(uiState.templates)
+            binding.viewTemplateSearchEmpty.root.isVisible = uiState.isEmpty
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
