@@ -256,7 +256,6 @@ class BottariServiceTest {
                     () -> assertThat(remainingBottari).isNotNull(),
                     () -> assertThat(remainingBottari.getTitle()).isEqualTo(remainingBottari.getTitle()),
                     () -> assertThat(findBottariItem).isNotEmpty(),
-                    () -> assertThat(findBottariItem.get().isDeleted()).isTrue(),
                     () -> assertThat(findBottariItem.get().getDeletedAt()).isNotNull()
             );
         }

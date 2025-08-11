@@ -10,7 +10,6 @@ import com.bottari.fixture.BottariItemFixture;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.member.domain.Member;
 import jakarta.persistence.EntityManager;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,7 @@ public class BottariItemDeleteTest {
     @Autowired
     private EntityManager entityManager;
 
-    @DisplayName("보따리 아이템 생성 시 is_deleted는 false이다.")
+    @DisplayName("보따리 아이템 생성 시 deleted_at이 null이다.")
     @Test
     void when_create() {
         // given
@@ -42,7 +41,7 @@ public class BottariItemDeleteTest {
         final BottariItem findBottariItem = entityManager.find(BottariItem.class, bottariItem.getId());
 
         // then
-        assertThat(findBottariItem.isDeleted()).isFalse();
+        assertThat(findBottariItem.getDeletedAt()).isNull();
     }
 
     @DisplayName("보따리 아이템 삭제 시, 데이터를 물리적으로 삭제한다.")
@@ -71,7 +70,7 @@ public class BottariItemDeleteTest {
         assertThat(findBottariItem).isEmpty();
     }
 
-    @DisplayName("보따리 아이디로 보따리 아이템 삭제 시, 데이터를 물리적으로 삭제하지 않고 is_deleted를 true로 변경한다.")
+    @DisplayName("보따리 아이디로 보따리 아이템 삭제 시, 데이터를 물리적으로 삭제하지 않고 deleted_at에 삭제된 시간을 추가한다.")
     @Test
     void when_deleteByBottariId() {
         // given
@@ -96,7 +95,6 @@ public class BottariItemDeleteTest {
 
         assertAll(
                 () -> assertThat(findBottariItem).isPresent(),
-                () -> assertThat(findBottariItem.get().isDeleted()).isTrue(),
                 () -> assertThat(findBottariItem.get().getDeletedAt()).isNotNull()
         );
     }

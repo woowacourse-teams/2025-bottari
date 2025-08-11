@@ -42,7 +42,7 @@ public interface BottariItemRepository extends JpaRepository<BottariItem, Long> 
     @Modifying(clearAutomatically = true)
     @Query("""
             UPDATE BottariItem bt
-            SET bt.deleted = true, bt.deletedAt = CURRENT_TIMESTAMP
+            SET bt.deletedAt = CURRENT_TIMESTAMP
             WHERE bt.bottari.id = :bottariId
             """)
     void deleteByBottariId(final Long bottariId);

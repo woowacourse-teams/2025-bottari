@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@SQLRestriction("is_deleted = false")
+@SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class BottariItem {
@@ -33,10 +33,6 @@ public class BottariItem {
     private Bottari bottari;
 
     private boolean isChecked;
-
-    // Soft Delete 경우에만 사용됨
-    @Column(name = "is_deleted", nullable = false)
-    private boolean deleted = false;
 
     // Soft Delete 경우에만 사용됨
     @Column(name = "deleted_at")
