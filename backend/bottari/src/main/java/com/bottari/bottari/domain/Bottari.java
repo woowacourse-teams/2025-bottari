@@ -23,8 +23,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@SQLDelete(sql = "UPDATE bottari SET is_deleted = true, deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@SQLRestriction("is_deleted = false")
+@SQLDelete(sql = "UPDATE bottari SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -42,9 +42,6 @@ public class Bottari {
 
     @CreatedDate
     private LocalDateTime createdAt;
-
-    @Column(name = "is_deleted", nullable = false)
-    private boolean deleted = false;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
