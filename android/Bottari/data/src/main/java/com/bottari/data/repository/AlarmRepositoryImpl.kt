@@ -9,24 +9,16 @@ class AlarmRepositoryImpl(
     private val alarmRemoteDataSource: AlarmRemoteDataSource,
 ) : AlarmRepository {
     override suspend fun saveAlarm(
-        ssaid: String,
         id: Long,
         alarm: Alarm,
-    ): Result<Unit> = alarmRemoteDataSource.saveAlarm(ssaid, id, alarm.toRequest())
+    ): Result<Unit> = alarmRemoteDataSource.saveAlarm(id, alarm.toRequest())
 
     override suspend fun createAlarm(
-        ssaid: String,
         bottariId: Long,
         alarm: Alarm,
-    ): Result<Unit> = alarmRemoteDataSource.createAlarm(ssaid, bottariId, alarm.toRequest())
+    ): Result<Unit> = alarmRemoteDataSource.createAlarm(bottariId, alarm.toRequest())
 
-    override suspend fun activeAlarm(
-        ssaid: String,
-        alarmId: Long,
-    ): Result<Unit> = alarmRemoteDataSource.activeAlarmState(id = alarmId, ssaid = ssaid)
+    override suspend fun activeAlarm(alarmId: Long): Result<Unit> = alarmRemoteDataSource.activeAlarmState(id = alarmId)
 
-    override suspend fun inactiveAlarm(
-        ssaid: String,
-        alarmId: Long,
-    ): Result<Unit> = alarmRemoteDataSource.inactiveAlarmState(id = alarmId, ssaid = ssaid)
+    override suspend fun inactiveAlarm(alarmId: Long): Result<Unit> = alarmRemoteDataSource.inactiveAlarmState(id = alarmId)
 }

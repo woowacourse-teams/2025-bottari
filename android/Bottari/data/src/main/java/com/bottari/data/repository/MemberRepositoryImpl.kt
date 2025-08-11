@@ -13,19 +13,18 @@ class MemberRepositoryImpl(
     private val memberRemoteDataSource: MemberRemoteDataSource,
     private val memberIdentifierLocalDataSource: MemberIdentifierLocalDataSource,
 ) : MemberRepository {
-    override suspend fun registerMember(ssaid: String): Result<Long?> =
+    override suspend fun registerMember(): Result<Long?> =
         memberRemoteDataSource
             .registerMember(RegisterMemberRequest(getMemberIdentifier()))
 
     override suspend fun saveMemberNickname(member: Member): Result<Unit> =
         memberRemoteDataSource.saveMemberNickname(
-            member.ssaid,
             SaveMemberNicknameRequest(member.nickname),
         )
 
-    override suspend fun checkRegisteredMember(ssaid: String): Result<RegisteredMember> =
+    override suspend fun checkRegisteredMember(): Result<RegisteredMember> =
         memberRemoteDataSource
-            .checkRegisteredMember(ssaid)
+            .checkRegisteredMember()
             .mapCatching { it.toDomain() }
 
     private fun getMemberIdentifier(): String = memberIdentifierLocalDataSource.getMemberIdentifier().getOrThrow()

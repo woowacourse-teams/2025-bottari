@@ -11,27 +11,18 @@ import com.bottari.domain.repository.BottariRepository
 class BottariRepositoryImpl(
     private val bottariRemoteDataSource: BottariRemoteDataSource,
 ) : BottariRepository {
-    override suspend fun fetchBottaries(ssaid: String): Result<List<Bottari>> =
-        bottariRemoteDataSource.fetchBottaries(ssaid).mapCatching { bottari -> bottari.toDomain() }
+    override suspend fun fetchBottaries(): Result<List<Bottari>> =
+        bottariRemoteDataSource.fetchBottaries().mapCatching { bottari -> bottari.toDomain() }
 
-    override suspend fun fetchBottariDetail(
-        id: Long,
-        ssaid: String,
-    ): Result<BottariDetail> = bottariRemoteDataSource.fetchBottariDetail(id, ssaid).mapCatching { it.toDomain() }
+    override suspend fun fetchBottariDetail(id: Long): Result<BottariDetail> =
+        bottariRemoteDataSource.fetchBottariDetail(id).mapCatching { it.toDomain() }
 
-    override suspend fun createBottari(
-        ssaid: String,
-        title: String,
-    ): Result<Long?> = bottariRemoteDataSource.createBottari(ssaid, CreateBottariRequest(title))
+    override suspend fun createBottari(title: String): Result<Long?> = bottariRemoteDataSource.createBottari(CreateBottariRequest(title))
 
-    override suspend fun deleteBottari(
-        id: Long,
-        ssaid: String,
-    ): Result<Unit> = bottariRemoteDataSource.deleteBottari(id, ssaid)
+    override suspend fun deleteBottari(id: Long): Result<Unit> = bottariRemoteDataSource.deleteBottari(id)
 
     override suspend fun saveBottariTitle(
         id: Long,
-        ssaid: String,
         title: String,
-    ): Result<Unit> = bottariRemoteDataSource.saveBottariTitle(id, ssaid, UpdateBottariTitleRequest(title))
+    ): Result<Unit> = bottariRemoteDataSource.saveBottariTitle(id, UpdateBottariTitleRequest(title))
 }

@@ -4,9 +4,9 @@ import com.bottari.domain.model.member.Member
 import com.bottari.domain.model.member.RegisteredMember
 
 interface MemberRepository {
-    suspend fun registerMember(ssaid: String): Result<Long?>
+    suspend fun registerMember(): Result<Long?>
 
     suspend fun saveMemberNickname(member: Member): Result<Unit>
 
-    suspend fun checkRegisteredMember(ssaid: String): Result<RegisteredMember>
+    suspend fun checkRegisteredMember(): Result<RegisteredMember>
 }
