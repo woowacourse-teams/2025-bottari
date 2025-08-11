@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.applyImeBottomPadding
 import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.extension.getParcelableArrayListCompat
 import com.bottari.presentation.common.extension.getSSAID
@@ -98,6 +99,7 @@ class PersonalItemEditFragment :
     private fun setupUI() {
         binding.rvPersonalItemEdit.adapter = adapter
         binding.rvPersonalItemEdit.layoutManager = LinearLayoutManager(requireContext())
+        binding.root.applyImeBottomPadding()
     }
 
     private fun setupListener() {
