@@ -17,9 +17,9 @@ class MemberRepositoryImpl(
         memberRemoteDataSource
             .registerMember(RegisterMemberRequest(getMemberIdentifier()))
 
-    override suspend fun saveMemberNickname(member: Member): Result<Unit> =
+    override suspend fun saveMemberNickname(nickname: String): Result<Unit> =
         memberRemoteDataSource.saveMemberNickname(
-            SaveMemberNicknameRequest(member.nickname),
+            SaveMemberNicknameRequest(nickname),
         )
 
     override suspend fun checkRegisteredMember(): Result<RegisteredMember> =
