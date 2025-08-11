@@ -62,10 +62,7 @@ abstract class BaseActivity<VB : ViewBinding>(
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val bottomPadding =
-                if (hasBottomNavigationView()) DEFAULT_BOTTOM_INSET else systemBars.bottom
-
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, bottomPadding)
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
     }
