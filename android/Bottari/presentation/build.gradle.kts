@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.material.calendarview)
     implementation(libs.threetenabp)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.work.runtime.ktx)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)
     testImplementation(libs.bundles.test)
