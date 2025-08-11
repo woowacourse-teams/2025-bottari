@@ -42,8 +42,12 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
 
+    kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.bundles.network)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.room.runtime)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
 }
