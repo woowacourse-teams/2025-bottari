@@ -56,7 +56,9 @@ public class GlobalExceptionHandler {
         final BusinessExceptionLogEntry logEntry = BusinessExceptionLogEntry.builder()
                 .exceptionType(exception.getClass().getName())
                 .message(exception.getMessage())
-                .at(request.getRequestURI())
+                .httpMethod(request.getMethod())
+                .requestUri(formatter.toUriWithQueryParamsLog(request))
+                .ssaid(formatter.toSsaidLog(request))
                 .build();
         final Marker businessExceptionLogMarker = MarkerFactory.getMarker("BUSINESS-EXCEPTION-LOG");
         log.warn(businessExceptionLogMarker, logEntry.toLogString());
@@ -69,8 +71,10 @@ public class GlobalExceptionHandler {
         final ExceptionLogEntry logEntry = ExceptionLogEntry.builder()
                 .exceptionType(exception.getClass().getName())
                 .message(exception.getMessage())
-                .at(request.getRequestURI())
                 .stackTrace(formatter.toStackTraceLog(exception))
+                .httpMethod(request.getMethod())
+                .requestUri(formatter.toUriWithQueryParamsLog(request))
+                .ssaid(formatter.toSsaidLog(request))
                 .build();
         final Marker exceptionLogMarker = MarkerFactory.getMarker("EXCEPTION-LOG");
         log.error(exceptionLogMarker, logEntry.toLogString());
