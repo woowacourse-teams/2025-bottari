@@ -7,8 +7,7 @@ class ReportRemoteDataSourceImpl(
     private val reportService: ReportService,
 ) : ReportRemoteDataSource {
     override suspend fun reportTemplate(
-        ssaid: String,
         bottariTemplateId: Long,
         reason: String,
-    ): Result<Unit> = safeApiCall { reportService.reportTemplate(ssaid, bottariTemplateId, reason) }
+    ): Result<Unit> = safeApiCall { reportService.reportTemplate(bottariTemplateId, reason) }
 }

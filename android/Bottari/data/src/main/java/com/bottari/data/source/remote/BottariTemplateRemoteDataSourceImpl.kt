@@ -13,39 +13,30 @@ class BottariTemplateRemoteDataSourceImpl(
     override suspend fun fetchBottariTemplates(searchWord: String?): Result<List<FetchBottariTemplateResponse>> =
         safeApiCall { bottariTemplateService.fetchBottariTemplates(searchWord) }
 
-    override suspend fun createBottariTemplate(
-        ssaid: String,
-        createBottariTemplateRequest: CreateBottariTemplateRequest,
-    ): Result<Long?> =
+    override suspend fun createBottariTemplate(createBottariTemplateRequest: CreateBottariTemplateRequest): Result<Long?> =
         runCatching {
             val response =
-                bottariTemplateService.createBottariTemplate(ssaid, createBottariTemplateRequest)
+                bottariTemplateService.createBottariTemplate(createBottariTemplateRequest)
             response.extractIdFromHeader(HEADER_TEMPLATE_ID_PREFIX)
         }
 
     override suspend fun fetchBottariTemplateDetail(bottariId: Long): Result<FetchBottariTemplateResponse> =
         safeApiCall { bottariTemplateService.fetchBottariTemplateDetail(bottariId) }
 
-    override suspend fun takeBottariTemplate(
-        ssaid: String,
-        bottariId: Long,
-    ): Result<Long?> =
+    override suspend fun takeBottariTemplate(bottariId: Long): Result<Long?> =
         runCatching {
-            val response = bottariTemplateService.takeBottariTemplate(ssaid, bottariId)
+            val response = bottariTemplateService.takeBottariTemplate(bottariId)
             response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)
         }
 
-    override suspend fun fetchMyBottariTemplates(ssaid: String): Result<List<FetchMyBottariTemplatesResponse>> =
+    override suspend fun fetchMyBottariTemplates(): Result<List<FetchMyBottariTemplatesResponse>> =
         safeApiCall {
-            bottariTemplateService.fetchMyBottariTemplates(ssaid)
+            bottariTemplateService.fetchMyBottariTemplates()
         }
 
-    override suspend fun deleteMyBottariTemplate(
-        ssaid: String,
-        bottariTemplateId: Long,
-    ): Result<Unit> =
+    override suspend fun deleteMyBottariTemplate(bottariTemplateId: Long): Result<Unit> =
         safeApiCall {
-            bottariTemplateService.deleteMyBottariTemplate(ssaid, bottariTemplateId)
+            bottariTemplateService.deleteMyBottariTemplate(bottariTemplateId)
         }
 
     companion object {
