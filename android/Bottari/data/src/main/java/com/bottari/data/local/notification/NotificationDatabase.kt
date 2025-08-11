@@ -7,10 +7,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.bottari.data.common.util.LocalDateConverter
 import com.bottari.data.common.util.LocalTimeConverter
+import com.bottari.data.common.util.RepeatDaysConverter
 import com.bottari.data.model.notification.NotificationEntity
 
 @Database(entities = [NotificationEntity::class], version = 1)
-@TypeConverters(LocalTimeConverter::class, LocalDateConverter::class)
+@TypeConverters(LocalTimeConverter::class, LocalDateConverter::class, RepeatDaysConverter::class)
 abstract class NotificationDatabase : RoomDatabase() {
     abstract fun notificationDao(): NotificationDao
 
