@@ -12,25 +12,21 @@ import retrofit2.http.Path
 interface BottariItemService {
     @GET("/bottaries/{bottariId}/bottari-items")
     suspend fun fetchChecklist(
-        @Header("ssaid") ssaid: String,
         @Path("bottariId") bottariId: Long,
     ): Response<List<FetchChecklistResponse>>
 
     @PATCH("/bottari-items/{id}/uncheck")
     suspend fun uncheckBottariItem(
-        @Header("ssaid") ssaid: String,
         @Path("id") bottariItemId: Long,
     ): Response<Unit>
 
     @PATCH("/bottari-items/{id}/check")
     suspend fun checkBottariItem(
-        @Header("ssaid") ssaid: String,
         @Path("id") bottariItemId: Long,
     ): Response<Unit>
 
     @PATCH("/bottaries/{bottariId}/bottari-items")
     suspend fun saveBottariItems(
-        @Header("ssaid") ssaid: String,
         @Path("bottariId") bottariId: Long,
         @Body request: SaveBottariItemsRequest,
     ): Response<Unit>

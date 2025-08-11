@@ -9,7 +9,6 @@ import retrofit2.http.Query
 interface ReportService {
     @POST("/reports/templates/{bottariTemplateId}")
     suspend fun reportTemplate(
-        @Header("ssaid") ssaid: String,
         @Path("bottariTemplateId") bottariTemplateId: Long,
         @Query("reason") reason: String,
     ): Response<Unit>

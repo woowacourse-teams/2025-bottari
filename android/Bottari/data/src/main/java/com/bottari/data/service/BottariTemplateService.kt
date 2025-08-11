@@ -20,7 +20,6 @@ interface BottariTemplateService {
 
     @POST("/templates")
     suspend fun createBottariTemplate(
-        @Header("ssaid") ssaid: String,
         @Body request: CreateBottariTemplateRequest,
     ): Response<Unit>
 
@@ -31,18 +30,14 @@ interface BottariTemplateService {
 
     @POST("/templates/{bottariId}/create-bottari")
     suspend fun takeBottariTemplate(
-        @Header("ssaid") ssaid: String,
         @Path("bottariId") bottariId: Long,
     ): Response<Unit>
 
     @GET("/templates/me")
-    suspend fun fetchMyBottariTemplates(
-        @Header("ssaid") ssaid: String,
-    ): Response<List<FetchMyBottariTemplatesResponse>>
+    suspend fun fetchMyBottariTemplates(): Response<List<FetchMyBottariTemplatesResponse>>
 
     @DELETE("/templates/{id}")
     suspend fun deleteMyBottariTemplate(
-        @Header("ssaid") ssaid: String,
         @Path("id") bottariTemplateId: Long,
     ): Response<Unit>
 }
