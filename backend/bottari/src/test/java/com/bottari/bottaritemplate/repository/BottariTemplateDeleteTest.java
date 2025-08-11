@@ -19,7 +19,7 @@ public class BottariTemplateDeleteTest {
     @Autowired
     private EntityManager entityManager;
 
-    @DisplayName("보따리 템플릿 생성 시 is_deleted는 false이다.")
+    @DisplayName("보따리 템플릿 생성 시 deleted_at은 null이다.")
     @Test
     void when_create() {
         // given
@@ -33,10 +33,10 @@ public class BottariTemplateDeleteTest {
         final BottariTemplate findBottariTemplate = entityManager.find(BottariTemplate.class, bottariTemplate.getId());
 
         // then
-        assertThat(findBottariTemplate.isDeleted()).isFalse();
+        assertThat(findBottariTemplate.getDeletedAt()).isNull();
     }
 
-    @DisplayName("보따리 템플릿 삭제 시, 데이터를 물리적으로 삭제하지 않고 is_deleted를 true로 변경한다.")
+    @DisplayName("보따리 템플릿 삭제 시, 데이터를 물리적으로 삭제하지 않고 deleted_at에 삭제된 시간을 추가한다.")
     @Test
     void when_delete() {
         // given
@@ -52,13 +52,12 @@ public class BottariTemplateDeleteTest {
 
         // then
         final BottariTemplate findBottariTemplate = (BottariTemplate) entityManager.createNativeQuery(
-                        "select * from bottari_template where id = :id", BottariTemplate.class)
+                        "SELECT * FROM bottari_template WHERE id = :id", BottariTemplate.class)
                 .setParameter("id", bottariTemplate.getId())
                 .getSingleResult();
 
         assertAll(
                 () -> assertThat(findBottariTemplate).isNotNull(),
-                () -> assertThat(findBottariTemplate.isDeleted()).isTrue(),
                 () -> assertThat(findBottariTemplate.getDeletedAt()).isNotNull()
         );
     }
