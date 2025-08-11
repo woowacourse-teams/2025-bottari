@@ -2,6 +2,7 @@ package com.bottari.presentation.view.template.my
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
@@ -44,6 +45,7 @@ class MyTemplateFragment :
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
             adapter.submitList(uiState.bottariTemplates)
+            binding.viewTemplateMyEmpty.clTemplateMyEmptyView.isVisible = uiState.isEmpty
         }
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
@@ -52,10 +54,12 @@ class MyTemplateFragment :
                     requireView().showSnackbar(
                         R.string.template_my_template_fetch_failure_text,
                     )
+
                 MyTemplateUiEvent.DeleteMyTemplateFailure ->
                     requireView().showSnackbar(
                         R.string.template_my_template_delete_failure_text,
                     )
+
                 MyTemplateUiEvent.DeleteMyTemplateSuccess ->
                     requireView().showSnackbar(
                         R.string.template_my_template_delete_success_text,
