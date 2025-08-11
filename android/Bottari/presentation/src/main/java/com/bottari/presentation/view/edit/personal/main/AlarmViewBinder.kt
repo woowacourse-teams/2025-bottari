@@ -25,11 +25,12 @@ class AlarmViewBinder(
 
     fun bind(
         binding: FragmentPersonalBottariEditBinding,
-        alarm: AlarmUiModel?,
+        uiState: PersonalBottariEditUiState,
     ) {
-        val isSwitchChecked = binding.switchAlarm.isChecked
+        val isSwitchChecked = uiState.isAlarmActive
+        val alarm = uiState.alarm
         val hasAlarm = alarm != null
-        binding.switchAlarm.isChecked = alarm?.isActive ?: false
+        binding.switchAlarm.isChecked = uiState.isAlarmActive
         toggleAlarmView(binding, isSwitchChecked, hasAlarm)
 
         if (alarm == null) return
