@@ -20,6 +20,9 @@ import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.GetMemberIdentifierUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
+import com.bottari.domain.usecase.notification.DeleteNotificationUseCase
+import com.bottari.domain.usecase.notification.GetNotificationsUseCase
+import com.bottari.domain.usecase.notification.SaveNotificationsUseCase
 import com.bottari.domain.usecase.report.ReportTemplateUseCase
 import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.CreateTeamAssignedItemUseCase
@@ -165,6 +168,15 @@ object UseCaseProvider {
     }
     val reportTemplateUseCase: ReportTemplateUseCase by lazy {
         ReportTemplateUseCase(RepositoryProvider.reportRepository)
+    }
+    val getNotificationsUseCase: GetNotificationsUseCase by lazy {
+        GetNotificationsUseCase(RepositoryProvider.notificationRepository)
+    }
+    val saveNotificationsUseCase: SaveNotificationsUseCase by lazy {
+        SaveNotificationsUseCase(RepositoryProvider.notificationRepository)
+    }
+    val deleteNotificationsUseCase: DeleteNotificationUseCase by lazy {
+        DeleteNotificationUseCase(RepositoryProvider.notificationRepository)
     }
     val createTeamBottariUseCase: CreateTeamBottariUseCase by lazy {
         CreateTeamBottariUseCase(RepositoryProvider.teamBottariRepository)
