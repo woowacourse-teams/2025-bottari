@@ -64,6 +64,7 @@ class MainViewModel(
     private fun handlePermissionFlag(permissionFlag: Boolean) {
         updateState { copy(hasPermissionFlag = permissionFlag) }
         if (!permissionFlag) {
+            updateState { copy(isReady = true) }
             emitEvent(MainUiEvent.IncompletePermissionFlow)
             return
         }
