@@ -5,7 +5,6 @@ import com.bottari.data.model.member.RegisterMemberRequest
 import com.bottari.data.model.member.SaveMemberNicknameRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
-import com.bottari.data.testFixture.memberFixture
 import com.bottari.domain.repository.MemberRepository
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.result.shouldBeFailure
@@ -42,12 +41,12 @@ class MemberRepositoryImplTest {
     fun registerMemberSuccessReturnsSuccess() =
         runTest {
             // given
-            val ssaid = "ssaid"
-            val request = RegisterMemberRequest(ssaid)
+            val request = RegisterMemberRequest("ssaid")
             coEvery { remoteDataSource.registerMember(request) } returns Result.success(1)
+            coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns Result.success("ssaid")
 
             // when
-            val result = repository.registerMember(ssaid)
+            val result = repository.registerMember()
 
             // then
             result.shouldBeSuccess()
@@ -61,13 +60,13 @@ class MemberRepositoryImplTest {
     fun registerMemberFailsReturnsFailure() =
         runTest {
             // given
-            val ssaid = "ssaid"
-            val request = RegisterMemberRequest(ssaid)
+            val request = RegisterMemberRequest("ssaid")
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { remoteDataSource.registerMember(request) } returns Result.failure(exception)
+            coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns Result.success("ssaid")
 
             // when
-            val result = repository.registerMember(ssaid)
+            val result = repository.registerMember()
 
             // then
             result.shouldBeFailure { it shouldBe exception }
@@ -81,23 +80,22 @@ class MemberRepositoryImplTest {
     fun saveMemberNicknameSuccess() =
         runTest {
             // given
-            val member = memberFixture()
-            val request = SaveMemberNicknameRequest(member.nickname)
+            val newNickname = "nickname"
+            val request = SaveMemberNicknameRequest(newNickname)
             coEvery {
                 remoteDataSource.saveMemberNickname(
-                    member.ssaid,
                     request,
                 )
             } returns Result.success(Unit)
 
             // when
-            val result = repository.saveMemberNickname(member)
+            val result = repository.saveMemberNickname(newNickname)
 
             // then
             result.shouldBeSuccess()
 
             // verify
-            coVerify(exactly = 1) { remoteDataSource.saveMemberNickname(member.ssaid, request) }
+            coVerify(exactly = 1) { remoteDataSource.saveMemberNickname(request) }
         }
 
     @DisplayName("닉네임 갱신에 실패하면 Failure를 반환한다")
@@ -105,24 +103,23 @@ class MemberRepositoryImplTest {
     fun saveMemberNicknameFailsReturnsFailure() =
         runTest {
             // given
-            val member = memberFixture()
-            val request = SaveMemberNicknameRequest(member.nickname)
+            val newNickname = "nickname"
+            val request = SaveMemberNicknameRequest(newNickname)
             val httpException = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery {
                 remoteDataSource.saveMemberNickname(
-                    member.ssaid,
                     request,
                 )
             } returns Result.failure(httpException)
 
             // when
-            val result = repository.saveMemberNickname(member)
+            val result = repository.saveMemberNickname(newNickname)
 
             // then
             result.shouldBeFailure { it shouldBe httpException }
 
             // verify
-            coVerify(exactly = 1) { remoteDataSource.saveMemberNickname(member.ssaid, request) }
+            coVerify(exactly = 1) { remoteDataSource.saveMemberNickname(request) }
         }
 
     @DisplayName("회원가입된 상태에서 회원가입 여부 확인에 성공하면 Success를 반환한다")
@@ -130,15 +127,14 @@ class MemberRepositoryImplTest {
     fun checkRegisteredMemberSuccess() =
         runTest {
             // given
-            val ssaid = "ssaid"
             val response = CheckRegisteredMemberResponse(true, 1, "test")
-            coEvery { remoteDataSource.checkRegisteredMember(ssaid) } returns
+            coEvery { remoteDataSource.checkRegisteredMember() } returns
                 Result.success(
                     response,
                 )
 
             // when
-            val result = repository.checkRegisteredMember(ssaid)
+            val result = repository.checkRegisteredMember()
 
             // then
             assertSoftly(result) {
@@ -149,7 +145,7 @@ class MemberRepositoryImplTest {
             }
 
             // verify
-            coVerify(exactly = 1) { remoteDataSource.checkRegisteredMember(ssaid) }
+            coVerify(exactly = 1) { remoteDataSource.checkRegisteredMember() }
         }
 
     @DisplayName("회원가입이 되지 않은 상태에서 회원가입 여부 확인에 성공하면 Success를 반환한다")
@@ -157,15 +153,14 @@ class MemberRepositoryImplTest {
     fun checkRegisteredMemberFailsReturnsFailure() =
         runTest {
             // given
-            val ssaid = "ssaid"
             val response = CheckRegisteredMemberResponse(false, 1, "test")
-            coEvery { remoteDataSource.checkRegisteredMember(ssaid) } returns
+            coEvery { remoteDataSource.checkRegisteredMember() } returns
                 Result.success(
                     response,
                 )
 
             // when
-            val result = repository.checkRegisteredMember(ssaid)
+            val result = repository.checkRegisteredMember()
 
             // then
             assertSoftly(result) {

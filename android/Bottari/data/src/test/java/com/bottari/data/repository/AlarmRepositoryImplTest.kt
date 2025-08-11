@@ -27,16 +27,16 @@ class AlarmRepositoryImplTest {
     fun activateAlarmReturnsSuccess() =
         runTest {
             // given
-            coEvery { remoteDataSource.activeAlarmState(1L, "ssaid123") } returns Result.success(Unit)
+            coEvery { remoteDataSource.activeAlarmState(1L) } returns Result.success(Unit)
 
             // when
-            val result = repository.activeAlarm("ssaid123", 1L)
+            val result = repository.activeAlarm(1L)
 
             // then
             result.shouldBeSuccess()
 
             // verify
-            coVerify { remoteDataSource.activeAlarmState(1L, "ssaid123") }
+            coVerify { remoteDataSource.activeAlarmState(1L) }
         }
 
     @DisplayName("알람을 비활성화 할 수 있다")
@@ -44,16 +44,16 @@ class AlarmRepositoryImplTest {
     fun deactivateAlarmReturnsSuccess() =
         runTest {
             // given
-            coEvery { remoteDataSource.inactiveAlarmState(1L, "ssaid123") } returns Result.success(Unit)
+            coEvery { remoteDataSource.inactiveAlarmState(1L) } returns Result.success(Unit)
 
             // when
-            val result = repository.inactiveAlarm("ssaid123", 1L)
+            val result = repository.inactiveAlarm(1L)
 
             // then
             result.shouldBeSuccess()
 
             // verify
-            coVerify { remoteDataSource.inactiveAlarmState(1L, "ssaid123") }
+            coVerify { remoteDataSource.inactiveAlarmState(1L) }
         }
 
     @DisplayName("알람 활성화 실패 시 예외를 반환한다")
@@ -62,10 +62,13 @@ class AlarmRepositoryImplTest {
         runTest {
             // given
             val expectedException = RuntimeException("알람 활성화 실패")
-            coEvery { remoteDataSource.activeAlarmState(1L, "ssaid123") } returns Result.failure(expectedException)
+            coEvery { remoteDataSource.activeAlarmState(1L) } returns
+                Result.failure(
+                    expectedException,
+                )
 
             // when
-            val result = repository.activeAlarm("ssaid123", 1L)
+            val result = repository.activeAlarm(1L)
 
             // then
             result.shouldBeFailure {
@@ -73,7 +76,7 @@ class AlarmRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.activeAlarmState(1L, "ssaid123") }
+            coVerify { remoteDataSource.activeAlarmState(1L) }
         }
 
     @DisplayName("알람 비활성화 실패 시 예외를 반환한다")
@@ -82,10 +85,13 @@ class AlarmRepositoryImplTest {
         runTest {
             // given
             val expectedException = RuntimeException("알람 비활성화 실패")
-            coEvery { remoteDataSource.inactiveAlarmState(1L, "ssaid123") } returns Result.failure(expectedException)
+            coEvery { remoteDataSource.inactiveAlarmState(1L) } returns
+                Result.failure(
+                    expectedException,
+                )
 
             // when
-            val result = repository.inactiveAlarm("ssaid123", 1L)
+            val result = repository.inactiveAlarm(1L)
 
             // then
             result.shouldBeFailure {
@@ -93,6 +99,6 @@ class AlarmRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.inactiveAlarmState(1L, "ssaid123") }
+            coVerify { remoteDataSource.inactiveAlarmState(1L) }
         }
 }
