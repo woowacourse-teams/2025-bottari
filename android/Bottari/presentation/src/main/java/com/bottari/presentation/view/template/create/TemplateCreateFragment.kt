@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTemplateCreateBinding
 import com.bottari.presentation.view.common.decoration.SideSpaceItemDecoration
@@ -18,7 +17,7 @@ import com.bottari.presentation.view.template.create.adapter.TemplateCreateMyBot
 
 class TemplateCreateFragment : BaseFragment<FragmentTemplateCreateBinding>(FragmentTemplateCreateBinding::inflate) {
     private val viewModel: TemplateCreateViewModel by viewModels {
-        TemplateCreateViewModel.Factory(requireContext().getSSAID())
+        TemplateCreateViewModel.Factory()
     }
     private val snapHelper by lazy { LinearSnapHelper() }
     private val itemAdapter by lazy { TemplateCreateMyBottariItemAdapter() }

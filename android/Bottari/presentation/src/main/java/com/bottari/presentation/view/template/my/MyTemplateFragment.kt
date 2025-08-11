@@ -6,7 +6,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentMyTemplateBinding
 import com.bottari.presentation.view.template.TemplateNavigator
@@ -17,9 +16,7 @@ class MyTemplateFragment :
     BaseFragment<FragmentMyTemplateBinding>(FragmentMyTemplateBinding::inflate),
     MyBottariTemplateEventListener {
     private val viewModel: MyTemplateViewModel by viewModels {
-        MyTemplateViewModel.Factory(
-            requireContext().getSSAID(),
-        )
+        MyTemplateViewModel.Factory()
     }
     private val adapter: MyTemplateAdapter by lazy { MyTemplateAdapter(this) }
 

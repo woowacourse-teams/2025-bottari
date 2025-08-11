@@ -10,14 +10,13 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentProfileBinding
 
 class ProfileFragment :
     BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate),
     TextWatcher {
-    private val viewModel: ProfileViewModel by viewModels { ProfileViewModel.Factory(requireContext().getSSAID()) }
+    private val viewModel: ProfileViewModel by viewModels { ProfileViewModel.Factory() }
     private val inputManager: InputMethodManager by lazy {
         requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }

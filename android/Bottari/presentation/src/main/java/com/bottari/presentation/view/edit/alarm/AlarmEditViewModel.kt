@@ -29,7 +29,6 @@ class AlarmEditViewModel(
             alarm = stateHandle[KEY_ALARM] ?: AlarmUiModel.DEFAULT_ALARM_UI_MODEL,
         ),
     ) {
-    private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRE_SSAID)
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val bottariTitle: String =
         stateHandle[KEY_BOTTARI_TITLE] ?: error(ERROR_REQUIRE_BOTTARI_TITLE)
@@ -78,7 +77,7 @@ class AlarmEditViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            createAlarmUseCase(ssaid, bottariId, alarm)
+            createAlarmUseCase(bottariId, alarm)
                 .onSuccess {
                     BottariLogger.ui(
                         UiEventType.ALARM_CREATE,
@@ -97,7 +96,7 @@ class AlarmEditViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            saveAlarmUseCase(ssaid, alarm.id!!, alarm)
+            saveAlarmUseCase(alarm.id!!, alarm)
                 .onSuccess {
                     BottariLogger.ui(
                         UiEventType.ALARM_EDIT,
@@ -124,16 +123,13 @@ class AlarmEditViewModel(
         )
 
     companion object {
-        private const val KEY_SSAID = "KEY_SSAID"
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
         private const val KEY_BOTTARI_TITLE = "KEY_BOTTARI_TITLE"
         private const val KEY_ALARM = "KEY_ALARM"
-        private const val ERROR_REQUIRE_SSAID = "[ERROR] SSAID가 존재하지 않습니다."
         private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
         private const val ERROR_REQUIRE_BOTTARI_TITLE = "[ERROR] 보따리 이름이 존재하지 않습니다."
 
         fun Factory(
-            ssaid: String,
             bottariId: Long?,
             bottariTitle: String?,
             alarm: AlarmUiModel?,
@@ -141,7 +137,6 @@ class AlarmEditViewModel(
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_SSAID] = ssaid
                     stateHandle[KEY_BOTTARI_ID] = bottariId
                     stateHandle[KEY_BOTTARI_TITLE] = bottariTitle
                     stateHandle[KEY_ALARM] = alarm
