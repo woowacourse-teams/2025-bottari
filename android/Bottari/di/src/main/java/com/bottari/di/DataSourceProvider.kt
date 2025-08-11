@@ -3,7 +3,7 @@ package com.bottari.di
 import com.bottari.data.source.local.AppConfigDataSource
 import com.bottari.data.source.local.AppConfigLocalDataSourceImpl
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
-import com.bottari.data.source.local.MemberIdentifierLocalLocalDataSourceImpl
+import com.bottari.data.source.local.MemberIdentifierLocalDataSourceImpl
 import com.bottari.data.source.remote.AlarmRemoteDataSource
 import com.bottari.data.source.remote.AlarmRemoteDataSourceImpl
 import com.bottari.data.source.remote.BottariItemRemoteDataSource
@@ -52,6 +52,6 @@ object DataSourceProvider {
         )
     }
     val memberIdentifierLocalDataSource: MemberIdentifierLocalDataSource by lazy {
-        MemberIdentifierLocalLocalDataSourceImpl()
+        MemberIdentifierLocalDataSourceImpl()
     }
 }
