@@ -19,11 +19,11 @@ class MemberRemoteDataSourceImpl(
     override suspend fun saveMemberNickname(
         ssaid: String,
         request: SaveMemberNicknameRequest,
-    ): Result<Unit> = safeApiCall { memberService.saveMemberNickname(ssaid, request) }
+    ): Result<Unit> = safeApiCall { memberService.saveMemberNickname(request) }
 
     override suspend fun checkRegisteredMember(ssaid: String): Result<CheckRegisteredMemberResponse> =
         safeApiCall {
-            memberService.checkRegisteredMember(ssaid)
+            memberService.checkRegisteredMember()
         }
 
     companion object {

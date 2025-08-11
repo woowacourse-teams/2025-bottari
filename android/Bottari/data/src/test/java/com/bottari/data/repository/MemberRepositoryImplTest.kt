@@ -3,7 +3,7 @@ package com.bottari.data.repository
 import com.bottari.data.model.member.CheckRegisteredMemberResponse
 import com.bottari.data.model.member.RegisterMemberRequest
 import com.bottari.data.model.member.SaveMemberNicknameRequest
-import com.bottari.data.source.local.UserInfoLocalDataSource
+import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.data.testFixture.memberFixture
 import com.bottari.domain.repository.MemberRepository
@@ -25,7 +25,7 @@ import retrofit2.Response
 
 class MemberRepositoryImplTest {
     private lateinit var remoteDataSource: MemberRemoteDataSource
-    private lateinit var userInfoLocalDataSource: UserInfoLocalDataSource
+    private lateinit var userInfoLocalDataSource: MemberIdentifierLocalDataSource
     private lateinit var repository: MemberRepository
     private val errorResponseBody =
         """{"message":"잘못된 요청입니다."}""".toResponseBody("application/json".toMediaType())
@@ -33,7 +33,7 @@ class MemberRepositoryImplTest {
     @BeforeEach
     fun setUp() {
         remoteDataSource = mockk<MemberRemoteDataSource>()
-        userInfoLocalDataSource = mockk<UserInfoLocalDataSource>()
+        userInfoLocalDataSource = mockk<MemberIdentifierLocalDataSource>()
         repository = MemberRepositoryImpl(remoteDataSource, userInfoLocalDataSource)
     }
 
