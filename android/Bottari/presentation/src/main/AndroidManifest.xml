@@ -53,6 +53,7 @@
             android:exported="false" />
 
         <receiver android:name=".receiver.AlarmReceiver" />
+        <receiver android:name=".receiver.BootReceiver" />
 
         <service
             android:name=".service.fcm.ReminderMessagingService"
