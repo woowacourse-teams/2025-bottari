@@ -188,6 +188,8 @@
     <string name="team_management_member_title_text">팀원</string>
     <string name="team_management_member_head_count">%d/%d</string>
     <string name="team_management_fetch_failure_text">팀원 정보를 가져오는데 실패했어요</string>
+    <string name="team_management_copy_invite_code_success_text">초대 코드가 클립보드에 복사되었어요</string>
+    <string name="team_management_copy_invite_code_failure_text">초대 코드가 없어요</string>
 
     <!-- Alarm Edit -->
     <string name="alarm_edit_title_text">알람 설정</string>
