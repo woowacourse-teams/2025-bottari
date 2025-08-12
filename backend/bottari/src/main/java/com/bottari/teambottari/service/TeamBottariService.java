@@ -6,8 +6,10 @@ import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.InviteCodeGenerator;
 import com.bottari.teambottari.domain.TeamBottari;
+import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
 import com.bottari.teambottari.repository.TeamBottariRepository;
+import com.bottari.teambottari.repository.TeamMemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TeamBottariService {
 
     private final TeamBottariRepository teamBottariRepository;
+    private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
 
     @Transactional
@@ -29,6 +32,8 @@ public class TeamBottariService {
         final String inviteCode = InviteCodeGenerator.generate();
         final TeamBottari teamBottari = new TeamBottari(request.title(), member, inviteCode);
         final TeamBottari savedTeamBottari = teamBottariRepository.save(teamBottari);
+        final TeamMember teamMember = new TeamMember(savedTeamBottari, member);
+        teamMemberRepository.save(teamMember);
 
         return savedTeamBottari.getId();
     }
