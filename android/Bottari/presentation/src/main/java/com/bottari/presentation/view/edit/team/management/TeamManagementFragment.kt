@@ -30,6 +30,11 @@ class TeamManagementFragment :
         setupListener()
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.fetchTeamMembers()
+    }
+
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             adapter.submitList(uiState.members)
