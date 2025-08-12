@@ -15,13 +15,15 @@ public record ReadTeamMemberInfoResponse(
             final TeamBottari teamBottari,
             final List<TeamMember> teamMembers
     ) {
+        final List<String> teamMemberNames = teamMembers.stream()
+                .map(teamMember -> teamMember.getMember().getName())
+                .toList();
+
         return new ReadTeamMemberInfoResponse(
                 teamBottari.getInviteCode(),
                 teamMembers.size(),
                 teamBottari.getOwner().getName(),
-                teamMembers.stream()
-                        .map(teamMember -> teamMember.getMember().getName())
-                        .toList()
+                teamMemberNames
         );
     }
 }
