@@ -3,10 +3,9 @@ package com.bottari.presentation.view.edit.team.management.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.bottari.presentation.model.TeamMemberUiModel
 
-class TeamMemberAdapter(
-    private val hostName: String,
-) : ListAdapter<String, TeamMemberViewHolder>(DiffUtil) {
+class TeamMemberAdapter : ListAdapter<TeamMemberUiModel, TeamMemberViewHolder>(DiffUtil) {
     override fun onBindViewHolder(
         holder: TeamMemberViewHolder,
         position: Int,
@@ -17,20 +16,20 @@ class TeamMemberAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): TeamMemberViewHolder = TeamMemberViewHolder.from(parent, hostName)
+    ): TeamMemberViewHolder = TeamMemberViewHolder.from(parent)
 
     companion object {
         private val DiffUtil =
-            object : DiffUtil.ItemCallback<String>() {
+            object : DiffUtil.ItemCallback<TeamMemberUiModel>() {
                 override fun areContentsTheSame(
-                    oldItem: String,
-                    newItem: String,
+                    oldItem: TeamMemberUiModel,
+                    newItem: TeamMemberUiModel,
                 ): Boolean = oldItem == newItem
 
                 override fun areItemsTheSame(
-                    oldItem: String,
-                    newItem: String,
-                ): Boolean = oldItem == newItem
+                    oldItem: TeamMemberUiModel,
+                    newItem: TeamMemberUiModel,
+                ): Boolean = oldItem.nickname == newItem.nickname
             }
     }
 }

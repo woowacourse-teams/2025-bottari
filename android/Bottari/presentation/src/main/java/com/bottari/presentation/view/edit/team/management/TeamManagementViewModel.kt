@@ -9,6 +9,8 @@ import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.team.TeamMembers
 import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
 import com.bottari.presentation.common.base.BaseViewModel
+import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
+import com.bottari.presentation.model.TeamMemberUiModel
 
 class TeamManagementViewModel(
     stateHandle: SavedStateHandle,
@@ -41,8 +43,7 @@ class TeamManagementViewModel(
             inviteCode = teamMembers.inviteCode,
             teamMemberHeadCount = teamMembers.teamMemberHeadCount.value,
             maxHeadCount = teamMembers.teamMemberHeadCount.maxValue,
-            hostName = teamMembers.hostName.value,
-            memberNicknames = teamMembers.memberNicknames.map { nickname -> nickname.value },
+            members = teamMembers.toUiModel(),
         )
 
     companion object {
