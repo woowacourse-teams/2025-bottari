@@ -90,6 +90,17 @@ enum class UiEventType {
     CHECKLIST_COMPLETE,
 
     /**
+     * 팀원 조회 이벤트
+     *
+     * 파라미터:
+     * - invite_code: 초대 코드
+     * - member_head_count: 인원 수
+     * - host_name: 방장 닉네임
+     * - members: 팀원 명단
+     */
+    TEAM_BOTTARI_MEMBERS_FETCH,
+
+    /**
      * 모두의 보따리 템플릿 검색 이벤트
      *
      * 파라미터:

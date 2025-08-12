@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_f8f8f8">
+
+    <Toolbar
+        android:id="@+id/tb_team_bottari"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentInsetStart="0dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btn_previous"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/common_previous_btn_description"
+            android:padding="@dimen/space_small"
+            android:src="@drawable/btn_previous" />
+
+        <TextView
+            android:id="@+id/tv_team_bottari_title"
+            style="@style/Pretendard_Bold_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/team_management_title_text"
+            android:textColor="@color/black" />
+    </Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_add_team_member"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_large"
+        android:layout_marginVertical="@dimen/space_median"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:elevation="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tb_team_bottari">
+
+        <TextView
+            android:id="@+id/tv_add_team_member"
+            style="@style/Pretendard_Bold_18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/space_large"
+            android:paddingVertical="@dimen/space_median"
+            android:text="@string/team_management_add_member_text"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/btn_clipboard"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/team_management_clipboard_btn_description"
+            android:padding="@dimen/space_small"
+            android:src="@drawable/btn_clipboard"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_team_member"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_large"
+        android:layout_marginTop="@dimen/space_small"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:elevation="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_add_team_member">
+
+        <TextView
+            android:id="@+id/tv_team_member_title"
+            style="@style/Pretendard_Bold_18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/space_median"
+            android:text="@string/team_management_member_title_text"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_team_member_head_count"
+            style="@style/Pretendard_Bold_18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_median"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/tv_team_member_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_team_member_title"
+            tools:text="3/10" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_member_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/space_median"
+            android:layout_marginStart="@dimen/space_median"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_team_member_title" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+

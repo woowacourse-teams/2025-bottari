@@ -182,6 +182,15 @@
     <string name="bottari_rename_dialog_btn_text">이름 저장</string>
     <string name="bottari_rename_dialog_hint_text">새 이름을 입력해 주세요</string>
 
+    <!--  Team Management  -->
+    <string name="team_management_title_text">팀원 관리</string>
+    <string name="team_management_add_member_text">링크로 팀원 추가하기</string>
+    <string name="team_management_member_title_text">팀원</string>
+    <string name="team_management_member_head_count">%d/%d</string>
+    <string name="team_management_fetch_failure_text">팀원 정보를 가져오는데 실패했어요</string>
+    <string name="team_management_copy_invite_code_success_text">초대 코드가 클립보드에 복사되었어요</string>
+    <string name="team_management_copy_invite_code_failure_text">초대 코드가 없어요</string>
+
     <!-- Alarm Edit -->
     <string name="alarm_edit_title_text">알람 설정</string>
     <string name="alarm_edit_type_title_text">반복 설정</string>
@@ -255,6 +264,8 @@
     <string name="location_permission_iv_description">위치 권한 이미지</string>
     <string name="alarm_date_edit_btn_description">날짜 수정 버튼</string>
     <string name="bottari_type_icon_description">보따리 타입 아이콘</string>
+    <string name="team_management_clipboard_btn_description">링크 복사 버튼</string>
+    <string name="team_management_host_iv_description">방장 이미지</string>
 
     <!-- Menu -->
     <string name="menu_create_template_title_text">모두의 보따리에 등록하기</string>
