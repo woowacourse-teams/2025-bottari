@@ -16,6 +16,7 @@ public enum ErrorCode {
     MEMBER_NAME_TOO_SHORT(HttpStatus.BAD_REQUEST, "사용자 이름이 너무 짧습니다."),
     MEMBER_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "사용자 이름이 너무 깁니다."),
     MEMBER_NAME_GENERATION_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "고유한 임시 닉네임을 생성하는 데 실패했습니다. (관리자 문의 필요)"),
+    MEMBER_IDENTIFIER_NOT_FOUND_IN_REQUEST(HttpStatus.BAD_REQUEST, "요청에 사용자 식별자가 존재하지 않습니다."),
 
     // ===== BOTTARI 관련 =====
     BOTTARI_NOT_FOUND(HttpStatus.NOT_FOUND, "보따리를 찾을 수 없습니다."),
@@ -35,6 +36,7 @@ public enum ErrorCode {
     BOTTARI_ITEM_CHECK_STATE_INVALID(HttpStatus.BAD_REQUEST, "해당 보따리 물품의 체크 상태가 이미 요청된 상태입니다."),
     BOTTARI_ITEM_NAME_BLANK(HttpStatus.BAD_REQUEST, "보따리 물품명은 공백일 수 없습니다."),
     BOTTARI_ITEM_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 물품명이 너무 깁니다."),
+    BOTTARI_ITEM_NOT_OWNED(HttpStatus.FORBIDDEN, "해당 보따리 물품에 접근할 수 있는 권한이 없습니다."),
 
     // ===== BOTTARI_TEMPLATE 관련 =====
     BOTTARI_TEMPLATE_NOT_FOUND(HttpStatus.NOT_FOUND, "보따리 템플릿을 찾을 수 없습니다."),
@@ -48,6 +50,14 @@ public enum ErrorCode {
     BOTTARI_TEMPLATE_ITEM_DUPLICATE_IN_REQUEST(HttpStatus.BAD_REQUEST, "요청에 중복된 보따리 템플릿 물품이 있습니다."),
     BOTTARI_TEMPLATE_ITEM_NAME_BLANK(HttpStatus.BAD_REQUEST, "보따리 템플릿 물품명은 공백일 수 없습니다."),
     BOTTARI_TEMPLATE_ITEM_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 템플릿 물품명이 너무 깁니다."),
+
+    // ===== TEAM_BOTTARI 관련 =====
+    TEAM_BOTTARI_TITLE_BLANK(HttpStatus.BAD_REQUEST, "팀 보따리 제목은 공백일 수 없습니다."),
+    TEAM_BOTTARI_TITLE_TOO_LONG(HttpStatus.BAD_REQUEST, "팀 보따리 제목이 너무 깁니다."),
+
+    // ===== TEAM_BOTTARI_ITEM 관련 =====
+    TEAM_BOTTARI_ITEM_NAME_BLANK(HttpStatus.BAD_REQUEST, "팀 보따리 물품명은 공백일 수 없습니다."),
+    TEAM_BOTTARI_ITEM_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "팀 보따리 물품명이 너무 깁니다."),
 
     // ===== ALARM 관련 =====
     ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "알람을 찾을 수 없습니다."),

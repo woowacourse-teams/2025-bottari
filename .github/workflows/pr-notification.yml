@@ -1,0 +1,80 @@
+name: BE PR Review & Merge Notification
+
+on:
+  pull_request_review:
+    types: [submitted] # 리뷰 제출 시
+  pull_request:
+    branches:
+      - be/develop
+    types: [closed]    # PR 머지/닫힘 시
+
+jobs:
+  pr-notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine Webhook
+        run: echo "WEBHOOK=${{ secrets.DISCORD_BACKEND_WEBHOOK }}" >> $GITHUB_ENV
+
+      # ---------------------------
+      # 1. 리뷰 제출 시
+      # ---------------------------
+      # 리뷰 제출 시
+      - name: Notify Discord - Review Submitted
+        if: github.event_name == 'pull_request_review'
+        run: |
+          AUTHOR=${{ github.event.pull_request.user.login }}
+          AUTHOR_ID=$(echo '${{ secrets.DISCORD_USER_MAP }}' | jq -r --arg AUTHOR "$AUTHOR" '.[$AUTHOR]')
+          BASE_BRANCH=${{ github.event.pull_request.base.ref }}
+          HEAD_BRANCH=${{ github.event.pull_request.head.ref }}
+
+          MESSAGE='{
+            "content": "<@'"$AUTHOR_ID"'> 📝 리뷰가 등록되었습니다.",
+            "embeds": [
+              {
+                "title": "리뷰 등록",
+                "url": "'"${{ github.event.pull_request.html_url }}"'",
+                "color": 3447003,
+                "fields": [
+                  { "name": "PR 제목", "value": "'"${{ github.event.pull_request.title }}"'" },
+                  { "name": "브랜치", "value": "'"$HEAD_BRANCH → $BASE_BRANCH"'" },
+                  { "name": "리뷰 상태", "value": "'"${{ github.event.review.state }}"'" }
+                ]
+              }
+            ]
+          }'
+          echo "$MESSAGE" > payload.json
+          curl -H "Content-Type: application/json" -d @payload.json $WEBHOOK
+
+      # ---------------------------
+      # 2. PR 머지/닫힘 시
+      # ---------------------------
+      - name: Notify Discord - PR Closed/Merged
+        if: github.event_name == 'pull_request'
+        run: |
+          BASE_BRANCH=${{ github.event.pull_request.base.ref }}
+          HEAD_BRANCH=${{ github.event.pull_request.head.ref }}
+
+          if [ "${{ github.event.pull_request.merged }}" = "true" ]; then
+            STATUS="🎉 PR 머지 완료"
+            COLOR=16766720
+          else
+            STATUS="⚠️ PR 닫힘 (머지 안됨)"
+            COLOR=15105570
+          fi
+
+          MESSAGE='{
+            "embeds": [
+              {
+                "title": "'"$STATUS"'",
+                "url": "'"${{ github.event.pull_request.html_url }}"'",
+                "color": '$COLOR',
+                "fields": [
+                  { "name": "PR 제목", "value": "'"${{ github.event.pull_request.title }}"'" },
+                  { "name": "브랜치", "value": "'"$HEAD_BRANCH → $BASE_BRANCH"'" },
+                  { "name": "작성자", "value": "'"${{ github.event.pull_request.user.login }}"'" }
+                ]
+              }
+            ]
+          }'
+          echo "$MESSAGE" > payload.json
+          curl -H "Content-Type: application/json" -d @payload.json $WEBHOOK

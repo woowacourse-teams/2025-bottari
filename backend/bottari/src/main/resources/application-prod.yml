@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: bottari
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    defer-datasource-initialization: true
+    open-in-view: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: never
+management:
+  metrics:
+    enable:
+      all: false
+      app.health.status: true
+  cloudwatch:
+    metrics:
+      export:
+        enabled: true
+        step: 1m
+        namespace: EC2/bottari-prod-api
