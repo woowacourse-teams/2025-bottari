@@ -12,7 +12,9 @@ class BottariRepositoryImpl(
     private val bottariRemoteDataSource: BottariRemoteDataSource,
 ) : BottariRepository {
     override suspend fun fetchBottaries(): Result<List<Bottari>> =
-        bottariRemoteDataSource.fetchBottaries().mapCatching { bottari -> bottari.toDomain() }
+        bottariRemoteDataSource
+            .fetchBottaries()
+            .mapCatching { bottaries -> bottaries.map { it.toDomain() } }
 
     override suspend fun fetchBottariDetail(id: Long): Result<BottariDetail> =
         bottariRemoteDataSource.fetchBottariDetail(id).mapCatching { it.toDomain() }
