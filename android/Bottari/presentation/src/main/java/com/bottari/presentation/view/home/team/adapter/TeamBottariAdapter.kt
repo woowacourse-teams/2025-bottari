@@ -3,7 +3,6 @@ package com.bottari.presentation.view.home.team.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.model.TeamBottariUiModel
 
 class TeamBottariAdapter(
