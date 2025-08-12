@@ -8,22 +8,20 @@ import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.domain.TeamSharedItem;
+import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
-import com.bottari.teambottari.repository.TeamAssignedItemRepository;
 import com.bottari.teambottari.repository.TeamMemberRepository;
-import com.bottari.teambottari.repository.TeamPersonalItemRepository;
-import com.bottari.teambottari.repository.TeamSharedItemRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class TeamBottariItemService {
+public class TeamItemService {
 
-    private final TeamSharedItemRepository teamSharedItemRepository;
-    private final TeamAssignedItemRepository teamAssignedItemRepository;
-    private final TeamPersonalItemRepository teamPersonalItemRepository;
+    private final TeamSharedItemService teamSharedItemService;
+    private final TeamAssignedItemService teamAssignedItemService;
+    private final TeamPersonalItemService teamPersonalItemService;
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
 
@@ -32,13 +30,35 @@ public class TeamBottariItemService {
             final String ssaid
     ) {
         final TeamMember teamMember = getTeamMemberByTeamBottariIdAndSsaid(teamBottariId, ssaid);
-        final List<TeamSharedItem> teamSharedItems = teamSharedItemRepository.findAllByTeamMemberId(teamMember.getId());
-        final List<TeamAssignedItem> teamAssignedItems = teamAssignedItemRepository.findAllByTeamMemberId(
-                teamMember.getId());
-        final List<TeamPersonalItem> teamPersonalItems = teamPersonalItemRepository.findAllByTeamMemberId(
-                teamMember.getId());
+        final List<TeamSharedItem> teamSharedItems = teamSharedItemService.getAllByTeamMember(teamMember);
+        final List<TeamAssignedItem> teamAssignedItems = teamAssignedItemService.getAllByTeamMember(teamMember);
+        final List<TeamPersonalItem> teamPersonalItems = teamPersonalItemService.getAllByTeamMember(teamMember);
 
         return TeamMemberChecklistResponse.of(teamSharedItems, teamAssignedItems, teamPersonalItems);
+    }
+
+    public void check(
+            final Long id,
+            final String ssaid,
+            final CheckTeamItemRequest request
+    ) {
+        switch (request.type()) {
+            case SHARED -> teamSharedItemService.check(id, ssaid);
+            case ASSIGNED -> teamAssignedItemService.check(id, ssaid);
+            case PERSONAL -> teamPersonalItemService.check(id, ssaid);
+        }
+    }
+
+    public void uncheck(
+            final Long id,
+            final String ssaid,
+            final CheckTeamItemRequest request
+    ) {
+        switch (request.type()) {
+            case SHARED -> teamSharedItemService.uncheck(id, ssaid);
+            case ASSIGNED -> teamAssignedItemService.uncheck(id, ssaid);
+            case PERSONAL -> teamPersonalItemService.uncheck(id, ssaid);
+        }
     }
 
     private TeamMember getTeamMemberByTeamBottariIdAndSsaid(

@@ -2,6 +2,7 @@ package com.bottari.teambottari.controller;
 
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
+import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,6 +24,34 @@ public interface TeamBottariItemApiDocs {
     })
     ResponseEntity<TeamMemberChecklistResponse> readChecklistBySsaid(
             final Long teamBottariId,
+            @Parameter(hidden = true) final String ssaid
+    );
+
+    @Operation(summary = "팀 보따리 물품 체크")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "팀 보따리 물품 물품 체크 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND,
+            ErrorCode.TEAM_BOTTARI_ITEM_ALREADY_CHECKED
+    })
+    ResponseEntity<Void> check(
+            final Long id,
+            final CheckTeamItemRequest request,
+            @Parameter(hidden = true) final String ssaid
+    );
+
+    @Operation(summary = "팀 보따리 물품 체크 해제")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "팀 보따리 물품 체크 해제 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND,
+            ErrorCode.TEAM_BOTTARI_ITEM_ALREADY_UNCHECKED
+    })
+    ResponseEntity<Void> uncheck(
+            final Long id,
+            final CheckTeamItemRequest request,
             @Parameter(hidden = true) final String ssaid
     );
 }
