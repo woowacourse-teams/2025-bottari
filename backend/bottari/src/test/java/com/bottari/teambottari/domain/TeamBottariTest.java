@@ -2,7 +2,6 @@ package com.bottari.teambottari.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.bottari.bottari.domain.Bottari;
 import com.bottari.error.BusinessException;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.member.domain.Member;

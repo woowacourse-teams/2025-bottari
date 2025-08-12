@@ -1,12 +1,8 @@
 package com.bottari.teambottari.domain;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
-import com.bottari.bottari.domain.Bottari;
-import com.bottari.bottari.domain.BottariItem;
 import com.bottari.error.BusinessException;
-import com.bottari.fixture.BottariFixture;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
