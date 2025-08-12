@@ -36,12 +36,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
     private fun setBottomNavigationView() {
         binding.root.applyWindowInsetsWithBottomNavigation()
         binding.bnvHome.setOnItemSelectedListener { item ->
-            if (isSameNavItem(item)) return@setOnItemSelectedListener false
             when (item.itemId) {
-                R.id.menu_template -> showFragment(TemplateFragment::class.java)
                 R.id.menu_personal_bottari -> showFragment(BottariFragment::class.java)
-                R.id.menu_profile -> showFragment(ProfileFragment::class.java)
                 R.id.menu_team_bottari -> showFragment(TeamBottariFragment::class.java)
+                R.id.menu_template -> showFragment(TemplateFragment::class.java)
+                R.id.menu_more -> showFragment(ProfileFragment::class.java)
             }
             changeToolbarTitle(item)
             true
@@ -58,8 +57,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
 
         transaction.commit()
     }
-
-    private fun isSameNavItem(item: MenuItem): Boolean = binding.bnvHome.selectedItemId == item.itemId
 
     private fun changeToolbarTitle(item: MenuItem) {
         binding.toolbarHome.title = item.title

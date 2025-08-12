@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:contentInsetStart="@dimen/space_x_large"
-        android:title="@string/home_nav_bottari_title_text"
+        tools:title="@string/home_nav_personal_bottari_title_text"
         android:titleTextColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/fcv_home"
         app:layout_constraintTop_toTopOf="parent">

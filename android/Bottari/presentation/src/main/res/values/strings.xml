@@ -110,9 +110,10 @@
     <string name="splash_screen_permission_denied_text">권한이 거부되어 일부 기능이 제한돼요.\n기능 사용 시 다시 요청드릴게요.</string>
 
     <!-- Home Navigation -->
+    <string name="home_nav_personal_bottari_title_text">나의 보따리</string>
+    <string name="home_nav_team_bottari_title_text">우리 보따리</string>
     <string name="home_nav_template_title_text">모두의 보따리</string>
-    <string name="home_nav_bottari_title_text">나의 보따리</string>
-    <string name="home_nav_profile_title_text">내 정보</string>
+    <string name="home_nav_more_title_text">더보기</string>
 
     <!-- Bottari Home -->
     <string name="bottari_home_fetch_failure_text">보따리 목록을 불러오지 못했어요</string>
@@ -253,6 +254,7 @@
     <string name="alarm_permission_iv_description">알람 및 리마인더 권한 이미지</string>
     <string name="location_permission_iv_description">위치 권한 이미지</string>
     <string name="alarm_date_edit_btn_description">날짜 수정 버튼</string>
+    <string name="bottari_type_icon_description">보따리 타입 아이콘</string>
 
     <!-- Menu -->
     <string name="menu_create_template_title_text">모두의 보따리에 등록하기</string>
