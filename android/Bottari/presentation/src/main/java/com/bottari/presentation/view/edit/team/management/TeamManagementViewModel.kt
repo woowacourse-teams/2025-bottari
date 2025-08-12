@@ -28,15 +28,7 @@ class TeamManagementViewModel(
             fetchTeamMembersUseCase(teamBottariId)
                 .onSuccess { teamMembers ->
                     updateState { copyFromTeamMembers(teamMembers) }
-                    BottariLogger.ui(
-                        UiEventType.TEAM_BOTTARI_MEMBERS_FETCH,
-                        mapOf(
-                            "invite_code" to teamMembers.inviteCode,
-                            "member_head_count" to teamMembers.teamMemberHeadCount.value,
-                            "host_name" to teamMembers.hostName.value,
-                            "members" to teamMembers.memberNicknames.map { nickname -> nickname.value },
-                        ),
-                    )
+                    logTeamMembersFetch(teamMembers)
                 }.onFailure {
                     emitEvent(TeamManagementUiEvent.FetchTeamMembersFailure)
                 }
@@ -51,6 +43,18 @@ class TeamManagementViewModel(
             maxHeadCount = teamMembers.teamMemberHeadCount.maxValue,
             members = teamMembers.toUiModel(),
         )
+
+    private fun logTeamMembersFetch(teamMembers: TeamMembers) {
+        BottariLogger.ui(
+            UiEventType.TEAM_BOTTARI_MEMBERS_FETCH,
+            mapOf(
+                "invite_code" to teamMembers.inviteCode,
+                "member_head_count" to teamMembers.teamMemberHeadCount.value,
+                "host_name" to teamMembers.hostName.value,
+                "members" to teamMembers.memberNicknames.map { nickname -> nickname.value },
+            ),
+        )
+    }
 
     companion object {
         private const val KEY_TEAM_BOTTARI_ID = "KEY_TEAM_BOTTARI_ID"
