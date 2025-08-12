@@ -8,6 +8,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.team.TeamMembers
 import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
 
@@ -26,6 +28,15 @@ class TeamManagementViewModel(
             fetchTeamMembersUseCase(teamBottariId)
                 .onSuccess { teamMembers ->
                     updateState { copyFromTeamMembers(teamMembers) }
+                    BottariLogger.ui(
+                        UiEventType.TEAM_BOTTARI_MEMBERS_FETCH,
+                        mapOf(
+                            "invite_code" to teamMembers.inviteCode,
+                            "member_head_count" to teamMembers.teamMemberHeadCount.value,
+                            "host_name" to teamMembers.hostName.value,
+                            "members" to teamMembers.memberNicknames.map { nickname -> nickname.value },
+                        ),
+                    )
                 }.onFailure {
                     emitEvent(TeamManagementUiEvent.FetchTeamMembersFailure)
                 }
