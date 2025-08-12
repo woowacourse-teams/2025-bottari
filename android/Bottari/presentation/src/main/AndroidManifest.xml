@@ -7,33 +7,32 @@
 
     <application>
         <activity
+            android:name=".view.edit.team.TeamBottariEditActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Bottari.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.home.HomeActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustNothing"
             android:launchMode="singleTask" />
-
         <activity
             android:name=".view.checklist.ChecklistActivity"
             android:exported="false" />
-
         <activity
             android:name=".view.edit.personal.PersonalBottariEditActivity"
             android:exported="false" />
-
         <activity
             android:name=".view.setting.SettingActivity"
             android:exported="false" />
-
         <activity
             android:name=".view.template.TemplateActivity"
             android:exported="false" />
