@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.personal
+package com.bottari.presentation.view.home.team
 
 import android.os.Bundle
 import android.view.View
@@ -12,21 +12,21 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.common.extension.showSnackbar
-import com.bottari.presentation.databinding.FragmentBottariBinding
+import com.bottari.presentation.databinding.FragmentTeamBottariBinding
 import com.bottari.presentation.view.checklist.ChecklistActivity
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
 import com.bottari.presentation.view.create.BottariCreateDialog
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
-import com.bottari.presentation.view.home.personal.adapter.BottariAdapter
-import com.bottari.presentation.view.home.personal.adapter.BottariViewHolder
+import com.bottari.presentation.view.home.team.adapter.TeamBottariAdapter
+import com.bottari.presentation.view.home.team.adapter.TeamBottariViewHolder
 
-class BottariFragment :
-    BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate),
-    BottariViewHolder.BottariEventListener {
-    private val viewModel: BottariViewModel by viewModels {
-        BottariViewModel.Factory()
+class TeamBottariFragment :
+    BaseFragment<FragmentTeamBottariBinding>(FragmentTeamBottariBinding::inflate),
+    TeamBottariViewHolder.BottariEventListener {
+    private val viewModel: TeamBottariViewModel by viewModels {
+        TeamBottariViewModel.Factory()
     }
-    private val adapter: BottariAdapter by lazy { BottariAdapter(this) }
+    private val adapter: TeamBottariAdapter by lazy { TeamBottariAdapter(this) }
 
     override fun onViewCreated(
         view: View,
@@ -68,9 +68,9 @@ class BottariFragment :
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             val message =
                 when (uiEvent) {
-                    BottariUiEvent.BottariDeleteFailure -> R.string.bottari_home_delete_failure_text
-                    BottariUiEvent.BottariDeleteSuccess -> R.string.bottari_home_delete_success_text
-                    BottariUiEvent.FetchBottariesFailure -> R.string.bottari_home_fetch_failure_text
+                    TeamBottariUiEvent.BottariDeleteFailure -> R.string.bottari_home_delete_failure_text
+                    TeamBottariUiEvent.BottariDeleteSuccess -> R.string.bottari_home_delete_success_text
+                    TeamBottariUiEvent.FetchBottariesFailure -> R.string.bottari_home_fetch_failure_text
                 }
             requireView().showSnackbar(message)
         }

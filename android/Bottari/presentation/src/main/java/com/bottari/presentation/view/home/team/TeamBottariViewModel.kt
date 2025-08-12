@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.personal
+package com.bottari.presentation.view.home.team
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
@@ -11,10 +11,10 @@ import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 
-class BottariViewModel(
+class TeamBottariViewModel(
     private val fetchBottariesUseCase: FetchBottariesUseCase,
     private val deleteBottariUseCase: DeleteBottariUseCase,
-) : BaseViewModel<BottariUiState, BottariUiEvent>(BottariUiState()) {
+) : BaseViewModel<TeamBottariUiState, TeamBottariUiEvent>(TeamBottariUiState()) {
     init {
         fetchBottaries()
     }
@@ -29,7 +29,7 @@ class BottariViewModel(
                         copy(bottaries = bottaries.map { bottari -> bottari.toUiModel() })
                     }
                 }.onFailure {
-                    emitEvent(BottariUiEvent.FetchBottariesFailure)
+                    emitEvent(TeamBottariUiEvent.FetchBottariesFailure)
                 }
 
             updateState { copy(isLoading = false, isFetched = true) }
@@ -51,9 +51,9 @@ class BottariViewModel(
                         ),
                     )
                     fetchBottaries()
-                    emitEvent(BottariUiEvent.BottariDeleteSuccess)
+                    emitEvent(TeamBottariUiEvent.BottariDeleteSuccess)
                 }.onFailure {
-                    emitEvent(BottariUiEvent.BottariDeleteFailure)
+                    emitEvent(TeamBottariUiEvent.BottariDeleteFailure)
                 }
 
             updateState { copy(isLoading = false) }
@@ -64,7 +64,7 @@ class BottariViewModel(
         fun Factory(): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    BottariViewModel(
+                    TeamBottariViewModel(
                         UseCaseProvider.fetchBottariesUseCase,
                         UseCaseProvider.deleteBottariUseCase,
                     )

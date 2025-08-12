@@ -2,17 +2,14 @@ package com.bottari.presentation.common.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.children
 import androidx.viewbinding.ViewBinding
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.LogEventHelper
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 abstract class BaseActivity<VB : ViewBinding>(
     private val bindingFactory: (LayoutInflater) -> VB,
