@@ -9,8 +9,7 @@ import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
-import com.bottari.teambottari.domain.TeamSharedItem;
-import com.bottari.teambottari.domain.TeamSharedItemInfo;
+import com.bottari.teambottari.domain.TeamPersonalItem;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,11 +19,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 @DataJpaTest
-@Import(TeamSharedItemService.class)
-class TeamSharedItemServiceTest {
+@Import(TeamPersonalItemService.class)
+class TeamPersonalItemServiceTest {
 
     @Autowired
-    private TeamSharedItemService teamSharedItemService;
+    private TeamPersonalItemService teamPersonalItemService;
 
     @Autowired
     private EntityManager entityManager;
@@ -32,7 +31,7 @@ class TeamSharedItemServiceTest {
     @Nested
     class CheckTest {
 
-        @DisplayName("팀 보따리 공통 물품을 체크한다.")
+        @DisplayName("팀 보따리 개인 물품을 체크한다.")
         @Test
         void check() {
             // given
@@ -45,21 +44,18 @@ class TeamSharedItemServiceTest {
             final TeamMember teamMember = new TeamMember(teamBottari, member);
             entityManager.persist(teamMember);
 
-            final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo("공통 물품", teamBottari);
-            entityManager.persist(teamSharedItemInfo);
-
-            final TeamSharedItem teamSharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember);
-            entityManager.persist(teamSharedItem);
+            final TeamPersonalItem teamPersonalItem = new TeamPersonalItem("개인 물품", teamMember);
+            entityManager.persist(teamPersonalItem);
 
             // when
-            teamSharedItemService.check(teamSharedItem.getId(), member.getSsaid());
+            teamPersonalItemService.check(teamPersonalItem.getId(), member.getSsaid());
 
             // then
-            final TeamSharedItem actual = entityManager.find(TeamSharedItem.class, teamSharedItem.getId());
+            final TeamPersonalItem actual = entityManager.find(TeamPersonalItem.class, teamPersonalItem.getId());
             assertThat(actual.isChecked()).isTrue();
         }
 
-        @DisplayName("팀 보따리 공통 물품 체크 시, 물품 주인이 아니라면, 예외를 던진다.")
+        @DisplayName("팀 보따리 개인 물품을 체크 시, 주인이 아니라면, 예외를 던진다.")
         @Test
         void check_Exception_NotOwned() {
             // given
@@ -72,21 +68,18 @@ class TeamSharedItemServiceTest {
             final TeamMember teamMember = new TeamMember(teamBottari, member);
             entityManager.persist(teamMember);
 
-            final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo("공통 물품", teamBottari);
-            entityManager.persist(teamSharedItemInfo);
-
-            final TeamSharedItem teamSharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember);
-            entityManager.persist(teamSharedItem);
+            final TeamPersonalItem teamPersonalItem = new TeamPersonalItem("개인 물품", teamMember);
+            entityManager.persist(teamPersonalItem);
 
             final String invalidSsaid = "invalid_ssaid";
 
             // when & then
-            assertThatThrownBy(() -> teamSharedItemService.check(teamSharedItem.getId(), invalidSsaid))
+            assertThatThrownBy(() -> teamPersonalItemService.check(teamPersonalItem.getId(), invalidSsaid))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리 물품에 접근할 수 있는 권한이 없습니다. - 본인의 팀 보따리 물품이 아닙니다.");
         }
 
-        @DisplayName("팀 보따리 공통 물품 체크 시, 물품을 찾을 수 없다면, 예외를 던진다.")
+        @DisplayName("팀 보따리 개인 물품 체크 시, 물품을 찾을 수 없다면, 예외를 던진다.")
         @Test
         void check_Exception_NotExistsItem() {
             // given
@@ -96,16 +89,16 @@ class TeamSharedItemServiceTest {
             final Long notExistsBottariItemId = 1L;
 
             // when & then
-            assertThatThrownBy(() -> teamSharedItemService.check(notExistsBottariItemId, member.getSsaid()))
+            assertThatThrownBy(() -> teamPersonalItemService.check(notExistsBottariItemId, member.getSsaid()))
                     .isInstanceOf(BusinessException.class)
-                    .hasMessage("팀 보따리 물품을 찾을 수 없습니다. - 공통");
+                    .hasMessage("팀 보따리 물품을 찾을 수 없습니다. - 개인");
         }
     }
 
     @Nested
     class UncheckTest {
 
-        @DisplayName("팀 보따리 공통 물품을 체크 해제한다.")
+        @DisplayName("팀 보따리 개인 물품을 체크 해제한다.")
         @Test
         void uncheck() {
             // given
@@ -118,22 +111,19 @@ class TeamSharedItemServiceTest {
             final TeamMember teamMember = new TeamMember(teamBottari, member);
             entityManager.persist(teamMember);
 
-            final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo("공통 물품", teamBottari);
-            entityManager.persist(teamSharedItemInfo);
-
-            final TeamSharedItem teamSharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember);
-            teamSharedItem.check();
-            entityManager.persist(teamSharedItem);
+            final TeamPersonalItem teamPersonalItem = new TeamPersonalItem("개인 물품", teamMember);
+            teamPersonalItem.check();
+            entityManager.persist(teamPersonalItem);
 
             // when
-            teamSharedItemService.uncheck(teamSharedItem.getId(), member.getSsaid());
+            teamPersonalItemService.uncheck(teamPersonalItem.getId(), member.getSsaid());
 
             // then
-            final TeamSharedItem actual = entityManager.find(TeamSharedItem.class, teamSharedItem.getId());
+            final TeamPersonalItem actual = entityManager.find(TeamPersonalItem.class, teamPersonalItem.getId());
             assertThat(actual.isChecked()).isFalse();
         }
 
-        @DisplayName("팀 보따리 공통 물품 체크 해제 시, 물품 주인이 아니라면, 예외를 던진다.")
+        @DisplayName("팀 보따리 개인 물품 체크 해제 시, 물품 주인이 아니라면, 예외를 던진다.")
         @Test
         void uncheck_Exception_NotOwned() {
             // given
@@ -146,21 +136,18 @@ class TeamSharedItemServiceTest {
             final TeamMember teamMember = new TeamMember(teamBottari, member);
             entityManager.persist(teamMember);
 
-            final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo("공통 물품", teamBottari);
-            entityManager.persist(teamSharedItemInfo);
-
-            final TeamSharedItem teamSharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember);
-            entityManager.persist(teamSharedItem);
+            final TeamPersonalItem teamPersonalItem = new TeamPersonalItem("개인 물품", teamMember);
+            entityManager.persist(teamPersonalItem);
 
             final String invalidSsaid = "invalid_ssaid";
 
             // when & then
-            assertThatThrownBy(() -> teamSharedItemService.uncheck(teamSharedItem.getId(), invalidSsaid))
+            assertThatThrownBy(() -> teamPersonalItemService.uncheck(teamPersonalItem.getId(), invalidSsaid))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리 물품에 접근할 수 있는 권한이 없습니다. - 본인의 팀 보따리 물품이 아닙니다.");
         }
 
-        @DisplayName("팀 보따리 공통 물품 체크 해제 시, 물품을 찾을 수 없다면, 예외를 던진다.")
+        @DisplayName("팀 보따리 개인 물품 체크 해제 시, 물품을 찾을 수 없다면, 예외를 던진다.")
         @Test
         void uncheck_Exception_NotExistsItem() {
             // given
@@ -170,9 +157,9 @@ class TeamSharedItemServiceTest {
             final Long notExistsBottariItemId = 1L;
 
             // when & then
-            assertThatThrownBy(() -> teamSharedItemService.uncheck(notExistsBottariItemId, member.getSsaid()))
+            assertThatThrownBy(() -> teamPersonalItemService.uncheck(notExistsBottariItemId, member.getSsaid()))
                     .isInstanceOf(BusinessException.class)
-                    .hasMessage("팀 보따리 물품을 찾을 수 없습니다. - 공통");
+                    .hasMessage("팀 보따리 물품을 찾을 수 없습니다. - 개인");
         }
     }
 }
