@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
-@Tag(name = "Team Bottari", description = "팀 보따리 API")
+@Tag(name = "Team Member", description = "팀 멤버 API")
 public interface TeamMemberApiDocs {
 
     @Operation(summary = "팀 보따리 팀원 관리 정보 조회 ")
