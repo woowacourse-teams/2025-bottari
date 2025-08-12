@@ -187,6 +187,7 @@
     <string name="team_management_add_member_text">링크로 팀원 추가하기</string>
     <string name="team_management_member_title_text">팀원</string>
     <string name="team_management_member_head_count">%d/%d</string>
+    <string name="team_management_fetch_failure_text">팀원 정보를 가져오는데 실패했어요</string>
 
     <!-- Alarm Edit -->
     <string name="alarm_edit_title_text">알람 설정</string>
