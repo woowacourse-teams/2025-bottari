@@ -47,6 +47,7 @@
         app:itemTextAppearanceActive="@style/Bottari.BottomNavigation.TextAppearance"
         app:itemTextAppearanceInactive="@style/Bottari.BottomNavigation.TextAppearance"
         app:itemTextColor="@color/bottom_nav_selector"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/home_nav" />
 
