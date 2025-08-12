@@ -8,6 +8,9 @@ data class TeamManagementUiState(
     val hostName: String = "",
     val memberNicknames: List<String> = emptyList(),
 ) {
+    val nonDuplicateNicknames: List<String>
+        get() = listOf(hostName) + memberNicknames.filter { nickname -> nickname != hostName }
+
     companion object {
         private const val DEFAULT_VALUE = 0
     }
