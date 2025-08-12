@@ -69,6 +69,6 @@ public class TeamItemService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
 
         return teamMemberRepository.findByTeamBottariIdAndMemberId(teamBottariId, member.getId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_MEMBER_NOT_FOUND, "팀에 등록되지 않은 사용자입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI));
     }
 }

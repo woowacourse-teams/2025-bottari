@@ -125,7 +125,7 @@ public class TeamItemServiceTest {
             // when & then
             assertThatThrownBy(() -> teamItemService.getCheckList(teamBottari.getId(), member.getSsaid()))
                     .isInstanceOf(BusinessException.class)
-                    .hasMessage("팀 멤버를 찾을 수 없습니다. - 팀에 등록되지 않은 사용자입니다.");
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }
     }
 

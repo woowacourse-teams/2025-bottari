@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
-@Tag(name = "TeamBottariItem", description = "팀 보따리 물품 API")
+@Tag(name = "Team Bottari Item", description = "팀 보따리 물품 API")
 public interface TeamBottariItemApiDocs {
 
     @Operation(summary = "팀 보따리 체크리스트 조회")
@@ -20,7 +20,7 @@ public interface TeamBottariItemApiDocs {
     })
     @ApiErrorCodes({
             ErrorCode.MEMBER_NOT_FOUND,
-            ErrorCode.TEAM_MEMBER_NOT_FOUND
+            ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI
     })
     ResponseEntity<TeamMemberChecklistResponse> readChecklistBySsaid(
             final Long teamBottariId,
