@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.personal.create
+package com.bottari.presentation.view.create
 
 data class BottariCreateUiState(
     val bottariTitle: String = "",

@@ -15,10 +15,10 @@ import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentBottariBinding
 import com.bottari.presentation.view.checklist.ChecklistActivity
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
+import com.bottari.presentation.view.create.BottariCreateDialog
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.home.personal.adapter.BottariAdapter
 import com.bottari.presentation.view.home.personal.adapter.BottariViewHolder
-import com.bottari.presentation.view.home.personal.create.BottariCreateDialog
 
 class BottariFragment :
     BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate),
