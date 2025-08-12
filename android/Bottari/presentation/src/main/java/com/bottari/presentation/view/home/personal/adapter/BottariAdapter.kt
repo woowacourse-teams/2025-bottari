@@ -31,7 +31,7 @@ class BottariAdapter(
                 override fun areItemsTheSame(
                     oldItem: BottariUiModel,
                     newItem: BottariUiModel,
-                ): Boolean = oldItem.title == newItem.title
+                ): Boolean = oldItem.id == newItem.id
             }
     }
 }
