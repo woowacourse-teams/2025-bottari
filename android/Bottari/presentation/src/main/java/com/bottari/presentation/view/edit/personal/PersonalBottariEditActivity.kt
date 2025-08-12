@@ -3,6 +3,7 @@ package com.bottari.presentation.view.edit.personal
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.commit
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityPersonalBottariEditBinding
@@ -18,13 +19,12 @@ class PersonalBottariEditActivity : BaseActivity<ActivityPersonalBottariEditBind
     }
 
     private fun navigateToScreen() {
-        supportFragmentManager.beginTransaction().run {
+        supportFragmentManager.commit {
             replace(
                 R.id.fcv_personal_edit,
                 PersonalBottariEditFragment::class.java,
                 PersonalBottariEditFragment.newBundle(getBottariId()),
             )
-            commit()
         }
     }
 
