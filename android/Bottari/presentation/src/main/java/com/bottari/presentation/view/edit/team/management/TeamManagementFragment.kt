@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
@@ -17,7 +18,7 @@ class TeamManagementFragment :
     private val viewModel: TeamManagementViewModel by viewModels {
         TeamManagementViewModel.Factory(requireArguments().getLong(ARG_TEAM_BOTTARI_ID))
     }
-    private lateinit var adapter: TeamMemberAdapter
+    private val adapter: TeamMemberAdapter by lazy { TeamMemberAdapter() }
 
     override fun onViewCreated(
         view: View,
@@ -25,13 +26,13 @@ class TeamManagementFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
         setupObserver()
+        setupUI()
         setupListener()
     }
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            adapter = TeamMemberAdapter(uiState.hostName)
-            adapter.submitList(uiState.nonDuplicateNicknames)
+            adapter.submitList(uiState.members)
             binding.tvTeamMemberHeadCount.text =
                 getString(
                     R.string.team_management_member_head_count,
@@ -44,6 +45,11 @@ class TeamManagementFragment :
                 is TeamManagementUiEvent.FetchTeamMembersFailure -> requireView().showSnackbar(R.string.team_management_fetch_failure_text)
             }
         }
+    }
+
+    private fun setupUI() {
+        binding.rvMemberList.adapter = adapter
+        binding.rvMemberList.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun setupListener() {
