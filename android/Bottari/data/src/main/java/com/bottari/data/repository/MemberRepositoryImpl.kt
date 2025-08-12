@@ -1,10 +1,11 @@
 package com.bottari.data.repository
 
 import com.bottari.data.mapper.MemberMapper.toDomain
+import com.bottari.data.mapper.NicknameMapper.toRequest
 import com.bottari.data.model.member.RegisterMemberRequest
-import com.bottari.data.model.member.SaveMemberNicknameRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
+import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.member.RegisteredMember
 import com.bottari.domain.repository.MemberRepository
 
@@ -16,10 +17,8 @@ class MemberRepositoryImpl(
         memberRemoteDataSource
             .registerMember(RegisterMemberRequest(getMemberIdentifier()))
 
-    override suspend fun saveMemberNickname(nickname: String): Result<Unit> =
-        memberRemoteDataSource.saveMemberNickname(
-            SaveMemberNicknameRequest(nickname),
-        )
+    override suspend fun saveMemberNickname(nickname: Nickname): Result<Unit> =
+        memberRemoteDataSource.saveMemberNickname(nickname.toRequest())
 
     override suspend fun checkRegisteredMember(): Result<RegisteredMember> =
         memberRemoteDataSource
