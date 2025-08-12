@@ -3,6 +3,7 @@ package com.bottari.teambottari.domain;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
@@ -34,6 +35,7 @@ public class TeamBottari {
     @JoinColumn(name = "owner_id")
     private Member owner;
 
+    @Column(unique = true)
     private String inviteCode;
 
     @CreatedDate
