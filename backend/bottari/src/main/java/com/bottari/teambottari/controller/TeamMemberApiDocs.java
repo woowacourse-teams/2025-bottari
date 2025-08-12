@@ -4,6 +4,7 @@ import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +23,6 @@ public interface TeamMemberApiDocs {
     })
     ResponseEntity<ReadTeamMemberInfoResponse> readTeamMemberManagementInfo(
             final Long teamBottariId,
-            final String ssaid
+            @Parameter(hidden = true) final String ssaid
     );
 }
