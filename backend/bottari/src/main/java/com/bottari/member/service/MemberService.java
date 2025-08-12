@@ -2,6 +2,8 @@ package com.bottari.member.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.fcm.domain.FcmToken;
+import com.bottari.fcm.repository.FcmTokenRepository;
 import com.bottari.member.domain.Member;
 import com.bottari.member.dto.CheckRegistrationResponse;
 import com.bottari.member.dto.CreateMemberRequest;
@@ -24,12 +26,14 @@ public class MemberService {
     };
 
     private final MemberRepository memberRepository;
+    private final FcmTokenRepository fcmTokenRepository;
 
     @Transactional
     public Long create(final CreateMemberRequest request) {
         validateDuplicateSsaid(request.ssaid());
-
-        return saveMemberWithRandomGeneratedName(request).getId();
+        final Member savedMember = saveMemberWithRandomGeneratedName(request);
+        createFcmToken(savedMember,request.fcmToken());
+        return savedMember.getId();
     }
 
     public CheckRegistrationResponse checkRegistration(final String ssaid) {
@@ -86,5 +90,13 @@ public class MemberService {
         if (memberRepository.existsByName(request.name())) {
             throw new BusinessException(ErrorCode.MEMBER_NAME_ALREADY_EXISTS);
         }
+    }
+
+    private void createFcmToken(
+            final Member member,
+            final String token
+    ) {
+        final FcmToken fcmToken = new FcmToken(token, member);
+        fcmTokenRepository.save(fcmToken);
     }
 }
