@@ -4,12 +4,11 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentSwipeChecklistBinding
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.checklist.ChecklistUiEvent
@@ -26,12 +25,7 @@ import com.yuyakaido.android.cardstackview.SwipeAnimationSetting
 class SwipeChecklistFragment :
     BaseFragment<FragmentSwipeChecklistBinding>(FragmentSwipeChecklistBinding::inflate),
     CardStackListener {
-    private val viewModel: ChecklistViewModel by activityViewModels {
-        ChecklistViewModel.Factory(
-            requireContext().getSSAID(),
-            requireArguments().getLong(ARG_BOTTARI_ID),
-        )
-    }
+    private val viewModel: ChecklistViewModel by activityViewModels()
     private val adapter: SwipeCheckListAdapter by lazy { SwipeCheckListAdapter() }
     private lateinit var cardStackLayoutManager: CardStackLayoutManager
 
@@ -81,11 +75,12 @@ class SwipeChecklistFragment :
             handleProgressBar(uiState)
             updateSwipeList(uiState.nonSwipedItems)
             handleCompleteView(uiState)
+            handleEmptyView(uiState.isItemsEmpty)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                ChecklistUiEvent.FetchChecklistFailure -> showSnackbar(R.string.checklist_fetch_failure_text)
-                ChecklistUiEvent.CheckItemFailure -> showSnackbar(R.string.checklist_check_failure_text)
+                ChecklistUiEvent.FetchChecklistFailure -> requireView().showSnackbar(R.string.checklist_fetch_failure_text)
+                ChecklistUiEvent.CheckItemFailure -> requireView().showSnackbar(R.string.checklist_check_failure_text)
             }
         }
     }
@@ -123,6 +118,12 @@ class SwipeChecklistFragment :
         }
     }
 
+    private fun handleEmptyView(isEmpty: Boolean) {
+        if (!isEmpty) return
+        showDoneButton()
+        showEmptyView()
+    }
+
     private fun showCompleteState(isComplete: Boolean) {
         showDoneButton()
         binding.viewSwipeCompleteNotAll.clSwipeCompleteNotAll.isVisible = !isComplete
@@ -133,6 +134,10 @@ class SwipeChecklistFragment :
         binding.btnSwipeChecklistNot.isVisible = false
         binding.btnSwipeChecklistYes.isVisible = false
         binding.btnSwipeChecklistReturn.isVisible = true
+    }
+
+    private fun showEmptyView() {
+        binding.viewSwipeEmpty.clSwipeEmpty.isVisible = true
     }
 
     private fun setupCardStackView() {
@@ -172,13 +177,9 @@ class SwipeChecklistFragment :
     }
 
     companion object {
-        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
         private const val INDEX_OFFSET = 1
 
         @JvmStatic
-        fun newInstance(bottariId: Long): SwipeChecklistFragment =
-            SwipeChecklistFragment().apply {
-                arguments = bundleOf(ARG_BOTTARI_ID to bottariId)
-            }
+        fun newInstance(): SwipeChecklistFragment = SwipeChecklistFragment()
     }
 }

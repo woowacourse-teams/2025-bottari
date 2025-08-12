@@ -15,8 +15,8 @@ android {
         applicationId = "com.bottari.bottari"
         minSdk = 28
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.0.0"
+        versionCode = 4
+        versionName = "1.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -60,11 +60,17 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("net.bytebuddy:byte-buddy:1.14.12")
+    }
+}
+
 dependencies {
     implementation(project(":di"))
     implementation(project(":presentation"))
+    implementation(project(":logger"))
 
-    implementation(libs.timber)
     implementation(libs.material)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

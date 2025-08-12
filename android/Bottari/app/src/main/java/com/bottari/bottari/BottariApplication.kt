@@ -2,18 +2,17 @@ package com.bottari.bottari
 
 import android.app.Application
 import com.bottari.di.ApplicationContextProvider
-import timber.log.Timber
+import com.bottari.logger.BottariLogger
 
 class BottariApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        setupTimber()
+        BottariLogger.init(this)
         ApplicationContextProvider.init(this)
+        BottariLogger.global(APPLICATION_INIT_MESSAGE)
     }
 
-    private fun setupTimber() {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
+    companion object {
+        private const val APPLICATION_INIT_MESSAGE = "BOTTARI APPLICATION INIT"
     }
 }

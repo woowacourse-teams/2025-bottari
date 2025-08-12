@@ -5,5 +5,5 @@ import com.bottari.domain.repository.MemberRepository
 class RegisterMemberUseCase(
     private val memberRepository: MemberRepository,
 ) {
-    suspend operator fun invoke(ssaid: String): Result<Long?> = memberRepository.registerMember(ssaid)
+    suspend operator fun invoke(): Result<Long?> = memberRepository.registerMember()
 }

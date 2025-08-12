@@ -32,6 +32,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
     }
 
     private fun setBottomNavigationView() {
+        binding.bnvHome.setOnApplyWindowInsetsListener(null)
         binding.bnvHome.setOnItemSelectedListener { item ->
             if (isSameNavItem(item)) return@setOnItemSelectedListener false
             when (item.itemId) {

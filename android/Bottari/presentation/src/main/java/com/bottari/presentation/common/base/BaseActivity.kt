@@ -10,7 +10,8 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import androidx.viewbinding.ViewBinding
-import com.bottari.presentation.util.CrashlyticsLogger
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.LogEventHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 abstract class BaseActivity<VB : ViewBinding>(
@@ -21,7 +22,8 @@ abstract class BaseActivity<VB : ViewBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        CrashlyticsLogger.setScreen(this)
+        BottariLogger.lifecycle(javaClass.simpleName)
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
 
         binding = bindingFactory(layoutInflater)
         setContentView(binding.root)
@@ -30,15 +32,37 @@ abstract class BaseActivity<VB : ViewBinding>(
         setupNavigationBar()
     }
 
+    override fun onStart() {
+        super.onStart()
+        BottariLogger.lifecycle(javaClass.simpleName)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        BottariLogger.lifecycle(javaClass.simpleName)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        BottariLogger.lifecycle(javaClass.simpleName)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        BottariLogger.lifecycle(javaClass.simpleName)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        BottariLogger.lifecycle(javaClass.simpleName)
+    }
+
     private fun setWindowInsets() {
         enableEdgeToEdge()
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val bottomPadding =
-                if (hasBottomNavigationView()) DEFAULT_BOTTOM_INSET else systemBars.bottom
-
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, bottomPadding)
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
     }

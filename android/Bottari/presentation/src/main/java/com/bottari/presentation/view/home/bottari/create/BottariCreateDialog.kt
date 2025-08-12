@@ -12,8 +12,8 @@ import androidx.annotation.StringRes
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.R
-import com.bottari.presentation.common.extension.getSSAID
 import com.bottari.presentation.databinding.DialogBottariCreateBinding
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.google.android.material.snackbar.Snackbar
@@ -22,10 +22,17 @@ class BottariCreateDialog :
     DialogFragment(),
     TextWatcher {
     private val viewModel: BottariCreateViewModel by viewModels {
-        BottariCreateViewModel.Factory(getString(R.string.bottari_create_default_title_text))
+        BottariCreateViewModel.Factory(
+            defaultTitle = getString(R.string.bottari_create_default_title_text),
+        )
     }
     private var _binding: DialogBottariCreateBinding? = null
     val binding: DialogBottariCreateBinding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,7 +71,7 @@ class BottariCreateDialog :
     }
 
     override fun afterTextChanged(s: Editable?) {
-        viewModel.updateBottariTitle(s.toString().trim())
+        viewModel.updateBottariTitle(s.toString())
     }
 
     override fun onTextChanged(
@@ -98,8 +105,7 @@ class BottariCreateDialog :
         binding.etBottariCreateName.addTextChangedListener(this)
         binding.btnBottariCreateClose.setOnClickListener { dismiss() }
         binding.btnBottariCreate.setOnClickListener {
-            val title = binding.etBottariCreateName.text.toString()
-            viewModel.createBottari(requireContext().getSSAID(), title)
+            viewModel.createBottari()
         }
     }
 

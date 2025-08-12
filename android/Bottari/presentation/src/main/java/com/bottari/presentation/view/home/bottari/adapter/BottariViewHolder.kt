@@ -21,7 +21,7 @@ import com.bottari.presentation.databinding.PopupBottariOptionsBinding
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.BottariUiModel
-import com.bottari.presentation.model.DayOfWeekUiModel
+import com.bottari.presentation.model.RepeatDayUiModel
 import com.bottari.presentation.view.home.bottari.listener.OnBottariClickListener
 import java.time.LocalDate
 import java.time.LocalTime
@@ -75,8 +75,13 @@ class BottariViewHolder private constructor(
         if (alarm == null) return ""
         return when (alarm.type) {
             AlarmTypeUiModel.NON_REPEAT -> formatNonRepeat(alarm.date, alarm.time)
-            AlarmTypeUiModel.EVERYDAY_REPEAT -> formatEveryDayRepeat(alarm.time)
-            AlarmTypeUiModel.EVERYWEEK_REPEAT -> formatEveryWeekRepeat(alarm.time, alarm.daysOfWeek)
+            AlarmTypeUiModel.REPEAT -> {
+                if (alarm.isRepeatEveryDay) {
+                    formatEveryDayRepeat(alarm.time)
+                } else {
+                    formatEveryWeekRepeat(alarm.time, alarm.repeatDays)
+                }
+            }
         }
     }
 
@@ -121,9 +126,9 @@ class BottariViewHolder private constructor(
 
     private fun formatEveryWeekRepeat(
         time: LocalTime,
-        daysOfWeek: List<DayOfWeekUiModel>,
+        repeatDays: List<RepeatDayUiModel>,
     ): String {
-        val checkedDays = daysOfWeek.filter { it.isChecked }
+        val checkedDays = repeatDays.filter { it.isChecked }
         return buildString {
             append(time.formatWithPattern(timeFormat))
             append(separator)
@@ -199,6 +204,8 @@ class BottariViewHolder private constructor(
     }
 
     companion object {
+        private const val DAYS_IN_WEEK = 7
+
         fun from(
             parent: ViewGroup,
             onBottariClickListener: OnBottariClickListener,

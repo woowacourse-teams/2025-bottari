@@ -4,15 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.bottari.presentation.util.CrashlyticsLogger
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.view.common.LoadingDialog
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseFragment<VB : ViewBinding>(
     private val bindingFactory: (LayoutInflater, ViewGroup?, Boolean) -> VB,
@@ -21,10 +17,13 @@ abstract class BaseFragment<VB : ViewBinding>(
     val binding: VB get() = _binding!!
 
     private val loadingDialog: LoadingDialog by lazy { LoadingDialog() }
+    private var enterTime: Long = System.currentTimeMillis()
+    private val stayDuration: Long get() = System.currentTimeMillis() - enterTime
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        CrashlyticsLogger.setScreen(this)
+        BottariLogger.lifecycle(javaClass.simpleName)
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
     }
 
     override fun onCreateView(
@@ -32,6 +31,7 @@ abstract class BaseFragment<VB : ViewBinding>(
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        BottariLogger.lifecycle(javaClass.simpleName)
         _binding = bindingFactory(inflater, container, false)
         return binding.root
     }
@@ -41,23 +41,47 @@ abstract class BaseFragment<VB : ViewBinding>(
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setupWindowInsets()
+        BottariLogger.lifecycle(javaClass.simpleName)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        BottariLogger.lifecycle(javaClass.simpleName)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        BottariLogger.lifecycle(javaClass.simpleName)
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            LogEventHelper.logScreenExit(javaClass.simpleName, stayDuration)
+            return
+        }
+        LogEventHelper.logScreenEnter(javaClass.simpleName)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        BottariLogger.lifecycle(javaClass.simpleName)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        BottariLogger.lifecycle(javaClass.simpleName)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        BottariLogger.lifecycle(javaClass.simpleName)
         _binding = null
     }
 
-    protected fun showSnackbar(
-        @StringRes message: Int,
-        duration: Int = Snackbar.LENGTH_SHORT,
-        onDismissAction: (() -> Unit)? = null,
-    ) {
-        val rootView = view ?: return
-        val snackbar = Snackbar.make(rootView, message, duration)
-        onDismissAction?.let { snackbar.onDismiss(it) }
-        snackbar.show()
+    override fun onDestroy() {
+        super.onDestroy()
+        BottariLogger.lifecycle(javaClass.simpleName)
     }
 
     protected fun toggleLoadingIndicator(isShow: Boolean) {
@@ -71,41 +95,5 @@ abstract class BaseFragment<VB : ViewBinding>(
 
         if (!loadingDialog.isAdded) return
         loadingDialog.dismissAllowingStateLoss()
-    }
-
-    private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
-            val bottomInset = calculateBottomInset(insets, imeVisible)
-            view.setPadding(0, 0, 0, bottomInset)
-            insets
-        }
-    }
-
-    private fun calculateBottomInset(
-        insets: WindowInsetsCompat,
-        imeVisible: Boolean,
-    ): Int {
-        if (!imeVisible) return DEFAULT_BOTTOM_INSET
-
-        val imeInset = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-        val systemBarInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
-
-        return (imeInset - systemBarInset).coerceAtLeast(0)
-    }
-
-    private fun Snackbar.onDismiss(action: () -> Unit) {
-        val callback =
-            object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                override fun onDismissed(
-                    transientBottomBar: Snackbar?,
-                    event: Int,
-                ) = action()
-            }
-        addCallback(callback)
-    }
-
-    companion object {
-        private const val DEFAULT_BOTTOM_INSET = 0
     }
 }

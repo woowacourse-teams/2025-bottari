@@ -6,12 +6,12 @@
 
     <TextView
         android:id="@+id/tv_alarm_time"
-        style="@style/Pretendard_Bold_20"
+        style="@style/Pretendard_SemiBold_20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_median"
         android:layout_marginTop="@dimen/space_median"
-        android:text="@string/alarm_edit_time_title"
+        android:text="@string/alarm_edit_time_text"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

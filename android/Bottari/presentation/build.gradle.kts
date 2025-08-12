@@ -55,9 +55,16 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("net.bytebuddy:byte-buddy:1.14.12")
+    }
+}
+
 dependencies {
     implementation(project(":domain"))
     implementation(project(":di"))
+    implementation(project(":logger"))
 
     implementation(libs.timber)
     implementation(libs.androidx.core.ktx)
@@ -71,11 +78,10 @@ dependencies {
     implementation(libs.flexbox)
     implementation(libs.number.picker)
     implementation(libs.spinkit)
+    implementation(libs.material.calendarview)
+    implementation(libs.threetenabp)
+    implementation(libs.androidx.core.splashscreen)
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.crashlytics.ndk)
-    implementation(libs.firebase.analytics)
 }

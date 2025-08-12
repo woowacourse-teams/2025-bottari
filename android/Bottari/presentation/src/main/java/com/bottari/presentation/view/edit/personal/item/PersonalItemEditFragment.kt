@@ -14,9 +14,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.applyImeBottomPadding
 import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.extension.getParcelableArrayListCompat
-import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.view.common.alart.CustomAlertDialog
@@ -32,7 +33,6 @@ class PersonalItemEditFragment :
     private val viewModel: PersonalItemEditViewModel by viewModels {
         val arguments = requireArguments()
         PersonalItemEditViewModel.Factory(
-            ssaid = requireContext().getSSAID(),
             bottariId = arguments.getLong(ARG_EXTRA_BOTTARI_ID),
             title = arguments.getString(ARG_BOTTARI_TITLE) ?: "",
             items = arguments.getParcelableArrayListCompat(ARG_BOTTARI_ITEMS) ?: emptyList(),
@@ -85,7 +85,7 @@ class PersonalItemEditFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
-                PersonalItemEditUiEvent.SaveBottariItemsFailure -> showSnackbar(R.string.common_save_failure_text)
+                PersonalItemEditUiEvent.SaveBottariItemsFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
                 PersonalItemEditUiEvent.SaveBottariItemsSuccess -> {
                     onBackPressedCallback.isEnabled = false
                     requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -97,6 +97,7 @@ class PersonalItemEditFragment :
     private fun setupUI() {
         binding.rvPersonalItemEdit.adapter = adapter
         binding.rvPersonalItemEdit.layoutManager = LinearLayoutManager(requireContext())
+        binding.root.applyImeBottomPadding()
     }
 
     private fun setupListener() {

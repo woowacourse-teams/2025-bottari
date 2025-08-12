@@ -1,0 +1,15 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.Bottari" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/gray_f8f8f8</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.Bottari" parent="Base.Theme.Bottari" />
+
+    <style name="Theme.Bottari.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_bottari_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.Bottari</item>
+    </style>
+
+</resources>

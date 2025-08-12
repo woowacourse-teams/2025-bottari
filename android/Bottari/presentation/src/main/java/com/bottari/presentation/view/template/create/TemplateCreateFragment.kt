@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTemplateCreateBinding
 import com.bottari.presentation.view.common.decoration.SideSpaceItemDecoration
 import com.bottari.presentation.view.template.create.adapter.TemplateCreateMyBottariAdapter
@@ -17,7 +17,7 @@ import com.bottari.presentation.view.template.create.adapter.TemplateCreateMyBot
 
 class TemplateCreateFragment : BaseFragment<FragmentTemplateCreateBinding>(FragmentTemplateCreateBinding::inflate) {
     private val viewModel: TemplateCreateViewModel by viewModels {
-        TemplateCreateViewModel.Factory(requireContext().getSSAID())
+        TemplateCreateViewModel.Factory()
     }
     private val snapHelper by lazy { LinearSnapHelper() }
     private val itemAdapter by lazy { TemplateCreateMyBottariItemAdapter() }
@@ -56,10 +56,13 @@ class TemplateCreateFragment : BaseFragment<FragmentTemplateCreateBinding>(Fragm
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                TemplateCreateUiEvent.FetchMyBottariesFailure -> showSnackbar(R.string.template_fetch_bottari_details_failure_text)
-                TemplateCreateUiEvent.CreateTemplateFailure -> showSnackbar(R.string.template_create_failure_text)
+                TemplateCreateUiEvent.FetchMyBottariesFailure ->
+                    requireView().showSnackbar(
+                        R.string.template_fetch_bottari_details_failure_text,
+                    )
+                TemplateCreateUiEvent.CreateTemplateFailure -> requireView().showSnackbar(R.string.template_create_failure_text)
                 TemplateCreateUiEvent.CreateTemplateSuccuss ->
-                    showSnackbar(R.string.template_create_success_text) {
+                    requireView().showSnackbar(R.string.template_create_success_text) {
                         requireActivity().onBackPressedDispatcher.onBackPressed()
                     }
             }

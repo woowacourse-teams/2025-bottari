@@ -4,20 +4,24 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.addCallback
+import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityChecklistBinding
 import com.bottari.presentation.view.checklist.main.MainChecklistFragment
 import com.bottari.presentation.view.checklist.swipe.SwipeChecklistFragment
 import com.bottari.presentation.view.home.HomeActivity
+import java.time.LocalDateTime
 
 class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityChecklistBinding::inflate) {
-    private val notificationFlag: Boolean by lazy {
-        intent.getBooleanExtra(EXTRA_NOTIFICATION_FLAG, false)
+    private val viewModel: ChecklistViewModel by viewModels {
+        ChecklistViewModel.Factory(bottariId)
     }
     private val bottariId: Long by lazy {
         intent.getLongExtra(
@@ -25,11 +29,37 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
             INVALID_BOTTARI_ID,
         )
     }
+    private val notificationFlag: Boolean by lazy {
+        intent.getBooleanExtra(EXTRA_NOTIFICATION_FLAG, false)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupObserver()
         setupUI(savedInstanceState)
         setupListener()
+
+        if (notificationFlag) {
+            BottariLogger.ui(
+                UiEventType.NOTIFICATION_CLICK,
+                mapOf("notification_id" to bottariId, "time" to LocalDateTime.now().toString()),
+            )
+        }
+    }
+
+    private fun setupObserver() {
+        viewModel.uiState.observe(this) { uiState ->
+            updateToolbar(isMainChecklist() && uiState.bottariItems.isNotEmpty())
+            if (uiState.isAllChecked) {
+                BottariLogger.ui(
+                    UiEventType.CHECKLIST_COMPLETE,
+                    mapOf(
+                        "bottari_id" to bottariId,
+                        "checklist_items" to uiState.bottariItems.toString(),
+                    ),
+                )
+            }
+        }
     }
 
     private fun setupUI(savedInstanceState: Bundle?) {
@@ -66,7 +96,7 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
 
     private fun navigateToChecklistForNotification() {
         replaceChecklistFragment(MainChecklistFragment.newInstance(bottariId), false)
-        replaceChecklistFragment(SwipeChecklistFragment.newInstance(bottariId), true)
+        replaceChecklistFragment(SwipeChecklistFragment.newInstance(), true)
         updateToolbar(false)
     }
 
@@ -77,7 +107,7 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
     }
 
     private fun navigateToSwipeChecklist() {
-        val fragment = SwipeChecklistFragment.newInstance(bottariId)
+        val fragment = SwipeChecklistFragment.newInstance()
         replaceChecklistFragment(fragment, true)
         updateToolbar(false)
     }

@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +13,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTemplateBinding
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
 import com.bottari.presentation.view.home.template.adapter.TemplateAdapter
@@ -65,10 +67,14 @@ class TemplateFragment :
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
             adapter.submitList(uiState.templates)
+            binding.viewTemplateSearchEmpty.root.isVisible = uiState.isEmpty
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
-                TemplateUiEvent.FetchBottariTemplatesFailure -> showSnackbar(R.string.template_fetch_template_failure_text)
+                TemplateUiEvent.FetchBottariTemplatesFailure ->
+                    requireView().showSnackbar(
+                        R.string.template_fetch_template_failure_text,
+                    )
             }
         }
     }

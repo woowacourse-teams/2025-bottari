@@ -50,7 +50,28 @@
     <string name="common_fetch_failure_text">정보를 불러오지 못했어요</string>
     <string name="common_permission_failure_text">권한 요청이 실패했어요</string>
 
-    <!-- Common: 권한 다이얼로그 -->
+    <!-- Common: 포맷 -->
+    <string name="common_format_quantity_status">%d개 중 %d개</string>
+    <string name="common_format_date_alarm">M월 d일</string>
+    <string name="common_format_time_alarm">HH:mm</string>
+    <string name="common_format_template_items">\u00A0외 %d개</string>
+    <string name="common_format_checklist_swipe_status">%d개 중 %d개 남았어요!</string>
+    <string name="common_item_title_prefix_format">•\u00A0\u00A0%s</string>
+    <string name="common_separator_text">\u00A0|\u00A0</string>
+
+    <!-- Common: 공통 버튼 텍스트 -->
+    <string name="common_confirm_btn_text">확인</string>
+    <string name="common_cancel_btn_text">취소</string>
+    <string name="common_yes_btn_text">예</string>
+    <string name="common_no_btn_text">아니오</string>
+
+    <!-- Common: 접근성 -->
+    <string name="common_previous_btn_description">뒤로가기 버튼</string>
+    <string name="common_setting_btn_description">설정 버튼</string>
+    <string name="common_close_btn_description">닫기 버튼</string>
+    <string name="common_option_btn_description">옵션 버튼</string>
+
+    <!-- Dialog: 권한 다이얼로그 -->
     <string name="common_permission_notice_dialog_title_text">보따리를 편하게 챙기려면\n다음과 같은 권한이 필요해요</string>
     <string name="common_notification_permission_text">알림 (선택)</string>
     <string name="common_alarm_permission_text">알람 및 리마인더 (선택)</string>
@@ -64,30 +85,22 @@
     <string name="common_permission_dialog_positive_btn_text">설정으로 가기</string>
     <string name="common_permission_dialog_negative_btn_text">나중에 하기</string>
 
-    <!-- Common: 포맷 -->
-    <string name="common_format_quantity_status">%d개 중 %d개</string>
-    <string name="common_format_date_alarm">M월 d일</string>
-    <string name="common_format_time_alarm">HH:mm</string>
-    <string name="common_format_template_items">\u00A0외 %d개</string>
-    <string name="common_format_checklist_swipe_status">%d개 중 %d개 남았어요!</string>
-    <string name="common_item_title_prefix_format">•\u00A0\u00A0%s</string>
-    <string name="common_separator_text">\u00A0|\u00A0</string>
-
-    <!-- Common: 공통 버튼 텍스트 -->
-    <string name="common_confirm_btn_text">확인</string>
-    <string name="common_yes_btn_text">예</string>
-    <string name="common_no_btn_text">아니오</string>
-
-    <!-- Common: 공통 다이얼로그 텍스트-->
+    <!-- Dialog: 데이터 저장 다이얼로그 텍스트-->
     <string name="common_alert_dialog_title_text">주의</string>
     <string name="common_alert_unsaved_dialog_message_text">저장하지 않고 나가시겠습니까?</string>
 
-    <!-- Common: 접근성 -->
-    <string name="common_previous_btn_description">뒤로가기 버튼</string>
-    <string name="common_setting_btn_description">설정 버튼</string>
-    <string name="common_close_btn_description">닫기 버튼</string>
-    <string name="common_option_btn_description">옵션 버튼</string>
-    
+    <!-- Dialog: 신고 다이얼로그 텍스트 -->
+    <string name="common_report_dialog_title_text">신고 내용 확인</string>
+    <string name="common_report_dialog_report_button_text">신고하기</string>
+    <string name="common_report_dialog_description_text">신고 사유를 선택해 주세요</string>
+    <string name="common_report_dialog_spam_or_ad_radio_button_text">스팸 또는 광고</string>
+    <string name="common_report_dialog_inappropriate_content_radio_button_text">부적절한 콘텐츠</string>
+    <string name="common_report_dialog_false_information_radio_button_text">허위 정보</string>
+    <string name="common_report_dialog_privacy_exposure_radio_button_text">개인정보 노출</string>
+    <string name="common_report_dialog_submit_success_text">신고가 정상적으로 접수되었어요</string>
+    <string name="common_report_dialog_submit_failure_text">신고 접수에 실패했어요</string>
+    <!--  Notification: 보따리 알림  -->
+
     <!--  Common: 보따리 알림  -->
     <string name="common_bottari_notification_channel_name">보따리 알림</string>
     <string name="common_bottari_notification_title">%s 챙길 시간이에요!</string>
@@ -130,6 +143,10 @@
     <string name="checklist_swipe_complete_all_text">모든 준비 완료! 출발만 남았어요!</string>
     <string name="checklist_swipe_complete_not_all_text">아직 챙기지 않은 물건이 있어요. 마저 챙겨볼까요?</string>
     <string name="checklist_swipe_return_btn_text">돌아가기</string>
+    <string name="checklist_empty_view_edit_btn_text">편집하기</string>
+    <string name="checklist_empty_view_title_text">챙길 물건이 보이지 않아요</string>
+    <string name="checklist_empty_view_description_text">지금 \'편집하기\'를 눌러서\n보따리에 물건을 넣어보세요</string>
+    <string name="checklist_swipe_empty_view_description_text">보따리를 편집해서 물건을 챙겨보아요!</string>
 
     <!-- Bottari Create Dialog -->
     <string name="bottari_create_dialog_title_text">보따리 이름을 입력해 주세요</string>
@@ -155,6 +172,8 @@
     <!-- Bottari Personal Item Edit -->
     <string name="bottari_personal_item_edit_confirm_btn_text">추가하기</string>
     <string name="bottari_personal_item_edit_hint_text">추가할 물건을 입력해 주세요</string>
+    <string name="bottari_personal_item_empty_view_title">보따리 안에 물건이 없어요</string>
+    <string name="bottari_personal_item_empty_view_text">무엇을 챙겨야 할지 모르겠다면,\n‘모두의 보따리’를 살펴보세요! </string>
 
     <!-- Bottari Rename -->
     <string name="bottari_rename_failure_text">이름을 바꾸지 못했어요</string>
@@ -165,18 +184,20 @@
     <!-- Alarm Edit -->
     <string name="alarm_edit_title_text">알람 설정</string>
     <string name="alarm_edit_type_title_text">반복 설정</string>
-    <string name="alarm_edit_type_none_text">반복 없음</string>
-    <string name="alarm_edit_type_everyday_text">매일</string>
-    <string name="alarm_edit_type_everyweek_text">매주</string>
-    <string name="alarm_edit_date_title_text">알람 날짜</string>
-    <string name="alarm_edit_time_title">알람 시간</string>
-    <string name="alarm_edit_day_of_week_title_text">요일 선택</string>
+    <string name="alarm_edit_type_non_repeat_text">반복 안함</string>
+    <string name="alarm_edit_type_repeat_text">반복</string>
+    <string name="alarm_edit_date_text">날짜</string>
+    <string name="alarm_edit_time_text">시간</string>
+    <string name="alarm_edit_day_of_week_text">요일</string>
     <string name="alarm_edit_location_title_text">알람 장소</string>
     <string name="alarm_edit_save_success_text">알람을 저장했어요</string>
     <string name="alarm_edit_save_failure_text">알람을 저장하지 못했어요</string>
     <string name="alarm_edit_create_success_text">알람을 만들었어요</string>
     <string name="alarm_edit_create_failure_text">알람을 만들지 못했어요</string>
     <string name="alarm_edit_exact_alarm_permission_dialog_message_text">보따리 알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
+
+    <!--  Calendar  -->
+    <string name="calendar_title_format_text">%d년 %d월</string>
 
     <!-- Bottari Template -->
     <string name="template_search_hint_text">찾고 싶은 보따리를 입력해 보세요</string>
@@ -187,6 +208,7 @@
     <string name="template_detail_take_failure_text">나의 보따리로 가져오는데 실패했어요</string>
     <string name="template_create_btn_text">보따리 등록하기</string>
     <string name="template_taken_count_prefix">%d회</string>
+    <string name="template_empty_view_title_text">검색 결과가 없습니다</string>
 
     <!-- Bottari Template Create -->
     <string name="template_create_title_text">모두의 보따리 생성</string>
@@ -201,6 +223,8 @@
     <string name="template_my_template_delete_success_text">보따리를 삭제했어요</string>
     <string name="template_my_template_delete_failure_text">보따리를 삭제하지 못했어요</string>
     <string name="template_my_template_fetch_failure_text">내가 올린 보따리를 불러오지 못했어요</string>
+    <string name="template_my_empty_view_title_text">아직 공유한 보따리가 없어요</string>
+    <string name="template_my_empty_view_description_text">모두의 보따리에서 나만의 보따리를 소개해보세요</string>
 
     <!-- Profile -->
     <string name="profile_nickname_title">닉네임</string>
@@ -220,6 +244,7 @@
     <string name="bottari_personal_item_add_btn_description">물건 추가 버튼</string>
     <string name="bottari_personal_item_empty_icon_description">빈 물건 아이콘</string>
     <string name="bottari_home_icon_description">보따리 아이콘 이미지</string>
+    <string name="search_icon_description">검색 아이콘</string>
     <string name="checklist_swipe_check_not_all_icon">보따리 일부 품목 미체크 이미지</string>
     <string name="checklist_swipe_check_all_icon">보따리 모든 품목 체크 이미지</string>
     <string name="checklist_swipe_overlay_uncheck_icon">미체크 오버레이 아이콘</string>
@@ -227,13 +252,12 @@
     <string name="notification_permission_iv_description">알림 권한 이미지</string>
     <string name="alarm_permission_iv_description">알람 및 리마인더 권한 이미지</string>
     <string name="location_permission_iv_description">위치 권한 이미지</string>
+    <string name="alarm_date_edit_btn_description">날짜 수정 버튼</string>
 
     <!-- Menu -->
     <string name="menu_create_template_title_text">모두의 보따리에 등록하기</string>
     <string name="menu_bottari_rename_title_text">보따리 이름 바꾸기</string>
     <string name="menu_edit_title_text">내용 편집하기</string>
     <string name="menu_delete_title_text">삭제하기</string>
-    <string name="bottari_edit_item_empty_view_title">보따리 안에 물건이 없어요</string>
-    <string name="bottari_edit_item_empty_view_text">무엇을 챙겨야 할지 모르겠다면,\n‘모두의 보따리’를 살펴보세요! </string>
-
+    <string name="menu_template_report_title_text">신고하기</string>
 </resources>

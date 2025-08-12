@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_radius_12dp"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:elevation="2dp"
+    android:paddingHorizontal="@dimen/space_large"
+    android:paddingVertical="@dimen/space_median">
+
+    <TextView
+        android:id="@+id/tv_dialog_report_title"
+        style="@style/Pretendard_SemiBold_20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/common_report_dialog_title_text"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_dialog_report_description"
+        style="@style/Pretendard_Regular_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:text="@string/common_report_dialog_description_text"
+        android:textColor="@color/gray_787878"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_report_title" />
+
+    <RadioGroup
+        android:id="@+id/rg_report_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/space_small"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_report_description">
+
+        <RadioButton
+            android:id="@+id/rb_spam_or_ad"
+            style="@style/Pretendard_Regular_14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/ratio_button_selector"
+            android:paddingHorizontal="@dimen/space_2x_small"
+            android:text="@string/common_report_dialog_spam_or_ad_radio_button_text"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/rb_inappropriate_content"
+            style="@style/Pretendard_Regular_14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/ratio_button_selector"
+            android:paddingHorizontal="@dimen/space_2x_small"
+            android:text="@string/common_report_dialog_inappropriate_content_radio_button_text"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/rb_false_information"
+            style="@style/Pretendard_Regular_14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/ratio_button_selector"
+            android:paddingHorizontal="@dimen/space_2x_small"
+            android:text="@string/common_report_dialog_false_information_radio_button_text"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/rb_privacy_exposure"
+            style="@style/Pretendard_Regular_14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/ratio_button_selector"
+            android:paddingHorizontal="@dimen/space_2x_small"
+            android:text="@string/common_report_dialog_privacy_exposure_radio_button_text"
+            android:textColor="@color/black" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/btn_dialog_report"
+        style="@style/Pretendard_SemiBold_16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_median"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:backgroundTint="@color/red_soft"
+        android:clickable="false"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:paddingVertical="@dimen/space_small"
+        android:text="@string/common_report_dialog_report_button_text"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rg_report_reason" />
+
+    <ImageView
+        android:id="@+id/btn_dialog_report_close"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="@string/common_close_btn_description"
+        android:paddingStart="@dimen/space_x_large"
+        android:paddingEnd="0dp"
+        android:paddingBottom="@dimen/space_x_large"
+        android:src="@drawable/btn_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

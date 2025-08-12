@@ -12,9 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
-import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.util.PermissionUtil
 import com.bottari.presentation.util.PermissionUtil.requiredPermissions
@@ -30,9 +29,9 @@ import com.google.android.flexbox.JustifyContent
 class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
         val bottariId = requireArguments().getLong(ARG_BOTTARI_ID)
-        PersonalBottariEditViewModel.Factory(requireContext().getSSAID(), bottariId)
+        PersonalBottariEditViewModel.Factory(bottariId)
     }
-    private val popupMenu: PopupMenu by lazy { createPopupMenu() }
+    private lateinit var popupMenu: PopupMenu
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val permissionLauncher = getPermissionLauncher()
     private val alarmViewBinder: AlarmViewBinder by lazy { AlarmViewBinder(requireContext()) }
@@ -48,7 +47,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 if (PermissionUtil.isPermanentlyDenied(this)) {
                     showSettingsDialog()
                 } else {
-                    showSnackbar(R.string.common_permission_failure_text)
+                    requireView().showSnackbar(R.string.common_permission_failure_text)
                 }
             }
         }
@@ -73,14 +72,23 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
             toggleLoadingIndicator(uiState.isLoading)
             setupTitle(uiState.title)
             setupItems(uiState.items)
-            setupAlarm(uiState.alarm)
+            setupAlarm(uiState)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                PersonalBottariEditUiEvent.FetchBottariFailure -> showSnackbar(R.string.bottari_edit_fetch_failure_text)
-                PersonalBottariEditUiEvent.CreateTemplateFailure -> showSnackbar(R.string.bottari_edit_create_template_failure_text)
-                PersonalBottariEditUiEvent.CreateTemplateSuccess -> showSnackbar(R.string.bottari_edit_create_template_success_text)
-                is PersonalBottariEditUiEvent.ToggleAlarmStateFailure -> showSnackbar(R.string.bottari_edit_toggle_alarm_state_failure_text)
+                PersonalBottariEditUiEvent.FetchBottariFailure -> requireView().showSnackbar(R.string.bottari_edit_fetch_failure_text)
+                PersonalBottariEditUiEvent.CreateTemplateFailure ->
+                    requireView().showSnackbar(
+                        R.string.bottari_edit_create_template_failure_text,
+                    )
+                PersonalBottariEditUiEvent.CreateTemplateSuccess ->
+                    requireView().showSnackbar(
+                        R.string.bottari_edit_create_template_success_text,
+                    )
+                is PersonalBottariEditUiEvent.ToggleAlarmStateFailure ->
+                    requireView().showSnackbar(
+                        R.string.bottari_edit_toggle_alarm_state_failure_text,
+                    )
             }
         }
     }
@@ -149,6 +157,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun setupPopupMenu() {
+        popupMenu = createPopupMenu()
         popupMenu.menuInflater.inflate(R.menu.personal_bottari_edit_popup_menu, popupMenu.menu)
     }
 
@@ -172,8 +181,8 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         toggleItemSection(items.isNotEmpty())
     }
 
-    private fun setupAlarm(alarm: AlarmUiModel?) {
-        alarmViewBinder.bind(binding, alarm)
+    private fun setupAlarm(uiState: PersonalBottariEditUiState) {
+        alarmViewBinder.bind(binding, uiState)
     }
 
     private fun toggleAlarmSelection(

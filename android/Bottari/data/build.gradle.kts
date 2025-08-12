@@ -54,15 +54,25 @@ tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("net.bytebuddy:byte-buddy:1.14.12")
+    }
+}
+
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":logger"))
 
     kapt(libs.androidx.room.compiler)
+
     implementation(libs.androidx.core.ktx)
-    implementation(libs.timber)
     implementation(libs.bundles.network)
     implementation(libs.bundles.local)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.installations)
+
     testImplementation(libs.bundles.test)
-    androidTestImplementation(libs.androidx.junit)
     testImplementation(libs.kotest.assertions.core)
+    androidTestImplementation(libs.androidx.junit)
 }

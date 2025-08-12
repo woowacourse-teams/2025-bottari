@@ -1,92 +1,78 @@
 package com.bottari.presentation.view.home.profile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
-import com.bottari.presentation.common.event.SingleLiveEvent
-import com.bottari.presentation.common.extension.update
-import kotlinx.coroutines.launch
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
+import com.bottari.presentation.common.base.BaseViewModel
 
 class ProfileViewModel(
-    stateHandle: SavedStateHandle,
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
     private val saveMemberNicknameUseCase: SaveMemberNicknameUseCase,
-) : ViewModel() {
-    private val _uiState: MutableLiveData<ProfileUiState> = MutableLiveData(ProfileUiState())
-    val uiState: LiveData<ProfileUiState> = _uiState
-
-    private val _uiEvent: SingleLiveEvent<ProfileUiEvent> = SingleLiveEvent()
-    val uiEvent: LiveData<ProfileUiEvent> = _uiEvent
-
-    private val ssaid: String = stateHandle[KEY_SSAID] ?: error(ERROR_REQUIRED_SSAID)
-
+) : BaseViewModel<ProfileUiState, ProfileUiEvent>(ProfileUiState()) {
     init {
         fetchMemberInfo()
     }
 
     fun updateNickname(nickname: String) {
-        _uiState.update { copy(editingNickname = nickname) }
+        updateState { copy(editingNickname = nickname) }
     }
 
     fun saveNickname() {
-        if (_uiState.value?.isNicknameChanged == false) return
-        val editingNickname = _uiState.value?.editingNickname.orEmpty()
+        if (currentState.isNicknameChanged.not()) return
+        val editingNickname = currentState.editingNickname
 
-        viewModelScope.launch {
-            saveMemberNicknameUseCase(ssaid, editingNickname)
+        launch {
+            saveMemberNicknameUseCase(editingNickname)
                 .onSuccess {
-                    _uiState.update { copy(nickname = editingNickname) }
-                    _uiEvent.value = ProfileUiEvent.SaveMemberNicknameSuccess
+                    BottariLogger.ui(
+                        UiEventType.NICKNAME_EDIT,
+                        mapOf(
+                            "old_nickname" to currentState.nickname,
+                            "new_nickname" to editingNickname,
+                        ),
+                    )
+                    updateState { copy(nickname = editingNickname) }
+                    emitEvent(ProfileUiEvent.SaveMemberNicknameSuccess)
                 }.onFailure { error ->
-                    _uiState.update { copy(editingNickname = this.nickname) }
-                    _uiEvent.value =
+                    updateState { copy(editingNickname = this.nickname) }
+                    emitEvent(
                         when (error) {
                             is IllegalArgumentException -> ProfileUiEvent.InvalidNicknameRule
                             else -> ProfileUiEvent.SaveMemberNicknameFailure
-                        }
+                        },
+                    )
                 }
         }
     }
 
     private fun fetchMemberInfo() {
-        _uiState.update { copy(isLoading = true) }
+        updateState { copy(isLoading = true) }
 
-        viewModelScope.launch {
-            checkRegisteredMemberUseCase(ssaid)
+        launch {
+            checkRegisteredMemberUseCase()
                 .onSuccess {
-                    _uiState.update {
+                    updateState {
                         copy(
                             nickname = it.name.orEmpty(),
                             editingNickname = it.name.orEmpty(),
                         )
                     }
-                }.onFailure { _uiEvent.value = ProfileUiEvent.FetchMemberInfoFailure }
+                }.onFailure { emitEvent(ProfileUiEvent.FetchMemberInfoFailure) }
 
-            _uiState.update { copy(isLoading = false) }
+            updateState { copy(isLoading = false) }
         }
     }
 
     companion object {
-        private const val KEY_SSAID = "KEY_SSAID"
-        private const val ERROR_REQUIRED_SSAID = "[ERROR] SSAID를 찾지 못함"
-
-        fun Factory(ssaid: String): ViewModelProvider.Factory =
+        fun Factory(): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_SSAID] = ssaid
-
                     ProfileViewModel(
-                        stateHandle,
                         UseCaseProvider.checkRegisteredMemberUseCase,
                         UseCaseProvider.saveMemberNicknameUseCase,
                     )

@@ -2,10 +2,11 @@ package com.bottari.presentation.view.template.my
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.getSSAID
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentMyTemplateBinding
 import com.bottari.presentation.view.template.TemplateNavigator
 import com.bottari.presentation.view.template.my.adapter.MyTemplateAdapter
@@ -15,9 +16,7 @@ class MyTemplateFragment :
     BaseFragment<FragmentMyTemplateBinding>(FragmentMyTemplateBinding::inflate),
     MyBottariTemplateEventListener {
     private val viewModel: MyTemplateViewModel by viewModels {
-        MyTemplateViewModel.Factory(
-            requireContext().getSSAID(),
-        )
+        MyTemplateViewModel.Factory()
     }
     private val adapter: MyTemplateAdapter by lazy { MyTemplateAdapter(this) }
 
@@ -43,13 +42,25 @@ class MyTemplateFragment :
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
             adapter.submitList(uiState.bottariTemplates)
+            binding.viewTemplateMyEmpty.clTemplateMyEmptyView.isVisible = uiState.isEmpty
         }
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                MyTemplateUiEvent.FetchMyTemplateFailure -> showSnackbar(R.string.template_my_template_fetch_failure_text)
-                MyTemplateUiEvent.DeleteMyTemplateFailure -> showSnackbar(R.string.template_my_template_delete_failure_text)
-                MyTemplateUiEvent.DeleteMyTemplateSuccess -> showSnackbar(R.string.template_my_template_delete_success_text)
+                MyTemplateUiEvent.FetchMyTemplateFailure ->
+                    requireView().showSnackbar(
+                        R.string.template_my_template_fetch_failure_text,
+                    )
+
+                MyTemplateUiEvent.DeleteMyTemplateFailure ->
+                    requireView().showSnackbar(
+                        R.string.template_my_template_delete_failure_text,
+                    )
+
+                MyTemplateUiEvent.DeleteMyTemplateSuccess ->
+                    requireView().showSnackbar(
+                        R.string.template_my_template_delete_success_text,
+                    )
             }
         }
     }
@@ -62,14 +73,5 @@ class MyTemplateFragment :
         binding.btnPrevious.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
-    }
-
-    companion object {
-        private const val ARG_BOTTARI_TEMPLATE_ID = "ARG_BOTTARI_TEMPLATE_ID"
-
-        fun newBundle(bottariTemplateId: Long): Bundle =
-            Bundle().apply {
-                putLong(ARG_BOTTARI_TEMPLATE_ID, bottariTemplateId)
-            }
     }
 }
