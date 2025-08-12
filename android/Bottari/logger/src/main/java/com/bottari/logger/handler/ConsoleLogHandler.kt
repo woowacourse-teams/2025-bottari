@@ -40,7 +40,7 @@ class ConsoleLogHandler(
                 return@forEach
             }
 
-            Log.println(level.priority, LOG_NAME, line)
+            Log.println(level.priority, LOG_NAME.format(level.label), line)
         }
     }
 
@@ -49,7 +49,7 @@ class ConsoleLogHandler(
         line: String,
     ) {
         line.chunked(MAX_LOG_LENGTH).forEach { chunk ->
-            Log.println(level.priority, LOG_NAME, chunk)
+            Log.println(level.priority, LOG_NAME.format(level.label), chunk)
         }
     }
 
@@ -134,7 +134,7 @@ class ConsoleLogHandler(
         }
 
     companion object {
-        private const val LOG_NAME = "[BOTTARI_LOG]"
+        private const val LOG_NAME = "[BOTTARI_LOG_%s]"
         private const val MAX_LOG_LENGTH = 4000
 
         private const val SHORT_LOG_SEPARATOR =
