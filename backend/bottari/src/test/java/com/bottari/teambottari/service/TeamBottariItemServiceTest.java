@@ -24,11 +24,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 @DataJpaTest
-@Import({TeamMemberService.class})
-public class TeamMemberServiceTest {
+@Import({TeamBottariItemService.class})
+public class TeamBottariItemServiceTest {
 
     @Autowired
-    private TeamMemberService teamMemberService;
+    private TeamBottariItemService teamMemberService;
 
     @Autowired
     private EntityManager entityManager;

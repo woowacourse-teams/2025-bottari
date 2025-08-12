@@ -19,22 +19,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class TeamMemberService {
+public class TeamBottariItemService {
 
-    private final MemberRepository memberRepository;
-    private final TeamMemberRepository teamMemberRepository;
     private final TeamSharedItemRepository teamSharedItemRepository;
     private final TeamAssignedItemRepository teamAssignedItemRepository;
     private final TeamPersonalItemRepository teamPersonalItemRepository;
+    private final TeamMemberRepository teamMemberRepository;
+    private final MemberRepository memberRepository;
 
     public TeamMemberChecklistResponse getCheckList(
             final Long teamBottariId,
             final String ssaid
     ) {
-        final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
-        final TeamMember teamMember = teamMemberRepository.findByTeamBottariIdAndMemberId(teamBottariId, member.getId())
-                .orElseThrow();
+        final TeamMember teamMember = getTeamMemberByTeamBottariIdAndSsaid(teamBottariId, ssaid);
         final List<TeamSharedItem> teamSharedItems = teamSharedItemRepository.findAllByTeamMemberId(teamMember.getId());
         final List<TeamAssignedItem> teamAssignedItems = teamAssignedItemRepository.findAllByTeamMemberId(
                 teamMember.getId());
@@ -42,5 +39,16 @@ public class TeamMemberService {
                 teamMember.getId());
 
         return TeamMemberChecklistResponse.of(teamSharedItems, teamAssignedItems, teamPersonalItems);
+    }
+
+    private TeamMember getTeamMemberByTeamBottariIdAndSsaid(
+            final Long teamBottariId,
+            final String ssaid
+    ) {
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+
+        return teamMemberRepository.findByTeamBottariIdAndMemberId(teamBottariId, member.getId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_MEMBER_NOT_FOUND, "팀에 등록되지 않은 사용자입니다."));
     }
 }
