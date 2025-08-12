@@ -95,15 +95,15 @@ class TeamMemberServiceTest {
             final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
             entityManager.persist(teamBottari);
 
-            final TeamMember ownerTeamMember = new TeamMember(teamBottari, member);
-            entityManager.persist(ownerTeamMember);
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
 
             final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
             entityManager.persist(anotherMember);
 
             // when & then
             assertThatThrownBy(() -> teamMemberService.getTeamMemberInfoByTeamBottariId(
-                    teamBottari.getId(), member.getSsaid()
+                    teamBottari.getId(), anotherMember.getSsaid()
             )).isInstanceOf(BusinessException.class)
                     .hasMessage(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI.getMessage());
         }
