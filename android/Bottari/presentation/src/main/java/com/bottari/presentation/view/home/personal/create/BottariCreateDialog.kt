@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.bottari.create
+package com.bottari.presentation.view.home.personal.create
 
 import android.content.res.Resources
 import android.graphics.Color

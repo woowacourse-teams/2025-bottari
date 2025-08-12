@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.bottari.create
+package com.bottari.presentation.view.home.personal.create
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
@@ -10,7 +10,6 @@ import com.bottari.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import kotlinx.coroutines.launch
 
 class BottariCreateViewModel(
     stateHandle: SavedStateHandle,

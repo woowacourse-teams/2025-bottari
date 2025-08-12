@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.bottari.create
+package com.bottari.presentation.view.home.personal.create
 
 sealed interface BottariCreateUiEvent {
     data class CreateBottariSuccess(

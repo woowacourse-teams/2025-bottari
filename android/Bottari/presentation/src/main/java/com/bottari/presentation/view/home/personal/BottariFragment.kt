@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.bottari
+package com.bottari.presentation.view.home.personal
 
 import android.os.Bundle
 import android.view.View
@@ -16,9 +16,9 @@ import com.bottari.presentation.databinding.FragmentBottariBinding
 import com.bottari.presentation.view.checklist.ChecklistActivity
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
-import com.bottari.presentation.view.home.bottari.adapter.BottariAdapter
-import com.bottari.presentation.view.home.bottari.adapter.BottariViewHolder
-import com.bottari.presentation.view.home.bottari.create.BottariCreateDialog
+import com.bottari.presentation.view.home.personal.adapter.BottariAdapter
+import com.bottari.presentation.view.home.personal.adapter.BottariViewHolder
+import com.bottari.presentation.view.home.personal.create.BottariCreateDialog
 
 class BottariFragment :
     BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate),

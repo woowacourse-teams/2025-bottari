@@ -9,7 +9,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.applyWindowInsetsWithBottomNavigation
 import com.bottari.presentation.databinding.ActivityHomeBinding
-import com.bottari.presentation.view.home.bottari.BottariFragment
+import com.bottari.presentation.view.home.personal.BottariFragment
 import com.bottari.presentation.view.home.profile.ProfileFragment
 import com.bottari.presentation.view.home.team.TeamBottariFragment
 import com.bottari.presentation.view.home.template.TemplateFragment

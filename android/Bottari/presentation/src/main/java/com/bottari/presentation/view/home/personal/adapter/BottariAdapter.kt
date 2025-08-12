@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.bottari.adapter
+package com.bottari.presentation.view.home.personal.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

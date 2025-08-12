@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.bottari
+package com.bottari.presentation.view.home.personal
 
 import com.bottari.presentation.model.BottariUiModel
 
