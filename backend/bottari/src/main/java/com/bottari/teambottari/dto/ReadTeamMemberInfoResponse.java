@@ -7,6 +7,7 @@ import java.util.List;
 public record ReadTeamMemberInfoResponse(
         String inviteCode,
         int teamMemberCount,
+        String ownerName,
         List<String> teamMemberNames
 ) {
 
@@ -17,6 +18,7 @@ public record ReadTeamMemberInfoResponse(
         return new ReadTeamMemberInfoResponse(
                 teamBottari.getInviteCode(),
                 teamMembers.size(),
+                teamBottari.getOwner().getName(),
                 teamMembers.stream()
                         .map(teamMember -> teamMember.getMember().getName())
                         .toList()

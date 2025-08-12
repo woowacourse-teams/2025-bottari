@@ -62,6 +62,7 @@ class TeamMemberServiceTest {
             assertAll(
                     () -> assertThat(actual.inviteCode()).isEqualTo("inviteCode"),
                     () -> assertThat(actual.teamMemberCount()).isEqualTo(2),
+                    () -> assertThat(actual.ownerName()).isEqualTo(owner.getName()),
                     () -> assertThat(actual.teamMemberNames()).containsExactlyInAnyOrder(
                             owner.getName(),
                             anotherMember.getName()

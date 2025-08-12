@@ -40,6 +40,7 @@ class TeamMemberControllerTest {
         final ReadTeamMemberInfoResponse response = new ReadTeamMemberInfoResponse(
                 "Invite Code",
                 3,
+                "TeamMember1",
                 List.of(
                         "TeamMember1",
                         "TeamMember2",
