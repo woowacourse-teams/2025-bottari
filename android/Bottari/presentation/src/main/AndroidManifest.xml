@@ -36,6 +36,9 @@
         <activity
             android:name=".view.template.TemplateActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.team.checklist.TeamChecklistActivity"
+            android:exported="false" />
 
         <receiver android:name=".receiver.AlarmReceiver" />
     </application>
