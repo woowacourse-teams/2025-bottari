@@ -43,7 +43,7 @@ class TeamSharedItemInfoTest {
                 .hasMessage("팀 보따리 물품명이 너무 깁니다. - 최대 20자까지 입력 가능합니다.");
     }
 
-    @DisplayName("보따리 물품을 체크한다.")
+    @DisplayName("팀 공유 보따리 물품을 체크한다.")
     @Test
     void check() {
         // given
@@ -60,7 +60,7 @@ class TeamSharedItemInfoTest {
         assertThat(teamSharedItem.isChecked()).isTrue();
     }
 
-    @DisplayName("이미 체크 되어있는 물품을 체크하면, 예외를 던진다.")
+    @DisplayName("이미 체크 되어있는 팀 공유 보따리 물품을 체크하면, 예외를 던진다.")
     @Test
     void check_Exception_AlreadyCheck() {
         // given
@@ -77,7 +77,7 @@ class TeamSharedItemInfoTest {
                 .hasMessage("해당 팀 보따리 물품은 이미 체크되어 있습니다. - 공통");
     }
 
-    @DisplayName("보따리 물품을 체크 해제한다.")
+    @DisplayName("팀 공유 보따리 물품을 체크 해제한다.")
     @Test
     void uncheck() {
         // given
@@ -95,7 +95,7 @@ class TeamSharedItemInfoTest {
         assertThat(teamSharedItem.isChecked()).isFalse();
     }
 
-    @DisplayName("이미 체크 해제되어있는 물품을 체크 해제하면, 예외를 던진다.")
+    @DisplayName("이미 체크 해제되어있는 팀 공유 보따리 물품을 체크 해제하면, 예외를 던진다.")
     @Test
     void uncheck_Exception_AlreadyUncheck() {
         // given
@@ -111,7 +111,7 @@ class TeamSharedItemInfoTest {
                 .hasMessage("해당 팀 보따리 물품은 이미 체크 해제되어 있습니다. - 공통");
     }
 
-    @DisplayName("본인의 보따리 물품인지 확인한다.")
+    @DisplayName("본인의 팀 공유 보따리 물품인지 확인한다.")
     @ParameterizedTest
     @CsvSource({
             "same_ssaid, true",
