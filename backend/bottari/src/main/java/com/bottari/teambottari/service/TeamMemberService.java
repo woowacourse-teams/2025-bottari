@@ -37,8 +37,7 @@ public class TeamMemberService {
             final List<TeamMember> teamMembers
     ) {
         teamMembers.stream()
-                .map(teamMember -> teamMember.getMember().getSsaid())
-                .filter(memberSsaid -> memberSsaid.equals(ssaid))
+                .filter(teamMember -> teamMember.getMember().isSameBySsaid(ssaid))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI));
     }
