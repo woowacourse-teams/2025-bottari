@@ -1,8 +1,8 @@
 package com.bottari.domain.model.team
 
-@JvmInline
-value class HeadCount(
+data class HeadCount(
     val value: Int,
+    val maxValue: Int = MAXIMUM_HEAD_COUNT,
 ) {
     init {
         require(value in MINIMUM_HEAD_COUNT..MAXIMUM_HEAD_COUNT) { HEAD_COUNT_ERROR }
