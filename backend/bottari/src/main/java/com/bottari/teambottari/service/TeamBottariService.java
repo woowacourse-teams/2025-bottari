@@ -11,6 +11,7 @@ import com.bottari.teambottari.dto.CreateTeamBottariRequest;
 import com.bottari.teambottari.repository.TeamBottariRepository;
 import com.bottari.teambottari.repository.TeamMemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,12 +30,16 @@ public class TeamBottariService {
     ) {
         final Member member = memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
-        final String inviteCode = InviteCodeGenerator.generate();
-        final TeamBottari teamBottari = new TeamBottari(request.title(), member, inviteCode);
-        final TeamBottari savedTeamBottari = teamBottariRepository.save(teamBottari);
-        final TeamMember teamMember = new TeamMember(savedTeamBottari, member);
-        teamMemberRepository.save(teamMember);
+        try {
+            final String inviteCode = InviteCodeGenerator.generate();
+            final TeamBottari teamBottari = new TeamBottari(request.title(), member, inviteCode);
+            final TeamBottari savedTeamBottari = teamBottariRepository.save(teamBottari);
+            final TeamMember teamMember = new TeamMember(savedTeamBottari, member);
+            teamMemberRepository.save(teamMember);
 
-        return savedTeamBottari.getId();
+            return savedTeamBottari.getId();
+        } catch (final DataIntegrityViolationException exception) {
+            throw new BusinessException(ErrorCode.TEAM_BOTTARI_INVITE_CODE_GENERATION_FAILED);
+        }
     }
 }
