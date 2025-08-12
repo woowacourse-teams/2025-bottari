@@ -19,6 +19,7 @@
         <activity
             android:name=".view.home.HomeActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustNothing"
             android:launchMode="singleTask" />
 
         <activity
