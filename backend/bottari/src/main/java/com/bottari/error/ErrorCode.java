@@ -52,8 +52,10 @@ public enum ErrorCode {
     BOTTARI_TEMPLATE_ITEM_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 템플릿 물품명이 너무 깁니다."),
 
     // ===== TEAM_BOTTARI 관련 =====
+    TEAM_BOTTARI_NOT_FOUND(HttpStatus.NOT_FOUND, "팀 보따리를 찾을 수 없습니다."),
     TEAM_BOTTARI_TITLE_BLANK(HttpStatus.BAD_REQUEST, "팀 보따리 제목은 공백일 수 없습니다."),
     TEAM_BOTTARI_TITLE_TOO_LONG(HttpStatus.BAD_REQUEST, "팀 보따리 제목이 너무 깁니다."),
+    TEAM_BOTTARI_INVITE_CODE_GENERATION_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "고유한 팀 보따리 초대 코드를 생성하는 데 실패했습니다. (관리자 문의 필요)"),
 
     // ===== TEAM_BOTTARI_ITEM 관련 =====
     TEAM_BOTTARI_ITEM_NOT_FOUND(HttpStatus.BAD_REQUEST, "팀 보따리 물품을 찾을 수 없습니다."),
@@ -65,6 +67,9 @@ public enum ErrorCode {
 
     // ===== TEAM_MEMBER 관련 =====
     TEAM_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "팀 멤버를 찾을 수 없습니다."),
+
+    // ===== TEAM_MEMBER 관련 =====
+    MEMBER_NOT_IN_TEAM_BOTTARI(HttpStatus.FORBIDDEN, "해당 팀 보따리의 팀 멤버가 아닙니다."),
 
     // ===== ALARM 관련 =====
     ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "알람을 찾을 수 없습니다."),
