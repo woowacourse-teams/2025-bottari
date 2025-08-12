@@ -7,9 +7,11 @@ import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
+import com.bottari.presentation.common.extension.applyWindowInsetsWithBottomNavigation
 import com.bottari.presentation.databinding.ActivityHomeBinding
-import com.bottari.presentation.view.home.bottari.BottariFragment
+import com.bottari.presentation.view.home.personal.BottariFragment
 import com.bottari.presentation.view.home.profile.ProfileFragment
+import com.bottari.presentation.view.home.team.TeamBottariFragment
 import com.bottari.presentation.view.home.template.TemplateFragment
 import com.bottari.presentation.view.setting.SettingActivity
 
@@ -19,7 +21,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
         setupUI()
         setupListener()
         if (savedInstanceState == null) {
-            binding.bnvHome.selectedItemId = R.id.menu_bottari
+            binding.bnvHome.selectedItemId = R.id.menu_personal_bottari
         }
     }
 
@@ -32,13 +34,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
     }
 
     private fun setBottomNavigationView() {
-        binding.bnvHome.setOnApplyWindowInsetsListener(null)
+        binding.root.applyWindowInsetsWithBottomNavigation()
         binding.bnvHome.setOnItemSelectedListener { item ->
-            if (isSameNavItem(item)) return@setOnItemSelectedListener false
             when (item.itemId) {
+                R.id.menu_personal_bottari -> showFragment(BottariFragment::class.java)
+                R.id.menu_team_bottari -> showFragment(TeamBottariFragment::class.java)
                 R.id.menu_template -> showFragment(TemplateFragment::class.java)
-                R.id.menu_bottari -> showFragment(BottariFragment::class.java)
-                R.id.menu_profile -> showFragment(ProfileFragment::class.java)
+                R.id.menu_more -> showFragment(ProfileFragment::class.java)
             }
             changeToolbarTitle(item)
             true
@@ -55,8 +57,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
 
         transaction.commit()
     }
-
-    private fun isSameNavItem(item: MenuItem): Boolean = binding.bnvHome.selectedItemId == item.itemId
 
     private fun changeToolbarTitle(item: MenuItem) {
         binding.toolbarHome.title = item.title
