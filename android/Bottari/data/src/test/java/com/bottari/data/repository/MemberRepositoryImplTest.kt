@@ -5,6 +5,7 @@ import com.bottari.data.model.member.RegisterMemberRequest
 import com.bottari.data.model.member.SaveMemberNicknameRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
+import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.repository.MemberRepository
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.result.shouldBeFailure
@@ -80,8 +81,8 @@ class MemberRepositoryImplTest {
     fun saveMemberNicknameSuccess() =
         runTest {
             // given
-            val newNickname = "nickname"
-            val request = SaveMemberNicknameRequest(newNickname)
+            val newNickname = Nickname("nickname")
+            val request = SaveMemberNicknameRequest("nickname")
             coEvery {
                 remoteDataSource.saveMemberNickname(
                     request,
@@ -103,8 +104,8 @@ class MemberRepositoryImplTest {
     fun saveMemberNicknameFailsReturnsFailure() =
         runTest {
             // given
-            val newNickname = "nickname"
-            val request = SaveMemberNicknameRequest(newNickname)
+            val newNickname = Nickname("nickname")
+            val request = SaveMemberNicknameRequest("nickname")
             val httpException = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery {
                 remoteDataSource.saveMemberNickname(
