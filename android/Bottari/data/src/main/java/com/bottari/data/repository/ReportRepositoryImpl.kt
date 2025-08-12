@@ -1,5 +1,6 @@
 package com.bottari.data.repository
 
+import com.bottari.data.model.report.ReportTemplateRequest
 import com.bottari.data.source.remote.ReportRemoteDataSource
 import com.bottari.domain.repository.ReportRepository
 
@@ -9,5 +10,5 @@ class ReportRepositoryImpl(
     override suspend fun reportTemplate(
         bottariTemplateId: Long,
         reason: String,
-    ): Result<Unit> = reportRemoteDataSource.reportTemplate(bottariTemplateId, reason)
+    ): Result<Unit> = reportRemoteDataSource.reportTemplate(bottariTemplateId, ReportTemplateRequest(reason))
 }
