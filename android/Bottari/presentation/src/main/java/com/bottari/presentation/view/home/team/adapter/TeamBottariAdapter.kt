@@ -4,10 +4,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.BottariUiModel
+import com.bottari.presentation.model.TeamBottariUiModel
 
 class TeamBottariAdapter(
     private val bottariEventListener: TeamBottariViewHolder.BottariEventListener,
-) : ListAdapter<BottariUiModel, TeamBottariViewHolder>(DiffUtil) {
+) : ListAdapter<TeamBottariUiModel, TeamBottariViewHolder>(DiffUtil) {
     override fun onBindViewHolder(
         holder: TeamBottariViewHolder,
         position: Int,
@@ -22,16 +23,16 @@ class TeamBottariAdapter(
 
     companion object {
         private val DiffUtil =
-            object : DiffUtil.ItemCallback<BottariUiModel>() {
+            object : DiffUtil.ItemCallback<TeamBottariUiModel>() {
                 override fun areContentsTheSame(
-                    oldItem: BottariUiModel,
-                    newItem: BottariUiModel,
+                    oldItem: TeamBottariUiModel,
+                    newItem: TeamBottariUiModel,
                 ): Boolean = oldItem == newItem
 
                 override fun areItemsTheSame(
-                    oldItem: BottariUiModel,
-                    newItem: BottariUiModel,
-                ): Boolean = oldItem.title == newItem.title
+                    oldItem: TeamBottariUiModel,
+                    newItem: TeamBottariUiModel,
+                ): Boolean = oldItem.id == newItem.id
             }
     }
 }

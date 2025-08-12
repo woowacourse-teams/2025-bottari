@@ -6,6 +6,10 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.ShapeDrawable
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,8 +24,8 @@ import com.bottari.presentation.databinding.ItemBottariBinding
 import com.bottari.presentation.databinding.PopupBottariOptionsBinding
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
-import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.model.RepeatDayUiModel
+import com.bottari.presentation.model.TeamBottariUiModel
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.TextStyle
@@ -31,32 +35,54 @@ class TeamBottariViewHolder private constructor(
     private val binding: ItemBottariBinding,
     private val bottariEventListener: BottariEventListener,
 ) : RecyclerView.ViewHolder(binding.root) {
-    private val dateFormat: String = getString(R.string.common_format_date_alarm)
-    private val timeFormat: String = getString(R.string.common_format_time_alarm)
-    private val separator: String = getString(R.string.common_separator_text)
+    private val dateFormat = getString(R.string.common_format_date_alarm)
+    private val timeFormat = getString(R.string.common_format_time_alarm)
+    private val separator = getString(R.string.common_separator_text)
     private var bottariId: Long? = null
 
     init {
-        itemView.setOnClickListener {
-            bottariId?.let { id ->
-                val bottariTitle = binding.tvBottariTitle.text.toString()
-                bottariEventListener.onBottariClick(id, bottariTitle)
-            }
-        }
-        binding.btnBottariMore.setOnClickListener(::showBottariOptionsPopup)
+        setupClickListeners()
     }
 
-    fun bind(bottari: BottariUiModel) {
+    fun bind(bottari: TeamBottariUiModel) {
         bottariId = bottari.id
         with(binding) {
             clBottariItem.clipToOutline = true
-            tvBottariTitle.text = bottari.title
+            tvBottariTitle.text = formatTitleWithMemberCount(bottari.title, bottari.memberCount)
             tvBottariQuantityStatus.text =
                 formatQuantityStatus(bottari.checkedQuantity, bottari.totalQuantity)
             tvBottariAlarmInfo.text = formatAlarmInfo(bottari.alarm)
             updateProgressBar(bottari.checkedQuantity, bottari.totalQuantity)
         }
     }
+
+    private fun setupClickListeners() {
+        itemView.setOnClickListener {
+            bottariId?.let { id ->
+                bottariEventListener.onBottariClick(id, binding.tvBottariTitle.text.toString())
+            }
+        }
+        binding.btnBottariMore.setOnClickListener(::showBottariOptionsPopup)
+    }
+
+    private fun formatTitleWithMemberCount(
+        title: String,
+        count: Int,
+    ): SpannableStringBuilder =
+        SpannableStringBuilder(title)
+            .append(" ")
+            .append(
+                count.toString(),
+                ForegroundColorSpan(ContextCompat.getColor(itemView.context, R.color.gray_999999)),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+            ).apply {
+                setSpan(
+                    RelativeSizeSpan(0.9f),
+                    length - count.toString().length,
+                    length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+                )
+            }
 
     private fun formatQuantityStatus(
         checked: Int,
@@ -172,8 +198,8 @@ class TeamBottariViewHolder private constructor(
             ).apply {
                 isOutsideTouchable = true
                 setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
-                elevation = 10f
-                showAsDropDown(anchorView, -200, 0)
+                elevation = POPUP_ELEVATION
+                showAsDropDown(anchorView, POPUP_OFFSET_X, POPUP_OFFSET_Y)
             }
 
         setPopupClickListeners(binding, popupWindow)
@@ -206,13 +232,17 @@ class TeamBottariViewHolder private constructor(
     }
 
     companion object {
+        private const val POPUP_OFFSET_X = -200
+        private const val POPUP_OFFSET_Y = 0
+        private const val POPUP_ELEVATION = 10f
+
         fun from(
             parent: ViewGroup,
-            bottariEventListener: BottariEventListener,
+            listener: BottariEventListener,
         ): TeamBottariViewHolder {
-            val inflater = LayoutInflater.from(parent.context)
-            val binding = ItemBottariBinding.inflate(inflater, parent, false)
-            return TeamBottariViewHolder(binding, bottariEventListener)
+            val binding =
+                ItemBottariBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return TeamBottariViewHolder(binding, listener)
         }
     }
 }
