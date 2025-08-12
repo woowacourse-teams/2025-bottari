@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.bottari
+package com.bottari.presentation.view.home.personal
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
@@ -32,7 +32,7 @@ class BottariViewModel(
                     emitEvent(BottariUiEvent.FetchBottariesFailure)
                 }
 
-            updateState { copy(isLoading = false) }
+            updateState { copy(isLoading = false, isFetched = true) }
         }
     }
 
