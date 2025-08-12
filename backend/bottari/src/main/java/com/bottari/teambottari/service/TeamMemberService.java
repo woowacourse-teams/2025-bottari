@@ -2,7 +2,7 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.repository.TeamMemberRepository;
+import com.bottari.teambottari.repository.TeamMemberRepository;
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;

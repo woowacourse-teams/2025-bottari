@@ -1,4 +1,4 @@
-package com.bottari.repository;
+package com.bottari.teambottari.repository;
 
 import com.bottari.teambottari.domain.TeamMember;
 import java.util.List;
