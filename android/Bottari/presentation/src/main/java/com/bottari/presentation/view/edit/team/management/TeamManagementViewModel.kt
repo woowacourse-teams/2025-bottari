@@ -10,7 +10,6 @@ import com.bottari.domain.model.team.TeamMembers
 import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
-import com.bottari.presentation.model.TeamMemberUiModel
 
 class TeamManagementViewModel(
     stateHandle: SavedStateHandle,
@@ -21,11 +20,7 @@ class TeamManagementViewModel(
     private val teamBottariId: Long =
         stateHandle[KEY_TEAM_BOTTARI_ID] ?: error(ERROR_REQUIRE_TEAM_BOTTARI_ID)
 
-    init {
-        fetchTeamMembers()
-    }
-
-    private fun fetchTeamMembers() {
+    fun fetchTeamMembers() {
         updateState { copy(isLoading = true) }
         launch {
             fetchTeamMembersUseCase(teamBottariId)
