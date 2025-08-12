@@ -19,6 +19,7 @@ import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
 import com.bottari.domain.usecase.report.ReportTemplateUseCase
+import com.bottari.domain.usecase.team.CreateTeamBottariUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
@@ -143,5 +144,8 @@ object UseCaseProvider {
     }
     val reportTemplateUseCase: ReportTemplateUseCase by lazy {
         ReportTemplateUseCase(RepositoryProvider.reportRepository)
+    }
+    val createTeamBottariUseCase: CreateTeamBottariUseCase by lazy {
+        CreateTeamBottariUseCase(RepositoryProvider.teamBottariRepository)
     }
 }
