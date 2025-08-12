@@ -1,5 +1,7 @@
 package com.bottari.presentation.view.edit.team.management
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -19,6 +21,11 @@ class TeamManagementFragment :
         TeamManagementViewModel.Factory(requireArguments().getLong(ARG_TEAM_BOTTARI_ID))
     }
     private val adapter: TeamMemberAdapter by lazy { TeamMemberAdapter() }
+    private val clipboardManager: ClipboardManager by lazy {
+        requireContext().getSystemService(
+            ClipboardManager::class.java,
+        )
+    }
 
     override fun onViewCreated(
         view: View,
@@ -58,14 +65,26 @@ class TeamManagementFragment :
     }
 
     private fun setupListener() {
-        binding.btnClipboard.setOnClickListener { }
+        binding.btnClipboard.setOnClickListener { copyInviteCode() }
         binding.btnPrevious.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 
+    private fun copyInviteCode() {
+        val inviteCode =
+            viewModel.uiState.value?.inviteCode ?: run {
+                requireView().showSnackbar(R.string.team_management_copy_invite_code_success_text)
+                return
+            }
+        val clip = ClipData.newPlainText(LABEL_INVITE_CODE, inviteCode)
+        clipboardManager.setPrimaryClip(clip)
+        requireView().showSnackbar(R.string.team_management_copy_invite_code_failure_text)
+    }
+
     companion object {
         private const val ARG_TEAM_BOTTARI_ID = "ARG_TEAM_BOTTARI_ID"
+        private const val LABEL_INVITE_CODE = "LABEL_INVITE_CODE"
 
         @JvmStatic
         fun newInstance(id: Long) =
