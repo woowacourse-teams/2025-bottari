@@ -11,7 +11,7 @@ class TeamBottariRemoteDataSourceImpl(
     override suspend fun createBottari(request: CreateTeamBottariRequest): Result<Long?> =
         runCatching {
             val response = teamBottariService.createTeamBottari(request)
-            if (!response.isSuccessful) {
+            if (response.isSuccessful) {
                 return Result.success(response.extractIdFromHeader(HEADER_TEAM_BOTTARI_ID_PREFIX))
             }
 

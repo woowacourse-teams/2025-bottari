@@ -10,19 +10,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.bottari.domain.model.bottari.BottariType
 import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.R
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.DialogBottariCreateBinding
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
-import com.google.android.material.snackbar.Snackbar
 
 class BottariCreateDialog :
     DialogFragment(),
     TextWatcher {
     private val viewModel: BottariCreateViewModel by viewModels {
         BottariCreateViewModel.Factory(
+            type = requireArguments().getString(ARG_BOTTARI_TYPE) ?: error(ERROR_BOTTARI_TYPE),
             defaultTitle = getString(R.string.bottari_create_default_title_text),
         )
     }
@@ -80,14 +83,11 @@ class BottariCreateDialog :
         before: Int,
         count: Int,
     ) {
-        val isEnabled = s.isNullOrBlank().not()
-        val alphaValue = if (isEnabled) ENABLED_ALPHA_VALUE else DISABLED_ALPHA_VALUE
-        binding.btnBottariCreate.isClickable = isEnabled
-        binding.btnBottariCreate.alpha = alphaValue
     }
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            handleCreateButtonState(uiState.isCanCreate)
             if (binding.etBottariCreateName.text.toString() == uiState.bottariTitle) return@observe
             binding.etBottariCreateName.setText(uiState.bottariTitle)
             binding.etBottariCreateName.setSelection(uiState.bottariTitle.length)
@@ -96,9 +96,15 @@ class BottariCreateDialog :
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
                 is BottariCreateUiEvent.CreateBottariSuccess -> navigateToScreen(uiEvent.bottariId)
-                BottariCreateUiEvent.CreateBottariFailure -> showSnackBar(R.string.bottari_create_failure_text)
+                BottariCreateUiEvent.CreateBottariFailure -> showSnackbar(R.string.bottari_create_failure_text)
             }
         }
+    }
+
+    private fun handleCreateButtonState(isCanCreate: Boolean) {
+        binding.btnBottariCreate.isEnabled = isCanCreate
+        binding.btnBottariCreate.alpha =
+            if (isCanCreate) ENABLED_ALPHA_VALUE else DISABLED_ALPHA_VALUE
     }
 
     private fun setupListener() {
@@ -122,28 +128,36 @@ class BottariCreateDialog :
         }
     }
 
-    private fun showSnackBar(
-        @StringRes message: Int,
-    ) {
-        Snackbar
-            .make(
-                requireActivity().findViewById(android.R.id.content),
-                message,
-                Snackbar.LENGTH_SHORT,
-            ).show()
+    private fun navigateToScreen(bottariId: Long?) {
+        if (bottariId != null) {
+            val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId, true)
+            startActivity(intent)
+        }
+
         dismiss()
     }
 
-    private fun navigateToScreen(bottariId: Long?) {
-        if (bottariId == null) return
-        val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId, true)
-        startActivity(intent)
-        dismiss()
+    private fun showSnackbar(
+        @StringRes messageRes: Int,
+    ) {
+        requireActivity()
+            .findViewById<View>(android.R.id.content)
+            .showSnackbar(messageRes) {
+                dismiss()
+            }
     }
 
     companion object {
         private const val WIDTH_RATIO = 0.9
         private const val DISABLED_ALPHA_VALUE = 0.4f
         private const val ENABLED_ALPHA_VALUE = 1f
+
+        private const val ARG_BOTTARI_TYPE = "ARG_BOTTARI_TYPE"
+        private const val ERROR_BOTTARI_TYPE = "[ERROR] 보따리 타입을 찾을 수 없습니다"
+
+        fun newInstance(type: BottariType): BottariCreateDialog =
+            BottariCreateDialog().apply {
+                arguments = bundleOf(ARG_BOTTARI_TYPE to type.name)
+            }
     }
 }

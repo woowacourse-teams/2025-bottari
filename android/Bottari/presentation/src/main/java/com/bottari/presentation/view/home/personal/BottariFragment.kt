@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bottari.domain.model.bottari.BottariType
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.fadeIn
@@ -87,7 +88,9 @@ class BottariFragment :
     private fun setupListener() {
         binding.rvBottari.addOnScrollListener(handleScrollState())
         binding.btnBottariCreate.setOnClickListener {
-            BottariCreateDialog().show(parentFragmentManager, BottariCreateDialog::class.java.name)
+            BottariCreateDialog
+                .newInstance(BottariType.PERSONAL)
+                .show(parentFragmentManager, BottariCreateDialog::class.java.name)
         }
     }
 
