@@ -9,9 +9,7 @@ import com.bottari.domain.model.bottari.BottariDetail
 import com.bottari.domain.model.bottari.BottariItem
 
 object BottariMapper {
-    fun List<FetchBottariesResponse>.toDomain(): List<Bottari> = mapNotNull { it.toDomain() }
-
-    private fun FetchBottariesResponse.toDomain(): Bottari =
+    fun FetchBottariesResponse.toDomain(): Bottari =
         Bottari(
             alarm = alarmResponse?.toDomain(),
             checkedQuantity = checkedItemsCount,
