@@ -2,10 +2,13 @@ package com.bottari.teambottari.controller;
 
 import com.bottari.config.MemberIdentifier;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
+import com.bottari.teambottari.dto.ReadTeamBottariPreviewResponse;
 import com.bottari.teambottari.service.TeamBottariService;
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class TeamBottariController implements TeamBottariApiDocs {
 
     private final TeamBottariService teamBottariService;
+
+    @GetMapping
+    @Override
+    public ResponseEntity<List<ReadTeamBottariPreviewResponse>> readPreviews(
+            @MemberIdentifier final String ssaid
+    ) {
+        final List<ReadTeamBottariPreviewResponse> responses = teamBottariService.getAllBySsaid(ssaid);
+
+        return ResponseEntity.ok(responses);
+    }
 
     @PostMapping
     @Override

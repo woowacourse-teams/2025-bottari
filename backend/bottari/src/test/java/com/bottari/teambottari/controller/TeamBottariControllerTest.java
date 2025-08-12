@@ -1,14 +1,18 @@
 package com.bottari.teambottari.controller;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
+import com.bottari.teambottari.dto.ReadTeamBottariPreviewResponse;
 import com.bottari.teambottari.service.TeamBottariService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +35,26 @@ class TeamBottariControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @DisplayName("내가 소속된 팀 보따리 목록을 조회한다.")
+    @Test
+    void readPreviews() throws Exception {
+        // given
+        final String ssaid = "ssaid";
+        final List<ReadTeamBottariPreviewResponse> response = List.of(
+                new ReadTeamBottariPreviewResponse(1L, "title", 5, 3, 2, null),
+                new ReadTeamBottariPreviewResponse(2L, "another title", 10, 7, 3, null)
+        );
+        given(teamBottariService.getAllBySsaid(ssaid))
+                .willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/team-bottaries")
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
 
     @DisplayName("팀 보따리를 생성한다.")
     @Test
