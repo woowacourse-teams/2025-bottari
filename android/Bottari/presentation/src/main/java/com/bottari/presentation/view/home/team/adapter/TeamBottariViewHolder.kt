@@ -238,11 +238,11 @@ class TeamBottariViewHolder private constructor(
 
         fun from(
             parent: ViewGroup,
-            listener: BottariEventListener,
+            bottariEventListener: BottariEventListener,
         ): TeamBottariViewHolder {
             val binding =
                 ItemBottariBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return TeamBottariViewHolder(binding, listener)
+            return TeamBottariViewHolder(binding, bottariEventListener)
         }
     }
 }
