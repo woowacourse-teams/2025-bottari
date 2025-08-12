@@ -22,7 +22,6 @@ import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.BottariUiModel
 import com.bottari.presentation.model.RepeatDayUiModel
-import com.bottari.presentation.view.home.bottari.listener.OnBottariClickListener
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.TextStyle
@@ -30,7 +29,7 @@ import java.util.Locale
 
 class BottariViewHolder private constructor(
     private val binding: ItemBottariBinding,
-    private val onBottariClickListener: OnBottariClickListener,
+    private val bottariEventListener: BottariEventListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val dateFormat: String = getString(R.string.common_format_date_alarm)
     private val timeFormat: String = getString(R.string.common_format_time_alarm)
@@ -41,14 +40,10 @@ class BottariViewHolder private constructor(
         itemView.setOnClickListener {
             bottariId?.let { id ->
                 val bottariTitle = binding.tvBottariTitle.text.toString()
-                onBottariClickListener.onClick(id, bottariTitle)
+                bottariEventListener.onBottariClick(id, bottariTitle)
             }
         }
-        binding.btnBottariMore.setOnClickListener { anchorView ->
-            bottariId?.let { id ->
-                showBottariOptionsPopup(anchorView, id)
-            }
-        }
+        binding.btnBottariMore.setOnClickListener(::showBottariOptionsPopup)
     }
 
     fun bind(bottari: BottariUiModel) {
@@ -165,10 +160,7 @@ class BottariViewHolder private constructor(
         return drawable
     }
 
-    private fun showBottariOptionsPopup(
-        anchorView: View,
-        bottariId: Long,
-    ) {
+    private fun showBottariOptionsPopup(anchorView: View) {
         val binding = PopupBottariOptionsBinding.inflate(LayoutInflater.from(anchorView.context))
 
         val popupWindow =
@@ -184,35 +176,43 @@ class BottariViewHolder private constructor(
                 showAsDropDown(anchorView, -200, 0)
             }
 
-        setPopupClickListeners(binding, popupWindow, bottariId)
+        setPopupClickListeners(binding, popupWindow)
     }
 
     private fun setPopupClickListeners(
         binding: PopupBottariOptionsBinding,
         popupWindow: PopupWindow,
-        bottariId: Long,
     ) {
         binding.btnEdit.setOnClickListener {
-            onBottariClickListener.onEditClick(bottariId)
+            bottariId?.let { bottariEventListener.onBottariEditClick(it) }
             popupWindow.dismiss()
         }
 
         binding.btnDelete.setOnClickListener {
-            onBottariClickListener.onDeleteClick(bottariId)
+            bottariId?.let { bottariEventListener.onBottariDeleteClick(it) }
             popupWindow.dismiss()
         }
     }
 
-    companion object {
-        private const val DAYS_IN_WEEK = 7
+    interface BottariEventListener {
+        fun onBottariClick(
+            bottariId: Long,
+            bottariTitle: String,
+        )
 
+        fun onBottariEditClick(bottariId: Long)
+
+        fun onBottariDeleteClick(bottariId: Long)
+    }
+
+    companion object {
         fun from(
             parent: ViewGroup,
-            onBottariClickListener: OnBottariClickListener,
+            bottariEventListener: BottariEventListener,
         ): BottariViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemBottariBinding.inflate(inflater, parent, false)
-            return BottariViewHolder(binding, onBottariClickListener)
+            return BottariViewHolder(binding, bottariEventListener)
         }
     }
 }

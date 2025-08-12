@@ -17,12 +17,12 @@ import com.bottari.presentation.view.checklist.ChecklistActivity
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.home.bottari.adapter.BottariAdapter
+import com.bottari.presentation.view.home.bottari.adapter.BottariViewHolder
 import com.bottari.presentation.view.home.bottari.create.BottariCreateDialog
-import com.bottari.presentation.view.home.bottari.listener.OnBottariClickListener
 
 class BottariFragment :
     BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate),
-    OnBottariClickListener {
+    BottariViewHolder.BottariEventListener {
     private val viewModel: BottariViewModel by viewModels {
         BottariViewModel.Factory()
     }
@@ -43,18 +43,18 @@ class BottariFragment :
         viewModel.fetchBottaries()
     }
 
-    override fun onClick(
+    override fun onBottariClick(
         bottariId: Long,
         bottariTitle: String,
     ) {
         navigateToChecklist(bottariId, bottariTitle)
     }
 
-    override fun onEditClick(bottariId: Long) {
+    override fun onBottariEditClick(bottariId: Long) {
         navigateToEdit(bottariId)
     }
 
-    override fun onDeleteClick(bottariId: Long) {
+    override fun onBottariDeleteClick(bottariId: Long) {
         viewModel.deleteBottari(bottariId)
     }
 
