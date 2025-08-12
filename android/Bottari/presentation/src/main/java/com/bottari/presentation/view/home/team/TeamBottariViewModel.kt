@@ -5,14 +5,14 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
-import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
+import com.bottari.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.BottariMapper.toUiModel
+import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
 
 class TeamBottariViewModel(
-    private val fetchBottariesUseCase: FetchBottariesUseCase,
+    private val fetchTeamBottariesUseCase: FetchTeamBottariesUseCase,
     private val deleteBottariUseCase: DeleteBottariUseCase,
 ) : BaseViewModel<TeamBottariUiState, TeamBottariUiEvent>(TeamBottariUiState()) {
     init {
@@ -23,14 +23,12 @@ class TeamBottariViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            fetchBottariesUseCase()
+            fetchTeamBottariesUseCase()
                 .onSuccess { bottaries ->
                     updateState {
                         copy(bottaries = bottaries.map { bottari -> bottari.toUiModel() })
                     }
-                }.onFailure {
-                    emitEvent(TeamBottariUiEvent.FetchBottariesFailure)
-                }
+                }.onFailure { emitEvent(TeamBottariUiEvent.FetchBottariesFailure) }
 
             updateState { copy(isLoading = false, isFetched = true) }
         }
@@ -42,22 +40,24 @@ class TeamBottariViewModel(
         launch {
             deleteBottariUseCase(bottariId)
                 .onSuccess {
-                    val bottari = currentState.bottaries.find { it.id == bottariId }
-                    BottariLogger.ui(
-                        UiEventType.PERSONAL_BOTTARI_DELETE,
-                        mapOf(
-                            "bottari_id" to bottariId,
-                            "bottari_title" to bottari?.title.orEmpty(),
-                        ),
-                    )
+                    logPersonalBottariDelete(bottariId)
                     fetchBottaries()
                     emitEvent(TeamBottariUiEvent.BottariDeleteSuccess)
-                }.onFailure {
-                    emitEvent(TeamBottariUiEvent.BottariDeleteFailure)
-                }
+                }.onFailure { emitEvent(TeamBottariUiEvent.BottariDeleteFailure) }
 
             updateState { copy(isLoading = false) }
         }
+    }
+
+    private fun logPersonalBottariDelete(bottariId: Long) {
+        val bottari = currentState.bottaries.find { it.id == bottariId }
+        BottariLogger.ui(
+            UiEventType.PERSONAL_BOTTARI_DELETE,
+            mapOf(
+                "bottari_id" to bottariId,
+                "bottari_title" to bottari?.title.orEmpty(),
+            ),
+        )
     }
 
     companion object {
@@ -65,7 +65,7 @@ class TeamBottariViewModel(
             viewModelFactory {
                 initializer {
                     TeamBottariViewModel(
-                        UseCaseProvider.fetchBottariesUseCase,
+                        UseCaseProvider.fetchTeamBottariesUseCase,
                         UseCaseProvider.deleteBottariUseCase,
                     )
                 }

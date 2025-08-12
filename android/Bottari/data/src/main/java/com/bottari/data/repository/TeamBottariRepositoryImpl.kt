@@ -1,7 +1,9 @@
 package com.bottari.data.repository
 
+import com.bottari.data.mapper.TeamBottariMapper.toDomain
 import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
+import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.repository.TeamBottariRepository
 
 class TeamBottariRepositoryImpl(
@@ -11,4 +13,9 @@ class TeamBottariRepositoryImpl(
         teamBottariRemoteDataSource.createBottari(
             CreateTeamBottariRequest(title),
         )
+
+    override suspend fun fetchTeamBottaries(): Result<List<TeamBottari>> =
+        teamBottariRemoteDataSource
+            .fetchTeamBottaries()
+            .mapCatching { teamBottaries -> teamBottaries.map { it.toDomain() } }
 }
