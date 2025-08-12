@@ -10,6 +10,7 @@ import com.bottari.teambottari.repository.TeamBottariRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ public class TeamMemberService {
     private final TeamMemberRepository teamMemberRepository;
     private final TeamBottariRepository teamBottariRepository;
 
+    @Transactional(readOnly = true)
     public ReadTeamMemberInfoResponse getTeamMemberInfoByTeamBottariId(
             final Long teamBottariId,
             final String ssaid
