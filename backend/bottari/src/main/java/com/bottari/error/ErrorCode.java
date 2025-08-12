@@ -76,6 +76,7 @@ public enum ErrorCode {
     // ===== 기타 =====
     DATE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 날짜 형식입니다."),
     NUMBER_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 숫자 형식입니다."),
+    FCM_INITIALIZED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR,"Firebase 초기화를 실패하였습니다.")
     ;
 
     private final HttpStatus status;
