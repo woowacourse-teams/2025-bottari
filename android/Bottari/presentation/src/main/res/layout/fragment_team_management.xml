@@ -29,16 +29,6 @@
             android:layout_gravity="center"
             android:text="@string/team_management_title_text"
             android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/btn_confirm"
-            style="@style/Pretendard_SemiBold_16"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:gravity="center"
-            android:text="@string/common_confirm_btn_text"
-            android:textColor="@color/black" />
     </Toolbar>
 
     <androidx.constraintlayout.widget.ConstraintLayout

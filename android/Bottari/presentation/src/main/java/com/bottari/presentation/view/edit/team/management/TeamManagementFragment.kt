@@ -54,6 +54,9 @@ class TeamManagementFragment :
 
     private fun setupListener() {
         binding.btnClipboard.setOnClickListener { }
+        binding.btnPrevious.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     companion object {
