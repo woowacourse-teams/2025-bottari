@@ -1,11 +1,18 @@
 package com.bottari.data.source.remote
 
 import com.bottari.data.model.team.CreateTeamBottariRequest
+import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.TeamMembersResponse
 
 interface TeamBottariRemoteDataSource {
     suspend fun createBottari(request: CreateTeamBottariRequest): Result<Long?>
+
+    suspend fun fetchTeamBottari(teamBottariId: Long): Result<FetchTeamBottariChecklistResponse>
+
+    suspend fun uncheckBottariItem(bottariItemId: Long): Result<Unit>
+
+    suspend fun checkBottariItem(bottariItemId: Long): Result<Unit>
 
     suspend fun fetchTeamBottaries(): Result<List<FetchTeamBottariResponse>>
 

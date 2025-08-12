@@ -6,6 +6,7 @@ import com.bottari.data.model.common.ErrorResponse
 import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.TeamMembersResponse
+import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.service.TeamBottariService
 
 class TeamBottariRemoteDataSourceImpl(
@@ -18,6 +19,37 @@ class TeamBottariRemoteDataSourceImpl(
                 return Result.success(response.extractIdFromHeader(HEADER_TEAM_BOTTARI_ID_PREFIX))
             }
 
+            val errorResponse = ErrorResponse.parseErrorResponse(response.errorBody())
+            return Result.failure(Exception(errorResponse?.title))
+        }
+
+    override suspend fun fetchTeamBottari(teamBottariId: Long): Result<FetchTeamBottariChecklistResponse> =
+        runCatching {
+            val response = teamBottariService.fetchTeamBottari(teamBottariId)
+            if (response.isSuccessful) {
+                return Result.success(response.body()!!)
+            }
+
+            val errorResponse = ErrorResponse.parseErrorResponse(response.errorBody())
+            return Result.failure(Exception(errorResponse?.title))
+        }
+
+    override suspend fun uncheckBottariItem(bottariItemId: Long): Result<Unit> =
+        runCatching {
+            val response = teamBottariService.uncheckTeamBottariItem(bottariItemId)
+            if (response.isSuccessful) {
+                return Result.success(Unit)
+            }
+            val errorResponse = ErrorResponse.parseErrorResponse(response.errorBody())
+            return Result.failure(Exception(errorResponse?.title))
+        }
+
+    override suspend fun checkBottariItem(bottariItemId: Long): Result<Unit> =
+        runCatching {
+            val response = teamBottariService.checkTeamBottariItem(bottariItemId)
+            if (response.isSuccessful) {
+                return Result.success(Unit)
+            }
             val errorResponse = ErrorResponse.parseErrorResponse(response.errorBody())
             return Result.failure(Exception(errorResponse?.title))
         }

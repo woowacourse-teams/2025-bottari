@@ -1,15 +1,27 @@
 package com.bottari.presentation.view.team.checklist.checklist
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.bottari.di.UseCaseProvider
+import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
+import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
+import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.TeamChecklistParentUIModel
 
 sealed interface TeamChecklistUiEvent
 
-class TeamChecklistViewModel : BaseViewModel<TeamChecklistUiState, TeamChecklistUiEvent>(TeamChecklistUiState()) {
+class TeamChecklistViewModel(
+    stateHandle: SavedStateHandle,
+    private val fetchTeamBottariChecklistUseCase: FetchTeamChecklistUseCase,
+    private val checkTeamBottariItemUseCase: CheckTeamBottariItemUseCase,
+    private val unCheckTeamBottariItemUseCase: UnCheckTeamBottariItemUseCase,
+) : BaseViewModel<TeamChecklistUiState, TeamChecklistUiEvent>(TeamChecklistUiState()) {
+    val teamBottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val categoryItemsMap: Map<ChecklistCategory, List<BottariItemUiModel>> =
         mapOf(
             ChecklistCategory.COMMON to fixtureList1,
@@ -51,7 +63,6 @@ class TeamChecklistViewModel : BaseViewModel<TeamChecklistUiState, TeamChecklist
                     emptyList(),
                     categoryItemsMap,
                 )
-
             copy(
                 allItems = categoryItemsMap[ChecklistCategory.COMMON] ?: emptyList(),
                 pointItems = categoryItemsMap[ChecklistCategory.RESPONSIBLE] ?: emptyList(),
@@ -68,12 +79,25 @@ class TeamChecklistViewModel : BaseViewModel<TeamChecklistUiState, TeamChecklist
                     currentState.allItems.any { it.id == itemId } -> {
                         currentState.copy(allItems = currentState.allItems.toggleItemInList(itemId))
                     }
+
                     currentState.pointItems.any { it.id == itemId } -> {
-                        currentState.copy(pointItems = currentState.pointItems.toggleItemInList(itemId))
+                        currentState.copy(
+                            pointItems =
+                                currentState.pointItems.toggleItemInList(
+                                    itemId,
+                                ),
+                        )
                     }
+
                     currentState.personalItems.any { it.id == itemId } -> {
-                        currentState.copy(personalItems = currentState.personalItems.toggleItemInList(itemId))
+                        currentState.copy(
+                            personalItems =
+                                currentState.personalItems.toggleItemInList(
+                                    itemId,
+                                ),
+                        )
                     }
+
                     else -> currentState
                 }
 
@@ -117,10 +141,20 @@ class TeamChecklistViewModel : BaseViewModel<TeamChecklistUiState, TeamChecklist
     }
 
     companion object {
-        fun Factory(): ViewModelProvider.Factory =
+        const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
+        const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
+
+        fun Factory(bottariId: Long): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    TeamChecklistViewModel()
+                    val stateHandle = createSavedStateHandle()
+                    stateHandle[KEY_BOTTARI_ID] = bottariId
+                    TeamChecklistViewModel(
+                        stateHandle,
+                        UseCaseProvider.fetchTeamChecklistUseCase,
+                        UseCaseProvider.checkTeamBottariItemUseCase,
+                        UseCaseProvider.unCheckTeamBottariItemUseCase,
+                    )
                 }
             }
     }
