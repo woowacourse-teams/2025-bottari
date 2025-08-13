@@ -1,5 +1,6 @@
 package com.bottari.presentation.view.edit.team.main
 
+import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 
 data class TeamBottariEditUiState(
@@ -8,6 +9,7 @@ data class TeamBottariEditUiState(
     val personalItems: List<BottariItemUiModel> = emptyList(),
     val sharedItems: List<BottariItemUiModel> = emptyList(),
     val assignedItems: List<BottariItemUiModel> = emptyList(),
+    val alarm: AlarmUiModel? = null,
     val isFetched: Boolean = false,
 ) {
     val isPersonalItemsEmpty: Boolean = isFetched && personalItems.isEmpty()

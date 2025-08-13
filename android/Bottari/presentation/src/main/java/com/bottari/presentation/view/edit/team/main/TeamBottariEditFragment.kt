@@ -66,7 +66,7 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
 
     private fun handleUiEvent(uiEvent: TeamBottariEditUiEvent) {
         when (uiEvent) {
-            TeamBottariEditUiEvent.FetchTeamBottariFailure ->
+            TeamBottariEditUiEvent.FetchTeamBottariDetailFailure ->
                 showSnackbar(R.string.bottari_edit_fetch_failure_text)
 
             TeamBottariEditUiEvent.ToggleAlarmStateFailure ->
