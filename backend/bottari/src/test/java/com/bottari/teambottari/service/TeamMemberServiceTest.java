@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.error.BusinessException;
-import com.bottari.error.ErrorCode;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
@@ -90,7 +89,7 @@ class TeamMemberServiceTest {
             assertThatThrownBy(() -> teamMemberService.getTeamMemberInfoByTeamBottariId(
                     notExistsTeamBottariId, member.getSsaid()
             )).isInstanceOf(BusinessException.class)
-                    .hasMessage(ErrorCode.TEAM_BOTTARI_NOT_FOUND.getMessage());
+                    .hasMessage("팀 보따리를 찾을 수 없습니다.");
         }
 
         @DisplayName("해당 ssaid의 멤버가 팀 보따리에 속한 멤버가 아닐 경우, 예외를 던진다.")
@@ -113,7 +112,7 @@ class TeamMemberServiceTest {
             assertThatThrownBy(() -> teamMemberService.getTeamMemberInfoByTeamBottariId(
                     teamBottari.getId(), anotherMember.getSsaid()
             )).isInstanceOf(BusinessException.class)
-                    .hasMessage(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI.getMessage());
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }
     }
 
@@ -218,7 +217,7 @@ class TeamMemberServiceTest {
             assertThatThrownBy(() -> teamMemberService.getTeamMemberStatusByTeamBottariId(
                     notExistsTeamBottariId, member.getSsaid()
             )).isInstanceOf(BusinessException.class)
-                    .hasMessage(ErrorCode.TEAM_BOTTARI_NOT_FOUND.getMessage());
+                    .hasMessage("팀 보따리를 찾을 수 없습니다.");
         }
 
         @DisplayName("해당 ssaid의 멤버가 팀 보따리에 속한 멤버가 아닐 경우, 예외를 던진다.")
@@ -241,7 +240,7 @@ class TeamMemberServiceTest {
             assertThatThrownBy(() -> teamMemberService.getTeamMemberStatusByTeamBottariId(
                     teamBottari.getId(), anotherMember.getSsaid()
             )).isInstanceOf(BusinessException.class)
-                    .hasMessage(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI.getMessage());
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }
     }
 }
