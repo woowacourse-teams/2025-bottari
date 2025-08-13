@@ -183,13 +183,34 @@ class TeamBottariServiceTest {
         @Test
         void getById_Exception_WhenNonExistentUser() {
             // given
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(anotherMember);
+            final TeamBottari teamBottari = new TeamBottari("팀 보따리", anotherMember, "code");
+            entityManager.persist(teamBottari);
+            final TeamMember teamMember = new TeamMember(teamBottari, anotherMember);
+            entityManager.persist(teamMember);
+            final Long teamBottariId = teamBottari.getId();
+
             final String nonExistentSsaid = "non-existent-ssaid";
-            final Long teamBottariId = 1L;
 
             // when & then
             assertThatThrownBy(() -> teamBottariService.getById(nonExistentSsaid, teamBottariId))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
+        }
+
+        @DisplayName("존재하지 않는 팀 보따리를 조회할 경우, 예외를 던진다.")
+        @Test
+        void getById_Exception_WhenNonExistentTeamBottari() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+            final Long nonExistentTeamBottariId = 999L;
+
+            // when & then
+            assertThatThrownBy(() -> teamBottariService.getById(member.getSsaid(), nonExistentTeamBottariId))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("팀 보따리를 찾을 수 없습니다.");
         }
 
         @DisplayName("소속된 팀 보따리를 조회할 때, 팀 멤버가 아닌 경우 예외를 던진다.")
@@ -207,20 +228,6 @@ class TeamBottariServiceTest {
 
             // when & then
             assertThatThrownBy(() -> teamBottariService.getById(member.getSsaid(), teamBottari.getId()))
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
-        }
-
-        @DisplayName("존재하지 않는 팀 보따리를 조회할 경우, 예외를 던진다.")
-        @Test
-        void getById_Exception_WhenNonExistentTeamBottari() {
-            // given
-            final Member member = MemberFixture.MEMBER.get();
-            entityManager.persist(member);
-            final Long nonExistentTeamBottariId = 999L;
-
-            // when & then
-            assertThatThrownBy(() -> teamBottariService.getById(member.getSsaid(), nonExistentTeamBottariId))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }

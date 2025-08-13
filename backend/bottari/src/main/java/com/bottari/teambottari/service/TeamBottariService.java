@@ -47,8 +47,8 @@ public class TeamBottariService {
 
     @Transactional(readOnly = true)
     public List<ReadTeamBottariPreviewResponse> getAllBySsaid(final String ssaid) {
-        final Long memberId = findByMemberId(ssaid);
-        final List<TeamMember> teamMembers = teamMemberRepository.findAllByMemberId(memberId);
+        final Member member = findMemberBySsaid(ssaid);
+        final List<TeamMember> teamMembers = teamMemberRepository.findAllByMemberId(member.getId());
 
         return buildReadTeamBottariPreviewResponses(teamMembers);
     }
@@ -58,10 +58,10 @@ public class TeamBottariService {
             final String ssaid,
             final Long id
     ) {
-        final Long memberId = findByMemberId(ssaid);
-        final TeamMember teamMember = teamMemberRepository.findByTeamBottariIdAndMemberIdWithTeamBottari(id, memberId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI));
-        final TeamBottari teamBottari = teamMember.getTeamBottari();
+        final TeamBottari teamBottari = teamBottariRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_NOT_FOUND));
+        final Member member = findMemberBySsaid(ssaid);
+        final TeamMember teamMember = findTeamMemberByTeamBottariAndMember(teamBottari, member);
         final List<TeamSharedItemInfo> sharedItems = findSharedItemsByTeam(teamBottari.getId());
         final List<TeamAssignedItemInfo> assignedItems = findAssignedItemsByTeam(teamBottari.getId());
         final List<TeamPersonalItem> personalItems = findPersonalItemsByMember(teamMember.getId());
@@ -80,8 +80,7 @@ public class TeamBottariService {
             final String ssaid,
             final CreateTeamBottariRequest request
     ) {
-        final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        final Member member = findMemberBySsaid(ssaid);
         try {
             final String inviteCode = InviteCodeGenerator.generate();
             final TeamBottari teamBottari = new TeamBottari(request.title(), member, inviteCode);
@@ -95,10 +94,9 @@ public class TeamBottariService {
         }
     }
 
-    private Long findByMemberId(final String ssaid) {
-        final Member member = memberRepository.findBySsaid(ssaid)
+    private Member findMemberBySsaid(final String ssaid) {
+        return memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
-        return member.getId();
     }
 
     private List<ReadTeamBottariPreviewResponse> buildReadTeamBottariPreviewResponses(final List<TeamMember> teamMembers) {
@@ -184,6 +182,14 @@ public class TeamBottariService {
 
         return allByTeamMemberIn.stream()
                 .collect(Collectors.groupingBy(TeamPersonalItem::getTeamMember));
+    }
+
+    private TeamMember findTeamMemberByTeamBottariAndMember(
+            final TeamBottari teamBottari,
+            final Member member
+    ) {
+        return teamMemberRepository.findByTeamBottariIdAndMemberId(teamBottari.getId(), member.getId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI));
     }
 
     private List<TeamSharedItemInfo> findSharedItemsByTeam(final Long teamBottariId) {
