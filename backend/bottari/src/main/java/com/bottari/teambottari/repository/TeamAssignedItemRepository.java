@@ -16,7 +16,7 @@ public interface TeamAssignedItemRepository extends JpaRepository<TeamAssignedIt
             JOIN FETCH tm.member
             WHERE tai.teamMember.teamBottari.id = :teamBottariId
             """)
-    List<TeamAssignedItem> findAllByTeamBottariId(Long teamBottariId);
+    List<TeamAssignedItem> findAllByTeamBottariId(final Long teamBottariId);
 
     List<TeamAssignedItem> findAllByTeamMemberIn(final List<TeamMember> teamMembers);
 

@@ -9,8 +9,8 @@ import java.util.List;
 public record TeamItemStatusResponse(
         String name,
         List<MemberCheckStatusResponse> memberCheckStatus,
-        int checkCount,
-        int totalCount
+        int checkItemsCount,
+        int totalItemsCount
 ) {
 
     public static TeamItemStatusResponse of(
@@ -20,9 +20,11 @@ public record TeamItemStatusResponse(
         final List<MemberCheckStatusResponse> checkStatusResponses = items.stream()
                 .map(MemberCheckStatusResponse::from)
                 .toList();
-        final int checkCount = Math.toIntExact(checkStatusResponses.stream()
-                .filter(MemberCheckStatusResponse::checked)
-                .count());
+        final int checkCount = Math.toIntExact(
+                checkStatusResponses.stream()
+                        .filter(MemberCheckStatusResponse::checked)
+                        .count()
+        );
 
         return new TeamItemStatusResponse(
                 info.getName(),

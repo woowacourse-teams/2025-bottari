@@ -108,14 +108,14 @@ public class TeamItemFacadeTest {
             assertAll(
                     () -> assertThat(actual.sharedItems()).hasSize(1),
                     () -> assertThat(actual.assignedItems()).hasSize(2),
-                    () -> assertThat(actualSharedItemResponse.checkCount()).isEqualTo(0),
-                    () -> assertThat(actualSharedItemResponse.totalCount()).isEqualTo(2),
+                    () -> assertThat(actualSharedItemResponse.checkItemsCount()).isEqualTo(0),
+                    () -> assertThat(actualSharedItemResponse.totalItemsCount()).isEqualTo(2),
                     () -> assertThat(member_1_assignedItemResponse.name()).isEqualTo(teamAssignedItemInfo_1.getName()),
-                    () -> assertThat(member_1_assignedItemResponse.checkCount()).isEqualTo(0),
-                    () -> assertThat(member_1_assignedItemResponse.totalCount()).isEqualTo(1),
+                    () -> assertThat(member_1_assignedItemResponse.checkItemsCount()).isEqualTo(0),
+                    () -> assertThat(member_1_assignedItemResponse.totalItemsCount()).isEqualTo(1),
                     () -> assertThat(member_2_assignedItemResponse.name()).isEqualTo(teamAssignedItemInfo_2.getName()),
-                    () -> assertThat(member_2_assignedItemResponse.checkCount()).isEqualTo(1),
-                    () -> assertThat(member_2_assignedItemResponse.totalCount()).isEqualTo(1)
+                    () -> assertThat(member_2_assignedItemResponse.checkItemsCount()).isEqualTo(1),
+                    () -> assertThat(member_2_assignedItemResponse.totalItemsCount()).isEqualTo(1)
             );
         }
 
