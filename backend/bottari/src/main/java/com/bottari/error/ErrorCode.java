@@ -73,7 +73,6 @@ public enum ErrorCode {
     // ===== REPORT 관련 =====
     REPORT_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 해당 템플릿에 대한 신고 기록이 있습니다."),
 
-
     // ===== FCM 관련 =====
     FCM_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND,"FCM 토큰 정보가 존재하지 않습니다."),
     FCM_INITIALIZED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR,"Firebase 초기화를 실패하였습니다."),
