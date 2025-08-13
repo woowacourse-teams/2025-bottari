@@ -22,6 +22,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 sealed interface TeamChecklistUiEvent {
+    data object FetchChecklistFailure : TeamChecklistUiEvent
+
     data object CheckItemFailure : TeamChecklistUiEvent
 }
 
@@ -135,6 +137,7 @@ class TeamChecklistViewModel(
                     }
                 }.onFailure {
                     updateState { copy(isLoading = false) }
+                    emitEvent(TeamChecklistUiEvent.FetchChecklistFailure)
                 }
         }
     }
@@ -170,7 +173,6 @@ class TeamChecklistViewModel(
             } else {
                 unCheckTeamBottariItemUseCase(item.id, item.category.toString())
             }
-
         result.onFailure {
             emitEvent(TeamChecklistUiEvent.CheckItemFailure)
         }

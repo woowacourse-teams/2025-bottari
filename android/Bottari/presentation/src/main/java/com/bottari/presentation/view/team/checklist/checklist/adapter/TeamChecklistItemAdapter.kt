@@ -32,7 +32,7 @@ class TeamChecklistItemAdapter(
         viewType: Int,
     ): RecyclerView.ViewHolder =
         when (viewType) {
-            TeamChecklistItemType.PARENT -> {
+            TeamChecklistItemType.CATEGORY -> {
                 val binding =
                     ItemTeamChecklistOptionBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -42,7 +42,7 @@ class TeamChecklistItemAdapter(
                 ParentViewHolder(binding)
             }
 
-            TeamChecklistItemType.CHILD -> {
+            TeamChecklistItemType.ITEM -> {
                 TeamChecklistViewHolder.from(parent) { position ->
                     val item = currentList[position]
                     if (item is TeamChecklistItem.Item) {
@@ -60,8 +60,8 @@ class TeamChecklistItemAdapter(
 
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
-            is TeamChecklistItem.Category -> TeamChecklistItemType.PARENT
-            is TeamChecklistItem.Item -> TeamChecklistItemType.CHILD
+            is TeamChecklistItem.Category -> TeamChecklistItemType.CATEGORY
+            is TeamChecklistItem.Item -> TeamChecklistItemType.ITEM
         }
 
     override fun onBindViewHolder(
