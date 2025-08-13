@@ -141,13 +141,18 @@ class TeamMemberServiceTest {
             entityManager.persist(teamSharedItemInfo1);
             entityManager.persist(teamSharedItemInfo2);
 
-            // 체크 추가
             final TeamSharedItem ownerTeamMemberSharedItem1 = new TeamSharedItem(teamSharedItemInfo1, ownerTeamMember);
-            final TeamSharedItem anotherTeamMemberSharedItem1 = new TeamSharedItem(teamSharedItemInfo1,
-                    anotherTeamMember);
+            ownerTeamMemberSharedItem1.check();
+            final TeamSharedItem anotherTeamMemberSharedItem1 = new TeamSharedItem(
+                    teamSharedItemInfo1,
+                    anotherTeamMember
+            );
             final TeamSharedItem ownerTeamMemberSharedItem2 = new TeamSharedItem(teamSharedItemInfo2, ownerTeamMember);
-            final TeamSharedItem anotherTeamMemberSharedItem2 = new TeamSharedItem(teamSharedItemInfo2,
-                    anotherTeamMember);
+            final TeamSharedItem anotherTeamMemberSharedItem2 = new TeamSharedItem(
+                    teamSharedItemInfo2,
+                    anotherTeamMember
+            );
+            anotherTeamMemberSharedItem2.check();
             entityManager.persist(ownerTeamMemberSharedItem1);
             entityManager.persist(anotherTeamMemberSharedItem1);
             entityManager.persist(ownerTeamMemberSharedItem2);
@@ -160,6 +165,7 @@ class TeamMemberServiceTest {
                     teamAssignedItemInfo,
                     anotherTeamMember
             );
+            anotherTeamMemberAssignedItem.check();
             entityManager.persist(anotherTeamMemberAssignedItem);
 
             // when
@@ -172,7 +178,7 @@ class TeamMemberServiceTest {
                     owner.getName(),
                     true,
                     2,
-                    0,
+                    1,
                     List.of(
                             ReadTeamMemberStatusResponse.TeamMemberItemResponse.from(ownerTeamMemberSharedItem1),
                             ReadTeamMemberStatusResponse.TeamMemberItemResponse.from(ownerTeamMemberSharedItem2)
@@ -183,7 +189,7 @@ class TeamMemberServiceTest {
                     anotherMember.getName(),
                     false,
                     3,
-                    0,
+                    2,
                     List.of(
                             ReadTeamMemberStatusResponse.TeamMemberItemResponse.from(anotherTeamMemberSharedItem1),
                             ReadTeamMemberStatusResponse.TeamMemberItemResponse.from(anotherTeamMemberSharedItem2)
