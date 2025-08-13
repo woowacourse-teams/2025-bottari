@@ -10,6 +10,7 @@ import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
+import com.bottari.teambottari.repository.TeamBottariRepository;
 import com.bottari.teambottari.repository.TeamMemberRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +24,14 @@ public class TeamItemFacade {
     private final TeamAssignedItemService teamAssignedItemService;
     private final TeamPersonalItemService teamPersonalItemService;
     private final TeamMemberRepository teamMemberRepository;
+    private final TeamBottariRepository teamBottariRepository;
     private final MemberRepository memberRepository;
 
     public ReadTeamItemStatusResponse getTeamItemStatus(
             final Long teamBottariId,
             final String ssaid
     ) {
+        validateTeamBottari(teamBottariId);
         validateMemberInTeam(teamBottariId, ssaid);
         final List<TeamItemStatusResponse> sharedItemResponses = teamSharedItemService.getAllWithMemberStatusByTeamBottariId(
                 teamBottariId);
@@ -83,6 +86,12 @@ public class TeamItemFacade {
 
         return teamMemberRepository.findByTeamBottariIdAndMemberId(teamBottariId, member.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI));
+    }
+
+    private void validateTeamBottari(final Long teamBottariId) {
+        if (!teamBottariRepository.existsById(teamBottariId)) {
+            throw new BusinessException(ErrorCode.TEAM_BOTTARI_NOT_FOUND);
+        }
     }
 
     private void validateMemberInTeam(

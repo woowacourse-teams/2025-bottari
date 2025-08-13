@@ -136,6 +136,21 @@ public class TeamItemFacadeTest {
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }
+
+        @DisplayName("팀 보따리 물품 현황을 조회할 때, 팀 보따리가 존재하지 않는다면 예외를 던진다.")
+        @Test
+        void getTeamItemStatus_Exception_NotFoundTeamBottari() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final Long invalid_teamBottariId = -1L;
+
+            // when & then
+            assertThatThrownBy(() -> teamItemFacade.getTeamItemStatus(invalid_teamBottariId, member.getSsaid()))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("팀 보따리를 찾을 수 없습니다.");
+        }
     }
 
     @Nested
