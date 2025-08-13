@@ -24,7 +24,7 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
             JOIN FETCH tm.teamBottari t
             WHERE m.id = :memberId
            """)
-    List<TeamMember> findAllByMemberId(Long memberId);
+    List<TeamMember> findAllByMemberId(final Long memberId);
 
     @Query("""
             SELECT tm.teamBottari.id AS teamBottariId, COUNT(tm) AS memberCount
@@ -32,5 +32,5 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
             WHERE tm.teamBottari IN :teamBottaries
             GROUP BY tm.teamBottari
            """)
-    List<TeamBottariMemberCountProjection> countMembersByTeamBottariIn(List<TeamBottari> teamBottaries);
+    List<TeamBottariMemberCountProjection> countMembersByTeamBottariIn(final List<TeamBottari> teamBottaries);
 }

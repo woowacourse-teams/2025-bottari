@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TeamPersonalItemRepository extends JpaRepository<TeamPersonalItem, Long> {
 
-    List<TeamPersonalItem> findAllByTeamMemberIn(List<TeamMember> teamMembers);
+    List<TeamPersonalItem> findAllByTeamMemberIn(final List<TeamMember> teamMembers);
 }
