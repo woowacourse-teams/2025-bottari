@@ -100,9 +100,9 @@ public class TeamBottariService {
                 .map(TeamMember::getTeamBottari)
                 .distinct()
                 .collect(Collectors.toList());
-        final List<TeamBottariMemberCountProjection> memberCountResponses = teamMemberRepository.countMembersByTeamBottariIn(teamBottaries);
+        final List<TeamBottariMemberCountProjection> teamMembersCount = teamMemberRepository.countMembersByTeamBottariIn(teamBottaries);
 
-        return memberCountResponses.stream()
+        return teamMembersCount.stream()
                 .collect(Collectors.toMap(
                         TeamBottariMemberCountProjection::getTeamBottariId,
                         TeamBottariMemberCountProjection::getMemberCount
