@@ -88,6 +88,29 @@ class TeamChecklistViewModel(
         }
     }
 
+    private fun fetchTeamCheckList() {
+        launch {
+            updateState { copy(isLoading = true) }
+
+            fetchTeamBottariChecklistUseCase(teamBottariId)
+                .onSuccess { checklistData ->
+                    val newItems = checklistData.toUIModel()
+                    updateState { copy(items = newItems) }
+                    val newExpandableList =
+                        generateExpandableCategoryList(currentState.expandableItems, newItems)
+                    updateState {
+                        copy(
+                            isLoading = false,
+                            expandableItems = newExpandableList,
+                        )
+                    }
+                }.onFailure {
+                    updateState { copy(isLoading = false) }
+                    emitEvent(TeamChecklistUiEvent.FetchChecklistFailure)
+                }
+        }
+    }
+
     private fun generateExpandableList(
         currentExpandableItems: List<TeamChecklistRowUiModel>,
         categoryItems: Map<ChecklistCategory, List<TeamChecklistItemUiModel>>,
@@ -114,29 +137,6 @@ class TeamChecklistViewModel(
             }
         }
         return newExpandableList
-    }
-
-    private fun fetchTeamCheckList() {
-        launch {
-            updateState { copy(isLoading = true) }
-
-            fetchTeamBottariChecklistUseCase(teamBottariId)
-                .onSuccess { checklistData ->
-                    val newItems = checklistData.toUIModel()
-                    updateState { copy(items = newItems) }
-                    val newExpandableList =
-                        generateExpandableCategoryList(currentState.expandableItems, newItems)
-                    updateState {
-                        copy(
-                            isLoading = false,
-                            expandableItems = newExpandableList,
-                        )
-                    }
-                }.onFailure {
-                    updateState { copy(isLoading = false) }
-                    emitEvent(TeamChecklistUiEvent.FetchChecklistFailure)
-                }
-        }
     }
 
     private fun generateExpandableCategoryList(
