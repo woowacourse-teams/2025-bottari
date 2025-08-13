@@ -2,7 +2,7 @@ package com.bottari.teambottari.repository;
 
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
-import com.bottari.teambottari.dto.TeamBottariMemberCountProjection;
+import com.bottari.teambottari.repository.dto.TeamBottariMemberCountProjection;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

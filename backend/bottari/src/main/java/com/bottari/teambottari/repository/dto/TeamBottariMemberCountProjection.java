@@ -1,4 +1,4 @@
-package com.bottari.teambottari.dto;
+package com.bottari.teambottari.repository.dto;
 
 public interface TeamBottariMemberCountProjection {
 
