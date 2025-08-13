@@ -17,6 +17,7 @@ import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
+import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -180,8 +181,8 @@ class TeamMemberServiceTest {
                     2,
                     1,
                     List.of(
-                            ReadTeamMemberStatusResponse.TeamMemberItemResponse.from(ownerTeamMemberSharedItem1),
-                            ReadTeamMemberStatusResponse.TeamMemberItemResponse.from(ownerTeamMemberSharedItem2)
+                            TeamMemberItemResponse.from(ownerTeamMemberSharedItem1),
+                            TeamMemberItemResponse.from(ownerTeamMemberSharedItem2)
                     ),
                     List.of()
             );
@@ -191,10 +192,10 @@ class TeamMemberServiceTest {
                     3,
                     2,
                     List.of(
-                            ReadTeamMemberStatusResponse.TeamMemberItemResponse.from(anotherTeamMemberSharedItem1),
-                            ReadTeamMemberStatusResponse.TeamMemberItemResponse.from(anotherTeamMemberSharedItem2)
+                            TeamMemberItemResponse.from(anotherTeamMemberSharedItem1),
+                            TeamMemberItemResponse.from(anotherTeamMemberSharedItem2)
                     ),
-                    List.of(ReadTeamMemberStatusResponse.TeamMemberItemResponse.from(anotherTeamMemberAssignedItem))
+                    List.of(TeamMemberItemResponse.from(anotherTeamMemberAssignedItem))
             );
 
             // then

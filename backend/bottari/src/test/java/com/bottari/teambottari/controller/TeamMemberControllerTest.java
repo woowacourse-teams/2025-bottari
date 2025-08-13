@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
-import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse.TeamMemberItemResponse;
+import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.service.TeamMemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;

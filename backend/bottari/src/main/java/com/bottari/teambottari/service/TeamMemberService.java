@@ -8,7 +8,7 @@ import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
-import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse.TeamMemberItemResponse;
+import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamAssignedItemRepository;
 import com.bottari.teambottari.repository.TeamBottariRepository;
 import com.bottari.teambottari.repository.TeamMemberRepository;
@@ -96,8 +96,12 @@ public class TeamMemberService {
             final List<TeamSharedItem> sharedItems,
             final List<TeamAssignedItem> assignedItems
     ) {
-        final int checkedSharedItemsCount = (int) sharedItems.stream().filter(TeamSharedItem::isChecked).count();
-        final int checkedAssignedItemsCount = (int) assignedItems.stream().filter(TeamAssignedItem::isChecked).count();
+        final int checkedSharedItemsCount = (int) sharedItems.stream()
+                .filter(TeamSharedItem::isChecked)
+                .count();
+        final int checkedAssignedItemsCount = (int) assignedItems.stream()
+                .filter(TeamAssignedItem::isChecked)
+                .count();
 
         return checkedSharedItemsCount + checkedAssignedItemsCount;
     }
