@@ -40,6 +40,24 @@ public class TeamPersonalItem {
         this.isChecked = false;
     }
 
+    public void check() {
+        if (isChecked) {
+            throw new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_ALREADY_CHECKED, "공통");
+        }
+        this.isChecked = true;
+    }
+
+    public void uncheck() {
+        if (!isChecked) {
+            throw new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_ALREADY_UNCHECKED, "공통");
+        }
+        this.isChecked = false;
+    }
+
+    public boolean isOwner(final String ssaid) {
+        return teamMember.isSameBySsaid(ssaid);
+    }
+
     private void validateName(final String name) {
         if (name.isBlank()) {
             throw new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NAME_BLANK);
