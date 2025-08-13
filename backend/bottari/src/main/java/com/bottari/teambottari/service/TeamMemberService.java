@@ -9,10 +9,10 @@ import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse.TeamMemberItemResponse;
-import com.bottari.teambottari.repository.TeamAssignedItemRepositoryV2;
+import com.bottari.teambottari.repository.TeamAssignedItemRepository;
 import com.bottari.teambottari.repository.TeamBottariRepository;
 import com.bottari.teambottari.repository.TeamMemberRepository;
-import com.bottari.teambottari.repository.TeamSharedItemRepositoryV2;
+import com.bottari.teambottari.repository.TeamSharedItemRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,8 +24,8 @@ public class TeamMemberService {
 
     private final TeamMemberRepository teamMemberRepository;
     private final TeamBottariRepository teamBottariRepository;
-    private final TeamSharedItemRepositoryV2 teamSharedItemRepository;
-    private final TeamAssignedItemRepositoryV2 teamAssignedItemRepository;
+    private final TeamSharedItemRepository teamSharedItemRepository;
+    private final TeamAssignedItemRepository teamAssignedItemRepository;
 
     @Transactional(readOnly = true)
     public ReadTeamMemberInfoResponse getTeamMemberInfoByTeamBottariId(
