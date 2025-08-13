@@ -20,9 +20,8 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
     @Query("""
             SELECT tm
             FROM TeamMember tm
-            JOIN FETCH tm.member m
-            JOIN FETCH tm.teamBottari t
-            WHERE m.id = :memberId
+            JOIN FETCH tm.teamBottari tㅌㅈ
+            WHERE tm.member.id = :memberId
            """)
     List<TeamMember> findAllByMemberId(final Long memberId);
 
