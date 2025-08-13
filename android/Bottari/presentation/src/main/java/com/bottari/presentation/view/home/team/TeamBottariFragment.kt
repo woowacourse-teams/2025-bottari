@@ -17,7 +17,7 @@ import com.bottari.presentation.databinding.FragmentTeamBottariBinding
 import com.bottari.presentation.view.checklist.team.TeamChecklistActivity
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
 import com.bottari.presentation.view.create.BottariCreateDialog
-import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
+import com.bottari.presentation.view.edit.team.TeamBottariEditActivity
 import com.bottari.presentation.view.home.team.adapter.TeamBottariAdapter
 import com.bottari.presentation.view.home.team.adapter.TeamBottariViewHolder
 
@@ -103,7 +103,7 @@ class TeamBottariFragment :
     }
 
     private fun navigateToEdit(bottariId: Long) {
-        val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId, false)
+        val intent = TeamBottariEditActivity.newIntent(requireContext(), bottariId, false)
         startActivity(intent)
     }
 
