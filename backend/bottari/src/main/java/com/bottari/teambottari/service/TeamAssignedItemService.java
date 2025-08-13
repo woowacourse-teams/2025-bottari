@@ -17,6 +17,10 @@ public class TeamAssignedItemService {
 
     private final TeamAssignedItemRepository teamAssignedItemRepository;
 
+    public List<TeamAssignedItem> findAllByTeamBottariId(final Long teamBottariId) {
+        return teamAssignedItemRepository.findAllByTeamBottariId(teamBottariId);
+    }
+
     public List<TeamMemberItemResponse> getAllByTeamMember(final TeamMember teamMember) {
         final List<TeamAssignedItem> items = teamAssignedItemRepository.findAllByTeamMemberId(teamMember.getId());
 

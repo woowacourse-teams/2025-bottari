@@ -17,6 +17,10 @@ public class TeamSharedItemService {
 
     private final TeamSharedItemRepository teamSharedItemRepository;
 
+    public List<TeamSharedItem> findAllByTeamBottariId(final Long teamBottariId) {
+        return teamSharedItemRepository.findAllByTeamBottariId(teamBottariId);
+    }
+
     public List<TeamMemberItemResponse> getAllByTeamMember(final TeamMember teamMember) {
         final List<TeamSharedItem> items = teamSharedItemRepository.findAllByTeamMemberId(teamMember.getId());
 

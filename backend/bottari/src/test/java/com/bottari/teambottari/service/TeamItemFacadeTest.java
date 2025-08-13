@@ -17,6 +17,8 @@ import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
+import com.bottari.teambottari.dto.ReadTeamItemResponse;
+import com.bottari.teambottari.dto.ReadTeamItemResponse.TeamBottariItemWithCheckResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
@@ -44,6 +46,79 @@ public class TeamItemFacadeTest {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Nested
+    class GetTeamItemsTest {
+
+        @DisplayName("팀 멤버가 아니라면, 팀 보따리 물품 현황을 확인하 수 없다.")
+        @Test
+        void getTeamItems() {
+            // given
+            final Member member_1 = MemberFixture.MEMBER.get();
+            final Member member_2 = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(member_1);
+            entityManager.persist(member_2);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member_1);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember_1 = new TeamMember(teamBottari, member_1);
+            final TeamMember teamMember_2 = new TeamMember(teamBottari, member_2);
+            entityManager.persist(teamMember_1);
+            entityManager.persist(teamMember_2);
+
+            final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo("공통 물품", teamBottari);
+            entityManager.persist(teamSharedItemInfo);
+
+            // 공통 물품 배정
+            final TeamSharedItem member_1_sharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember_1);
+            final TeamSharedItem member_2_sharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember_2);
+            entityManager.persist(member_1_sharedItem);
+            entityManager.persist(member_2_sharedItem);
+
+            // 담당 물품 배정
+            final TeamAssignedItemInfo teamAssignedItemInfo_1 = new TeamAssignedItemInfo("멤버 1 물품", teamBottari);
+            final TeamAssignedItemInfo teamAssignedItemInfo_2 = new TeamAssignedItemInfo("멤버 2 물품", teamBottari);
+            entityManager.persist(teamAssignedItemInfo_1);
+            entityManager.persist(teamAssignedItemInfo_2);
+
+            // 담당 물품 배정 (멤버 1 -> member_1_assignedItem, 멤버 2 -> member_2_assignedItem)
+            final TeamAssignedItem member_1_assignedItem = new TeamAssignedItem(teamAssignedItemInfo_1, teamMember_1);
+            final TeamAssignedItem member_2_assignedItem = new TeamAssignedItem(teamAssignedItemInfo_2, teamMember_2);
+            member_2_assignedItem.check();
+            entityManager.persist(member_1_assignedItem);
+            entityManager.persist(member_2_assignedItem);
+
+            // when
+            final ReadTeamItemResponse actual = teamItemFacade.getTeamItems(teamBottari.getId(),
+                    member_1.getSsaid());
+
+            // then
+            final TeamBottariItemWithCheckResponse actualSharedItemResponse = actual.sharedItems().getFirst();
+            final TeamBottariItemWithCheckResponse member_1_assignedItemResponse = actual.assignedItems()
+                    .stream()
+                    .filter(response -> response.name().equals("멤버 1 물품"))
+                    .findFirst()
+                    .orElse(null);
+            final TeamBottariItemWithCheckResponse member_2_assignedItemResponse = actual.assignedItems()
+                    .stream()
+                    .filter(response -> response.name().equals("멤버 2 물품"))
+                    .findFirst()
+                    .orElse(null);
+            assertAll(
+                    () -> assertThat(actual.sharedItems()).hasSize(1),
+                    () -> assertThat(actual.assignedItems()).hasSize(2),
+                    () -> assertThat(actualSharedItemResponse.checkCount()).isEqualTo(0),
+                    () -> assertThat(actualSharedItemResponse.totalCount()).isEqualTo(2),
+                    () -> assertThat(member_1_assignedItemResponse.name()).isEqualTo(teamAssignedItemInfo_1.getName()),
+                    () -> assertThat(member_1_assignedItemResponse.checkCount()).isEqualTo(0),
+                    () -> assertThat(member_1_assignedItemResponse.totalCount()).isEqualTo(1),
+                    () -> assertThat(member_2_assignedItemResponse.name()).isEqualTo(teamAssignedItemInfo_2.getName()),
+                    () -> assertThat(member_2_assignedItemResponse.checkCount()).isEqualTo(1),
+                    () -> assertThat(member_2_assignedItemResponse.totalCount()).isEqualTo(1)
+            );
+        }
+    }
 
     @Nested
     class GetCheckListTest {
