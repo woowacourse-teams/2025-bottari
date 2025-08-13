@@ -1,10 +1,10 @@
 package com.bottari.presentation.view.checklist.personal
 
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.ChecklistItemUiModel
 
 data class ChecklistUiState(
     val isLoading: Boolean = false,
-    val bottariItems: List<BottariItemUiModel> = emptyList(),
+    val bottariItems: List<ChecklistItemUiModel> = emptyList(),
     val swipedItemIds: Set<Long> = emptySet(),
 ) {
     val totalQuantity: Int
@@ -13,7 +13,7 @@ data class ChecklistUiState(
     val checkedQuantity: Int
         get() = bottariItems.count { it.isChecked }
 
-    val nonSwipedItems: List<BottariItemUiModel> by lazy {
+    val nonSwipedItems: List<ChecklistItemUiModel> by lazy {
         nonCheckedItems.filterNot { it.id in swipedItemIds }
     }
 
@@ -26,7 +26,7 @@ data class ChecklistUiState(
     val isAllSwiped: Boolean
         get() = bottariItems.isNotEmpty() && nonSwipedItems.isEmpty()
 
-    private val nonCheckedItems: List<BottariItemUiModel> by lazy {
+    private val nonCheckedItems: List<ChecklistItemUiModel> by lazy {
         bottariItems.filterNot { it.isChecked }
     }
 }

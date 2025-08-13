@@ -1,7 +1,7 @@
 package com.bottari.domain.model.bottari
 
-data class BottariItem(
+data class ChecklistItem(
     val id: Long,
     val name: String,
-    val type: BottariItemType,
+    val isChecked: Boolean,
 )

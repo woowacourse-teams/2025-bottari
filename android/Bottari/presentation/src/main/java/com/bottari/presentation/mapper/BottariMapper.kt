@@ -3,10 +3,12 @@ package com.bottari.presentation.mapper
 import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariDetail
 import com.bottari.domain.model.bottari.BottariItem
+import com.bottari.domain.model.bottari.ChecklistItem
 import com.bottari.presentation.mapper.AlarmMapper.toUiModel
 import com.bottari.presentation.model.BottariDetailUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.BottariUiModel
+import com.bottari.presentation.model.ChecklistItemUiModel
 import com.bottari.presentation.model.MyBottariUiModel
 
 object BottariMapper {
@@ -27,11 +29,18 @@ object BottariMapper {
             items = items.map { item -> item.toUiModel() },
         )
 
-    fun BottariItem.toUiModel(): BottariItemUiModel =
-        BottariItemUiModel(
+    fun ChecklistItem.toUiModel(): ChecklistItemUiModel =
+        ChecklistItemUiModel(
             id = id,
             isChecked = isChecked,
             name = name,
+        )
+
+    fun BottariItem.toUiModel(): BottariItemUiModel =
+        BottariItemUiModel(
+            id = id,
+            name = name,
+            type = type,
         )
 
     fun BottariDetail.toMyBottariUiModel(): MyBottariUiModel =
