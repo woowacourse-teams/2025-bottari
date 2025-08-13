@@ -19,7 +19,6 @@ import com.bottari.presentation.model.TeamChecklistRowUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
 
 sealed interface TeamChecklistUiEvent {
     data object FetchChecklistFailure : TeamChecklistUiEvent
@@ -118,7 +117,7 @@ class TeamChecklistViewModel(
     }
 
     private fun fetchTeamCheckList() {
-        viewModelScope.launch {
+        launch {
             updateState { copy(isLoading = true) }
 
             fetchTeamBottariChecklistUseCase(teamBottariId)
@@ -154,7 +153,7 @@ class TeamChecklistViewModel(
     )
 
     private fun performServerCheck(items: List<TeamChecklistItemUiModel>) {
-        viewModelScope.launch {
+        launch {
             val jobs =
                 items.map { item ->
                     async { processItemCheck(item) }
