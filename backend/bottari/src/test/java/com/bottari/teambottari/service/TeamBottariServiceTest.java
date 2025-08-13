@@ -2,7 +2,6 @@ package com.bottari.teambottari.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.filter;
 
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
