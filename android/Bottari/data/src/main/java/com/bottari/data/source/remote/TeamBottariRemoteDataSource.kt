@@ -24,4 +24,6 @@ interface TeamBottariRemoteDataSource {
     suspend fun fetchTeamBottaries(): Result<List<FetchTeamBottariResponse>>
 
     suspend fun fetchTeamMembers(id: Long): Result<TeamMembersResponse>
+
+    suspend fun fetchTeamBottariDetail(teamBottariId: Long): Result<FetchTeamBottariDetailResponse>
 }

@@ -42,4 +42,9 @@ interface TeamBottariService {
     suspend fun fetchTeamMembers(
         @Path("teamBottariId") id: Long,
     ): Response<TeamMembersResponse>
+
+    @GET("/team-bottaries/{id}")
+    suspend fun fetchTeamBottari(
+        @Path("id") teamBottariId: Long,
+    ): Response<FetchTeamBottariDetailResponse>
 }

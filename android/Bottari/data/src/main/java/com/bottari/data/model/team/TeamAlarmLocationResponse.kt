@@ -4,9 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LocationRequest(
-    @SerialName("isLocationAlarmActive")
-    val isLocationAlarmActive: Boolean,
+data class TeamAlarmLocationResponse(
+    @SerialName("isActive")
+    val isActive: Boolean,
     @SerialName("latitude")
     val latitude: Double,
     @SerialName("longitude")

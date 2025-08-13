@@ -22,4 +22,6 @@ interface TeamBottariRepository {
     suspend fun fetchTeamBottaries(): Result<List<TeamBottari>>
 
     suspend fun fetchTeamMembers(id: Long): Result<TeamMembers>
+
+    suspend fun fetchTeamBottariDetail(teamBottariId: Long): Result<TeamBottariDetail>
 }

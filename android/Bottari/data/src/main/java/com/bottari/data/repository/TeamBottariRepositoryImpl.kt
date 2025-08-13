@@ -41,4 +41,9 @@ class TeamBottariRepositoryImpl(
         teamBottariRemoteDataSource
             .fetchTeamMembers(id)
             .mapCatching { response -> response.toDomain() }
+
+    override suspend fun fetchTeamBottariDetail(teamBottariId: Long): Result<TeamBottariDetail> =
+        teamBottariRemoteDataSource
+            .fetchTeamBottariDetail(teamBottariId)
+            .mapCatching { response -> response.toDomain() }
 }
