@@ -1,14 +1,14 @@
 package com.bottari.presentation.view.team.checklist.checklist.adapter
 
-import com.bottari.presentation.model.TeamBottariItemUIModel
-import com.bottari.presentation.model.TeamChecklistParentUIModel
+import com.bottari.presentation.model.TeamChecklistCategoryUIModel
+import com.bottari.presentation.model.TeamChecklistItemUIModel
 
 sealed class TeamChecklistItem {
-    data class CategoryPage(
-        val teamChecklistParent: TeamChecklistParentUIModel,
+    data class Category(
+        val teamChecklistCategory: TeamChecklistCategoryUIModel,
     ) : TeamChecklistItem()
 
-    data class TeamBottariItem(
-        val teamBottariItem: TeamBottariItemUIModel,
+    data class Item(
+        val teamBottariItem: TeamChecklistItemUIModel,
     ) : TeamChecklistItem()
 }

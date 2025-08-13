@@ -12,4 +12,9 @@ class TeamStatusFragment : BaseFragment<FragmentTeamStatusBinding>(FragmentTeamS
     ) {
         super.onViewCreated(view, savedInstanceState)
     }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(): TeamStatusFragment = TeamStatusFragment()
+    }
 }

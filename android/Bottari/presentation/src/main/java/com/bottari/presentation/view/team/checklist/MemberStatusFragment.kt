@@ -12,4 +12,8 @@ class MemberStatusFragment : BaseFragment<FragmentMemberStatusBinding>(FragmentM
     ) {
         super.onViewCreated(view, savedInstanceState)
     }
+
+    companion object {
+        fun newInstance(): MemberStatusFragment = MemberStatusFragment()
+    }
 }
