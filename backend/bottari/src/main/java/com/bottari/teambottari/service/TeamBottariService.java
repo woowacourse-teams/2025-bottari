@@ -6,17 +6,21 @@ import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.InviteCodeGenerator;
 import com.bottari.teambottari.domain.TeamAssignedItem;
+import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.domain.TeamSharedItem;
+import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamBottariPreviewResponse;
 import com.bottari.teambottari.dto.ReadTeamBottariResponse;
+import com.bottari.teambottari.repository.TeamAssignedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamAssignedItemRepository;
 import com.bottari.teambottari.repository.TeamBottariRepository;
 import com.bottari.teambottari.repository.TeamMemberRepository;
 import com.bottari.teambottari.repository.TeamPersonalItemRepository;
+import com.bottari.teambottari.repository.TeamSharedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamSharedItemRepository;
 import com.bottari.teambottari.repository.dto.TeamBottariMemberCountProjection;
 import java.util.Collections;
@@ -38,6 +42,8 @@ public class TeamBottariService {
     private final TeamSharedItemRepository teamSharedItemRepository;
     private final TeamAssignedItemRepository teamAssignedItemRepository;
     private final TeamPersonalItemRepository teamPersonalItemRepository;
+    private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
+    private final TeamAssignedItemInfoRepository teamAssignedItemInfoRepository;
 
     @Transactional(readOnly = true)
     public List<ReadTeamBottariPreviewResponse> getAllBySsaid(final String ssaid) {
@@ -56,8 +62,8 @@ public class TeamBottariService {
         final TeamMember teamMember = teamMemberRepository.findByTeamBottariIdAndMemberIdWithTeamBottari(id, memberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI));
         final TeamBottari teamBottari = teamMember.getTeamBottari();
-        final List<TeamSharedItem> sharedItems = findSharedItemsByTeam(teamBottari.getId());
-        final List<TeamAssignedItem> assignedItems = findAssignedItemsByTeam(teamBottari.getId());
+        final List<TeamSharedItemInfo> sharedItems = findSharedItemsByTeam(teamBottari.getId());
+        final List<TeamAssignedItemInfo> assignedItems = findAssignedItemsByTeam(teamBottari.getId());
         final List<TeamPersonalItem> personalItems = findPersonalItemsByMember(teamMember.getId());
 
         return ReadTeamBottariResponse.of(
@@ -180,12 +186,12 @@ public class TeamBottariService {
                 .collect(Collectors.groupingBy(TeamPersonalItem::getTeamMember));
     }
 
-    private List<TeamSharedItem> findSharedItemsByTeam(final Long teamBottariId) {
-        return teamSharedItemRepository.findAllByTeamBottariId(teamBottariId);
+    private List<TeamSharedItemInfo> findSharedItemsByTeam(final Long teamBottariId) {
+        return teamSharedItemInfoRepository.findAllByTeamBottariId(teamBottariId);
     }
 
-    private List<TeamAssignedItem> findAssignedItemsByTeam(final Long teamBottariId) {
-        return teamAssignedItemRepository.findAllByTeamBottariId(teamBottariId);
+    private List<TeamAssignedItemInfo> findAssignedItemsByTeam(final Long teamBottariId) {
+        return teamAssignedItemInfoRepository.findAllByTeamBottariId(teamBottariId);
     }
 
     private List<TeamPersonalItem> findPersonalItemsByMember(final Long teamMemberId) {

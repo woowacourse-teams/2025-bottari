@@ -1,10 +1,10 @@
 package com.bottari.teambottari.dto;
 
 import com.bottari.alarm.dto.AlarmResponse;
-import com.bottari.teambottari.domain.TeamAssignedItem;
+import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamPersonalItem;
-import com.bottari.teambottari.domain.TeamSharedItem;
+import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import java.util.List;
 
 public record ReadTeamBottariResponse(
@@ -18,8 +18,8 @@ public record ReadTeamBottariResponse(
 
     public static ReadTeamBottariResponse of(
             final TeamBottari teamBottari,
-            final List<TeamSharedItem> sharedItems,
-            final List<TeamAssignedItem> assignedItems,
+            final List<TeamSharedItemInfo> sharedItems,
+            final List<TeamAssignedItemInfo> assignedItems,
             final List<TeamPersonalItem> personalItems,
             final AlarmResponse alarm
     ) {
@@ -38,17 +38,17 @@ public record ReadTeamBottariResponse(
             String name
     ) {
 
-        public static TeamItem from(final TeamSharedItem teamSharedItem) {
+        public static TeamItem from(final TeamSharedItemInfo teamSharedItemInfo) {
             return new TeamItem(
-                    teamSharedItem.getId(),
-                    teamSharedItem.getInfo().getName()
+                    teamSharedItemInfo.getId(),
+                    teamSharedItemInfo.getName()
             );
         }
 
-        public static TeamItem from(final TeamAssignedItem teamAssignedItem) {
+        public static TeamItem from(final TeamAssignedItemInfo teamAssignedItemInfo) {
             return new TeamItem(
-                    teamAssignedItem.getId(),
-                    teamAssignedItem.getInfo().getName()
+                    teamAssignedItemInfo.getId(),
+                    teamAssignedItemInfo.getName()
             );
         }
 

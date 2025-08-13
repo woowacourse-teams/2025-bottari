@@ -12,6 +12,8 @@ import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamPersonalItem;
+import com.bottari.teambottari.domain.TeamSharedItem;
+import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamBottariPreviewResponse;
 import com.bottari.teambottari.dto.ReadTeamBottariResponse;
@@ -131,6 +133,13 @@ class TeamBottariServiceTest {
             final TeamMember anotherTeamMember = new TeamMember(teamBottari, anotherMember);
             entityManager.persist(anotherTeamMember);
 
+            final TeamSharedItemInfo sharedItemInfo = new TeamSharedItemInfo("shared", teamBottari);
+            entityManager.persist(sharedItemInfo);
+            final TeamSharedItem sharedItem = new TeamSharedItem(sharedItemInfo, teamMember);
+            entityManager.persist(sharedItem);
+            final TeamSharedItem anotherSharedItem = new TeamSharedItem(sharedItemInfo, anotherTeamMember);
+            entityManager.persist(anotherSharedItem);
+
             final TeamAssignedItemInfo assignedItemInfo = new TeamAssignedItemInfo("assigned", teamBottari);
             entityManager.persist(assignedItemInfo);
             final TeamAssignedItem assignedItem = new TeamAssignedItem(assignedItemInfo, anotherTeamMember);
@@ -152,7 +161,10 @@ class TeamBottariServiceTest {
             final ReadTeamBottariResponse expected = new ReadTeamBottariResponse(
                     teamBottari.getId(),
                     teamBottari.getTitle(),
-                    List.of(),
+                    List.of(
+                            // 공통 물품이더라도 하나만 포함
+                            new TeamItem(sharedItem.getId(), sharedItem.getInfo().getName())
+                    ),
                     List.of(
                             // 다른 사람에게 할당된 assigned item 포함
                             new TeamItem(assignedItem.getId(), assignedItem.getInfo().getName())
