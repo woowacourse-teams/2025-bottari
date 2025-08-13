@@ -25,7 +25,7 @@ class TeamBottariRemoteDataSourceImpl(
         }
 
     override suspend fun fetchTeamBottari(teamBottariId: Long): Result<FetchTeamBottariChecklistResponse> =
-        runCatching {
+        safeApiCall {
             val response = teamBottariService.fetchTeamBottari(teamBottariId)
             if (response.isSuccessful) {
                 return Result.success(response.body()!!)
@@ -39,7 +39,7 @@ class TeamBottariRemoteDataSourceImpl(
         bottariItemId: Long,
         request: ItemTypeRequest,
     ): Result<Unit> =
-        runCatching {
+        safeApiCall {
             val response = teamBottariService.uncheckTeamBottariItem(bottariItemId, request)
             if (response.isSuccessful) {
                 return Result.success(Unit)
@@ -52,7 +52,7 @@ class TeamBottariRemoteDataSourceImpl(
         bottariItemId: Long,
         request: ItemTypeRequest,
     ): Result<Unit> =
-        runCatching {
+        safeApiCall {
             val response = teamBottariService.checkTeamBottariItem(bottariItemId, request)
             if (response.isSuccessful) {
                 return Result.success(Unit)
