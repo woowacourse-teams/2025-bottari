@@ -1,6 +1,7 @@
 package com.bottari.member.dto;
 
 public record CreateMemberRequest(
-        String ssaid
+        String ssaid,
+        String fcmToken
 ) {
 }

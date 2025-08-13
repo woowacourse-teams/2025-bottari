@@ -26,3 +26,6 @@ management:
         enabled: true
         step: 1m
         namespace: EC2/bottari-dev-api
+firebase:
+  service:
+    key-path: ${FIREBASE_SERVICE_ACCOUNT_JSON}
