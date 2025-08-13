@@ -37,7 +37,7 @@ public class TeamMember {
         this.member = member;
     }
 
-    public boolean isOwner() {
+    public boolean isTeamBottariOwner() {
         return teamBottari.getOwner().equals(member);
     }
 

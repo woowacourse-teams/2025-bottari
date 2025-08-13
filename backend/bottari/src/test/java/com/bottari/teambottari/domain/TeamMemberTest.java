@@ -12,7 +12,7 @@ class TeamMemberTest {
 
     @DisplayName("해당 팀 멤버가 팀 보따리 주인이라면 true를 반환한다.")
     @Test
-    void isOwner_true() {
+    void isTeamBottariOwner_true() {
         // given
         final Member member = MemberFixture.MEMBER.get();
 
@@ -20,7 +20,7 @@ class TeamMemberTest {
         final TeamMember teamMember = new TeamMember(teamBottari, member);
 
         // when
-        final boolean actual = teamMember.isOwner();
+        final boolean actual = teamMember.isTeamBottariOwner();
 
         // then
         assertThat(actual).isTrue();
@@ -28,7 +28,7 @@ class TeamMemberTest {
 
     @DisplayName("해당 팀 멤버가 팀 보따리 주인이 아니라면 false를 반환한다.")
     @Test
-    void isOwner_false() {
+    void isTeamBottariOwner_false() {
         // given
         final Member member = MemberFixture.MEMBER.get();
         final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
@@ -39,7 +39,7 @@ class TeamMemberTest {
         final TeamMember anotherTeamMember = new TeamMember(teamBottari, anotherMember);
 
         // when
-        final boolean actual = anotherTeamMember.isOwner();
+        final boolean actual = anotherTeamMember.isTeamBottariOwner();
 
         // then
         assertThat(actual).isFalse();

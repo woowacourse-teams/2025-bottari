@@ -84,7 +84,7 @@ public class TeamMemberService {
 
         return new ReadTeamMemberStatusResponse(
                 teamMember.getMember().getName(),
-                teamMember.isOwner(),
+                teamMember.isTeamBottariOwner(),
                 totalItemsCount,
                 calculateCheckedItemsCount(sharedItems, assignedItems),
                 sharedItemResponses,
