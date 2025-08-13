@@ -1,7 +1,11 @@
 package com.bottari.domain.model.bottari
 
-enum class BottariItemType {
-    PERSONAL,
-    ASSIGNED,
-    SHARED,
+sealed interface BottariItemType {
+    data object PERSONAL : BottariItemType
+
+    data object SHARED : BottariItemType
+
+    data class ASSIGNED(
+        val members: List<String>,
+    ) : BottariItemType
 }
