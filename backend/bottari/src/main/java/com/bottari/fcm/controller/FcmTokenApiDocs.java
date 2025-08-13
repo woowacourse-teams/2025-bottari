@@ -4,6 +4,7 @@ import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
 import com.bottari.fcm.dto.UpdateFcmRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,7 +21,7 @@ public interface FcmTokenApiDocs {
             ErrorCode.FCM_TOKEN_NOT_FOUND
     })
     ResponseEntity<Void> updateFcmToken(
-            final String ssaid,
+            @Parameter(hidden = true) final String ssaid,
             final UpdateFcmRequest request
     );
 }
