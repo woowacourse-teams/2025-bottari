@@ -7,23 +7,19 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemChecklistBinding
-import com.bottari.presentation.model.TeamBottariItemUiModel
-import com.bottari.presentation.view.checklist.main.listener.OnChecklistItemClickListener
+import com.bottari.presentation.model.TeamBottariItemUIModel
 
 class TeamChecklistViewHolder private constructor(
     private val binding: ItemChecklistBinding,
-    private val onChecklistItemClickListener: OnChecklistItemClickListener,
+    private val onTeamChecklistItemClickListener: OnTeamChecklistItemClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
-    private var itemId: Long? = null
-
     init {
         itemView.setOnClickListener {
-            itemId?.let { onChecklistItemClickListener.onClick(it) }
+            onTeamChecklistItemClickListener.onClick(adapterPosition)
         }
     }
 
-    fun bind(item: TeamBottariItemUiModel) {
-        itemId = item.id
+    fun bind(item: TeamBottariItemUIModel) {
         binding.ctvChecklistItemTitle.text = item.name
         updateCheckedState(item.isChecked)
     }
@@ -43,11 +39,11 @@ class TeamChecklistViewHolder private constructor(
     companion object {
         fun from(
             parent: ViewGroup,
-            onChecklistItemClickListener: OnChecklistItemClickListener,
+            onTeamChecklistItemClickListener: OnTeamChecklistItemClickListener,
         ): TeamChecklistViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemChecklistBinding.inflate(inflater, parent, false)
-            return TeamChecklistViewHolder(binding, onChecklistItemClickListener)
+            return TeamChecklistViewHolder(binding, onTeamChecklistItemClickListener)
         }
     }
 }

@@ -20,7 +20,7 @@ class TeamChecklistFragment : BaseFragment<FragmentTeamChecklistBinding>(Fragmen
                 viewModel.toggleParentExpanded(parent.category)
             },
             onChildClick = { item ->
-                viewModel.toggleItemChecked(item.id)
+                viewModel.toggleItemChecked(item.id, item.category)
             },
         )
     }

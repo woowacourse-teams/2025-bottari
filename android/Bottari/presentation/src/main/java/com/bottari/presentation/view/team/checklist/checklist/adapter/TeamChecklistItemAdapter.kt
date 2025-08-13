@@ -8,14 +8,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.databinding.ItemTeamChecklistOptionBinding
-import com.bottari.presentation.model.TeamBottariItemUiModel
+import com.bottari.presentation.model.TeamBottariItemUIModel
 import com.bottari.presentation.model.TeamChecklistParentUIModel
 
 class TeamChecklistItemAdapter(
     private val onParentClick: (TeamChecklistParentUIModel) -> Unit,
-    private val onChildClick: (TeamBottariItemUiModel) -> Unit,
+    private val onChildClick: (TeamBottariItemUIModel) -> Unit,
 ) : ListAdapter<TeamChecklistItem, RecyclerView.ViewHolder>(DiffCallback) {
-
     inner class ParentViewHolder(
         private val binding: ItemTeamChecklistOptionBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -28,12 +27,6 @@ class TeamChecklistItemAdapter(
             }
         }
     }
-
-    override fun getItemViewType(position: Int): Int =
-        when (getItem(position)) {
-            is TeamChecklistItem.Parent -> TeamChecklistItemType.PARENT
-            is TeamChecklistItem.Child -> TeamChecklistItemType.CHILD
-        }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -51,9 +44,11 @@ class TeamChecklistItemAdapter(
             }
 
             TeamChecklistItemType.CHILD -> {
-                TeamChecklistViewHolder.from(parent) { itemId ->
-                    val item = currentList.find { it is TeamChecklistItem.Child && it.teamBottariItem.id == itemId }
-                    item?.let { onChildClick((it as TeamChecklistItem.Child).teamBottariItem) }
+                TeamChecklistViewHolder.from(parent) { position ->
+                    val item = currentList[position]
+                    if (item is TeamChecklistItem.TeamBottariItem) {
+                        onChildClick(item.teamBottariItem)
+                    }
                 }
             }
 
@@ -64,13 +59,19 @@ class TeamChecklistItemAdapter(
             }
         }
 
+    override fun getItemViewType(position: Int): Int =
+        when (getItem(position)) {
+            is TeamChecklistItem.CategoryPage -> TeamChecklistItemType.PARENT
+            is TeamChecklistItem.TeamBottariItem -> TeamChecklistItemType.CHILD
+        }
+
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int,
     ) {
         when (val item = getItem(position)) {
-            is TeamChecklistItem.Parent -> (holder as ParentViewHolder).bind(item.teamChecklistParent)
-            is TeamChecklistItem.Child -> (holder as TeamChecklistViewHolder).bind(item.teamBottariItem)
+            is TeamChecklistItem.CategoryPage -> (holder as ParentViewHolder).bind(item.teamChecklistParent)
+            is TeamChecklistItem.TeamBottariItem -> (holder as TeamChecklistViewHolder).bind(item.teamBottariItem)
         }
     }
 
@@ -90,12 +91,14 @@ class TeamChecklistItemAdapter(
                     if (oldItem::class != newItem::class) return false
 
                     return when (oldItem) {
-                        is TeamChecklistItem.Parent -> {
-                            (newItem as TeamChecklistItem.Parent).teamChecklistParent.category == oldItem.teamChecklistParent.category
+                        is TeamChecklistItem.CategoryPage -> {
+                            (newItem as TeamChecklistItem.CategoryPage).teamChecklistParent.category == oldItem.teamChecklistParent.category
                         }
-                        is TeamChecklistItem.Child -> {
-                            val newChild = newItem as TeamChecklistItem.Child
-                            oldItem.teamBottariItem.id == newChild.teamBottariItem.id && oldItem.teamBottariItem.category == newChild.teamBottariItem.category
+
+                        is TeamChecklistItem.TeamBottariItem -> {
+                            val newTeamBottariItem = newItem as TeamChecklistItem.TeamBottariItem
+                            oldItem.teamBottariItem.id == newTeamBottariItem.teamBottariItem.id &&
+                                oldItem.teamBottariItem.category == newTeamBottariItem.teamBottariItem.category
                         }
                     }
                 }
