@@ -169,6 +169,9 @@
     <string name="bottari_edit_create_template_success_text">모두의 보따리에 등록했어요</string>
     <string name="bottari_edit_create_template_failure_text">머두의 보따리에 등록하지 못했어요</string>
     <string name="bottari_edit_toggle_alarm_state_failure_text">알람 상태를 변경하지 못했어요</string>
+    <string name="bottari_edit_personal_items_title_text">개인 물건</string>
+    <string name="bottari_edit_assigned_items_title_text">담당 물건</string>
+    <string name="bottari_edit_shared_items_title_text">공통 물건</string>
 
     <!-- Bottari Personal Item Edit -->
     <string name="bottari_personal_item_edit_confirm_btn_text">추가하기</string>
