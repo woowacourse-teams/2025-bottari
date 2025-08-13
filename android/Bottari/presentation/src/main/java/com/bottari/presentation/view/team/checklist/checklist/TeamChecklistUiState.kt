@@ -1,6 +1,7 @@
 package com.bottari.presentation.view.team.checklist.checklist
 
 import com.bottari.presentation.model.TeamBottariItemUiModel
+import com.bottari.presentation.view.team.checklist.checklist.adapter.TeamChecklistItem
 
 data class TeamChecklistUiState(
     val isLoading: Boolean = false,
@@ -8,7 +9,7 @@ data class TeamChecklistUiState(
     val pointItems: List<TeamBottariItemUiModel> = emptyList(),
     val personalItems: List<TeamBottariItemUiModel> = emptyList(),
     val swipedItemIds: Set<Long> = emptySet(),
-    val expandableItems: List<Any> = emptyList(),
+    val expandableItems: List<TeamChecklistItem> = emptyList(),
 ) {
     private val bottariItems: List<TeamBottariItemUiModel> = allItems + pointItems + personalItems
     val totalQuantity: Int

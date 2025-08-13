@@ -14,6 +14,7 @@ import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
 import com.bottari.presentation.model.TeamBottariItemUiModel
 import com.bottari.presentation.model.TeamChecklistParentUIModel
+import com.bottari.presentation.view.team.checklist.checklist.adapter.TeamChecklistItem
 import kotlinx.coroutines.launch
 
 sealed interface TeamChecklistUiEvent
@@ -31,23 +32,23 @@ class TeamChecklistViewModel(
     }
 
     private fun generateExpandableList(
-        currentExpandableItems: List<Any>,
+        currentExpandableItems: List<TeamChecklistItem>,
         categoryItems: Map<ChecklistCategory, List<TeamBottariItemUiModel>>,
-    ): List<Any> {
-        val newExpandableList = mutableListOf<Any>()
+    ): List<TeamChecklistItem> {
+        val newExpandableList = mutableListOf<TeamChecklistItem>()
 
         ChecklistCategory.entries.forEach { category ->
             val itemsForCategory = categoryItems[category] ?: emptyList()
             val parent =
                 currentExpandableItems
-                    .filterIsInstance<TeamChecklistParentUIModel>()
-                    .firstOrNull { it.category == category }
-                    ?.copy(children = itemsForCategory)
+                    .filterIsInstance<TeamChecklistItem.Parent>()
+                    .firstOrNull { it.teamChecklistParent.category == category }
+                    ?.teamChecklistParent?.copy(children = itemsForCategory)
                     ?: TeamChecklistParentUIModel(category, itemsForCategory)
 
-            newExpandableList.add(parent)
+            newExpandableList.add(TeamChecklistItem.Parent(parent))
             if (parent.isExpanded) {
-                newExpandableList.addAll(parent.children)
+                newExpandableList.addAll(parent.children.map { TeamChecklistItem.Child(it) })
             }
         }
         return newExpandableList
@@ -160,8 +161,8 @@ class TeamChecklistViewModel(
         updateState {
             val updatedExpandableItems =
                 currentState.expandableItems.map { item ->
-                    if (item is TeamChecklistParentUIModel && item.category == category) {
-                        item.copy(isExpanded = !item.isExpanded)
+                    if (item is TeamChecklistItem.Parent && item.teamChecklistParent.category == category) {
+                        TeamChecklistItem.Parent(item.teamChecklistParent.copy(isExpanded = !item.teamChecklistParent.isExpanded))
                     } else {
                         item
                     }

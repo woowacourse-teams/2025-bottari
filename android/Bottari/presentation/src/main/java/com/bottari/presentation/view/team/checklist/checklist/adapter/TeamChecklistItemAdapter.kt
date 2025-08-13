@@ -14,7 +14,8 @@ import com.bottari.presentation.model.TeamChecklistParentUIModel
 class TeamChecklistItemAdapter(
     private val onParentClick: (TeamChecklistParentUIModel) -> Unit,
     private val onChildClick: (TeamBottariItemUiModel) -> Unit,
-) : ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
+) : ListAdapter<TeamChecklistItem, RecyclerView.ViewHolder>(DiffCallback) {
+
     inner class ParentViewHolder(
         private val binding: ItemTeamChecklistOptionBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -30,14 +31,8 @@ class TeamChecklistItemAdapter(
 
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
-            is TeamChecklistParentUIModel -> TeamChecklistItemType.PARENT
-            is TeamBottariItemUiModel -> TeamChecklistItemType.CHILD
-            else -> {
-                val errorMessage =
-                    ERROR_MESSAGE_INVALID_DATA_TYPE
-                BottariLogger.error(errorMessage)
-                throw IllegalArgumentException(errorMessage)
-            }
+            is TeamChecklistItem.Parent -> TeamChecklistItemType.PARENT
+            is TeamChecklistItem.Child -> TeamChecklistItemType.CHILD
         }
 
     override fun onCreateViewHolder(
@@ -57,8 +52,8 @@ class TeamChecklistItemAdapter(
 
             TeamChecklistItemType.CHILD -> {
                 TeamChecklistViewHolder.from(parent) { itemId ->
-                    val item = currentList.find { it is TeamBottariItemUiModel && it.id == itemId }
-                    item?.let { onChildClick(it as TeamBottariItemUiModel) }
+                    val item = currentList.find { it is TeamChecklistItem.Child && it.teamBottariItem.id == itemId }
+                    item?.let { onChildClick((it as TeamChecklistItem.Child).teamBottariItem) }
                 }
             }
 
@@ -73,9 +68,9 @@ class TeamChecklistItemAdapter(
         holder: RecyclerView.ViewHolder,
         position: Int,
     ) {
-        when (holder) {
-            is ParentViewHolder -> holder.bind(getItem(position) as TeamChecklistParentUIModel)
-            is TeamChecklistViewHolder -> holder.bind(getItem(position) as TeamBottariItemUiModel)
+        when (val item = getItem(position)) {
+            is TeamChecklistItem.Parent -> (holder as ParentViewHolder).bind(item.teamChecklistParent)
+            is TeamChecklistItem.Child -> (holder as TeamChecklistViewHolder).bind(item.teamBottariItem)
         }
     }
 
@@ -83,31 +78,31 @@ class TeamChecklistItemAdapter(
         private const val TOGGLE_SHAPE_UNOPENED = 0f
         private const val TOGGLE_SHAPE_OPENED = 90f
 
-        private const val ERROR_MESSAGE_INVALID_DATA_TYPE = "잘못된 데이터 타입입니다"
         private const val ERROR_MESSAGE_INVALID_VIEW_TYPE = "잘못된 뷰 타입입니다"
 
         @SuppressLint("DiffUtilEquals")
         private val DiffCallback =
-            object : DiffUtil.ItemCallback<Any>() {
+            object : DiffUtil.ItemCallback<TeamChecklistItem>() {
                 override fun areItemsTheSame(
-                    oldItem: Any,
-                    newItem: Any,
+                    oldItem: TeamChecklistItem,
+                    newItem: TeamChecklistItem,
                 ): Boolean {
                     if (oldItem::class != newItem::class) return false
 
                     return when (oldItem) {
-                        is TeamChecklistParentUIModel -> (newItem as TeamChecklistParentUIModel).category == oldItem.category
-                        is TeamBottariItemUiModel -> {
-                            newItem as TeamBottariItemUiModel
-                            oldItem.id == newItem.id && oldItem.category == newItem.category
+                        is TeamChecklistItem.Parent -> {
+                            (newItem as TeamChecklistItem.Parent).teamChecklistParent.category == oldItem.teamChecklistParent.category
                         }
-                        else -> false
+                        is TeamChecklistItem.Child -> {
+                            val newChild = newItem as TeamChecklistItem.Child
+                            oldItem.teamBottariItem.id == newChild.teamBottariItem.id && oldItem.teamBottariItem.category == newChild.teamBottariItem.category
+                        }
                     }
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: Any,
-                    newItem: Any,
+                    oldItem: TeamChecklistItem,
+                    newItem: TeamChecklistItem,
                 ): Boolean = oldItem == newItem
             }
     }

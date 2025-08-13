@@ -20,6 +20,7 @@ import com.bottari.presentation.view.create.BottariCreateDialog
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.home.personal.adapter.BottariAdapter
 import com.bottari.presentation.view.home.personal.adapter.BottariViewHolder
+import com.bottari.presentation.view.team.checklist.TeamChecklistActivity
 
 class BottariFragment :
     BaseFragment<FragmentBottariBinding>(FragmentBottariBinding::inflate),
@@ -98,7 +99,8 @@ class BottariFragment :
         bottariId: Long,
         bottariTitle: String,
     ) {
-        val intent = ChecklistActivity.newIntent(requireContext(), bottariId, bottariTitle)
+        // val intent = ChecklistActivity.newIntent(requireContext(), bottariId, bottariTitle)
+        val intent = TeamChecklistActivity.newIntent(requireContext(), 1)
         startActivity(intent)
     }
 
