@@ -1,5 +1,3 @@
--- H2 데이터베이스용 INSERT 문
-
 -- 회원 데이터
 INSERT INTO member (ssaid, name)
 VALUES ('test_ssaid_1', '다이스'),
