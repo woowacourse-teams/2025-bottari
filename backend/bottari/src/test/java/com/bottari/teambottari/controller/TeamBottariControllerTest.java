@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamBottariPreviewResponse;
+import com.bottari.teambottari.dto.ReadTeamBottariResponse;
 import com.bottari.teambottari.service.TeamBottariService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -50,6 +51,31 @@ class TeamBottariControllerTest {
 
         // when & then
         mockMvc.perform(get("/team-bottaries")
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @DisplayName("팀 보따리를 상세 조회한다.")
+    @Test
+    void read() throws Exception {
+        // given
+        final String ssaid = "ssaid";
+        final Long teamBottariId = 1L;
+        final ReadTeamBottariResponse response = new ReadTeamBottariResponse(
+                teamBottariId,
+                "title",
+                List.of(),
+                List.of(),
+                List.of(),
+                null
+        );
+        given(teamBottariService.getById(ssaid, teamBottariId))
+                .willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/team-bottaries/{id}", teamBottariId)
                         .header("ssaid", ssaid)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
