@@ -30,8 +30,8 @@ class TeamChecklistFragment : BaseFragment<FragmentTeamChecklistBinding>(Fragmen
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        setupObserver()
         setupUI()
-        observeViewModel()
     }
 
     private fun setupUI() {
@@ -39,7 +39,7 @@ class TeamChecklistFragment : BaseFragment<FragmentTeamChecklistBinding>(Fragmen
         binding.rvChecklist.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun observeViewModel() {
+    private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) {
             checklistAdapter.submitList(it.expandableItems)
         }
