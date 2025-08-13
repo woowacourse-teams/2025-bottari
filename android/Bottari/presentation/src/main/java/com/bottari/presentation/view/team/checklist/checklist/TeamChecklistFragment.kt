@@ -5,8 +5,11 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamChecklistBinding
+import com.bottari.presentation.view.home.personal.BottariUiEvent
 import com.bottari.presentation.view.team.checklist.checklist.adapter.TeamChecklistItemAdapter
 
 class TeamChecklistFragment : BaseFragment<FragmentTeamChecklistBinding>(FragmentTeamChecklistBinding::inflate) {
@@ -40,8 +43,16 @@ class TeamChecklistFragment : BaseFragment<FragmentTeamChecklistBinding>(Fragmen
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) {
-            checklistAdapter.submitList(it.expandableItems)
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            checklistAdapter.submitList(uiState.expandableItems)
+        }
+        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+            val message =
+                when (uiEvent) {
+                    TeamChecklistUiEvent.CheckItemFailure -> R.string.checklist_fetch_failure_text
+                    TeamChecklistUiEvent.FetchChecklistFailure -> R.string.checklist_check_failure_text
+                }
+            requireView().showSnackbar(message)
         }
     }
 

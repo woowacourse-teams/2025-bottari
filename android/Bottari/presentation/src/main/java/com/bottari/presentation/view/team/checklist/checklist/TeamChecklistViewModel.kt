@@ -20,12 +20,6 @@ import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 
-sealed interface TeamChecklistUiEvent {
-    data object FetchChecklistFailure : TeamChecklistUiEvent
-
-    data object CheckItemFailure : TeamChecklistUiEvent
-}
-
 class TeamChecklistViewModel(
     stateHandle: SavedStateHandle,
     private val fetchTeamBottariChecklistUseCase: FetchTeamChecklistUseCase,
