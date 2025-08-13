@@ -6,6 +6,7 @@
     <dimen name="space_median">16dp</dimen>
     <dimen name="space_large">20dp</dimen>
     <dimen name="space_x_large">24dp</dimen>
+    <dimen name="space_2x_large">28dp</dimen>
 
     <dimen name="design_bottom_navigation_height" tools:override="true">68dp</dimen>
     <dimen name="design_bottom_navigation_label_padding" tools:override="true">0dp</dimen>
