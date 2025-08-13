@@ -4,11 +4,16 @@ import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.dto.TeamBottariMemberCountProjection;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
 
+    Optional<TeamMember> findByTeamBottariIdAndMemberId(
+            final Long teamBottariId,
+            final Long memberId
+    );
     @Query("""
             SELECT tm
             FROM TeamMember tm
