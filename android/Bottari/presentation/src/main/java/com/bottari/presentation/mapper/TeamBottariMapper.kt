@@ -1,10 +1,10 @@
 package com.bottari.presentation.mapper
 
 import com.bottari.domain.model.bottari.TeamBottari
-import com.bottari.presentation.mapper.AlarmMapper.toUiModel
-import com.bottari.presentation.model.TeamBottariUiModel
 import com.bottari.domain.model.team.TeamMemberItem
-import com.bottari.presentation.model.TeamBottariItemUiModel
+import com.bottari.presentation.mapper.AlarmMapper.toUiModel
+import com.bottari.presentation.model.TeamBottariItemUIModel
+import com.bottari.presentation.model.TeamBottariUiModel
 import com.bottari.presentation.view.team.checklist.checklist.ChecklistCategory
 
 object TeamBottariMapper {
@@ -17,8 +17,9 @@ object TeamBottariMapper {
             memberCount = memberCount,
             alarm = alarm?.toUiModel(),
         )
-    fun TeamMemberItem.toUiModel(category: ChecklistCategory): TeamBottariItemUiModel =
-        TeamBottariItemUiModel(
+
+    fun TeamMemberItem.toUiModel(category: ChecklistCategory): TeamBottariItemUIModel =
+        TeamBottariItemUIModel(
             id = id,
             name = name,
             isChecked = isChecked,

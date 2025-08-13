@@ -4,6 +4,6 @@ import com.bottari.presentation.view.team.checklist.checklist.ChecklistCategory
 
 data class TeamChecklistParentUIModel(
     val category: ChecklistCategory,
-    val children: List<TeamBottariItemUiModel>,
+    val teamChecklistItems: List<TeamBottariItemUIModel>,
     var isExpanded: Boolean = true,
 )
