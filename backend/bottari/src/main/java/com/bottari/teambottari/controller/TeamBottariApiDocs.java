@@ -33,6 +33,7 @@ public interface TeamBottariApiDocs {
     })
     @ApiErrorCodes({
             ErrorCode.TEAM_BOTTARI_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI
     })
     ResponseEntity<ReadTeamBottariResponse> read(
             final Long id,
