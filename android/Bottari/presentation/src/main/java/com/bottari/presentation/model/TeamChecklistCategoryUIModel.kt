@@ -6,4 +6,4 @@ data class TeamChecklistCategoryUIModel(
     val category: ChecklistCategory,
     val teamChecklistItems: List<TeamChecklistItemUIModel>,
     var isExpanded: Boolean = true,
-)
+) : TeamChecklistRowUiModel

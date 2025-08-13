@@ -10,4 +10,5 @@ data class TeamChecklistItemUIModel(
     val name: String,
     val isChecked: Boolean,
     val category: ChecklistCategory,
-) : Parcelable
+) : Parcelable,
+    TeamChecklistRowUiModel

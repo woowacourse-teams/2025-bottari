@@ -7,16 +7,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.team.TeamBottariCheckList
 import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
 import com.bottari.presentation.model.TeamChecklistCategoryUIModel
 import com.bottari.presentation.model.TeamChecklistItemUIModel
+import com.bottari.presentation.model.TeamChecklistRowUiModel
 import com.bottari.presentation.util.debounce
-import com.bottari.presentation.view.team.checklist.checklist.adapter.TeamChecklistItem
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
@@ -51,8 +51,8 @@ class TeamChecklistViewModel(
         updateState {
             val updatedExpandableItems =
                 expandableItems.map { item ->
-                    if (item is TeamChecklistItem.Category && item.teamChecklistCategory.category == category) {
-                        TeamChecklistItem.Category(item.teamChecklistCategory.copy(isExpanded = !item.teamChecklistCategory.isExpanded))
+                    if (item is TeamChecklistCategoryUIModel && item.category == category) {
+                        item.copy(isExpanded = !item.isExpanded)
                     } else {
                         item
                     }
@@ -70,12 +70,13 @@ class TeamChecklistViewModel(
         val listToSearch = currentState.expandableItems
         val itemToToggle =
             listToSearch.firstOrNull {
-                it is TeamChecklistItem.Item && it.teamBottariItem.id == itemId &&
-                    it.teamBottariItem.category == itemCategory
+                it is TeamChecklistItemUIModel &&
+                    it.id == itemId &&
+                    it.category == itemCategory
             }
 
         itemToToggle?.let {
-            val toggledItem = (it as TeamChecklistItem.Item).teamBottariItem.toggle()
+            val toggledItem = (it as TeamChecklistItemUIModel).toggle()
             updateState {
                 val newExpandableList = expandableItems.toggleItemInList(toggledItem)
                 copy(
@@ -89,29 +90,26 @@ class TeamChecklistViewModel(
     }
 
     private fun generateExpandableList(
-        currentExpandableItems: List<TeamChecklistItem>,
+        currentExpandableItems: List<TeamChecklistRowUiModel>,
         categoryItems: Map<ChecklistCategory, List<TeamChecklistItemUIModel>>,
-    ): List<TeamChecklistItem> {
-        val newExpandableList = mutableListOf<TeamChecklistItem>()
+    ): List<TeamChecklistRowUiModel> {
+        val newExpandableList = mutableListOf<TeamChecklistRowUiModel>()
 
         ChecklistCategory.entries.forEach { category ->
             val categoryPageData =
                 currentExpandableItems
-                    .filterIsInstance<TeamChecklistItem.Category>()
-                    .firstOrNull { it.teamChecklistCategory.category == category }
-                    ?.teamChecklistCategory
+                    .filterIsInstance<TeamChecklistCategoryUIModel>()
+                    .firstOrNull { it.category == category }
 
             val newParent =
                 (categoryPageData ?: TeamChecklistCategoryUIModel(category, emptyList()))
                     .copy(teamChecklistItems = categoryItems[category] ?: emptyList())
 
-            newExpandableList.add(TeamChecklistItem.Category(newParent))
+            newExpandableList.add(newParent)
             if (newParent.isExpanded) {
                 newExpandableList.addAll(
                     newParent.teamChecklistItems.map {
-                        TeamChecklistItem.Item(
-                            it,
-                        )
+                        it
                     },
                 )
             }
@@ -143,7 +141,7 @@ class TeamChecklistViewModel(
     }
 
     private fun generateExpandableCategoryList(
-        expandableItems: List<TeamChecklistItem>,
+        expandableItems: List<TeamChecklistRowUiModel>,
         items: List<TeamChecklistItemUIModel>,
     ) = generateExpandableList(
         currentExpandableItems = expandableItems,
@@ -179,28 +177,36 @@ class TeamChecklistViewModel(
     }
 
     private fun TeamBottariCheckList.toUIModel() =
-        this.sharedItems.map { it.toUiModel(ChecklistCategory.SHARED) } +
+        this.sharedItems.map { it.toTeamUiModel(ChecklistCategory.SHARED) } +
             this.assignedItems.map {
-                it.toUiModel(
+                it.toTeamUiModel(
                     ChecklistCategory.ASSIGNED,
                 )
             } +
             this.personalItems.map {
-                it.toUiModel(
+                it.toTeamUiModel(
                     ChecklistCategory.PERSONAL,
                 )
             }
 
     private fun TeamChecklistItemUIModel.toggle(): TeamChecklistItemUIModel = this.copy(isChecked = !this.isChecked)
 
-    private fun List<TeamChecklistItem>.toggleItemInList(item: TeamChecklistItemUIModel): List<TeamChecklistItem> =
+    private fun List<TeamChecklistRowUiModel>.toggleItemInList(item: TeamChecklistItemUIModel): List<TeamChecklistRowUiModel> =
         this.map {
-            if (it is TeamChecklistItem.Item && it.teamBottariItem.id == item.id && it.teamBottariItem.category == item.category) {
-                TeamChecklistItem.Item(item)
+            if (it is TeamChecklistItemUIModel && it.id == item.id && it.category == item.category) {
+                item
             } else {
                 it
             }
         }
+
+    private fun BottariItem.toTeamUiModel(category: ChecklistCategory) =
+        TeamChecklistItemUIModel(
+            id = id,
+            name = name,
+            isChecked = isChecked,
+            category = category,
+        )
 
     companion object {
         const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
