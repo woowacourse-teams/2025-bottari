@@ -17,8 +17,8 @@ public class FcmTokenController implements FcmTokenApiDocs {
 
     @PatchMapping("/fcm")
     public ResponseEntity<Void> updateFcmToken(
-            @MemberIdentifier final String ssaid,
-            @RequestBody final UpdateFcmRequest request
+            @RequestBody final UpdateFcmRequest request,
+            @MemberIdentifier final String ssaid
     ) {
         fcmTokenService.updateFcmToken(ssaid, request);
 

@@ -21,7 +21,7 @@ public interface FcmTokenApiDocs {
             ErrorCode.FCM_TOKEN_NOT_FOUND
     })
     ResponseEntity<Void> updateFcmToken(
-            @Parameter(hidden = true) final String ssaid,
-            final UpdateFcmRequest request
+            final UpdateFcmRequest request,
+            @Parameter(hidden = true) final String ssaid
     );
 }
