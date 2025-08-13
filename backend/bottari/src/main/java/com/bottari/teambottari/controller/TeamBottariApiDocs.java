@@ -3,13 +3,28 @@ package com.bottari.teambottari.controller;
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
+import com.bottari.teambottari.dto.ReadTeamBottariPreviewResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 
+@Tag(name = "Team Bottari", description = "팀 보따리 API")
 public interface TeamBottariApiDocs {
+
+    @Operation(summary = "내가 소속된 팀 보따리 목록 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "내가 소속된 팀 보따리 목록 조회 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.MEMBER_NOT_FOUND
+    })
+    ResponseEntity<List<ReadTeamBottariPreviewResponse>> readPreviews(
+            @Parameter(hidden = true) final String ssaid
+    );
 
     @Operation(summary = "보따리 생성")
     @ApiResponses(value = {
