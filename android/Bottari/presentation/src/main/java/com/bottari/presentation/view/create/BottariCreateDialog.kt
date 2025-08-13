@@ -19,6 +19,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.DialogBottariCreateBinding
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
+import com.bottari.presentation.view.edit.team.TeamBottariEditActivity
 
 class BottariCreateDialog :
     DialogFragment(),
@@ -95,7 +96,8 @@ class BottariCreateDialog :
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                is BottariCreateUiEvent.CreateBottariSuccess -> navigateToScreen(uiEvent.bottariId)
+                is BottariCreateUiEvent.CreatePersonalBottariSuccess -> navigateToPersonalEdit(uiEvent.bottariId)
+                is BottariCreateUiEvent.CreateTeamBottariSuccess -> navigateToTeamBottariEdit(uiEvent.bottariId)
                 BottariCreateUiEvent.CreateBottariFailure -> showSnackbar(R.string.bottari_create_failure_text)
             }
         }
@@ -128,12 +130,19 @@ class BottariCreateDialog :
         }
     }
 
-    private fun navigateToScreen(bottariId: Long?) {
+    private fun navigateToPersonalEdit(bottariId: Long?) {
         if (bottariId != null) {
             val intent = PersonalBottariEditActivity.newIntent(requireContext(), bottariId, true)
             startActivity(intent)
         }
+        dismiss()
+    }
 
+    private fun navigateToTeamBottariEdit(bottariId: Long?) {
+        if (bottariId != null) {
+            val intent = TeamBottariEditActivity.newIntent(requireContext(), bottariId, true)
+            startActivity(intent)
+        }
         dismiss()
     }
 

@@ -44,7 +44,7 @@ class BottariCreateViewModel(
                 .onSuccess { createdBottariId ->
                     if (createdBottariId == null) return@onSuccess
                     logCreateBottariEvent(UiEventType.PERSONAL_BOTTARI_CREATE, title)
-                    emitEvent(BottariCreateUiEvent.CreateBottariSuccess(createdBottariId))
+                    emitEvent(BottariCreateUiEvent.CreatePersonalBottariSuccess(createdBottariId))
                 }.onFailure { emitEvent(BottariCreateUiEvent.CreateBottariFailure) }
         }
     }
@@ -57,7 +57,7 @@ class BottariCreateViewModel(
                 .onSuccess { createdBottariId ->
                     if (createdBottariId == null) return@onSuccess
                     logCreateBottariEvent(UiEventType.TEAM_BOTTARI_CREATE, title)
-                    emitEvent(BottariCreateUiEvent.CreateBottariSuccess(createdBottariId))
+                    emitEvent(BottariCreateUiEvent.CreateTeamBottariSuccess(createdBottariId))
                 }.onFailure { emitEvent(BottariCreateUiEvent.CreateBottariFailure) }
         }
     }
