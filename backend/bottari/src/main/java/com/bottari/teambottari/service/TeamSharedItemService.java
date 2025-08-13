@@ -8,6 +8,7 @@ import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamSharedItemRepository;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,6 +28,7 @@ public class TeamSharedItemService {
 
         return itemsByInfo.keySet()
                 .stream()
+                .sorted(Comparator.comparing(TeamSharedItemInfo::getCreatedAt))
                 .map(info -> buildTeamStatusResponse(itemsByInfo, info))
                 .toList();
     }
