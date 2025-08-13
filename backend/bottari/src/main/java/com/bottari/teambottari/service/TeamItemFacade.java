@@ -4,12 +4,10 @@ import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
-import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamMember;
-import com.bottari.teambottari.domain.TeamPersonalItem;
-import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
+import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamMemberRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class TeamItemService {
+public class TeamItemFacade {
 
     private final TeamSharedItemService teamSharedItemService;
     private final TeamAssignedItemService teamAssignedItemService;
@@ -30,9 +28,9 @@ public class TeamItemService {
             final String ssaid
     ) {
         final TeamMember teamMember = getTeamMemberByTeamBottariIdAndSsaid(teamBottariId, ssaid);
-        final List<TeamSharedItem> teamSharedItems = teamSharedItemService.getAllByTeamMember(teamMember);
-        final List<TeamAssignedItem> teamAssignedItems = teamAssignedItemService.getAllByTeamMember(teamMember);
-        final List<TeamPersonalItem> teamPersonalItems = teamPersonalItemService.getAllByTeamMember(teamMember);
+        final List<TeamMemberItemResponse> teamSharedItems = teamSharedItemService.getAllByTeamMember(teamMember);
+        final List<TeamMemberItemResponse> teamAssignedItems = teamAssignedItemService.getAllByTeamMember(teamMember);
+        final List<TeamMemberItemResponse> teamPersonalItems = teamPersonalItemService.getAllByTeamMember(teamMember);
 
         return TeamMemberChecklistResponse.of(teamSharedItems, teamAssignedItems, teamPersonalItems);
     }

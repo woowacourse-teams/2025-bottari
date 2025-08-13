@@ -12,8 +12,8 @@ import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.domain.TeamItemType;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
-import com.bottari.teambottari.dto.TeamMemberChecklistResponse.TeamMemberItemResponse;
-import com.bottari.teambottari.service.TeamItemService;
+import com.bottari.teambottari.dto.TeamMemberItemResponse;
+import com.bottari.teambottari.service.TeamItemFacade;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +35,7 @@ class TeamBottariItemControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private TeamItemService teamItemService;
+    private TeamItemFacade teamItemFacade;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -65,7 +65,7 @@ class TeamBottariItemControllerTest {
                 personalItems
         );
 
-        given(teamItemService.getCheckList(teamBottariId, ssaid))
+        given(teamItemFacade.getCheckList(teamBottariId, ssaid))
                 .willReturn(responses);
 
         // when & then
@@ -87,7 +87,7 @@ class TeamBottariItemControllerTest {
         final String ssaid = "test-ssaid";
         final CheckTeamItemRequest request = new CheckTeamItemRequest(type);
 
-        willDoNothing().given(teamItemService)
+        willDoNothing().given(teamItemFacade)
                 .check(itemId, ssaid, request);
 
         // when & then
@@ -111,7 +111,7 @@ class TeamBottariItemControllerTest {
         final String ssaid = "test-ssaid";
         final CheckTeamItemRequest request = new CheckTeamItemRequest(type);
 
-        willDoNothing().given(teamItemService)
+        willDoNothing().given(teamItemFacade)
                 .uncheck(itemId, ssaid, request);
 
         // when & then

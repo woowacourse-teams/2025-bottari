@@ -18,7 +18,7 @@ import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
-import com.bottari.teambottari.dto.TeamMemberChecklistResponse.TeamMemberItemResponse;
+import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -32,15 +32,15 @@ import org.springframework.context.annotation.Import;
 
 @DataJpaTest
 @Import({
-        TeamItemService.class,
+        TeamItemFacade.class,
         TeamSharedItemService.class,
         TeamAssignedItemService.class,
         TeamPersonalItemService.class,
 })
-public class TeamItemServiceTest {
+public class TeamItemFacadeTest {
 
     @Autowired
-    private TeamItemService teamItemService;
+    private TeamItemFacade teamItemFacade;
 
     @Autowired
     private EntityManager entityManager;
@@ -77,7 +77,7 @@ public class TeamItemServiceTest {
             entityManager.persist(teamPersonalItem);
 
             // when
-            final TeamMemberChecklistResponse actual = teamItemService.getCheckList(teamBottari.getId(),
+            final TeamMemberChecklistResponse actual = teamItemFacade.getCheckList(teamBottari.getId(),
                     member.getSsaid());
 
             // then
@@ -107,7 +107,7 @@ public class TeamItemServiceTest {
             final String invalid_ssaid = "invalid_ssaid";
 
             // when & then
-            assertThatThrownBy(() -> teamItemService.getCheckList(1L, invalid_ssaid))
+            assertThatThrownBy(() -> teamItemFacade.getCheckList(1L, invalid_ssaid))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
         }
@@ -123,7 +123,7 @@ public class TeamItemServiceTest {
             entityManager.persist(teamBottari);
 
             // when & then
-            assertThatThrownBy(() -> teamItemService.getCheckList(teamBottari.getId(), member.getSsaid()))
+            assertThatThrownBy(() -> teamItemFacade.getCheckList(teamBottari.getId(), member.getSsaid()))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }
@@ -154,7 +154,7 @@ public class TeamItemServiceTest {
             final CheckTeamItemRequest request = new CheckTeamItemRequest(type);
 
             // when
-            teamItemService.check(itemId, member.getSsaid(), request);
+            teamItemFacade.check(itemId, member.getSsaid(), request);
 
             // then
             final boolean actual = getItemCheckedStatus(type, itemId);
@@ -216,7 +216,7 @@ public class TeamItemServiceTest {
             final CheckTeamItemRequest request = new CheckTeamItemRequest(type);
 
             // when
-            teamItemService.uncheck(itemId, member.getSsaid(), request);
+            teamItemFacade.uncheck(itemId, member.getSsaid(), request);
 
             // then
             final boolean actual = getItemCheckedStatus(type, itemId);

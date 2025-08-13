@@ -3,7 +3,7 @@ package com.bottari.teambottari.controller;
 import com.bottari.config.MemberIdentifier;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
-import com.bottari.teambottari.service.TeamItemService;
+import com.bottari.teambottari.service.TeamItemFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TeamBottariItemController implements TeamBottariItemApiDocs {
 
-    private final TeamItemService teamItemService;
+    private final TeamItemFacade teamItemFacade;
 
     @GetMapping("/teams/{teamBottariId}/checklist")
     @Override
@@ -24,7 +24,7 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
             @PathVariable final Long teamBottariId,
             @MemberIdentifier final String ssaid
     ) {
-        final TeamMemberChecklistResponse response = teamItemService.getCheckList(teamBottariId, ssaid);
+        final TeamMemberChecklistResponse response = teamItemFacade.getCheckList(teamBottariId, ssaid);
 
         return ResponseEntity.ok(response);
     }
@@ -36,7 +36,7 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
             @RequestBody final CheckTeamItemRequest request,
             @MemberIdentifier final String ssaid
     ) {
-        teamItemService.check(id, ssaid, request);
+        teamItemFacade.check(id, ssaid, request);
 
         return ResponseEntity.noContent().build();
     }
@@ -48,7 +48,7 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
             @RequestBody final CheckTeamItemRequest request,
             @MemberIdentifier final String ssaid
     ) {
-        teamItemService.uncheck(id, ssaid, request);
+        teamItemFacade.uncheck(id, ssaid, request);
 
         return ResponseEntity.noContent().build();
     }

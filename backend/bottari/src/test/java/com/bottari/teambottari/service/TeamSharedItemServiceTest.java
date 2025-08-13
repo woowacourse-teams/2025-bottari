@@ -2,6 +2,7 @@ package com.bottari.teambottari.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.error.BusinessException;
 import com.bottari.fixture.MemberFixture;
@@ -11,7 +12,9 @@ import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
+import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -28,6 +31,39 @@ class TeamSharedItemServiceTest {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Nested
+    class GetAllByTeamMemberTest {
+
+        @DisplayName("팀 멤버를 통해 물품을 조회한다.")
+        @Test
+        void getAllByTeamMember() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo("공통 물품", teamBottari);
+            entityManager.persist(teamSharedItemInfo);
+
+            final TeamSharedItem teamSharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember);
+            entityManager.persist(teamSharedItem);
+
+            // when
+            final List<TeamMemberItemResponse> actual = teamSharedItemService.getAllByTeamMember(teamMember);
+
+            // then
+            assertAll(
+                    () -> assertThat(actual).hasSize(1),
+                    () -> assertThat(actual.getFirst().name()).isEqualTo(teamSharedItemInfo.getName())
+            );
+        }
+    }
 
     @Nested
     class CheckTest {

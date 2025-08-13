@@ -4,6 +4,7 @@ import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamPersonalItem;
+import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamPersonalItemRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,11 @@ public class TeamPersonalItemService {
 
     private final TeamPersonalItemRepository teamPersonalItemRepository;
 
-    public List<TeamPersonalItem> getAllByTeamMember(final TeamMember teamMember) {
-        return teamPersonalItemRepository.findAllByTeamMemberId(teamMember.getId());
+    public List<TeamMemberItemResponse> getAllByTeamMember(final TeamMember teamMember) {
+        final List<TeamPersonalItem> items = teamPersonalItemRepository.findAllByTeamMemberId(teamMember.getId());
+        return items.stream()
+                .map(TeamMemberItemResponse::from)
+                .toList();
     }
 
     @Transactional
