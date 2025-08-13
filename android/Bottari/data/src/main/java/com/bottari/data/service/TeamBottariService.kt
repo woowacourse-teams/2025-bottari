@@ -18,7 +18,7 @@ interface TeamBottariService {
         @Body request: CreateTeamBottariRequest,
     ): Response<Unit>
 
-    @GET("/teams/{teamBottariId}/checklist")
+    @GET("/team-bottaries/{teamBottariId}/checklist")
     suspend fun fetchTeamBottari(
         @Path("teamBottariId") teamBottariId: Long,
     ): Response<FetchTeamBottariChecklistResponse>
