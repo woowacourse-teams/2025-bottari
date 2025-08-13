@@ -54,7 +54,7 @@ class MemberServiceTest {
             final Long actual = memberService.create(request);
 
             // then
-            FcmToken actualFcmToken = entityManager.createQuery("""
+            final FcmToken actualFcmToken = entityManager.createQuery("""
                           SELECT f FROM FcmToken f WHERE f.member.id = :memberId
                     """, FcmToken.class)
                     .setParameter("memberId", actual)

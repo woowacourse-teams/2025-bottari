@@ -35,7 +35,10 @@ public class FcmToken {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public FcmToken(final String token, final Member member) {
+    public FcmToken(
+            final String token,
+            final Member member
+    ) {
         this.token = token;
         this.member = member;
     }
