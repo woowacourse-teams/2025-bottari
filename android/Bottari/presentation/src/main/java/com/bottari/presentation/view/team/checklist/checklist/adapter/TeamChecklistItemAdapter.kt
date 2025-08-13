@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.databinding.ItemTeamChecklistOptionBinding
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.TeamBottariItemUiModel
 import com.bottari.presentation.model.TeamChecklistParentUIModel
 
 class TeamChecklistItemAdapter(
     private val onParentClick: (TeamChecklistParentUIModel) -> Unit,
-    private val onChildClick: (BottariItemUiModel) -> Unit,
+    private val onChildClick: (TeamBottariItemUiModel) -> Unit,
 ) : ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
     inner class ParentViewHolder(
         private val binding: ItemTeamChecklistOptionBinding,
@@ -31,7 +31,7 @@ class TeamChecklistItemAdapter(
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
             is TeamChecklistParentUIModel -> TeamChecklistItemType.PARENT
-            is BottariItemUiModel -> TeamChecklistItemType.CHILD
+            is TeamBottariItemUiModel -> TeamChecklistItemType.CHILD
             else -> {
                 val errorMessage =
                     ERROR_MESSAGE_INVALID_DATA_TYPE
@@ -57,8 +57,8 @@ class TeamChecklistItemAdapter(
 
             TeamChecklistItemType.CHILD -> {
                 TeamChecklistViewHolder.from(parent) { itemId ->
-                    val item = currentList.find { it is BottariItemUiModel && it.id == itemId }
-                    item?.let { onChildClick(it as BottariItemUiModel) }
+                    val item = currentList.find { it is TeamBottariItemUiModel && it.id == itemId }
+                    item?.let { onChildClick(it as TeamBottariItemUiModel) }
                 }
             }
 
@@ -75,7 +75,7 @@ class TeamChecklistItemAdapter(
     ) {
         when (holder) {
             is ParentViewHolder -> holder.bind(getItem(position) as TeamChecklistParentUIModel)
-            is TeamChecklistViewHolder -> holder.bind(getItem(position) as BottariItemUiModel)
+            is TeamChecklistViewHolder -> holder.bind(getItem(position) as TeamBottariItemUiModel)
         }
     }
 
@@ -97,7 +97,10 @@ class TeamChecklistItemAdapter(
 
                     return when (oldItem) {
                         is TeamChecklistParentUIModel -> (newItem as TeamChecklistParentUIModel).category == oldItem.category
-                        is BottariItemUiModel -> (newItem as BottariItemUiModel).id == oldItem.id
+                        is TeamBottariItemUiModel -> {
+                            newItem as TeamBottariItemUiModel
+                            oldItem.id == newItem.id && oldItem.category == newItem.category
+                        }
                         else -> false
                     }
                 }

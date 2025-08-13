@@ -1,23 +1,23 @@
 package com.bottari.presentation.view.team.checklist.checklist
 
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.TeamBottariItemUiModel
 
 data class TeamChecklistUiState(
     val isLoading: Boolean = false,
-    val allItems: List<BottariItemUiModel> = emptyList(),
-    val pointItems: List<BottariItemUiModel> = emptyList(),
-    val personalItems: List<BottariItemUiModel> = emptyList(),
+    val allItems: List<TeamBottariItemUiModel> = emptyList(),
+    val pointItems: List<TeamBottariItemUiModel> = emptyList(),
+    val personalItems: List<TeamBottariItemUiModel> = emptyList(),
     val swipedItemIds: Set<Long> = emptySet(),
     val expandableItems: List<Any> = emptyList(),
 ) {
-    private val bottariItems: List<BottariItemUiModel> = allItems + pointItems + personalItems
+    private val bottariItems: List<TeamBottariItemUiModel> = allItems + pointItems + personalItems
     val totalQuantity: Int
         get() = bottariItems.size
 
     val checkedQuantity: Int
         get() = bottariItems.count { it.isChecked }
 
-    val nonSwipedItems: List<BottariItemUiModel> by lazy {
+    val nonSwipedItems: List<TeamBottariItemUiModel> by lazy {
         nonCheckedItems.filterNot { it.id in swipedItemIds }
     }
 
@@ -30,7 +30,7 @@ data class TeamChecklistUiState(
     val isAllSwiped: Boolean
         get() = bottariItems.isNotEmpty() && nonSwipedItems.isEmpty()
 
-    private val nonCheckedItems: List<BottariItemUiModel> by lazy {
+    private val nonCheckedItems: List<TeamBottariItemUiModel> by lazy {
         bottariItems.filterNot { it.isChecked }
     }
 }

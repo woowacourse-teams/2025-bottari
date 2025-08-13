@@ -24,7 +24,7 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     }
 
     private fun initFragments() {
-        teamChecklistFragment = TeamChecklistFragment()
+        teamChecklistFragment = TeamChecklistFragment.newInstance(intent.getLongExtra(EXTRA_BOTTARI_ID, -1))
         teamStatusFragment = TeamStatusFragment()
         memberStatusFragment = MemberStatusFragment()
     }
@@ -57,8 +57,14 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     }
 
     companion object {
-        fun newIntent(context: Context): Intent =
+        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
+
+        fun newIntent(
+            context: Context,
+            bottariId: Long,
+        ): Intent =
             Intent(context, TeamChecklistActivity::class.java).apply {
+                putExtra(EXTRA_BOTTARI_ID, bottariId)
             }
     }
 }

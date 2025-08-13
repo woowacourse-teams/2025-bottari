@@ -4,9 +4,10 @@ import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.common.ErrorResponse
 import com.bottari.data.model.team.CreateTeamBottariRequest
-import com.bottari.data.model.team.FetchTeamBottariResponse
-import com.bottari.data.model.team.TeamMembersResponse
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
+import com.bottari.data.model.team.FetchTeamBottariResponse
+import com.bottari.data.model.team.ItemTypeRequest
+import com.bottari.data.model.team.TeamMembersResponse
 import com.bottari.data.service.TeamBottariService
 
 class TeamBottariRemoteDataSourceImpl(
@@ -34,9 +35,12 @@ class TeamBottariRemoteDataSourceImpl(
             return Result.failure(Exception(errorResponse?.title))
         }
 
-    override suspend fun uncheckBottariItem(bottariItemId: Long): Result<Unit> =
+    override suspend fun uncheckBottariItem(
+        bottariItemId: Long,
+        request: ItemTypeRequest,
+    ): Result<Unit> =
         runCatching {
-            val response = teamBottariService.uncheckTeamBottariItem(bottariItemId)
+            val response = teamBottariService.uncheckTeamBottariItem(bottariItemId, request)
             if (response.isSuccessful) {
                 return Result.success(Unit)
             }
@@ -44,9 +48,12 @@ class TeamBottariRemoteDataSourceImpl(
             return Result.failure(Exception(errorResponse?.title))
         }
 
-    override suspend fun checkBottariItem(bottariItemId: Long): Result<Unit> =
+    override suspend fun checkBottariItem(
+        bottariItemId: Long,
+        request: ItemTypeRequest,
+    ): Result<Unit> =
         runCatching {
-            val response = teamBottariService.checkTeamBottariItem(bottariItemId)
+            val response = teamBottariService.checkTeamBottariItem(bottariItemId, request)
             if (response.isSuccessful) {
                 return Result.success(Unit)
             }

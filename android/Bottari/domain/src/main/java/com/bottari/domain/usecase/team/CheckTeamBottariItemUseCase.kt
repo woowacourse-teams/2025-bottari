@@ -5,5 +5,8 @@ import com.bottari.domain.repository.TeamBottariRepository
 class CheckTeamBottariItemUseCase(
     private val teamBottariRepository: TeamBottariRepository,
 ) {
-    suspend operator fun invoke(title: String): Result<Long?> = teamBottariRepository.createTeamBottari(title)
+    suspend operator fun invoke(
+        id: Long,
+        category: String,
+    ): Result<Unit> = teamBottariRepository.checkBottariItem(id, category)
 }
