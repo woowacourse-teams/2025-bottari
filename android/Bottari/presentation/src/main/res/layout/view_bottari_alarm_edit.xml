@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_alarm_edit"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_radius_12dp"
+    android:elevation="2dp"
+    android:padding="@dimen/space_median">
+
+    <TextView
+        android:id="@+id/tv_alarm_edit_title"
+        style="@style/Pretendard_Bold_20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bottari_edit_alarm_list_title"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_alarm_edit_description"
+        style="@style/Pretendard_Medium_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:text="@string/bottari_edit_alarm_description_text"
+        android:textColor="@color/gray_a6a6a6"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_alarm_edit_title" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_alarm_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:lineSpacingExtra="6.4sp"
+        android:textOff=""
+        android:textOn=""
+        android:thumb="@drawable/bg_thumb"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:track="@drawable/bg_track" />
+
+    <include
+        android:id="@+id/view_alarm_edit_empty"
+        layout="@layout/view_edit_alarm_empty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_x_large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_alarm_edit_title" />
+
+    <include
+        android:id="@+id/view_alarm_edit_item"
+        layout="@layout/item_checklist_alarm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_median"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_alarm_edit_description" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
