@@ -15,19 +15,6 @@ class TeamChecklistItemAdapter(
     private val onParentClick: (TeamChecklistCategoryUiModel) -> Unit,
     private val onChildClick: (TeamChecklistItemUiModel) -> Unit,
 ) : ListAdapter<TeamChecklistRowUiModel, RecyclerView.ViewHolder>(DiffCallback) {
-    inner class ParentViewHolder(
-        private val binding: ItemTeamChecklistOptionBinding,
-    ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(teamChecklistParent: TeamChecklistCategoryUiModel) {
-            binding.tvChecklistItemTitle.text = teamChecklistParent.category.title
-            binding.ivChecklistOption.rotation =
-                if (teamChecklistParent.isExpanded) TOGGLE_SHAPE_OPENED else TOGGLE_SHAPE_UNOPENED
-            itemView.setOnClickListener {
-                onParentClick(teamChecklistParent)
-            }
-        }
-    }
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -40,7 +27,7 @@ class TeamChecklistItemAdapter(
                         parent,
                         false,
                     )
-                ParentViewHolder(binding)
+                TeamChecklistCategoryViewHolder(binding, onParentClick)
             }
 
             TeamChecklistItemType.ITEM -> {
@@ -70,15 +57,12 @@ class TeamChecklistItemAdapter(
         position: Int,
     ) {
         when (val item = getItem(position)) {
-            is TeamChecklistCategoryUiModel -> (holder as ParentViewHolder).bind(item)
+            is TeamChecklistCategoryUiModel -> (holder as TeamChecklistCategoryViewHolder).bind(item)
             is TeamChecklistItemUiModel -> (holder as TeamChecklistViewHolder).bind(item)
         }
     }
 
     companion object {
-        private const val TOGGLE_SHAPE_UNOPENED = 0f
-        private const val TOGGLE_SHAPE_OPENED = 90f
-
         private const val ERROR_MESSAGE_INVALID_VIEW_TYPE = "잘못된 뷰 타입입니다"
 
         private val DiffCallback =
