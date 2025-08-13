@@ -2,7 +2,9 @@ package com.bottari.teambottari.controller;
 
 import com.bottari.config.MemberIdentifier;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
+import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
 import com.bottari.teambottari.service.TeamMemberService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,20 @@ public class TeamMemberController implements TeamMemberApiDocs {
             @MemberIdentifier final String ssaid
     ) {
         final ReadTeamMemberInfoResponse response = teamMemberService.getTeamMemberInfoByTeamBottariId(
+                teamBottariId,
+                ssaid
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/team-bottaries/{teamBottariId}/members/status")
+    @Override
+    public ResponseEntity<List<ReadTeamMemberStatusResponse>> readTeamMemberStatus(
+            @PathVariable final Long teamBottariId,
+            @MemberIdentifier final String ssaid
+    ) {
+        final List<ReadTeamMemberStatusResponse> response = teamMemberService.getTeamMemberStatusByTeamBottariId(
                 teamBottariId,
                 ssaid
         );
