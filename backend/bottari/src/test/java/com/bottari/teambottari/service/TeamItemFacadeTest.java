@@ -48,11 +48,11 @@ public class TeamItemFacadeTest {
     private EntityManager entityManager;
 
     @Nested
-    class GetTeamItemsTest {
+    class GetTeamItemStatusTest {
 
         @DisplayName("팀 보따리 물품 현황을 조회한다.")
         @Test
-        void getTeamItems() {
+        void getTeamItemStatus() {
             // given
             final Member member_1 = MemberFixture.MEMBER.get();
             final Member member_2 = MemberFixture.ANOTHER_MEMBER.get();
@@ -94,34 +94,33 @@ public class TeamItemFacadeTest {
                     member_1.getSsaid());
 
             // then
-            final TeamItemStatusResponse actualSharedItemResponse = actual.sharedItems().getFirst();
-            final TeamItemStatusResponse member_1_assignedItemResponse = actual.assignedItems()
-                    .stream()
-                    .filter(response -> response.name().equals("멤버 1 물품"))
-                    .findFirst()
-                    .orElse(null);
-            final TeamItemStatusResponse member_2_assignedItemResponse = actual.assignedItems()
-                    .stream()
-                    .filter(response -> response.name().equals("멤버 2 물품"))
-                    .findFirst()
-                    .orElse(null);
-            assertAll(
-                    () -> assertThat(actual.sharedItems()).hasSize(1),
-                    () -> assertThat(actual.assignedItems()).hasSize(2),
-                    () -> assertThat(actualSharedItemResponse.checkItemsCount()).isEqualTo(0),
-                    () -> assertThat(actualSharedItemResponse.totalItemsCount()).isEqualTo(2),
-                    () -> assertThat(member_1_assignedItemResponse.name()).isEqualTo(teamAssignedItemInfo_1.getName()),
-                    () -> assertThat(member_1_assignedItemResponse.checkItemsCount()).isEqualTo(0),
-                    () -> assertThat(member_1_assignedItemResponse.totalItemsCount()).isEqualTo(1),
-                    () -> assertThat(member_2_assignedItemResponse.name()).isEqualTo(teamAssignedItemInfo_2.getName()),
-                    () -> assertThat(member_2_assignedItemResponse.checkItemsCount()).isEqualTo(1),
-                    () -> assertThat(member_2_assignedItemResponse.totalItemsCount()).isEqualTo(1)
+            final List<TeamItemStatusResponse.MemberCheckStatusResponse> expectedSharedMemberStatus = List.of(
+                    new TeamItemStatusResponse.MemberCheckStatusResponse(member_1.getName(), false),
+                    new TeamItemStatusResponse.MemberCheckStatusResponse(member_2.getName(), false)
             );
+            final List<TeamItemStatusResponse.MemberCheckStatusResponse> expectedMember1AssignedStatus = List.of(
+                    new TeamItemStatusResponse.MemberCheckStatusResponse(member_1.getName(), false)
+            );
+            final List<TeamItemStatusResponse.MemberCheckStatusResponse> expectedMember2AssignedStatus = List.of(
+                    new TeamItemStatusResponse.MemberCheckStatusResponse(member_2.getName(), true)
+            );
+
+            final List<TeamItemStatusResponse> expectedSharedItems = List.of(
+                    new TeamItemStatusResponse("공통 물품", expectedSharedMemberStatus, 0, 2)
+            );
+            final List<TeamItemStatusResponse> expectedAssignedItems = List.of(
+                    new TeamItemStatusResponse("멤버 1 물품", expectedMember1AssignedStatus, 0, 1),
+                    new TeamItemStatusResponse("멤버 2 물품", expectedMember2AssignedStatus, 1, 1)
+            );
+            final ReadTeamItemStatusResponse expected = new ReadTeamItemStatusResponse(expectedSharedItems,
+                    expectedAssignedItems);
+
+            assertThat(actual).isEqualTo(expected);
         }
 
         @DisplayName("팀 보따리 물품을 조회할 때, 팀 멤버가 아니라면 예외를 던진다.")
         @Test
-        void getTeamItems_Exception_NotTeamMamber() {
+        void getTeamItemStatus_Exception_NotTeamMamber() {
             // given
             final Member member_in_team = MemberFixture.MEMBER.get();
             final Member member_not_in_team = MemberFixture.ANOTHER_MEMBER.get();

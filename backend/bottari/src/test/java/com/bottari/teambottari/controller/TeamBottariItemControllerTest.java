@@ -61,12 +61,12 @@ class TeamBottariItemControllerTest {
         );
 
         final List<TeamItemStatusResponse> sharedItems = List.of(
-                new TeamItemStatusResponse("렌터카 예약", sharedItemMemberStatus, 2, 3),
-                new TeamItemStatusResponse("숙소 예약", sharedItemMemberStatus, 2, 3)
+                new TeamItemStatusResponse("잠옷", sharedItemMemberStatus, 2, 3),
+                new TeamItemStatusResponse("세면도구", sharedItemMemberStatus, 2, 3)
         );
         final List<TeamItemStatusResponse> assignedItems = List.of(
-                new TeamItemStatusResponse("간식 준비", assignedItemMemberStatus, 1, 2),
-                new TeamItemStatusResponse("음료 준비", assignedItemMemberStatus, 1, 2)
+                new TeamItemStatusResponse("가스 버너", assignedItemMemberStatus, 1, 2),
+                new TeamItemStatusResponse("생수", assignedItemMemberStatus, 1, 2)
         );
 
         final ReadTeamItemStatusResponse response = new ReadTeamItemStatusResponse(sharedItems, assignedItems);
