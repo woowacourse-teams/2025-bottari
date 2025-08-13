@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
+import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
+import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.service.TeamMemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -35,8 +37,8 @@ class TeamMemberControllerTest {
     @Test
     void readTeamMemberManagementInfo() throws Exception {
         // given
-        final String ssaid = "ssaid";
         final Long teamBottariId = 1L;
+        final String ssaid = "ssaid";
         final ReadTeamMemberInfoResponse response = new ReadTeamMemberInfoResponse(
                 "Invite Code",
                 3,
@@ -52,6 +54,46 @@ class TeamMemberControllerTest {
 
         // when & then
         mockMvc.perform(get("/team-bottaries/{teamBottariId}/members", teamBottariId)
+                        .header("ssaid", ssaid))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @DisplayName("팀원 별 챙김 현황 정보를 조회한다.")
+    @Test
+    void readTeamMemberStatus() throws Exception {
+        // given
+        final Long teamBottariId = 1L;
+        final String ssaid = "ssaid";
+        final List<ReadTeamMemberStatusResponse> response = List.of(
+                new ReadTeamMemberStatusResponse(
+                        "owner_name",
+                        true,
+                        2,
+                        1,
+                        List.of(
+                                new TeamMemberItemResponse(1L, "shared_item_1", true),
+                                new TeamMemberItemResponse(2L, "shared_item_2", false)
+                        ),
+                        List.of()
+                ), new ReadTeamMemberStatusResponse(
+                        "member_name",
+                        false,
+                        3,
+                        2,
+                        List.of(
+                                new TeamMemberItemResponse(1L, "shared_item_1", false),
+                                new TeamMemberItemResponse(2L, "shared_item_2", true)),
+                        List.of(
+                                new TeamMemberItemResponse(1L, "assigned_item_1", true)
+                        )
+                )
+        );
+        given(teamMemberService.getTeamMemberStatusByTeamBottariId(teamBottariId, ssaid))
+                .willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/team-bottaries/{teamBottariId}/members/status", teamBottariId)
                         .header("ssaid", ssaid))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(response)));
