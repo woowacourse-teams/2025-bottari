@@ -7,18 +7,18 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.databinding.ItemTeamChecklistOptionBinding
-import com.bottari.presentation.model.TeamChecklistCategoryUIModel
-import com.bottari.presentation.model.TeamChecklistItemUIModel
+import com.bottari.presentation.model.TeamChecklistCategoryUiModel
+import com.bottari.presentation.model.TeamChecklistItemUiModel
 import com.bottari.presentation.model.TeamChecklistRowUiModel
 
 class TeamChecklistItemAdapter(
-    private val onParentClick: (TeamChecklistCategoryUIModel) -> Unit,
-    private val onChildClick: (TeamChecklistItemUIModel) -> Unit,
+    private val onParentClick: (TeamChecklistCategoryUiModel) -> Unit,
+    private val onChildClick: (TeamChecklistItemUiModel) -> Unit,
 ) : ListAdapter<TeamChecklistRowUiModel, RecyclerView.ViewHolder>(DiffCallback) {
     inner class ParentViewHolder(
         private val binding: ItemTeamChecklistOptionBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(teamChecklistParent: TeamChecklistCategoryUIModel) {
+        fun bind(teamChecklistParent: TeamChecklistCategoryUiModel) {
             binding.tvChecklistItemTitle.text = teamChecklistParent.category.title
             binding.ivChecklistOption.rotation =
                 if (teamChecklistParent.isExpanded) TOGGLE_SHAPE_OPENED else TOGGLE_SHAPE_UNOPENED
@@ -46,7 +46,7 @@ class TeamChecklistItemAdapter(
             TeamChecklistItemType.ITEM -> {
                 TeamChecklistViewHolder.from(parent) { position ->
                     val item = currentList[position]
-                    if (item is TeamChecklistItemUIModel) {
+                    if (item is TeamChecklistItemUiModel) {
                         onChildClick(item)
                     }
                 }
@@ -61,8 +61,8 @@ class TeamChecklistItemAdapter(
 
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
-            is TeamChecklistCategoryUIModel -> TeamChecklistItemType.CATEGORY
-            is TeamChecklistItemUIModel -> TeamChecklistItemType.ITEM
+            is TeamChecklistCategoryUiModel -> TeamChecklistItemType.CATEGORY
+            is TeamChecklistItemUiModel -> TeamChecklistItemType.ITEM
         }
 
     override fun onBindViewHolder(
@@ -70,8 +70,8 @@ class TeamChecklistItemAdapter(
         position: Int,
     ) {
         when (val item = getItem(position)) {
-            is TeamChecklistCategoryUIModel -> (holder as ParentViewHolder).bind(item)
-            is TeamChecklistItemUIModel -> (holder as TeamChecklistViewHolder).bind(item)
+            is TeamChecklistCategoryUiModel -> (holder as ParentViewHolder).bind(item)
+            is TeamChecklistItemUiModel -> (holder as TeamChecklistViewHolder).bind(item)
         }
     }
 
@@ -90,13 +90,13 @@ class TeamChecklistItemAdapter(
                     if (oldItem::class != newItem::class) return false
 
                     return when (oldItem) {
-                        is TeamChecklistCategoryUIModel -> {
-                            (newItem as TeamChecklistCategoryUIModel).category ==
+                        is TeamChecklistCategoryUiModel -> {
+                            (newItem as TeamChecklistCategoryUiModel).category ==
                                 oldItem.category
                         }
 
-                        is TeamChecklistItemUIModel -> {
-                            val newTeamBottariItem = newItem as TeamChecklistItemUIModel
+                        is TeamChecklistItemUiModel -> {
+                            val newTeamBottariItem = newItem as TeamChecklistItemUiModel
                             oldItem.id == newTeamBottariItem.id &&
                                 oldItem.category == newTeamBottariItem.category
                         }

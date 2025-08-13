@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemChecklistBinding
-import com.bottari.presentation.model.TeamChecklistItemUIModel
+import com.bottari.presentation.model.TeamChecklistItemUiModel
 
 class TeamChecklistViewHolder private constructor(
     private val binding: ItemChecklistBinding,
@@ -19,7 +19,7 @@ class TeamChecklistViewHolder private constructor(
         }
     }
 
-    fun bind(item: TeamChecklistItemUIModel) {
+    fun bind(item: TeamChecklistItemUiModel) {
         binding.ctvChecklistItemTitle.text = item.name
         updateCheckedState(item.isChecked)
     }

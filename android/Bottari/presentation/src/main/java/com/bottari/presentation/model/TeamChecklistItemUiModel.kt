@@ -5,7 +5,7 @@ import com.bottari.presentation.view.team.checklist.checklist.ChecklistCategory
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class TeamChecklistItemUIModel(
+data class TeamChecklistItemUiModel(
     val id: Long,
     val name: String,
     val isChecked: Boolean,

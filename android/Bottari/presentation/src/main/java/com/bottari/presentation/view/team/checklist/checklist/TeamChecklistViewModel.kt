@@ -13,8 +13,8 @@ import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.TeamChecklistCategoryUIModel
-import com.bottari.presentation.model.TeamChecklistItemUIModel
+import com.bottari.presentation.model.TeamChecklistCategoryUiModel
+import com.bottari.presentation.model.TeamChecklistItemUiModel
 import com.bottari.presentation.model.TeamChecklistRowUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.async
@@ -35,9 +35,9 @@ class TeamChecklistViewModel(
 ) : BaseViewModel<TeamChecklistUiState, TeamChecklistUiEvent>(TeamChecklistUiState()) {
     private val teamBottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
-    private val pendingCheckStatusMap = mutableMapOf<Long, TeamChecklistItemUIModel>()
+    private val pendingCheckStatusMap = mutableMapOf<Long, TeamChecklistItemUiModel>()
 
-    private val debouncedCheck: (List<TeamChecklistItemUIModel>) -> Unit =
+    private val debouncedCheck: (List<TeamChecklistItemUiModel>) -> Unit =
         debounce(
             timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
@@ -51,7 +51,7 @@ class TeamChecklistViewModel(
         updateState {
             val updatedExpandableItems =
                 expandableItems.map { item ->
-                    if (item is TeamChecklistCategoryUIModel && item.category == category) {
+                    if (item is TeamChecklistCategoryUiModel && item.category == category) {
                         item.copy(isExpanded = !item.isExpanded)
                     } else {
                         item
@@ -70,13 +70,13 @@ class TeamChecklistViewModel(
         val listToSearch = currentState.expandableItems
         val itemToToggle =
             listToSearch.firstOrNull {
-                it is TeamChecklistItemUIModel &&
+                it is TeamChecklistItemUiModel &&
                     it.id == itemId &&
                     it.category == itemCategory
             }
 
         itemToToggle?.let {
-            val toggledItem = (it as TeamChecklistItemUIModel).toggle()
+            val toggledItem = (it as TeamChecklistItemUiModel).toggle()
             updateState {
                 val newExpandableList = expandableItems.toggleItemInList(toggledItem)
                 copy(
@@ -91,18 +91,18 @@ class TeamChecklistViewModel(
 
     private fun generateExpandableList(
         currentExpandableItems: List<TeamChecklistRowUiModel>,
-        categoryItems: Map<ChecklistCategory, List<TeamChecklistItemUIModel>>,
+        categoryItems: Map<ChecklistCategory, List<TeamChecklistItemUiModel>>,
     ): List<TeamChecklistRowUiModel> {
         val newExpandableList = mutableListOf<TeamChecklistRowUiModel>()
 
         ChecklistCategory.entries.forEach { category ->
             val categoryPageData =
                 currentExpandableItems
-                    .filterIsInstance<TeamChecklistCategoryUIModel>()
+                    .filterIsInstance<TeamChecklistCategoryUiModel>()
                     .firstOrNull { it.category == category }
 
             val newParent =
-                (categoryPageData ?: TeamChecklistCategoryUIModel(category, emptyList()))
+                (categoryPageData ?: TeamChecklistCategoryUiModel(category, emptyList()))
                     .copy(teamChecklistItems = categoryItems[category] ?: emptyList())
 
             newExpandableList.add(newParent)
@@ -142,7 +142,7 @@ class TeamChecklistViewModel(
 
     private fun generateExpandableCategoryList(
         expandableItems: List<TeamChecklistRowUiModel>,
-        items: List<TeamChecklistItemUIModel>,
+        items: List<TeamChecklistItemUiModel>,
     ) = generateExpandableList(
         currentExpandableItems = expandableItems,
         categoryItems =
@@ -153,7 +153,7 @@ class TeamChecklistViewModel(
             ),
     )
 
-    private fun performServerCheck(items: List<TeamChecklistItemUIModel>) {
+    private fun performServerCheck(items: List<TeamChecklistItemUiModel>) {
         viewModelScope.launch {
             val jobs =
                 items.map { item ->
@@ -164,7 +164,7 @@ class TeamChecklistViewModel(
         }
     }
 
-    private suspend fun processItemCheck(item: TeamChecklistItemUIModel) {
+    private suspend fun processItemCheck(item: TeamChecklistItemUiModel) {
         val result =
             if (item.isChecked) {
                 checkTeamBottariItemUseCase(item.id, item.category.toString())
@@ -189,11 +189,11 @@ class TeamChecklistViewModel(
                 )
             }
 
-    private fun TeamChecklistItemUIModel.toggle(): TeamChecklistItemUIModel = this.copy(isChecked = !this.isChecked)
+    private fun TeamChecklistItemUiModel.toggle(): TeamChecklistItemUiModel = this.copy(isChecked = !this.isChecked)
 
-    private fun List<TeamChecklistRowUiModel>.toggleItemInList(item: TeamChecklistItemUIModel): List<TeamChecklistRowUiModel> =
+    private fun List<TeamChecklistRowUiModel>.toggleItemInList(item: TeamChecklistItemUiModel): List<TeamChecklistRowUiModel> =
         this.map {
-            if (it is TeamChecklistItemUIModel && it.id == item.id && it.category == item.category) {
+            if (it is TeamChecklistItemUiModel && it.id == item.id && it.category == item.category) {
                 item
             } else {
                 it
@@ -201,7 +201,7 @@ class TeamChecklistViewModel(
         }
 
     private fun BottariItem.toTeamUiModel(category: ChecklistCategory) =
-        TeamChecklistItemUIModel(
+        TeamChecklistItemUiModel(
             id = id,
             name = name,
             isChecked = isChecked,

@@ -2,8 +2,8 @@ package com.bottari.presentation.model
 
 import com.bottari.presentation.view.team.checklist.checklist.ChecklistCategory
 
-data class TeamChecklistCategoryUIModel(
+data class TeamChecklistCategoryUiModel(
     val category: ChecklistCategory,
-    val teamChecklistItems: List<TeamChecklistItemUIModel>,
+    val teamChecklistItems: List<TeamChecklistItemUiModel>,
     var isExpanded: Boolean = true,
 ) : TeamChecklistRowUiModel
