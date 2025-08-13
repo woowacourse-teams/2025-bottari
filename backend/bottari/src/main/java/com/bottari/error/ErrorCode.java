@@ -55,11 +55,16 @@ public enum ErrorCode {
     TEAM_BOTTARI_NOT_FOUND(HttpStatus.NOT_FOUND, "팀 보따리를 찾을 수 없습니다."),
     TEAM_BOTTARI_TITLE_BLANK(HttpStatus.BAD_REQUEST, "팀 보따리 제목은 공백일 수 없습니다."),
     TEAM_BOTTARI_TITLE_TOO_LONG(HttpStatus.BAD_REQUEST, "팀 보따리 제목이 너무 깁니다."),
-    TEAM_BOTTARI_INVITE_CODE_GENERATION_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "고유한 팀 보따리 초대 코드를 생성하는 데 실패했습니다. (관리자 문의 필요)"),
+    TEAM_BOTTARI_INVITE_CODE_GENERATION_FAILED(HttpStatus.SERVICE_UNAVAILABLE,
+            "고유한 팀 보따리 초대 코드를 생성하는 데 실패했습니다. (관리자 문의 필요)"),
 
     // ===== TEAM_BOTTARI_ITEM 관련 =====
+    TEAM_BOTTARI_ITEM_NOT_FOUND(HttpStatus.BAD_REQUEST, "팀 보따리 물품을 찾을 수 없습니다."),
     TEAM_BOTTARI_ITEM_NAME_BLANK(HttpStatus.BAD_REQUEST, "팀 보따리 물품명은 공백일 수 없습니다."),
     TEAM_BOTTARI_ITEM_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "팀 보따리 물품명이 너무 깁니다."),
+    TEAM_BOTTARI_ITEM_NOT_OWNED(HttpStatus.FORBIDDEN, "해당 팀 보따리 물품에 접근할 수 있는 권한이 없습니다."),
+    TEAM_BOTTARI_ITEM_ALREADY_CHECKED(HttpStatus.CONFLICT, "해당 팀 보따리 물품은 이미 체크되어 있습니다."),
+    TEAM_BOTTARI_ITEM_ALREADY_UNCHECKED(HttpStatus.CONFLICT, "해당 팀 보따리 물품은 이미 체크 해제되어 있습니다."),
 
     // ===== TEAM_MEMBER 관련 =====
     MEMBER_NOT_IN_TEAM_BOTTARI(HttpStatus.FORBIDDEN, "해당 팀 보따리의 팀 멤버가 아닙니다."),
