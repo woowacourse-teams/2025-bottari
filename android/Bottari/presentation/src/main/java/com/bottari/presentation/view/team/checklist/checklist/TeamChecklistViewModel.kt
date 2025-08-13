@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.domain.model.team.TeamBottariCheckList
 import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
@@ -44,6 +45,47 @@ class TeamChecklistViewModel(
         fetchTeamCheckList()
     }
 
+    fun toggleParentExpanded(category: ChecklistCategory) {
+        updateState {
+            val updatedExpandableItems =
+                expandableItems.map { item ->
+                    if (item is TeamChecklistItem.Category && item.teamChecklistCategory.category == category) {
+                        TeamChecklistItem.Category(item.teamChecklistCategory.copy(isExpanded = !item.teamChecklistCategory.isExpanded))
+                    } else {
+                        item
+                    }
+                }
+
+            val newExpandableList = generateExpandableCategoryList(updatedExpandableItems, items)
+            copy(expandableItems = newExpandableList)
+        }
+    }
+
+    fun toggleItemChecked(
+        itemId: Long,
+        itemCategory: ChecklistCategory,
+    ) {
+        val listToSearch = currentState.expandableItems
+        val itemToToggle =
+            listToSearch.firstOrNull {
+                it is TeamChecklistItem.Item && it.teamBottariItem.id == itemId &&
+                    it.teamBottariItem.category == itemCategory
+            }
+
+        itemToToggle?.let {
+            val toggledItem = (it as TeamChecklistItem.Item).teamBottariItem.toggle()
+            updateState {
+                val newExpandableList = expandableItems.toggleItemInList(toggledItem)
+                copy(
+                    expandableItems = newExpandableList,
+                )
+            }
+
+            pendingCheckStatusMap[toggledItem.id] = toggledItem
+            debouncedCheck(pendingCheckStatusMap.values.toList())
+        }
+    }
+
     private fun generateExpandableList(
         currentExpandableItems: List<TeamChecklistItem>,
         categoryItems: Map<ChecklistCategory, List<TeamChecklistItemUIModel>>,
@@ -63,7 +105,13 @@ class TeamChecklistViewModel(
 
             newExpandableList.add(TeamChecklistItem.Category(newParent))
             if (newParent.isExpanded) {
-                newExpandableList.addAll(newParent.teamChecklistItems.map { TeamChecklistItem.Item(it) })
+                newExpandableList.addAll(
+                    newParent.teamChecklistItems.map {
+                        TeamChecklistItem.Item(
+                            it,
+                        )
+                    },
+                )
             }
         }
         return newExpandableList
@@ -75,30 +123,13 @@ class TeamChecklistViewModel(
 
             fetchTeamBottariChecklistUseCase(teamBottariId)
                 .onSuccess { checklistData ->
-                    val newSharedItems =
-                        checklistData.sharedItems.map { it.toUiModel(ChecklistCategory.SHARED) }
-                    val newAssignedItems =
-                        checklistData.assignedItems.map { it.toUiModel(ChecklistCategory.ASSIGNED) }
-                    val newPersonalItems =
-                        checklistData.personalItems.map { it.toUiModel(ChecklistCategory.PERSONAL) }
-
+                    val newItems = checklistData.toUIModel()
+                    updateState { copy(items = newItems) }
                     val newExpandableList =
-                        generateExpandableList(
-                            currentExpandableItems = currentState.expandableItems,
-                            categoryItems =
-                                mapOf(
-                                    ChecklistCategory.SHARED to newSharedItems,
-                                    ChecklistCategory.ASSIGNED to newAssignedItems,
-                                    ChecklistCategory.PERSONAL to newPersonalItems,
-                                ),
-                        )
-
+                        generateExpandableCategoryList(currentState.expandableItems, newItems)
                     updateState {
                         copy(
                             isLoading = false,
-                            sharedItems = newSharedItems,
-                            assignedItems = newAssignedItems,
-                            personalItems = newPersonalItems,
                             expandableItems = newExpandableList,
                         )
                     }
@@ -108,63 +139,18 @@ class TeamChecklistViewModel(
         }
     }
 
-    fun toggleItemChecked(
-        itemId: Long,
-        itemCategory: ChecklistCategory,
-    ) {
-        val listToSearch =
-            when (itemCategory) {
-                ChecklistCategory.SHARED -> currentState.sharedItems
-                ChecklistCategory.ASSIGNED -> currentState.assignedItems
-                ChecklistCategory.PERSONAL -> currentState.personalItems
-            }
-        val itemToToggle = listToSearch.firstOrNull { it.id == itemId }
-
-        itemToToggle?.let {
-            val toggledItem = it.toggle()
-
-            updateState {
-                val newAllItems =
-                    if (itemCategory == ChecklistCategory.SHARED) sharedItems.toggleItemInList(itemId) else sharedItems
-                val newPointItems =
-                    if (itemCategory == ChecklistCategory.ASSIGNED) {
-                        assignedItems.toggleItemInList(
-                            itemId,
-                        )
-                    } else {
-                        assignedItems
-                    }
-                val newPersonalItems =
-                    if (itemCategory == ChecklistCategory.PERSONAL) {
-                        personalItems.toggleItemInList(
-                            itemId,
-                        )
-                    } else {
-                        personalItems
-                    }
-
-                val newExpandableList =
-                    generateExpandableList(
-                        currentExpandableItems = expandableItems,
-                        categoryItems =
-                            mapOf(
-                                ChecklistCategory.SHARED to newAllItems,
-                                ChecklistCategory.ASSIGNED to newPointItems,
-                                ChecklistCategory.PERSONAL to newPersonalItems,
-                            ),
-                    )
-                copy(
-                    sharedItems = newAllItems,
-                    assignedItems = newPointItems,
-                    personalItems = newPersonalItems,
-                    expandableItems = newExpandableList,
-                )
-            }
-
-            pendingCheckStatusMap[toggledItem.id] = toggledItem
-            debouncedCheck(pendingCheckStatusMap.values.toList())
-        }
-    }
+    private fun generateExpandableCategoryList(
+        expandableItems: List<TeamChecklistItem>,
+        items: List<TeamChecklistItemUIModel>,
+    ) = generateExpandableList(
+        currentExpandableItems = expandableItems,
+        categoryItems =
+            mapOf(
+                ChecklistCategory.SHARED to items.filter { it.category == ChecklistCategory.SHARED },
+                ChecklistCategory.ASSIGNED to items.filter { it.category == ChecklistCategory.ASSIGNED },
+                ChecklistCategory.PERSONAL to items.filter { it.category == ChecklistCategory.PERSONAL },
+            ),
+    )
 
     private fun performServerCheck(items: List<TeamChecklistItemUIModel>) {
         viewModelScope.launch {
@@ -190,30 +176,29 @@ class TeamChecklistViewModel(
         }
     }
 
-    fun toggleParentExpanded(category: ChecklistCategory) {
-        updateState {
-            val updatedExpandableItems =
-                expandableItems.map { item ->
-                    if (item is TeamChecklistItem.Category && item.teamChecklistCategory.category == category) {
-                        TeamChecklistItem.Category(item.teamChecklistCategory.copy(isExpanded = !item.teamChecklistCategory.isExpanded))
-                    } else {
-                        item
-                    }
-                }
-
-            val newExpandableList =
-                generateExpandableList(
-                    currentExpandableItems = updatedExpandableItems,
-                    categoryItems =
-                        mapOf(
-                            ChecklistCategory.SHARED to sharedItems,
-                            ChecklistCategory.ASSIGNED to assignedItems,
-                            ChecklistCategory.PERSONAL to personalItems,
-                        ),
+    private fun TeamBottariCheckList.toUIModel() =
+        this.sharedItems.map { it.toUiModel(ChecklistCategory.SHARED) } +
+            this.assignedItems.map {
+                it.toUiModel(
+                    ChecklistCategory.ASSIGNED,
                 )
-            copy(expandableItems = newExpandableList)
+            } +
+            this.personalItems.map {
+                it.toUiModel(
+                    ChecklistCategory.PERSONAL,
+                )
+            }
+
+    private fun TeamChecklistItemUIModel.toggle(): TeamChecklistItemUIModel = this.copy(isChecked = !this.isChecked)
+
+    private fun List<TeamChecklistItem>.toggleItemInList(item: TeamChecklistItemUIModel): List<TeamChecklistItem> =
+        this.map {
+            if (it is TeamChecklistItem.Item && it.teamBottariItem.id == item.id && it.teamBottariItem.category == item.category) {
+                TeamChecklistItem.Item(item)
+            } else {
+                it
+            }
         }
-    }
 
     companion object {
         const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
@@ -235,10 +220,3 @@ class TeamChecklistViewModel(
             }
     }
 }
-
-fun TeamChecklistItemUIModel.toggle(): TeamChecklistItemUIModel = this.copy(isChecked = !this.isChecked)
-
-private fun List<TeamChecklistItemUIModel>.toggleItemInList(itemId: Long): List<TeamChecklistItemUIModel> =
-    this.map {
-        if (it.id == itemId) it.toggle() else it
-    }
