@@ -1,7 +1,9 @@
 package com.bottari.presentation.common.base
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -59,7 +61,13 @@ abstract class BaseActivity<VB : ViewBinding>(
     }
 
     private fun setWindowInsets() {
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            navigationBarStyle =
+                SystemBarStyle.light(
+                    scrim = Color.WHITE,
+                    darkScrim = Color.WHITE,
+                ),
+        )
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
