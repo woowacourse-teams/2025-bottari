@@ -27,7 +27,7 @@ public class TeamAssignedItemService {
 
         return itemsByInfo.keySet()
                 .stream()
-                .map(info -> TeamItemStatusResponse.of(info, itemsByInfo.get(info)))
+                .map(info -> buildTeamStatusResponse(itemsByInfo, info))
                 .toList();
     }
 
@@ -64,6 +64,26 @@ public class TeamAssignedItemService {
     private Map<TeamAssignedItemInfo, List<TeamAssignedItem>> groupByInfo(final List<TeamAssignedItem> assignedItems) {
         return assignedItems.stream()
                 .collect(Collectors.groupingBy(TeamAssignedItem::getInfo));
+    }
+
+    private TeamItemStatusResponse buildTeamStatusResponse(
+            final Map<TeamAssignedItemInfo, List<TeamAssignedItem>> itemsByInfo,
+            final TeamAssignedItemInfo info
+    ) {
+        final List<TeamAssignedItem> items = itemsByInfo.get(info);
+
+        return TeamItemStatusResponse.of(
+                info,
+                items,
+                countCheckedItem(items),
+                items.size()
+        );
+    }
+
+    private int countCheckedItem(final List<TeamAssignedItem> items) {
+        return Math.toIntExact(items.stream()
+                .filter(TeamAssignedItem::isChecked)
+                .count());
     }
 
     private void validateOwner(

@@ -15,41 +15,37 @@ public record TeamItemStatusResponse(
 
     public static TeamItemStatusResponse of(
             final TeamSharedItemInfo info,
-            final List<TeamSharedItem> items
+            final List<TeamSharedItem> items,
+            final int checkItemsCount,
+            final int totalItemsCount
     ) {
         final List<MemberCheckStatusResponse> checkStatusResponses = items.stream()
                 .map(MemberCheckStatusResponse::from)
                 .toList();
-        final int checkCount = Math.toIntExact(
-                checkStatusResponses.stream()
-                        .filter(MemberCheckStatusResponse::checked)
-                        .count()
-        );
 
         return new TeamItemStatusResponse(
                 info.getName(),
                 checkStatusResponses,
-                checkCount,
-                items.size()
+                checkItemsCount,
+                totalItemsCount
         );
     }
 
     public static TeamItemStatusResponse of(
             final TeamAssignedItemInfo info,
-            final List<TeamAssignedItem> items
+            final List<TeamAssignedItem> items,
+            final int checkItemsCount,
+            final int totalItemsCount
     ) {
         final List<MemberCheckStatusResponse> checkStatusResponses = items.stream()
                 .map(MemberCheckStatusResponse::from)
                 .toList();
-        final int checkCount = Math.toIntExact(checkStatusResponses.stream()
-                .filter(MemberCheckStatusResponse::checked)
-                .count());
 
         return new TeamItemStatusResponse(
                 info.getName(),
                 checkStatusResponses,
-                checkCount,
-                items.size()
+                checkItemsCount,
+                totalItemsCount
         );
     }
 

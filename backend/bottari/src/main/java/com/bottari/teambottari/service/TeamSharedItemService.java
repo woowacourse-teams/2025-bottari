@@ -27,7 +27,7 @@ public class TeamSharedItemService {
 
         return itemsByInfo.keySet()
                 .stream()
-                .map(info -> TeamItemStatusResponse.of(info, itemsByInfo.get(info)))
+                .map(info -> buildTeamStatusResponse(itemsByInfo, info))
                 .toList();
     }
 
@@ -64,6 +64,26 @@ public class TeamSharedItemService {
     private Map<TeamSharedItemInfo, List<TeamSharedItem>> groupByInfo(final List<TeamSharedItem> items) {
         return items.stream()
                 .collect(Collectors.groupingBy(TeamSharedItem::getInfo));
+    }
+
+    private TeamItemStatusResponse buildTeamStatusResponse(
+            final Map<TeamSharedItemInfo, List<TeamSharedItem>> itemsByInfo,
+            final TeamSharedItemInfo info
+    ) {
+        final List<TeamSharedItem> items = itemsByInfo.get(info);
+
+        return TeamItemStatusResponse.of(
+                info,
+                items,
+                countCheckedItem(items),
+                items.size()
+        );
+    }
+
+    private int countCheckedItem(final List<TeamSharedItem> items) {
+        return Math.toIntExact(items.stream()
+                .filter(TeamSharedItem::isChecked)
+                .count());
     }
 
     private void validateOwner(
