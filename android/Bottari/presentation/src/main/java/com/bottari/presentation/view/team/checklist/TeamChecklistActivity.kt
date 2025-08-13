@@ -15,12 +15,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(ActivityTeamChecklistBinding::inflate) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupViewPager()
+        setupUI()
     }
 
-    private fun setupViewPager() {
+    private fun setupUI() {
         val bottariId = intent.getLongExtra(EXTRA_BOTTARI_ID, -1)
+        val bottariTitle = intent.getStringExtra(EXTRA_BOTTARI_TITLE)
         val adapter = TeamChecklistFragmentAdapter(this, bottariId)
+        binding.tvBottariTitle.text = bottariTitle
         binding.vpTeamBottari.adapter = adapter
 
         TabLayoutMediator(binding.tlTeamBottari, binding.vpTeamBottari) { tab, position ->
@@ -49,13 +51,16 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
 
     companion object {
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
+        private const val EXTRA_BOTTARI_TITLE = "EXTRA_BOTTARI_TITLE"
 
         fun newIntent(
             context: Context,
             bottariId: Long,
+            bottariTitle: String,
         ): Intent =
             Intent(context, TeamChecklistActivity::class.java).apply {
                 putExtra(EXTRA_BOTTARI_ID, bottariId)
+                putExtra(EXTRA_BOTTARI_TITLE, bottariTitle)
             }
     }
 }
