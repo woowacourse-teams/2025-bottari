@@ -17,8 +17,8 @@ import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
-import com.bottari.teambottari.dto.ReadTeamItemResponse;
-import com.bottari.teambottari.dto.ReadTeamItemResponse.TeamBottariItemWithCheckResponse;
+import com.bottari.teambottari.dto.ReadTeamItemsResponse;
+import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
@@ -90,17 +90,17 @@ public class TeamItemFacadeTest {
             entityManager.persist(member_2_assignedItem);
 
             // when
-            final ReadTeamItemResponse actual = teamItemFacade.getTeamItems(teamBottari.getId(),
+            final ReadTeamItemsResponse actual = teamItemFacade.getTeamItems(teamBottari.getId(),
                     member_1.getSsaid());
 
             // then
-            final TeamBottariItemWithCheckResponse actualSharedItemResponse = actual.sharedItems().getFirst();
-            final TeamBottariItemWithCheckResponse member_1_assignedItemResponse = actual.assignedItems()
+            final TeamItemStatusResponse actualSharedItemResponse = actual.sharedItems().getFirst();
+            final TeamItemStatusResponse member_1_assignedItemResponse = actual.assignedItems()
                     .stream()
                     .filter(response -> response.name().equals("멤버 1 물품"))
                     .findFirst()
                     .orElse(null);
-            final TeamBottariItemWithCheckResponse member_2_assignedItemResponse = actual.assignedItems()
+            final TeamItemStatusResponse member_2_assignedItemResponse = actual.assignedItems()
                     .stream()
                     .filter(response -> response.name().equals("멤버 2 물품"))
                     .findFirst()

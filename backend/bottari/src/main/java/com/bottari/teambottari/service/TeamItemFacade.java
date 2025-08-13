@@ -4,19 +4,14 @@ import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
-import com.bottari.teambottari.domain.TeamAssignedItem;
-import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamMember;
-import com.bottari.teambottari.domain.TeamSharedItem;
-import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
-import com.bottari.teambottari.dto.ReadTeamItemResponse;
+import com.bottari.teambottari.dto.ReadTeamItemsResponse;
+import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamMemberRepository;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,26 +25,17 @@ public class TeamItemFacade {
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
 
-    public ReadTeamItemResponse getTeamItems(
+    // TODO: 본인이 팀 멤버인지 확인하는 로직 추가
+    public ReadTeamItemsResponse getTeamItems(
             final Long teamBottariId,
             final String ssaid
     ) {
-        final List<TeamSharedItem> sharedItems = teamSharedItemService.findAllByTeamBottariId(teamBottariId);
-        final List<TeamAssignedItem> assignedItems = teamAssignedItemService.findAllByTeamBottariId(teamBottariId);
-        final Map<TeamSharedItemInfo, List<TeamSharedItem>> sharedItemMap = groupingByInfo1(sharedItems);
-        final Map<TeamAssignedItemInfo, List<TeamAssignedItem>> assignedItemMap = groupingByInfo2(assignedItems);
+        final List<TeamItemStatusResponse> sharedItemResponses = teamSharedItemService.getAllWithMemberStatusByTeamBottariId(
+                teamBottariId);
+        final List<TeamItemStatusResponse> assignedItemResponses = teamAssignedItemService.getAllWithMemberStatusByTeamBottariId(
+                teamBottariId);
 
-        return ReadTeamItemResponse.from(sharedItemMap, assignedItemMap);
-    }
-
-    private Map<TeamSharedItemInfo, List<TeamSharedItem>> groupingByInfo1(final List<TeamSharedItem> sharedItems) {
-        return sharedItems.stream()
-                .collect(Collectors.groupingBy(TeamSharedItem::getInfo));
-    }
-
-    private Map<TeamAssignedItemInfo, List<TeamAssignedItem>> groupingByInfo2(final List<TeamAssignedItem> assignedItems) {
-        return assignedItems.stream()
-                .collect(Collectors.groupingBy(TeamAssignedItem::getInfo));
+        return ReadTeamItemsResponse.of(sharedItemResponses, assignedItemResponses);
     }
 
     public TeamMemberChecklistResponse getCheckList(
