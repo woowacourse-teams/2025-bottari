@@ -75,7 +75,6 @@ class AlarmEditViewModel(
 
     private fun createAlarm(alarm: Alarm) {
         updateState { copy(isLoading = true) }
-
         launch {
             createAlarmUseCase(bottariId, alarm)
                 .onSuccess {
@@ -87,14 +86,12 @@ class AlarmEditViewModel(
                 }.onFailure {
                     emitEvent(AlarmUiEvent.AlarmCreateFailure)
                 }
+            updateState { copy(isLoading = false) }
         }
-
-        updateState { copy(isLoading = false) }
     }
 
     private fun saveAlarm(alarm: Alarm) {
         updateState { copy(isLoading = true) }
-
         launch {
             saveAlarmUseCase(alarm.id!!, alarm)
                 .onSuccess {
@@ -110,9 +107,8 @@ class AlarmEditViewModel(
                 }.onFailure {
                     emitEvent(AlarmUiEvent.AlarmSaveFailure)
                 }
+            updateState { copy(isLoading = false) }
         }
-
-        updateState { copy(isLoading = false) }
     }
 
     private fun createNotification(): NotificationUiModel =
