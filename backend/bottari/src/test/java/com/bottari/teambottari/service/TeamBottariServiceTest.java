@@ -2,15 +2,21 @@ package com.bottari.teambottari.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.filter;
 
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.member.domain.Member;
+import com.bottari.teambottari.domain.TeamAssignedItem;
+import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
+import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamBottariPreviewResponse;
+import com.bottari.teambottari.dto.ReadTeamBottariResponse;
+import com.bottari.teambottari.dto.ReadTeamBottariResponse.TeamItem;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -104,6 +110,108 @@ class TeamBottariServiceTest {
             assertThatThrownBy(() -> teamBottariService.getAllBySsaid(nonExistentSsaid))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
+        }
+    }
+
+    @Nested
+    class GetById {
+
+        @DisplayName("팀 보따리를 ID로 조회한다.")
+        @Test
+        void getById() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(anotherMember);
+
+            final TeamBottari teamBottari = new TeamBottari("팀 보따리", member, "code");
+            entityManager.persist(teamBottari);
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+            final TeamMember anotherTeamMember = new TeamMember(teamBottari, anotherMember);
+            entityManager.persist(anotherTeamMember);
+
+            final TeamAssignedItemInfo assignedItemInfo = new TeamAssignedItemInfo("assigned", teamBottari);
+            entityManager.persist(assignedItemInfo);
+            final TeamAssignedItem assignedItem = new TeamAssignedItem(assignedItemInfo, anotherTeamMember);
+            entityManager.persist(assignedItem);
+
+            final TeamPersonalItem personalItem = new TeamPersonalItem("personal", teamMember);
+            entityManager.persist(personalItem);
+            final TeamPersonalItem anotherPersonalItem = new TeamPersonalItem("another_personal", anotherTeamMember);
+            entityManager.persist(anotherPersonalItem);
+
+            entityManager.flush();
+            entityManager.clear();
+
+            // when
+            final Long teamBottariId = teamBottari.getId();
+            final ReadTeamBottariResponse response = teamBottariService.getById(member.getSsaid(), teamBottariId);
+
+            // then
+            final ReadTeamBottariResponse expected = new ReadTeamBottariResponse(
+                    teamBottari.getId(),
+                    teamBottari.getTitle(),
+                    List.of(),
+                    List.of(
+                            // 다른 사람에게 할당된 assigned item 포함
+                            new TeamItem(assignedItem.getId(), assignedItem.getInfo().getName())
+                    ),
+                    List.of(
+                            // 본인에게 할당된 personal item 포함, 다른 사람의 personal item 제외
+                            new TeamItem(personalItem.getId(), personalItem.getName())
+                    ),
+                    null // TODO: 알람 매핑 방향 의논 필요, 우선 null 반환
+            );
+            assertThat(response)
+                    .isEqualTo(expected);
+        }
+
+        @DisplayName("존재하지 않는 사용자로 팀 보따리를 조회할 경우, 예외를 던진다.")
+        @Test
+        void getById_Exception_WhenNonExistentUser() {
+            // given
+            final String nonExistentSsaid = "non-existent-ssaid";
+            final Long teamBottariId = 1L;
+
+            // when & then
+            assertThatThrownBy(() -> teamBottariService.getById(nonExistentSsaid, teamBottariId))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
+        }
+
+        @DisplayName("소속된 팀 보따리를 조회할 때, 팀 멤버가 아닌 경우 예외를 던진다.")
+        @Test
+        void getById_Exception_WhenNotTeamMember() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = new TeamBottari("팀 보따리", member, "code");
+            entityManager.persist(teamBottari);
+
+            entityManager.flush();
+            entityManager.clear();
+
+            // when & then
+            assertThatThrownBy(() -> teamBottariService.getById(member.getSsaid(), teamBottari.getId()))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
+        }
+
+        @DisplayName("존재하지 않는 팀 보따리를 조회할 경우, 예외를 던진다.")
+        @Test
+        void getById_Exception_WhenNonExistentTeamBottari() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+            final Long nonExistentTeamBottariId = 999L;
+
+            // when & then
+            assertThatThrownBy(() -> teamBottariService.getById(member.getSsaid(), nonExistentTeamBottariId))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }
     }
 
