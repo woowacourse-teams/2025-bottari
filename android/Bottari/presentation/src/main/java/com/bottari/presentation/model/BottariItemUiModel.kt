@@ -1,12 +1,11 @@
 package com.bottari.presentation.model
 
 import android.os.Parcelable
-import com.bottari.domain.model.bottari.BottariItemType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class BottariItemUiModel(
     val id: Long,
     val name: String,
-    val type: BottariItemType,
+    val type: BottariItemTypeUiModel,
 ) : Parcelable
