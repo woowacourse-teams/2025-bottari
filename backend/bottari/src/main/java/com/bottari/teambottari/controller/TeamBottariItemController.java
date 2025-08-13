@@ -2,6 +2,7 @@ package com.bottari.teambottari.controller;
 
 import com.bottari.config.MemberIdentifier;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
+import com.bottari.teambottari.dto.ReadTeamItemsResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.service.TeamItemFacade;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class TeamBottariItemController implements TeamBottariItemApiDocs {
 
     private final TeamItemFacade teamItemFacade;
+
+    @GetMapping("/team-bottaries/{teamBottariId}/items")
+    @Override
+    public ResponseEntity<ReadTeamItemsResponse> readTeamItems(
+            @PathVariable final Long teamBottariId,
+            @MemberIdentifier final String ssaid
+    ) {
+        final ReadTeamItemsResponse response = teamItemFacade.getTeamItems(teamBottariId, ssaid);
+
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/team-bottaries/{teamBottariId}/checklist")
     @Override

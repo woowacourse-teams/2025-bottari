@@ -50,7 +50,7 @@ public class TeamItemFacadeTest {
     @Nested
     class GetTeamItemsTest {
 
-        @DisplayName("팀 멤버가 아니라면, 팀 보따리 물품 현황을 확인하 수 없다.")
+        @DisplayName("팀 보따리 물품 현황을 조회한다.")
         @Test
         void getTeamItems() {
             // given

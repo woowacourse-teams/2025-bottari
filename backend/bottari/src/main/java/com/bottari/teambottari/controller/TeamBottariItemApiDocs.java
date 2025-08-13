@@ -3,6 +3,7 @@ package com.bottari.teambottari.controller;
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
+import com.bottari.teambottari.dto.ReadTeamItemsResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,6 +14,18 @@ import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Team Bottari Item", description = "팀 보따리 물품 API")
 public interface TeamBottariItemApiDocs {
+
+    @Operation(summary = "팀 보따리 공통/담당 물품 조회", description = "각 멤버 별 체크 현황 포함 제공")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "공통/담당 물품 조회 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI
+    })
+    ResponseEntity<ReadTeamItemsResponse> readTeamItems(
+            final Long teamBottariId,
+            @Parameter(hidden = true) final String ssaid
+    );
 
     @Operation(summary = "팀 보따리 체크리스트 조회")
     @ApiResponses(value = {

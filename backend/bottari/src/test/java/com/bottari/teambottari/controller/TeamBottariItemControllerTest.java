@@ -11,6 +11,9 @@ import com.bottari.config.WebConfig;
 import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.domain.TeamItemType;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
+import com.bottari.teambottari.dto.ReadTeamItemsResponse;
+import com.bottari.teambottari.dto.TeamItemStatusResponse;
+import com.bottari.teambottari.dto.TeamItemStatusResponse.MemberCheckStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.service.TeamItemFacade;
@@ -39,6 +42,44 @@ class TeamBottariItemControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @DisplayName("팀 보따리 물품 현황을 성공적으로 조회한다.")
+    @Test
+    void readTeamItems() throws Exception {
+        // given
+        final Long teamBottariId = 1L;
+        final String ssaid = "test-ssaid";
+
+        final List<MemberCheckStatusResponse> sharedItemMemberStatus = List.of(
+                new MemberCheckStatusResponse("다이스", true),
+                new MemberCheckStatusResponse("방벨로", false),
+                new MemberCheckStatusResponse("이오이", true)
+        );
+        final List<MemberCheckStatusResponse> assignedItemMemberStatus = List.of(
+                new MemberCheckStatusResponse("다이스", false),
+                new MemberCheckStatusResponse("방벨로", true)
+        );
+
+        final List<TeamItemStatusResponse> sharedItems = List.of(
+                new TeamItemStatusResponse("렌터카 예약", sharedItemMemberStatus, 2, 3),
+                new TeamItemStatusResponse("숙소 예약", sharedItemMemberStatus, 2, 3)
+        );
+        final List<TeamItemStatusResponse> assignedItems = List.of(
+                new TeamItemStatusResponse("간식 준비", assignedItemMemberStatus, 1, 2),
+                new TeamItemStatusResponse("음료 준비", assignedItemMemberStatus, 1, 2)
+        );
+
+        final ReadTeamItemsResponse response = new ReadTeamItemsResponse(sharedItems, assignedItems);
+
+        given(teamItemFacade.getTeamItems(teamBottariId, ssaid))
+                .willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/team-bottaries/{teamBottariId}/items", teamBottariId)
+                        .header("ssaid", ssaid))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
 
     @DisplayName("팀 보따리 체크리스트를 성공적으로 조회한다.")
     @Test
