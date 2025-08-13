@@ -63,5 +63,4 @@ class FcmTokenServiceTest {
                     .hasMessage("FCM 토큰 정보가 존재하지 않습니다.");
         }
     }
-
 }
