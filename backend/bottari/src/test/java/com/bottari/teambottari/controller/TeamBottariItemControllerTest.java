@@ -69,7 +69,7 @@ class TeamBottariItemControllerTest {
                 .willReturn(responses);
 
         // when & then
-        mockMvc.perform(get("/teams/{teamBottariId}/checklist", teamBottariId)
+        mockMvc.perform(get("/team-bottaries/{teamBottariId}/checklist", teamBottariId)
                         .header("ssaid", ssaid))
                 .andExpect(content().json(objectMapper.writeValueAsString(responses)));
     }

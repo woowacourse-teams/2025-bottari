@@ -18,7 +18,7 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
 
     private final TeamItemFacade teamItemFacade;
 
-    @GetMapping("/teams/{teamBottariId}/checklist")
+    @GetMapping("/team-bottaries/{teamBottariId}/checklist")
     @Override
     public ResponseEntity<TeamMemberChecklistResponse> readChecklistBySsaid(
             @PathVariable final Long teamBottariId,
