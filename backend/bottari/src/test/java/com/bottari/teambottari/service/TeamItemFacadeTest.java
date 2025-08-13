@@ -118,6 +118,24 @@ public class TeamItemFacadeTest {
                     () -> assertThat(member_2_assignedItemResponse.totalCount()).isEqualTo(1)
             );
         }
+
+        @DisplayName("팀 보따리 물품을 조회할 때, 팀 멤버가 아니라면 예외를 던진다.")
+        @Test
+        void getTeamItems_Exception_NotTeamMamber() {
+            // given
+            final Member member_in_team = MemberFixture.MEMBER.get();
+            final Member member_not_in_team = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(member_in_team);
+            entityManager.persist(member_not_in_team);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member_in_team);
+            entityManager.persist(teamBottari);
+
+            // when & then
+            assertThatThrownBy(() -> teamItemFacade.getTeamItems(teamBottari.getId(), member_not_in_team.getSsaid()))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
+        }
     }
 
     @Nested

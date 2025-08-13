@@ -25,11 +25,11 @@ public class TeamItemFacade {
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
 
-    // TODO: 본인이 팀 멤버인지 확인하는 로직 추가
     public ReadTeamItemsResponse getTeamItems(
             final Long teamBottariId,
             final String ssaid
     ) {
+        validateMemberInTeam(teamBottariId, ssaid);
         final List<TeamItemStatusResponse> sharedItemResponses = teamSharedItemService.getAllWithMemberStatusByTeamBottariId(
                 teamBottariId);
         final List<TeamItemStatusResponse> assignedItemResponses = teamAssignedItemService.getAllWithMemberStatusByTeamBottariId(
@@ -83,5 +83,14 @@ public class TeamItemFacade {
 
         return teamMemberRepository.findByTeamBottariIdAndMemberId(teamBottariId, member.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI));
+    }
+
+    private void validateMemberInTeam(
+            final Long teamBottariId,
+            final String ssaid
+    ) {
+        if (!teamMemberRepository.existsByTeamBottariIdAndMemberSsaid(teamBottariId, ssaid)) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI);
+        }
     }
 }
