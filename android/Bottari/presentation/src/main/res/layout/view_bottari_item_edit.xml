@@ -24,7 +24,6 @@
         style="@style/Pretendard_Medium_14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_x_small"
         android:text="@string/bottari_edit_add_item_description_text"
         android:textColor="@color/gray_a6a6a6"
         android:visibility="gone"
@@ -35,7 +34,7 @@
         android:id="@+id/rv_item_edit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_median"
+        android:layout_marginTop="@dimen/space_x_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_item_edit_description" />

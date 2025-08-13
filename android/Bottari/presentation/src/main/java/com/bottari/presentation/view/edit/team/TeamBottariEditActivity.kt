@@ -3,6 +3,7 @@ package com.bottari.presentation.view.edit.team
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.fragment.app.commit
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
@@ -17,9 +18,10 @@ class TeamBottariEditActivity :
     TeamBottariEditNavigator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        showWelcomeMessage()
         if (savedInstanceState != null) return
-        navigateToScreen()
+        showWelcomeMessage()
+        setupUI()
+        setupListener()
     }
 
     override fun navigateBack() {
@@ -28,6 +30,14 @@ class TeamBottariEditActivity :
             return
         }
         supportFragmentManager.popBackStack()
+    }
+
+    private fun setupUI() {
+        navigateToScreen()
+    }
+
+    private fun setupListener() {
+        onBackPressedDispatcher.addCallback(this) { navigateBack() }
     }
 
     private fun navigateToScreen() {

@@ -10,13 +10,28 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamBottariEditBinding
+import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.view.edit.team.TeamBottariEditNavigator
+import com.bottari.presentation.view.edit.team.main.adapter.TeamBottariEditItemAdapter
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 
 class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(FragmentTeamBottariEditBinding::inflate) {
     private val viewModel: TeamBottariEditViewModel by viewModels {
         TeamBottariEditViewModel.Factory(
             bottariId = requireArguments().getLong(ARG_BOTTARI_ID),
         )
+    }
+    private val personalItemAdapter: TeamBottariEditItemAdapter by lazy {
+        TeamBottariEditItemAdapter(BottariItemTypeUiModel.PERSONAL)
+    }
+    private val assignedItemAdapter: TeamBottariEditItemAdapter by lazy {
+        TeamBottariEditItemAdapter(BottariItemTypeUiModel.ASSIGNED())
+    }
+    private val sharedItemAdapter: TeamBottariEditItemAdapter by lazy {
+        TeamBottariEditItemAdapter(BottariItemTypeUiModel.SHARED)
     }
 
     override fun onViewCreated(
@@ -36,17 +51,27 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
 
     private fun setupUI() {
         setupItemTitles()
+        binding.viewTeamPersonalItemEdit.rvItemEdit.adapter = personalItemAdapter
+        binding.viewTeamPersonalItemEdit.rvItemEdit.layoutManager = createFlexBoxLayoutManager()
+        binding.viewTeamAssignedItemEdit.rvItemEdit.adapter = assignedItemAdapter
+        binding.viewTeamAssignedItemEdit.rvItemEdit.layoutManager = createFlexBoxLayoutManager()
+        binding.viewTeamSharedItemEdit.rvItemEdit.adapter = sharedItemAdapter
+        binding.viewTeamSharedItemEdit.rvItemEdit.layoutManager = createFlexBoxLayoutManager()
     }
 
     private fun setupListener() {
-        binding.btnPrevious.setOnClickListener(::handlePreviousButtonClick)
+        binding.btnPrevious.setOnClickListener { handlePreviousButtonClick() }
     }
 
     private fun handleUiState(uiState: TeamBottariEditUiState) {
         toggleLoadingIndicator(uiState.isLoading)
+        binding.tvTeamEditTitle.text = uiState.bottariTitle
         handlePersonalItemEmptyViews(uiState.isPersonalItemsEmpty)
         handleAssignedItemEmptyViews(uiState.isAssignedItemsEmpty)
         handleSharedItemEmptyViews(uiState.isSharedItemsEmpty)
+        personalItemAdapter.submitList(uiState.personalItems)
+        assignedItemAdapter.submitList(uiState.assignedItems)
+        sharedItemAdapter.submitList(uiState.sharedItems)
     }
 
     private fun handlePersonalItemEmptyViews(isItemEmpty: Boolean) {
@@ -87,7 +112,14 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
             getString(R.string.bottari_edit_shared_items_title_text)
     }
 
-    private fun handlePreviousButtonClick(view: View) {
+    private fun createFlexBoxLayoutManager(): FlexboxLayoutManager =
+        FlexboxLayoutManager(requireContext()).apply {
+            flexDirection = FlexDirection.ROW
+            flexWrap = FlexWrap.WRAP
+            justifyContent = JustifyContent.FLEX_START
+        }
+
+    private fun handlePreviousButtonClick() {
         (requireActivity() as? TeamBottariEditNavigator)?.navigateBack()
     }
 
