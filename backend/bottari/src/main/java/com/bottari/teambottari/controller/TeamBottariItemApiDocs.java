@@ -3,7 +3,7 @@ package com.bottari.teambottari.controller;
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
-import com.bottari.teambottari.dto.ReadTeamItemsResponse;
+import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,7 +22,7 @@ public interface TeamBottariItemApiDocs {
     @ApiErrorCodes({
             ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI
     })
-    ResponseEntity<ReadTeamItemsResponse> readTeamItems(
+    ResponseEntity<ReadTeamItemStatusResponse> readTeamItemsStatus(
             final Long teamBottariId,
             @Parameter(hidden = true) final String ssaid
     );

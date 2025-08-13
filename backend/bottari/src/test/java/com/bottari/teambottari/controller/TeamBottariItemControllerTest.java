@@ -11,7 +11,7 @@ import com.bottari.config.WebConfig;
 import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.domain.TeamItemType;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
-import com.bottari.teambottari.dto.ReadTeamItemsResponse;
+import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse.MemberCheckStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
@@ -45,7 +45,7 @@ class TeamBottariItemControllerTest {
 
     @DisplayName("팀 보따리 물품 현황을 성공적으로 조회한다.")
     @Test
-    void readTeamItems() throws Exception {
+    void readTeamItemsStatus() throws Exception {
         // given
         final Long teamBottariId = 1L;
         final String ssaid = "test-ssaid";
@@ -69,13 +69,13 @@ class TeamBottariItemControllerTest {
                 new TeamItemStatusResponse("음료 준비", assignedItemMemberStatus, 1, 2)
         );
 
-        final ReadTeamItemsResponse response = new ReadTeamItemsResponse(sharedItems, assignedItems);
+        final ReadTeamItemStatusResponse response = new ReadTeamItemStatusResponse(sharedItems, assignedItems);
 
-        given(teamItemFacade.getTeamItems(teamBottariId, ssaid))
+        given(teamItemFacade.getTeamItemStatus(teamBottariId, ssaid))
                 .willReturn(response);
 
         // when & then
-        mockMvc.perform(get("/team-bottaries/{teamBottariId}/items", teamBottariId)
+        mockMvc.perform(get("/team-bottaries/{teamBottariId}/items/status", teamBottariId)
                         .header("ssaid", ssaid))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(response)));

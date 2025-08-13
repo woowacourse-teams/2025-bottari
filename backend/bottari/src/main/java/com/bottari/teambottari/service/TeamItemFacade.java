@@ -6,7 +6,7 @@ import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
-import com.bottari.teambottari.dto.ReadTeamItemsResponse;
+import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
@@ -25,7 +25,7 @@ public class TeamItemFacade {
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
 
-    public ReadTeamItemsResponse getTeamItems(
+    public ReadTeamItemStatusResponse getTeamItemStatus(
             final Long teamBottariId,
             final String ssaid
     ) {
@@ -35,7 +35,7 @@ public class TeamItemFacade {
         final List<TeamItemStatusResponse> assignedItemResponses = teamAssignedItemService.getAllWithMemberStatusByTeamBottariId(
                 teamBottariId);
 
-        return ReadTeamItemsResponse.of(sharedItemResponses, assignedItemResponses);
+        return ReadTeamItemStatusResponse.of(sharedItemResponses, assignedItemResponses);
     }
 
     public TeamMemberChecklistResponse getCheckList(

@@ -17,7 +17,7 @@ import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
-import com.bottari.teambottari.dto.ReadTeamItemsResponse;
+import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
@@ -90,7 +90,7 @@ public class TeamItemFacadeTest {
             entityManager.persist(member_2_assignedItem);
 
             // when
-            final ReadTeamItemsResponse actual = teamItemFacade.getTeamItems(teamBottari.getId(),
+            final ReadTeamItemStatusResponse actual = teamItemFacade.getTeamItemStatus(teamBottari.getId(),
                     member_1.getSsaid());
 
             // then
@@ -132,7 +132,8 @@ public class TeamItemFacadeTest {
             entityManager.persist(teamBottari);
 
             // when & then
-            assertThatThrownBy(() -> teamItemFacade.getTeamItems(teamBottari.getId(), member_not_in_team.getSsaid()))
+            assertThatThrownBy(
+                    () -> teamItemFacade.getTeamItemStatus(teamBottari.getId(), member_not_in_team.getSsaid()))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }
