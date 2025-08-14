@@ -8,8 +8,18 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface TeamAssignedItemRepository extends JpaRepository<TeamAssignedItem, Long> {
 
+    @Query("""
+            SELECT tai
+            FROM TeamAssignedItem tai
+            JOIN FETCH tai.info
+            JOIN FETCH tai.teamMember tm
+            JOIN FETCH tm.member
+            WHERE tai.teamMember.teamBottari.id = :teamBottariId
+            """)
+    List<TeamAssignedItem> findAllByTeamBottariId(final Long teamBottariId);
+
     List<TeamAssignedItem> findAllByTeamMemberIn(final List<TeamMember> teamMembers);
-  
+
     @Query("""
             SELECT tai
             FROM TeamAssignedItem tai
