@@ -1,20 +1,23 @@
 package com.bottari.presentation.view.checklist.team.checklist.adapter
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
-import com.bottari.presentation.databinding.ItemTeamChecklistOptionBinding
 import com.bottari.presentation.model.TeamChecklistItemUiModel
 import com.bottari.presentation.model.TeamChecklistRowUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
 
 class TeamChecklistItemAdapter(
-    private val onParentClick: (TeamChecklistTypeUiModel) -> Unit,
-    private val onChildClick: (TeamChecklistItemUiModel) -> Unit,
+    private val clickListener: OnItemClickListener,
 ) : ListAdapter<TeamChecklistRowUiModel, RecyclerView.ViewHolder>(DiffCallback) {
+    interface OnItemClickListener {
+        fun onTypeClick(position: TeamChecklistTypeUiModel)
+
+        fun onItemClick(position: TeamChecklistItemUiModel)
+    }
+
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
             is TeamChecklistTypeUiModel -> R.layout.item_team_checklist_option
@@ -27,23 +30,14 @@ class TeamChecklistItemAdapter(
     ): RecyclerView.ViewHolder =
         when (viewType) {
             R.layout.item_team_checklist_option -> {
-                val binding =
-                    ItemTeamChecklistOptionBinding.inflate(
-                        LayoutInflater.from(parent.context),
-                        parent,
-                        false,
-                    )
-                TeamChecklistTypeViewHolder(binding, onParentClick)
+                TeamChecklistTypeViewHolder.from(parent, clickListener)
             }
+
             R.layout.item_team_checklist -> {
-                TeamChecklistViewHolder.from(parent) { position ->
-                    val item = getItem(position)
-                    if (item is TeamChecklistItemUiModel) {
-                        onChildClick(item)
-                    }
-                }
+                TeamChecklistViewHolder.from(parent, clickListener)
             }
-            else -> throw IllegalArgumentException("Unknown viewType $viewType")
+
+            else -> throw IllegalArgumentException(ERROR_VIEW_TYPE)
         }
 
     override fun onBindViewHolder(
@@ -57,6 +51,8 @@ class TeamChecklistItemAdapter(
     }
 
     companion object {
+        const val ERROR_VIEW_TYPE = "잘못된 뷰 타입 입니다"
+
         private val DiffCallback =
             object : DiffUtil.ItemCallback<TeamChecklistRowUiModel>() {
                 override fun areItemsTheSame(
@@ -67,6 +63,7 @@ class TeamChecklistItemAdapter(
                     return when (oldItem) {
                         is TeamChecklistTypeUiModel ->
                             (newItem as TeamChecklistTypeUiModel).type == oldItem.type
+
                         is TeamChecklistItemUiModel ->
                             (newItem as TeamChecklistItemUiModel).id == oldItem.id
                     }

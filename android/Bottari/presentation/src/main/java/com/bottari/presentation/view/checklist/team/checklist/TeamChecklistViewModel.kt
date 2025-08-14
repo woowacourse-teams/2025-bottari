@@ -185,11 +185,11 @@ class TeamChecklistViewModel(
     private fun TeamChecklistItemUiModel.toggle(): TeamChecklistItemUiModel = this.copy(isChecked = !this.isChecked)
 
     private fun List<TeamChecklistRowUiModel>.toggleItemInList(item: TeamChecklistItemUiModel): List<TeamChecklistRowUiModel> =
-        this.map {
-            if (it is TeamChecklistItemUiModel && it.id == item.id && it.type == item.type) {
+        this.map { row ->
+            if (row is TeamChecklistItemUiModel && row.id == item.id && row.type == item.type) {
                 item
             } else {
-                it
+                row
             }
         }
 
