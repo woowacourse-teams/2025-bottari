@@ -32,7 +32,7 @@ class BottariTitleTest {
     @DisplayName("보따리 제목에 욕설이 들어가있는 경우, 예외를 던진다.")
     @ParameterizedTest
     @ValueSource(strings = {"씨발이네", "씨@발 안녕하세요", "병1신이세요?", "ㅅㅂ입니다."})
-    void validateName_BadWord(final String title) {
+    void validateTitle_BadWord(final String title) {
         // when & then
         assertThatThrownBy(() -> new BottariTitle(title))
                 .isInstanceOf(BusinessException.class)

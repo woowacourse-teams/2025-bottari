@@ -50,6 +50,7 @@ public enum ErrorCode {
     BOTTARI_TEMPLATE_NOT_OWNED(HttpStatus.FORBIDDEN, "해당 보따리 템플릿에 접근할 수 있는 권한이 없습니다."),
     BOTTARI_TEMPLATE_TITLE_BLANK(HttpStatus.BAD_REQUEST, "보따리 템플릿 제목은 공백일 수 없습니다."),
     BOTTARI_TEMPLATE_TITLE_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 템플릿 제목이 너무 깁니다. 최대 15자까지 입력 가능합니다."),
+    BOTTARI_TEMPLATE_TITLE_OFFENSIVE(HttpStatus.BAD_REQUEST, "보따리 템플릿 제목에 욕설을 입력할 수 없습니다."),
     BOTTARI_TEMPLATE_INVALID_SORT_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 보따리 템플릿 정렬 타입입니다."),
     BOTTARI_TEMPLATE_ALREADY_TAKEN_RECENTLY(HttpStatus.CONFLICT, "최근에 해당 보따리 템플릿을 가져온 기록이 있습니다. 잠시 후 다시 시도해주세요."),
 
