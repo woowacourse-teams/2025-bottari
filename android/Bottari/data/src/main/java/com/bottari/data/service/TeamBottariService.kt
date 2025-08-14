@@ -37,6 +37,12 @@ interface TeamBottariService {
         @Body request: ItemTypeRequest,
     ): Response<Unit>
 
+    @POST("/team-items/{id}/remind")
+    suspend fun remind(
+        @Path("id") id: Long,
+        @Body request: ItemTypeRequest,
+    ): Response<Unit>
+
     @GET("/team-bottaries")
     suspend fun fetchTeamBottaries(): Response<List<FetchTeamBottariResponse>>
 

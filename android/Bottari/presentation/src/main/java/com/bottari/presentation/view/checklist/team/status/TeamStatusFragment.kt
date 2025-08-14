@@ -37,6 +37,7 @@ class TeamStatusFragment :
         super.onViewCreated(view, savedInstanceState)
         setupUI()
         setupObserver()
+        setupListener()
     }
 
     private fun setupUI() {
@@ -57,6 +58,12 @@ class TeamStatusFragment :
             binding.tvTeamBottariItemStatusTitle.text = state.item?.name + " 챙김 현황"
             teamProductStatusAdapter.submitList(state.teamChecklistItems)
             teamProductStatusDetailAdapter.submitList(state.item?.memberCheckStatus)
+        }
+    }
+
+    private fun setupListener() {
+        binding.btnTeamBottariItemRemind.setOnClickListener {
+            viewModel.remindItem()
         }
     }
 

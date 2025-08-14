@@ -44,6 +44,7 @@ object TeamBottariMapper {
 
     private fun TeamProductStatusResponse.toDomain(): TeamProductStatus =
         TeamProductStatus(
+            id = id,
             name = name,
             memberCheckStatus = memberCheckStatus.map { it.toDomain() },
             checkItemsCount = checkItemsCount,

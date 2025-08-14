@@ -53,4 +53,11 @@ class TeamBottariRepositoryImpl(
         teamBottariRemoteDataSource
             .fetchTeamBottariStatus(id)
             .mapCatching { response -> response.toDomain() }
+
+    override suspend fun remind(
+        id: Long,
+        type: String,
+    ): Result<Unit> =
+        teamBottariRemoteDataSource
+            .remind(id, ItemTypeRequest(type))
 }

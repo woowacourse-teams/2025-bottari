@@ -7,6 +7,7 @@ import com.bottari.domain.model.team.TeamBottariStatus
 import com.bottari.domain.model.team.TeamProductStatus
 import com.bottari.presentation.mapper.AlarmMapper.toUiModel
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
+import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.TeamBottariUiModel
 import com.bottari.presentation.view.checklist.team.status.MemberCheckStatusUiModel
@@ -33,16 +34,28 @@ object TeamBottariMapper {
 
     fun TeamBottariStatus.toUiModel(): TeamBottariStatusUiModel =
         TeamBottariStatusUiModel(
-            sharedItems = sharedItems.map { item -> item.toUiModel() },
-            assignedItems = assignedItems.map { item -> item.toUiModel() },
+            sharedItems = sharedItems.map { item -> item.toSharedUiModel() },
+            assignedItems = assignedItems.map { item -> item.toAssignedUiModel() },
         )
 
-    private fun TeamProductStatus.toUiModel(): TeamProductStatusUiModel =
+    private fun TeamProductStatus.toSharedUiModel(): TeamProductStatusUiModel =
         TeamProductStatusUiModel(
+            id = id,
             name = name,
             memberCheckStatus = memberCheckStatus.map { item -> item.toUiModel() },
             checkItemsCount = checkItemsCount,
             totalItemsCount = totalItemsCount,
+            type = BottariItemTypeUiModel.SHARED,
+        )
+
+    private fun TeamProductStatus.toAssignedUiModel(): TeamProductStatusUiModel =
+        TeamProductStatusUiModel(
+            id = id,
+            name = name,
+            memberCheckStatus = memberCheckStatus.map { item -> item.toUiModel() },
+            checkItemsCount = checkItemsCount,
+            totalItemsCount = totalItemsCount,
+            type = BottariItemTypeUiModel.ASSIGNED(),
         )
 
     private fun MemberCheckStatus.toUiModel(): MemberCheckStatusUiModel =

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.team.FetchTeamStatusUseCase
+import com.bottari.domain.usecase.team.RemindUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
@@ -29,11 +30,28 @@ sealed interface TeamStatusUiEvent {
 class TeamStatusViewModel(
     private val stateHandle: SavedStateHandle,
     private val fetchTeamStatusUseCase: FetchTeamStatusUseCase,
+    private val remindUseCase: RemindUseCase,
 ) : BaseViewModel<TeamStatusUiState, TeamStatusUiEvent>(
         TeamStatusUiState(),
     ) {
     init {
         fetchTeamStatus()
+    }
+
+    fun selectItem(item: TeamProductStatusUiModel) {
+        updateState { copy(item = item) }
+    }
+
+    fun remindItem() {
+        viewModelScope.launch {
+            remindUseCase
+                .invoke(
+                    currentState.item?.id ?: throw IllegalArgumentException(),
+                    currentState.item?.type.toString(),
+                ).onSuccess {
+                }.onFailure {
+                }
+        }
     }
 
     private fun fetchTeamStatus() {
@@ -62,10 +80,6 @@ class TeamStatusViewModel(
         }
     }
 
-    fun selectItem(item: TeamProductStatusUiModel) {
-        updateState { copy(item = item) }
-    }
-
     private fun generateTeamItemsList(teamBottariStatusUiModel: TeamBottariStatusUiModel): List<TeamProductStatusItem> =
         buildList {
             add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.SHARED))
@@ -86,6 +100,7 @@ class TeamStatusViewModel(
                     TeamStatusViewModel(
                         stateHandle,
                         UseCaseProvider.fetchTeamStatusUseCase,
+                        UseCaseProvider.remindUseCase,
                     )
                 }
             }
