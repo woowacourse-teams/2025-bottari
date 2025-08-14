@@ -1,6 +1,7 @@
 package com.bottari.teambottari.controller;
 
 import com.bottari.config.MemberIdentifier;
+import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemTypeRequest;
@@ -32,6 +33,19 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
     ) {
         final Long id = teamItemFacade.createSharedItem(teamBottariId, request, ssaid);
         final URI location = URI.create("/team-bottaries/" + teamBottariId + "/shared-items/" + id);
+
+        return ResponseEntity.created(location).build();
+    }
+
+    @PostMapping("/team-bottaries/{teamBottariId}/assigned-items")
+    @Override
+    public ResponseEntity<Void> createAssigned(
+            @PathVariable final Long teamBottariId,
+            @RequestBody final CreateTeamAssignedItemRequest request,
+            @MemberIdentifier final String ssaid
+    ) {
+        final Long id = teamItemFacade.createAssignedItem(teamBottariId, request, ssaid);
+        final URI location = URI.create("/team-bottaries/" + teamBottariId + "/assigned-items/" + id);
 
         return ResponseEntity.created(location).build();
     }

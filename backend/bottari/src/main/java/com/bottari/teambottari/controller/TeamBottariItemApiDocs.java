@@ -2,6 +2,7 @@ package com.bottari.teambottari.controller;
 
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
+import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemTypeRequest;
@@ -31,6 +32,24 @@ public interface TeamBottariItemApiDocs {
     ResponseEntity<Void> createShared(
             final Long teamBottariId,
             final CreateTeamItemRequest request,
+            @Parameter(hidden = true) final String ssaid
+    );
+
+    @Operation(summary = "팀 보따리 담당 물품 생성")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "팀 보따리 담당 물품 생성 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.TEAM_BOTTARI_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI,
+            ErrorCode.MEMBER_NOT_FOUND,
+            ErrorCode.TEAM_BOTTARI_ITEM_NAME_BLANK,
+            ErrorCode.TEAM_BOTTARI_ITEM_NAME_TOO_LONG,
+            ErrorCode.TEAM_BOTTARI_ITEM_ALREADY_EXISTS
+    })
+    ResponseEntity<Void> createAssigned(
+            final Long teamBottariId,
+            final CreateTeamAssignedItemRequest request,
             @Parameter(hidden = true) final String ssaid
     );
 
