@@ -3,8 +3,10 @@
     <color name="transparent">#00000000</color>
 
     <color name="primary">#FF0064FF</color>
+    <color name="secondary">#FF00AEFF</color>
     <color name="red">#FFFF0000</color>
     <color name="red_soft">#FFFF3B30</color>
+    <color name="green">#FF6EBA76</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 

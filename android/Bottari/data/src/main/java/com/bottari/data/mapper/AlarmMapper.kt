@@ -6,6 +6,8 @@ import com.bottari.data.model.bottari.LocationRequest
 import com.bottari.data.model.bottari.LocationResponse
 import com.bottari.data.model.bottari.RoutineRequest
 import com.bottari.data.model.bottari.RoutineResponse
+import com.bottari.data.model.team.TeamAlarmLocationResponse
+import com.bottari.data.model.team.TeamAlarmResponse
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.alarm.AlarmType
 import com.bottari.domain.model.alarm.LocationAlarm
@@ -26,6 +28,15 @@ object AlarmMapper {
         )
 
     fun AlarmResponse.toDomain(): Alarm =
+        Alarm(
+            id = id,
+            isActive = isActive,
+            time = routine.time,
+            alarmType = routine.toAlarmType(),
+            location = location?.toDomain(),
+        )
+
+    fun TeamAlarmResponse.toDomain(): Alarm =
         Alarm(
             id = id,
             isActive = isActive,
@@ -81,6 +92,14 @@ object AlarmMapper {
         }
 
     private fun LocationResponse.toDomain(): LocationAlarm =
+        LocationAlarm(
+            latitude = latitude,
+            longitude = longitude,
+            radius = radius,
+            isActive = isActive,
+        )
+
+    private fun TeamAlarmLocationResponse.toDomain(): LocationAlarm =
         LocationAlarm(
             latitude = latitude,
             longitude = longitude,

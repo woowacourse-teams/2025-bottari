@@ -10,7 +10,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentSwipeChecklistBinding
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.ChecklistItemUiModel
 import com.bottari.presentation.view.checklist.personal.ChecklistUiEvent
 import com.bottari.presentation.view.checklist.personal.ChecklistUiState
 import com.bottari.presentation.view.checklist.personal.ChecklistViewModel
@@ -99,7 +99,7 @@ class SwipeChecklistFragment :
         }
     }
 
-    private fun updateSwipeList(items: List<BottariItemUiModel>) {
+    private fun updateSwipeList(items: List<ChecklistItemUiModel>) {
         adapter.submitList(items)
     }
 

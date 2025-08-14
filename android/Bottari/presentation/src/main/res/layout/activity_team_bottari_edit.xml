@@ -6,7 +6,7 @@
     tools:context=".view.edit.team.TeamBottariEditActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fcv_team_management"
+        android:id="@+id/fcv_team_edit"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

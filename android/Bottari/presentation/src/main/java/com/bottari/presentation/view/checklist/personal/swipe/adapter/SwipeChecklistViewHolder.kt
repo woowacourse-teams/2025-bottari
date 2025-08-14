@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.databinding.ItemSwipeChecklistBinding
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.ChecklistItemUiModel
 
 class SwipeChecklistViewHolder private constructor(
     private val binding: ItemSwipeChecklistBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: BottariItemUiModel) {
+    fun bind(item: ChecklistItemUiModel) {
         binding.tvSwipeItemTitle.text = item.name
     }
 

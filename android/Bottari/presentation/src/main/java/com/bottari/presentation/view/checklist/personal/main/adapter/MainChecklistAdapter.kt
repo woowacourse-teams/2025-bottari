@@ -3,18 +3,16 @@ package com.bottari.presentation.view.checklist.personal.main.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.ChecklistItemUiModel
 import com.bottari.presentation.view.checklist.personal.main.listener.OnChecklistItemClickListener
 
 class MainChecklistAdapter(
     private val onChecklistItemClickListener: OnChecklistItemClickListener,
-) : ListAdapter<BottariItemUiModel, MainChecklistViewHolder>(DiffUtil) {
+) : ListAdapter<ChecklistItemUiModel, MainChecklistViewHolder>(DiffUtil) {
     override fun onBindViewHolder(
         holder: MainChecklistViewHolder,
         position: Int,
-    ) {
-        holder.bind(getItem(position))
-    }
+    ) = holder.bind(getItem(position))
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -23,15 +21,15 @@ class MainChecklistAdapter(
 
     companion object {
         private val DiffUtil =
-            object : DiffUtil.ItemCallback<BottariItemUiModel>() {
+            object : DiffUtil.ItemCallback<ChecklistItemUiModel>() {
                 override fun areContentsTheSame(
-                    oldItem: BottariItemUiModel,
-                    newItem: BottariItemUiModel,
+                    oldItem: ChecklistItemUiModel,
+                    newItem: ChecklistItemUiModel,
                 ): Boolean = oldItem == newItem
 
                 override fun areItemsTheSame(
-                    oldItem: BottariItemUiModel,
-                    newItem: BottariItemUiModel,
+                    oldItem: ChecklistItemUiModel,
+                    newItem: ChecklistItemUiModel,
                 ): Boolean = oldItem.id == newItem.id
             }
     }

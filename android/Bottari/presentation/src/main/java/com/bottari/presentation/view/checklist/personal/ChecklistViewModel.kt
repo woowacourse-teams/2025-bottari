@@ -12,7 +12,7 @@ import com.bottari.domain.usecase.item.FetchChecklistUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.ChecklistItemUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -24,9 +24,9 @@ class ChecklistViewModel(
     private val unCheckBottariItemUseCase: UnCheckBottariItemUseCase,
 ) : BaseViewModel<ChecklistUiState, ChecklistUiEvent>(ChecklistUiState()) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
-    private val pendingCheckStatusMap = mutableMapOf<Long, BottariItemUiModel>()
+    private val pendingCheckStatusMap = mutableMapOf<Long, ChecklistItemUiModel>()
 
-    private val debouncedCheck: (List<BottariItemUiModel>) -> Unit =
+    private val debouncedCheck: (List<ChecklistItemUiModel>) -> Unit =
         debounce(
             timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
@@ -72,7 +72,7 @@ class ChecklistViewModel(
         debouncedCheck(pendingCheckStatusMap.values.toList())
     }
 
-    private fun performCheck(items: List<BottariItemUiModel>) {
+    private fun performCheck(items: List<ChecklistItemUiModel>) {
         launch {
             val jobs =
                 items.map { item ->
@@ -83,7 +83,7 @@ class ChecklistViewModel(
         }
     }
 
-    private suspend fun processItemCheck(item: BottariItemUiModel) {
+    private suspend fun processItemCheck(item: ChecklistItemUiModel) {
         val result =
             if (item.isChecked) {
                 checkBottariItemUseCase(item.id)
@@ -95,7 +95,7 @@ class ChecklistViewModel(
         }
     }
 
-    private fun recordPendingCheckStatus(item: BottariItemUiModel) {
+    private fun recordPendingCheckStatus(item: ChecklistItemUiModel) {
         pendingCheckStatusMap[item.id] = item
     }
 
