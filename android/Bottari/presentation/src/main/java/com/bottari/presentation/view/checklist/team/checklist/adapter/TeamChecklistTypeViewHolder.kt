@@ -22,7 +22,7 @@ class TeamChecklistTypeViewHolder(
 
     fun bind(type: TeamChecklistTypeUiModel) {
         this.currentType = type
-        binding.tvChecklistItemTitle.text = type.type.title
+        binding.tvChecklistItemTitle.setText(type.type.title)
         binding.ivChecklistOption.rotation =
             if (type.isExpanded) TOGGLE_SHAPE_OPENED else TOGGLE_SHAPE_UNOPENED
     }

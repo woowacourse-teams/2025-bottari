@@ -1,9 +1,12 @@
 package com.bottari.presentation.view.checklist.team.checklist
 
+import androidx.annotation.StringRes
+import com.bottari.presentation.R
+
 enum class ChecklistType(
-    val title: String,
+    @StringRes val title: Int,
 ) {
-    SHARED("공통"),
-    ASSIGNED("담당"),
-    PERSONAL("개인"),
+    SHARED(R.string.team_checklist_type_shared),
+    ASSIGNED(R.string.team_checklist_type_assigned),
+    PERSONAL(R.string.team_checklist_type_personal),
 }
