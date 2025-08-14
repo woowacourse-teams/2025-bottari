@@ -41,11 +41,6 @@ class TeamChecklistFragment :
         setupUI()
     }
 
-    private fun setupUI() {
-        binding.rvChecklist.adapter = checklistAdapter
-        binding.rvChecklist.layoutManager = LinearLayoutManager(requireContext())
-    }
-
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             checklistAdapter.submitList(uiState.expandableItems)
@@ -56,6 +51,11 @@ class TeamChecklistFragment :
                 TeamChecklistUiEvent.CheckItemFailure -> requireView().showSnackbar(R.string.checklist_check_failure_text)
             }
         }
+    }
+
+    private fun setupUI() {
+        binding.rvChecklist.adapter = checklistAdapter
+        binding.rvChecklist.layoutManager = LinearLayoutManager(requireContext())
     }
 
     companion object {
