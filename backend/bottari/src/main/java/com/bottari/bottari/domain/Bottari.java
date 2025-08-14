@@ -1,8 +1,9 @@
 package com.bottari.bottari.domain;
 
-import com.bottari.member.domain.Member;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.member.domain.Member;
+import com.bottari.vo.BottariTitle;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -34,7 +35,7 @@ public class Bottari {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private BottariTitle title;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -50,8 +51,7 @@ public class Bottari {
             final String title,
             final Member member
     ) {
-        validateTitle(title);
-        this.title = title;
+        this.title = new BottariTitle(title);
         this.member = member;
     }
 
@@ -60,11 +60,14 @@ public class Bottari {
     }
 
     public void updateTitle(final String newTitle) {
-        if (title.equals(newTitle)) {
+        if (title.getTitle().equals(newTitle)) {
             throw new BusinessException(ErrorCode.BOTTARI_TITLE_UNCHANGED);
         }
-        validateTitle(newTitle);
-        this.title = newTitle;
+        this.title = new BottariTitle(newTitle);
+    }
+
+    public String getTitle() {
+        return title.getTitle();
     }
 
     private void validateTitle(final String title) {

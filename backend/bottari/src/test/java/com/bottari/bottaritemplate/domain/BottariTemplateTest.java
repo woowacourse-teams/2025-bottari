@@ -35,7 +35,7 @@ class BottariTemplateTest {
         // when & then
         assertThatThrownBy(() -> new BottariTemplate(title, member))
                 .isInstanceOf(BusinessException.class)
-                .hasMessage("보따리 템플릿 제목이 너무 깁니다. - 최대 15자까지 입력 가능합니다.");
+                .hasMessage("보따리 템플릿 제목이 너무 깁니다. 최대 15자까지 입력 가능합니다. - 최대 15자까지 입력 가능합니다.");
     }
 
     @DisplayName("본인의 보따리 템플릿인지 확인한다.")
