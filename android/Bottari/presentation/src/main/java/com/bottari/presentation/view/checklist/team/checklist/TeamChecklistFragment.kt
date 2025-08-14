@@ -15,14 +15,13 @@ import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamCheckl
 
 class TeamChecklistFragment :
     BaseFragment<FragmentTeamChecklistBinding>(FragmentTeamChecklistBinding::inflate),
-    TeamChecklistViewHolder.OnTeamChecklistItemClickListener,
-    TeamChecklistTypeViewHolder.OnTeamChecklistTypeClickListener {
+    TeamChecklistItemAdapter.TeamChecklistEventListener {
     private val viewModel: TeamChecklistViewModel by viewModels {
         TeamChecklistViewModel.Factory(requireArguments().getLong(ARG_BOTTARI_ID))
     }
 
     private val checklistAdapter: TeamChecklistItemAdapter by lazy {
-        TeamChecklistItemAdapter(this, this)
+        TeamChecklistItemAdapter(this)
     }
 
     override fun onClick(type: ChecklistType) {

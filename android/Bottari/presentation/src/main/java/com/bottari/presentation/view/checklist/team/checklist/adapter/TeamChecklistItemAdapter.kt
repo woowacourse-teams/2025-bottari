@@ -9,8 +9,7 @@ import com.bottari.presentation.model.TeamChecklistProductUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
 
 class TeamChecklistItemAdapter(
-    private val teamChecklistTypeClickListener: TeamChecklistTypeViewHolder.OnTeamChecklistTypeClickListener,
-    private val teamChecklistItemClickListener: TeamChecklistViewHolder.OnTeamChecklistItemClickListener,
+    private val teamChecklistEventListener: TeamChecklistEventListener,
 ) : ListAdapter<TeamChecklistItem, RecyclerView.ViewHolder>(DiffCallback) {
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
@@ -24,11 +23,11 @@ class TeamChecklistItemAdapter(
     ): RecyclerView.ViewHolder =
         when (viewType) {
             ITEM_VIEW_TYPE_TYPE -> {
-                TeamChecklistTypeViewHolder.from(parent, teamChecklistTypeClickListener)
+                TeamChecklistTypeViewHolder.from(parent, teamChecklistEventListener)
             }
 
             ITEM_VIEW_TYPE_ITEM -> {
-                TeamChecklistViewHolder.from(parent, teamChecklistItemClickListener)
+                TeamChecklistViewHolder.from(parent, teamChecklistEventListener)
             }
 
             else -> throw IllegalArgumentException(ERROR_VIEW_TYPE)
@@ -49,6 +48,10 @@ class TeamChecklistItemAdapter(
             }
         }
     }
+
+    interface TeamChecklistEventListener :
+        TeamChecklistTypeViewHolder.OnTeamChecklistTypeClickListener,
+        TeamChecklistViewHolder.OnTeamChecklistItemClickListener
 
     companion object {
         const val ERROR_VIEW_TYPE = "잘못된 뷰 타입 입니다"

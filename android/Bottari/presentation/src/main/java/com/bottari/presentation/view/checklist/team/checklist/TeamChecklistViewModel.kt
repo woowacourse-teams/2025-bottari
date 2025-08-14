@@ -66,8 +66,17 @@ class TeamChecklistViewModel(
         itemToToggle?.let { item ->
             val toggledItem = item.toggle()
             updateState {
+                val newItems =
+                    items.map { item ->
+                        if (item.id == toggledItem.id && item.type == toggledItem.type) {
+                            toggledItem
+                        } else {
+                            item
+                        }
+                    }
                 val newExpandableList = expandableItems.toggleItemInList(toggledItem)
                 copy(
+                    items = newItems,
                     expandableItems = newExpandableList,
                 )
             }
