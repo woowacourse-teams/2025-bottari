@@ -227,11 +227,11 @@ VALUES
     (2, 5);
 
 -- 팀 공유 아이템 정보 (team_shared_item_info)
-INSERT INTO team_shared_item_info (team_bottari_id, name)
+INSERT INTO team_shared_item_info (team_bottari_id, name, created_at)
 VALUES
-    (1, '공용 간식'),
-    (1, '상비약'),
-    (2, '공용 노트북 충전기');
+    (1, '공용 간식', '2024-01-10 10:00:00'),
+    (1, '상비약', '2024-01-10 10:05:00'),
+    (2, '공용 노트북 충전기', '2024-07-12 10:05:00');
 
 -- 팀 공유 아이템 (team_shared_item)
 INSERT INTO team_shared_item (team_shared_item_info_id, team_member_id, is_checked)
@@ -256,11 +256,11 @@ VALUES
     (5, '개인 명함', true);
 
 -- 팀 할당 아이템 정보 (team_assigned_item_info)
-INSERT INTO team_assigned_item_info (team_bottari_id, name)
+INSERT INTO team_assigned_item_info (team_bottari_id, name, created_at)
 VALUES
-    (1, '항공권'),
-    (1, '크레파스'),
-    (2, '물파스');
+    (1, '항공권', '2024-01-10 10:00:00'),
+    (1, '크레파스', '2024-01-10 10:05:00'),
+    (2, '물파스', '2024-07-12 10:05:00');
 
 -- 팀 할당 아이템 (team_assigned_item)
 -- team_member_id 1: '다이스의 첫 여행 준비' 팀의 '다이스'
