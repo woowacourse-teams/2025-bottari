@@ -79,8 +79,10 @@ public enum ErrorCode {
     REPORT_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 해당 템플릿에 대한 신고 기록이 있습니다."),
 
     // ===== FCM 관련 =====
-    FCM_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND,"FCM 토큰 정보가 존재하지 않습니다."),
-    FCM_INITIALIZED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR,"Firebase 초기화를 실패하였습니다."),
+    FCM_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "FCM 토큰 정보가 존재하지 않습니다."),
+    FCM_INITIALIZED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "Firebase 초기화를 실패하였습니다."),
+    FCM_MESSAGE_SEND_FAIL(HttpStatus.BAD_GATEWAY, "FCM 서버 문제로 FCM 메시지 전송을 실패하였습니다."),
+    FCM_INVALID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰으로 인해 FCM 메시지 전송을 실패하였습니다."),
 
     // ===== 기타 =====
     DATE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 날짜 형식입니다."),
