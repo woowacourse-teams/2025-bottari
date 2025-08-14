@@ -2,8 +2,10 @@ package com.bottari.data.repository
 
 import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
+import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.TeamMembersResponse
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
+import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.HeadCount
 import com.bottari.domain.model.team.TeamBottariCheckList
@@ -28,6 +30,26 @@ import retrofit2.Response
 class TeamBottariRepositoryImplTest {
     private lateinit var dataSource: TeamBottariRemoteDataSource
     private lateinit var repository: TeamBottariRepository
+    private val teamBottariResponse: FetchTeamBottariResponse by lazy {
+        FetchTeamBottariResponse(
+            1L,
+            "test",
+            null,
+            10,
+            10,
+            3,
+        )
+    }
+    private val teamBottari: TeamBottari by lazy {
+        TeamBottari(
+            1L,
+            "test",
+            10,
+            10,
+            3,
+            null,
+        )
+    }
     private val errorResponseBody =
         """{"message":"잘못된 요청입니다."}""".toResponseBody("application/json".toMediaType())
 
@@ -126,6 +148,46 @@ class TeamBottariRepositoryImplTest {
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamMembers(id) }
+        }
+
+    @DisplayName("팀 보따리 목록 조회에 성공하면 Success를 반환한다")
+    @Test
+    fun fetchTeamBottariReturnsSuccessTest() =
+        runTest {
+            // given
+            val bottaries = listOf(teamBottariResponse, teamBottariResponse.copy(2L))
+            coEvery { dataSource.fetchTeamBottaries() } returns Result.success(bottaries)
+
+            // when
+            val result = repository.fetchTeamBottaries()
+
+            // then
+            val expected = listOf(teamBottari, teamBottari.copy(2L))
+            assertSoftly(result) {
+                shouldBeSuccess()
+                getOrThrow().shouldBe(expected)
+            }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.fetchTeamBottaries() }
+        }
+
+    @DisplayName("팀 보따리 목록 조회에 실패하면 Failure를 반환한다")
+    @Test
+    fun fetchTeamBottariReturnsFailureTest() =
+        runTest {
+            // given
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery { dataSource.fetchTeamBottariDetail(1L) } returns Result.failure(exception)
+
+            // when
+            val result = repository.fetchTeamBottariDetail(1L)
+
+            // then
+            result shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.fetchTeamBottariDetail(1L) }
         }
 
     @DisplayName("팀 체크리스트 조회에 성공하면 Success를 반환한다")
