@@ -7,6 +7,7 @@ import com.bottari.data.model.bottari.ItemResponse
 import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariDetail
 import com.bottari.domain.model.bottari.BottariItem
+import com.bottari.domain.model.bottari.BottariItemType
 
 object BottariMapper {
     fun FetchBottariesResponse.toDomain(): Bottari =
@@ -30,6 +31,6 @@ object BottariMapper {
         BottariItem(
             id = id,
             name = name,
-            isChecked = false,
+            type = BottariItemType.PERSONAL,
         )
 }

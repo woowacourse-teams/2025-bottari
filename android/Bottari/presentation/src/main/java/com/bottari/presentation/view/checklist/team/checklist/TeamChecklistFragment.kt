@@ -9,6 +9,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamChecklistBinding
+import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamChecklistItemAdapter
 
 class TeamChecklistFragment :
@@ -22,13 +23,13 @@ class TeamChecklistFragment :
         TeamChecklistItemAdapter(this)
     }
 
-    override fun onClick(type: ChecklistType) {
+    override fun onClick(type: BottariItemTypeUiModel) {
         viewModel.toggleParentExpanded(type)
     }
 
     override fun onClick(
         id: Long,
-        type: ChecklistType,
+        type: BottariItemTypeUiModel,
     ) {
         viewModel.toggleItemChecked(id, type)
     }
