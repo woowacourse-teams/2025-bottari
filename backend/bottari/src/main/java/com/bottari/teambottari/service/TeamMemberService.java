@@ -72,7 +72,7 @@ public class TeamMemberService {
                         "해당하는 초대코드 없음"));
         final Member member = memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
-        validateMemberNotInTeam(teamBottari.getId(), ssaid);
+        validateMemberNotInTeam(teamBottari, member);
         final TeamMember teamMember = new TeamMember(teamBottari, member);
         teamMemberRepository.save(teamMember);
         addTeamMemberSharedItems(teamBottari.getId(), teamMember);
@@ -104,10 +104,10 @@ public class TeamMemberService {
     }
 
     private void validateMemberNotInTeam(
-            final Long teamBottariId,
-            final String ssaid
+            final TeamBottari teamBottari,
+            final Member member
     ) {
-        if (teamMemberRepository.existsByTeamBottariIdAndMemberSsaid(teamBottariId, ssaid)) {
+        if (teamMemberRepository.existsByTeamBottariIdAndMemberId(teamBottari.getId(), member.getId())) {
             throw new BusinessException(ErrorCode.MEMBER_ALREADY_IN_TEAM_BOTTARI);
         }
     }

@@ -43,4 +43,9 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
             final Long teamBottariId,
             final String ssaid
     );
+
+    boolean existsByTeamBottariIdAndMemberId(
+            final Long teamBottariId,
+            final Long memberId
+    );
 }
