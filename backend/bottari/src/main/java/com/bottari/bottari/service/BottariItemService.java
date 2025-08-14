@@ -9,6 +9,7 @@ import com.bottari.bottari.repository.BottariItemRepository;
 import com.bottari.bottari.repository.BottariRepository;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.vo.ItemName;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -103,7 +104,7 @@ public class BottariItemService {
             final Long bottariId,
             final String name
     ) {
-        if (bottariItemRepository.existsByBottariIdAndName(bottariId, name)) {
+        if (bottariItemRepository.existsByBottariIdAndName(bottariId, new ItemName(name))) {
             throw new BusinessException(ErrorCode.BOTTARI_ITEM_ALREADY_EXISTS);
         }
     }
@@ -139,7 +140,8 @@ public class BottariItemService {
             final Long bottariId,
             final List<String> itemNames
     ) {
-        if (bottariItemRepository.existsByBottariIdAndNameIn(bottariId, itemNames)) {
+        final List<ItemName> names = itemNames.stream().map(ItemName::new).toList();
+        if (bottariItemRepository.existsByBottariIdAndNameIn(bottariId, names)) {
             throw new BusinessException(ErrorCode.BOTTARI_ITEM_ALREADY_EXISTS);
         }
     }
