@@ -36,6 +36,7 @@ class TeamMembersStatusFragment :
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            toggleLoadingIndicator(uiState.isLoading)
             adapter.submitList(uiState.membersStatus)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
