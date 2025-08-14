@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.checklist
+package com.bottari.presentation.view.checklist.personal
 
 import com.bottari.presentation.model.BottariItemUiModel
 

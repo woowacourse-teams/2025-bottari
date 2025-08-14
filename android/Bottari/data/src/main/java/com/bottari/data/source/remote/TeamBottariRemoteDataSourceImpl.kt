@@ -4,7 +4,9 @@ import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.common.ErrorResponse
 import com.bottari.data.model.team.CreateTeamBottariRequest
+import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
+import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.TeamMembersResponse
 import com.bottari.data.service.TeamBottariService
 
@@ -20,6 +22,27 @@ class TeamBottariRemoteDataSourceImpl(
 
             val errorResponse = ErrorResponse.parseErrorResponse(response.errorBody())
             return Result.failure(Exception(errorResponse?.title))
+        }
+
+    override suspend fun fetchTeamBottari(teamBottariId: Long): Result<FetchTeamBottariChecklistResponse> =
+        safeApiCall {
+            teamBottariService.fetchTeamBottari(teamBottariId)
+        }
+
+    override suspend fun uncheckBottariItem(
+        bottariItemId: Long,
+        request: ItemTypeRequest,
+    ): Result<Unit> =
+        safeApiCall {
+            teamBottariService.uncheckTeamBottariItem(bottariItemId, request)
+        }
+
+    override suspend fun checkBottariItem(
+        bottariItemId: Long,
+        request: ItemTypeRequest,
+    ): Result<Unit> =
+        safeApiCall {
+            teamBottariService.checkTeamBottariItem(bottariItemId, request)
         }
 
     override suspend fun fetchTeamBottaries(): Result<List<FetchTeamBottariResponse>> =

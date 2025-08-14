@@ -25,7 +25,7 @@
             android:windowSoftInputMode="adjustNothing"
             android:launchMode="singleTask" />
         <activity
-            android:name=".view.checklist.ChecklistActivity"
+            android:name=".view.checklist.personal.ChecklistActivity"
             android:exported="false" />
         <activity
             android:name=".view.edit.personal.PersonalBottariEditActivity"
@@ -35,6 +35,9 @@
             android:exported="false" />
         <activity
             android:name=".view.template.TemplateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.checklist.team.TeamChecklistActivity"
             android:exported="false" />
 
         <receiver android:name=".receiver.AlarmReceiver" />

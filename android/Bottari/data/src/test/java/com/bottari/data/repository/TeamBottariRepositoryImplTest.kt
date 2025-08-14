@@ -1,10 +1,12 @@
 package com.bottari.data.repository
 
 import com.bottari.data.model.team.CreateTeamBottariRequest
+import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.TeamMembersResponse
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.HeadCount
+import com.bottari.domain.model.team.TeamBottariCheckList
 import com.bottari.domain.model.team.TeamMembers
 import com.bottari.domain.repository.TeamBottariRepository
 import io.kotest.assertions.assertSoftly
@@ -124,5 +126,53 @@ class TeamBottariRepositoryImplTest {
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamMembers(id) }
+        }
+
+    @DisplayName("팀 체크리스트 조회에 성공하면 Success를 반환한다")
+    @Test
+    fun fetchTeamChecklistReturnsSuccessTest() =
+        runTest {
+            // given
+            val id = 1L
+            val response = FetchTeamBottariChecklistResponse(listOf(), listOf(), listOf())
+            coEvery { dataSource.fetchTeamBottari(id) } returns Result.success(response)
+
+            // when
+            val result = repository.fetchTeamBottari(id)
+
+            // then
+            val expected =
+                TeamBottariCheckList(
+                    sharedItems = listOf(),
+                    assignedItems = listOf(),
+                    personalItems = listOf(),
+                )
+
+            assertSoftly(result) {
+                shouldBeSuccess()
+                getOrThrow().shouldBe(expected)
+            }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.fetchTeamBottari(id) }
+        }
+
+    @DisplayName("팀 체크리스트 조회에 실패하면 Failure를 반환한다")
+    @Test
+    fun fetchTeamChecklistReturnsFailureTest() =
+        runTest {
+            // given
+            val id = 1L
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery { dataSource.fetchTeamBottari(id) } returns Result.failure(exception)
+
+            // when
+            val result = repository.fetchTeamBottari(id)
+
+            // then
+            result shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.fetchTeamBottari(id) }
         }
 }

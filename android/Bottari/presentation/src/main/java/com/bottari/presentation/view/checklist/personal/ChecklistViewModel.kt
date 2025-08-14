@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.checklist
+package com.bottari.presentation.view.checklist.personal
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider

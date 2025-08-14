@@ -14,7 +14,7 @@ import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentBottariBinding
-import com.bottari.presentation.view.checklist.ChecklistActivity
+import com.bottari.presentation.view.checklist.personal.ChecklistActivity
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
 import com.bottari.presentation.view.create.BottariCreateDialog
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity

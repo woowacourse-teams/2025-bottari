@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.checklist
+package com.bottari.presentation.view.checklist.personal
 
 sealed interface ChecklistUiEvent {
     data object FetchChecklistFailure : ChecklistUiEvent

@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.checklist.swipe.adapter
+package com.bottari.presentation.view.checklist.personal.swipe.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

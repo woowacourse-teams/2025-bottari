@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.checklist.main
+package com.bottari.presentation.view.checklist.personal.main
 
 import android.os.Bundle
 import android.view.View
@@ -10,9 +10,9 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentChecklistBinding
-import com.bottari.presentation.view.checklist.ChecklistUiEvent
-import com.bottari.presentation.view.checklist.ChecklistViewModel
-import com.bottari.presentation.view.checklist.main.adapter.MainChecklistAdapter
+import com.bottari.presentation.view.checklist.personal.ChecklistUiEvent
+import com.bottari.presentation.view.checklist.personal.ChecklistViewModel
+import com.bottari.presentation.view.checklist.personal.main.adapter.MainChecklistAdapter
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 
 class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChecklistBinding::inflate) {

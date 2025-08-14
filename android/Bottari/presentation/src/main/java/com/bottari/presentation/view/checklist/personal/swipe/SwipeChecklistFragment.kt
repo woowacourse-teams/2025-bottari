@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.checklist.swipe
+package com.bottari.presentation.view.checklist.personal.swipe
 
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -11,10 +11,10 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentSwipeChecklistBinding
 import com.bottari.presentation.model.BottariItemUiModel
-import com.bottari.presentation.view.checklist.ChecklistUiEvent
-import com.bottari.presentation.view.checklist.ChecklistUiState
-import com.bottari.presentation.view.checklist.ChecklistViewModel
-import com.bottari.presentation.view.checklist.swipe.adapter.SwipeCheckListAdapter
+import com.bottari.presentation.view.checklist.personal.ChecklistUiEvent
+import com.bottari.presentation.view.checklist.personal.ChecklistUiState
+import com.bottari.presentation.view.checklist.personal.ChecklistViewModel
+import com.bottari.presentation.view.checklist.personal.swipe.adapter.SwipeCheckListAdapter
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
 import com.yuyakaido.android.cardstackview.Direction

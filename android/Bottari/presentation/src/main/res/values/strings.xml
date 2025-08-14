@@ -273,4 +273,15 @@
     <string name="menu_edit_title_text">내용 편집하기</string>
     <string name="menu_delete_title_text">삭제하기</string>
     <string name="menu_template_report_title_text">신고하기</string>
+
+    <!-- Team Bottari -->
+    <string name="team_checklist_tap_checklist_text">체크리스트</string>
+    <string name="team_checklist_tap_team_current_text">팀 보따리 현황</string>
+    <string name="team_checklist_tap_member_checklist_text">멤버 현황</string>
+
+    <!-- Team Checklist -->
+    <string name="team_checklist_type_shared_text">공통</string>
+    <string name="team_checklist_type_assigned_text">담당</string>
+    <string name="team_checklist_type_personal_text">개인</string>
+
 </resources>
