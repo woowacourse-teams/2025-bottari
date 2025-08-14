@@ -7,7 +7,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemChecklistMiniBinding
-import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.ChecklistItemUiModel
 
 class SharedItemViewHolder(

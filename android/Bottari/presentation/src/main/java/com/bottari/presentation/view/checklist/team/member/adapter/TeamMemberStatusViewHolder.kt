@@ -6,7 +6,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamMemberStatusBinding
-import com.bottari.presentation.model.ChecklistItemUiModel
 import com.bottari.presentation.model.TeamMemberStatusUiModel
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap

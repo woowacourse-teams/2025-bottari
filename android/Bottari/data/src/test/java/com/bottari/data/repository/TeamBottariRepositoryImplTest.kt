@@ -2,7 +2,6 @@ package com.bottari.data.repository
 
 import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
-import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.data.testFixture.TEAM_BOTTARI

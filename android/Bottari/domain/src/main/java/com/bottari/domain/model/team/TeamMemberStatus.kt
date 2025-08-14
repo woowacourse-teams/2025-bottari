@@ -1,6 +1,5 @@
 package com.bottari.domain.model.team
 
-import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.ChecklistItem
 import com.bottari.domain.model.member.Nickname
 
