@@ -87,10 +87,10 @@ public class TeamMemberService {
         final List<TeamSharedItemInfo> sharedItemInfos = teamSharedItemInfoRepository.findAllByTeamBottariId(
                 teamBottariId
         );
-        for (final TeamSharedItemInfo info : sharedItemInfos) {
-            final TeamSharedItem teamSharedItem = new TeamSharedItem(info, teamMember);
-            teamSharedItemRepository.save(teamSharedItem);
-        }
+        final List<TeamSharedItem> teamSharedItems = sharedItemInfos.stream()
+                .map(info -> new TeamSharedItem(info, teamMember))
+                .toList();
+        teamSharedItemRepository.saveAll(teamSharedItems);
     }
 
     private void validateMemberInTeam(
