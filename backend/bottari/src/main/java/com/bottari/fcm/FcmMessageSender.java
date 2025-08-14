@@ -70,7 +70,7 @@ public class FcmMessageSender {
         final MessagingErrorCode messagingErrorCode = exception.getMessagingErrorCode();
 
         return messagingErrorCode == MessagingErrorCode.UNREGISTERED
-                || messagingErrorCode == MessagingErrorCode.INVALID_ARGUMENT;
+               || messagingErrorCode == MessagingErrorCode.INVALID_ARGUMENT;
     }
 
     private Message createMessage(
@@ -79,8 +79,8 @@ public class FcmMessageSender {
     ) {
         return Message.builder()
                 .setToken(fcmToken.getToken())
-                .setNotification(request.createNotification())
                 .putData("type", request.messageType().name())
+                .putAllData(request.dataToJsonValue())
                 .build();
     }
 }
