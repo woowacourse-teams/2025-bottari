@@ -10,9 +10,9 @@ import com.bottari.presentation.view.checklist.team.checklist.TeamChecklistFragm
 import com.google.android.material.tabs.TabLayoutMediator
 
 class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(ActivityTeamChecklistBinding::inflate) {
-    val bottariId: Long by lazy { intent.getLongExtra(EXTRA_BOTTARI_ID, INVALID_BOTTARI_ID) }
+    private val bottariId: Long by lazy { intent.getLongExtra(EXTRA_BOTTARI_ID, INVALID_BOTTARI_ID) }
 
-    val adapter: TeamChecklistFragmentAdapter by lazy {
+    private val adapter: TeamChecklistFragmentAdapter by lazy {
         TeamChecklistFragmentAdapter(this, bottariId)
     }
 
@@ -23,7 +23,6 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
 
     private fun setupUI() {
         val bottariTitle = intent.getStringExtra(EXTRA_BOTTARI_TITLE)
-        val adapter = TeamChecklistFragmentAdapter(this, bottariId)
         binding.tvBottariTitle.text = bottariTitle
         binding.vpTeamBottari.adapter = adapter
 
