@@ -32,16 +32,17 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
                 when (position) {
                     0 -> getString(R.string.team_checklist_tap_checklist_text)
                     1 -> getString(R.string.team_checklist_tap_team_current_text)
-                    else -> getString(R.string.team_checklist_tap_member_checklist_text)
+                    2 -> getString(R.string.team_checklist_tap_member_checklist_text)
+                    else -> throw IllegalArgumentException(ERROR_UNKNOWN_TYPE)
                 }
         }.attach()
     }
 
     companion object {
         private const val INVALID_BOTTARI_ID = -1L
-
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
         private const val EXTRA_BOTTARI_TITLE = "EXTRA_BOTTARI_TITLE"
+        private const val ERROR_UNKNOWN_TYPE = "[ERROR] 알 수 없는 타입입니다."
 
         fun newIntent(
             context: Context,

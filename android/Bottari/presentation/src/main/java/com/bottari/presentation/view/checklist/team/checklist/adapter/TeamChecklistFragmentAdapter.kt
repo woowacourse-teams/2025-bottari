@@ -17,6 +17,11 @@ class TeamChecklistFragmentAdapter(
         when (position) {
             0 -> TeamChecklistFragment.newInstance(bottariId)
             1 -> TeamStatusFragment.newInstance()
-            else -> TeamMembersStatusFragment.newInstance(bottariId)
+            2 -> TeamMembersStatusFragment.newInstance(bottariId)
+            else -> throw IllegalArgumentException(ERROR_UNKNOWN_FRAGMENT)
         }
+
+    companion object {
+        private const val ERROR_UNKNOWN_FRAGMENT = "[ERROR] 알 수 없는 프래그먼트입니다."
+    }
 }
