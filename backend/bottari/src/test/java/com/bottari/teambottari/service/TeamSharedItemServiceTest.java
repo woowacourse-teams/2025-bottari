@@ -251,7 +251,7 @@ class TeamSharedItemServiceTest {
             doNothing().when(fcmMessageSender).sendMessageToMembers(anyList(), any());
 
             // when & then
-            assertThatCode(() -> teamSharedItemService.sendRemindAlarm(teamSharedItemInfo.getId()))
+            assertThatCode(() -> teamSharedItemService.sendRemindAlarm(teamSharedItemInfo.getId(), member.getSsaid()))
                     .doesNotThrowAnyException();
             verify(fcmMessageSender).sendMessageToMembers(anyList(), any());
         }
@@ -272,9 +272,37 @@ class TeamSharedItemServiceTest {
             final Long invalid_item_info_id = -1L;
 
             // when & then
-            assertThatThrownBy(() -> teamSharedItemService.sendRemindAlarm(invalid_item_info_id))
+            assertThatThrownBy(() -> teamSharedItemService.sendRemindAlarm(invalid_item_info_id, member.getSsaid()))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("팀 보따리 물품 정보를 찾을 수 없습니다. - 공통");
+        }
+
+        @DisplayName("보채기 알람을 보낼 때, 팀 멤버가 아니라면 예외를 던진다.")
+        @Test
+        void sendRemindAlarm_Exception_NotTeamMember() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamSharedItemInfo info = new TeamSharedItemInfo("공통 물품", teamBottari);
+            entityManager.persist(info);
+
+            final TeamSharedItem item = new TeamSharedItem(info, teamMember);
+            entityManager.persist(item);
+
+            final String invalid_ssaid = "invalid_ssaid";
+
+            // when & then
+            assertThatThrownBy(
+                    () -> teamSharedItemService.sendRemindAlarm(info.getId(), invalid_ssaid))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }
     }
 }

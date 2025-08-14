@@ -7,11 +7,13 @@ import com.bottari.fcm.dto.MessageType;
 import com.bottari.fcm.dto.SendMessageRequest;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
+import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamAssignedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamAssignedItemRepository;
+import com.bottari.teambottari.repository.TeamMemberRepository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ public class TeamAssignedItemService {
     private final FcmMessageSender fcmMessageSender;
     private final TeamAssignedItemRepository teamAssignedItemRepository;
     private final TeamAssignedItemInfoRepository teamAssignedItemInfoRepository;
+    private final TeamMemberRepository teamMemberRepository;
 
     public List<TeamItemStatusResponse> getAllWithMemberStatusByTeamBottariId(final Long teamBottariId) {
         final List<TeamAssignedItem> items = teamAssignedItemRepository.findAllByTeamBottariId(teamBottariId);
@@ -69,9 +72,13 @@ public class TeamAssignedItemService {
         item.uncheck();
     }
 
-    public void sendRemindAlarm(final Long infoId) {
+    public void sendRemindAlarm(
+            final Long infoId,
+            final String ssaid
+    ) {
         final TeamAssignedItemInfo info = teamAssignedItemInfoRepository.findById(infoId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_INFO_NOT_FOUND, "담당"));
+        validateMemberInTeam(info.getTeamBottari(), ssaid);
         final List<TeamAssignedItem> items = teamAssignedItemRepository.findAllByInfoIdWithMember(infoId);
         final List<Long> uncheckedMemberIds = collectUncheckedMemberIds(items);
         final SendMessageRequest sendMessageRequest = SendMessageRequest.of(info.getTeamBottari(), MessageType.REMIND);
@@ -118,6 +125,15 @@ public class TeamAssignedItemService {
     ) {
         if (!item.isOwner(ssaid)) {
             throw new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NOT_OWNED, "본인의 팀 보따리 물품이 아닙니다.");
+        }
+    }
+
+    private void validateMemberInTeam(
+            final TeamBottari teamBottari,
+            final String ssaid
+    ) {
+        if (!teamMemberRepository.existsByTeamBottariIdAndMemberSsaid(teamBottari.getId(), ssaid)) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI);
         }
     }
 }
