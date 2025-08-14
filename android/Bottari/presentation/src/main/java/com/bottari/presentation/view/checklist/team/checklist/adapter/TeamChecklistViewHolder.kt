@@ -37,7 +37,7 @@ class TeamChecklistViewHolder private constructor(
         val textColorRes = if (isChecked) R.color.white else R.color.black
         val textColor = ContextCompat.getColor(itemView.context, textColorRes)
 
-        binding.clChecklistItem.backgroundTintList = ColorStateList.valueOf(bgColor)
+        binding.clTeamChecklistItem.backgroundTintList = ColorStateList.valueOf(bgColor)
         binding.ctvChecklistItemTitle.setTextColor(textColor)
         binding.ctvChecklistItemTitle.isChecked = isChecked
     }
