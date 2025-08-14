@@ -1,10 +1,11 @@
-package com.bottari.presentation.view.checklist.team.checklist
+package com.bottari.presentation.view.checklist.team.checklist.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bottari.presentation.view.checklist.team.MemberStatusFragment
 import com.bottari.presentation.view.checklist.team.TeamStatusFragment
+import com.bottari.presentation.view.checklist.team.checklist.TeamChecklistFragment
 
 class TeamChecklistFragmentAdapter(
     fragmentActivity: FragmentActivity,

@@ -6,7 +6,7 @@ import android.os.Bundle
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityTeamChecklistBinding
-import com.bottari.presentation.view.checklist.team.checklist.TeamChecklistFragmentAdapter
+import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamChecklistFragmentAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
 class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(ActivityTeamChecklistBinding::inflate) {

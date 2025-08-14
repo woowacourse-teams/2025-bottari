@@ -4,19 +4,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bottari.presentation.R
 import com.bottari.presentation.model.TeamChecklistItem
 import com.bottari.presentation.model.TeamChecklistProductUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
-import com.bottari.presentation.view.checklist.team.checklist.TeamChecklistItemClickListener
 
 class TeamChecklistItemAdapter(
-    private val clickListener: TeamChecklistItemClickListener,
+    private val teamChecklistTypeClickListener: TeamChecklistTypeViewHolder.OnTeamChecklistTypeClickListener,
+    private val teamChecklistItemClickListener: TeamChecklistViewHolder.OnTeamChecklistItemClickListener,
 ) : ListAdapter<TeamChecklistItem, RecyclerView.ViewHolder>(DiffCallback) {
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
-            is TeamChecklistTypeUiModel -> R.layout.item_team_checklist_option
-            is TeamChecklistProductUiModel -> R.layout.item_team_checklist
+            is TeamChecklistTypeUiModel -> ITEM_VIEW_TYPE_TYPE
+            is TeamChecklistProductUiModel -> ITEM_VIEW_TYPE_ITEM
         }
 
     override fun onCreateViewHolder(
@@ -24,12 +23,12 @@ class TeamChecklistItemAdapter(
         viewType: Int,
     ): RecyclerView.ViewHolder =
         when (viewType) {
-            R.layout.item_team_checklist_option -> {
-                TeamChecklistTypeViewHolder.from(parent, clickListener)
+            ITEM_VIEW_TYPE_TYPE -> {
+                TeamChecklistTypeViewHolder.from(parent, teamChecklistTypeClickListener)
             }
 
-            R.layout.item_team_checklist -> {
-                TeamChecklistViewHolder.from(parent, clickListener)
+            ITEM_VIEW_TYPE_ITEM -> {
+                TeamChecklistViewHolder.from(parent, teamChecklistItemClickListener)
             }
 
             else -> throw IllegalArgumentException(ERROR_VIEW_TYPE)
@@ -53,6 +52,8 @@ class TeamChecklistItemAdapter(
 
     companion object {
         const val ERROR_VIEW_TYPE = "잘못된 뷰 타입 입니다"
+        private const val ITEM_VIEW_TYPE_TYPE = 0
+        private const val ITEM_VIEW_TYPE_ITEM = 1
 
         private val DiffCallback =
             object : DiffUtil.ItemCallback<TeamChecklistItem>() {

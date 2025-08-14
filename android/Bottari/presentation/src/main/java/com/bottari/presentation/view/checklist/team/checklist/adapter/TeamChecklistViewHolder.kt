@@ -8,18 +8,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamChecklistBinding
 import com.bottari.presentation.model.TeamChecklistProductUiModel
-import com.bottari.presentation.view.checklist.team.checklist.TeamChecklistItemClickListener
+import com.bottari.presentation.view.checklist.team.checklist.ChecklistType
 
 class TeamChecklistViewHolder private constructor(
     private val binding: ItemTeamChecklistBinding,
-    private val clickListener: TeamChecklistItemClickListener,
+    private val clickListener: OnTeamChecklistItemClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
+    interface OnTeamChecklistItemClickListener {
+        fun onClick(
+            id: Long,
+            type: ChecklistType,
+        )
+    }
+
     private var currentItem: TeamChecklistProductUiModel? = null
 
     init {
         binding.root.setOnClickListener {
             currentItem?.let { item ->
-                clickListener.onItemClick(item.id, item.type)
+                clickListener.onClick(item.id, item.type)
             }
         }
     }
@@ -45,7 +52,7 @@ class TeamChecklistViewHolder private constructor(
     companion object {
         fun from(
             parent: ViewGroup,
-            teamChecklistItemClickListener: TeamChecklistItemClickListener,
+            teamChecklistItemClickListener: OnTeamChecklistItemClickListener,
         ): TeamChecklistViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemTeamChecklistBinding.inflate(inflater, parent, false)

@@ -10,23 +10,26 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamChecklistBinding
 import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamChecklistItemAdapter
+import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamChecklistTypeViewHolder
+import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamChecklistViewHolder
 
 class TeamChecklistFragment :
     BaseFragment<FragmentTeamChecklistBinding>(FragmentTeamChecklistBinding::inflate),
-    TeamChecklistItemClickListener {
+    TeamChecklistViewHolder.OnTeamChecklistItemClickListener,
+    TeamChecklistTypeViewHolder.OnTeamChecklistTypeClickListener {
     private val viewModel: TeamChecklistViewModel by viewModels {
         TeamChecklistViewModel.Factory(requireArguments().getLong(ARG_BOTTARI_ID))
     }
 
     private val checklistAdapter: TeamChecklistItemAdapter by lazy {
-        TeamChecklistItemAdapter(this)
+        TeamChecklistItemAdapter(this, this)
     }
 
-    override fun onTypeClick(type: ChecklistType) {
+    override fun onClick(type: ChecklistType) {
         viewModel.toggleParentExpanded(type)
     }
 
-    override fun onItemClick(
+    override fun onClick(
         id: Long,
         type: ChecklistType,
     ) {
