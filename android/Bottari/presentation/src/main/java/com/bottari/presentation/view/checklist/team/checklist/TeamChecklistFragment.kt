@@ -10,8 +10,6 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamChecklistBinding
 import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamChecklistItemAdapter
-import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamChecklistTypeViewHolder
-import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamChecklistViewHolder
 
 class TeamChecklistFragment :
     BaseFragment<FragmentTeamChecklistBinding>(FragmentTeamChecklistBinding::inflate),
