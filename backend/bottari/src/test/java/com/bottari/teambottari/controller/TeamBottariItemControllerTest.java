@@ -12,6 +12,7 @@ import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.domain.TeamItemType;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
+import com.bottari.teambottari.dto.RemindTeamItemRequest;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse.MemberCheckStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
@@ -157,6 +158,29 @@ class TeamBottariItemControllerTest {
 
         // when & then
         mockMvc.perform(patch("/team-items/{id}/uncheck", itemId)
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("보채기 알람을 전송한다.")
+    @ParameterizedTest
+    @CsvSource({
+            "SHARED",
+            "ASSIGNED"
+    })
+    void sendRemindAlarmByInfo(final TeamItemType type) throws Exception {
+        // given
+        final Long infoId = 1L;
+        final String ssaid = "test-ssaid";
+        final RemindTeamItemRequest request = new RemindTeamItemRequest(type);
+
+        willDoNothing().given(teamItemFacade)
+                .sendRemindAlarmByInfo(infoId, request, ssaid);
+
+        // when & then
+        mockMvc.perform(patch("/team-items/{id}/uncheck", infoId)
                         .header("ssaid", ssaid)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))

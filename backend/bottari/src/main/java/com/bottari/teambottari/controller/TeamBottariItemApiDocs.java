@@ -4,6 +4,7 @@ import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
+import com.bottari.teambottari.dto.RemindTeamItemRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,6 +25,16 @@ public interface TeamBottariItemApiDocs {
     })
     ResponseEntity<ReadTeamItemStatusResponse> readTeamItemsStatus(
             final Long teamBottariId,
+            @Parameter(hidden = true) final String ssaid
+    );
+
+    @Operation(summary = "팀 보따리 공통/담당 물품 보채기")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "보채기 알람 전송 성공")
+    })
+    ResponseEntity<Void> sendRemindAlarmByInfo(
+            final Long id,
+            final RemindTeamItemRequest request,
             @Parameter(hidden = true) final String ssaid
     );
 
