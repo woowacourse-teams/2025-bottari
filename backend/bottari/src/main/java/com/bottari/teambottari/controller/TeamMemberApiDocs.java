@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 @Tag(name = "Team Member", description = "팀 멤버 API")
 public interface TeamMemberApiDocs {
 
-    @Operation(summary = "팀 보따리 팀원 관리 정보 조회 ")
+    @Operation(summary = "팀 보따리 팀원 관리 정보 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "팀 보따리 팀원 관리 정보 조회 성공"),
     })
