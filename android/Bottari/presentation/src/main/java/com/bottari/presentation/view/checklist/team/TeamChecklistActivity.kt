@@ -24,7 +24,9 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     private fun setupUI() {
         binding.tvBottariTitle.text = intent.getStringExtra(EXTRA_BOTTARI_TITLE)
         binding.vpTeamBottari.adapter = adapter
-
+        binding.btnPrevious.setOnClickListener {
+            finish()
+        }
         TabLayoutMediator(binding.tlTeamBottari, binding.vpTeamBottari) { tab, position ->
             tab.text =
                 when (position) {
