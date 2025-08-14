@@ -2,8 +2,9 @@ package com.bottari.teambottari.controller;
 
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
-import com.bottari.teambottari.dto.CheckTeamItemRequest;
+import com.bottari.teambottari.dto.CreatePersonalItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
+import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +15,38 @@ import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Team Bottari Item", description = "팀 보따리 물품 API")
 public interface TeamBottariItemApiDocs {
+
+    @Operation(summary = "팀 보따리 개인 물품 생성")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "팀 보따리 개인 물품 생성 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.TEAM_BOTTARI_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI,
+            ErrorCode.MEMBER_NOT_FOUND,
+            ErrorCode.TEAM_BOTTARI_ITEM_NAME_BLANK,
+            ErrorCode.TEAM_BOTTARI_ITEM_NAME_TOO_LONG,
+            ErrorCode.TEAM_BOTTARI_ITEM_ALREADY_EXISTS
+    })
+    ResponseEntity<Void> createPersonal(
+            final Long teamBottariId,
+            final CreatePersonalItemRequest request,
+            @Parameter(hidden = true) final String ssaid
+    );
+
+    @Operation(summary = "팀 보따리 물품 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "팀 보따리 물품 삭제 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND,
+            ErrorCode.TEAM_BOTTARI_ITEM_NOT_OWNED
+    })
+    ResponseEntity<Void> delete(
+            final Long id,
+            final TeamItemTypeRequest request,
+            @Parameter(hidden = true) final String ssaid
+    );
 
     @Operation(summary = "팀 보따리 공통/담당 물품 조회", description = "각 멤버 별 체크 현황 포함 제공")
     @ApiResponses(value = {
@@ -50,7 +83,7 @@ public interface TeamBottariItemApiDocs {
     })
     ResponseEntity<Void> check(
             final Long id,
-            final CheckTeamItemRequest request,
+            final TeamItemTypeRequest request,
             @Parameter(hidden = true) final String ssaid
     );
 
@@ -64,7 +97,7 @@ public interface TeamBottariItemApiDocs {
     })
     ResponseEntity<Void> uncheck(
             final Long id,
-            final CheckTeamItemRequest request,
+            final TeamItemTypeRequest request,
             @Parameter(hidden = true) final String ssaid
     );
 }
