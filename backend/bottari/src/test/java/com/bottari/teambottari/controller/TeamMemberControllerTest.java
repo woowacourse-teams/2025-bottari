@@ -113,7 +113,7 @@ class TeamMemberControllerTest {
                 .willReturn(teamMemberId);
 
         // when & then
-        mockMvc.perform(post("/team-bottaries/members/join")
+        mockMvc.perform(post("/team-bottaries/join")
                         .header("ssaid", ssaid)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(request)))

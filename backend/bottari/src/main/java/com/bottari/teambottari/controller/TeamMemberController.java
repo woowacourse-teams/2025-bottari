@@ -49,7 +49,7 @@ public class TeamMemberController implements TeamMemberApiDocs {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/team-bottaries/members/join")
+    @PostMapping("/team-bottaries/join")
     @Override
     public ResponseEntity<Void> joinTeamBottari(
             @RequestBody final JoinTeamBottariRequest request,
