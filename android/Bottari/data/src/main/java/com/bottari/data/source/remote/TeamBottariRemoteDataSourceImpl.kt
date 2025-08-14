@@ -7,9 +7,9 @@ import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
+import com.bottari.data.model.team.FetchTeamMemberStatusResponse
+import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.ItemTypeRequest
-import com.bottari.data.model.team.TeamMemberStatusResponse
-import com.bottari.data.model.team.TeamMembersResponse
 import com.bottari.data.service.TeamBottariService
 
 class TeamBottariRemoteDataSourceImpl(
@@ -57,11 +57,11 @@ class TeamBottariRemoteDataSourceImpl(
             teamBottariService.fetchTeamBottariDetail(teamBottariId)
         }
 
-    override suspend fun fetchTeamMembers(id: Long): Result<TeamMembersResponse> = safeApiCall { teamBottariService.fetchTeamMembers(id) }
+    override suspend fun fetchTeamMembers(id: Long): Result<FetchTeamMembersResponse> =
+        safeApiCall { teamBottariService.fetchTeamMembers(id) }
 
-    override suspend fun fetchTeamMembersStatus(id: Long): Result<List<TeamMemberStatusResponse>> =
+    override suspend fun fetchTeamMembersStatus(id: Long): Result<List<FetchTeamMemberStatusResponse>> =
         safeApiCall { teamBottariService.fetchTeamMembersStatus(id) }
-
 
     companion object {
         private const val HEADER_TEAM_BOTTARI_ID_PREFIX = "/team-bottaries/"

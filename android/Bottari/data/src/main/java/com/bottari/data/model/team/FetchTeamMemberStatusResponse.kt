@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TeamMemberStatusResponse(
+data class FetchTeamMemberStatusResponse(
     @SerialName("teamMemberName")
     val nickname: String,
     @SerialName("isOwner")
