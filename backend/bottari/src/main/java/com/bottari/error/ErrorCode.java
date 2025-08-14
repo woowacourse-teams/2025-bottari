@@ -15,6 +15,7 @@ public enum ErrorCode {
     MEMBER_NAME_UNCHANGED(HttpStatus.BAD_REQUEST, "기존의 사용자 이름과 동일한 이름으로는 변경할 수 없습니다."),
     MEMBER_NAME_TOO_SHORT(HttpStatus.BAD_REQUEST, "사용자 이름이 너무 짧습니다."),
     MEMBER_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "사용자 이름이 너무 깁니다."),
+    MEMBER_NAME_OFFENSIVE(HttpStatus.BAD_REQUEST,"이름에 욕설을 입력할 수 없습니다."),
     MEMBER_NAME_GENERATION_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "고유한 임시 닉네임을 생성하는 데 실패했습니다. (관리자 문의 필요)"),
     MEMBER_IDENTIFIER_NOT_FOUND_IN_REQUEST(HttpStatus.BAD_REQUEST, "요청에 사용자 식별자가 존재하지 않습니다."),
 

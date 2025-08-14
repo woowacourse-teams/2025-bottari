@@ -37,6 +37,5 @@ class ItemNameTest {
         assertThatThrownBy(() -> new ItemName(name))
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("물품명에 욕설을 입력할 수 없습니다.");
-
     }
 }
