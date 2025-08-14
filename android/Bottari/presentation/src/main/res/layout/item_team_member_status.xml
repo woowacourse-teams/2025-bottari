@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/space_large"
+    android:layout_marginTop="@dimen/space_x_small"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/bg_white_radius_12dp"
+    android:elevation="4dp"
+    android:paddingHorizontal="@dimen/space_median"
+    android:paddingTop="@dimen/space_median">
+
+    <TextView
+        android:id="@+id/tv_member_nickname"
+        style="@style/Pretendard_Bold_18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="보따리를잘챙기는시아" />
+
+    <ImageView
+        android:id="@+id/iv_team_host"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="@dimen/space_2x_small"
+        android:contentDescription="@string/team_host_iv_description"
+        android:src="@drawable/ic_host"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tv_member_nickname"
+        app:layout_constraintStart_toEndOf="@id/tv_member_nickname"
+        app:layout_constraintTop_toTopOf="@id/tv_member_nickname" />
+
+    <TextView
+        android:id="@+id/tv_items_count_status"
+        style="@style/Pretendard_Medium_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2x_small"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/rv_shared_items"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_member_nickname"
+        app:layout_goneMarginBottom="@dimen/space_median"
+        tools:text="23/35 챙김" />
+
+    <TextView
+        android:id="@+id/btn_hurry_up_alert"
+        style="@style/Pretendard_Medium_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:backgroundTint="@color/primary"
+        android:paddingHorizontal="@dimen/space_large"
+        android:paddingVertical="@dimen/space_small"
+        android:text="@string/team_members_status_hurry_up_btn_text"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/tv_items_count_status"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_member_nickname" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="btn_hurry_up_alert, rv_shared_items, md_items, rv_assigned_items" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_shared_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:layout_marginBottom="@dimen/space_small"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@id/md_items"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_items_count_status" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/md_items"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/space_small"
+        app:dividerColor="@color/gray_c4c4c4"
+        app:dividerThickness="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rv_shared_items" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_assigned_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2x_small"
+        android:layout_marginBottom="@dimen/space_median"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/md_items" />
+</androidx.constraintlayout.widget.ConstraintLayout>
