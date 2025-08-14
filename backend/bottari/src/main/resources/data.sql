@@ -1,5 +1,3 @@
--- H2 데이터베이스용 INSERT 문
-
 -- 회원 데이터
 INSERT INTO member (ssaid, name)
 VALUES ('test_ssaid_1', '다이스'),
@@ -205,3 +203,71 @@ VALUES
     (7,1),
     (7,3),
     (7,4);
+
+-- =======================================================================
+-- 팀 보따리 관련 목업 데이터 (수정됨)
+-- =======================================================================
+
+-- 팀 보따리 데이터
+INSERT INTO team_bottari (title, owner_id, invite_code, created_at)
+VALUES
+    ('다이스의 첫 여행 준비', 1, 'team-1-invite-code', '2024-01-10 10:00:00'),
+    ('방벨로의 출장 준비', 2, 'team-2-invite-code', '2024-07-12 10:05:00');
+
+-- 팀 멤버 데이터
+INSERT INTO team_member (team_bottari_id, member_id)
+VALUES
+    -- '다이스의 첫 여행 준비' (team_bottari_id: 1) -> team_member_id: 1, 2, 3
+    (1, 1), -- owner
+    (1, 2),
+    (1, 3),
+    -- '방벨로의 출장 준비' (team_bottari_id: 2) -> team_member_id: 4, 5, 6
+    (2, 2), -- owner
+    (2, 1),
+    (2, 5);
+
+-- 팀 공유 아이템 정보 (team_shared_item_info)
+INSERT INTO team_shared_item_info (team_bottari_id, name)
+VALUES
+    (1, '공용 간식'),
+    (1, '상비약'),
+    (2, '공용 노트북 충전기');
+
+-- 팀 공유 아이템 (team_shared_item)
+INSERT INTO team_shared_item (team_shared_item_info_id, team_member_id, is_checked)
+VALUES
+    (1, 1, false),
+    (1, 2, true),
+    (1, 3, true),
+    (2, 1, true),
+    (2, 2, true),
+    (2, 3, false),
+    (3, 1, true),
+    (3, 2, false),
+    (3, 5, true);
+
+-- 팀 개인 아이템 (team_personal_item)
+-- team_member_id 1: '다이스의 첫 여행 준비' 팀의 '다이스'
+-- team_member_id 5: '방벨로의 출장 준비' 팀의 '다이스'
+INSERT INTO team_personal_item (team_member_id, name, is_checked)
+VALUES
+    (1, '개인 여권', true),
+    (1, '선글라스', false),
+    (5, '개인 명함', true);
+
+-- 팀 할당 아이템 정보 (team_assigned_item_info)
+INSERT INTO team_assigned_item_info (team_bottari_id, name)
+VALUES
+    (1, '항공권'),
+    (1, '크레파스'),
+    (2, '물파스');
+
+-- 팀 할당 아이템 (team_assigned_item)
+-- team_member_id 1: '다이스의 첫 여행 준비' 팀의 '다이스'
+-- team_member_id 2: '다이스의 첫 여행 준비' 팀의 '방벨로'
+-- team_member_id 6: '방벨로의 출장 준비' 팀의 '장코기'
+INSERT INTO team_assigned_item (team_assigned_item_info_id, team_member_id, is_checked)
+VALUES
+    (1, 1, true),
+    (2, 2, false),
+    (3, 6, true);
