@@ -42,12 +42,12 @@ class MemberRepositoryImplTest {
     fun registerMemberSuccessReturnsSuccess() =
         runTest {
             // given
-            val request = RegisterMemberRequest("ssaid")
+            val request = RegisterMemberRequest("ssaid", "token")
             coEvery { remoteDataSource.registerMember(request) } returns Result.success(1)
             coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns Result.success("ssaid")
 
             // when
-            val result = repository.registerMember()
+            val result = repository.registerMember("token")
 
             // then
             result.shouldBeSuccess()
@@ -61,13 +61,13 @@ class MemberRepositoryImplTest {
     fun registerMemberFailsReturnsFailure() =
         runTest {
             // given
-            val request = RegisterMemberRequest("ssaid")
+            val request = RegisterMemberRequest("ssaid", "token")
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { remoteDataSource.registerMember(request) } returns Result.failure(exception)
             coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns Result.success("ssaid")
 
             // when
-            val result = repository.registerMember()
+            val result = repository.registerMember("token")
 
             // then
             result.shouldBeFailure { it shouldBe exception }

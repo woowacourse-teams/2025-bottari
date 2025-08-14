@@ -13,9 +13,9 @@ class MemberRepositoryImpl(
     private val memberRemoteDataSource: MemberRemoteDataSource,
     private val memberIdentifierLocalDataSource: MemberIdentifierLocalDataSource,
 ) : MemberRepository {
-    override suspend fun registerMember(): Result<Long?> =
+    override suspend fun registerMember(fcmToken: String): Result<Long?> =
         memberRemoteDataSource
-            .registerMember(RegisterMemberRequest(getMemberIdentifier()))
+            .registerMember(RegisterMemberRequest(getMemberIdentifier(), fcmToken))
 
     override suspend fun saveMemberNickname(nickname: Nickname): Result<Unit> =
         memberRemoteDataSource.saveMemberNickname(nickname.toRequest())
