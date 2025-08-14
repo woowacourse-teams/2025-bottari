@@ -30,9 +30,9 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
         TabLayoutMediator(binding.tlTeamBottari, binding.vpTeamBottari) { tab, position ->
             tab.text =
                 when (position) {
-                    0 -> getString(R.string.tap_checklist)
-                    1 -> getString(R.string.tap_team_current)
-                    else -> getString(R.string.tap_member_checklist)
+                    0 -> getString(R.string.team_checklist_tap_checklist_text)
+                    1 -> getString(R.string.team_checklist_tap_team_current_text)
+                    else -> getString(R.string.team_checklist_tap_member_checklist_text)
                 }
         }.attach()
     }
