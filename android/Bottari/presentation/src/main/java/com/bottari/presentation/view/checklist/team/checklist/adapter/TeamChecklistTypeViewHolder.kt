@@ -2,20 +2,17 @@ package com.bottari.presentation.view.checklist.team.checklist.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
+import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamChecklistOptionBinding
+import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
-import com.bottari.presentation.view.checklist.team.checklist.ChecklistType
-import com.bottari.presentation.view.checklist.team.checklist.getStringResId
 
 class TeamChecklistTypeViewHolder(
     private val binding: ItemTeamChecklistOptionBinding,
     private val onTeamChecklistTypeClickListener: OnTeamChecklistTypeClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
-    interface OnTeamChecklistTypeClickListener {
-        fun onClick(type: ChecklistType)
-    }
-
     private var currentType: TeamChecklistTypeUiModel? = null
 
     init {
@@ -31,6 +28,18 @@ class TeamChecklistTypeViewHolder(
         binding.tvTeamChecklistItemTitle.setText(type.type.getStringResId())
         binding.ivTeamChecklistOption.rotation =
             if (type.isExpanded) TOGGLE_SHAPE_OPENED else TOGGLE_SHAPE_UNOPENED
+    }
+
+    @StringRes
+    private fun BottariItemTypeUiModel.getStringResId(): Int =
+        when (this) {
+            BottariItemTypeUiModel.SHARED -> R.string.team_checklist_type_shared_text
+            is BottariItemTypeUiModel.ASSIGNED -> R.string.team_checklist_type_assigned_text
+            BottariItemTypeUiModel.PERSONAL -> R.string.team_checklist_type_personal_text
+        }
+
+    interface OnTeamChecklistTypeClickListener {
+        fun onClick(type: BottariItemTypeUiModel)
     }
 
     companion object {

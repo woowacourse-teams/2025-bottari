@@ -2,6 +2,7 @@ package com.bottari.domain.repository
 
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.TeamBottariCheckList
+import com.bottari.domain.model.team.TeamBottariDetail
 import com.bottari.domain.model.team.TeamMembers
 
 interface TeamBottariRepository {

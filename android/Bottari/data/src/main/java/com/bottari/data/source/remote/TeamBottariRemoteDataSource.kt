@@ -2,6 +2,7 @@ package com.bottari.data.source.remote
 
 import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
+import com.bottari.data.model.team.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.TeamMembersResponse

@@ -4,6 +4,10 @@ import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.TeamMembersResponse
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
+import com.bottari.data.testFixture.TEAM_BOTTARI
+import com.bottari.data.testFixture.TEAM_BOTTARI_DETAIL
+import com.bottari.data.testFixture.TEAM_BOTTARI_DETAIL_RESPONSE
+import com.bottari.data.testFixture.TEAM_BOTTARI_RESPONSE
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.HeadCount
 import com.bottari.domain.model.team.TeamBottariCheckList
@@ -211,7 +215,7 @@ class TeamBottariRepositoryImplTest {
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamBottariDetail(teamBottariId) }
         }
-¬
+
     @DisplayName("팀 체크리스트 조회에 성공하면 Success를 반환한다")
     @Test
     fun fetchTeamChecklistReturnsSuccessTest() =

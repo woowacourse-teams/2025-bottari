@@ -8,6 +8,7 @@ import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.TeamBottariCheckList
+import com.bottari.domain.model.team.TeamBottariDetail
 import com.bottari.domain.model.team.TeamMembers
 import com.bottari.domain.repository.TeamBottariRepository
 

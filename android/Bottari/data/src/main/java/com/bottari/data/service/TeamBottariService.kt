@@ -2,6 +2,7 @@ package com.bottari.data.service
 
 import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
+import com.bottari.data.model.team.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.TeamMembersResponse
@@ -44,7 +45,7 @@ interface TeamBottariService {
     ): Response<TeamMembersResponse>
 
     @GET("/team-bottaries/{id}")
-    suspend fun fetchTeamBottari(
+    suspend fun fetchTeamBottariDetail(
         @Path("id") teamBottariId: Long,
     ): Response<FetchTeamBottariDetailResponse>
 }

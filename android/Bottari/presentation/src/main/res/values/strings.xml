@@ -250,6 +250,23 @@
     <string name="profile_nickname_save_failure_text">닉네임을 저장하지 못했어요</string>
     <string name="profile_invalid_nickname_rule_text">닉네임은 3~10자로 입력해 주세요</string>
 
+    <!-- Menu -->
+    <string name="menu_create_template_title_text">모두의 보따리에 등록하기</string>
+    <string name="menu_bottari_rename_title_text">보따리 이름 바꾸기</string>
+    <string name="menu_edit_title_text">내용 편집하기</string>
+    <string name="menu_delete_title_text">삭제하기</string>
+    <string name="menu_template_report_title_text">신고하기</string>
+
+    <!-- Team Bottari -->
+    <string name="team_checklist_tap_checklist_text">체크리스트</string>
+    <string name="team_checklist_tap_team_current_text">팀 보따리 현황</string>
+    <string name="team_checklist_tap_member_checklist_text">멤버 현황</string>
+
+    <!-- Team Checklist -->
+    <string name="team_checklist_type_shared_text">공통</string>
+    <string name="team_checklist_type_assigned_text">담당</string>
+    <string name="team_checklist_type_personal_text">개인</string>
+
     <!-- Description 접근성 -->
     <string name="bottari_create_btn_description">보따리 만들기 버튼</string>
     <string name="checklist_swipe_btn_description">스와이프 전환 버튼</string>
@@ -273,22 +290,5 @@
     <string name="team_management_clipboard_btn_description">링크 복사 버튼</string>
     <string name="team_management_host_iv_description">방장 이미지</string>
     <string name="team_bottari_edit_member_edit_btn_description">멤버 편집 버튼</string>
-
-    <!-- Menu -->
-    <string name="menu_create_template_title_text">모두의 보따리에 등록하기</string>
-    <string name="menu_bottari_rename_title_text">보따리 이름 바꾸기</string>
-    <string name="menu_edit_title_text">내용 편집하기</string>
-    <string name="menu_delete_title_text">삭제하기</string>
-    <string name="menu_template_report_title_text">신고하기</string>
-
-    <!-- Team Bottari -->
-    <string name="team_checklist_tap_checklist_text">체크리스트</string>
-    <string name="team_checklist_tap_team_current_text">팀 보따리 현황</string>
-    <string name="team_checklist_tap_member_checklist_text">멤버 현황</string>
-
-    <!-- Team Checklist -->
-    <string name="team_checklist_type_shared_text">공통</string>
-    <string name="team_checklist_type_assigned_text">담당</string>
-    <string name="team_checklist_type_personal_text">개인</string>
 
 </resources>

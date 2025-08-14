@@ -7,20 +7,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamChecklistBinding
+import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.TeamChecklistProductUiModel
-import com.bottari.presentation.view.checklist.team.checklist.ChecklistType
 
 class TeamChecklistViewHolder private constructor(
     private val binding: ItemTeamChecklistBinding,
-    private val clickListener: OnTeamChecklistItemClickListener,
+    clickListener: OnTeamChecklistItemClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
-    interface OnTeamChecklistItemClickListener {
-        fun onClick(
-            id: Long,
-            type: ChecklistType,
-        )
-    }
-
     private var currentItem: TeamChecklistProductUiModel? = null
 
     init {
@@ -47,6 +40,13 @@ class TeamChecklistViewHolder private constructor(
         binding.clTeamChecklistItem.backgroundTintList = ColorStateList.valueOf(bgColor)
         binding.ctvChecklistItemTitle.setTextColor(textColor)
         binding.ctvChecklistItemTitle.isChecked = isChecked
+    }
+
+    interface OnTeamChecklistItemClickListener {
+        fun onClick(
+            id: Long,
+            type: BottariItemTypeUiModel,
+        )
     }
 
     companion object {
