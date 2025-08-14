@@ -19,7 +19,7 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     }
 
     private fun setupUI() {
-        val bottariId = intent.getLongExtra(EXTRA_BOTTARI_ID, -1)
+        val bottariId = intent.getLongExtra(EXTRA_BOTTARI_ID, INVALID_BOTTARI_ID)
         val bottariTitle = intent.getStringExtra(EXTRA_BOTTARI_TITLE)
         val adapter = TeamChecklistFragmentAdapter(this, bottariId)
         binding.tvBottariTitle.text = bottariTitle
@@ -50,6 +50,8 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     }
 
     companion object {
+        private const val INVALID_BOTTARI_ID = -1L
+
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
         private const val EXTRA_BOTTARI_TITLE = "EXTRA_BOTTARI_TITLE"
 
