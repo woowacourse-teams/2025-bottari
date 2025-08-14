@@ -1,6 +1,7 @@
 package com.bottari.domain.model.team
 
 import com.bottari.domain.model.bottari.BottariItem
+import com.bottari.domain.model.bottari.ChecklistItem
 import com.bottari.domain.model.member.Nickname
 
 data class TeamMemberStatus(
@@ -8,6 +9,6 @@ data class TeamMemberStatus(
     val isHost: Boolean,
     val totalItemsCount: Int,
     val checkedItemsCount: Int,
-    val sharedItems: List<BottariItem>,
-    val assignedItems: List<BottariItem>,
+    val sharedItems: List<ChecklistItem>,
+    val assignedItems: List<ChecklistItem>,
 )

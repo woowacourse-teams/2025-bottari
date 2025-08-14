@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamMemberStatusBinding
 import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.ChecklistItemUiModel
 import com.bottari.presentation.model.TeamMemberStatusUiModel
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -38,13 +39,13 @@ class TeamMemberStatusViewHolder(
         setupAssignedItems(status.assignedItems)
     }
 
-    private fun setupSharedItems(sharedItems: List<BottariItemUiModel>) {
+    private fun setupSharedItems(sharedItems: List<ChecklistItemUiModel>) {
         binding.rvSharedItems.adapter = sharedItemAdapter
         binding.rvSharedItems.layoutManager = createFlexboxLayoutManager()
         sharedItemAdapter.submitList(sharedItems)
     }
 
-    private fun setupAssignedItems(assignedItems: List<BottariItemUiModel>) {
+    private fun setupAssignedItems(assignedItems: List<ChecklistItemUiModel>) {
         binding.rvAssignedItems.adapter = assignedItemAdapter
         binding.rvAssignedItems.layoutManager = createFlexboxLayoutManager()
         assignedItemAdapter.submitList(assignedItems)

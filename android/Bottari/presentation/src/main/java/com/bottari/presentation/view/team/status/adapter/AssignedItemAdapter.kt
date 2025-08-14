@@ -4,8 +4,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.ChecklistItemUiModel
 
-class AssignedItemAdapter : ListAdapter<BottariItemUiModel, AssignedItemViewHolder>(DiffUtil) {
+class AssignedItemAdapter : ListAdapter<ChecklistItemUiModel, AssignedItemViewHolder>(DiffUtil) {
     override fun onBindViewHolder(
         holder: AssignedItemViewHolder,
         position: Int,
@@ -20,15 +21,15 @@ class AssignedItemAdapter : ListAdapter<BottariItemUiModel, AssignedItemViewHold
 
     companion object {
         private val DiffUtil =
-            object : DiffUtil.ItemCallback<BottariItemUiModel>() {
+            object : DiffUtil.ItemCallback<ChecklistItemUiModel>() {
                 override fun areContentsTheSame(
-                    oldItem: BottariItemUiModel,
-                    newItem: BottariItemUiModel,
+                    oldItem: ChecklistItemUiModel,
+                    newItem: ChecklistItemUiModel,
                 ): Boolean = oldItem == newItem
 
                 override fun areItemsTheSame(
-                    oldItem: BottariItemUiModel,
-                    newItem: BottariItemUiModel,
+                    oldItem: ChecklistItemUiModel,
+                    newItem: ChecklistItemUiModel,
                 ): Boolean = oldItem.id == newItem.id
             }
     }

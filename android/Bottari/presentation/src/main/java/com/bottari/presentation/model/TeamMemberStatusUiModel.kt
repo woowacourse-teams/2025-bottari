@@ -4,6 +4,6 @@ data class TeamMemberStatusUiModel(
     val member: TeamMemberUiModel,
     val totalItemsCount: Int,
     val checkedItemsCount: Int,
-    val sharedItems: List<BottariItemUiModel>,
-    val assignedItems: List<BottariItemUiModel>,
+    val sharedItems: List<ChecklistItemUiModel>,
+    val assignedItems: List<ChecklistItemUiModel>,
 )
