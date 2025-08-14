@@ -36,7 +36,7 @@ public interface TeamBottariItemApiDocs {
             ErrorCode.TEAM_BOTTARI_ITEM_INFO_NOT_FOUND,
             ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI
     })
-    ResponseEntity<Void> sendRemindAlarmByInfo(
+    ResponseEntity<Void> sendRemindAlarmByItemInfo(
             final Long id,
             final TeamItemTypeRequest request,
             @Parameter(hidden = true) final String ssaid

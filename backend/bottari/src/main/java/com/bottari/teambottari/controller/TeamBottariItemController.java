@@ -33,7 +33,7 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
 
     @PostMapping("/team-items/{infoId}/remind")
     @Override
-    public ResponseEntity<Void> sendRemindAlarmByInfo(
+    public ResponseEntity<Void> sendRemindAlarmByItemInfo(
             @PathVariable final Long infoId,
             @RequestBody final TeamItemTypeRequest request,
             @MemberIdentifier final String ssaid

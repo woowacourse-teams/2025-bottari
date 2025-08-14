@@ -169,7 +169,7 @@ class TeamBottariItemControllerTest {
             "SHARED",
             "ASSIGNED"
     })
-    void sendRemindAlarmByInfo(final TeamItemType type) throws Exception {
+    void sendRemindAlarmByItemInfo(final TeamItemType type) throws Exception {
         // given
         final Long infoId = 1L;
         final String ssaid = "test-ssaid";

@@ -35,5 +35,5 @@ public interface TeamSharedItemRepository extends JpaRepository<TeamSharedItem, 
             JOIN FETCH tm.member
             WHERE tsi.info.id = :infoId
             """)
-    List<TeamSharedItem> findAllByInfoIdWithMember(Long infoId);
+    List<TeamSharedItem> findAllByInfoIdWithMember(final Long infoId);
 }
