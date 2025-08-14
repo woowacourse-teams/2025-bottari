@@ -2,11 +2,15 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.fcm.FcmMessageSender;
+import com.bottari.fcm.dto.MessageType;
+import com.bottari.fcm.dto.SendMessageRequest;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
+import com.bottari.teambottari.repository.TeamSharedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamSharedItemRepository;
 import java.util.Comparator;
 import java.util.List;
@@ -20,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TeamSharedItemService {
 
+    private final FcmMessageSender fcmMessageSender;
     private final TeamSharedItemRepository teamSharedItemRepository;
+    private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
 
     public List<TeamItemStatusResponse> getAllWithMemberStatusByTeamBottariId(final Long teamBottariId) {
         final List<TeamSharedItem> items = teamSharedItemRepository.findAllByTeamBottariId(teamBottariId);
@@ -63,6 +69,15 @@ public class TeamSharedItemService {
         item.uncheck();
     }
 
+    public void sendRemindAlarm(final Long infoId) {
+        final TeamSharedItemInfo info = teamSharedItemInfoRepository.findById(infoId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_INFO_NOT_FOUND, "공통"));
+        final List<TeamSharedItem> items = teamSharedItemRepository.findAllByInfoIdWithMember(infoId);
+        final List<Long> uncheckedMemberIds = collectUncheckedMemberIds(items);
+        final SendMessageRequest sendMessageRequest = SendMessageRequest.of(info.getTeamBottari(), MessageType.REMIND);
+        fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
+    }
+
     private Map<TeamSharedItemInfo, List<TeamSharedItem>> groupByInfo(final List<TeamSharedItem> items) {
         return items.stream()
                 .collect(Collectors.groupingBy(TeamSharedItem::getInfo));
@@ -88,6 +103,13 @@ public class TeamSharedItemService {
                 .count();
 
         return Math.toIntExact(count);
+    }
+
+    private List<Long> collectUncheckedMemberIds(final List<TeamSharedItem> items) {
+        return items.stream()
+                .filter(item -> !item.isChecked())
+                .map(item -> item.getTeamMember().getMember().getId())
+                .toList();
     }
 
     private void validateOwner(

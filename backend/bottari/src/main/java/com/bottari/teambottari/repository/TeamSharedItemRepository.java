@@ -27,4 +27,14 @@ public interface TeamSharedItemRepository extends JpaRepository<TeamSharedItem, 
             WHERE tsi.teamMember.id = :teamMemberId
             """)
     List<TeamSharedItem> findAllByTeamMemberId(final Long teamMemberId);
+
+    @Query("""
+            SELECT tsi
+            FROM TeamSharedItem tsi
+            JOIN FETCH TeamBottari tb ON  tsi.info.teamBottari.id = :infoId
+            JOIN FETCH tsi.teamMember tm
+            JOIN FETCH tm.member
+            WHERE tsi.info.id = :infoId
+            """)
+    List<TeamSharedItem> findAllByInfoIdWithMember(Long infoId);
 }
