@@ -19,10 +19,9 @@ import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
-import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
-import com.bottari.teambottari.dto.RemindTeamItemRequest;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
+import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
@@ -270,7 +269,7 @@ public class TeamItemFacadeTest {
             entityManager.persist(teamMember);
 
             final Long itemId = createItemByType(type, teamBottari, teamMember);
-            final CheckTeamItemRequest request = new CheckTeamItemRequest(type);
+            final TeamItemTypeRequest request = new TeamItemTypeRequest(type);
 
             // when
             teamItemFacade.check(itemId, member.getSsaid(), request);
@@ -332,7 +331,7 @@ public class TeamItemFacadeTest {
 
             final Long itemId = createCheckedItemByType(type, teamBottari, teamMember);
 
-            final CheckTeamItemRequest request = new CheckTeamItemRequest(type);
+            final TeamItemTypeRequest request = new TeamItemTypeRequest(type);
 
             // when
             teamItemFacade.uncheck(itemId, member.getSsaid(), request);
@@ -396,7 +395,7 @@ public class TeamItemFacadeTest {
             final TeamSharedItem item = new TeamSharedItem(info, teamMember);
             entityManager.persist(item);
 
-            final RemindTeamItemRequest request = new RemindTeamItemRequest(TeamItemType.SHARED);
+            final TeamItemTypeRequest request = new TeamItemTypeRequest(TeamItemType.SHARED);
 
             // when & then
             assertThatCode(() -> teamItemFacade.sendRemindAlarmByInfo(info.getId(), request, member.getSsaid()))
@@ -422,7 +421,7 @@ public class TeamItemFacadeTest {
             final TeamAssignedItem item = new TeamAssignedItem(info, teamMember);
             entityManager.persist(item);
 
-            final RemindTeamItemRequest request = new RemindTeamItemRequest(TeamItemType.ASSIGNED);
+            final TeamItemTypeRequest request = new TeamItemTypeRequest(TeamItemType.ASSIGNED);
 
             // when & then
             assertThatCode(() -> teamItemFacade.sendRemindAlarmByInfo(info.getId(), request, member.getSsaid()))
@@ -445,7 +444,7 @@ public class TeamItemFacadeTest {
             final TeamPersonalItem item = new TeamPersonalItem("개인 물품", teamMember);
             entityManager.persist(item);
 
-            final RemindTeamItemRequest request = new RemindTeamItemRequest(TeamItemType.PERSONAL);
+            final TeamItemTypeRequest request = new TeamItemTypeRequest(TeamItemType.PERSONAL);
 
             // when & then
             assertThatThrownBy(() -> teamItemFacade.sendRemindAlarmByInfo(item.getId(), request, member.getSsaid()))

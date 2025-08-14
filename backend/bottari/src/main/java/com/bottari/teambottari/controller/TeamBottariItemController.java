@@ -1,9 +1,8 @@
 package com.bottari.teambottari.controller;
 
 import com.bottari.config.MemberIdentifier;
-import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
-import com.bottari.teambottari.dto.RemindTeamItemRequest;
+import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.service.TeamItemFacade;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,7 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
     @Override
     public ResponseEntity<Void> sendRemindAlarmByInfo(
             @PathVariable final Long infoId,
-            @RequestBody final RemindTeamItemRequest request,
+            @RequestBody final TeamItemTypeRequest request,
             @MemberIdentifier final String ssaid
     ) {
         teamItemFacade.sendRemindAlarmByInfo(infoId, request, ssaid);
@@ -59,7 +58,7 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
     @Override
     public ResponseEntity<Void> check(
             @PathVariable final Long id,
-            @RequestBody final CheckTeamItemRequest request,
+            @RequestBody final TeamItemTypeRequest request,
             @MemberIdentifier final String ssaid
     ) {
         teamItemFacade.check(id, ssaid, request);
@@ -71,7 +70,7 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
     @Override
     public ResponseEntity<Void> uncheck(
             @PathVariable final Long id,
-            @RequestBody final CheckTeamItemRequest request,
+            @RequestBody final TeamItemTypeRequest request,
             @MemberIdentifier final String ssaid
     ) {
         teamItemFacade.uncheck(id, ssaid, request);

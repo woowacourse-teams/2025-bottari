@@ -10,11 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.bottari.config.WebConfig;
 import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.domain.TeamItemType;
-import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
-import com.bottari.teambottari.dto.RemindTeamItemRequest;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse.MemberCheckStatusResponse;
+import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.service.TeamItemFacade;
@@ -127,7 +126,7 @@ class TeamBottariItemControllerTest {
         // given
         final Long itemId = 1L;
         final String ssaid = "test-ssaid";
-        final CheckTeamItemRequest request = new CheckTeamItemRequest(type);
+        final TeamItemTypeRequest request = new TeamItemTypeRequest(type);
 
         willDoNothing().given(teamItemFacade)
                 .check(itemId, ssaid, request);
@@ -151,7 +150,7 @@ class TeamBottariItemControllerTest {
         // given
         final Long itemId = 1L;
         final String ssaid = "test-ssaid";
-        final CheckTeamItemRequest request = new CheckTeamItemRequest(type);
+        final TeamItemTypeRequest request = new TeamItemTypeRequest(type);
 
         willDoNothing().given(teamItemFacade)
                 .uncheck(itemId, ssaid, request);
@@ -174,7 +173,7 @@ class TeamBottariItemControllerTest {
         // given
         final Long infoId = 1L;
         final String ssaid = "test-ssaid";
-        final RemindTeamItemRequest request = new RemindTeamItemRequest(type);
+        final TeamItemTypeRequest request = new TeamItemTypeRequest(type);
 
         willDoNothing().given(teamItemFacade)
                 .sendRemindAlarmByInfo(infoId, request, ssaid);

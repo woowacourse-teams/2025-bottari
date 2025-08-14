@@ -5,10 +5,9 @@ import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.TeamMember;
-import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
-import com.bottari.teambottari.dto.RemindTeamItemRequest;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
+import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamBottariRepository;
@@ -57,7 +56,7 @@ public class TeamItemFacade {
     public void check(
             final Long id,
             final String ssaid,
-            final CheckTeamItemRequest request
+            final TeamItemTypeRequest request
     ) {
         switch (request.type()) {
             case SHARED -> teamSharedItemService.check(id, ssaid);
@@ -69,7 +68,7 @@ public class TeamItemFacade {
     public void uncheck(
             final Long id,
             final String ssaid,
-            final CheckTeamItemRequest request
+            final TeamItemTypeRequest request
     ) {
         switch (request.type()) {
             case SHARED -> teamSharedItemService.uncheck(id, ssaid);
@@ -80,7 +79,7 @@ public class TeamItemFacade {
 
     public void sendRemindAlarmByInfo(
             final Long infoId,
-            final RemindTeamItemRequest request,
+            final TeamItemTypeRequest request,
             final String ssaid
     ) {
         switch (request.type()) {

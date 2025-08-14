@@ -2,9 +2,8 @@ package com.bottari.teambottari.controller;
 
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
-import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
-import com.bottari.teambottari.dto.RemindTeamItemRequest;
+import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,7 +38,7 @@ public interface TeamBottariItemApiDocs {
     })
     ResponseEntity<Void> sendRemindAlarmByInfo(
             final Long id,
-            final RemindTeamItemRequest request,
+            final TeamItemTypeRequest request,
             @Parameter(hidden = true) final String ssaid
     );
 
@@ -66,7 +65,7 @@ public interface TeamBottariItemApiDocs {
     })
     ResponseEntity<Void> check(
             final Long id,
-            final CheckTeamItemRequest request,
+            final TeamItemTypeRequest request,
             @Parameter(hidden = true) final String ssaid
     );
 
@@ -80,7 +79,7 @@ public interface TeamBottariItemApiDocs {
     })
     ResponseEntity<Void> uncheck(
             final Long id,
-            final CheckTeamItemRequest request,
+            final TeamItemTypeRequest request,
             @Parameter(hidden = true) final String ssaid
     );
 }
