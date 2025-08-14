@@ -147,12 +147,14 @@ class TeamSharedItemServiceTest {
             );
         }
 
-        @DisplayName("팀 보따리 공통 물품 삭제 시, 물품 주인이 아니라면, 예외를 던진다.")
+        @DisplayName("팀 보따리 공통 물품 삭제 시, 해당 팀 보따리의 팀 멤버가 아니라면, 예외를 던진다.")
         @Test
-        void delete_Exception_NotOwned() {
+        void delete_Exception_NotTeamMember() {
             // given
             final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(anotherMember);
 
             final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
             entityManager.persist(teamBottari);
@@ -166,12 +168,10 @@ class TeamSharedItemServiceTest {
             final TeamSharedItem teamSharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember);
             entityManager.persist(teamSharedItem);
 
-            final String invalidSsaid = "invalid_ssaid";
-
             // when & then
-            assertThatThrownBy(() -> teamSharedItemService.delete(teamSharedItem.getId(), invalidSsaid))
+            assertThatThrownBy(() -> teamSharedItemService.delete(teamSharedItem.getId(), anotherMember.getSsaid()))
                     .isInstanceOf(BusinessException.class)
-                    .hasMessage("팀 보따리 물품을 찾을 수 없습니다. - 공통");
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }
 
         @DisplayName("팀 보따리 공통 물품 삭제 시, 물품을 찾을 수 없다면, 예외를 던진다.")

@@ -5,6 +5,7 @@ import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.TeamMember;
+import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
@@ -21,8 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class TeamItemFacade {
-
     private final TeamSharedItemService teamSharedItemService;
+
     private final TeamAssignedItemService teamAssignedItemService;
     private final TeamPersonalItemService teamPersonalItemService;
     private final TeamMemberRepository teamMemberRepository;
@@ -40,6 +41,19 @@ public class TeamItemFacade {
         final TeamMember teamMember = getTeamMemberByTeamBottariIdAndSsaid(teamBottariId, ssaid);
 
         return teamSharedItemService.create(teamMember, request);
+    }
+
+    @Transactional
+    public Long createAssignedItem(
+            final Long teamBottariId,
+            final CreateTeamAssignedItemRequest request,
+            final String ssaid
+    ) {
+        validateTeamBottari(teamBottariId);
+        validateMemberInTeam(teamBottariId, ssaid);
+        final TeamMember teamMember = getTeamMemberByTeamBottariIdAndSsaid(teamBottariId, ssaid);
+
+        return teamAssignedItemService.create(teamMember, request);
     }
 
     @Transactional
@@ -62,9 +76,8 @@ public class TeamItemFacade {
     ) {
         switch (request.type()) {
             case SHARED -> teamSharedItemService.delete(id, ssaid);
-//            case ASSIGNED -> teamAssignedItemService.delete(id, ssaid);
+            case ASSIGNED -> teamAssignedItemService.delete(id, ssaid);
             case PERSONAL -> teamPersonalItemService.delete(id, ssaid);
-            default -> throw new IllegalArgumentException();
         }
     }
 
