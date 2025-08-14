@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cl_team_bottari_item_status"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/space_large"
+    android:layout_marginTop="@dimen/space_2x_small"
+    android:layout_marginBottom="@dimen/space_x_small"
+    android:background="@drawable/bg_white_radius_12dp"
+    android:elevation="2dp">
+
+    <TextView
+        android:id="@+id/tv_team_item_name"
+        style="@style/Pretendard_Medium_16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_small"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_team_item_status"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="•  시계" />
+
+    <TextView
+        android:id="@+id/tv_team_item_status"
+        style="@style/Pretendard_Medium_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_x_large"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="10/20" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
