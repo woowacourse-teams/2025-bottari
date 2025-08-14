@@ -32,6 +32,11 @@ public interface TeamBottariItemApiDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "보채기 알람 전송 성공")
     })
+    @ApiErrorCodes({
+            ErrorCode.TEAM_BOTTARI_ITEM_INAPPROPRIATE_TYPE,
+            ErrorCode.TEAM_BOTTARI_ITEM_INFO_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI
+    })
     ResponseEntity<Void> sendRemindAlarmByInfo(
             final Long id,
             final RemindTeamItemRequest request,
