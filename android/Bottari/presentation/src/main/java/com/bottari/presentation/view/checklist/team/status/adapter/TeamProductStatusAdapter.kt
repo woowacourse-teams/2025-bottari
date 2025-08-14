@@ -15,6 +15,13 @@ class TeamProductStatusAdapter(
     ) {
     private var selectedPosition = 1
 
+    fun updateSelectedPosition(position: Int) {
+        val previousPosition = selectedPosition
+        selectedPosition = position
+        notifyItemChanged(previousPosition)
+        notifyItemChanged(selectedPosition)
+    }
+
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
             is TeamProductStatusUiModel -> ITEM_VIEW_TYPE_TYPE
@@ -51,13 +58,6 @@ class TeamProductStatusAdapter(
                 holder.bind(item)
             }
         }
-    }
-
-    fun updateSelectedPosition(position: Int) {
-        val previousPosition = selectedPosition
-        selectedPosition = position
-        notifyItemChanged(previousPosition)
-        notifyItemChanged(selectedPosition)
     }
 
     companion object {

@@ -20,7 +20,11 @@ class TeamProductStatusViewHolder private constructor(
         }
         binding.tvTeamItemName.text = item.name
         binding.tvTeamItemStatus.text =
-            item.checkItemsCount.toString() + " / " + item.totalItemsCount.toString()
+            binding.root.context.getString(
+                R.string.team_product_status_format,
+                item.checkItemsCount,
+                item.totalItemsCount,
+            )
         updateSelectedState(isSelected)
     }
 

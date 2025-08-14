@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.databinding.FragmentTeamStatusBinding
 import com.bottari.presentation.model.TeamProductStatusUiModel
@@ -56,9 +57,8 @@ class TeamStatusFragment :
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
             teamProductStatusDetailAdapter.submitList(state.item?.memberCheckStatus)
-            binding.tvTeamBottariItemStatusTitle.text = state.item?.name + " 챙김 현황"
+            binding.tvTeamBottariItemStatusTitle.text = getString(R.string.team_product_status_title_format, state.item?.name)
             teamProductStatusAdapter.submitList(state.teamChecklistItems)
-            teamProductStatusDetailAdapter.submitList(state.item?.memberCheckStatus)
         }
     }
 
