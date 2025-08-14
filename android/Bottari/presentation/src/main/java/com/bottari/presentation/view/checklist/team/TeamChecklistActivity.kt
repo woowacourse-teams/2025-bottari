@@ -22,8 +22,7 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     }
 
     private fun setupUI() {
-        val bottariTitle = intent.getStringExtra(EXTRA_BOTTARI_TITLE)
-        binding.tvBottariTitle.text = bottariTitle
+        binding.tvBottariTitle.text = intent.getStringExtra(EXTRA_BOTTARI_TITLE)
         binding.vpTeamBottari.adapter = adapter
 
         TabLayoutMediator(binding.tlTeamBottari, binding.vpTeamBottari) { tab, position ->

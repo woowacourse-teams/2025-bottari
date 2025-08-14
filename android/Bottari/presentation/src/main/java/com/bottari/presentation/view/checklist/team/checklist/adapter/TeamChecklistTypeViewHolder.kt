@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.databinding.ItemTeamChecklistOptionBinding
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
+import com.bottari.presentation.view.checklist.team.checklist.getStringResId
 
 class TeamChecklistTypeViewHolder(
     private val binding: ItemTeamChecklistOptionBinding,
@@ -22,7 +23,7 @@ class TeamChecklistTypeViewHolder(
 
     fun bind(type: TeamChecklistTypeUiModel) {
         this.currentType = type
-        binding.tvChecklistItemTitle.setText(type.type.title)
+        binding.tvChecklistItemTitle.setText(type.type.getStringResId())
         binding.ivChecklistOption.rotation =
             if (type.isExpanded) TOGGLE_SHAPE_OPENED else TOGGLE_SHAPE_UNOPENED
     }
