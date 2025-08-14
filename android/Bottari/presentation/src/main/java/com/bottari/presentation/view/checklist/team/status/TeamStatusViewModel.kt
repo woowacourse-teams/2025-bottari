@@ -26,9 +26,11 @@ data class TeamStatusUiState(
 )
 
 sealed interface TeamStatusUiEvent {
-    data object FetchChecklistFailure : TeamStatusUiEvent
+    data object FetchTeamStatusFailure : TeamStatusUiEvent
 
-    data object CheckItemFailure : TeamStatusUiEvent
+    data object SendRemindSuccess : TeamStatusUiEvent
+
+    data object SendRemindFailure : TeamStatusUiEvent
 }
 
 class TeamStatusViewModel(
@@ -53,7 +55,9 @@ class TeamStatusViewModel(
                     currentState.item?.id ?: throw IllegalArgumentException(),
                     currentState.item?.type.toString(),
                 ).onSuccess {
+                    emitEvent(TeamStatusUiEvent.SendRemindSuccess)
                 }.onFailure {
+                    emitEvent(TeamStatusUiEvent.SendRemindFailure)
                 }
         }
     }
@@ -79,7 +83,7 @@ class TeamStatusViewModel(
                         )
                     }
                 }.onFailure {
-                    emitEvent(TeamStatusUiEvent.FetchChecklistFailure)
+                    emitEvent(TeamStatusUiEvent.FetchTeamStatusFailure)
                 }
         }
     }

@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamStatusBinding
 import com.bottari.presentation.model.TeamProductStatusUiModel
 import com.bottari.presentation.view.checklist.team.status.adapter.TeamProductStatusAdapter
@@ -37,9 +38,25 @@ class TeamStatusFragment :
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setupUI()
         setupObserver()
+        setupUI()
         setupListener()
+    }
+
+    private fun setupObserver() {
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            teamProductStatusDetailAdapter.submitList(state.item?.memberCheckStatus)
+            binding.tvTeamBottariItemStatusTitle.text =
+                getString(R.string.team_product_status_title_format, state.item?.name)
+            teamProductStatusAdapter.submitList(state.teamChecklistItems)
+        }
+        viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
+            when (event) {
+                TeamStatusUiEvent.FetchTeamStatusFailure -> requireView().showSnackbar(R.string.team_status_fetch_failure_text)
+                TeamStatusUiEvent.SendRemindSuccess -> requireView().showSnackbar(R.string.team_status_remind_success_text)
+                TeamStatusUiEvent.SendRemindFailure -> requireView().showSnackbar(R.string.team_status_remind_failure_text)
+            }
+        }
     }
 
     private fun setupUI() {
@@ -52,14 +69,6 @@ class TeamStatusFragment :
             }
         binding.rvTeamBottariItems.adapter = teamProductStatusAdapter
         binding.rvTeamBottariItems.layoutManager = LinearLayoutManager(requireContext())
-    }
-
-    private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            teamProductStatusDetailAdapter.submitList(state.item?.memberCheckStatus)
-            binding.tvTeamBottariItemStatusTitle.text = getString(R.string.team_product_status_title_format, state.item?.name)
-            teamProductStatusAdapter.submitList(state.teamChecklistItems)
-        }
     }
 
     private fun setupListener() {
@@ -79,6 +88,10 @@ class TeamStatusFragment :
 
     override fun onItemClick(item: TeamProductStatusUiModel) {
         viewModel.selectItem(item)
-        teamProductStatusAdapter.updateSelectedPosition(teamProductStatusAdapter.currentList.indexOf(item))
+        teamProductStatusAdapter.updateSelectedPosition(
+            teamProductStatusAdapter.currentList.indexOf(
+                item,
+            ),
+        )
     }
 }
