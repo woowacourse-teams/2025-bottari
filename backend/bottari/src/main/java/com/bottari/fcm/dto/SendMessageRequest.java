@@ -10,8 +10,8 @@ public record SendMessageRequest(
 
     public Notification createNotification() {
         return Notification.builder()
-                .setTitle(title())
-                .setBody(message())
+                .setTitle(title)
+                .setBody(message)
                 .build();
     }
 }

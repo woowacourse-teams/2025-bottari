@@ -16,6 +16,10 @@ public interface FcmTokenRepository extends JpaRepository<FcmToken, Long> {
     List<FcmToken> findByMemberIdIn(final List<Long> memberIds);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
-    @Query("UPDATE FcmToken f SET f.deletedAt = CURRENT_TIMESTAMP WHERE f.id IN :ids")
+    @Query("""
+            UPDATE FcmToken f
+            SET f.deletedAt = CURRENT_TIMESTAMP
+            WHERE f.id IN :ids
+            """)
     void deleteByIds(final List<Long> ids);
 }

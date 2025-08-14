@@ -68,6 +68,7 @@ public class FcmMessageSender {
 
     private boolean isInvalidFcmToken(final FirebaseMessagingException exception) {
         final MessagingErrorCode messagingErrorCode = exception.getMessagingErrorCode();
+
         return messagingErrorCode == MessagingErrorCode.UNREGISTERED
                 || messagingErrorCode == MessagingErrorCode.INVALID_ARGUMENT;
     }
