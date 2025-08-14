@@ -34,7 +34,7 @@ class TeamChecklistViewModel(
         debounce(
             timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
-        ) { items -> performServerCheck(items) }
+        ) { items -> performItemCheck(items) }
 
     init {
         fetchTeamCheckList()
@@ -191,7 +191,7 @@ class TeamChecklistViewModel(
             it.type == type
     }
 
-    private fun performServerCheck(items: List<TeamChecklistItemUiModel>) {
+    private fun performItemCheck(items: List<TeamChecklistItemUiModel>) {
         launch {
             val jobs =
                 items.map { item ->
