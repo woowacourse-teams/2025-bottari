@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
@@ -38,6 +39,7 @@ import org.springframework.context.annotation.Import;
         TeamSharedItemService.class,
         TeamAssignedItemService.class,
         TeamPersonalItemService.class,
+        JpaAuditingConfig.class
 })
 public class TeamItemFacadeTest {
 
