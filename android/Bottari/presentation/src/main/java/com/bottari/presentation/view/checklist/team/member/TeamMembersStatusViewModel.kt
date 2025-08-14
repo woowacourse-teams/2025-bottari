@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.team.status
+package com.bottari.presentation.view.checklist.team.member
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider

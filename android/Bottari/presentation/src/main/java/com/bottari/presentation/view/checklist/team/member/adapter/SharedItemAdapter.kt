@@ -1,9 +1,8 @@
-package com.bottari.presentation.view.team.status.adapter
+package com.bottari.presentation.view.checklist.team.member.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.ChecklistItemUiModel
 
 class SharedItemAdapter : ListAdapter<ChecklistItemUiModel, SharedItemViewHolder>(DiffUtil) {

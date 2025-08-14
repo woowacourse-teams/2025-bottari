@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.team.status.adapter
+package com.bottari.presentation.view.checklist.team.member.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.team.status
+package com.bottari.presentation.view.checklist.team.member
 
 import android.os.Bundle
 import android.view.View
@@ -9,7 +9,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamMembersStatusBinding
-import com.bottari.presentation.view.team.status.adapter.TeamMemberStatusAdapter
+import com.bottari.presentation.view.checklist.team.member.adapter.TeamMemberStatusAdapter
 
 class TeamMembersStatusFragment :
     BaseFragment<FragmentTeamMembersStatusBinding>(

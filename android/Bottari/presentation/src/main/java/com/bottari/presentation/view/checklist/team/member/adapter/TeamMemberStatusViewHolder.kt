@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.team.status.adapter
+package com.bottari.presentation.view.checklist.team.member.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamMemberStatusBinding
-import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.ChecklistItemUiModel
 import com.bottari.presentation.model.TeamMemberStatusUiModel
 import com.google.android.flexbox.FlexDirection
