@@ -26,13 +26,7 @@ class TeamBottariRemoteDataSourceImpl(
 
     override suspend fun fetchTeamBottari(teamBottariId: Long): Result<FetchTeamBottariChecklistResponse> =
         safeApiCall {
-            val response = teamBottariService.fetchTeamBottari(teamBottariId)
-            if (response.isSuccessful) {
-                return Result.success(response.body()!!)
-            }
-
-            val errorResponse = ErrorResponse.parseErrorResponse(response.errorBody())
-            return Result.failure(Exception(errorResponse?.title))
+            teamBottariService.fetchTeamBottari(teamBottariId)
         }
 
     override suspend fun uncheckBottariItem(
@@ -40,12 +34,7 @@ class TeamBottariRemoteDataSourceImpl(
         request: ItemTypeRequest,
     ): Result<Unit> =
         safeApiCall {
-            val response = teamBottariService.uncheckTeamBottariItem(bottariItemId, request)
-            if (response.isSuccessful) {
-                return Result.success(Unit)
-            }
-            val errorResponse = ErrorResponse.parseErrorResponse(response.errorBody())
-            return Result.failure(Exception(errorResponse?.title))
+            teamBottariService.uncheckTeamBottariItem(bottariItemId, request)
         }
 
     override suspend fun checkBottariItem(
@@ -53,12 +42,7 @@ class TeamBottariRemoteDataSourceImpl(
         request: ItemTypeRequest,
     ): Result<Unit> =
         safeApiCall {
-            val response = teamBottariService.checkTeamBottariItem(bottariItemId, request)
-            if (response.isSuccessful) {
-                return Result.success(Unit)
-            }
-            val errorResponse = ErrorResponse.parseErrorResponse(response.errorBody())
-            return Result.failure(Exception(errorResponse?.title))
+            teamBottariService.checkTeamBottariItem(bottariItemId, request)
         }
 
     override suspend fun fetchTeamBottaries(): Result<List<FetchTeamBottariResponse>> =
