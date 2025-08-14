@@ -55,4 +55,11 @@
     <style name="CustomCalendarSundayText">
         <item name="android:textColor">@color/calendar_sunday_selector</item>
     </style>
+
+    <style name="CustomTabText" parent="TextAppearance.AppCompat" >
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+        <item name="android:textFontWeight">600</item>
+    </style>
 </resources>
