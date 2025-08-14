@@ -27,4 +27,14 @@ public interface TeamAssignedItemRepository extends JpaRepository<TeamAssignedIt
             WHERE tai.teamMember.id = :teamMemberId
             """)
     List<TeamAssignedItem> findAllByTeamMemberId(final Long teamMemberId);
+
+    @Query("""
+            SELECT tai
+            FROM TeamAssignedItem tai
+            JOIN FETCH TeamBottari tb ON  tai.info.teamBottari.id = :infoId
+            JOIN FETCH tai.teamMember tm
+            JOIN FETCH tm.member
+            WHERE tai.info.id = :infoId
+            """)
+    List<TeamAssignedItem> findAllByInfoIdWithMember(Long infoId);
 }
