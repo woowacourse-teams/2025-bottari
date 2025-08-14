@@ -33,9 +33,9 @@ class TeamChecklistTypeViewHolder(
     @StringRes
     private fun BottariItemTypeUiModel.getStringResId(): Int =
         when (this) {
-            BottariItemTypeUiModel.SHARED -> R.string.team_checklist_type_shared_text
-            is BottariItemTypeUiModel.ASSIGNED -> R.string.team_checklist_type_assigned_text
-            BottariItemTypeUiModel.PERSONAL -> R.string.team_checklist_type_personal_text
+            BottariItemTypeUiModel.SHARED -> R.string.bottari_item_type_shared_text
+            is BottariItemTypeUiModel.ASSIGNED -> R.string.bottari_item_type_assigned_text
+            BottariItemTypeUiModel.PERSONAL -> R.string.bottari_item_type_personal_text
         }
 
     interface OnTeamChecklistTypeClickListener {
