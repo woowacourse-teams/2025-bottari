@@ -5,9 +5,10 @@ import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.TeamMember;
-import com.bottari.teambottari.dto.CheckTeamItemRequest;
+import com.bottari.teambottari.dto.CreatePersonalItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
+import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamBottariRepository;
@@ -15,6 +16,7 @@ import com.bottari.teambottari.repository.TeamMemberRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +28,33 @@ public class TeamItemFacade {
     private final TeamMemberRepository teamMemberRepository;
     private final TeamBottariRepository teamBottariRepository;
     private final MemberRepository memberRepository;
+
+    @Transactional
+    public Long createPersonalItem(
+            final Long teamBottariId,
+            final CreatePersonalItemRequest request,
+            final String ssaid
+    ) {
+        validateTeamBottari(teamBottariId);
+        validateMemberInTeam(teamBottariId, ssaid);
+        final TeamMember teamMember = getTeamMemberByTeamBottariIdAndSsaid(teamBottariId, ssaid);
+
+        return teamPersonalItemService.create(teamMember, request);
+    }
+
+    public void delete(
+            final Long id,
+            final String ssaid,
+            final TeamItemTypeRequest request
+    ) {
+        switch (request.type()) {
+//            TODO: 구현 필요
+//            case SHARED -> teamSharedItemService.delete(id, ssaid);
+//            case ASSIGNED -> teamAssignedItemService.delete(id, ssaid);
+            case PERSONAL -> teamPersonalItemService.delete(id, ssaid);
+            default -> throw new IllegalArgumentException();
+        }
+    }
 
     public ReadTeamItemStatusResponse getTeamItemStatus(
             final Long teamBottariId,
@@ -56,7 +85,7 @@ public class TeamItemFacade {
     public void check(
             final Long id,
             final String ssaid,
-            final CheckTeamItemRequest request
+            final TeamItemTypeRequest request
     ) {
         switch (request.type()) {
             case SHARED -> teamSharedItemService.check(id, ssaid);
@@ -68,7 +97,7 @@ public class TeamItemFacade {
     public void uncheck(
             final Long id,
             final String ssaid,
-            final CheckTeamItemRequest request
+            final TeamItemTypeRequest request
     ) {
         switch (request.type()) {
             case SHARED -> teamSharedItemService.uncheck(id, ssaid);

@@ -8,6 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TeamPersonalItemRepository extends JpaRepository<TeamPersonalItem, Long> {
 
     List<TeamPersonalItem> findAllByTeamMemberIn(final List<TeamMember> teamMembers);
-  
+
     List<TeamPersonalItem> findAllByTeamMemberId(final Long teamMemberId);
+
+    boolean existsByTeamMemberIdAndName(
+            final Long teamMemberId,
+            final String name
+    );
 }

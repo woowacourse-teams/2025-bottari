@@ -17,9 +17,10 @@ import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
-import com.bottari.teambottari.dto.CheckTeamItemRequest;
+import com.bottari.teambottari.dto.CreatePersonalItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
+import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
@@ -48,6 +49,83 @@ public class TeamItemFacadeTest {
 
     @Autowired
     private EntityManager entityManager;
+
+    private boolean getItemCheckedStatus(
+            final TeamItemType type,
+            final Long itemId
+    ) {
+        return switch (type) {
+            case SHARED -> entityManager.find(TeamSharedItem.class, itemId).isChecked();
+            case ASSIGNED -> entityManager.find(TeamAssignedItem.class, itemId).isChecked();
+            case PERSONAL -> entityManager.find(TeamPersonalItem.class, itemId).isChecked();
+        };
+    }
+
+    @Nested
+    class CreatePersonalItemTest {
+
+        @DisplayName("개인 물품을 생성한다.")
+        @Test
+        void createPersonalItem() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final String itemName = "개인 물품";
+            final CreatePersonalItemRequest request = new CreatePersonalItemRequest(itemName);
+            final String ssaid = member.getSsaid();
+
+            // when
+            final Long actual = teamItemFacade.createPersonalItem(teamBottari.getId(), request, ssaid);
+
+            // then
+            final TeamPersonalItem actualItem = entityManager.find(TeamPersonalItem.class, actual);
+            assertThat(actualItem.getName()).isEqualTo(itemName);
+        }
+
+        @DisplayName("개인 물품을 생성할 때, 팀 보따리가 존재하지 않는다면 예외를 던진다.")
+        @Test
+        void createPersonalItem_Exception_NotFoundTeamBottari() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final Long invalid_teamBottariId = -1L;
+            final CreatePersonalItemRequest request = new CreatePersonalItemRequest("개인 물품");
+            final String ssaid = member.getSsaid();
+
+            // when & then
+            assertThatThrownBy(() -> teamItemFacade.createPersonalItem(invalid_teamBottariId, request, ssaid))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("팀 보따리를 찾을 수 없습니다.");
+        }
+
+        @DisplayName("개인 물품을 생성할 때, 팀 멤버가 아니라면 예외를 던진다.")
+        @Test
+        void createPersonalItem_Exception_NotTeamMember() {
+            // given
+            final Member member_in_team = MemberFixture.MEMBER.get();
+            final Member member_not_in_team = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(member_in_team);
+            entityManager.persist(member_not_in_team);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member_in_team);
+            entityManager.persist(teamBottari);
+
+            final CreatePersonalItemRequest request = new CreatePersonalItemRequest("개인 물품");
+            final String ssaid = member_not_in_team.getSsaid();
+
+            // when & then
+            assertThatThrownBy(() -> teamItemFacade.createPersonalItem(teamBottari.getId(), request, ssaid))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
+        }
+    }
 
     @Nested
     class GetTeamItemStatusTest {
@@ -261,7 +339,7 @@ public class TeamItemFacadeTest {
             entityManager.persist(teamMember);
 
             final Long itemId = createItemByType(type, teamBottari, teamMember);
-            final CheckTeamItemRequest request = new CheckTeamItemRequest(type);
+            final TeamItemTypeRequest request = new TeamItemTypeRequest(type);
 
             // when
             teamItemFacade.check(itemId, member.getSsaid(), request);
@@ -323,7 +401,7 @@ public class TeamItemFacadeTest {
 
             final Long itemId = createCheckedItemByType(type, teamBottari, teamMember);
 
-            final CheckTeamItemRequest request = new CheckTeamItemRequest(type);
+            final TeamItemTypeRequest request = new TeamItemTypeRequest(type);
 
             // when
             teamItemFacade.uncheck(itemId, member.getSsaid(), request);
@@ -363,16 +441,5 @@ public class TeamItemFacadeTest {
                 }
             };
         }
-    }
-
-    private boolean getItemCheckedStatus(
-            final TeamItemType type,
-            final Long itemId
-    ) {
-        return switch (type) {
-            case SHARED -> entityManager.find(TeamSharedItem.class, itemId).isChecked();
-            case ASSIGNED -> entityManager.find(TeamAssignedItem.class, itemId).isChecked();
-            case PERSONAL -> entityManager.find(TeamPersonalItem.class, itemId).isChecked();
-        };
     }
 }
