@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.checklist
+package com.bottari.presentation.view.checklist.personal
 
 import android.content.Context
 import android.content.Intent
@@ -14,8 +14,8 @@ import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityChecklistBinding
-import com.bottari.presentation.view.checklist.main.MainChecklistFragment
-import com.bottari.presentation.view.checklist.swipe.SwipeChecklistFragment
+import com.bottari.presentation.view.checklist.personal.main.MainChecklistFragment
+import com.bottari.presentation.view.checklist.personal.swipe.SwipeChecklistFragment
 import com.bottari.presentation.view.home.HomeActivity
 import java.time.LocalDateTime
 

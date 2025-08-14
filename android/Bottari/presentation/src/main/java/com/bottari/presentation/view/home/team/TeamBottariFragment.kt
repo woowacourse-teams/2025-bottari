@@ -14,7 +14,7 @@ import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamBottariBinding
-import com.bottari.presentation.view.checklist.ChecklistActivity
+import com.bottari.presentation.view.checklist.team.TeamChecklistActivity
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
 import com.bottari.presentation.view.create.BottariCreateDialog
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
@@ -98,7 +98,7 @@ class TeamBottariFragment :
         bottariId: Long,
         bottariTitle: String,
     ) {
-        val intent = ChecklistActivity.newIntent(requireContext(), bottariId, bottariTitle)
+        val intent = TeamChecklistActivity.newIntent(requireContext(), bottariId, bottariTitle)
         startActivity(intent)
     }
 

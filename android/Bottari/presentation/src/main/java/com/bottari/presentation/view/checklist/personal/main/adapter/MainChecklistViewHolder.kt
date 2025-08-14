@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.checklist.main.adapter
+package com.bottari.presentation.view.checklist.personal.main.adapter
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemChecklistBinding
 import com.bottari.presentation.model.BottariItemUiModel
-import com.bottari.presentation.view.checklist.main.listener.OnChecklistItemClickListener
+import com.bottari.presentation.view.checklist.personal.main.listener.OnChecklistItemClickListener
 
 class MainChecklistViewHolder private constructor(
     private val binding: ItemChecklistBinding,

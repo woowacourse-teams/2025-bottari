@@ -1,13 +1,16 @@
-package com.bottari.presentation.view.checklist.swipe.adapter
+package com.bottari.presentation.view.checklist.personal.main.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.view.checklist.personal.main.listener.OnChecklistItemClickListener
 
-class SwipeCheckListAdapter : ListAdapter<BottariItemUiModel, SwipeChecklistViewHolder>(DiffUtil) {
+class MainChecklistAdapter(
+    private val onChecklistItemClickListener: OnChecklistItemClickListener,
+) : ListAdapter<BottariItemUiModel, MainChecklistViewHolder>(DiffUtil) {
     override fun onBindViewHolder(
-        holder: SwipeChecklistViewHolder,
+        holder: MainChecklistViewHolder,
         position: Int,
     ) {
         holder.bind(getItem(position))
@@ -16,7 +19,7 @@ class SwipeCheckListAdapter : ListAdapter<BottariItemUiModel, SwipeChecklistView
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): SwipeChecklistViewHolder = SwipeChecklistViewHolder.from(parent)
+    ): MainChecklistViewHolder = MainChecklistViewHolder.from(parent, onChecklistItemClickListener)
 
     companion object {
         private val DiffUtil =

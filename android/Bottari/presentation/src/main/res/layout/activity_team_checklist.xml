@@ -5,14 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.checklist.personal.ChecklistActivity">
+    android:theme="@style/Theme.Bottari"
+    tools:context=".view.checklist.team.TeamChecklistActivity">
 
-    <Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_bottari"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:contentInsetStart="0dp"
-        app:layout_constraintBottom_toTopOf="@id/fcv_checklist"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="@color/black"
-            tools:text="나의 보따리" />
+            tools:text="팀 보따리" />
 
         <ImageView
             android:id="@+id/btn_swipe"
@@ -41,13 +41,24 @@
             android:padding="@dimen/space_small"
             android:src="@drawable/btn_swipe" />
 
-    </Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fcv_checklist"
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tl_team_bottari"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_bottari"
+        app:tabIndicatorColor="@color/black"
+        app:tabSelectedTextColor="@color/black"
+        app:tabTextColor="@color/gray_c4c4c4" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_team_bottari"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_bottari" />
-
+        app:layout_constraintTop_toBottomOf="@id/tl_team_bottari" />
 </androidx.constraintlayout.widget.ConstraintLayout>
