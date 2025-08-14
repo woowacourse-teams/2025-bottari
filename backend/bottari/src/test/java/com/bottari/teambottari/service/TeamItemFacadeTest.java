@@ -108,11 +108,13 @@ public class TeamItemFacadeTest {
             );
 
             final List<TeamItemStatusResponse> expectedSharedItems = List.of(
-                    new TeamItemStatusResponse("공통 물품", expectedSharedMemberStatus, 0, 2)
+                    new TeamItemStatusResponse(teamSharedItemInfo.getId(), "공통 물품", expectedSharedMemberStatus, 0, 2)
             );
             final List<TeamItemStatusResponse> expectedAssignedItems = List.of(
-                    new TeamItemStatusResponse("멤버 1 물품", expectedMember1AssignedStatus, 0, 1),
-                    new TeamItemStatusResponse("멤버 2 물품", expectedMember2AssignedStatus, 1, 1)
+                    new TeamItemStatusResponse(
+                            teamAssignedItemInfo_1.getId(), "멤버 1 물품", expectedMember1AssignedStatus, 0, 1),
+                    new TeamItemStatusResponse(
+                            teamAssignedItemInfo_2.getId(), "멤버 2 물품", expectedMember2AssignedStatus, 1, 1)
             );
             final ReadTeamItemStatusResponse expected = new ReadTeamItemStatusResponse(expectedSharedItems,
                     expectedAssignedItems);
