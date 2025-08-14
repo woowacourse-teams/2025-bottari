@@ -32,7 +32,9 @@ public class TeamItemFacade {
             final String ssaid
     ) {
         validateTeamBottari(teamBottariId);
-        validateMemberInTeam(teamBottariId, ssaid);
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        validateMemberInTeam(teamBottariId, member);
         final List<TeamItemStatusResponse> sharedItemResponses = teamSharedItemService.getAllWithMemberStatusByTeamBottariId(
                 teamBottariId);
         final List<TeamItemStatusResponse> assignedItemResponses = teamAssignedItemService.getAllWithMemberStatusByTeamBottariId(
@@ -109,9 +111,9 @@ public class TeamItemFacade {
 
     private void validateMemberInTeam(
             final Long teamBottariId,
-            final String ssaid
+            final Member member
     ) {
-        if (!teamMemberRepository.existsByTeamBottariIdAndMemberSsaid(teamBottariId, ssaid)) {
+        if (!teamMemberRepository.existsByTeamBottariIdAndMemberId(teamBottariId, member.getId())) {
             throw new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI);
         }
     }

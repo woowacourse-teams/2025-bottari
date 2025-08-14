@@ -277,9 +277,9 @@ class TeamSharedItemServiceTest {
                     .hasMessage("팀 보따리 물품 정보를 찾을 수 없습니다. - 공통");
         }
 
-        @DisplayName("보채기 알람을 보낼 때, 팀 멤버가 아니라면 예외를 던진다.")
+        @DisplayName("보채기 알람을 보낼 때, 유효하지 않은 ssaid라면 예외를 던진다.")
         @Test
-        void sendRemindAlarm_Exception_NotTeamMember() {
+        void sendRemindAlarm_Exception_InvalidSsaid() {
             // given
             final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
@@ -301,6 +301,35 @@ class TeamSharedItemServiceTest {
             // when & then
             assertThatThrownBy(
                     () -> teamSharedItemService.sendRemindAlarm(info.getId(), invalid_ssaid))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
+        }
+
+        @DisplayName("보채기 알람을 보낼 때, 팀 멤버가 아니라면 예외를 던진다.")
+        @Test
+        void sendRemindAlarm_Exception_NotTeamMember() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamSharedItemInfo info = new TeamSharedItemInfo("공통 물품", teamBottari);
+            entityManager.persist(info);
+
+            final TeamSharedItem item = new TeamSharedItem(info, teamMember);
+            entityManager.persist(item);
+
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(anotherMember);
+
+            // when & then
+            assertThatThrownBy(
+                    () -> teamSharedItemService.sendRemindAlarm(info.getId(), anotherMember.getSsaid()))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }

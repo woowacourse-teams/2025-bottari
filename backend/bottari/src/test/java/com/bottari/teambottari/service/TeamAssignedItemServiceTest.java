@@ -274,9 +274,9 @@ class TeamAssignedItemServiceTest {
                     .hasMessage("팀 보따리 물품 정보를 찾을 수 없습니다. - 담당");
         }
 
-        @DisplayName("보채기 알람을 보낼 때, 팀 멤버가 아니라면 예외를 던진다.")
+        @DisplayName("보채기 알람을 보낼 때, 유효하지 않은 ssaid라면 예외를 던진다.")
         @Test
-        void sendRemindAlarm_Exception_NotTeamMember() {
+        void sendRemindAlarm_Exception_InvalidSsaid() {
             // given
             final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
@@ -298,6 +298,35 @@ class TeamAssignedItemServiceTest {
             // when & then
             assertThatThrownBy(
                     () -> teamAssignedItemService.sendRemindAlarm(info.getId(), invalid_ssaid))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
+        }
+
+        @DisplayName("보채기 알람을 보낼 때, 팀 멤버가 아니라면 예외를 던진다.")
+        @Test
+        void sendRemindAlarm_Exception_NotTeamMember() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamAssignedItemInfo info = new TeamAssignedItemInfo("담당 물품", teamBottari);
+            entityManager.persist(info);
+
+            final TeamAssignedItem teamAssignedItem = new TeamAssignedItem(info, teamMember);
+            entityManager.persist(teamAssignedItem);
+
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(anotherMember);
+
+            // when & then
+            assertThatThrownBy(
+                    () -> teamAssignedItemService.sendRemindAlarm(info.getId(), anotherMember.getSsaid()))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }

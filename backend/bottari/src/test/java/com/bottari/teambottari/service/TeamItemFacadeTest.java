@@ -128,6 +128,25 @@ public class TeamItemFacadeTest {
             assertThat(actual).isEqualTo(expected);
         }
 
+        @DisplayName("팀 보따리 물품을 조회할 때, 유효하지 않은 ssaid라면 예외를 던진다.")
+        @Test
+        void getTeamItemStatus_Exception_InvalidSsaid() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final String invalid_ssaid = "invalid_ssaid";
+
+            // when & then
+            assertThatThrownBy(
+                    () -> teamItemFacade.getTeamItemStatus(teamBottari.getId(), invalid_ssaid))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
+        }
+
         @DisplayName("팀 보따리 물품을 조회할 때, 팀 멤버가 아니라면 예외를 던진다.")
         @Test
         void getTeamItemStatus_Exception_NotTeamMamber() {
