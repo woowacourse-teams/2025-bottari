@@ -31,7 +31,6 @@ public interface TeamSharedItemRepository extends JpaRepository<TeamSharedItem, 
     @Query("""
             SELECT tsi
             FROM TeamSharedItem tsi
-            JOIN FETCH TeamBottari tb ON  tsi.info.teamBottari.id = :infoId
             JOIN FETCH tsi.teamMember tm
             JOIN FETCH tm.member
             WHERE tsi.info.id = :infoId
