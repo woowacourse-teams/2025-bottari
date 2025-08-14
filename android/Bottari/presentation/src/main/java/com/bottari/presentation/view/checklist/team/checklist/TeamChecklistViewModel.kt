@@ -96,9 +96,9 @@ class TeamChecklistViewModel(
                 .onSuccess { checklistData ->
                     setTeamCheckList(checklistData)
                 }.onFailure {
-                    updateState { copy(isLoading = false) }
                     emitEvent(TeamChecklistUiEvent.FetchChecklistFailure)
                 }
+            updateState { copy(isLoading = false) }
         }
     }
 
