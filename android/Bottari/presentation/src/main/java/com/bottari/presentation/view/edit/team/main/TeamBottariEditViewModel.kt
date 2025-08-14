@@ -26,8 +26,6 @@ class TeamBottariEditViewModel(
     fun toggleAlarmState() {
         val newAlarmSwitchState = currentState.alarmSwitchState.not()
 
-        Thread.sleep(100)
-
         if (currentState.isAlarmNull) {
             updateState { copy(alarmSwitchState = newAlarmSwitchState) }
             return
