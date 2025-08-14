@@ -68,6 +68,7 @@ public enum ErrorCode {
 
     // ===== TEAM_MEMBER 관련 =====
     MEMBER_NOT_IN_TEAM_BOTTARI(HttpStatus.FORBIDDEN, "해당 팀 보따리의 팀 멤버가 아닙니다."),
+    MEMBER_ALREADY_IN_TEAM_BOTTARI(HttpStatus.CONFLICT, "이미 해당 팀 보따리에 참여한 멤버입니다."),
 
     // ===== ALARM 관련 =====
     ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "알람을 찾을 수 없습니다."),
