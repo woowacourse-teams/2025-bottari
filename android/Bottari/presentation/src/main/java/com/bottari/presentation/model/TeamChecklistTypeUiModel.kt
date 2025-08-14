@@ -4,6 +4,6 @@ import com.bottari.presentation.view.checklist.team.checklist.ChecklistType
 
 data class TeamChecklistTypeUiModel(
     val type: ChecklistType,
-    val teamChecklistItems: List<TeamChecklistItemUiModel>,
+    val teamChecklistItems: List<TeamChecklistProductUiModel>,
     var isExpanded: Boolean = true,
-) : TeamChecklistRowUiModel
+) : TeamChecklistItem

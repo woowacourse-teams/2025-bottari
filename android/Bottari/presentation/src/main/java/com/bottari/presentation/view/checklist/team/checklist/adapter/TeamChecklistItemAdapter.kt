@@ -5,18 +5,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
-import com.bottari.presentation.model.TeamChecklistItemUiModel
-import com.bottari.presentation.model.TeamChecklistRowUiModel
+import com.bottari.presentation.model.TeamChecklistItem
+import com.bottari.presentation.model.TeamChecklistProductUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
 import com.bottari.presentation.view.checklist.team.checklist.ItemClickListener
 
 class TeamChecklistItemAdapter(
     private val clickListener: ItemClickListener,
-) : ListAdapter<TeamChecklistRowUiModel, RecyclerView.ViewHolder>(DiffCallback) {
+) : ListAdapter<TeamChecklistItem, RecyclerView.ViewHolder>(DiffCallback) {
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
             is TeamChecklistTypeUiModel -> R.layout.item_team_checklist_option
-            is TeamChecklistItemUiModel -> R.layout.item_team_checklist
+            is TeamChecklistProductUiModel -> R.layout.item_team_checklist
         }
 
     override fun onCreateViewHolder(
@@ -45,7 +45,7 @@ class TeamChecklistItemAdapter(
                 holder.bind(item)
             }
 
-            item is TeamChecklistItemUiModel && holder is TeamChecklistViewHolder -> {
+            item is TeamChecklistProductUiModel && holder is TeamChecklistViewHolder -> {
                 holder.bind(item)
             }
         }
@@ -55,24 +55,24 @@ class TeamChecklistItemAdapter(
         const val ERROR_VIEW_TYPE = "잘못된 뷰 타입 입니다"
 
         private val DiffCallback =
-            object : DiffUtil.ItemCallback<TeamChecklistRowUiModel>() {
+            object : DiffUtil.ItemCallback<TeamChecklistItem>() {
                 override fun areItemsTheSame(
-                    oldItem: TeamChecklistRowUiModel,
-                    newItem: TeamChecklistRowUiModel,
+                    oldItem: TeamChecklistItem,
+                    newItem: TeamChecklistItem,
                 ): Boolean =
                     when {
                         oldItem is TeamChecklistTypeUiModel && newItem is TeamChecklistTypeUiModel ->
                             oldItem.type == newItem.type
 
-                        oldItem is TeamChecklistItemUiModel && newItem is TeamChecklistItemUiModel ->
+                        oldItem is TeamChecklistProductUiModel && newItem is TeamChecklistProductUiModel ->
                             oldItem.id == newItem.id
 
                         else -> false
                     }
 
                 override fun areContentsTheSame(
-                    oldItem: TeamChecklistRowUiModel,
-                    newItem: TeamChecklistRowUiModel,
+                    oldItem: TeamChecklistItem,
+                    newItem: TeamChecklistItem,
                 ): Boolean = oldItem == newItem
             }
     }

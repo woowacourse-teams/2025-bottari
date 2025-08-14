@@ -7,14 +7,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamChecklistBinding
-import com.bottari.presentation.model.TeamChecklistItemUiModel
+import com.bottari.presentation.model.TeamChecklistProductUiModel
 import com.bottari.presentation.view.checklist.team.checklist.ItemClickListener
 
 class TeamChecklistViewHolder private constructor(
     private val binding: ItemTeamChecklistBinding,
     private val clickListener: ItemClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
-    private var currentItem: TeamChecklistItemUiModel? = null
+    private var currentItem: TeamChecklistProductUiModel? = null
 
     init {
         binding.root.setOnClickListener {
@@ -24,7 +24,7 @@ class TeamChecklistViewHolder private constructor(
         }
     }
 
-    fun bind(item: TeamChecklistItemUiModel) {
+    fun bind(item: TeamChecklistProductUiModel) {
         currentItem = item
         binding.ctvChecklistItemTitle.text = item.name
         updateCheckedState(item.isChecked)

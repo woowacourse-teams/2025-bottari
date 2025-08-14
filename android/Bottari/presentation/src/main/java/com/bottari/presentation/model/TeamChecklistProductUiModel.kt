@@ -5,10 +5,10 @@ import com.bottari.presentation.view.checklist.team.checklist.ChecklistType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class TeamChecklistItemUiModel(
+data class TeamChecklistProductUiModel(
     val id: Long,
     val name: String,
     val isChecked: Boolean,
     val type: ChecklistType,
 ) : Parcelable,
-    TeamChecklistRowUiModel
+    TeamChecklistItem
