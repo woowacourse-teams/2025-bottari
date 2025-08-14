@@ -19,10 +19,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class MessageSender {
+public class FcmMessageSender {
 
-    private final FcmTokenRepository fcmTokenRepository;
     private final FirebaseMessaging firebaseMessaging;
+    private final FcmTokenRepository fcmTokenRepository;
 
     public void sendMessageToMember(
             final Long memberId,

@@ -36,11 +36,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @DataJpaTest
-@Import(MessageSender.class)
-class MessageSenderTest {
+@Import(FcmMessageSender.class)
+class FcmMessageSenderTest {
 
     @Autowired
-    private MessageSender messageSender;
+    private FcmMessageSender fcmMessageSender;
 
     @MockitoBean
     private FirebaseMessaging firebaseMessaging;
@@ -64,7 +64,7 @@ class MessageSenderTest {
             final SendMessageRequest request = new SendMessageRequest("title", "message", MessageType.HURRY_UP);
 
             // when & then
-            assertThatCode(() -> messageSender.sendMessageToMember(member.getId(), request))
+            assertThatCode(() -> fcmMessageSender.sendMessageToMember(member.getId(), request))
                     .doesNotThrowAnyException();
         }
 
@@ -77,7 +77,7 @@ class MessageSenderTest {
             final SendMessageRequest request = new SendMessageRequest("title", "message", MessageType.HURRY_UP);
 
             // when & then
-            assertThatThrownBy(() -> messageSender.sendMessageToMember(member.getId(), request))
+            assertThatThrownBy(() -> fcmMessageSender.sendMessageToMember(member.getId(), request))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("FCM 토큰 정보가 존재하지 않습니다.");
         }
@@ -97,7 +97,7 @@ class MessageSenderTest {
             doThrow(exception).when(firebaseMessaging).send(any(Message.class));
 
             // when & then
-            assertThatThrownBy(() -> messageSender.sendMessageToMember(member.getId(), request))
+            assertThatThrownBy(() -> fcmMessageSender.sendMessageToMember(member.getId(), request))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("유효하지 않은 토큰으로 인해 FCM 메시지 전송을 실패하였습니다.");
             final FcmToken actual = (FcmToken) entityManager.createNativeQuery("""
@@ -124,7 +124,7 @@ class MessageSenderTest {
             doThrow(exception).when(firebaseMessaging).send(any(Message.class));
 
             // when & then
-            assertThatThrownBy(() -> messageSender.sendMessageToMember(member.getId(), request))
+            assertThatThrownBy(() -> fcmMessageSender.sendMessageToMember(member.getId(), request))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("FCM 서버 문제로 FCM 메시지 전송을 실패하였습니다.");
         }
@@ -151,7 +151,7 @@ class MessageSenderTest {
             final SendMessageRequest request = new SendMessageRequest("title", "message", MessageType.HURRY_UP);
 
             // when & then
-            assertThatCode(() -> messageSender.sendMessageToMembers(memberIds, request))
+            assertThatCode(() -> fcmMessageSender.sendMessageToMembers(memberIds, request))
                     .doesNotThrowAnyException();
         }
 
@@ -164,7 +164,7 @@ class MessageSenderTest {
             final SendMessageRequest request = new SendMessageRequest("title", "message", MessageType.HURRY_UP);
 
             // when & then
-            assertThatThrownBy(() -> messageSender.sendMessageToMember(member.getId(), request))
+            assertThatThrownBy(() -> fcmMessageSender.sendMessageToMember(member.getId(), request))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("FCM 토큰 정보가 존재하지 않습니다.");
         }
@@ -195,7 +195,7 @@ class MessageSenderTest {
             final SendMessageRequest request = new SendMessageRequest("title", "message", MessageType.HURRY_UP);
 
             // when & then
-            assertThatThrownBy(() -> messageSender.sendMessageToMembers(memberIds, request))
+            assertThatThrownBy(() -> fcmMessageSender.sendMessageToMembers(memberIds, request))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("유효하지 않은 토큰으로 인해 FCM 메시지 전송을 실패하였습니다.");
             final FcmToken member1Token = (FcmToken) entityManager.createNativeQuery("""
@@ -233,7 +233,7 @@ class MessageSenderTest {
             doThrow(exception).when(firebaseMessaging).send(any(Message.class));
 
             // when & then
-            assertThatThrownBy(() -> messageSender.sendMessageToMembers(memberIds, request))
+            assertThatThrownBy(() -> fcmMessageSender.sendMessageToMembers(memberIds, request))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("FCM 서버 문제로 FCM 메시지 전송을 실패하였습니다.");
         }
