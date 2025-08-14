@@ -31,7 +31,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -273,11 +273,7 @@ public class TeamItemFacadeTest {
 
         @DisplayName("팀 아이템 타입별로 체크한다.")
         @ParameterizedTest
-        @CsvSource({
-                "SHARED",
-                "ASSIGNED",
-                "PERSONAL"
-        })
+        @EnumSource(TeamItemType.class)
         void check(final TeamItemType type) {
             // given
             final Member member = MemberFixture.MEMBER.get();
@@ -334,11 +330,7 @@ public class TeamItemFacadeTest {
 
         @DisplayName("팀 아이템 타입별로 체크 해제한다.")
         @ParameterizedTest
-        @CsvSource({
-                "SHARED",
-                "ASSIGNED",
-                "PERSONAL"
-        })
+        @EnumSource(TeamItemType.class)
         void uncheck(final TeamItemType type) {
             // given
             final Member member = MemberFixture.MEMBER.get();

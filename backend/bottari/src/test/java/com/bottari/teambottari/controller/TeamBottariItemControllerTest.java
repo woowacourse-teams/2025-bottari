@@ -22,7 +22,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -117,11 +117,7 @@ class TeamBottariItemControllerTest {
 
     @DisplayName("팀 보따리 물품을 체크한다.")
     @ParameterizedTest
-    @CsvSource({
-            "SHARED",
-            "ASSIGNED",
-            "PERSONAL"
-    })
+    @EnumSource(TeamItemType.class)
     void check(final TeamItemType type) throws Exception {
         // given
         final Long itemId = 1L;
@@ -141,11 +137,7 @@ class TeamBottariItemControllerTest {
 
     @DisplayName("팀 보따리 물품을 체크 해제한다.")
     @ParameterizedTest
-    @CsvSource({
-            "SHARED",
-            "ASSIGNED",
-            "PERSONAL"
-    })
+    @EnumSource(TeamItemType.class)
     void uncheck(final TeamItemType type) throws Exception {
         // given
         final Long itemId = 1L;
@@ -165,10 +157,10 @@ class TeamBottariItemControllerTest {
 
     @DisplayName("보채기 알람을 전송한다.")
     @ParameterizedTest
-    @CsvSource({
-            "SHARED",
-            "ASSIGNED"
-    })
+    @EnumSource(
+            value = TeamItemType.class,
+            names = {"SHARED", "ASSIGNED"}
+    )
     void sendRemindAlarmByItemInfo(final TeamItemType type) throws Exception {
         // given
         final Long infoId = 1L;
