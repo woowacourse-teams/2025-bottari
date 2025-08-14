@@ -2,10 +2,13 @@ package com.bottari.teambottari.controller;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bottari.log.LogFormatter;
+import com.bottari.teambottari.dto.JoinTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
@@ -97,5 +100,24 @@ class TeamMemberControllerTest {
                         .header("ssaid", ssaid))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @DisplayName("멤버가 팀 보따리에 참가한다.")
+    @Test
+    void joinTeamBottari() throws Exception {
+        // given
+        final String ssaid = "ssaid";
+        final Long teamMemberId = 1L;
+        final JoinTeamBottariRequest request = new JoinTeamBottariRequest("inviteCode");
+        given(teamMemberService.joinTeamBottari(request, ssaid))
+                .willReturn(teamMemberId);
+
+        // when & then
+        mockMvc.perform(post("/team-bottaries/members/join")
+                        .header("ssaid", ssaid)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("Location", "/team-members/" + teamMemberId));
     }
 }

@@ -1,14 +1,18 @@
 package com.bottari.teambottari.controller;
 
 import com.bottari.config.MemberIdentifier;
+import com.bottari.teambottari.dto.JoinTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
 import com.bottari.teambottari.service.TeamMemberService;
+import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -43,5 +47,16 @@ public class TeamMemberController implements TeamMemberApiDocs {
         );
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/team-bottaries/members/join")
+    @Override
+    public ResponseEntity<Void> joinTeamBottari(
+            @RequestBody final JoinTeamBottariRequest request,
+            @MemberIdentifier final String ssaid
+    ) {
+        final Long id = teamMemberService.joinTeamBottari(request, ssaid);
+
+        return ResponseEntity.created(URI.create("/team-members/" + id)).build();
     }
 }
