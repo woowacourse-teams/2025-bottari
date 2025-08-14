@@ -99,6 +99,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk" }
 firebase-installations = { module = "com.google.firebase:firebase-installations" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 
 [plugins]
 # --- Android Plugins ---
