@@ -2,12 +2,15 @@ package com.bottari.data.repository
 
 import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
-import com.bottari.data.model.team.TeamMembersResponse
+import com.bottari.data.model.team.FetchTeamMemberStatusResponse
+import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.data.testFixture.TEAM_BOTTARI
 import com.bottari.data.testFixture.TEAM_BOTTARI_DETAIL
 import com.bottari.data.testFixture.TEAM_BOTTARI_DETAIL_RESPONSE
 import com.bottari.data.testFixture.TEAM_BOTTARI_RESPONSE
+import com.bottari.data.testFixture.TEAM_MEMBERS_STATUS
+import com.bottari.data.testFixture.TEAM_MEMBERS_STATUS_RESPONSE
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.HeadCount
 import com.bottari.domain.model.team.TeamBottariCheckList
@@ -90,7 +93,7 @@ class TeamBottariRepositoryImplTest {
         runTest {
             // given
             val id = 1L
-            val response = TeamMembersResponse("", 1, "test", listOf("test"))
+            val response = FetchTeamMembersResponse("", 1, "test", listOf("test"))
             coEvery { dataSource.fetchTeamMembers(id) } returns Result.success(response)
 
             // when
@@ -262,5 +265,42 @@ class TeamBottariRepositoryImplTest {
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamBottari(id) }
+        }
+
+    @DisplayName("팀 멤버 현황 조회에 성공하면 Success를 반환한다")
+    @Test
+    fun fetchTeamMembersStatusReturnsSuccessTest() =
+        runTest {
+            // given
+            val id = 1L
+            coEvery { dataSource.fetchTeamMembersStatus(id) } returns
+                Result.success(
+                    TEAM_MEMBERS_STATUS_RESPONSE,
+                )
+
+            // when
+            val result = repository.fetchTeamMembersStatus(id)
+
+            // then
+            assertSoftly(result) {
+                shouldBeSuccess()
+                getOrThrow().shouldBe(TEAM_MEMBERS_STATUS)
+            }
+        }
+
+    @DisplayName("팀 멤버 현황 조회에 실패하면 Failure를 반환한다")
+    @Test
+    fun fetchTeamMembersStatusReturnsFailureText() =
+        runTest {
+            // given
+            val id = 1L
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery { dataSource.fetchTeamMembersStatus(id) } returns Result.failure(exception)
+
+            // when
+            val result = repository.fetchTeamMembersStatus(id)
+
+            // then
+            result.shouldBeFailure { exception -> exception shouldBe exception }
         }
 }
