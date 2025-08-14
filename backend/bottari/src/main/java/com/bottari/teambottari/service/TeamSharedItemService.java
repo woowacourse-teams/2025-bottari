@@ -89,7 +89,7 @@ public class TeamSharedItemService {
         final List<TeamSharedItem> items = teamSharedItemRepository.findAllByInfoIdWithMember(infoId);
         final List<Long> uncheckedMemberIds = collectUncheckedMemberIds(items);
         final SendMessageRequest sendMessageRequest = fcmMessageConverter.convert(info.getTeamBottari(), info,
-                MessageType.REMIND);
+                MessageType.REMIND_BY_ITEM);
         fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
     }
 
