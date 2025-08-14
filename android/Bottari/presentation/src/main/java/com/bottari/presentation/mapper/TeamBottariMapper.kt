@@ -9,10 +9,10 @@ import com.bottari.presentation.mapper.AlarmMapper.toUiModel
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.MemberCheckStatusUiModel
+import com.bottari.presentation.model.TeamBottariStatusUiModel
 import com.bottari.presentation.model.TeamBottariUiModel
-import com.bottari.presentation.view.checklist.team.status.MemberCheckStatusUiModel
-import com.bottari.presentation.view.checklist.team.status.TeamBottariStatusUiModel
-import com.bottari.presentation.view.checklist.team.status.TeamProductStatusUiModel
+import com.bottari.presentation.model.TeamProductStatusUiModel
 
 object TeamBottariMapper {
     fun TeamBottari.toUiModel(): TeamBottariUiModel =

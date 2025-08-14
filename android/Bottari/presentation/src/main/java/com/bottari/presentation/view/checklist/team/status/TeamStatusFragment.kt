@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.databinding.FragmentTeamStatusBinding
+import com.bottari.presentation.model.TeamProductStatusUiModel
 import com.bottari.presentation.view.checklist.team.status.adapter.TeamProductStatusAdapter
 import com.bottari.presentation.view.checklist.team.status.adapter.TeamProductStatusDetailAdapter
 import com.bottari.presentation.view.checklist.team.status.adapter.TeamProductStatusViewHolder

@@ -7,11 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamBottariTypeBinding
 import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.model.TeamChecklistTypeUiModel
 
 class TeamProductTypeViewHolder private constructor(
     private val binding: ItemTeamBottariTypeBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: com.bottari.presentation.view.checklist.team.status.TeamChecklistTypeUiModel) {
+    fun bind(item: TeamChecklistTypeUiModel) {
         binding.tvTypeName.setText(item.type.getStringResId())
     }
 

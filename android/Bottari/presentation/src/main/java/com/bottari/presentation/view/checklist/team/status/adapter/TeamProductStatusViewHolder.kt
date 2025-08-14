@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamBottariItemStatusBinding
-import com.bottari.presentation.view.checklist.team.status.TeamProductStatusUiModel
+import com.bottari.presentation.model.TeamProductStatusUiModel
 
 class TeamProductStatusViewHolder private constructor(
     private val binding: ItemTeamBottariItemStatusBinding,

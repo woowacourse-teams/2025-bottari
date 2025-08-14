@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemChecklistMiniBinding
-import com.bottari.presentation.view.checklist.team.status.MemberCheckStatusUiModel
+import com.bottari.presentation.model.MemberCheckStatusUiModel
 
 class TeamProductStatusDetailViewHolder private constructor(
     private val binding: ItemChecklistMiniBinding,

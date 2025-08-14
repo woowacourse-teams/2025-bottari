@@ -1,11 +1,4 @@
-package com.bottari.presentation.view.checklist.team.status
-
-import com.bottari.presentation.model.BottariItemTypeUiModel
-
-data class TeamBottariStatusUiModel(
-    val sharedItems: List<TeamProductStatusUiModel>,
-    val assignedItems: List<TeamProductStatusUiModel>,
-)
+package com.bottari.presentation.model
 
 sealed interface TeamProductStatusItem
 
@@ -17,11 +10,6 @@ data class TeamProductStatusUiModel(
     val totalItemsCount: Int,
     val type: BottariItemTypeUiModel,
 ) : TeamProductStatusItem
-
-data class MemberCheckStatusUiModel(
-    val name: String,
-    val checked: Boolean,
-)
 
 data class TeamChecklistTypeUiModel(
     val type: BottariItemTypeUiModel,

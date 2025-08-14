@@ -12,6 +12,10 @@ import com.bottari.domain.usecase.team.RemindUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.model.TeamBottariStatusUiModel
+import com.bottari.presentation.model.TeamChecklistTypeUiModel
+import com.bottari.presentation.model.TeamProductStatusItem
+import com.bottari.presentation.model.TeamProductStatusUiModel
 import kotlinx.coroutines.launch
 
 data class TeamStatusUiState(

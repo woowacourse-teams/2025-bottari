@@ -4,16 +4,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bottari.presentation.view.checklist.team.status.TeamChecklistTypeUiModel
-import com.bottari.presentation.view.checklist.team.status.TeamProductStatusItem
-import com.bottari.presentation.view.checklist.team.status.TeamProductStatusUiModel
+import com.bottari.presentation.model.TeamChecklistTypeUiModel
+import com.bottari.presentation.model.TeamProductStatusItem
+import com.bottari.presentation.model.TeamProductStatusUiModel
 
 class TeamProductStatusAdapter(
     private val listener: TeamProductStatusViewHolder.OnTeamProductStatusItemClickListener,
 ) : ListAdapter<TeamProductStatusItem, RecyclerView.ViewHolder>(
         DiffUtil,
     ) {
-    private var selectedPosition = 0
+    private var selectedPosition = 1
 
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
