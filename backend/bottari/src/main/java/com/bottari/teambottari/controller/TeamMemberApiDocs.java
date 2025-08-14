@@ -47,7 +47,9 @@ public interface TeamMemberApiDocs {
             @ApiResponse(responseCode = "201", description = "팀 보따리 참가 성공"),
     })
     @ApiErrorCodes({
-            // todo : 추가필요
+            ErrorCode.TEAM_BOTTARI_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_FOUND,
+            ErrorCode.MEMBER_ALREADY_IN_TEAM_BOTTARI,
     })
     ResponseEntity<Void> joinTeamBottari(
             final JoinTeamBottariRequest request,
