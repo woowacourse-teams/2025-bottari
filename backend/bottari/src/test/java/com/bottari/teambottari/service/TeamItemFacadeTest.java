@@ -1,6 +1,7 @@
 package com.bottari.teambottari.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -20,6 +21,7 @@ import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
+import com.bottari.teambottari.dto.RemindTeamItemRequest;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
@@ -369,6 +371,86 @@ public class TeamItemFacadeTest {
                     yield item.getId();
                 }
             };
+        }
+    }
+
+    @Nested
+    class SendRemindAlarmByInfoTest {
+
+        @DisplayName("공유 물품에 대해 보채기 알람을 전송한다.")
+        @Test
+        void sendRemindAlarmByInfo_Shared() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamSharedItemInfo info = new TeamSharedItemInfo("공유 물품", teamBottari);
+            entityManager.persist(info);
+
+            final TeamSharedItem item = new TeamSharedItem(info, teamMember);
+            entityManager.persist(item);
+
+            final RemindTeamItemRequest request = new RemindTeamItemRequest(TeamItemType.SHARED);
+
+            // when & then
+            assertThatCode(() -> teamItemFacade.sendRemindAlarmByInfo(info.getId(), request, member.getSsaid()))
+                    .doesNotThrowAnyException();
+        }
+
+        @DisplayName("담당 물품에 대해 보채기 알람을 전송한다.")
+        @Test
+        void sendRemindAlarmByInfo_Assigned() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamAssignedItemInfo info = new TeamAssignedItemInfo("담당 물품", teamBottari);
+            entityManager.persist(info);
+
+            final TeamAssignedItem item = new TeamAssignedItem(info, teamMember);
+            entityManager.persist(item);
+
+            final RemindTeamItemRequest request = new RemindTeamItemRequest(TeamItemType.ASSIGNED);
+
+            // when & then
+            assertThatCode(() -> teamItemFacade.sendRemindAlarmByInfo(info.getId(), request, member.getSsaid()))
+                    .doesNotThrowAnyException();
+        }
+
+        @DisplayName("개인 물품에 대해 보채기 알람을 요청하면 예외를 던진다.")
+        @Test
+        void sendRemindAlarmByInfo_Personal_Exception() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamPersonalItem item = new TeamPersonalItem("개인 물품", teamMember);
+            entityManager.persist(item);
+
+            final RemindTeamItemRequest request = new RemindTeamItemRequest(TeamItemType.PERSONAL);
+
+            // when & then
+            assertThatThrownBy(() -> teamItemFacade.sendRemindAlarmByInfo(item.getId(), request, member.getSsaid()))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("적절하지 않은 아이템 타입입니다. - 보채기 알람은 공통/담당 물품만 가능합니다.");
         }
     }
 

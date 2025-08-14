@@ -7,6 +7,7 @@ import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
+import com.bottari.teambottari.dto.RemindTeamItemRequest;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
@@ -74,6 +75,19 @@ public class TeamItemFacade {
             case SHARED -> teamSharedItemService.uncheck(id, ssaid);
             case ASSIGNED -> teamAssignedItemService.uncheck(id, ssaid);
             case PERSONAL -> teamPersonalItemService.uncheck(id, ssaid);
+        }
+    }
+
+    public void sendRemindAlarmByInfo(
+            final Long infoId,
+            final RemindTeamItemRequest request,
+            final String ssaid
+    ) {
+        switch (request.type()) {
+            case SHARED -> teamSharedItemService.sendRemindAlarm(infoId, ssaid);
+            case ASSIGNED -> teamAssignedItemService.sendRemindAlarm(infoId, ssaid);
+            case PERSONAL -> throw new BusinessException(
+                    ErrorCode.TEAM_BOTTARI_ITEM_INAPPROPRIATE_TYPE, "보채기 알람은 공통/담당 물품만 가능합니다.");
         }
     }
 
