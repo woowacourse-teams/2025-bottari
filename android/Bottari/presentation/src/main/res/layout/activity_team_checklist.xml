@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.Bottari"
-    tools:context=".view.team.checklist.TeamChecklistActivity">
+    tools:context=".view.checklist.team.TeamChecklistActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_bottari"

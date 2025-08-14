@@ -1,7 +1,7 @@
 package com.bottari.presentation.model
 
 import android.os.Parcelable
-import com.bottari.presentation.view.team.checklist.checklist.ChecklistCategory
+import com.bottari.presentation.view.checklist.team.checklist.ChecklistCategory
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

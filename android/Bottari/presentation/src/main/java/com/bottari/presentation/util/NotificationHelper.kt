@@ -10,7 +10,7 @@ import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import com.bottari.di.ApplicationContextProvider
 import com.bottari.presentation.R
-import com.bottari.presentation.view.checklist.ChecklistActivity
+import com.bottari.presentation.view.checklist.personal.ChecklistActivity
 
 class NotificationHelper(
     private val context: Context = ApplicationContextProvider.applicationContext,

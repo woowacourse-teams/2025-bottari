@@ -14,12 +14,12 @@ import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamBottariBinding
+import com.bottari.presentation.view.checklist.team.TeamChecklistActivity
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
 import com.bottari.presentation.view.create.BottariCreateDialog
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.home.team.adapter.TeamBottariAdapter
 import com.bottari.presentation.view.home.team.adapter.TeamBottariViewHolder
-import com.bottari.presentation.view.team.checklist.TeamChecklistActivity
 
 class TeamBottariFragment :
     BaseFragment<FragmentTeamBottariBinding>(FragmentTeamBottariBinding::inflate),
