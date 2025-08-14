@@ -17,7 +17,7 @@ class TeamChecklistTypeViewHolder(
     init {
         binding.root.setOnClickListener {
             currentType?.let { item ->
-                clickListener.onTypeClick(item)
+                clickListener.onTypeClick(item.type)
             }
         }
     }

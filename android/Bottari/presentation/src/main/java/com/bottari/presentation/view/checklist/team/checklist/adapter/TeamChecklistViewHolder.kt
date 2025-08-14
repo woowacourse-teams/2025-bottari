@@ -19,7 +19,7 @@ class TeamChecklistViewHolder private constructor(
     init {
         binding.root.setOnClickListener {
             currentItem?.let { item ->
-                clickListener.onItemClick(item)
+                clickListener.onItemClick(item.id, item.type)
             }
         }
     }
