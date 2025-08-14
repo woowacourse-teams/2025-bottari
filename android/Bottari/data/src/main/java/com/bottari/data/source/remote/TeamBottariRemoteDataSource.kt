@@ -4,6 +4,7 @@ import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
+import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.TeamMembersResponse
 
@@ -27,4 +28,6 @@ interface TeamBottariRemoteDataSource {
     suspend fun fetchTeamMembers(id: Long): Result<TeamMembersResponse>
 
     suspend fun fetchTeamBottariDetail(teamBottariId: Long): Result<FetchTeamBottariDetailResponse>
+
+    suspend fun fetchTeamBottariStatus(id: Long): Result<FetchTeamBottariStatusResponse>
 }

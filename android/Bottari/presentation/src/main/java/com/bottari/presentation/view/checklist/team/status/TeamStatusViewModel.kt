@@ -3,14 +3,19 @@ package com.bottari.presentation.view.checklist.team.status
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.bottari.di.UseCaseProvider
+import com.bottari.domain.usecase.team.FetchTeamStatusUseCase
 import com.bottari.presentation.common.base.BaseViewModel
+import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
+import kotlinx.coroutines.launch
 
 data class TeamStatusUiState(
     val isLoading: Boolean = false,
-    val teamChecklistStatus: TeamChecklistUiModel? = null,
+    val teamChecklistStatus: TeamBottariStatusUiModel? = null,
     val item: TeamProductStatusUiModel? = null,
     val teamChecklistItems: List<TeamProductStatusItem> = listOf(),
 )
@@ -23,116 +28,51 @@ sealed interface TeamStatusUiEvent {
 
 class TeamStatusViewModel(
     private val stateHandle: SavedStateHandle,
-) : BaseViewModel<TeamStatusUiState, TeamStatusUiEvent>(TeamStatusUiState()) {
+    private val fetchTeamStatusUseCase: FetchTeamStatusUseCase,
+) : BaseViewModel<TeamStatusUiState, TeamStatusUiEvent>(
+        TeamStatusUiState(),
+    ) {
     init {
         fetchTeamStatus()
     }
 
     private fun fetchTeamStatus() {
-        updateState { copy(teamChecklistStatus = create(), item = create().sharedItems[0]) }
-        generateTeamItemsList(create())
+        viewModelScope.launch {
+            fetchTeamStatusUseCase
+                .invoke(
+                    stateHandle[KEY_BOTTARI_ID] ?: throw IllegalArgumentException(
+                        ERROR_REQUIRE_BOTTARI_ID,
+                    ),
+                ).onSuccess { teamBottariStatus ->
+                    val teamBottariStatusUiModel = teamBottariStatus.toUiModel()
+                    val teamStatusListItems = generateTeamItemsList(teamBottariStatusUiModel)
+                    updateState {
+                        copy(
+                            teamChecklistStatus = teamBottariStatusUiModel,
+                            teamChecklistItems = teamStatusListItems,
+                            item =
+                                teamStatusListItems
+                                    .filter { it is TeamProductStatusUiModel }
+                                    .firstOrNull() as? TeamProductStatusUiModel,
+                        )
+                    }
+                }.onFailure {
+                    emitEvent(TeamStatusUiEvent.FetchChecklistFailure)
+                }
+        }
     }
 
     fun selectItem(item: TeamProductStatusUiModel) {
         updateState { copy(item = item) }
     }
 
-    private fun generateTeamItemsList(teamChecklistUiModel: TeamChecklistUiModel) {
-        val newItems =
-            buildList<TeamProductStatusItem> {
-                add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.SHARED))
-                addAll(teamChecklistUiModel.sharedItems)
-                add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.ASSIGNED()))
-                addAll(teamChecklistUiModel.assignedItems)
-            }
-
-        updateState { copy(teamChecklistItems = newItems) }
-    }
-
-    fun create(): TeamChecklistUiModel {
-        val sharedItems =
-            listOf(
-                TeamProductStatusUiModel(
-                    name = "공용 멀티탭",
-                    checkItemsCount = 5,
-                    totalItemsCount = 5,
-                    memberCheckStatus =
-                        listOf(
-                            MemberCheckStatusUiModel(name = "철수", checked = true),
-                            MemberCheckStatusUiModel(name = "영희", checked = true),
-                            MemberCheckStatusUiModel(name = "민준", checked = true),
-                            MemberCheckStatusUiModel(name = "서연", checked = true),
-                            MemberCheckStatusUiModel(name = "지훈", checked = true),
-                        ),
-                ),
-                TeamProductStatusUiModel(
-                    name = "구급상자",
-                    checkItemsCount = 3,
-                    totalItemsCount = 5,
-                    memberCheckStatus =
-                        listOf(
-                            MemberCheckStatusUiModel(name = "철수", checked = true),
-                            MemberCheckStatusUiModel(name = "영희", checked = false),
-                            MemberCheckStatusUiModel(name = "민준", checked = true),
-                            MemberCheckStatusUiModel(name = "서연", checked = true),
-                            MemberCheckStatusUiModel(name = "지훈", checked = false),
-                        ),
-                ),
-                TeamProductStatusUiModel(
-                    name = "보드게임",
-                    checkItemsCount = 0,
-                    totalItemsCount = 5,
-                    memberCheckStatus =
-                        listOf(
-                            MemberCheckStatusUiModel(name = "철수", checked = false),
-                            MemberCheckStatusUiModel(name = "영희", checked = false),
-                            MemberCheckStatusUiModel(name = "민준", checked = false),
-                            MemberCheckStatusUiModel(name = "서연", checked = false),
-                            MemberCheckStatusUiModel(name = "지훈", checked = false),
-                        ),
-                ),
-            )
-
-        // 할당 아이템 목록 더미 데이터
-        val assignedItems =
-            listOf(
-                TeamProductStatusUiModel(
-                    name = "항공권 출력",
-                    checkItemsCount = 2,
-                    totalItemsCount = 2,
-                    memberCheckStatus =
-                        listOf(
-                            MemberCheckStatusUiModel(name = "철수", checked = true),
-                            MemberCheckStatusUiModel(name = "영희", checked = true),
-                        ),
-                ),
-                TeamProductStatusUiModel(
-                    name = "렌터카 예약",
-                    checkItemsCount = 1,
-                    totalItemsCount = 2,
-                    memberCheckStatus =
-                        listOf(
-                            MemberCheckStatusUiModel(name = "서연", checked = true),
-                            MemberCheckStatusUiModel(name = "지훈", checked = false),
-                        ),
-                ),
-                TeamProductStatusUiModel(
-                    name = "맛집 리스트업",
-                    checkItemsCount = 0,
-                    totalItemsCount = 2,
-                    memberCheckStatus =
-                        listOf(
-                            MemberCheckStatusUiModel(name = "영희", checked = false),
-                            MemberCheckStatusUiModel(name = "지훈", checked = false),
-                        ),
-                ),
-            )
-
-        return TeamChecklistUiModel(
-            sharedItems = sharedItems,
-            assignedItems = assignedItems,
-        )
-    }
+    private fun generateTeamItemsList(teamBottariStatusUiModel: TeamBottariStatusUiModel): List<TeamProductStatusItem> =
+        buildList {
+            add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.SHARED))
+            addAll(teamBottariStatusUiModel.sharedItems)
+            add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.ASSIGNED()))
+            addAll(teamBottariStatusUiModel.assignedItems)
+        }
 
     companion object {
         const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
@@ -145,6 +85,7 @@ class TeamStatusViewModel(
                     stateHandle[KEY_BOTTARI_ID] = bottariId
                     TeamStatusViewModel(
                         stateHandle,
+                        UseCaseProvider.fetchTeamStatusUseCase,
                     )
                 }
             }
