@@ -4,7 +4,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bottari.presentation.view.checklist.team.status.MemberCheckStatusUiModel
 import com.bottari.presentation.view.checklist.team.status.TeamChecklistTypeUiModel
 import com.bottari.presentation.view.checklist.team.status.TeamProductStatusItem
 import com.bottari.presentation.view.checklist.team.status.TeamProductStatusUiModel

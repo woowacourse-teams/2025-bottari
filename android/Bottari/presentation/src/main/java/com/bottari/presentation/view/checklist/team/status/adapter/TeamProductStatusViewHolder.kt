@@ -11,7 +11,6 @@ class TeamProductStatusViewHolder private constructor(
     private val binding: ItemTeamBottariItemStatusBinding,
     private val listener: OnTeamProductStatusItemClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
-
     fun bind(
         item: TeamProductStatusUiModel,
         isSelected: Boolean,
