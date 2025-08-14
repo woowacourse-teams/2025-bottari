@@ -131,6 +131,7 @@ public class TeamMemberService {
                 .toList();
 
         return new ReadTeamMemberStatusResponse(
+                teamMember.getMember().getId(),
                 teamMember.getMember().getName(),
                 teamMember.isTeamBottariOwner(),
                 totalItemsCount,

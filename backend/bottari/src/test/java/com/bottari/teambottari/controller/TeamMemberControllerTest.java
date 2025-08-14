@@ -70,6 +70,7 @@ class TeamMemberControllerTest {
         final String ssaid = "ssaid";
         final List<ReadTeamMemberStatusResponse> response = List.of(
                 new ReadTeamMemberStatusResponse(
+                        1L,
                         "owner_name",
                         true,
                         2,
@@ -80,6 +81,7 @@ class TeamMemberControllerTest {
                         ),
                         List.of()
                 ), new ReadTeamMemberStatusResponse(
+                        2L,
                         "member_name",
                         false,
                         3,
