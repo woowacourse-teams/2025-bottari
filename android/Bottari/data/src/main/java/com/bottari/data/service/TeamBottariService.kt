@@ -26,13 +26,13 @@ interface TeamBottariService {
     @PATCH("/team-items/{id}/check")
     suspend fun checkTeamBottariItem(
         @Path("id") id: Long,
-        @Body body: ItemTypeRequest,
+        @Body request: ItemTypeRequest,
     ): Response<Unit>
 
     @PATCH("/team-items/{id}/uncheck")
     suspend fun uncheckTeamBottariItem(
         @Path("id") id: Long,
-        @Body body: ItemTypeRequest,
+        @Body request: ItemTypeRequest,
     ): Response<Unit>
 
     @GET("/team-bottaries")
