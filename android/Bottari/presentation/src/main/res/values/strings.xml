@@ -209,6 +209,7 @@
     <!--  Team Members Status  -->
     <string name="team_members_status_hurry_up_btn_text">보채기</string>
     <string name="team_members_status_items_count_text">%d/%d 챙김</string>
+    <string name="team_members_status_items_empty_text">챙길 물건이 없어요</string>
     <string name="team_members_status_fetch_failure_text">팀원 현황을 조회하는데 실패했어요</string>
 
     <!-- Alarm Edit -->

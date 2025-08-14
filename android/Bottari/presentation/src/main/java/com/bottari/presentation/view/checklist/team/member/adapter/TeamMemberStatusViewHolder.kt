@@ -20,22 +20,32 @@ class TeamMemberStatusViewHolder(
     private val assignedItemAdapter: AssignedItemAdapter by lazy { AssignedItemAdapter() }
 
     init {
-        binding.root.setOnClickListener {
+        itemView.setOnClickListener {
             binding.groupItems.apply { isVisible = !isVisible }
         }
     }
 
     fun bind(status: TeamMemberStatusUiModel) {
+        itemView.isClickable = status.isItemsEmpty.not()
         binding.tvMemberNickname.text = status.member.nickname
         binding.ivTeamHost.isVisible = status.member.isHost
+        handleItemsStatus(status)
+        setupSharedItems(status.sharedItems)
+        setupAssignedItems(status.assignedItems)
+    }
+
+    private fun handleItemsStatus(status: TeamMemberStatusUiModel) {
+        if (status.isItemsEmpty) {
+            binding.tvItemsCountStatus.text =
+                itemView.context.getString(R.string.team_members_status_items_empty_text)
+            return
+        }
         binding.tvItemsCountStatus.text =
             itemView.context.getString(
                 R.string.team_members_status_items_count_text,
                 status.checkedItemsCount,
                 status.totalItemsCount,
             )
-        setupSharedItems(status.sharedItems)
-        setupAssignedItems(status.assignedItems)
     }
 
     private fun setupSharedItems(sharedItems: List<ChecklistItemUiModel>) {
