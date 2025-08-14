@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.checklist.team.checklist
 
-interface ItemClickListener {
+interface TeamChecklistItemClickListener {
     fun onTypeClick(type: ChecklistType)
 
     fun onItemClick(

@@ -13,7 +13,7 @@ import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamCheckl
 
 class TeamChecklistFragment :
     BaseFragment<FragmentTeamChecklistBinding>(FragmentTeamChecklistBinding::inflate),
-    ItemClickListener {
+    TeamChecklistItemClickListener {
     private val viewModel: TeamChecklistViewModel by viewModels {
         TeamChecklistViewModel.Factory(requireArguments().getLong(ARG_BOTTARI_ID))
     }

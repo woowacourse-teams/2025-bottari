@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamChecklistBinding
 import com.bottari.presentation.model.TeamChecklistProductUiModel
-import com.bottari.presentation.view.checklist.team.checklist.ItemClickListener
+import com.bottari.presentation.view.checklist.team.checklist.TeamChecklistItemClickListener
 
 class TeamChecklistViewHolder private constructor(
     private val binding: ItemTeamChecklistBinding,
-    private val clickListener: ItemClickListener,
+    private val clickListener: TeamChecklistItemClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     private var currentItem: TeamChecklistProductUiModel? = null
 
@@ -45,11 +45,11 @@ class TeamChecklistViewHolder private constructor(
     companion object {
         fun from(
             parent: ViewGroup,
-            itemClickListener: ItemClickListener,
+            teamChecklistItemClickListener: TeamChecklistItemClickListener,
         ): TeamChecklistViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemTeamChecklistBinding.inflate(inflater, parent, false)
-            return TeamChecklistViewHolder(binding, itemClickListener)
+            return TeamChecklistViewHolder(binding, teamChecklistItemClickListener)
         }
     }
 }

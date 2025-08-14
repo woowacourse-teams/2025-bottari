@@ -8,10 +8,10 @@ import com.bottari.presentation.R
 import com.bottari.presentation.model.TeamChecklistItem
 import com.bottari.presentation.model.TeamChecklistProductUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
-import com.bottari.presentation.view.checklist.team.checklist.ItemClickListener
+import com.bottari.presentation.view.checklist.team.checklist.TeamChecklistItemClickListener
 
 class TeamChecklistItemAdapter(
-    private val clickListener: ItemClickListener,
+    private val clickListener: TeamChecklistItemClickListener,
 ) : ListAdapter<TeamChecklistItem, RecyclerView.ViewHolder>(DiffCallback) {
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
