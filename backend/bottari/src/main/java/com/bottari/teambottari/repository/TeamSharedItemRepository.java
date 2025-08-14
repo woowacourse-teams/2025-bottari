@@ -8,7 +8,17 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface TeamSharedItemRepository extends JpaRepository<TeamSharedItem, Long> {
 
-    List<TeamSharedItem> findAllByTeamMemberIn(final List<TeamMember> teamMembers);  
+    @Query("""
+            SELECT tsi
+            FROM TeamSharedItem tsi
+            JOIN FETCH tsi.info
+            JOIN FETCH tsi.teamMember tm
+            JOIN FETCH tm.member
+            WHERE tsi.teamMember.teamBottari.id = :teamBottariId
+            """)
+    List<TeamSharedItem> findAllByTeamBottariId(final Long teamBottariId);
+
+    List<TeamSharedItem> findAllByTeamMemberIn(final List<TeamMember> teamMembers);
 
     @Query("""
             SELECT tsi

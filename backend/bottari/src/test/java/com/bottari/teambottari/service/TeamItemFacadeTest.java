@@ -17,6 +17,8 @@ import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CheckTeamItemRequest;
+import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
+import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
@@ -44,6 +46,112 @@ public class TeamItemFacadeTest {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Nested
+    class GetTeamItemStatusTest {
+
+        @DisplayName("팀 보따리 물품 현황을 조회한다.")
+        @Test
+        void getTeamItemStatus() {
+            // given
+            final Member member_1 = MemberFixture.MEMBER.get();
+            final Member member_2 = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(member_1);
+            entityManager.persist(member_2);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member_1);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember_1 = new TeamMember(teamBottari, member_1);
+            final TeamMember teamMember_2 = new TeamMember(teamBottari, member_2);
+            entityManager.persist(teamMember_1);
+            entityManager.persist(teamMember_2);
+
+            final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo("공통 물품", teamBottari);
+            entityManager.persist(teamSharedItemInfo);
+
+            // 공통 물품 배정
+            final TeamSharedItem member_1_sharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember_1);
+            final TeamSharedItem member_2_sharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember_2);
+            entityManager.persist(member_1_sharedItem);
+            entityManager.persist(member_2_sharedItem);
+
+            // 담당 물품 배정
+            final TeamAssignedItemInfo teamAssignedItemInfo_1 = new TeamAssignedItemInfo("멤버 1 물품", teamBottari);
+            final TeamAssignedItemInfo teamAssignedItemInfo_2 = new TeamAssignedItemInfo("멤버 2 물품", teamBottari);
+            entityManager.persist(teamAssignedItemInfo_1);
+            entityManager.persist(teamAssignedItemInfo_2);
+
+            // 담당 물품 배정 (멤버 1 -> member_1_assignedItem, 멤버 2 -> member_2_assignedItem)
+            final TeamAssignedItem member_1_assignedItem = new TeamAssignedItem(teamAssignedItemInfo_1, teamMember_1);
+            final TeamAssignedItem member_2_assignedItem = new TeamAssignedItem(teamAssignedItemInfo_2, teamMember_2);
+            member_2_assignedItem.check();
+            entityManager.persist(member_1_assignedItem);
+            entityManager.persist(member_2_assignedItem);
+
+            // when
+            final ReadTeamItemStatusResponse actual = teamItemFacade.getTeamItemStatus(teamBottari.getId(),
+                    member_1.getSsaid());
+
+            // then
+            final List<TeamItemStatusResponse.MemberCheckStatusResponse> expectedSharedMemberStatus = List.of(
+                    new TeamItemStatusResponse.MemberCheckStatusResponse(member_1.getName(), false),
+                    new TeamItemStatusResponse.MemberCheckStatusResponse(member_2.getName(), false)
+            );
+            final List<TeamItemStatusResponse.MemberCheckStatusResponse> expectedMember1AssignedStatus = List.of(
+                    new TeamItemStatusResponse.MemberCheckStatusResponse(member_1.getName(), false)
+            );
+            final List<TeamItemStatusResponse.MemberCheckStatusResponse> expectedMember2AssignedStatus = List.of(
+                    new TeamItemStatusResponse.MemberCheckStatusResponse(member_2.getName(), true)
+            );
+
+            final List<TeamItemStatusResponse> expectedSharedItems = List.of(
+                    new TeamItemStatusResponse("공통 물품", expectedSharedMemberStatus, 0, 2)
+            );
+            final List<TeamItemStatusResponse> expectedAssignedItems = List.of(
+                    new TeamItemStatusResponse("멤버 1 물품", expectedMember1AssignedStatus, 0, 1),
+                    new TeamItemStatusResponse("멤버 2 물품", expectedMember2AssignedStatus, 1, 1)
+            );
+            final ReadTeamItemStatusResponse expected = new ReadTeamItemStatusResponse(expectedSharedItems,
+                    expectedAssignedItems);
+
+            assertThat(actual).isEqualTo(expected);
+        }
+
+        @DisplayName("팀 보따리 물품을 조회할 때, 팀 멤버가 아니라면 예외를 던진다.")
+        @Test
+        void getTeamItemStatus_Exception_NotTeamMamber() {
+            // given
+            final Member member_in_team = MemberFixture.MEMBER.get();
+            final Member member_not_in_team = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(member_in_team);
+            entityManager.persist(member_not_in_team);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member_in_team);
+            entityManager.persist(teamBottari);
+
+            // when & then
+            assertThatThrownBy(
+                    () -> teamItemFacade.getTeamItemStatus(teamBottari.getId(), member_not_in_team.getSsaid()))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
+        }
+
+        @DisplayName("팀 보따리 물품 현황을 조회할 때, 팀 보따리가 존재하지 않는다면 예외를 던진다.")
+        @Test
+        void getTeamItemStatus_Exception_NotFoundTeamBottari() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final Long invalid_teamBottariId = -1L;
+
+            // when & then
+            assertThatThrownBy(() -> teamItemFacade.getTeamItemStatus(invalid_teamBottariId, member.getSsaid()))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("팀 보따리를 찾을 수 없습니다.");
+        }
+    }
 
     @Nested
     class GetCheckListTest {

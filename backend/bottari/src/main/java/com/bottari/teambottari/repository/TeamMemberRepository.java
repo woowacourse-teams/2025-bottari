@@ -14,27 +14,33 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
             final Long teamBottariId,
             final Long memberId
     );
+
     @Query("""
-            SELECT tm
-            FROM TeamMember tm
-            JOIN FETCH tm.member m
-            WHERE tm.teamBottari.id = :teamBottariId
-           """)
+             SELECT tm
+             FROM TeamMember tm
+             JOIN FETCH tm.member m
+             WHERE tm.teamBottari.id = :teamBottariId
+            """)
     List<TeamMember> findAllByTeamBottariId(final Long teamBottariId);
 
     @Query("""
-            SELECT tm
-            FROM TeamMember tm
-            JOIN FETCH tm.teamBottari t
-            WHERE tm.member.id = :memberId
-           """)
+             SELECT tm
+             FROM TeamMember tm
+             JOIN FETCH tm.teamBottari t
+             WHERE tm.member.id = :memberId
+            """)
     List<TeamMember> findAllByMemberId(final Long memberId);
 
     @Query("""
-            SELECT tm.teamBottari.id AS teamBottariId, COUNT(tm) AS memberCount
-            FROM TeamMember tm
-            WHERE tm.teamBottari IN :teamBottaries
-            GROUP BY tm.teamBottari
-           """)
+             SELECT tm.teamBottari.id AS teamBottariId, COUNT(tm) AS memberCount
+             FROM TeamMember tm
+             WHERE tm.teamBottari IN :teamBottaries
+             GROUP BY tm.teamBottari
+            """)
     List<TeamBottariMemberCountProjection> countMembersByTeamBottariIn(final List<TeamBottari> teamBottaries);
+
+    boolean existsByTeamBottariIdAndMemberSsaid(
+            final Long teamBottariId,
+            final String ssaid
+    );
 }
