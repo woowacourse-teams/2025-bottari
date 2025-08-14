@@ -79,7 +79,7 @@ class TeamChecklistViewModel(
 
     private fun List<TeamChecklistRowUiModel>.toggleItemInList(item: TeamChecklistItemUiModel): List<TeamChecklistRowUiModel> =
         this.map { row ->
-            if (row is TeamChecklistItemUiModel && row.id == item.id && row.type == item.type) {
+            if (row.isSameItem(item)) {
                 item
             } else {
                 row
@@ -185,11 +185,15 @@ class TeamChecklistViewModel(
     private fun findItemToToggle(
         itemId: Long,
         type: ChecklistType,
-    ) = currentState.expandableItems.firstOrNull {
-        it is TeamChecklistItemUiModel &&
-            it.id == itemId &&
-            it.type == type
-    }
+    ) = currentState.expandableItems.find { it.isSameItem(itemId, type) } as? TeamChecklistItemUiModel
+
+    private fun TeamChecklistRowUiModel.isSameItem(other: TeamChecklistItemUiModel): Boolean =
+        this is TeamChecklistItemUiModel && this.id == other.id && this.type == other.type
+
+    private fun TeamChecklistRowUiModel.isSameItem(
+        itemId: Long,
+        type: ChecklistType,
+    ): Boolean = this is TeamChecklistItemUiModel && this.id == itemId && this.type == type
 
     private fun performItemCheck(items: List<TeamChecklistItemUiModel>) {
         launch {
@@ -203,16 +207,18 @@ class TeamChecklistViewModel(
     }
 
     private suspend fun processItemCheck(item: TeamChecklistItemUiModel) {
-        val result =
-            if (item.isChecked) {
-                checkTeamBottariItemUseCase(item.id, item.type.toString())
-            } else {
-                unCheckTeamBottariItemUseCase(item.id, item.type.toString())
-            }
+        val result = executeCheckUseCase(item)
         result.onFailure {
             emitEvent(TeamChecklistUiEvent.CheckItemFailure)
         }
     }
+
+    private suspend fun executeCheckUseCase(item: TeamChecklistItemUiModel) =
+        if (item.isChecked) {
+            checkTeamBottariItemUseCase(item.id, item.type.toString())
+        } else {
+            unCheckTeamBottariItemUseCase(item.id, item.type.toString())
+        }
 
     companion object {
         const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
