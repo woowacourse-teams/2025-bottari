@@ -1,7 +1,7 @@
 package com.bottari.teambottari.controller;
 
 import com.bottari.config.MemberIdentifier;
-import com.bottari.teambottari.dto.CreatePersonalItemRequest;
+import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
@@ -23,11 +23,24 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
 
     private final TeamItemFacade teamItemFacade;
 
+    @PostMapping("/team-bottaries/{teamBottariId}/shared-items")
+    @Override
+    public ResponseEntity<Void> createShared(
+            @PathVariable final Long teamBottariId,
+            @RequestBody final CreateTeamItemRequest request,
+            @MemberIdentifier final String ssaid
+    ) {
+        final Long id = teamItemFacade.createSharedItem(teamBottariId, request, ssaid);
+        final URI location = URI.create("/team-bottaries/" + teamBottariId + "/shared-items/" + id);
+
+        return ResponseEntity.created(location).build();
+    }
+
     @PostMapping("/team-bottaries/{teamBottariId}/personal-items")
     @Override
     public ResponseEntity<Void> createPersonal(
             @PathVariable final Long teamBottariId,
-            @RequestBody final CreatePersonalItemRequest request,
+            @RequestBody final CreateTeamItemRequest request,
             @MemberIdentifier final String ssaid
     ) {
         final Long id = teamItemFacade.createPersonalItem(teamBottariId, request, ssaid);

@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.bottari.config.WebConfig;
 import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.domain.TeamItemType;
-import com.bottari.teambottari.dto.CreatePersonalItemRequest;
+import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse.MemberCheckStatusResponse;
@@ -47,6 +47,32 @@ class TeamBottariItemControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @DisplayName("팀 보따리 공통 물품을 성공적으로 생성한다.")
+    @Test
+    void createSharedItem() throws Exception {
+        // given
+        final Long teamBottariId = 1L;
+        final String ssaid = "test-ssaid";
+        final String itemName = "공통 물품1";
+
+        final CreateTeamItemRequest request = new CreateTeamItemRequest(itemName);
+        final Long createdItemId = 1L;
+
+        given(teamItemFacade.createSharedItem(teamBottariId, request, ssaid))
+                .willReturn(createdItemId);
+
+        // when & then
+        mockMvc.perform(post("/team-bottaries/{teamBottariId}/shared-items", teamBottariId)
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(header().string(
+                        "Location",
+                        "/team-bottaries/" + teamBottariId + "/shared-items/" + createdItemId
+                ));
+    }
+
     @DisplayName("팀 보따리 개인 물품을 성공적으로 생성한다.")
     @Test
     void createPersonalItem() throws Exception {
@@ -55,7 +81,7 @@ class TeamBottariItemControllerTest {
         final String ssaid = "test-ssaid";
         final String itemName = "개인 물품1";
 
-        final CreatePersonalItemRequest request = new CreatePersonalItemRequest(itemName);
+        final CreateTeamItemRequest request = new CreateTeamItemRequest(itemName);
         final Long createdItemId = 1L;
 
         given(teamItemFacade.createPersonalItem(teamBottariId, request, ssaid))
@@ -76,6 +102,7 @@ class TeamBottariItemControllerTest {
     @DisplayName("팀 보따리 물품을 성공적으로 삭제한다.")
     @ParameterizedTest
     @CsvSource({
+            "SHARED",
             "PERSONAL"
     })
     void deleteItem(final TeamItemType type) throws Exception {
