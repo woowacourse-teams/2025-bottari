@@ -10,6 +10,8 @@ import com.bottari.domain.usecase.appConfig.SavePermissionFlagUseCase
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.presentation.common.base.BaseViewModel
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.tasks.await
 
 class MainViewModel(
     private val registerMemberUseCase: RegisterMemberUseCase,
@@ -68,7 +70,8 @@ class MainViewModel(
 
     private fun registerMember() {
         launch {
-            registerMemberUseCase()
+            val fcmToken = FirebaseMessaging.getInstance().token.await()
+            registerMemberUseCase(fcmToken)
                 .onSuccess {
                     updateState { copy(isLoading = false, isReady = true) }
                     emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))

@@ -7,4 +7,6 @@ import kotlinx.serialization.Serializable
 data class RegisterMemberRequest(
     @SerialName("ssaid")
     val ssaid: String,
+    @SerialName("fcmToken")
+    val fcmToken: String,
 )
