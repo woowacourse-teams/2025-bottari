@@ -359,7 +359,7 @@ class TeamMemberServiceTest {
             // when & then
             assertThatThrownBy(() -> teamMemberService.joinTeamBottari(request, notExistsSsaid))
                     .isInstanceOf(BusinessException.class)
-                    .hasMessage("사용자를 찾을 수 없습니다.");
+                    .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
         }
 
         @DisplayName("이미 팀 보따리에 속한 멤버일 경우, 예외를 던진다.")

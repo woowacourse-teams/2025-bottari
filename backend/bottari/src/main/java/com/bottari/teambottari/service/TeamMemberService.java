@@ -71,7 +71,7 @@ public class TeamMemberService {
                         ErrorCode.TEAM_BOTTARI_NOT_FOUND,
                         "해당하는 초대코드 없음"));
         final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         validateMemberNotInTeam(teamBottari, member);
         final TeamMember teamMember = new TeamMember(teamBottari, member);
         teamMemberRepository.save(teamMember);
