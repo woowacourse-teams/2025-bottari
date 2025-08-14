@@ -4,7 +4,7 @@ import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamPersonalItem;
-import com.bottari.teambottari.dto.CreatePersonalItemRequest;
+import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamPersonalItemRepository;
 import java.util.List;
@@ -21,7 +21,7 @@ public class TeamPersonalItemService {
     @Transactional
     public Long create(
             final TeamMember teamMember,
-            final CreatePersonalItemRequest request
+            final CreateTeamItemRequest request
     ) {
         validateDuplicateName(teamMember.getId(), request.name());
         final TeamPersonalItem item = new TeamPersonalItem(request.name(), teamMember);

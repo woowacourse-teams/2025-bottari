@@ -13,4 +13,9 @@ public interface TeamSharedItemInfoRepository extends JpaRepository<TeamSharedIt
              WHERE tsii.teamBottari.id = :teamBottariId
             """)
     List<TeamSharedItemInfo> findAllByTeamBottariId(final Long teamBottariId);
+
+    boolean existsByTeamBottariIdAndName(
+            final Long teamBottariId,
+            final String name
+    );
 }

@@ -1,6 +1,6 @@
 package com.bottari.teambottari.dto;
 
-public record CreatePersonalItemRequest(
+public record CreateTeamItemRequest(
         String name
 ) {
 }

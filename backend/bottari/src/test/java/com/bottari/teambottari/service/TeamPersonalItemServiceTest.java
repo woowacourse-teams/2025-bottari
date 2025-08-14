@@ -11,7 +11,7 @@ import com.bottari.member.domain.Member;
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamPersonalItem;
-import com.bottari.teambottari.dto.CreatePersonalItemRequest;
+import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
 import java.util.List;
@@ -49,7 +49,7 @@ class TeamPersonalItemServiceTest {
             entityManager.persist(teamMember);
 
             final String itemName = "개인 물품";
-            final CreatePersonalItemRequest request = new CreatePersonalItemRequest(itemName);
+            final CreateTeamItemRequest request = new CreateTeamItemRequest(itemName);
 
             // when
             final Long actual = teamPersonalItemService.create(teamMember, request);
@@ -79,7 +79,7 @@ class TeamPersonalItemServiceTest {
             final String itemName = "개인 물품";
             entityManager.persist(new TeamPersonalItem(itemName, teamMember));
 
-            final CreatePersonalItemRequest request = new CreatePersonalItemRequest(itemName);
+            final CreateTeamItemRequest request = new CreateTeamItemRequest(itemName);
 
             // when & then
             assertThatThrownBy(() -> teamPersonalItemService.create(teamMember, request))
