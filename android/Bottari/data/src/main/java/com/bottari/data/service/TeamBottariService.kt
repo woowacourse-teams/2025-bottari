@@ -4,8 +4,9 @@ import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
+import com.bottari.data.model.team.FetchTeamMemberStatusResponse
+import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.ItemTypeRequest
-import com.bottari.data.model.team.TeamMembersResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -42,10 +43,15 @@ interface TeamBottariService {
     @GET("/team-bottaries/{teamBottariId}/members")
     suspend fun fetchTeamMembers(
         @Path("teamBottariId") id: Long,
-    ): Response<TeamMembersResponse>
+    ): Response<FetchTeamMembersResponse>
 
     @GET("/team-bottaries/{id}")
     suspend fun fetchTeamBottariDetail(
         @Path("id") teamBottariId: Long,
     ): Response<FetchTeamBottariDetailResponse>
+
+    @GET("/team-bottaries/{teamBottariId}/members/status")
+    suspend fun fetchTeamMembersStatus(
+        @Path("teamBottariId") id: Long,
+    ): Response<List<FetchTeamMemberStatusResponse>>
 }

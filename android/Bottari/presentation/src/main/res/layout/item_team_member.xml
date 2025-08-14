@@ -22,7 +22,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="@dimen/space_2x_small"
-        android:contentDescription="@string/team_management_host_iv_description"
+        android:contentDescription="@string/team_host_iv_description"
         android:src="@drawable/ic_host"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/tv_team_member"

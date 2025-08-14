@@ -24,6 +24,7 @@ import com.bottari.domain.usecase.team.CreateTeamBottariUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariDetailUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
+import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
 import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
@@ -171,5 +172,8 @@ object UseCaseProvider {
     }
     val fetchTeamBottariDetailUseCase: FetchTeamBottariDetailUseCase by lazy {
         FetchTeamBottariDetailUseCase(RepositoryProvider.teamBottariRepository)
+    }
+    val fetchTeamMembersStatusUseCase: FetchTeamMembersStatusUseCase by lazy {
+        FetchTeamMembersStatusUseCase(RepositoryProvider.teamBottariRepository)
     }
 }
