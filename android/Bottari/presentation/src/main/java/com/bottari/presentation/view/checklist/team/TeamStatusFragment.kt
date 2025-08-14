@@ -5,7 +5,6 @@ import com.bottari.presentation.databinding.FragmentTeamStatusBinding
 
 class TeamStatusFragment : BaseFragment<FragmentTeamStatusBinding>(FragmentTeamStatusBinding::inflate) {
     companion object {
-        @JvmStatic
         fun newInstance(): TeamStatusFragment = TeamStatusFragment()
     }
 }

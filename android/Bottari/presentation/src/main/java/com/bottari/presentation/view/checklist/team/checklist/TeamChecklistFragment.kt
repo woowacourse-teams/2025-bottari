@@ -62,7 +62,6 @@ class TeamChecklistFragment :
     companion object {
         private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
 
-        @JvmStatic
         fun newInstance(bottariId: Long): TeamChecklistFragment =
             TeamChecklistFragment().apply {
                 arguments = bundleOf(ARG_BOTTARI_ID to bottariId)
