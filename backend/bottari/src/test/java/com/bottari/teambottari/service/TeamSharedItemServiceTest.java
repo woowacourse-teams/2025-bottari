@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
@@ -250,12 +250,16 @@ class TeamSharedItemServiceTest {
             final TeamSharedItem teamSharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember);
             entityManager.persist(teamSharedItem);
 
-            doNothing().when(fcmMessageSender).sendMessageToMembers(anyList(), any());
+            final List<Long> uncheckedMemberIds = List.of(
+                    member.getId()
+            );
+
+            doNothing().when(fcmMessageSender).sendMessageToMembers(eq(uncheckedMemberIds), any());
 
             // when & then
             assertThatCode(() -> teamSharedItemService.sendRemindAlarm(teamSharedItemInfo.getId(), member.getSsaid()))
                     .doesNotThrowAnyException();
-            verify(fcmMessageSender).sendMessageToMembers(anyList(), any());
+            verify(fcmMessageSender).sendMessageToMembers(eq(uncheckedMemberIds), any());
         }
 
         @DisplayName("보채기 알람을 보낼 때, 물품 정보가 존재하지 않는다면 예외를 던진다.")
