@@ -11,7 +11,7 @@ import com.bottari.presentation.model.TeamChecklistItemUiModel
 
 class TeamChecklistViewHolder private constructor(
     private val binding: ItemTeamChecklistBinding,
-    private val clickListener: TeamChecklistItemAdapter.OnItemClickListener,
+    private val clickListener: TeamChecklistItemAdapter.ItemClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     private var currentItem: TeamChecklistItemUiModel? = null
 
@@ -44,11 +44,11 @@ class TeamChecklistViewHolder private constructor(
     companion object {
         fun from(
             parent: ViewGroup,
-            onItemClickListener: TeamChecklistItemAdapter.OnItemClickListener,
+            itemClickListener: TeamChecklistItemAdapter.ItemClickListener,
         ): TeamChecklistViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemTeamChecklistBinding.inflate(inflater, parent, false)
-            return TeamChecklistViewHolder(binding, onItemClickListener)
+            return TeamChecklistViewHolder(binding, itemClickListener)
         }
     }
 }

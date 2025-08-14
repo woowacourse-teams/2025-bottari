@@ -10,9 +10,9 @@ import com.bottari.presentation.model.TeamChecklistRowUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
 
 class TeamChecklistItemAdapter(
-    private val clickListener: OnItemClickListener,
+    private val clickListener: ItemClickListener,
 ) : ListAdapter<TeamChecklistRowUiModel, RecyclerView.ViewHolder>(DiffCallback) {
-    interface OnItemClickListener {
+    interface ItemClickListener {
         fun onTypeClick(position: TeamChecklistTypeUiModel)
 
         fun onItemClick(position: TeamChecklistItemUiModel)
