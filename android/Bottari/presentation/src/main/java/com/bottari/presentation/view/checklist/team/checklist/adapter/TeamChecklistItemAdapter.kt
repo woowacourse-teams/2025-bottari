@@ -39,9 +39,15 @@ class TeamChecklistItemAdapter(
         holder: RecyclerView.ViewHolder,
         position: Int,
     ) {
-        when (val item = getItem(position)) {
-            is TeamChecklistTypeUiModel -> (holder as TeamChecklistTypeViewHolder).bind(item)
-            is TeamChecklistItemUiModel -> (holder as TeamChecklistViewHolder).bind(item)
+        val item = getItem(position)
+        when {
+            item is TeamChecklistTypeUiModel && holder is TeamChecklistTypeViewHolder -> {
+                holder.bind(item)
+            }
+
+            item is TeamChecklistItemUiModel && holder is TeamChecklistViewHolder -> {
+                holder.bind(item)
+            }
         }
     }
 
@@ -53,16 +59,16 @@ class TeamChecklistItemAdapter(
                 override fun areItemsTheSame(
                     oldItem: TeamChecklistRowUiModel,
                     newItem: TeamChecklistRowUiModel,
-                ): Boolean {
-                    if (oldItem::class != newItem::class) return false
-                    return when (oldItem) {
-                        is TeamChecklistTypeUiModel ->
-                            (newItem as TeamChecklistTypeUiModel).type == oldItem.type
+                ): Boolean =
+                    when {
+                        oldItem is TeamChecklistTypeUiModel && newItem is TeamChecklistTypeUiModel ->
+                            oldItem.type == newItem.type
 
-                        is TeamChecklistItemUiModel ->
-                            (newItem as TeamChecklistItemUiModel).id == oldItem.id
+                        oldItem is TeamChecklistItemUiModel && newItem is TeamChecklistItemUiModel ->
+                            oldItem.id == newItem.id
+
+                        else -> false
                     }
-                }
 
                 override fun areContentsTheSame(
                     oldItem: TeamChecklistRowUiModel,
