@@ -83,9 +83,11 @@ public class TeamAssignedItemService {
     }
 
     private int countCheckedItem(final List<TeamAssignedItem> items) {
-        return Math.toIntExact(items.stream()
+        final long count = items.stream()
                 .filter(TeamAssignedItem::isChecked)
-                .count());
+                .count();
+        
+        return Math.toIntExact(count);
     }
 
     private void validateOwner(

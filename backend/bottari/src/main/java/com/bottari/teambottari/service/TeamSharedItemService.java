@@ -83,9 +83,11 @@ public class TeamSharedItemService {
     }
 
     private int countCheckedItem(final List<TeamSharedItem> items) {
-        return Math.toIntExact(items.stream()
+        final long count = items.stream()
                 .filter(TeamSharedItem::isChecked)
-                .count());
+                .count();
+
+        return Math.toIntExact(count);
     }
 
     private void validateOwner(
