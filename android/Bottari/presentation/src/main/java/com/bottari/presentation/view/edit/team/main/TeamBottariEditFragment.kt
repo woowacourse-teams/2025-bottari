@@ -8,8 +8,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.formatWithPattern
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamBottariEditBinding
+import com.bottari.presentation.model.AlarmTypeUiModel
+import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.view.edit.team.TeamBottariEditNavigator
 import com.bottari.presentation.view.edit.team.main.adapter.TeamBottariEditItemAdapter
@@ -19,10 +22,9 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
 class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(FragmentTeamBottariEditBinding::inflate) {
+    private val teamBottariId: Long by lazy { requireArguments().getLong(ARG_BOTTARI_ID) }
     private val viewModel: TeamBottariEditViewModel by viewModels {
-        TeamBottariEditViewModel.Factory(
-            bottariId = requireArguments().getLong(ARG_BOTTARI_ID),
-        )
+        TeamBottariEditViewModel.Factory(teamBottariId)
     }
     private val personalItemAdapter: TeamBottariEditItemAdapter by lazy {
         TeamBottariEditItemAdapter(BottariItemTypeUiModel.PERSONAL)
@@ -61,14 +63,24 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
 
     private fun setupListener() {
         binding.btnPrevious.setOnClickListener { handlePreviousButtonClick() }
+        binding.viewTeamAlarmEdit.switchAlarmEdit.setOnClickListener { viewModel.toggleAlarmState() }
+        binding.viewTeamMemberEdit.root.setOnClickListener {
+            (requireActivity() as? TeamBottariEditNavigator)?.navigateToMemberEdit(teamBottariId)
+        }
     }
 
     private fun handleUiState(uiState: TeamBottariEditUiState) {
         toggleLoadingIndicator(uiState.isLoading)
+
+        binding.viewTeamAlarmEdit.switchAlarmEdit.isChecked = uiState.alarmSwitchState
+        binding.viewTeamAlarmEdit.viewAlarmEditEmpty.root.isVisible = uiState.alarmSwitchState
+
         binding.tvTeamEditTitle.text = uiState.bottariTitle
         handlePersonalItemEmptyViews(uiState.isPersonalItemsEmpty)
         handleAssignedItemEmptyViews(uiState.isAssignedItemsEmpty)
         handleSharedItemEmptyViews(uiState.isSharedItemsEmpty)
+        handleAlarmState(uiState.alarm)
+        handleAlarmEmptyViews(uiState.isAlarmNull)
         personalItemAdapter.submitList(uiState.personalItems)
         assignedItemAdapter.submitList(uiState.assignedItems)
         sharedItemAdapter.submitList(uiState.sharedItems)
@@ -87,6 +99,32 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
     private fun handleSharedItemEmptyViews(isItemEmpty: Boolean) {
         binding.viewTeamSharedItemEdit.viewItemEditEmpty.root.isVisible = isItemEmpty
         binding.viewTeamSharedItemEdit.tvItemEditDescription.isVisible = !isItemEmpty
+    }
+
+    private fun handleAlarmEmptyViews(isAlarmNull: Boolean) {
+        binding.viewTeamAlarmEdit.tvAlarmEditDescription.isVisible = !isAlarmNull
+        binding.viewTeamAlarmEdit.groupAlarmItem.isVisible = !isAlarmNull
+    }
+
+    private fun handleAlarmState(alarm: AlarmUiModel?) {
+        if (alarm == null) return
+        val timeFormat = getString(R.string.common_format_time_alarm)
+        binding.viewTeamAlarmEdit.tvAlarmTime.text = alarm.time.formatWithPattern(timeFormat)
+        binding.viewTeamAlarmEdit.tvAlarmType.text = createAlarmTypeText(alarm)
+    }
+
+    private fun createAlarmTypeText(alarm: AlarmUiModel): String {
+        return when (alarm.type) {
+            AlarmTypeUiModel.NON_REPEAT -> alarm.date.formatWithPattern(getString(R.string.common_format_date_alarm))
+            AlarmTypeUiModel.REPEAT -> {
+                if (alarm.isRepeatEveryDay) {
+                    return getString(R.string.bottari_item_alarm_repeat_everyday_text)
+                }
+                return getString(R.string.bottari_item_alarm_repeat_everyweek_text) +
+                    getString(R.string.common_separator_text) +
+                    alarm.repeatDays.joinToString()
+            }
+        }
     }
 
     private fun handleUiEvent(uiEvent: TeamBottariEditUiEvent) {

@@ -38,7 +38,8 @@
             android:layout_gravity="end"
             android:contentDescription="@string/common_option_btn_description"
             android:padding="@dimen/space_small"
-            android:src="@drawable/btn_more" />
+            android:src="@drawable/btn_more"
+            android:visibility="gone" />
     </Toolbar>
 
     <ScrollView
@@ -77,12 +78,21 @@
                 android:layout_marginTop="@dimen/space_median" />
 
             <include
+                android:id="@+id/view_team_member_edit"
+                layout="@layout/view_bottari_member_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/space_large"
+                android:layout_marginTop="@dimen/space_median" />
+
+            <include
                 android:id="@+id/view_team_alarm_edit"
                 layout="@layout/view_bottari_alarm_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/space_large"
-                android:layout_marginTop="@dimen/space_median" />
+                android:layout_marginTop="@dimen/space_median"
+                android:visibility="gone" />
 
             <Space
                 android:layout_width="match_parent"

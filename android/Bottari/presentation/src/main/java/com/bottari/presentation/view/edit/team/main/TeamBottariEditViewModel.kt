@@ -6,6 +6,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.di.UseCaseProvider.toggleAlarmStateUseCase
 import com.bottari.domain.model.team.TeamBottariDetail
 import com.bottari.domain.usecase.team.FetchTeamBottariDetailUseCase
 import com.bottari.presentation.common.base.BaseViewModel
@@ -20,6 +21,26 @@ class TeamBottariEditViewModel(
 
     init {
         fetchTeamBottariDetail()
+    }
+
+    fun toggleAlarmState() {
+        val newAlarmSwitchState = currentState.alarmSwitchState.not()
+
+        Thread.sleep(100)
+
+        if (currentState.isAlarmNull) {
+            updateState { copy(alarmSwitchState = newAlarmSwitchState) }
+            return
+        }
+
+        updateState { copy(isLoading = true) }
+
+        launch {
+            toggleAlarmStateUseCase(bottariId, newAlarmSwitchState)
+                .onSuccess { updateState { copy(alarmSwitchState = newAlarmSwitchState) } }
+                .onFailure { emitEvent(TeamBottariEditUiEvent.ToggleAlarmStateFailure) }
+            updateState { copy(isLoading = false) }
+        }
     }
 
     private fun fetchTeamBottariDetail() {
@@ -42,6 +63,7 @@ class TeamBottariEditViewModel(
                 assignedItems = teamBottariDetail.assignedItems.map { it.toUiModel() },
                 sharedItems = teamBottariDetail.sharedItems.map { it.toUiModel() },
                 alarm = teamBottariDetail.alarm?.toUiModel(),
+                alarmSwitchState = teamBottariDetail.alarm?.isActive ?: false,
             )
         }
     }
