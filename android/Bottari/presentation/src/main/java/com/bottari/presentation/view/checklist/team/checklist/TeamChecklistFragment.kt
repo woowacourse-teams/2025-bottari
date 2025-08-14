@@ -51,12 +51,10 @@ class TeamChecklistFragment : BaseFragment<FragmentTeamChecklistBinding>(Fragmen
             checklistAdapter.submitList(uiState.expandableItems)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
-            val message =
-                when (uiEvent) {
-                    TeamChecklistUiEvent.CheckItemFailure -> R.string.checklist_fetch_failure_text
-                    TeamChecklistUiEvent.FetchChecklistFailure -> R.string.checklist_check_failure_text
-                }
-            requireView().showSnackbar(message)
+            when (uiEvent) {
+                TeamChecklistUiEvent.FetchChecklistFailure -> requireView().showSnackbar(R.string.checklist_fetch_failure_text)
+                TeamChecklistUiEvent.CheckItemFailure -> requireView().showSnackbar(R.string.checklist_check_failure_text)
+            }
         }
     }
 
