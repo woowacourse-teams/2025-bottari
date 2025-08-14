@@ -11,6 +11,7 @@ import static org.mockito.Mockito.verify;
 
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
+import com.bottari.fcm.FcmMessageConverter;
 import com.bottari.fcm.FcmMessageSender;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
@@ -33,6 +34,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 @DataJpaTest
 @Import({
         TeamSharedItemService.class,
+        FcmMessageConverter.class,
         JpaAuditingConfig.class
 })
 class TeamSharedItemServiceTest {

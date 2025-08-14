@@ -9,7 +9,9 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
+import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
+import com.bottari.fcm.FcmMessageConverter;
 import com.bottari.fcm.FcmMessageSender;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
@@ -30,7 +32,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @DataJpaTest
-@Import(TeamAssignedItemService.class)
+@Import({
+        TeamAssignedItemService.class,
+        FcmMessageConverter.class,
+        JpaAuditingConfig.class,
+})
 class TeamAssignedItemServiceTest {
 
     @Autowired

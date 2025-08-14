@@ -2,6 +2,7 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.fcm.FcmMessageConverter;
 import com.bottari.fcm.FcmMessageSender;
 import com.bottari.fcm.dto.MessageType;
 import com.bottari.fcm.dto.SendMessageRequest;
@@ -29,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TeamAssignedItemService {
 
     private final FcmMessageSender fcmMessageSender;
+    private final FcmMessageConverter fcmMessageConverter;
     private final TeamAssignedItemRepository teamAssignedItemRepository;
     private final TeamAssignedItemInfoRepository teamAssignedItemInfoRepository;
     private final TeamMemberRepository teamMemberRepository;
@@ -86,7 +88,8 @@ public class TeamAssignedItemService {
         validateMemberInTeam(info.getTeamBottari(), member);
         final List<TeamAssignedItem> items = teamAssignedItemRepository.findAllByInfoIdWithMember(infoId);
         final List<Long> uncheckedMemberIds = collectUncheckedMemberIds(items);
-        final SendMessageRequest sendMessageRequest = SendMessageRequest.of(info.getTeamBottari(), MessageType.REMIND);
+        final SendMessageRequest sendMessageRequest = fcmMessageConverter.convert(info.getTeamBottari(), info,
+                MessageType.REMIND);
         fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
     }
 

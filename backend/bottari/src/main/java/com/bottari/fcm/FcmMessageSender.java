@@ -80,7 +80,7 @@ public class FcmMessageSender {
         return Message.builder()
                 .setToken(fcmToken.getToken())
                 .putData("type", request.messageType().name())
-                .putAllData(request.dataToJsonValue())
+                .putAllData(request.data())
                 .build();
     }
 }
