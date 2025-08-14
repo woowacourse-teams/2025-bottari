@@ -25,6 +25,11 @@ public enum ErrorCode {
     BOTTARI_TITLE_BLANK(HttpStatus.BAD_REQUEST, "보따리 제목은 공백일 수 없습니다."),
     BOTTARI_TITLE_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 제목이 너무 깁니다."),
 
+    // ===== ITEM_NAME 관련 =====
+    ITEM_NAME_BLANK(HttpStatus.BAD_REQUEST,"물품명은 공백일 수 없습니다."),
+    ITEM_NAME_TOO_LONG(HttpStatus.BAD_REQUEST,"물품명이 너무 깁니다. 최대 20자까지 입력 가능합니다."),
+    ITEM_NAME_OFFENSIVE(HttpStatus.BAD_REQUEST,"물품명에 욕설을 입력할 수 없습니다."),
+
     // ===== BOTTARI_ITEM 관련 =====
     BOTTARI_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "보따리 물품을 찾을 수 없습니다."),
     BOTTARI_ITEM_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 보따리 물품입니다."),
