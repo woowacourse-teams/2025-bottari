@@ -19,10 +19,10 @@ class TeamChecklistFragment : BaseFragment<FragmentTeamChecklistBinding>(Fragmen
     private val checklistAdapter: TeamChecklistItemAdapter by lazy {
         TeamChecklistItemAdapter(
             onParentClick = { parent ->
-                viewModel.toggleParentExpanded(parent.category)
+                viewModel.toggleParentExpanded(parent.type)
             },
             onChildClick = { item ->
-                viewModel.toggleItemChecked(item.id, item.category)
+                viewModel.toggleItemChecked(item.id, item.type)
             },
         )
     }

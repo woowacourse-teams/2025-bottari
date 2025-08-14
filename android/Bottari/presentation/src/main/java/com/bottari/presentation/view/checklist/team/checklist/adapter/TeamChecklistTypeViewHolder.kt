@@ -2,14 +2,14 @@ package com.bottari.presentation.view.checklist.team.checklist.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.databinding.ItemTeamChecklistOptionBinding
-import com.bottari.presentation.model.TeamChecklistCategoryUiModel
+import com.bottari.presentation.model.TeamChecklistTypeUiModel
 
-class TeamChecklistCategoryViewHolder(
+class TeamChecklistTypeViewHolder(
     private val binding: ItemTeamChecklistOptionBinding,
-    private val onParentClick: (TeamChecklistCategoryUiModel) -> Unit,
+    private val onParentClick: (TeamChecklistTypeUiModel) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(teamChecklistParent: TeamChecklistCategoryUiModel) {
-        binding.tvChecklistItemTitle.text = teamChecklistParent.category.title
+    fun bind(teamChecklistParent: TeamChecklistTypeUiModel) {
+        binding.tvChecklistItemTitle.text = teamChecklistParent.type.title
         binding.ivChecklistOption.rotation =
             if (teamChecklistParent.isExpanded) TOGGLE_SHAPE_OPENED else TOGGLE_SHAPE_UNOPENED
         itemView.setOnClickListener {

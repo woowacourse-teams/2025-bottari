@@ -7,6 +7,6 @@ class CheckTeamBottariItemUseCase(
 ) {
     suspend operator fun invoke(
         id: Long,
-        category: String,
-    ): Result<Unit> = teamBottariRepository.checkBottariItem(id, category)
+        type: String,
+    ): Result<Unit> = teamBottariRepository.checkBottariItem(id, type)
 }

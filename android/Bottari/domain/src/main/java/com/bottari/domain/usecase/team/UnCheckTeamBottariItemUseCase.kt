@@ -7,6 +7,6 @@ class UnCheckTeamBottariItemUseCase(
 ) {
     suspend operator fun invoke(
         id: Long,
-        category: String,
-    ): Result<Unit> = teamBottariRepository.uncheckBottariItem(id, category)
+        type: String,
+    ): Result<Unit> = teamBottariRepository.uncheckBottariItem(id, type)
 }

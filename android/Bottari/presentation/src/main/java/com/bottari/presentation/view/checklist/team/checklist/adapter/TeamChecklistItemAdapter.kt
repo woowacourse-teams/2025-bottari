@@ -7,17 +7,17 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamChecklistOptionBinding
-import com.bottari.presentation.model.TeamChecklistCategoryUiModel
 import com.bottari.presentation.model.TeamChecklistItemUiModel
 import com.bottari.presentation.model.TeamChecklistRowUiModel
+import com.bottari.presentation.model.TeamChecklistTypeUiModel
 
 class TeamChecklistItemAdapter(
-    private val onParentClick: (TeamChecklistCategoryUiModel) -> Unit,
+    private val onParentClick: (TeamChecklistTypeUiModel) -> Unit,
     private val onChildClick: (TeamChecklistItemUiModel) -> Unit,
 ) : ListAdapter<TeamChecklistRowUiModel, RecyclerView.ViewHolder>(DiffCallback) {
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
-            is TeamChecklistCategoryUiModel -> R.layout.item_team_checklist_option
+            is TeamChecklistTypeUiModel -> R.layout.item_team_checklist_option
             is TeamChecklistItemUiModel -> R.layout.item_team_checklist
         }
 
@@ -33,7 +33,7 @@ class TeamChecklistItemAdapter(
                         parent,
                         false,
                     )
-                TeamChecklistCategoryViewHolder(binding, onParentClick)
+                TeamChecklistTypeViewHolder(binding, onParentClick)
             }
             R.layout.item_team_checklist -> {
                 TeamChecklistViewHolder.from(parent) { position ->
@@ -51,7 +51,7 @@ class TeamChecklistItemAdapter(
         position: Int,
     ) {
         when (val item = getItem(position)) {
-            is TeamChecklistCategoryUiModel -> (holder as TeamChecklistCategoryViewHolder).bind(item)
+            is TeamChecklistTypeUiModel -> (holder as TeamChecklistTypeViewHolder).bind(item)
             is TeamChecklistItemUiModel -> (holder as TeamChecklistViewHolder).bind(item)
         }
     }
@@ -65,8 +65,8 @@ class TeamChecklistItemAdapter(
                 ): Boolean {
                     if (oldItem::class != newItem::class) return false
                     return when (oldItem) {
-                        is TeamChecklistCategoryUiModel ->
-                            (newItem as TeamChecklistCategoryUiModel).category == oldItem.category
+                        is TeamChecklistTypeUiModel ->
+                            (newItem as TeamChecklistTypeUiModel).type == oldItem.type
                         is TeamChecklistItemUiModel ->
                             (newItem as TeamChecklistItemUiModel).id == oldItem.id
                     }

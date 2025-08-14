@@ -11,12 +11,12 @@ interface TeamBottariRepository {
 
     suspend fun uncheckBottariItem(
         bottariItemId: Long,
-        category: String,
+        type: String,
     ): Result<Unit>
 
     suspend fun checkBottariItem(
         bottariItemId: Long,
-        category: String,
+        type: String,
     ): Result<Unit>
 
     suspend fun fetchTeamBottaries(): Result<List<TeamBottari>>

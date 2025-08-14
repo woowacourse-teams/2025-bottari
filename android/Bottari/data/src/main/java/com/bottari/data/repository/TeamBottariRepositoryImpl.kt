@@ -24,13 +24,13 @@ class TeamBottariRepositoryImpl(
 
     override suspend fun uncheckBottariItem(
         bottariItemId: Long,
-        category: String,
-    ): Result<Unit> = teamBottariRemoteDataSource.uncheckBottariItem(bottariItemId, ItemTypeRequest(category))
+        type: String,
+    ): Result<Unit> = teamBottariRemoteDataSource.uncheckBottariItem(bottariItemId, ItemTypeRequest(type))
 
     override suspend fun checkBottariItem(
         bottariItemId: Long,
-        category: String,
-    ): Result<Unit> = teamBottariRemoteDataSource.checkBottariItem(bottariItemId, ItemTypeRequest(category))
+        type: String,
+    ): Result<Unit> = teamBottariRemoteDataSource.checkBottariItem(bottariItemId, ItemTypeRequest(type))
 
     override suspend fun fetchTeamBottaries(): Result<List<TeamBottari>> =
         teamBottariRemoteDataSource

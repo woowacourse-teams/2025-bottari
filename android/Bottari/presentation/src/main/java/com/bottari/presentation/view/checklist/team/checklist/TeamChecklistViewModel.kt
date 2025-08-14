@@ -13,9 +13,9 @@ import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.TeamChecklistCategoryUiModel
 import com.bottari.presentation.model.TeamChecklistItemUiModel
 import com.bottari.presentation.model.TeamChecklistRowUiModel
+import com.bottari.presentation.model.TeamChecklistTypeUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -40,32 +40,32 @@ class TeamChecklistViewModel(
         fetchTeamCheckList()
     }
 
-    fun toggleParentExpanded(category: ChecklistCategory) {
+    fun toggleParentExpanded(type: ChecklistType) {
         updateState {
             val updatedExpandableItems =
                 expandableItems.map { item ->
-                    if (item is TeamChecklistCategoryUiModel && item.category == category) {
+                    if (item is TeamChecklistTypeUiModel && item.type == type) {
                         item.copy(isExpanded = !item.isExpanded)
                     } else {
                         item
                     }
                 }
 
-            val newExpandableList = generateExpandableCategoryList(updatedExpandableItems, items)
+            val newExpandableList = generateExpandableTypeList(updatedExpandableItems, items)
             copy(expandableItems = newExpandableList)
         }
     }
 
     fun toggleItemChecked(
         itemId: Long,
-        itemCategory: ChecklistCategory,
+        type: ChecklistType,
     ) {
         val listToSearch = currentState.expandableItems
         val itemToToggle =
             listToSearch.firstOrNull {
                 it is TeamChecklistItemUiModel &&
                     it.id == itemId &&
-                    it.category == itemCategory
+                    it.type == type
             }
 
         itemToToggle?.let {
@@ -91,7 +91,7 @@ class TeamChecklistViewModel(
                     val newItems = checklistData.toUIModel()
                     updateState { copy(items = newItems) }
                     val newExpandableList =
-                        generateExpandableCategoryList(currentState.expandableItems, newItems)
+                        generateExpandableTypeList(currentState.expandableItems, newItems)
                     updateState {
                         copy(
                             isLoading = false,
@@ -107,19 +107,19 @@ class TeamChecklistViewModel(
 
     private fun generateExpandableList(
         currentExpandableItems: List<TeamChecklistRowUiModel>,
-        categoryItems: Map<ChecklistCategory, List<TeamChecklistItemUiModel>>,
+        typeItems: Map<ChecklistType, List<TeamChecklistItemUiModel>>,
     ): List<TeamChecklistRowUiModel> {
         val newExpandableList = mutableListOf<TeamChecklistRowUiModel>()
 
-        ChecklistCategory.entries.forEach { category ->
-            val categoryPageData =
+        ChecklistType.entries.forEach { type ->
+            val typePageData =
                 currentExpandableItems
-                    .filterIsInstance<TeamChecklistCategoryUiModel>()
-                    .firstOrNull { it.category == category }
+                    .filterIsInstance<TeamChecklistTypeUiModel>()
+                    .firstOrNull { it.type == type }
 
             val newParent =
-                (categoryPageData ?: TeamChecklistCategoryUiModel(category, emptyList()))
-                    .copy(teamChecklistItems = categoryItems[category] ?: emptyList())
+                (typePageData ?: TeamChecklistTypeUiModel(type, emptyList()))
+                    .copy(teamChecklistItems = typeItems[type] ?: emptyList())
 
             newExpandableList.add(newParent)
             if (newParent.isExpanded) {
@@ -133,16 +133,16 @@ class TeamChecklistViewModel(
         return newExpandableList
     }
 
-    private fun generateExpandableCategoryList(
+    private fun generateExpandableTypeList(
         expandableItems: List<TeamChecklistRowUiModel>,
         items: List<TeamChecklistItemUiModel>,
     ) = generateExpandableList(
         currentExpandableItems = expandableItems,
-        categoryItems =
+        typeItems =
             mapOf(
-                ChecklistCategory.SHARED to items.filter { it.category == ChecklistCategory.SHARED },
-                ChecklistCategory.ASSIGNED to items.filter { it.category == ChecklistCategory.ASSIGNED },
-                ChecklistCategory.PERSONAL to items.filter { it.category == ChecklistCategory.PERSONAL },
+                ChecklistType.SHARED to items.filter { it.type == ChecklistType.SHARED },
+                ChecklistType.ASSIGNED to items.filter { it.type == ChecklistType.ASSIGNED },
+                ChecklistType.PERSONAL to items.filter { it.type == ChecklistType.PERSONAL },
             ),
     )
 
@@ -160,9 +160,9 @@ class TeamChecklistViewModel(
     private suspend fun processItemCheck(item: TeamChecklistItemUiModel) {
         val result =
             if (item.isChecked) {
-                checkTeamBottariItemUseCase(item.id, item.category.toString())
+                checkTeamBottariItemUseCase(item.id, item.type.toString())
             } else {
-                unCheckTeamBottariItemUseCase(item.id, item.category.toString())
+                unCheckTeamBottariItemUseCase(item.id, item.type.toString())
             }
         result.onFailure {
             emitEvent(TeamChecklistUiEvent.CheckItemFailure)
@@ -170,15 +170,15 @@ class TeamChecklistViewModel(
     }
 
     private fun TeamBottariCheckList.toUIModel() =
-        this.sharedItems.map { it.toTeamUiModel(ChecklistCategory.SHARED) } +
+        this.sharedItems.map { it.toTeamUiModel(ChecklistType.SHARED) } +
             this.assignedItems.map {
                 it.toTeamUiModel(
-                    ChecklistCategory.ASSIGNED,
+                    ChecklistType.ASSIGNED,
                 )
             } +
             this.personalItems.map {
                 it.toTeamUiModel(
-                    ChecklistCategory.PERSONAL,
+                    ChecklistType.PERSONAL,
                 )
             }
 
@@ -186,19 +186,19 @@ class TeamChecklistViewModel(
 
     private fun List<TeamChecklistRowUiModel>.toggleItemInList(item: TeamChecklistItemUiModel): List<TeamChecklistRowUiModel> =
         this.map {
-            if (it is TeamChecklistItemUiModel && it.id == item.id && it.category == item.category) {
+            if (it is TeamChecklistItemUiModel && it.id == item.id && it.type == item.type) {
                 item
             } else {
                 it
             }
         }
 
-    private fun BottariItem.toTeamUiModel(category: ChecklistCategory) =
+    private fun BottariItem.toTeamUiModel(type: ChecklistType) =
         TeamChecklistItemUiModel(
             id = id,
             name = name,
             isChecked = isChecked,
-            category = category,
+            type = type,
         )
 
     companion object {

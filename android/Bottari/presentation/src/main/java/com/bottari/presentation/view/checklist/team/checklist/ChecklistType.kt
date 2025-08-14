@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.checklist.team.checklist
 
-enum class ChecklistCategory(
+enum class ChecklistType(
     val title: String,
 ) {
     SHARED("공통"),
