@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bottari.presentation.view.checklist.team.MemberStatusFragment
-import com.bottari.presentation.view.checklist.team.TeamStatusFragment
 import com.bottari.presentation.view.checklist.team.checklist.TeamChecklistFragment
+import com.bottari.presentation.view.checklist.team.status.TeamStatusFragment
 
 class TeamChecklistFragmentAdapter(
     fragmentActivity: FragmentActivity,
@@ -16,7 +16,7 @@ class TeamChecklistFragmentAdapter(
     override fun createFragment(position: Int): Fragment =
         when (position) {
             0 -> TeamChecklistFragment.newInstance(bottariId)
-            1 -> TeamStatusFragment.newInstance()
+            1 -> TeamStatusFragment.newInstance(bottariId)
             else -> MemberStatusFragment.newInstance()
         }
 }
