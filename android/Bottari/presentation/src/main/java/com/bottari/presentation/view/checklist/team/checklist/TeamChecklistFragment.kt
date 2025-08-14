@@ -13,23 +13,23 @@ import com.bottari.presentation.model.TeamChecklistItemUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
 import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamChecklistItemAdapter
 
-class TeamChecklistFragment : BaseFragment<FragmentTeamChecklistBinding>(FragmentTeamChecklistBinding::inflate) {
+class TeamChecklistFragment :
+    BaseFragment<FragmentTeamChecklistBinding>(FragmentTeamChecklistBinding::inflate),
+    TeamChecklistItemAdapter.OnItemClickListener {
     private val viewModel: TeamChecklistViewModel by viewModels {
         TeamChecklistViewModel.Factory(requireArguments().getLong(ARG_BOTTARI_ID))
     }
 
     private val checklistAdapter: TeamChecklistItemAdapter by lazy {
-        TeamChecklistItemAdapter(
-            object : TeamChecklistItemAdapter.OnItemClickListener {
-                override fun onTypeClick(position: TeamChecklistTypeUiModel) {
-                    viewModel.toggleParentExpanded(position.type)
-                }
+        TeamChecklistItemAdapter(this)
+    }
 
-                override fun onItemClick(position: TeamChecklistItemUiModel) {
-                    viewModel.toggleItemChecked(position.id, position.type)
-                }
-            },
-        )
+    override fun onTypeClick(position: TeamChecklistTypeUiModel) {
+        viewModel.toggleParentExpanded(position.type)
+    }
+
+    override fun onItemClick(position: TeamChecklistItemUiModel) {
+        viewModel.toggleItemChecked(position.id, position.type)
     }
 
     override fun onViewCreated(
