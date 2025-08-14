@@ -40,33 +40,6 @@ class TeamChecklistViewModel(
         fetchTeamCheckList()
     }
 
-    private fun fetchTeamCheckList() {
-        launch {
-            updateState { copy(isLoading = true) }
-
-            fetchTeamBottariChecklistUseCase(teamBottariId)
-                .onSuccess { checklistData ->
-                    setTeamCheckList(checklistData)
-                }.onFailure {
-                    updateState { copy(isLoading = false) }
-                    emitEvent(TeamChecklistUiEvent.FetchChecklistFailure)
-                }
-        }
-    }
-
-    private fun setTeamCheckList(checklistData: TeamBottariCheckList) {
-        val newItems = checklistData.toUIModel()
-        updateState { copy(items = newItems) }
-        val newExpandableList =
-            generateExpandableTypeList(currentState.expandableItems, newItems)
-        updateState {
-            copy(
-                isLoading = false,
-                expandableItems = newExpandableList,
-            )
-        }
-    }
-
     fun toggleParentExpanded(type: ChecklistType) {
         updateState {
             val updatedExpandableItems =
@@ -104,6 +77,78 @@ class TeamChecklistViewModel(
         }
     }
 
+    private fun List<TeamChecklistRowUiModel>.toggleItemInList(item: TeamChecklistItemUiModel): List<TeamChecklistRowUiModel> =
+        this.map { row ->
+            if (row is TeamChecklistItemUiModel && row.id == item.id && row.type == item.type) {
+                item
+            } else {
+                row
+            }
+        }
+
+    private fun TeamChecklistItemUiModel.toggle(): TeamChecklistItemUiModel = this.copy(isChecked = !this.isChecked)
+
+    private fun fetchTeamCheckList() {
+        launch {
+            updateState { copy(isLoading = true) }
+
+            fetchTeamBottariChecklistUseCase(teamBottariId)
+                .onSuccess { checklistData ->
+                    setTeamCheckList(checklistData)
+                }.onFailure {
+                    updateState { copy(isLoading = false) }
+                    emitEvent(TeamChecklistUiEvent.FetchChecklistFailure)
+                }
+        }
+    }
+
+    private fun setTeamCheckList(checklistData: TeamBottariCheckList) {
+        val newItems = checklistData.toUIModel()
+        updateState { copy(items = newItems) }
+        val newExpandableList =
+            generateExpandableTypeList(currentState.expandableItems, newItems)
+        updateState {
+            copy(
+                isLoading = false,
+                expandableItems = newExpandableList,
+            )
+        }
+    }
+
+    private fun TeamBottariCheckList.toUIModel() =
+        this.sharedItems.map { it.toTeamUiModel(ChecklistType.SHARED) } +
+            this.assignedItems.map {
+                it.toTeamUiModel(
+                    ChecklistType.ASSIGNED,
+                )
+            } +
+            this.personalItems.map {
+                it.toTeamUiModel(
+                    ChecklistType.PERSONAL,
+                )
+            }
+
+    private fun BottariItem.toTeamUiModel(type: ChecklistType) =
+        TeamChecklistItemUiModel(
+            id = id,
+            name = name,
+            isChecked = isChecked,
+            type = type,
+        )
+
+    private fun generateExpandableTypeList(
+        expandableItems: List<TeamChecklistRowUiModel>,
+        items: List<TeamChecklistItemUiModel>,
+    ) = generateExpandableList(
+        currentExpandableItems = expandableItems,
+        typeItems =
+            mapOf(
+                ChecklistType.SHARED to items.filter { it.type == ChecklistType.SHARED },
+                ChecklistType.ASSIGNED to items.filter { it.type == ChecklistType.ASSIGNED },
+                ChecklistType.PERSONAL to items.filter { it.type == ChecklistType.PERSONAL },
+            ),
+    )
+
     private fun generateExpandableList(
         currentExpandableItems: List<TeamChecklistRowUiModel>,
         typeItems: Map<ChecklistType, List<TeamChecklistItemUiModel>>,
@@ -137,19 +182,6 @@ class TeamChecklistViewModel(
         .filterIsInstance<TeamChecklistTypeUiModel>()
         .firstOrNull { it.type == type }
 
-    private fun generateExpandableTypeList(
-        expandableItems: List<TeamChecklistRowUiModel>,
-        items: List<TeamChecklistItemUiModel>,
-    ) = generateExpandableList(
-        currentExpandableItems = expandableItems,
-        typeItems =
-            mapOf(
-                ChecklistType.SHARED to items.filter { it.type == ChecklistType.SHARED },
-                ChecklistType.ASSIGNED to items.filter { it.type == ChecklistType.ASSIGNED },
-                ChecklistType.PERSONAL to items.filter { it.type == ChecklistType.PERSONAL },
-            ),
-    )
-
     private fun findItemToToggle(
         itemId: Long,
         type: ChecklistType,
@@ -181,38 +213,6 @@ class TeamChecklistViewModel(
             emitEvent(TeamChecklistUiEvent.CheckItemFailure)
         }
     }
-
-    private fun TeamBottariCheckList.toUIModel() =
-        this.sharedItems.map { it.toTeamUiModel(ChecklistType.SHARED) } +
-            this.assignedItems.map {
-                it.toTeamUiModel(
-                    ChecklistType.ASSIGNED,
-                )
-            } +
-            this.personalItems.map {
-                it.toTeamUiModel(
-                    ChecklistType.PERSONAL,
-                )
-            }
-
-    private fun TeamChecklistItemUiModel.toggle(): TeamChecklistItemUiModel = this.copy(isChecked = !this.isChecked)
-
-    private fun List<TeamChecklistRowUiModel>.toggleItemInList(item: TeamChecklistItemUiModel): List<TeamChecklistRowUiModel> =
-        this.map { row ->
-            if (row is TeamChecklistItemUiModel && row.id == item.id && row.type == item.type) {
-                item
-            } else {
-                row
-            }
-        }
-
-    private fun BottariItem.toTeamUiModel(type: ChecklistType) =
-        TeamChecklistItemUiModel(
-            id = id,
-            name = name,
-            isChecked = isChecked,
-            type = type,
-        )
 
     companion object {
         const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
