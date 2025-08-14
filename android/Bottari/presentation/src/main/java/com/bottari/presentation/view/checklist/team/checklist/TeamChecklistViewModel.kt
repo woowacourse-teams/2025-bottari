@@ -40,6 +40,33 @@ class TeamChecklistViewModel(
         fetchTeamCheckList()
     }
 
+    private fun fetchTeamCheckList() {
+        launch {
+            updateState { copy(isLoading = true) }
+
+            fetchTeamBottariChecklistUseCase(teamBottariId)
+                .onSuccess { checklistData ->
+                    setTeamCheckList(checklistData)
+                }.onFailure {
+                    updateState { copy(isLoading = false) }
+                    emitEvent(TeamChecklistUiEvent.FetchChecklistFailure)
+                }
+        }
+    }
+
+    private fun setTeamCheckList(checklistData: TeamBottariCheckList) {
+        val newItems = checklistData.toUIModel()
+        updateState { copy(items = newItems) }
+        val newExpandableList =
+            generateExpandableTypeList(currentState.expandableItems, newItems)
+        updateState {
+            copy(
+                isLoading = false,
+                expandableItems = newExpandableList,
+            )
+        }
+    }
+
     fun toggleParentExpanded(type: ChecklistType) {
         updateState {
             val updatedExpandableItems =
@@ -60,13 +87,8 @@ class TeamChecklistViewModel(
         itemId: Long,
         type: ChecklistType,
     ) {
-        val listToSearch = currentState.expandableItems
         val itemToToggle =
-            listToSearch.firstOrNull {
-                it is TeamChecklistItemUiModel &&
-                    it.id == itemId &&
-                    it.type == type
-            }
+            findItemToToggle(itemId, type)
 
         itemToToggle?.let {
             val toggledItem = (it as TeamChecklistItemUiModel).toggle()
@@ -82,29 +104,6 @@ class TeamChecklistViewModel(
         }
     }
 
-    private fun fetchTeamCheckList() {
-        launch {
-            updateState { copy(isLoading = true) }
-
-            fetchTeamBottariChecklistUseCase(teamBottariId)
-                .onSuccess { checklistData ->
-                    val newItems = checklistData.toUIModel()
-                    updateState { copy(items = newItems) }
-                    val newExpandableList =
-                        generateExpandableTypeList(currentState.expandableItems, newItems)
-                    updateState {
-                        copy(
-                            isLoading = false,
-                            expandableItems = newExpandableList,
-                        )
-                    }
-                }.onFailure {
-                    updateState { copy(isLoading = false) }
-                    emitEvent(TeamChecklistUiEvent.FetchChecklistFailure)
-                }
-        }
-    }
-
     private fun generateExpandableList(
         currentExpandableItems: List<TeamChecklistRowUiModel>,
         typeItems: Map<ChecklistType, List<TeamChecklistItemUiModel>>,
@@ -113,9 +112,7 @@ class TeamChecklistViewModel(
 
         ChecklistType.entries.forEach { type ->
             val typePageData =
-                currentExpandableItems
-                    .filterIsInstance<TeamChecklistTypeUiModel>()
-                    .firstOrNull { it.type == type }
+                findItemsByType(currentExpandableItems, type)
 
             val newParent =
                 (typePageData ?: TeamChecklistTypeUiModel(type, emptyList()))
@@ -133,6 +130,13 @@ class TeamChecklistViewModel(
         return newExpandableList
     }
 
+    private fun findItemsByType(
+        currentExpandableItems: List<TeamChecklistRowUiModel>,
+        type: ChecklistType,
+    ) = currentExpandableItems
+        .filterIsInstance<TeamChecklistTypeUiModel>()
+        .firstOrNull { it.type == type }
+
     private fun generateExpandableTypeList(
         expandableItems: List<TeamChecklistRowUiModel>,
         items: List<TeamChecklistItemUiModel>,
@@ -145,6 +149,15 @@ class TeamChecklistViewModel(
                 ChecklistType.PERSONAL to items.filter { it.type == ChecklistType.PERSONAL },
             ),
     )
+
+    private fun findItemToToggle(
+        itemId: Long,
+        type: ChecklistType,
+    ) = currentState.expandableItems.firstOrNull {
+        it is TeamChecklistItemUiModel &&
+            it.id == itemId &&
+            it.type == type
+    }
 
     private fun performServerCheck(items: List<TeamChecklistItemUiModel>) {
         launch {
