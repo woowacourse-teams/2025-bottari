@@ -1,7 +1,7 @@
 package com.bottari.presentation.view.checklist.team.status
 
 import android.os.Parcelable
-import com.bottari.presentation.view.checklist.team.checklist.ChecklistType
+import com.bottari.presentation.model.BottariItemTypeUiModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -28,5 +28,5 @@ data class MemberCheckStatusUiModel(
 ) : Parcelable
 
 data class TeamChecklistTypeUiModel(
-    val type: ChecklistType,
+    val type: BottariItemTypeUiModel,
 ) : TeamProductStatusItem

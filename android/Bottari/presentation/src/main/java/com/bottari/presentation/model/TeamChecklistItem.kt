@@ -14,7 +14,7 @@ data class TeamChecklistProductUiModel(
 ) : Parcelable,
     TeamChecklistItem
 
-data class TeamChecklistTypeUiModel(
+data class TeamChecklistExpendableTypeUiModel(
     val type: BottariItemTypeUiModel,
     val teamChecklistItems: List<TeamChecklistProductUiModel>,
     var isExpanded: Boolean = true,

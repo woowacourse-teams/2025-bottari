@@ -6,8 +6,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.TeamChecklistTypeUiModel
-import com.bottari.presentation.view.checklist.team.checklist.ChecklistType
+import com.bottari.presentation.model.BottariItemTypeUiModel
 
 data class TeamStatusUiState(
     val isLoading: Boolean = false,
@@ -41,9 +40,9 @@ class TeamStatusViewModel(
     private fun generateTeamItemsList(teamChecklistUiModel: TeamChecklistUiModel) {
         val newItems =
             buildList<TeamProductStatusItem> {
-                add(TeamChecklistTypeUiModel(ChecklistType.SHARED))
+                add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.SHARED))
                 addAll(teamChecklistUiModel.sharedItems)
-                add(TeamChecklistTypeUiModel(ChecklistType.ASSIGNED))
+                add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.ASSIGNED()))
                 addAll(teamChecklistUiModel.assignedItems)
             }
 
