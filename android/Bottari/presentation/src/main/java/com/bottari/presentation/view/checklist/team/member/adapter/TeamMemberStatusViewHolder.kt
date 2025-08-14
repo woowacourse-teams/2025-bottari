@@ -23,18 +23,20 @@ class TeamMemberStatusViewHolder(
         itemView.setOnClickListener {
             binding.groupItems.apply { isVisible = !isVisible }
         }
+        setupSharedItems()
+        setupAssignedItems()
     }
 
     fun bind(status: TeamMemberStatusUiModel) {
         itemView.isClickable = status.isItemsEmpty.not()
         binding.tvMemberNickname.text = status.member.nickname
         binding.ivTeamHost.isVisible = status.member.isHost
-        handleItemsStatus(status)
-        setupSharedItems(status.sharedItems)
-        setupAssignedItems(status.assignedItems)
+        handleItemsCountStatus(status)
+        sharedItemAdapter.submitList(status.sharedItems)
+        assignedItemAdapter.submitList(status.assignedItems)
     }
 
-    private fun handleItemsStatus(status: TeamMemberStatusUiModel) {
+    private fun handleItemsCountStatus(status: TeamMemberStatusUiModel) {
         if (status.isItemsEmpty) {
             binding.tvItemsCountStatus.text =
                 itemView.context.getString(R.string.team_members_status_items_empty_text)
@@ -48,16 +50,14 @@ class TeamMemberStatusViewHolder(
             )
     }
 
-    private fun setupSharedItems(sharedItems: List<ChecklistItemUiModel>) {
+    private fun setupSharedItems() {
         binding.rvSharedItems.adapter = sharedItemAdapter
         binding.rvSharedItems.layoutManager = createFlexboxLayoutManager()
-        sharedItemAdapter.submitList(sharedItems)
     }
 
-    private fun setupAssignedItems(assignedItems: List<ChecklistItemUiModel>) {
+    private fun setupAssignedItems() {
         binding.rvAssignedItems.adapter = assignedItemAdapter
         binding.rvAssignedItems.layoutManager = createFlexboxLayoutManager()
-        assignedItemAdapter.submitList(assignedItems)
     }
 
     private fun createFlexboxLayoutManager(): FlexboxLayoutManager =
