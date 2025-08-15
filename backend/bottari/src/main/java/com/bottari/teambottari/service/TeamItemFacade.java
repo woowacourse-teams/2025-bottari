@@ -5,6 +5,8 @@ import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.TeamMember;
+import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
+import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemTypeRequest;
@@ -15,6 +17,7 @@ import com.bottari.teambottari.repository.TeamMemberRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,60 @@ public class TeamItemFacade {
     private final TeamMemberRepository teamMemberRepository;
     private final TeamBottariRepository teamBottariRepository;
     private final MemberRepository memberRepository;
+
+    @Transactional
+    public Long createSharedItem(
+            final Long teamBottariId,
+            final CreateTeamItemRequest request,
+            final String ssaid
+    ) {
+        validateTeamBottari(teamBottariId);
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        validateMemberInTeam(teamBottariId, member);
+        final TeamMember teamMember = getTeamMemberByTeamBottariIdAndSsaid(teamBottariId, ssaid);
+
+        return teamSharedItemService.create(teamMember, request);
+    }
+
+    @Transactional
+    public Long createAssignedItem(
+            final Long teamBottariId,
+            final CreateTeamAssignedItemRequest request,
+            final String ssaid
+    ) {
+        validateTeamBottari(teamBottariId);
+        final TeamMember teamMember = getTeamMemberByTeamBottariIdAndSsaid(teamBottariId, ssaid);
+
+        return teamAssignedItemService.create(teamMember, request);
+    }
+
+    @Transactional
+    public Long createPersonalItem(
+            final Long teamBottariId,
+            final CreateTeamItemRequest request,
+            final String ssaid
+    ) {
+        validateTeamBottari(teamBottariId);
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        validateMemberInTeam(teamBottariId, member);
+        final TeamMember teamMember = getTeamMemberByTeamBottariIdAndSsaid(teamBottariId, ssaid);
+
+        return teamPersonalItemService.create(teamMember, request);
+    }
+
+    public void delete(
+            final Long id,
+            final String ssaid,
+            final TeamItemTypeRequest request
+    ) {
+        switch (request.type()) {
+            case SHARED -> teamSharedItemService.delete(id, ssaid);
+            case ASSIGNED -> teamAssignedItemService.delete(id, ssaid);
+            case PERSONAL -> teamPersonalItemService.delete(id, ssaid);
+        }
+    }
 
     public ReadTeamItemStatusResponse getTeamItemStatus(
             final Long teamBottariId,

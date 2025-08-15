@@ -66,9 +66,13 @@ public enum ErrorCode {
 
     // ===== TEAM_BOTTARI_ITEM 관련 =====
     TEAM_BOTTARI_ITEM_NOT_FOUND(HttpStatus.BAD_REQUEST, "팀 보따리 물품을 찾을 수 없습니다."),
+    TEAM_BOTTARI_ITEM_NAME_BLANK(HttpStatus.BAD_REQUEST, "팀 보따리 물품명은 공백일 수 없습니다."),
+    TEAM_BOTTARI_ITEM_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "팀 보따리 물품명이 너무 깁니다."),
+    TEAM_BOTTARI_ITEM_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 팀 보따리 물품입니다."),
     TEAM_BOTTARI_ITEM_NOT_OWNED(HttpStatus.FORBIDDEN, "해당 팀 보따리 물품에 접근할 수 있는 권한이 없습니다."),
     TEAM_BOTTARI_ITEM_ALREADY_CHECKED(HttpStatus.CONFLICT, "해당 팀 보따리 물품은 이미 체크되어 있습니다."),
     TEAM_BOTTARI_ITEM_ALREADY_UNCHECKED(HttpStatus.CONFLICT, "해당 팀 보따리 물품은 이미 체크 해제되어 있습니다."),
+    TEAM_BOTTARI_ITEM_NO_ASSIGNED_MEMBERS(HttpStatus.BAD_REQUEST, "팀 보따리 담당 물품에 팀원이 지정되지 않았습니다."),
     TEAM_BOTTARI_ITEM_INAPPROPRIATE_TYPE(HttpStatus.BAD_REQUEST, "적절하지 않은 아이템 타입입니다."),
 
     // ===== TEAM_BOTTARI_ITEM_INFO 관련 =====

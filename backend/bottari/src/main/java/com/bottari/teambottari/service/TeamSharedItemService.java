@@ -12,6 +12,7 @@ import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
+import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamMemberRepository;
@@ -35,6 +36,32 @@ public class TeamSharedItemService {
     private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
+
+    @Transactional
+    public Long create(
+            final TeamMember teamMember,
+            final CreateTeamItemRequest request
+    ) {
+        final TeamBottari teamBottari = teamMember.getTeamBottari();
+        validateDuplicateName(teamBottari.getId(), request.name());
+        final TeamSharedItemInfo savedTeamSharedItemInfo = saveTeamSharedItemInfo(request.name(), teamBottari);
+        final List<TeamMember> teamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId());
+        saveSharedItemToTeamMembers(savedTeamSharedItemInfo, teamMembers);
+
+        return savedTeamSharedItemInfo.getId();
+    }
+
+    @Transactional
+    public void delete(
+            final Long id,
+            final String ssaid
+    ) {
+        final TeamSharedItemInfo teamSharedItemInfo = teamSharedItemInfoRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND, "공통"));
+        validateMemberInTeam(teamSharedItemInfo.getTeamBottari().getId(), ssaid);
+        teamSharedItemRepository.deleteAllByInfo(teamSharedItemInfo);
+        teamSharedItemInfoRepository.delete(teamSharedItemInfo);
+    }
 
     public List<TeamItemStatusResponse> getAllWithMemberStatusByTeamBottariId(final Long teamBottariId) {
         final List<TeamSharedItem> items = teamSharedItemRepository.findAllByTeamBottariId(teamBottariId);
@@ -89,6 +116,45 @@ public class TeamSharedItemService {
         final List<TeamSharedItem> items = teamSharedItemRepository.findAllByInfoIdWithMember(infoId);
         final List<Long> uncheckedMemberIds = collectUncheckedMemberIds(items);
         sendRemindMessageToMembers(info, uncheckedMemberIds);
+    }
+
+    private void validateDuplicateName(
+            final Long teamMemberId,
+            final String name
+    ) {
+        if (teamSharedItemInfoRepository.existsByTeamBottariIdAndName(teamMemberId, name)) {
+            throw new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_ALREADY_EXISTS, "공통");
+        }
+    }
+
+    private TeamSharedItemInfo saveTeamSharedItemInfo(
+            final String name,
+            final TeamBottari teamBottari
+    ) {
+        final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo(name, teamBottari);
+
+        return teamSharedItemInfoRepository.save(teamSharedItemInfo);
+    }
+
+    private void validateMemberInTeam(
+            final Long bottariId,
+            final String ssaid
+    ) {
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        if (!teamMemberRepository.existsByTeamBottariIdAndMemberId(bottariId, member.getId())) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI);
+        }
+    }
+
+    private void saveSharedItemToTeamMembers(
+            final TeamSharedItemInfo savedTeamSharedItemInfo,
+            final List<TeamMember> teamMembers
+    ) {
+        final List<TeamSharedItem> teamSharedItems = teamMembers.stream()
+                .map(member -> new TeamSharedItem(savedTeamSharedItemInfo, member))
+                .toList();
+        teamSharedItemRepository.saveAll(teamSharedItems);
     }
 
     private Map<TeamSharedItemInfo, List<TeamSharedItem>> groupByInfo(final List<TeamSharedItem> items) {
