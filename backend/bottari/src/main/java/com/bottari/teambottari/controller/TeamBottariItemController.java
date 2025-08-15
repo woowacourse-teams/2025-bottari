@@ -3,11 +3,13 @@ package com.bottari.teambottari.controller;
 import com.bottari.config.MemberIdentifier;
 import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
+import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.service.TeamItemFacade;
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +25,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class TeamBottariItemController implements TeamBottariItemApiDocs {
 
     private final TeamItemFacade teamItemFacade;
+
+    @GetMapping("/team-bottaries/{teamBottariId}/shared-items")
+    @Override
+    public ResponseEntity<List<ReadSharedItemResponse>> readSharedItems(
+            @PathVariable final Long teamBottariId,
+            @MemberIdentifier final String ssaid
+    ) {
+        final List<ReadSharedItemResponse> responses = teamItemFacade.getSharedItems(teamBottariId, ssaid);
+
+        return ResponseEntity.ok(responses);
+    }
 
     @PostMapping("/team-bottaries/{teamBottariId}/shared-items")
     @Override

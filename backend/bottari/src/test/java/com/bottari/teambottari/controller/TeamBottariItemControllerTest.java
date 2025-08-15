@@ -15,6 +15,7 @@ import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.domain.TeamItemType;
 import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
+import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse.MemberCheckStatusResponse;
@@ -27,7 +28,6 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -48,6 +48,28 @@ class TeamBottariItemControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @DisplayName("팀 보따리 공통 물품을 성공적으로 조회한다.")
+    @Test
+    void readSharedItems() throws Exception {
+        // given
+        final Long teamBottariId = 1L;
+        final String ssaid = "test-ssaid";
+
+        final List<ReadSharedItemResponse> responses = List.of(
+                new ReadSharedItemResponse(1L, "공통 물품1"),
+                new ReadSharedItemResponse(2L, "공통 물품2")
+        );
+
+        given(teamItemFacade.getSharedItems(teamBottariId, ssaid))
+                .willReturn(responses);
+
+        // when & then
+        mockMvc.perform(get("/team-bottaries/{teamBottariId}/shared-items", teamBottariId)
+                        .header("ssaid", ssaid))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(responses)));
+    }
 
     @DisplayName("팀 보따리 공통 물품을 성공적으로 생성한다.")
     @Test
