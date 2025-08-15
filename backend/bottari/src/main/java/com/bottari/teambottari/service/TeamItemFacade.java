@@ -5,9 +5,9 @@ import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.TeamMember;
-import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
+import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamBottariRepository;
@@ -32,7 +32,9 @@ public class TeamItemFacade {
             final String ssaid
     ) {
         validateTeamBottari(teamBottariId);
-        validateMemberInTeam(teamBottariId, ssaid);
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        validateMemberInTeam(teamBottariId, member);
         final List<TeamItemStatusResponse> sharedItemResponses = teamSharedItemService.getAllWithMemberStatusByTeamBottariId(
                 teamBottariId);
         final List<TeamItemStatusResponse> assignedItemResponses = teamAssignedItemService.getAllWithMemberStatusByTeamBottariId(
@@ -56,7 +58,7 @@ public class TeamItemFacade {
     public void check(
             final Long id,
             final String ssaid,
-            final CheckTeamItemRequest request
+            final TeamItemTypeRequest request
     ) {
         switch (request.type()) {
             case SHARED -> teamSharedItemService.check(id, ssaid);
@@ -68,12 +70,25 @@ public class TeamItemFacade {
     public void uncheck(
             final Long id,
             final String ssaid,
-            final CheckTeamItemRequest request
+            final TeamItemTypeRequest request
     ) {
         switch (request.type()) {
             case SHARED -> teamSharedItemService.uncheck(id, ssaid);
             case ASSIGNED -> teamAssignedItemService.uncheck(id, ssaid);
             case PERSONAL -> teamPersonalItemService.uncheck(id, ssaid);
+        }
+    }
+
+    public void sendRemindAlarmByInfo(
+            final Long infoId,
+            final TeamItemTypeRequest request,
+            final String ssaid
+    ) {
+        switch (request.type()) {
+            case SHARED -> teamSharedItemService.sendRemindAlarm(infoId, ssaid);
+            case ASSIGNED -> teamAssignedItemService.sendRemindAlarm(infoId, ssaid);
+            case PERSONAL -> throw new BusinessException(
+                    ErrorCode.TEAM_BOTTARI_ITEM_INAPPROPRIATE_TYPE, "보채기 알람은 공통/담당 물품만 가능합니다.");
         }
     }
 
@@ -96,9 +111,9 @@ public class TeamItemFacade {
 
     private void validateMemberInTeam(
             final Long teamBottariId,
-            final String ssaid
+            final Member member
     ) {
-        if (!teamMemberRepository.existsByTeamBottariIdAndMemberSsaid(teamBottariId, ssaid)) {
+        if (!teamMemberRepository.existsByTeamBottariIdAndMemberId(teamBottariId, member.getId())) {
             throw new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI);
         }
     }
