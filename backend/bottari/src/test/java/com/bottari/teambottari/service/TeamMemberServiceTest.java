@@ -15,6 +15,7 @@ import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
+import com.bottari.teambottari.dto.ReadTeamMemberNameResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
@@ -111,6 +112,95 @@ class TeamMemberServiceTest {
             // when & then
             assertThatThrownBy(() -> teamMemberService.getTeamMemberInfoByTeamBottariId(
                     teamBottari.getId(), anotherMember.getSsaid()
+            )).isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
+        }
+    }
+
+    @Nested
+    class GetTeamMemberNameByTeamBottariId {
+
+        @DisplayName("팀 보따리의 모든 팀원의 이름을 조회한다.")
+        @Test
+        void getTeamMemberNameByTeamBottariId() {
+            // given
+            final Member member1InTeamA = new Member("ssaid1", "nameA");
+            final Member member2InTeamA = new Member("ssaid2", "nameB");
+            final Member member3InTeamB = new Member("ssaid3", "nameC");
+            entityManager.persist(member1InTeamA);
+            entityManager.persist(member2InTeamA);
+            entityManager.persist(member3InTeamB);
+
+            final TeamBottari teamBottariA = new TeamBottari("title", member1InTeamA, "inviteCode1");
+            final TeamBottari teamBottariB = new TeamBottari("title2", member3InTeamB, "inviteCode2");
+            entityManager.persist(teamBottariA);
+            entityManager.persist(teamBottariB);
+
+            final TeamMember teamMember1 = new TeamMember(teamBottariA, member1InTeamA);
+            final TeamMember teamMember2 = new TeamMember(teamBottariA, member2InTeamA);
+            final TeamMember teamMember3 = new TeamMember(teamBottariB, member3InTeamB);
+            entityManager.persist(teamMember1);
+            entityManager.persist(teamMember2);
+            entityManager.persist(teamMember3);
+
+            final ReadTeamMemberNameResponse expectedMember1 = new ReadTeamMemberNameResponse(
+                    member1InTeamA.getId(),
+                    member1InTeamA.getName()
+            );
+            final ReadTeamMemberNameResponse expectedMember2 = new ReadTeamMemberNameResponse(
+                    member2InTeamA.getId(),
+                    member2InTeamA.getName()
+            );
+
+            // when
+            final List<ReadTeamMemberNameResponse> memberNames = teamMemberService.getTeamMemberNameByTeamBottariId(
+                    teamBottariA.getId(),
+                    member1InTeamA.getSsaid()
+            );
+
+            // then
+            assertThat(memberNames).contains(expectedMember1, expectedMember2);
+        }
+
+        @DisplayName("팀 보따리 맴버 이름 조회 시, 존재하지 않는 팀 보따리인 경우 예외가 발생한다.")
+        @Test
+        void getTeamMemberNameByTeamBottariId_Exception_TeamBottariNotFound() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final Long notExistsTeamBottariId = 1L;
+
+            // when & then
+            assertThatThrownBy(() -> teamMemberService.getTeamMemberNameByTeamBottariId(
+                    notExistsTeamBottariId, member.getSsaid()
+            )).isInstanceOf(BusinessException.class)
+                    .hasMessage("팀 보따리를 찾을 수 없습니다.");
+        }
+
+        @DisplayName("팀 보따리 맴버 이름 조회 시, 해당 ssaid의 멤버가 팀 보따리에 속한 멤버가 아닐 경우, 예외를 던진다.")
+        @Test
+        void getTeamMemberNameByTeamBottariId_Exception_MemberNotInTeamBottari() {
+            // given
+            final Member member1InTeamA = new Member("ssaid1", "nameA");
+            final Member member2InTeamB = new Member("ssaid3", "nameC");
+            entityManager.persist(member1InTeamA);
+            entityManager.persist(member2InTeamB);
+
+            final TeamBottari teamBottariA = new TeamBottari("title", member1InTeamA, "inviteCode1");
+            final TeamBottari teamBottariB = new TeamBottari("title2", member2InTeamB, "inviteCode2");
+            entityManager.persist(teamBottariA);
+            entityManager.persist(teamBottariB);
+
+            final TeamMember teamMember1 = new TeamMember(teamBottariA, member1InTeamA);
+            final TeamMember teamMember2 = new TeamMember(teamBottariB, member2InTeamB);
+            entityManager.persist(teamMember1);
+            entityManager.persist(teamMember2);
+
+            // when & then
+            assertThatThrownBy(() -> teamMemberService.getTeamMemberNameByTeamBottariId(
+                    teamBottariA.getId(),
+                    member2InTeamB.getSsaid()
             )).isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }

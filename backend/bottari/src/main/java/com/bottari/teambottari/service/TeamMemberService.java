@@ -7,6 +7,7 @@ import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
+import com.bottari.teambottari.dto.ReadTeamMemberNameResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamAssignedItemRepository;
@@ -38,6 +39,20 @@ public class TeamMemberService {
         validateMemberInTeam(ssaid, teamMembers);
 
         return ReadTeamMemberInfoResponse.of(teamBottari, teamMembers);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReadTeamMemberNameResponse> getTeamMemberNameByTeamBottariId(
+            final Long teamBottariId,
+            final String ssaid
+    ) {
+        validateTeamBottariExists(teamBottariId);
+        final List<TeamMember> teamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottariId);
+        validateMemberInTeam(ssaid, teamMembers);
+
+        return teamMembers.stream()
+                .map(ReadTeamMemberNameResponse::of)
+                .toList();
     }
 
     @Transactional(readOnly = true)
