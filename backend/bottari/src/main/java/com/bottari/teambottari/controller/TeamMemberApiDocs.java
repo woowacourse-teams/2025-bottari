@@ -12,8 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(name = "Team Member", description = "팀 멤버 API")
 public interface TeamMemberApiDocs {
@@ -39,9 +37,8 @@ public interface TeamMemberApiDocs {
             ErrorCode.TEAM_BOTTARI_NOT_FOUND,
             ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI
     })
-    @GetMapping("/team-bottaries/{teamBottariId}/members/name")
     ResponseEntity<List<ReadTeamMemberNameResponse>> readTeamMemberNameInfo(
-            @PathVariable final Long teamBottariId,
+            final Long teamBottariId,
             @Parameter(hidden = true) final String ssaid
     );
 
