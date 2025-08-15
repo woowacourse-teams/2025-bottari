@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/et_item_input"
+        style="@style/Pretendard_Regular_16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/space_median"
+        android:layout_marginStart="@dimen/space_median"
+        android:background="@drawable/bg_gray_radius_12dp_transparent_stroke"
+        android:hint="@string/bottari_personal_item_edit_hint_text"
+        android:imeOptions="actionSend"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:maxLength="20"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/space_median"
+        android:paddingVertical="@dimen/space_small"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray_a6a6a6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_personal_item_send"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/btn_personal_item_send"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="@string/bottari_personal_item_add_btn_description"
+        android:padding="@dimen/space_small"
+        android:src="@drawable/btn_send"
+        app:layout_constraintBottom_toBottomOf="@id/et_item_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/et_item_input" />
+</androidx.constraintlayout.widget.ConstraintLayout>
