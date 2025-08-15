@@ -6,7 +6,7 @@ import com.bottari.presentation.view.edit.team.item.assigned.TeamAssignedItemEdi
 import com.bottari.presentation.view.edit.team.item.personal.TeamPersonalItemEditFragment
 import com.bottari.presentation.view.edit.team.item.shared.TeamSharedItemEditFragment
 
-class TeamBottariItemEditFragmentAdapter(
+class TeamItemEditFragmentAdapter(
     fragment: Fragment,
     private val bottariId: Long,
 ) : FragmentStateAdapter(fragment) {

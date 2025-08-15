@@ -10,7 +10,7 @@ import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.ActivityTeamBottariEditBinding
 import com.bottari.presentation.model.BottariItemTypeUiModel
-import com.bottari.presentation.view.edit.team.item.main.TeamBottariItemEditFragment
+import com.bottari.presentation.view.edit.team.item.main.TeamItemEditFragment
 import com.bottari.presentation.view.edit.team.main.TeamBottariEditFragment
 import com.bottari.presentation.view.edit.team.management.TeamManagementFragment
 
@@ -49,7 +49,7 @@ class TeamBottariEditActivity :
         supportFragmentManager.commit {
             replace(
                 R.id.fcv_team_edit,
-                TeamBottariItemEditFragment.newInstance(teamBottariId, requireTabType),
+                TeamItemEditFragment.newInstance(teamBottariId, requireTabType),
             )
             addToBackStack(null)
         }
