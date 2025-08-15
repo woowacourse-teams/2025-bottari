@@ -22,8 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class TeamItemFacade {
-    private final TeamSharedItemService teamSharedItemService;
 
+    private final TeamSharedItemService teamSharedItemService;
     private final TeamAssignedItemService teamAssignedItemService;
     private final TeamPersonalItemService teamPersonalItemService;
     private final TeamMemberRepository teamMemberRepository;
