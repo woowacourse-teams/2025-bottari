@@ -34,11 +34,11 @@ public class TeamMemberController implements TeamMemberApiDocs {
 
     @GetMapping("/team-bottaries/{teamBottariId}/members/name")
     @Override
-    public ResponseEntity<List<ReadTeamMemberNameResponse>> readTeamMemberNameInfo(
+    public ResponseEntity<List<ReadTeamMemberNameResponse>> readTeamMemberNames(
             @PathVariable final Long teamBottariId,
             @MemberIdentifier final String ssaid
     ) {
-        final List<ReadTeamMemberNameResponse> response = teamMemberService.getTeamMemberNameByTeamBottariId(
+        final List<ReadTeamMemberNameResponse> response = teamMemberService.getTeamMemberNamesByTeamBottariId(
                 teamBottariId,
                 ssaid
         );

@@ -153,7 +153,7 @@ class TeamMemberServiceTest {
             );
 
             // when
-            final List<ReadTeamMemberNameResponse> memberNames = teamMemberService.getTeamMemberNameByTeamBottariId(
+            final List<ReadTeamMemberNameResponse> memberNames = teamMemberService.getTeamMemberNamesByTeamBottariId(
                     teamBottariA.getId(),
                     member1InTeamA.getSsaid()
             );
@@ -172,7 +172,7 @@ class TeamMemberServiceTest {
             final Long notExistsTeamBottariId = 1L;
 
             // when & then
-            assertThatThrownBy(() -> teamMemberService.getTeamMemberNameByTeamBottariId(
+            assertThatThrownBy(() -> teamMemberService.getTeamMemberNamesByTeamBottariId(
                     notExistsTeamBottariId, member.getSsaid()
             )).isInstanceOf(BusinessException.class)
                     .hasMessage("팀 보따리를 찾을 수 없습니다.");
@@ -198,7 +198,7 @@ class TeamMemberServiceTest {
             entityManager.persist(teamMember2);
 
             // when & then
-            assertThatThrownBy(() -> teamMemberService.getTeamMemberNameByTeamBottariId(
+            assertThatThrownBy(() -> teamMemberService.getTeamMemberNamesByTeamBottariId(
                     teamBottariA.getId(),
                     member2InTeamB.getSsaid()
             )).isInstanceOf(BusinessException.class)

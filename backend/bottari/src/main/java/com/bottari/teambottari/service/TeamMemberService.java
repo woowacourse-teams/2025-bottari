@@ -42,7 +42,7 @@ public class TeamMemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReadTeamMemberNameResponse> getTeamMemberNameByTeamBottariId(
+    public List<ReadTeamMemberNameResponse> getTeamMemberNamesByTeamBottariId(
             final Long teamBottariId,
             final String ssaid
     ) {

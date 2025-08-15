@@ -37,7 +37,7 @@ public interface TeamMemberApiDocs {
             ErrorCode.TEAM_BOTTARI_NOT_FOUND,
             ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI
     })
-    ResponseEntity<List<ReadTeamMemberNameResponse>> readTeamMemberNameInfo(
+    ResponseEntity<List<ReadTeamMemberNameResponse>> readTeamMemberNames(
             final Long teamBottariId,
             @Parameter(hidden = true) final String ssaid
     );

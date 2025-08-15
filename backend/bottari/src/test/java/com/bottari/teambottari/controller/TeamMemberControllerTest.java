@@ -70,7 +70,7 @@ class TeamMemberControllerTest {
                 new ReadTeamMemberNameResponse(1L, "nameA"),
                 new ReadTeamMemberNameResponse(2L, "nameB")
         );
-        given(teamMemberService.getTeamMemberNameByTeamBottariId(teamBottariId, ssaid))
+        given(teamMemberService.getTeamMemberNamesByTeamBottariId(teamBottariId, ssaid))
                 .willReturn(response);
 
         // when & then
