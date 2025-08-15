@@ -85,7 +85,6 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
             when {
                 notificationFlag && isMainChecklist() -> {
                     navigateToHome()
-                    finish()
                 }
 
                 isMainChecklist() -> finish()
