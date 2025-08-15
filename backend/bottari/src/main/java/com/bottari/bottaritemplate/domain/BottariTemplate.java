@@ -1,8 +1,9 @@
 package com.bottari.bottaritemplate.domain;
 
-import com.bottari.member.domain.Member;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.member.domain.Member;
+import com.bottari.support.BadWordValidator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -66,7 +67,10 @@ public class BottariTemplate {
             throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_TITLE_BLANK);
         }
         if (title.length() > 15) {
-            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_TITLE_TOO_LONG, "최대 15자까지 입력 가능합니다.");
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_TITLE_TOO_LONG);
+        }
+        if (BadWordValidator.hasBadWord(title)) {
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_TITLE_OFFENSIVE);
         }
     }
 }
