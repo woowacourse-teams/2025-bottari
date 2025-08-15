@@ -82,6 +82,8 @@ public enum ErrorCode {
     TEAM_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "팀 멤버를 찾을 수 없습니다."),
     MEMBER_NOT_IN_TEAM_BOTTARI(HttpStatus.FORBIDDEN, "해당 팀 보따리의 팀 멤버가 아닙니다."),
     MEMBER_ALREADY_IN_TEAM_BOTTARI(HttpStatus.CONFLICT, "이미 해당 팀 보따리에 참여한 멤버입니다."),
+    TEAM_MEMBER_ALREADY_CHECKED_ALL(HttpStatus.CONFLICT, "해당 팀 멤버는 모든 팀 보따리 물품을 체크했습니다."),
+    CANNOT_SEND_REMIND_TO_SELF(HttpStatus.BAD_REQUEST, "본인에게 보채기 알림을 보낼 수 없습니다."),
 
     // ===== ALARM 관련 =====
     ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "알람을 찾을 수 없습니다."),
@@ -97,6 +99,7 @@ public enum ErrorCode {
     FCM_INITIALIZED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "Firebase 초기화를 실패하였습니다."),
     FCM_MESSAGE_SEND_FAIL(HttpStatus.BAD_GATEWAY, "FCM 서버 문제로 FCM 메시지 전송을 실패하였습니다."),
     FCM_INVALID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰으로 인해 FCM 메시지 전송을 실패하였습니다."),
+    FCM_MESSAGE_CONVERT_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 메시지 변환을 실패하였습니다."),
 
     // ===== 기타 =====
     DATE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 날짜 형식입니다."),

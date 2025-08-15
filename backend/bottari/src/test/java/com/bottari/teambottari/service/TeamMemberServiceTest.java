@@ -1,10 +1,16 @@
 package com.bottari.teambottari.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
 import com.bottari.error.BusinessException;
+import com.bottari.fcm.FcmMessageConverter;
 import com.bottari.fcm.FcmMessageSender;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
@@ -30,7 +36,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @DataJpaTest
-@Import({TeamMemberService.class})
+@Import({
+        TeamMemberService.class,
+        FcmMessageConverter.class,
+})
 class TeamMemberServiceTest {
 
     @Autowired
@@ -385,6 +394,218 @@ class TeamMemberServiceTest {
             assertThatThrownBy(() -> teamMemberService.joinTeamBottari(request, member.getSsaid()))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("이미 해당 팀 보따리에 참여한 멤버입니다.");
+        }
+    }
+
+    @Nested
+    class SendRemindAlarm {
+
+        @DisplayName("팀 보따리의 팀원들에게 알림을 전송한다.")
+        @Test
+        void sendRemindAlarm() {
+            // given
+            final Member owner = MemberFixture.MEMBER.get();
+            entityManager.persist(owner);
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(owner);
+            entityManager.persist(teamBottari);
+            final TeamMember teamMember = new TeamMember(teamBottari, owner);
+            entityManager.persist(teamMember);
+
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(anotherMember);
+            final TeamMember anotherTeamMember = new TeamMember(teamBottari, anotherMember);
+            entityManager.persist(anotherTeamMember);
+
+            final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo("sharedItem", teamBottari);
+            entityManager.persist(teamSharedItemInfo);
+            final TeamSharedItem teamSharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember);
+            final TeamSharedItem anotherTeamSharedItem = new TeamSharedItem(teamSharedItemInfo, anotherTeamMember);
+            entityManager.persist(teamSharedItem);
+            entityManager.persist(anotherTeamSharedItem);
+
+            final TeamAssignedItemInfo teamAssignedItemInfo = new TeamAssignedItemInfo("assignedItem", teamBottari);
+            entityManager.persist(teamAssignedItemInfo);
+            final TeamAssignedItem teamAssignedItem = new TeamAssignedItem(teamAssignedItemInfo, anotherTeamMember);
+            entityManager.persist(teamAssignedItem);
+
+            doNothing().when(fcmMessageSender).sendMessageToMember(eq(anotherMember.getId()), any());
+
+            // when & then
+            assertThatCode(() -> teamMemberService.sendRemindAlarm(
+                    teamBottari.getId(),
+                    anotherMember.getId(),
+                    owner.getSsaid())
+            ).doesNotThrowAnyException();
+            verify(fcmMessageSender).sendMessageToMember(eq(anotherMember.getId()), any());
+        }
+
+        @DisplayName("존재하지 않는 ssaid인 경우, 예외를 던진다.")
+        @Test
+        void sendRemindAlarm_Exception_SenderNotFound() {
+            // given
+            final Member owner = MemberFixture.MEMBER.get();
+            entityManager.persist(owner);
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(owner);
+            entityManager.persist(teamBottari);
+            final TeamMember teamMember = new TeamMember(teamBottari, owner);
+            entityManager.persist(teamMember);
+
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(anotherMember);
+            final TeamMember anotherTeamMember = new TeamMember(teamBottari, anotherMember);
+            entityManager.persist(anotherTeamMember);
+
+            final String notExistsSsaid = "notExistsSsaid";
+
+            // when & then
+            assertThatThrownBy(() -> teamMemberService.sendRemindAlarm(
+                    teamBottari.getId(),
+                    anotherMember.getId(),
+                    notExistsSsaid
+            )).isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
+        }
+
+        @DisplayName("존재하지 않는 memberId인 경우, 예외를 던진다.")
+        @Test
+        void sendRemindAlarm_Exception_ReceiverNotFound() {
+            // given
+            final Member owner = MemberFixture.MEMBER.get();
+            entityManager.persist(owner);
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(owner);
+            entityManager.persist(teamBottari);
+            final TeamMember teamMember = new TeamMember(teamBottari, owner);
+            entityManager.persist(teamMember);
+
+            final Long notExistsMemberId = 999L;
+
+            // when & then
+            assertThatThrownBy(() -> teamMemberService.sendRemindAlarm(
+                    teamBottari.getId(),
+                    notExistsMemberId,
+                    owner.getSsaid()
+            )).isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 보채기를 받을 멤버를 찾을 수 없습니다.");
+        }
+
+        @DisplayName("본인에게 보채기 알림을 보내는 경우, 예외를 던진다.")
+        @Test
+        void sendRemindAlarm_Exception_SenderNotEqualsReceiver() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            // when & then
+            assertThatThrownBy(() -> teamMemberService.sendRemindAlarm(
+                    teamBottari.getId(),
+                    member.getId(),
+                    member.getSsaid()
+            )).isInstanceOf(BusinessException.class)
+                    .hasMessage("본인에게 보채기 알림을 보낼 수 없습니다.");
+        }
+
+        @DisplayName("존재하지 않는 팀 보따리인 경우, 예외를 던진다.")
+        @Test
+        void sendRemindAlarm_Exception_TeamBottariNotFound() {
+            // given
+            final Member owner = MemberFixture.MEMBER.get();
+            entityManager.persist(owner);
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(anotherMember);
+
+            final Long notExistsTeamBottariId = 999L;
+
+            // when & then
+            assertThatThrownBy(() -> teamMemberService.sendRemindAlarm(
+                    notExistsTeamBottariId,
+                    anotherMember.getId(),
+                    owner.getSsaid()
+            )).isInstanceOf(BusinessException.class)
+                    .hasMessage("팀 보따리를 찾을 수 없습니다.");
+        }
+
+        @DisplayName("보내는 사람이 팀 보따리의 팀원이 아닐 경우, 예외를 던진다.")
+        @Test
+        void sendRemindAlarm_Exception_SenderNotInTeamBottari() {
+            // given
+            final Member sender = MemberFixture.MEMBER.get();
+            entityManager.persist(sender);
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(sender);
+            entityManager.persist(teamBottari);
+
+            final Member receiver = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(receiver);
+            final TeamMember teamMember = new TeamMember(teamBottari, receiver);
+            entityManager.persist(teamMember);
+
+            // when & then
+            assertThatThrownBy(() -> teamMemberService.sendRemindAlarm(
+                    teamBottari.getId(),
+                    receiver.getId(),
+                    sender.getSsaid()
+            )).isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
+        }
+
+        @DisplayName("받는 사람이 팀 보따리의 팀원이 아닐 경우, 예외를 던진다.")
+        @Test
+        void sendRemindAlarm_Exception_ReceiverNotInTeamBottari() {
+            // given
+            final Member sender = MemberFixture.MEMBER.get();
+            entityManager.persist(sender);
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(sender);
+            entityManager.persist(teamBottari);
+            final TeamMember teamMember = new TeamMember(teamBottari, sender);
+            entityManager.persist(teamMember);
+
+            final Member receiver = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(receiver);
+
+            // when & then
+            assertThatThrownBy(() -> teamMemberService.sendRemindAlarm(
+                    teamBottari.getId(),
+                    receiver.getId(),
+                    sender.getSsaid()
+            )).isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다. - 보채기 대상 멤버가 팀에 없습니다.");
+        }
+
+        @DisplayName("받는 사람이 이미 모든 아이템을 챙겼다면, 예외를 던진다.")
+        @Test
+        void sendRemindAlarm_Exception_ReceiverAlreadyCheckedAllItems() {
+            // given
+            final Member owner = MemberFixture.MEMBER.get();
+            entityManager.persist(owner);
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(owner);
+            entityManager.persist(teamBottari);
+            final TeamMember teamMember = new TeamMember(teamBottari, owner);
+            entityManager.persist(teamMember);
+
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(anotherMember);
+            final TeamMember anotherTeamMember = new TeamMember(teamBottari, anotherMember);
+            entityManager.persist(anotherTeamMember);
+
+            final TeamAssignedItemInfo teamAssignedItemInfo = new TeamAssignedItemInfo("assignedItem", teamBottari);
+            entityManager.persist(teamAssignedItemInfo);
+            final TeamAssignedItem anotherTeamMemberAssignedItem = new TeamAssignedItem(
+                    teamAssignedItemInfo,
+                    anotherTeamMember
+            );
+            anotherTeamMemberAssignedItem.check();
+            entityManager.persist(anotherTeamMemberAssignedItem);
+
+            // when & then
+            assertThatThrownBy(() -> teamMemberService.sendRemindAlarm(
+                    teamBottari.getId(),
+                    anotherMember.getId(),
+                    owner.getSsaid()
+            )).isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 팀 멤버는 모든 팀 보따리 물품을 체크했습니다.");
         }
     }
 }
