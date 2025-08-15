@@ -273,9 +273,6 @@
     <string name="menu_template_report_title_text">신고하기</string>
 
     <!-- Team Bottari -->
-    <string name="team_checklist_tap_checklist_text">체크리스트</string>
-    <string name="team_checklist_tap_team_current_text">팀 보따리 현황</string>
-    <string name="team_checklist_tap_member_checklist_text">멤버 현황</string>
     <string name="team_product_status_format">%d / %d</string>
     <string name="team_product_status_title_format">%s 챙김 현황</string>
     <string name="team_status_fetch_failure_text">팀 보따리 현황을 불러오지 못했어요</string>
