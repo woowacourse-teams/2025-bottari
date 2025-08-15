@@ -79,6 +79,7 @@ public enum ErrorCode {
     TEAM_BOTTARI_ITEM_INFO_NOT_FOUND(HttpStatus.BAD_REQUEST, "팀 보따리 물품 정보를 찾을 수 없습니다."),
 
     // ===== TEAM_MEMBER 관련 =====
+    TEAM_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "팀 멤버를 찾을 수 없습니다."),
     MEMBER_NOT_IN_TEAM_BOTTARI(HttpStatus.FORBIDDEN, "해당 팀 보따리의 팀 멤버가 아닙니다."),
     MEMBER_ALREADY_IN_TEAM_BOTTARI(HttpStatus.CONFLICT, "이미 해당 팀 보따리에 참여한 멤버입니다."),
 
