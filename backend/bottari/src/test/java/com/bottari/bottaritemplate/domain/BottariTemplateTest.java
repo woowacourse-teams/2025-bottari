@@ -48,7 +48,7 @@ class BottariTemplateTest {
         // when & then
         assertThatThrownBy(() -> new BottariTemplate(title, member))
                 .isInstanceOf(BusinessException.class)
-                .hasMessage("보따리 템플릿 제목에 욕설을 입력할 수 없습니다.");
+                .hasMessage("보따리 템플릿 제목에 비속어를 입력할 수 없습니다.");
     }
 
     @DisplayName("본인의 보따리 템플릿인지 확인한다.")

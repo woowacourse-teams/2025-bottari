@@ -39,7 +39,7 @@ class MemberTest {
         // when & then
         assertThatThrownBy(() -> new Member("ssaid", name))
                 .isInstanceOf(BusinessException.class)
-                .hasMessage("이름에 욕설을 입력할 수 없습니다.");
+                .hasMessage("이름에 비속어를 입력할 수 없습니다.");
     }
 
     @DisplayName("같은 ssaid인지 비교한다.")

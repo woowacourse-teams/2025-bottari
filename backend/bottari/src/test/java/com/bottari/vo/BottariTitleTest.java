@@ -36,6 +36,6 @@ class BottariTitleTest {
         // when & then
         assertThatThrownBy(() -> new BottariTitle(title))
                 .isInstanceOf(BusinessException.class)
-                .hasMessage("보따리 제목에 욕설을 입력할 수 없습니다.");
+                .hasMessage("보따리 제목에 비속어를 입력할 수 없습니다.");
     }
 }
