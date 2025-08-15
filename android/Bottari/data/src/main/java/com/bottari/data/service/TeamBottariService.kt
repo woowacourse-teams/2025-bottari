@@ -71,19 +71,19 @@ interface TeamBottariService {
         @Path("teamBottariId") id: Long,
     ): Response<List<FetchTeamMemberStatusResponse>>
 
-    @GET("/team-bottaries/{teamBottariId}/shared-items")
+    @POST("/team-bottaries/{teamBottariId}/shared-items")
     suspend fun createTeamBottariSharedItem(
         @Path("teamBottariId") id: Long,
         @Body request: CreateTeamBottariSharedItemRequest,
     ): Response<Unit>
 
-    @GET("/team-bottaries/{teamBottariId}/personal-items")
+    @POST("/team-bottaries/{teamBottariId}/personal-items")
     suspend fun createTeamBottariPersonalItem(
         @Path("teamBottariId") id: Long,
         @Body request: CreateTeamBottariPersonalItemRequest,
     ): Response<Unit>
 
-    @GET("/team-bottaries/{teamBottariId}/assigned-items")
+    @POST("/team-bottaries/{teamBottariId}/assigned-items")
     suspend fun createTeamBottariAssignedItem(
         @Path("teamBottariId") id: Long,
         @Body request: CreateTeamBottariAssignedItemRequest,
