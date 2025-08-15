@@ -1,8 +1,8 @@
 package com.bottari.teambottari.controller;
 
-import com.bottari.config.MemberIdentifier;
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
+import com.bottari.teambottari.dto.JoinTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(name = "Team Member", description = "팀 멤버 API")
 public interface TeamMemberApiDocs {
@@ -40,6 +39,20 @@ public interface TeamMemberApiDocs {
     })
     ResponseEntity<List<ReadTeamMemberStatusResponse>> readTeamMemberStatus(
             final Long teamBottariId,
+            @Parameter(hidden = true) final String ssaid
+    );
+
+    @Operation(summary = "팀 보따리 참가")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "팀 보따리 참가 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.TEAM_BOTTARI_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_FOUND,
+            ErrorCode.MEMBER_ALREADY_IN_TEAM_BOTTARI,
+    })
+    ResponseEntity<Void> joinTeamBottari(
+            final JoinTeamBottariRequest request,
             @Parameter(hidden = true) final String ssaid
     );
 }
