@@ -56,7 +56,7 @@ class TeamAssignedItemServiceTest {
             final String itemName = "담당 물품";
             final CreateTeamAssignedItemRequest request = new CreateTeamAssignedItemRequest(
                     itemName,
-                    List.of(member.getName())
+                    List.of(member.getId())
             );
 
             // when
@@ -102,7 +102,7 @@ class TeamAssignedItemServiceTest {
 
             final CreateTeamAssignedItemRequest request = new CreateTeamAssignedItemRequest(
                     itemName,
-                    List.of(member.getName())
+                    List.of(member.getId())
             );
 
             // when & then
@@ -118,6 +118,9 @@ class TeamAssignedItemServiceTest {
             final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(anotherMember);
+
             final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
             entityManager.persist(teamBottari);
 
@@ -127,13 +130,39 @@ class TeamAssignedItemServiceTest {
             final String itemName = "담당 물품";
             final CreateTeamAssignedItemRequest request = new CreateTeamAssignedItemRequest(
                     itemName,
-                    List.of("존재하지 않는 멤버")
+                    List.of(anotherMember.getId())
             );
 
             // when & then
             assertThatThrownBy(() -> teamAssignedItemService.create(teamMember, request))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다. - 요청된 팀원 중 일부가 팀에 속해 있지 않습니다.");
+        }
+
+        @DisplayName("팀 보따리 담당 물품을 생성 시, 팀에 속하지 않는 멤버를 요청한다면, 예외를 던진다.")
+        @Test
+        void create_Exception_NotFoundMember() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final String itemName = "담당 물품";
+            final Long invalidMemberId = -1L;
+            final CreateTeamAssignedItemRequest request = new CreateTeamAssignedItemRequest(
+                    itemName,
+                    List.of(invalidMemberId)
+            );
+
+            // when & then
+            assertThatThrownBy(() -> teamAssignedItemService.create(teamMember, request))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 요청된 팀원 중 일부가 존재하지 않습니다.");
         }
 
         @DisplayName("팀 보따리 담당 물품 생성 시, 담당 멤버가 없다면, 예외를 던진다.")

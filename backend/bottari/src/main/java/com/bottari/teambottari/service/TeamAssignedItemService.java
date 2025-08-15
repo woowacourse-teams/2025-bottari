@@ -40,8 +40,9 @@ public class TeamAssignedItemService {
     ) {
         final TeamBottari teamBottari = teamMember.getTeamBottari();
         validateDuplicateName(teamBottari.getId(), request.name());
+        final List<String> requestAssignedMemberNames = getRequestAssignedMemberNames(request.memberIds());
+        final List<TeamMember> teamMembers = getAssignedTeamMembersByRequest(requestAssignedMemberNames, teamBottari);
         final TeamAssignedItemInfo savedTeamAssignedItemInfo = saveTeamAssignedItemInfo(request.name(), teamBottari);
-        final List<TeamMember> teamMembers = getAssignedTeamMembersByRequest(request.teamMemberNames(), teamBottari);
         saveAssignedItemToTeamMembers(savedTeamAssignedItemInfo, teamMembers);
 
         return savedTeamAssignedItemInfo.getId();
@@ -109,6 +110,20 @@ public class TeamAssignedItemService {
         }
     }
 
+    private List<String> getRequestAssignedMemberNames(final List<Long> memberIds) {
+        if (memberIds == null || memberIds.isEmpty()) {
+            throw new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NO_ASSIGNED_MEMBERS);
+        }
+        final List<Member> members = memberRepository.findAllById(memberIds);
+        if (members.size() != memberIds.size()) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "요청된 팀원 중 일부가 존재하지 않습니다.");
+        }
+
+        return members.stream()
+                .map(Member::getName)
+                .toList();
+    }
+
     private TeamAssignedItemInfo saveTeamAssignedItemInfo(
             final String name,
             final TeamBottari teamBottari
@@ -122,9 +137,6 @@ public class TeamAssignedItemService {
             final List<String> teamMemberNames,
             final TeamBottari teamBottari
     ) {
-        if (teamMemberNames == null || teamMemberNames.isEmpty()) {
-            throw new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NO_ASSIGNED_MEMBERS);
-        }
         final List<TeamMember> allTeamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId());
         final Set<String> requestNames = new HashSet<>(teamMemberNames);
         final Set<String> allTeamMemberNames = allTeamMembers.stream()

@@ -4,6 +4,6 @@ import java.util.List;
 
 public record CreateTeamAssignedItemRequest(
         String name,
-        List<String> teamMemberNames
+        List<Long> memberIds
 ) {
 }

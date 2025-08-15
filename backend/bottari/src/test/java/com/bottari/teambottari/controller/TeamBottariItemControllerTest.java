@@ -85,7 +85,7 @@ class TeamBottariItemControllerTest {
         final Long createdItemId = 1L;
         final CreateTeamAssignedItemRequest request = new CreateTeamAssignedItemRequest(
                 itemName,
-                List.of("담당자1", "담당자2")
+                List.of(1L, 2L)
         );
 
         given(teamItemFacade.createAssignedItem(teamBottariId, request, ssaid))

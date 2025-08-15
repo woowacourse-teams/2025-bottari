@@ -189,7 +189,7 @@ public class TeamItemFacadeTest {
             final String itemName = "담당 물품";
             final CreateTeamAssignedItemRequest request = new CreateTeamAssignedItemRequest(
                     itemName,
-                    List.of(member.getName(), anotherMember.getName())
+                    List.of(member.getId(), anotherMember.getId())
             );
             final String ssaid = member.getSsaid();
 
@@ -219,7 +219,7 @@ public class TeamItemFacadeTest {
             final Long invalid_teamBottariId = -1L;
             final CreateTeamAssignedItemRequest request = new CreateTeamAssignedItemRequest(
                     "담당 물품",
-                    List.of(member.getName())
+                    List.of(member.getId())
             );
             final String ssaid = member.getSsaid();
 
