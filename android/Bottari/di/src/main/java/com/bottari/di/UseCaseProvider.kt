@@ -11,6 +11,7 @@ import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
 import com.bottari.domain.usecase.bottari.SaveBottariTitleUseCase
 import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
+import com.bottari.domain.usecase.fcm.SaveFcmTokenUseCase
 import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
 import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
@@ -175,5 +176,8 @@ object UseCaseProvider {
     }
     val fetchTeamMembersStatusUseCase: FetchTeamMembersStatusUseCase by lazy {
         FetchTeamMembersStatusUseCase(RepositoryProvider.teamBottariRepository)
+    }
+    val saveFcmTokenUseCase: SaveFcmTokenUseCase by lazy {
+        SaveFcmTokenUseCase(RepositoryProvider.fcmRepository)
     }
 }
