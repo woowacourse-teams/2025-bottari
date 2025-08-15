@@ -2,6 +2,7 @@ package com.bottari.teambottari.domain;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import jakarta.persistence.Column;
 import com.bottari.vo.ItemName;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,11 +11,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
+@SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class TeamPersonalItem {
@@ -30,6 +34,10 @@ public class TeamPersonalItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_member_id")
     private TeamMember teamMember;
+
+    // Soft Delete 경우에만 사용됨
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     public TeamPersonalItem(
             final String name,

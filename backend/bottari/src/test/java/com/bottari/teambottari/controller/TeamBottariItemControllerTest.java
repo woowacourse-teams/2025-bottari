@@ -2,14 +2,19 @@ package com.bottari.teambottari.controller;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bottari.config.WebConfig;
 import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.domain.TeamItemType;
+import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
+import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse.MemberCheckStatusResponse;
@@ -22,6 +27,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -42,6 +48,129 @@ class TeamBottariItemControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @DisplayName("팀 보따리 공통 물품을 성공적으로 생성한다.")
+    @Test
+    void createSharedItem() throws Exception {
+        // given
+        final Long teamBottariId = 1L;
+        final String ssaid = "test-ssaid";
+        final String itemName = "공통 물품1";
+
+        final CreateTeamItemRequest request = new CreateTeamItemRequest(itemName);
+        final Long createdItemId = 1L;
+
+        given(teamItemFacade.createSharedItem(teamBottariId, request, ssaid))
+                .willReturn(createdItemId);
+
+        // when & then
+        mockMvc.perform(post("/team-bottaries/{teamBottariId}/shared-items", teamBottariId)
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(header().string(
+                        "Location",
+                        "/team-bottaries/" + teamBottariId + "/shared-items/" + createdItemId
+                ));
+    }
+
+    @DisplayName("팀 보따리 담당 물품을 성공적으로 생성한다.")
+    @Test
+    void createAssignedItem() throws Exception {
+        // given
+        final Long teamBottariId = 1L;
+        final String ssaid = "test-ssaid";
+        final String itemName = "담당 물품1";
+
+        final Long createdItemId = 1L;
+        final CreateTeamAssignedItemRequest request = new CreateTeamAssignedItemRequest(
+                itemName,
+                List.of(1L, 2L)
+        );
+
+        given(teamItemFacade.createAssignedItem(teamBottariId, request, ssaid))
+                .willReturn(createdItemId);
+
+        // when & then
+        mockMvc.perform(post("/team-bottaries/{teamBottariId}/assigned-items", teamBottariId)
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(header().string(
+                        "Location",
+                        "/team-bottaries/" + teamBottariId + "/assigned-items/" + createdItemId
+                ));
+    }
+
+    @DisplayName("팀 보따리 개인 물품을 성공적으로 생성한다.")
+    @Test
+    void createPersonalItem() throws Exception {
+        // given
+        final Long teamBottariId = 1L;
+        final String ssaid = "test-ssaid";
+        final String itemName = "개인 물품1";
+
+        final CreateTeamItemRequest request = new CreateTeamItemRequest(itemName);
+        final Long createdItemId = 1L;
+
+        given(teamItemFacade.createPersonalItem(teamBottariId, request, ssaid))
+                .willReturn(createdItemId);
+
+        // when & then
+        mockMvc.perform(post("/team-bottaries/{teamBottariId}/personal-items", teamBottariId)
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(header().string(
+                        "Location",
+                        "/team-bottaries/" + teamBottariId + "/personal-items/" + createdItemId
+                ));
+    }
+
+    @DisplayName("팀 보따리 물품을 성공적으로 삭제한다.")
+    @ParameterizedTest
+    @EnumSource(
+            value = TeamItemType.class,
+            names = {"SHARED", "PERSONAL"}
+    )
+    void deleteItem(final TeamItemType type) throws Exception {
+        // given
+        final Long itemId = 1L;
+        final String ssaid = "test-ssaid";
+        final TeamItemTypeRequest request = new TeamItemTypeRequest(type);
+
+        willDoNothing().given(teamItemFacade)
+                .delete(itemId, ssaid, request);
+
+        // when & then
+        mockMvc.perform(delete("/team-items/{id}", itemId)
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("팀 보따리 담당 물품을 성공적으로 삭제한다.")
+    @Test
+    void deleteAssignedItem() throws Exception {
+        // given
+        final Long itemId = 1L;
+        final String ssaid = "test-ssaid";
+        final TeamItemTypeRequest request = new TeamItemTypeRequest(TeamItemType.ASSIGNED);
+
+        willDoNothing().given(teamItemFacade)
+                .delete(itemId, ssaid, request);
+
+        // when & then
+        mockMvc.perform(delete("/team-items/{id}", itemId)
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent());
+    }
 
     @DisplayName("팀 보따리 물품 현황을 성공적으로 조회한다.")
     @Test
