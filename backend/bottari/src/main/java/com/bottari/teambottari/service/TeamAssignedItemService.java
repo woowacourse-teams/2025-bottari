@@ -15,8 +15,10 @@ import com.bottari.teambottari.repository.TeamAssignedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamAssignedItemRepository;
 import com.bottari.teambottari.repository.TeamMemberRepository;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,7 +41,7 @@ public class TeamAssignedItemService {
         final TeamBottari teamBottari = teamMember.getTeamBottari();
         validateDuplicateName(teamBottari.getId(), request.name());
         final TeamAssignedItemInfo savedTeamAssignedItemInfo = saveTeamAssignedItemInfo(request.name(), teamBottari);
-        final List<TeamMember> teamMembers = findAssignedTeamMembersByRequest(request.teamMemberNames(), teamBottari);
+        final List<TeamMember> teamMembers = getAssignedTeamMembersByRequest(request.teamMemberNames(), teamBottari);
         saveAssignedItemToTeamMembers(savedTeamAssignedItemInfo, teamMembers);
 
         return savedTeamAssignedItemInfo.getId();
@@ -116,19 +118,25 @@ public class TeamAssignedItemService {
         return teamAssignedItemInfoRepository.save(teamAssignedItemInfo);
     }
 
-    public List<TeamMember> findAssignedTeamMembersByRequest(
+    private List<TeamMember> getAssignedTeamMembersByRequest(
             final List<String> teamMemberNames,
             final TeamBottari teamBottari
     ) {
-        final List<TeamMember> targetTeamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId())
-                .stream()
-                .filter(member -> teamMemberNames.contains(member.getMember().getName()))
-                .toList();
-        if (targetTeamMembers.size() != teamMemberNames.size()) {
-            throw new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI);
+        if (teamMemberNames == null || teamMemberNames.isEmpty()) {
+            throw new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NO_ASSIGNED_MEMBERS);
+        }
+        final List<TeamMember> allTeamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId());
+        final Set<String> requestNames = new HashSet<>(teamMemberNames);
+        final Set<String> allTeamMemberNames = allTeamMembers.stream()
+                .map(m -> m.getMember().getName())
+                .collect(Collectors.toSet());
+        if (!allTeamMemberNames.containsAll(requestNames)) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI, "요청된 팀원 중 일부가 팀에 속해 있지 않습니다.");
         }
 
-        return targetTeamMembers;
+        return allTeamMembers.stream()
+                .filter(member -> requestNames.contains(member.getMember().getName()))
+                .toList();
     }
 
     private void validateMemberInTeam(

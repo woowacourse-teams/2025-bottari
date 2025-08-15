@@ -66,6 +66,7 @@ public enum ErrorCode {
     TEAM_BOTTARI_ITEM_NOT_OWNED(HttpStatus.FORBIDDEN, "해당 팀 보따리 물품에 접근할 수 있는 권한이 없습니다."),
     TEAM_BOTTARI_ITEM_ALREADY_CHECKED(HttpStatus.CONFLICT, "해당 팀 보따리 물품은 이미 체크되어 있습니다."),
     TEAM_BOTTARI_ITEM_ALREADY_UNCHECKED(HttpStatus.CONFLICT, "해당 팀 보따리 물품은 이미 체크 해제되어 있습니다."),
+    TEAM_BOTTARI_ITEM_NO_ASSIGNED_MEMBERS(HttpStatus.BAD_REQUEST, "팀 보따리 담당 물품에 팀원이 지정되지 않았습니다."),
 
     // ===== TEAM_MEMBER 관련 =====
     MEMBER_NOT_IN_TEAM_BOTTARI(HttpStatus.FORBIDDEN, "해당 팀 보따리의 팀 멤버가 아닙니다."),
@@ -87,8 +88,7 @@ public enum ErrorCode {
 
     // ===== 기타 =====
     DATE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 날짜 형식입니다."),
-    NUMBER_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 숫자 형식입니다.")
-    ;
+    NUMBER_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 숫자 형식입니다.");
 
     private final HttpStatus status;
     private final String message;

@@ -65,12 +65,13 @@ class TeamAssignedItemServiceTest {
             // then
             final TeamAssignedItemInfo teamAssignedItemInfo = entityManager.find(TeamAssignedItemInfo.class, actual);
             final List<TeamAssignedItem> teamAssignedItems = entityManager.createQuery(
-                    "SELECT tai FROM TeamAssignedItem tai WHERE tai.info.id = :infoId", TeamAssignedItem.class)
+                            "SELECT tai FROM TeamAssignedItem tai WHERE tai.info.id = :infoId", TeamAssignedItem.class)
                     .setParameter("infoId", actual)
                     .getResultList();
             // anotherMember가 담당하지 않으므로, teamAssignedItemsByMember는 비어있다.
             final List<TeamAssignedItem> teamAssignedItemsByMember = entityManager.createQuery(
-                    "SELECT tai FROM TeamAssignedItem tai WHERE tai.teamMember.id = :teamMemberId", TeamAssignedItem.class)
+                            "SELECT tai FROM TeamAssignedItem tai WHERE tai.teamMember.id = :teamMemberId",
+                            TeamAssignedItem.class)
                     .setParameter("teamMemberId", anotherTeamMember.getId())
                     .getResultList();
             assertAll(
@@ -108,6 +109,56 @@ class TeamAssignedItemServiceTest {
             assertThatThrownBy(() -> teamAssignedItemService.create(teamMember, request))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("이미 존재하는 팀 보따리 물품입니다. - 담당");
+        }
+
+        @DisplayName("팀 보따리 담당 물품을 생성 시, 팀에 속하지 않는 멤버를 요청한다면, 예외를 던진다.")
+        @Test
+        void create_Exception_NotInTeam() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final String itemName = "담당 물품";
+            final CreateTeamAssignedItemRequest request = new CreateTeamAssignedItemRequest(
+                    itemName,
+                    List.of("존재하지 않는 멤버")
+            );
+
+            // when & then
+            assertThatThrownBy(() -> teamAssignedItemService.create(teamMember, request))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다. - 요청된 팀원 중 일부가 팀에 속해 있지 않습니다.");
+        }
+
+        @DisplayName("팀 보따리 담당 물품 생성 시, 담당 멤버가 없다면, 예외를 던진다.")
+        @Test
+        void create_Exception_NoAssignedMembers() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final String itemName = "담당 물품";
+            final CreateTeamAssignedItemRequest request = new CreateTeamAssignedItemRequest(
+                    itemName,
+                    List.of()
+            );
+
+            // when & then
+            assertThatThrownBy(() -> teamAssignedItemService.create(teamMember, request))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("팀 보따리 담당 물품에 팀원이 지정되지 않았습니다.");
         }
     }
 

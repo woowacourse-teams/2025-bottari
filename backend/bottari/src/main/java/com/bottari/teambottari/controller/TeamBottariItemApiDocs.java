@@ -43,6 +43,7 @@ public interface TeamBottariItemApiDocs {
             ErrorCode.TEAM_BOTTARI_NOT_FOUND,
             ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI,
             ErrorCode.MEMBER_NOT_FOUND,
+            ErrorCode.TEAM_BOTTARI_ITEM_NO_ASSIGNED_MEMBERS,
             ErrorCode.TEAM_BOTTARI_ITEM_NAME_BLANK,
             ErrorCode.TEAM_BOTTARI_ITEM_NAME_TOO_LONG,
             ErrorCode.TEAM_BOTTARI_ITEM_ALREADY_EXISTS
