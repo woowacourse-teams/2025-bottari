@@ -4,48 +4,27 @@ import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.support.BadWordValidator;
 import jakarta.persistence.Embeddable;
-import java.util.Objects;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Embeddable
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-public class ItemName {
+public record ItemName(
+        String name
+) {
 
-    private String name;
+    private static final int MAX_NAME_LENGTH = 20;
 
-    public ItemName(final String name) {
+    public ItemName {
         validateName(name);
-        this.name = name;
     }
 
     private void validateName(final String name) {
         if (name.isBlank()) {
             throw new BusinessException(ErrorCode.ITEM_NAME_BLANK);
         }
-        if (name.length() > 20) {
-            throw new BusinessException(ErrorCode.ITEM_NAME_TOO_LONG);
+        if (name.length() > MAX_NAME_LENGTH) {
+            throw new BusinessException(ErrorCode.ITEM_NAME_TOO_LONG, "최대 " + MAX_NAME_LENGTH + "자까지 입력 가능합니다.");
         }
         if (BadWordValidator.hasBadWord(name)) {
             throw new BusinessException(ErrorCode.ITEM_NAME_OFFENSIVE);
         }
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof final ItemName itemName)) {
-            return false;
-        }
-        return Objects.equals(getName(), itemName.getName());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getName());
     }
 }

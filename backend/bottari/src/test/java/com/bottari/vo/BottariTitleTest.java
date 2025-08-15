@@ -26,7 +26,7 @@ class BottariTitleTest {
         // when & then
         assertThatThrownBy(() -> new BottariTitle(title))
                 .isInstanceOf(BusinessException.class)
-                .hasMessage("보따리 제목이 너무 깁니다. 최대 15자까지 입력 가능합니다.");
+                .hasMessage("보따리 제목이 너무 깁니다. - 최대 15자까지 입력 가능합니다.");
     }
 
     @DisplayName("보따리 제목에 욕설이 들어가있는 경우, 예외를 던진다.")

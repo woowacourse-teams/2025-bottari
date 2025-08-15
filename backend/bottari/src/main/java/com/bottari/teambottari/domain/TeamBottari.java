@@ -51,6 +51,6 @@ public class TeamBottari {
     }
 
     public String getTitle() {
-        return title.getTitle();
+        return title.title();
     }
 }

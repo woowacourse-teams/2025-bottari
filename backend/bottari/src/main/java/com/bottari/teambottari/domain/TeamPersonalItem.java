@@ -58,7 +58,7 @@ public class TeamPersonalItem {
         return teamMember.isSameBySsaid(ssaid);
     }
 
-    public String getName(){
-        return name.getName();
+    public String getName() {
+        return name.name();
     }
 }

@@ -67,6 +67,6 @@ public class BottariItem {
     }
 
     public String getName() {
-        return name.getName();
+        return name.name();
     }
 }

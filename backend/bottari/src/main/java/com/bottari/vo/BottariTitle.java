@@ -4,48 +4,27 @@ import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.support.BadWordValidator;
 import jakarta.persistence.Embeddable;
-import java.util.Objects;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Embeddable
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-public class BottariTitle {
+public record BottariTitle(
+        String title
+) {
 
-    private String title;
+    private static final int MAX_TITLE_LENGTH = 15;
 
-    public BottariTitle(final String title) {
+    public BottariTitle {
         validateTitle(title);
-        this.title = title;
     }
 
     private void validateTitle(final String title) {
         if (title.isBlank()) {
             throw new BusinessException(ErrorCode.BOTTARI_TITLE_BLANK);
         }
-        if (title.length() > 15) {
-            throw new BusinessException(ErrorCode.BOTTARI_TITLE_TOO_LONG);
+        if (title.length() > MAX_TITLE_LENGTH) {
+            throw new BusinessException(ErrorCode.BOTTARI_TITLE_TOO_LONG, "최대 " + MAX_TITLE_LENGTH + "자까지 입력 가능합니다.");
         }
         if (BadWordValidator.hasBadWord(title)) {
             throw new BusinessException(ErrorCode.BOTTARI_TITLE_OFFENSIVE);
         }
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof final BottariTitle that)) {
-            return false;
-        }
-        return Objects.equals(getTitle(), that.getTitle());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getTitle());
     }
 }

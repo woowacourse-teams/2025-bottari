@@ -26,7 +26,7 @@ class ItemNameTest {
         // when & then
         assertThatThrownBy(() -> new ItemName(name))
                 .isInstanceOf(BusinessException.class)
-                .hasMessage("물품명이 너무 깁니다. 최대 20자까지 입력 가능합니다.");
+                .hasMessage("물품명이 너무 깁니다. - 최대 20자까지 입력 가능합니다.");
     }
 
     @DisplayName("물풀명에 욕설이 들어가있는 경우, 예외를 던진다.")

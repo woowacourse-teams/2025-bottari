@@ -34,6 +34,6 @@ class TeamBottariTest {
         // when & then
         assertThatThrownBy(() -> new TeamBottari(title, member, "inviteCode"))
                 .isInstanceOf(BusinessException.class)
-                .hasMessage("보따리 제목이 너무 깁니다. 최대 15자까지 입력 가능합니다.");
+                .hasMessage("보따리 제목이 너무 깁니다. - 최대 15자까지 입력 가능합니다.");
     }
 }

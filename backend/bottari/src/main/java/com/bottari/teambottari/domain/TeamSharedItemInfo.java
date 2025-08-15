@@ -44,6 +44,6 @@ public class TeamSharedItemInfo {
     }
 
     public String getName() {
-        return name.getName();
+        return name.name();
     }
 }

@@ -44,6 +44,6 @@ public class BottariTemplateItem {
     }
 
     public String getName() {
-        return name.getName();
+        return name.name();
     }
 }
