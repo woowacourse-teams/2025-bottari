@@ -1,6 +1,9 @@
 package com.bottari.data.service
 
+import com.bottari.data.model.team.CreateTeamBottariAssignedItemRequest
+import com.bottari.data.model.team.CreateTeamBottariPersonalItemRequest
 import com.bottari.data.model.team.CreateTeamBottariRequest
+import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
@@ -10,6 +13,7 @@ import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.ItemTypeRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -66,6 +70,29 @@ interface TeamBottariService {
     suspend fun fetchTeamMembersStatus(
         @Path("teamBottariId") id: Long,
     ): Response<List<FetchTeamMemberStatusResponse>>
+
+    @GET("/team-bottaries/{teamBottariId}/shared-items")
+    suspend fun createTeamBottariSharedItem(
+        @Path("teamBottariId") id: Long,
+        @Body request: CreateTeamBottariSharedItemRequest,
+    ): Response<Unit>
+
+    @GET("/team-bottaries/{teamBottariId}/personal-items")
+    suspend fun createTeamBottariPersonalItem(
+        @Path("teamBottariId") id: Long,
+        @Body request: CreateTeamBottariPersonalItemRequest,
+    ): Response<Unit>
+
+    @GET("/team-bottaries/{teamBottariId}/assigned-items")
+    suspend fun createTeamBottariAssignedItem(
+        @Path("teamBottariId") id: Long,
+        @Body request: CreateTeamBottariAssignedItemRequest,
+    ): Response<Unit>
+
+    @DELETE("/team-items/{id}")
+    suspend fun deleteTeamBottariItem(
+        @Path("id") id: Long,
+    ): Response<Unit>
 
     @POST("/team-bottaries/{teamBottariId}/members/{memberId}/remind")
     suspend fun sendRemindByMemberMessage(

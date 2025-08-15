@@ -3,7 +3,10 @@ package com.bottari.data.source.remote
 import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.common.ErrorResponse
+import com.bottari.data.model.team.CreateTeamBottariAssignedItemRequest
+import com.bottari.data.model.team.CreateTeamBottariPersonalItemRequest
 import com.bottari.data.model.team.CreateTeamBottariRequest
+import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
@@ -76,6 +79,35 @@ class TeamBottariRemoteDataSourceImpl(
 
     override suspend fun fetchTeamMembersStatus(id: Long): Result<List<FetchTeamMemberStatusResponse>> =
         safeApiCall { teamBottariService.fetchTeamMembersStatus(id) }
+
+    override suspend fun createTeamBottariSharedItem(
+        id: Long,
+        request: CreateTeamBottariSharedItemRequest,
+    ): Result<Unit> =
+        safeApiCall {
+            teamBottariService.createTeamBottariSharedItem(id, request)
+        }
+
+    override suspend fun createTeamBottariPersonalItem(
+        id: Long,
+        request: CreateTeamBottariPersonalItemRequest,
+    ): Result<Unit> =
+        safeApiCall {
+            teamBottariService.createTeamBottariPersonalItem(id, request)
+        }
+
+    override suspend fun createTeamBottariAssignedItem(
+        id: Long,
+        request: CreateTeamBottariAssignedItemRequest,
+    ): Result<Unit> =
+        safeApiCall {
+            teamBottariService.createTeamBottariAssignedItem(id, request)
+        }
+
+    override suspend fun deleteTeamBottariItem(id: Long): Result<Unit> =
+        safeApiCall {
+            teamBottariService.deleteTeamBottariItem(id)
+        }
 
     override suspend fun sendRemindByMemberMessage(
         teamBottariId: Long,
