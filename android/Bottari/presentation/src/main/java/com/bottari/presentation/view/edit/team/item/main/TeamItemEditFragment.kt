@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import androidx.activity.addCallback
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -135,9 +134,10 @@ class TeamItemEditFragment :
     }
 
     private fun handleSendButtonState(canSend: Boolean) {
-        binding.viewItemInput.btnPersonalItemSend.isEnabled = canSend
-        binding.viewItemInput.btnPersonalItemSend.alpha =
-            if (canSend) SEND_BUTTON_ENABLED_ALPHA else SEND_BUTTON_DISABLED_ALPHA
+        binding.viewItemInput.btnPersonalItemSend.run {
+            isEnabled = canSend
+            alpha = if (canSend) SEND_BUTTON_ENABLED_ALPHA else SEND_BUTTON_DISABLED_ALPHA
+        }
     }
 
     companion object {
