@@ -1,6 +1,7 @@
 package com.bottari.teambottari.controller;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -121,5 +122,21 @@ class TeamMemberControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/team-members/" + teamMemberId));
+    }
+
+    @DisplayName("팀 보따리 멤버 보채기를 한다.")
+    @Test
+    void sendRemindAlarmByMember() throws Exception {
+        // given
+        final Long teamBottariId = 1L;
+        final Long memberId = 2L;
+        final String ssaid = "ssaid";
+        willDoNothing().given(teamMemberService)
+                .sendRemindAlarm(teamBottariId, memberId, ssaid);
+
+        // when & then
+        mockMvc.perform(post("/team-bottaries/{teamBottariId}/members/{memberId}/remind", teamBottariId, memberId)
+                        .header("ssaid", ssaid))
+                .andExpect(status().isNoContent());
     }
 }
