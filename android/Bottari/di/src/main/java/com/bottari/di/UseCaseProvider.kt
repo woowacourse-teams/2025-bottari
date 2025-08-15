@@ -180,9 +180,8 @@ object UseCaseProvider {
     }
     val remindUseCase: RemindUseCase by lazy {
         RemindUseCase(RepositoryProvider.teamBottariRepository)
-        
+    }
     val fetchTeamMembersStatusUseCase: FetchTeamMembersStatusUseCase by lazy {
         FetchTeamMembersStatusUseCase(RepositoryProvider.teamBottariRepository)
-
     }
 }
