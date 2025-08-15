@@ -1,11 +1,14 @@
 package com.bottari.teambottari.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
+import com.bottari.fcm.FcmMessageConverter;
+import com.bottari.fcm.FcmMessageSender;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
@@ -17,9 +20,9 @@ import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
-import com.bottari.teambottari.dto.CheckTeamItemRequest;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
+import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
@@ -28,10 +31,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @DataJpaTest
 @Import({
@@ -39,12 +43,16 @@ import org.springframework.context.annotation.Import;
         TeamSharedItemService.class,
         TeamAssignedItemService.class,
         TeamPersonalItemService.class,
+        FcmMessageConverter.class,
         JpaAuditingConfig.class
 })
 public class TeamItemFacadeTest {
 
     @Autowired
     private TeamItemFacade teamItemFacade;
+
+    @MockitoBean
+    private FcmMessageSender fcmMessageSender;
 
     @Autowired
     private EntityManager entityManager;
@@ -108,16 +116,37 @@ public class TeamItemFacadeTest {
             );
 
             final List<TeamItemStatusResponse> expectedSharedItems = List.of(
-                    new TeamItemStatusResponse("공통 물품", expectedSharedMemberStatus, 0, 2)
+                    new TeamItemStatusResponse(teamSharedItemInfo.getId(), "공통 물품", expectedSharedMemberStatus, 0, 2)
             );
             final List<TeamItemStatusResponse> expectedAssignedItems = List.of(
-                    new TeamItemStatusResponse("멤버 1 물품", expectedMember1AssignedStatus, 0, 1),
-                    new TeamItemStatusResponse("멤버 2 물품", expectedMember2AssignedStatus, 1, 1)
+                    new TeamItemStatusResponse(
+                            teamAssignedItemInfo_1.getId(), "멤버 1 물품", expectedMember1AssignedStatus, 0, 1),
+                    new TeamItemStatusResponse(
+                            teamAssignedItemInfo_2.getId(), "멤버 2 물품", expectedMember2AssignedStatus, 1, 1)
             );
             final ReadTeamItemStatusResponse expected = new ReadTeamItemStatusResponse(expectedSharedItems,
                     expectedAssignedItems);
 
             assertThat(actual).isEqualTo(expected);
+        }
+
+        @DisplayName("팀 보따리 물품을 조회할 때, 유효하지 않은 ssaid라면 예외를 던진다.")
+        @Test
+        void getTeamItemStatus_Exception_InvalidSsaid() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final String invalid_ssaid = "invalid_ssaid";
+
+            // when & then
+            assertThatThrownBy(
+                    () -> teamItemFacade.getTeamItemStatus(teamBottari.getId(), invalid_ssaid))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
         }
 
         @DisplayName("팀 보따리 물품을 조회할 때, 팀 멤버가 아니라면 예외를 던진다.")
@@ -244,11 +273,7 @@ public class TeamItemFacadeTest {
 
         @DisplayName("팀 아이템 타입별로 체크한다.")
         @ParameterizedTest
-        @CsvSource({
-                "SHARED",
-                "ASSIGNED",
-                "PERSONAL"
-        })
+        @EnumSource(TeamItemType.class)
         void check(final TeamItemType type) {
             // given
             final Member member = MemberFixture.MEMBER.get();
@@ -261,7 +286,7 @@ public class TeamItemFacadeTest {
             entityManager.persist(teamMember);
 
             final Long itemId = createItemByType(type, teamBottari, teamMember);
-            final CheckTeamItemRequest request = new CheckTeamItemRequest(type);
+            final TeamItemTypeRequest request = new TeamItemTypeRequest(type);
 
             // when
             teamItemFacade.check(itemId, member.getSsaid(), request);
@@ -305,11 +330,7 @@ public class TeamItemFacadeTest {
 
         @DisplayName("팀 아이템 타입별로 체크 해제한다.")
         @ParameterizedTest
-        @CsvSource({
-                "SHARED",
-                "ASSIGNED",
-                "PERSONAL"
-        })
+        @EnumSource(TeamItemType.class)
         void uncheck(final TeamItemType type) {
             // given
             final Member member = MemberFixture.MEMBER.get();
@@ -323,7 +344,7 @@ public class TeamItemFacadeTest {
 
             final Long itemId = createCheckedItemByType(type, teamBottari, teamMember);
 
-            final CheckTeamItemRequest request = new CheckTeamItemRequest(type);
+            final TeamItemTypeRequest request = new TeamItemTypeRequest(type);
 
             // when
             teamItemFacade.uncheck(itemId, member.getSsaid(), request);
@@ -362,6 +383,86 @@ public class TeamItemFacadeTest {
                     yield item.getId();
                 }
             };
+        }
+    }
+
+    @Nested
+    class SendRemindAlarmByInfoTest {
+
+        @DisplayName("공유 물품에 대해 보채기 알람을 전송한다.")
+        @Test
+        void sendRemindAlarmByInfo_Shared() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamSharedItemInfo info = new TeamSharedItemInfo("공유 물품", teamBottari);
+            entityManager.persist(info);
+
+            final TeamSharedItem item = new TeamSharedItem(info, teamMember);
+            entityManager.persist(item);
+
+            final TeamItemTypeRequest request = new TeamItemTypeRequest(TeamItemType.SHARED);
+
+            // when & then
+            assertThatCode(() -> teamItemFacade.sendRemindAlarmByInfo(info.getId(), request, member.getSsaid()))
+                    .doesNotThrowAnyException();
+        }
+
+        @DisplayName("담당 물품에 대해 보채기 알람을 전송한다.")
+        @Test
+        void sendRemindAlarmByInfo_Assigned() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamAssignedItemInfo info = new TeamAssignedItemInfo("담당 물품", teamBottari);
+            entityManager.persist(info);
+
+            final TeamAssignedItem item = new TeamAssignedItem(info, teamMember);
+            entityManager.persist(item);
+
+            final TeamItemTypeRequest request = new TeamItemTypeRequest(TeamItemType.ASSIGNED);
+
+            // when & then
+            assertThatCode(() -> teamItemFacade.sendRemindAlarmByInfo(info.getId(), request, member.getSsaid()))
+                    .doesNotThrowAnyException();
+        }
+
+        @DisplayName("개인 물품에 대해 보채기 알람을 요청하면 예외를 던진다.")
+        @Test
+        void sendRemindAlarmByInfo_Personal_Exception() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamPersonalItem item = new TeamPersonalItem("개인 물품", teamMember);
+            entityManager.persist(item);
+
+            final TeamItemTypeRequest request = new TeamItemTypeRequest(TeamItemType.PERSONAL);
+
+            // when & then
+            assertThatThrownBy(() -> teamItemFacade.sendRemindAlarmByInfo(item.getId(), request, member.getSsaid()))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("적절하지 않은 아이템 타입입니다. - 보채기 알람은 공통/담당 물품만 가능합니다.");
         }
     }
 

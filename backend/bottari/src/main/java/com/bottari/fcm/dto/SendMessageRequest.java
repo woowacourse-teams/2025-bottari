@@ -1,17 +1,9 @@
 package com.bottari.fcm.dto;
 
-import com.google.firebase.messaging.Notification;
+import java.util.Map;
 
 public record SendMessageRequest(
-        String title,
-        String message,
+        Map<String, String> data,
         MessageType messageType
 ) {
-
-    public Notification createNotification() {
-        return Notification.builder()
-                .setTitle(title)
-                .setBody(message)
-                .build();
-    }
 }

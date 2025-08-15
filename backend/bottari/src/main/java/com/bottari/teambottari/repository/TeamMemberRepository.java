@@ -39,9 +39,9 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
             """)
     List<TeamBottariMemberCountProjection> countMembersByTeamBottariIn(final List<TeamBottari> teamBottaries);
 
-    boolean existsByTeamBottariIdAndMemberSsaid(
+    boolean existsByTeamBottariIdAndMemberId(
             final Long teamBottariId,
-            final String ssaid
+            final Long memberId
     );
 
     boolean existsByTeamBottariIdAndMemberId(
