@@ -33,6 +33,7 @@ public class TeamMemberController implements TeamMemberApiDocs {
     }
 
     @GetMapping("/team-bottaries/{teamBottariId}/members/name")
+    @Override
     public ResponseEntity<List<ReadTeamMemberNameResponse>> readTeamMemberNameInfo(
             @PathVariable final Long teamBottariId,
             @MemberIdentifier final String ssaid
