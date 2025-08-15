@@ -9,13 +9,13 @@ import com.bottari.presentation.common.extension.getParcelableCompat
 import com.bottari.presentation.databinding.FragmentTeamBottariItemEditBinding
 import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.view.edit.team.TeamBottariEditNavigator
-import com.bottari.presentation.view.edit.team.item.main.adapter.TeamBottariItemEditFragmentAdapter
+import com.bottari.presentation.view.edit.team.item.main.adapter.TeamItemEditFragmentAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
-class TeamBottariItemEditFragment : BaseFragment<FragmentTeamBottariItemEditBinding>(FragmentTeamBottariItemEditBinding::inflate) {
-    private val adapter: TeamBottariItemEditFragmentAdapter by lazy {
-        TeamBottariItemEditFragmentAdapter(this, requireArguments().getLong(ARG_BOTTARI_ID))
+class TeamItemEditFragment : BaseFragment<FragmentTeamBottariItemEditBinding>(FragmentTeamBottariItemEditBinding::inflate) {
+    private val adapter: TeamItemEditFragmentAdapter by lazy {
+        TeamItemEditFragmentAdapter(this, requireArguments().getLong(ARG_BOTTARI_ID))
     }
 
     override fun onViewCreated(
@@ -76,8 +76,8 @@ class TeamBottariItemEditFragment : BaseFragment<FragmentTeamBottariItemEditBind
         fun newInstance(
             bottariId: Long,
             requireTabType: BottariItemTypeUiModel,
-        ): TeamBottariItemEditFragment =
-            TeamBottariItemEditFragment().apply {
+        ): TeamItemEditFragment =
+            TeamItemEditFragment().apply {
                 arguments = bundleOf(ARG_BOTTARI_ID to bottariId, ARG_TAB_TYPE to requireTabType)
             }
     }
