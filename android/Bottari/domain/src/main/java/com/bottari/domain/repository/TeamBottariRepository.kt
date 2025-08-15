@@ -37,6 +37,24 @@ interface TeamBottariRepository {
 
     suspend fun fetchTeamMembersStatus(id: Long): Result<List<TeamMemberStatus>>
 
+    suspend fun createTeamBottariSharedItem(
+        id: Long,
+        name: String,
+    ): Result<Unit>
+
+    suspend fun createTeamBottariPersonalItem(
+        id: Long,
+        name: String,
+    ): Result<Unit>
+
+    suspend fun createTeamBottariAssignedItem(
+        id: Long,
+        name: String,
+        teamMemberNames: List<String>,
+    ): Result<Unit>
+
+    suspend fun deleteTeamBottariItem(id: Long): Result<Unit>
+
     suspend fun sendRemindByMemberMessage(
         teamBottariId: Long,
         memberId: Long,
