@@ -35,7 +35,20 @@ class BottariTemplateTest {
         // when & then
         assertThatThrownBy(() -> new BottariTemplate(title, member))
                 .isInstanceOf(BusinessException.class)
-                .hasMessage("보따리 템플릿 제목이 너무 깁니다. - 최대 15자까지 입력 가능합니다.");
+                .hasMessage("보따리 템플릿 제목이 너무 깁니다. 최대 15자까지 입력 가능합니다.");
+    }
+
+    @DisplayName("보따리 템플릿 제목에 욕설이 들어가있는 경우, 예외를 던진다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"씨발이네", "씨@발 안녕하세요", "병1신이세요?", "ㅅㅂ입니다."})
+    void validateTitle_BadWord(final String title) {
+        // given
+        final Member member = new Member("ssaid", "name");
+
+        // when & then
+        assertThatThrownBy(() -> new BottariTemplate(title, member))
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("보따리 템플릿 제목에 비속어를 입력할 수 없습니다.");
     }
 
     @DisplayName("본인의 보따리 템플릿인지 확인한다.")

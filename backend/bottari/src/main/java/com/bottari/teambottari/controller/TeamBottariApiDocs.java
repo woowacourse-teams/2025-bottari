@@ -46,8 +46,8 @@ public interface TeamBottariApiDocs {
     })
     @ApiErrorCodes({
             ErrorCode.MEMBER_NOT_FOUND,
-            ErrorCode.TEAM_BOTTARI_ITEM_NAME_BLANK,
-            ErrorCode.TEAM_BOTTARI_TITLE_TOO_LONG,
+            ErrorCode.ITEM_NAME_BLANK,
+            ErrorCode.BOTTARI_TITLE_TOO_LONG,
             ErrorCode.TEAM_BOTTARI_INVITE_CODE_GENERATION_FAILED
     })
     ResponseEntity<Void> create(

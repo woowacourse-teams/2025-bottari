@@ -32,6 +32,16 @@ class MemberTest {
                 .hasMessage("사용자 이름이 너무 깁니다. - 최대 10자까지 입력 가능합니다.");
     }
 
+    @DisplayName("이름에 욕설이 들어가있는 경우, 예외를 던진다.")
+    @ParameterizedTest
+    @ValueSource(strings = {"씨발이네", "씨@발 안녕하세요", "병1신이세요?", "ㅅㅂ입니다."})
+    void validateName_BadWord(final String name) {
+        // when & then
+        assertThatThrownBy(() -> new Member("ssaid", name))
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("이름에 비속어를 입력할 수 없습니다.");
+    }
+
     @DisplayName("같은 ssaid인지 비교한다.")
     @ParameterizedTest
     @CsvSource({

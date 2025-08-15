@@ -2,6 +2,7 @@ package com.bottari.member.domain;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.support.BadWordValidator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -69,6 +70,9 @@ public class Member {
         }
         if (name.length() > 10) {
             throw new BusinessException(ErrorCode.MEMBER_NAME_TOO_LONG, "최대 10자까지 입력 가능합니다.");
+        }
+        if (BadWordValidator.hasBadWord(name)) {
+            throw new BusinessException(ErrorCode.MEMBER_NAME_OFFENSIVE);
         }
     }
 }

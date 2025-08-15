@@ -1,8 +1,7 @@
 package com.bottari.teambottari.domain;
 
-import com.bottari.error.BusinessException;
-import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
+import com.bottari.vo.BottariTitle;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -29,7 +28,7 @@ public class TeamBottari {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private BottariTitle title;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
@@ -46,18 +45,12 @@ public class TeamBottari {
             final Member owner,
             final String inviteCode
     ) {
-        validateTitle(title);
-        this.title = title;
+        this.title = new BottariTitle(title);
         this.owner = owner;
         this.inviteCode = inviteCode;
     }
 
-    private void validateTitle(final String title) {
-        if (title.isBlank()) {
-            throw new BusinessException(ErrorCode.TEAM_BOTTARI_TITLE_BLANK);
-        }
-        if (title.length() > 15) {
-            throw new BusinessException(ErrorCode.TEAM_BOTTARI_TITLE_TOO_LONG, "최대 15자까지 입력 가능합니다.");
-        }
+    public String getTitle() {
+        return title.title();
     }
 }
