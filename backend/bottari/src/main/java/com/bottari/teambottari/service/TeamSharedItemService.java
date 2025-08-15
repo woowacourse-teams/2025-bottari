@@ -88,9 +88,7 @@ public class TeamSharedItemService {
         validateMemberInTeam(info.getTeamBottari(), member);
         final List<TeamSharedItem> items = teamSharedItemRepository.findAllByInfoIdWithMember(infoId);
         final List<Long> uncheckedMemberIds = collectUncheckedMemberIds(items);
-        final SendMessageRequest sendMessageRequest = fcmMessageConverter.convert(info.getTeamBottari(), info,
-                MessageType.REMIND_BY_ITEM);
-        fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
+        sendRemindMessageToMembers(info, uncheckedMemberIds);
     }
 
     private Map<TeamSharedItemInfo, List<TeamSharedItem>> groupByInfo(final List<TeamSharedItem> items) {
@@ -123,8 +121,23 @@ public class TeamSharedItemService {
     private List<Long> collectUncheckedMemberIds(final List<TeamSharedItem> items) {
         return items.stream()
                 .filter(item -> !item.isChecked())
-                .map(item -> item.getTeamMember().getMember().getId())
+                .map(TeamSharedItemService::memberIdByItem)
                 .toList();
+    }
+
+    private static Long memberIdByItem(final TeamSharedItem item) {
+        return item.getTeamMember()
+                .getMember()
+                .getId();
+    }
+
+    private void sendRemindMessageToMembers(
+            final TeamSharedItemInfo info,
+            final List<Long> uncheckedMemberIds
+    ) {
+        final SendMessageRequest sendMessageRequest = fcmMessageConverter.convert(info.getTeamBottari(), info,
+                MessageType.REMIND_BY_ITEM);
+        fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
     }
 
     private void validateOwner(

@@ -88,9 +88,7 @@ public class TeamAssignedItemService {
         validateMemberInTeam(info.getTeamBottari(), member);
         final List<TeamAssignedItem> items = teamAssignedItemRepository.findAllByInfoIdWithMember(infoId);
         final List<Long> uncheckedMemberIds = collectUncheckedMemberIds(items);
-        final SendMessageRequest sendMessageRequest = fcmMessageConverter.convert(info.getTeamBottari(), info,
-                MessageType.REMIND_BY_ITEM);
-        fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
+        sendRemindMessageToMembers(info, uncheckedMemberIds);
     }
 
     private Map<TeamAssignedItemInfo, List<TeamAssignedItem>> groupByInfo(final List<TeamAssignedItem> assignedItems) {
@@ -123,8 +121,26 @@ public class TeamAssignedItemService {
     private List<Long> collectUncheckedMemberIds(final List<TeamAssignedItem> items) {
         return items.stream()
                 .filter(item -> !item.isChecked())
-                .map(item -> item.getTeamMember().getMember().getId())
+                .map(TeamAssignedItemService::memberIdByItem)
                 .toList();
+    }
+
+    private static Long memberIdByItem(final TeamAssignedItem item) {
+        return item.getTeamMember()
+                .getMember()
+                .getId();
+    }
+
+    private void sendRemindMessageToMembers(
+            final TeamAssignedItemInfo info,
+            final List<Long> uncheckedMemberIds
+    ) {
+        final SendMessageRequest sendMessageRequest = fcmMessageConverter.convert(
+                info.getTeamBottari(),
+                info,
+                MessageType.REMIND_BY_ITEM
+        );
+        fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
     }
 
     private void validateOwner(
