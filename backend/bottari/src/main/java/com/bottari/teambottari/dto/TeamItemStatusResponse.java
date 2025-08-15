@@ -7,6 +7,7 @@ import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import java.util.List;
 
 public record TeamItemStatusResponse(
+        Long id,
         String name,
         List<MemberCheckStatusResponse> memberCheckStatus,
         int checkItemsCount,
@@ -24,6 +25,7 @@ public record TeamItemStatusResponse(
                 .toList();
 
         return new TeamItemStatusResponse(
+                info.getId(),
                 info.getName(),
                 checkStatusResponses,
                 checkItemsCount,
@@ -42,6 +44,7 @@ public record TeamItemStatusResponse(
                 .toList();
 
         return new TeamItemStatusResponse(
+                info.getId(),
                 info.getName(),
                 checkStatusResponses,
                 checkItemsCount,

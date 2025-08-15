@@ -34,8 +34,8 @@ public interface BottariItemApiDocs {
     @ApiErrorCodes({
             ErrorCode.BOTTARI_NOT_FOUND,
             ErrorCode.BOTTARI_ITEM_ALREADY_EXISTS,
-            ErrorCode.BOTTARI_ITEM_NAME_BLANK,
-            ErrorCode.BOTTARI_ITEM_NAME_TOO_LONG
+            ErrorCode.ITEM_NAME_BLANK,
+            ErrorCode.ITEM_NAME_TOO_LONG
     })
     ResponseEntity<Void> create(
             final Long bottariId,
@@ -52,8 +52,8 @@ public interface BottariItemApiDocs {
             ErrorCode.BOTTARI_ITEM_MAXIMUM_EXCEEDED,
             ErrorCode.BOTTARI_ITEM_DUPLICATE_IN_REQUEST,
             ErrorCode.BOTTARI_ITEM_ALREADY_EXISTS,
-            ErrorCode.BOTTARI_ITEM_NAME_BLANK,
-            ErrorCode.BOTTARI_ITEM_NAME_TOO_LONG
+            ErrorCode.ITEM_NAME_BLANK,
+            ErrorCode.ITEM_NAME_TOO_LONG
     })
     ResponseEntity<Void> update(
             final Long bottariId,

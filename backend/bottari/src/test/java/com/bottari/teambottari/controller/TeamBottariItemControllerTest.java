@@ -28,6 +28,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -131,10 +132,10 @@ class TeamBottariItemControllerTest {
 
     @DisplayName("팀 보따리 물품을 성공적으로 삭제한다.")
     @ParameterizedTest
-    @CsvSource({
-            "SHARED",
-            "PERSONAL"
-    })
+    @EnumSource(
+            value = TeamItemType.class,
+            names = {"SHARED", "PERSONAL"}
+    )
     void deleteItem(final TeamItemType type) throws Exception {
         // given
         final Long itemId = 1L;
@@ -189,12 +190,12 @@ class TeamBottariItemControllerTest {
         );
 
         final List<TeamItemStatusResponse> sharedItems = List.of(
-                new TeamItemStatusResponse("잠옷", sharedItemMemberStatus, 2, 3),
-                new TeamItemStatusResponse("세면도구", sharedItemMemberStatus, 2, 3)
+                new TeamItemStatusResponse(1L, "잠옷", sharedItemMemberStatus, 2, 3),
+                new TeamItemStatusResponse(2L, "세면도구", sharedItemMemberStatus, 2, 3)
         );
         final List<TeamItemStatusResponse> assignedItems = List.of(
-                new TeamItemStatusResponse("가스 버너", assignedItemMemberStatus, 1, 2),
-                new TeamItemStatusResponse("생수", assignedItemMemberStatus, 1, 2)
+                new TeamItemStatusResponse(1L, "가스 버너", assignedItemMemberStatus, 1, 2),
+                new TeamItemStatusResponse(2L, "생수", assignedItemMemberStatus, 1, 2)
         );
 
         final ReadTeamItemStatusResponse response = new ReadTeamItemStatusResponse(sharedItems, assignedItems);
@@ -245,11 +246,7 @@ class TeamBottariItemControllerTest {
 
     @DisplayName("팀 보따리 물품을 체크한다.")
     @ParameterizedTest
-    @CsvSource({
-            "SHARED",
-            "ASSIGNED",
-            "PERSONAL"
-    })
+    @EnumSource(TeamItemType.class)
     void check(final TeamItemType type) throws Exception {
         // given
         final Long itemId = 1L;
@@ -269,11 +266,7 @@ class TeamBottariItemControllerTest {
 
     @DisplayName("팀 보따리 물품을 체크 해제한다.")
     @ParameterizedTest
-    @CsvSource({
-            "SHARED",
-            "ASSIGNED",
-            "PERSONAL"
-    })
+    @EnumSource(TeamItemType.class)
     void uncheck(final TeamItemType type) throws Exception {
         // given
         final Long itemId = 1L;
@@ -285,6 +278,29 @@ class TeamBottariItemControllerTest {
 
         // when & then
         mockMvc.perform(patch("/team-items/{id}/uncheck", itemId)
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("보채기 알람을 전송한다.")
+    @ParameterizedTest
+    @EnumSource(
+            value = TeamItemType.class,
+            names = {"SHARED", "ASSIGNED"}
+    )
+    void sendRemindAlarmByItemInfo(final TeamItemType type) throws Exception {
+        // given
+        final Long infoId = 1L;
+        final String ssaid = "test-ssaid";
+        final TeamItemTypeRequest request = new TeamItemTypeRequest(type);
+
+        willDoNothing().given(teamItemFacade)
+                .sendRemindAlarmByInfo(infoId, request, ssaid);
+
+        // when & then
+        mockMvc.perform(patch("/team-items/{id}/uncheck", infoId)
                         .header("ssaid", ssaid)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))

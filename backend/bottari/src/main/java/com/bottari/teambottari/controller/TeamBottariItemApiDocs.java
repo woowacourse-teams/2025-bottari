@@ -99,6 +99,21 @@ public interface TeamBottariItemApiDocs {
             @Parameter(hidden = true) final String ssaid
     );
 
+    @Operation(summary = "팀 보따리 공통/담당 물품 보채기")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "보채기 알람 전송 성공")
+    })
+    @ApiErrorCodes({
+            ErrorCode.TEAM_BOTTARI_ITEM_INAPPROPRIATE_TYPE,
+            ErrorCode.TEAM_BOTTARI_ITEM_INFO_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI
+    })
+    ResponseEntity<Void> sendRemindAlarmByItemInfo(
+            final Long id,
+            final TeamItemTypeRequest request,
+            @Parameter(hidden = true) final String ssaid
+    );
+
     @Operation(summary = "팀 보따리 체크리스트 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "체크 리스트 조회 성공"),

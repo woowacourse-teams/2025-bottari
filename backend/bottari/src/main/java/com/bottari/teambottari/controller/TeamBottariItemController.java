@@ -75,6 +75,18 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/team-items/{infoId}/remind")
+    @Override
+    public ResponseEntity<Void> sendRemindAlarmByItemInfo(
+            @PathVariable final Long infoId,
+            @RequestBody final TeamItemTypeRequest request,
+            @MemberIdentifier final String ssaid
+    ) {
+        teamItemFacade.sendRemindAlarmByInfo(infoId, request, ssaid);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/team-bottaries/{teamBottariId}/checklist")
     @Override
     public ResponseEntity<TeamMemberChecklistResponse> readChecklistBySsaid(

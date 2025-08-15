@@ -31,6 +31,7 @@ dependencies {
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-metrics:3.4.0'
     implementation "ch.qos.logback:logback-classic:1.5.18"
     implementation 'com.google.firebase:firebase-admin:9.5.0'
+    implementation 'io.github.vaneproject:badwordfiltering:1.0.0'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'

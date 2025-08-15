@@ -30,4 +30,13 @@ public interface TeamAssignedItemRepository extends JpaRepository<TeamAssignedIt
     List<TeamAssignedItem> findAllByTeamMemberId(final Long teamMemberId);
 
     void deleteAllByInfo(final TeamAssignedItemInfo teamAssignedItemInfo);
+
+    @Query("""
+            SELECT tai
+            FROM TeamAssignedItem tai
+            JOIN FETCH tai.teamMember tm
+            JOIN FETCH tm.member
+            WHERE tai.info.id = :infoId
+            """)
+    List<TeamAssignedItem> findAllByInfoIdWithMember(final Long infoId);
 }

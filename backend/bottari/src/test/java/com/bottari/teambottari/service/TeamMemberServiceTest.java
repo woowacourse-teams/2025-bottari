@@ -14,6 +14,7 @@ import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
+import com.bottari.teambottari.dto.JoinTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
@@ -241,6 +242,143 @@ class TeamMemberServiceTest {
                     teamBottari.getId(), anotherMember.getSsaid()
             )).isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
+        }
+    }
+
+    @Nested
+    class JoinTeamBottariTest {
+
+        @DisplayName("해당 멤버가 팀 보따리에 참가한다.")
+        @Test
+        void joinTeamBottari() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final Member joinMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(joinMember);
+
+            final JoinTeamBottariRequest request = new JoinTeamBottariRequest(teamBottari.getInviteCode());
+
+            // when
+            final Long joinTeamMemberId = teamMemberService.joinTeamBottari(request, joinMember.getSsaid());
+
+            // then
+            final TeamMember findTeamMember = entityManager.find(TeamMember.class, joinTeamMemberId);
+            assertAll(
+                    () -> assertThat(findTeamMember).isNotNull(),
+                    () -> assertThat(findTeamMember.getTeamBottari()).isEqualTo(teamBottari),
+                    () -> assertThat(findTeamMember.getMember()).isEqualTo(joinMember)
+            );
+        }
+
+        @DisplayName("팀 보따리에 팀 멤버를 추가하면, 해당 멤버의 팀 보따리 공통 물건도 추가된다.")
+        @Test
+        void joinTeamBottari_AddTeamMemberSharedItems() {
+            // given
+            final Member owner = MemberFixture.MEMBER.get();
+            entityManager.persist(owner);
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(owner);
+            entityManager.persist(teamBottari);
+            final TeamMember ownerTeamMember = new TeamMember(teamBottari, owner);
+            entityManager.persist(ownerTeamMember);
+
+            final TeamSharedItemInfo teamSharedItemInfo1 = new TeamSharedItemInfo("sharedItem1", teamBottari);
+            final TeamSharedItemInfo teamSharedItemInfo2 = new TeamSharedItemInfo("sharedItem2", teamBottari);
+            entityManager.persist(teamSharedItemInfo1);
+            entityManager.persist(teamSharedItemInfo2);
+
+            final TeamSharedItem teamSharedItem1 = new TeamSharedItem(teamSharedItemInfo1, ownerTeamMember);
+            final TeamSharedItem teamSharedItem2 = new TeamSharedItem(teamSharedItemInfo2, ownerTeamMember);
+            entityManager.persist(teamSharedItem1);
+            entityManager.persist(teamSharedItem2);
+
+            final Member joinMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(joinMember);
+
+            final JoinTeamBottariRequest request = new JoinTeamBottariRequest(teamBottari.getInviteCode());
+
+            // when
+            final Long joinTeamMemberId = teamMemberService.joinTeamBottari(request, joinMember.getSsaid());
+
+            // then
+            final List<TeamSharedItem> joinTeamMemberSharedItems = entityManager.createQuery("""
+                            SELECT tsi
+                            FROM TeamSharedItem tsi
+                            WHERE tsi.teamMember.id = :teamMemberId
+                            """, TeamSharedItem.class)
+                    .setParameter("teamMemberId", joinTeamMemberId)
+                    .getResultList();
+
+            assertAll(
+                    () -> assertThat(joinTeamMemberSharedItems).hasSize(2),
+                    () -> assertThat(joinTeamMemberSharedItems).extracting("info.name")
+                            .containsExactlyInAnyOrder("sharedItem1", "sharedItem2"),
+                    () -> assertThat(joinTeamMemberSharedItems.get(0).getTeamMember().getMember()).isEqualTo(
+                            joinMember),
+                    () -> assertThat(joinTeamMemberSharedItems.get(1).getTeamMember().getMember()).isEqualTo(joinMember)
+            );
+        }
+
+        @DisplayName("초대코드에 해당하는 팀 보따리가 존재하지 않는 경우, 예외를 던진다.")
+        @Test
+        void joinTeamBottari_Exception_TeamBottariNotFound() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final String notExistsTeamBottariInviteCode = "notExistsInviteCode";
+            final JoinTeamBottariRequest request = new JoinTeamBottariRequest(notExistsTeamBottariInviteCode);
+
+            // when & then
+            assertThatThrownBy(() -> teamMemberService.joinTeamBottari(request, member.getSsaid()))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("팀 보따리를 찾을 수 없습니다. - 해당하는 초대코드 없음");
+        }
+
+        @DisplayName("존재하지 않는 멤버일 경우, 예외를 던진다.")
+        @Test
+        void joinTeamBottari_Exception_MemberNotFound() {
+            // given
+            final Member owner = MemberFixture.MEMBER.get();
+            entityManager.persist(owner);
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(owner);
+            entityManager.persist(teamBottari);
+            final TeamMember teamMember = new TeamMember(teamBottari, owner);
+            entityManager.persist(teamMember);
+
+            final String notExistsSsaid = "notExistsSsaid";
+            final JoinTeamBottariRequest request = new JoinTeamBottariRequest(teamBottari.getInviteCode());
+
+            // when & then
+            assertThatThrownBy(() -> teamMemberService.joinTeamBottari(request, notExistsSsaid))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
+        }
+
+        @DisplayName("이미 팀 보따리에 속한 멤버일 경우, 예외를 던진다.")
+        @Test
+        void joinTeamBottari_Exception_MemberAlreadyInTeamBottari() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final JoinTeamBottariRequest request = new JoinTeamBottariRequest(teamBottari.getInviteCode());
+
+            // when & then
+            assertThatThrownBy(() -> teamMemberService.joinTeamBottari(request, member.getSsaid()))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("이미 해당 팀 보따리에 참여한 멤버입니다.");
         }
     }
 }

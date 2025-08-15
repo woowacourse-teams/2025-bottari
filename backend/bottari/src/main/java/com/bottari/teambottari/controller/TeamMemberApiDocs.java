@@ -2,6 +2,7 @@ package com.bottari.teambottari.controller;
 
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
+import com.bottari.teambottari.dto.JoinTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,6 +39,20 @@ public interface TeamMemberApiDocs {
     })
     ResponseEntity<List<ReadTeamMemberStatusResponse>> readTeamMemberStatus(
             final Long teamBottariId,
+            @Parameter(hidden = true) final String ssaid
+    );
+
+    @Operation(summary = "팀 보따리 참가")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "팀 보따리 참가 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.TEAM_BOTTARI_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_FOUND,
+            ErrorCode.MEMBER_ALREADY_IN_TEAM_BOTTARI,
+    })
+    ResponseEntity<Void> joinTeamBottari(
+            final JoinTeamBottariRequest request,
             @Parameter(hidden = true) final String ssaid
     );
 }

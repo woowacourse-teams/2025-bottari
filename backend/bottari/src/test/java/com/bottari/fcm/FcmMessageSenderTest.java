@@ -24,6 +24,7 @@ import com.google.firebase.messaging.MessagingErrorCode;
 import jakarta.persistence.EntityManager;
 import java.lang.reflect.Constructor;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -61,7 +62,7 @@ class FcmMessageSenderTest {
             entityManager.persist(fcmToken);
             doAnswer(invocation -> null)
                     .when(firebaseMessaging).send(any(Message.class));
-            final SendMessageRequest request = new SendMessageRequest("title", "message", MessageType.HURRY_UP);
+            final SendMessageRequest request = new SendMessageRequest(Map.of(), MessageType.REMIND_BY_ITEM);
 
             // when & then
             assertThatCode(() -> fcmMessageSender.sendMessageToMember(member.getId(), request))
@@ -74,7 +75,7 @@ class FcmMessageSenderTest {
             // given
             final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
-            final SendMessageRequest request = new SendMessageRequest("title", "message", MessageType.HURRY_UP);
+            final SendMessageRequest request = new SendMessageRequest(Map.of(), MessageType.REMIND_BY_ITEM);
 
             // when & then
             assertThatThrownBy(() -> fcmMessageSender.sendMessageToMember(member.getId(), request))
@@ -92,7 +93,7 @@ class FcmMessageSenderTest {
             entityManager.persist(member);
             final FcmToken fcmToken = FcmTokenFixture.FCM_TOKEN.get(member);
             entityManager.persist(fcmToken);
-            final SendMessageRequest request = new SendMessageRequest("title", "message", MessageType.HURRY_UP);
+            final SendMessageRequest request = new SendMessageRequest(Map.of(), MessageType.REMIND_BY_ITEM);
             final FirebaseMessagingException exception = createFirebaseMessagingException(errorCode);
             doThrow(exception).when(firebaseMessaging).send(any(Message.class));
 
@@ -101,8 +102,8 @@ class FcmMessageSenderTest {
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("유효하지 않은 토큰으로 인해 FCM 메시지 전송을 실패하였습니다.");
             final FcmToken actual = (FcmToken) entityManager.createNativeQuery("""
-                           SELECT * FROM fcm_token WHERE member_id = :id
-                     """, FcmToken.class)
+                                  SELECT * FROM fcm_token WHERE member_id = :id
+                            """, FcmToken.class)
                     .setParameter("id", member.getId())
                     .getSingleResult();
             assertThat(actual.getDeletedAt()).isNotNull();
@@ -119,7 +120,7 @@ class FcmMessageSenderTest {
             entityManager.persist(member);
             final FcmToken fcmToken = FcmTokenFixture.FCM_TOKEN.get(member);
             entityManager.persist(fcmToken);
-            final SendMessageRequest request = new SendMessageRequest("title", "message", MessageType.HURRY_UP);
+            final SendMessageRequest request = new SendMessageRequest(Map.of(), MessageType.REMIND_BY_ITEM);
             final FirebaseMessagingException exception = createFirebaseMessagingException(errorCode);
             doThrow(exception).when(firebaseMessaging).send(any(Message.class));
 
@@ -148,7 +149,7 @@ class FcmMessageSenderTest {
             doAnswer(invocation -> null)
                     .when(firebaseMessaging).send(any(Message.class));
             final List<Long> memberIds = List.of(member1.getId(), member2.getId());
-            final SendMessageRequest request = new SendMessageRequest("title", "message", MessageType.HURRY_UP);
+            final SendMessageRequest request = new SendMessageRequest(Map.of(), MessageType.REMIND_BY_ITEM);
 
             // when & then
             assertThatCode(() -> fcmMessageSender.sendMessageToMembers(memberIds, request))
@@ -161,7 +162,7 @@ class FcmMessageSenderTest {
             // given
             final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
-            final SendMessageRequest request = new SendMessageRequest("title", "message", MessageType.HURRY_UP);
+            final SendMessageRequest request = new SendMessageRequest(Map.of(), MessageType.REMIND_BY_ITEM);
 
             // when & then
             assertThatThrownBy(() -> fcmMessageSender.sendMessageToMember(member.getId(), request))
@@ -192,20 +193,20 @@ class FcmMessageSenderTest {
                 return null;
             }).when(firebaseMessaging).send(any(Message.class));
             final List<Long> memberIds = List.of(member1.getId(), member2.getId());
-            final SendMessageRequest request = new SendMessageRequest("title", "message", MessageType.HURRY_UP);
+            final SendMessageRequest request = new SendMessageRequest(Map.of(), MessageType.REMIND_BY_ITEM);
 
             // when & then
             assertThatThrownBy(() -> fcmMessageSender.sendMessageToMembers(memberIds, request))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("유효하지 않은 토큰으로 인해 FCM 메시지 전송을 실패하였습니다.");
             final FcmToken member1Token = (FcmToken) entityManager.createNativeQuery("""
-                         SELECT * FROM fcm_token WHERE member_id = :id
-                     """, FcmToken.class)
+                                SELECT * FROM fcm_token WHERE member_id = :id
+                            """, FcmToken.class)
                     .setParameter("id", member1.getId())
                     .getSingleResult();
             final FcmToken member2Token = (FcmToken) entityManager.createNativeQuery("""
-                         SELECT * FROM fcm_token WHERE member_id = :id
-                     """, FcmToken.class)
+                                SELECT * FROM fcm_token WHERE member_id = :id
+                            """, FcmToken.class)
                     .setParameter("id", member2.getId())
                     .getSingleResult();
             assertThat(member1Token.getDeletedAt()).isNotNull();
@@ -228,7 +229,7 @@ class FcmMessageSenderTest {
             final FcmToken fcmToken2 = FcmTokenFixture.FCM_TOKEN.get(member2);
             entityManager.persist(fcmToken2);
             final List<Long> memberIds = List.of(member1.getId(), member2.getId());
-            final SendMessageRequest request = new SendMessageRequest("title", "message", MessageType.HURRY_UP);
+            final SendMessageRequest request = new SendMessageRequest(Map.of(), MessageType.REMIND_BY_ITEM);
             final FirebaseMessagingException exception = createFirebaseMessagingException(errorCode);
             doThrow(exception).when(firebaseMessaging).send(any(Message.class));
 

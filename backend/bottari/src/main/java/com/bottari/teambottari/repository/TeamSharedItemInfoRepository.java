@@ -14,6 +14,12 @@ public interface TeamSharedItemInfoRepository extends JpaRepository<TeamSharedIt
             """)
     List<TeamSharedItemInfo> findAllByTeamBottariId(final Long teamBottariId);
 
+    @Query("""
+             SELECT COUNT(tsii) > 0
+             FROM TeamSharedItemInfo tsii
+             WHERE tsii.teamBottari.id = :teamBottariId
+               AND tsii.name.name = :name
+            """)
     boolean existsByTeamBottariIdAndName(
             final Long teamBottariId,
             final String name

@@ -2,6 +2,7 @@ package com.bottari.bottari.repository;
 
 import com.bottari.bottari.domain.Bottari;
 import com.bottari.bottari.domain.BottariItem;
+import com.bottari.vo.ItemName;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,12 +25,12 @@ public interface BottariItemRepository extends JpaRepository<BottariItem, Long> 
 
     boolean existsByBottariIdAndName(
             final Long bottariId,
-            final String name
+            final ItemName name
     );
 
     boolean existsByBottariIdAndNameIn(
             final Long bottariId,
-            final List<String> itemNames
+            final List<ItemName> itemNames
     );
 
     int countAllByBottariIdAndIdIn(

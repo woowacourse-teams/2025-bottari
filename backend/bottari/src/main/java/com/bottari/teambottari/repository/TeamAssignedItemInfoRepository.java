@@ -14,8 +14,14 @@ public interface TeamAssignedItemInfoRepository extends JpaRepository<TeamAssign
             """)
     List<TeamAssignedItemInfo> findAllByTeamBottariId(final Long teamBottariId);
 
+    @Query("""
+            SELECT COUNT(taii) > 0
+            FROM TeamAssignedItemInfo taii
+            WHERE taii.teamBottari.id = :teamBottariId
+              AND taii.name.name = :name
+            """)
     boolean existsByTeamBottariIdAndName(
-            final Long teamMemberId,
+            final Long teamBottariId,
             final String name
     );
 }
