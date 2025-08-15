@@ -10,6 +10,7 @@ import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.TeamBottariCheckList
 import com.bottari.domain.model.team.TeamBottariDetail
 import com.bottari.domain.model.team.TeamBottariStatus
+import com.bottari.domain.model.team.TeamMemberStatus
 import com.bottari.domain.model.team.TeamMembers
 import com.bottari.domain.repository.TeamBottariRepository
 
@@ -60,4 +61,10 @@ class TeamBottariRepositoryImpl(
     ): Result<Unit> =
         teamBottariRemoteDataSource
             .remind(id, ItemTypeRequest(type))
+
+    override suspend fun fetchTeamMembersStatus(id: Long): Result<List<TeamMemberStatus>> =
+        teamBottariRemoteDataSource
+            .fetchTeamMembersStatus(id)
+            .mapCatching { responses -> responses.map { response -> response.toDomain() } }
+
 }

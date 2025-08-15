@@ -6,6 +6,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bottari.presentation.view.checklist.team.MemberStatusFragment
 import com.bottari.presentation.view.checklist.team.checklist.TeamChecklistFragment
 import com.bottari.presentation.view.checklist.team.status.TeamStatusFragment
+import com.bottari.presentation.view.checklist.team.TeamStatusFragment
+import com.bottari.presentation.view.checklist.team.checklist.TeamChecklistFragment
+import com.bottari.presentation.view.checklist.team.member.TeamMembersStatusFragment
 
 class TeamChecklistFragmentAdapter(
     fragmentActivity: FragmentActivity,
@@ -17,6 +20,11 @@ class TeamChecklistFragmentAdapter(
         when (position) {
             0 -> TeamChecklistFragment.newInstance(bottariId)
             1 -> TeamStatusFragment.newInstance(bottariId)
-            else -> MemberStatusFragment.newInstance()
+            2 -> TeamMembersStatusFragment.newInstance(bottariId)
+            else -> throw IllegalArgumentException(ERROR_UNKNOWN_FRAGMENT)
         }
+
+    companion object {
+        private const val ERROR_UNKNOWN_FRAGMENT = "[ERROR] 알 수 없는 프래그먼트입니다."
+    }
 }

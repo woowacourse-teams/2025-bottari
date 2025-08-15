@@ -4,6 +4,7 @@ import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.TeamBottariCheckList
 import com.bottari.domain.model.team.TeamBottariDetail
 import com.bottari.domain.model.team.TeamBottariStatus
+import com.bottari.domain.model.team.TeamMemberStatus
 import com.bottari.domain.model.team.TeamMembers
 
 interface TeamBottariRepository {
@@ -33,4 +34,7 @@ interface TeamBottariRepository {
         id: Long,
         type: String,
     ): Result<Unit>
+
+    suspend fun fetchTeamMembersStatus(id: Long): Result<List<TeamMemberStatus>>
+
 }

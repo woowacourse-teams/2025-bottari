@@ -99,7 +99,6 @@
     <string name="common_report_dialog_privacy_exposure_radio_button_text">개인정보 노출</string>
     <string name="common_report_dialog_submit_success_text">신고가 정상적으로 접수되었어요</string>
     <string name="common_report_dialog_submit_failure_text">신고 접수에 실패했어요</string>
-    <!--  Notification: 보따리 알림  -->
 
     <!--  Common: 보따리 알림  -->
     <string name="common_bottari_notification_channel_name">보따리 알림</string>
@@ -185,6 +184,16 @@
     <string name="bottari_rename_dialog_btn_text">이름 저장</string>
     <string name="bottari_rename_dialog_hint_text">새 이름을 입력해 주세요</string>
 
+    <!-- Team Bottari -->
+    <string name="team_checklist_tap_checklist_text">체크리스트</string>
+    <string name="team_checklist_tap_team_current_text">팀 보따리 현황</string>
+    <string name="team_checklist_tap_member_checklist_text">멤버 현황</string>
+
+    <!-- Team Checklist -->
+    <string name="team_checklist_type_shared_text">공통</string>
+    <string name="team_checklist_type_assigned_text">담당</string>
+    <string name="team_checklist_type_personal_text">개인</string>
+
     <!--  Team Management  -->
     <string name="team_management_title_text">팀원 관리</string>
     <string name="team_management_add_member_text">링크로 팀원 추가하기</string>
@@ -196,6 +205,12 @@
 
     <!-- Team Bottari Edit -->
     <string name="team_bottari_member_edit_title">팀원 관리</string>
+
+    <!--  Team Members Status  -->
+    <string name="team_members_status_hurry_up_btn_text">보채기</string>
+    <string name="team_members_status_items_count_text">%d/%d 챙김</string>
+    <string name="team_members_status_items_empty_text">챙길 물건이 없어요</string>
+    <string name="team_members_status_fetch_failure_text">팀원 현황을 조회하는데 실패했어요</string>
 
     <!-- Alarm Edit -->
     <string name="alarm_edit_title_text">알람 설정</string>
@@ -271,7 +286,7 @@
     <string name="team_checklist_type_shared_text">공통</string>
     <string name="team_checklist_type_assigned_text">담당</string>
     <string name="team_checklist_type_personal_text">개인</string>
-
+  
     <!-- Description 접근성 -->
     <string name="bottari_create_btn_description">보따리 만들기 버튼</string>
     <string name="checklist_swipe_btn_description">스와이프 전환 버튼</string>
@@ -292,6 +307,7 @@
     <string name="location_permission_iv_description">위치 권한 이미지</string>
     <string name="alarm_date_edit_btn_description">날짜 수정 버튼</string>
     <string name="bottari_type_icon_description">보따리 타입 아이콘</string>
+    <string name="team_host_iv_description">방장 이미지</string>
     <string name="team_management_clipboard_btn_description">링크 복사 버튼</string>
     <string name="team_management_host_iv_description">방장 이미지</string>
     <string name="team_bottari_edit_member_edit_btn_description">멤버 편집 버튼</string>
