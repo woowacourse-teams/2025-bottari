@@ -25,17 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="물건 목록"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/btn_confirm"
-            style="@style/Pretendard_SemiBold_16"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:gravity="center"
-            android:text="@string/common_confirm_btn_text"
+            android:text="@string/team_bottari_item_edit_title_text"
             android:textColor="@color/black" />
     </Toolbar>
 
@@ -47,16 +37,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_team_bottari_item_edit"
         app:tabIndicatorColor="@color/black"
+        app:tabSelectedTextAppearance="@style/CustomTabText"
         app:tabSelectedTextColor="@color/black"
         app:tabTextAppearance="@style/CustomTabText"
-        app:tabSelectedTextAppearance="@style/CustomTabText"
         app:tabTextColor="@color/gray_c4c4c4" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp_team_bottari_item_edit"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingVertical="@dimen/space_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tl_team_bottari_item_edit" />
 
+    <include
+        android:id="@+id/view_item_input"
+        layout="@layout/view_item_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
