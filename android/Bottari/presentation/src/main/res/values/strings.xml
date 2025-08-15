@@ -210,6 +210,7 @@
 
     <!-- Team Bottari Edit -->
     <string name="team_bottari_member_edit_title">팀원 관리</string>
+    <string name="team_bottari_item_edit_title_text">물건 목록</string>
 
     <!--  Team Members Status  -->
     <string name="team_members_status_hurry_up_btn_text">보채기</string>
