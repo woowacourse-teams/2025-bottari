@@ -4,9 +4,11 @@ import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
+import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
+import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemTypeRequest;
@@ -29,6 +31,19 @@ public class TeamItemFacade {
     private final TeamMemberRepository teamMemberRepository;
     private final TeamBottariRepository teamBottariRepository;
     private final MemberRepository memberRepository;
+
+    public List<ReadSharedItemResponse> getSharedItems(
+            final Long teamBottariId,
+            final String ssaid
+    ) {
+        final TeamBottari teamBottari = teamBottariRepository.findById(teamBottariId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_NOT_FOUND, "존재하지 않는 팀 보따리입니다."));
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        validateMemberInTeam(teamBottari.getId(), member);
+
+        return teamSharedItemService.getAllByTeamBottariId(teamBottariId);
+    }
 
     @Transactional
     public Long createSharedItem(

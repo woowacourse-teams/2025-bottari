@@ -21,6 +21,7 @@ import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
+import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
 import java.util.List;
@@ -48,6 +49,44 @@ class TeamSharedItemServiceTest {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Nested
+    class GetAllByTeamBottariIdTest {
+
+        @DisplayName("팀 보따리 ID로 팀 보따리 공통 물품을 조회한다.")
+        @Test
+        void getAllByTeamBottariId() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo("공통 물품", teamBottari);
+            entityManager.persist(teamSharedItemInfo);
+
+            final TeamSharedItem teamSharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember);
+            entityManager.persist(teamSharedItem);
+
+            // when
+            final List<ReadSharedItemResponse> actual = teamSharedItemService.getAllByTeamBottariId(teamBottari.getId());
+
+            // then
+            final List<ReadSharedItemResponse> expected = List.of(
+                    new ReadSharedItemResponse(
+                            teamSharedItemInfo.getId(),
+                            teamSharedItemInfo.getName()
+                    )
+            );
+            assertAll(
+                    () -> assertThat(actual).hasSize(1),
+                    () -> assertThat(actual).isEqualTo(expected)
+            );
+        }
+    }
 
     @Nested
     class CreateTest {
