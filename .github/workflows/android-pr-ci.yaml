@@ -43,7 +43,8 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: > 
+            ./android/Bottari/.gradle/caches
+          key: >
             ${{ runner.os }}-gradle-${{ hashFiles(
               'android/Bottari/**/build.gradle.kts',
               'android/Bottari/**/settings.gradle.kts',
@@ -63,6 +64,10 @@ jobs:
       - name: Create local.properties
         run: echo "$LOCAL_PROPERTIES_CONTENTS" > ./local.properties
 
+      - name: Run Ktlint Check
+        id: ktlint
+        run: ./gradlew ktlintCheck
+
       - name: Assemble Debug APK
         id: assemble
         run: ./gradlew assembleDebug --build-cache --parallel
@@ -71,19 +76,16 @@ jobs:
         id: test
         run: ./gradlew testDebugUnitTest --build-cache --parallel
 
-      - name: Run Ktlint Check
-        id: ktlint
-        run: ./gradlew ktlintCheck
-
       - name: Post CI summary as PR comment
         if: always()
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const results = {
-              assemble: '${{ steps.assemble.outcome }}',
-              test: '${{ steps.test.outcome }}',
-              ktlint: '${{ steps.ktlint.outcome }}'
+              ktlint: `${{ steps.ktlint.outcome }}`,
+              assemble: `${{ steps.assemble.outcome }}`,
+              test: `${{ steps.test.outcome }}`
             };
 
             const emoji = {
@@ -94,13 +96,13 @@ jobs:
             };
 
             let body = `## Android CI Results\n\n`;
+            body += `- **Ktlint Check**: ${emoji[results.ktlint] || results.ktlint}\n`;
             body += `- **Assemble Debug APK**: ${emoji[results.assemble] || results.assemble}\n`;
             body += `- **Unit Tests**: ${emoji[results.test] || results.test}\n`;
-            body += `- **Ktlint Check**: ${emoji[results.ktlint] || results.ktlint}\n`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body
+              body: body
             });
