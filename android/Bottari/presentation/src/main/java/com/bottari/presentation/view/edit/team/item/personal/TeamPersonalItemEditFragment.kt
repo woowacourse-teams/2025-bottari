@@ -37,7 +37,9 @@ class TeamPersonalItemEditFragment :
         setupUI()
     }
 
-    override fun onClickDelete(itemId: Long) {}
+    override fun onClickDelete(itemId: Long) {
+        viewModel.deleteItem(itemId)
+    }
 
     private fun setupObserver() {
         parentViewModel.uiEvent.observe(viewLifecycleOwner, ::handleParentUiEvent)
