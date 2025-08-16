@@ -46,8 +46,10 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(final HttpServletRequest request) {
         final String uri = request.getRequestURI();
+        final String acceptHeader = request.getHeader("Accept");
 
-        return uri.startsWith("/swagger") || uri.startsWith("/v3/api-docs");
+        return uri.startsWith("/swagger") || uri.startsWith("/v3/api-docs")
+               || (acceptHeader != null && acceptHeader.contains("text/event-stream"));
     }
 
     private void doLog(
