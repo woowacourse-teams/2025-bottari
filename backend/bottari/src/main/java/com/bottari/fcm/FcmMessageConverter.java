@@ -18,7 +18,7 @@ public class FcmMessageConverter {
 
     private static final String TEAM_BOTTARI_ID = "teamBottariId";
     private static final String TEAM_BOTTARI_TITLE = "teamBottariTitle";
-    public static final String TEAM_ITEM_NAME = "teamItemName";
+    private static final String TEAM_ITEM_NAME = "teamItemName";
     private static final String TEAM_SHARED_ITEM_NAMES = "teamSharedItemNames";
     private static final String TEAM_ASSIGNED_ITEM_NAMES = "teamAssignedItemNames";
 
