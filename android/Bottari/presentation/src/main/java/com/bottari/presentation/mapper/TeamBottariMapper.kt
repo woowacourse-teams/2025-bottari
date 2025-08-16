@@ -3,15 +3,13 @@ package com.bottari.presentation.mapper
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.MemberCheckStatus
-import com.bottari.domain.model.team.TeamBottariStatus
-import com.bottari.domain.model.team.TeamProductStatus
+import com.bottari.domain.model.team.TeamBottariProductStatus
 import com.bottari.presentation.mapper.AlarmMapper.toUiModel
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.MemberCheckStatusUiModel
 import com.bottari.presentation.model.TeamBottariProductStatusUiModel
-import com.bottari.presentation.model.TeamBottariStatusUiModel
 import com.bottari.presentation.model.TeamBottariUiModel
 
 object TeamBottariMapper {
@@ -32,13 +30,7 @@ object TeamBottariMapper {
             type = type.toUiModel(),
         )
 
-    fun TeamBottariStatus.toUiModel(): TeamBottariStatusUiModel =
-        TeamBottariStatusUiModel(
-            sharedItems = sharedItems.map { item -> item.toSharedUiModel() },
-            assignedItems = assignedItems.map { item -> item.toAssignedUiModel() },
-        )
-
-    private fun TeamProductStatus.toSharedUiModel(): TeamBottariProductStatusUiModel =
+    fun TeamBottariProductStatus.toSharedUiModel(): TeamBottariProductStatusUiModel =
         TeamBottariProductStatusUiModel(
             id = id,
             name = name,
@@ -48,7 +40,7 @@ object TeamBottariMapper {
             type = BottariItemTypeUiModel.SHARED,
         )
 
-    private fun TeamProductStatus.toAssignedUiModel(): TeamBottariProductStatusUiModel =
+    fun TeamBottariProductStatus.toAssignedUiModel(): TeamBottariProductStatusUiModel =
         TeamBottariProductStatusUiModel(
             id = id,
             name = name,

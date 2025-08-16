@@ -2,7 +2,6 @@ package com.bottari.data.mapper
 
 import com.bottari.data.mapper.AlarmMapper.toDomain
 import com.bottari.data.mapper.BottariItemMapper.toDomain
-import com.bottari.data.mapper.TeamBottariMapper.toDomain
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.FetchTeamBottariStatusResponse
@@ -12,8 +11,8 @@ import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.MemberCheckStatus
 import com.bottari.domain.model.team.TeamBottariDetail
+import com.bottari.domain.model.team.TeamBottariProductStatus
 import com.bottari.domain.model.team.TeamBottariStatus
-import com.bottari.domain.model.team.TeamProductStatus
 
 object TeamBottariMapper {
     fun FetchTeamBottariResponse.toDomain(): TeamBottari =
@@ -42,8 +41,8 @@ object TeamBottariMapper {
             assignedItems = assignedItems.map { it.toDomain() },
         )
 
-    private fun TeamProductStatusResponse.toDomain(): TeamProductStatus =
-        TeamProductStatus(
+    private fun TeamProductStatusResponse.toDomain(): TeamBottariProductStatus =
+        TeamBottariProductStatus(
             id = id,
             name = name,
             memberCheckStatus = memberCheckStatus.map { it.toDomain() },

@@ -1,6 +1,6 @@
 package com.bottari.domain.model.team
 
 data class TeamBottariStatus(
-    val sharedItems: List<TeamProductStatus>,
-    val assignedItems: List<TeamProductStatus>,
+    val sharedItems: List<TeamBottariProductStatus>,
+    val assignedItems: List<TeamBottariProductStatus>,
 )
