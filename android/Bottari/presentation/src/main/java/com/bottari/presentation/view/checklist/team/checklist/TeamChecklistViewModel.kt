@@ -46,10 +46,9 @@ class TeamChecklistViewModel(
             val updatedExpandableItems =
                 expandableItems.map { item ->
                     if (item is TeamChecklistExpandableTypeUiModel && item.type == type) {
-                        item.copy(isExpanded = !item.isExpanded)
-                    } else {
-                        item
+                        return@map item.copy(isExpanded = !item.isExpanded)
                     }
+                    item
                 }
 
             val newExpandableList = generateExpandableTypeList(updatedExpandableItems, items)
@@ -61,8 +60,7 @@ class TeamChecklistViewModel(
         itemId: Long,
         type: BottariItemTypeUiModel,
     ) {
-        val itemToToggle =
-            findItemToToggle(itemId, type)
+        val itemToToggle = findItemToToggle(itemId, type)
 
         itemToToggle?.let { item ->
             val toggledItem = item.toggle()
