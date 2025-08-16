@@ -63,6 +63,11 @@ class TeamBottariRemoteDataSourceImpl(
     override suspend fun fetchTeamMembersStatus(id: Long): Result<List<FetchTeamMemberStatusResponse>> =
         safeApiCall { teamBottariService.fetchTeamMembersStatus(id) }
 
+    override suspend fun sendRemindByMemberMessage(
+        teamBottariId: Long,
+        memberId: Long,
+    ): Result<Unit> = safeApiCall { teamBottariService.sendRemindByMemberMessage(teamBottariId, memberId) }
+
     companion object {
         private const val HEADER_TEAM_BOTTARI_ID_PREFIX = "/team-bottaries/"
     }
