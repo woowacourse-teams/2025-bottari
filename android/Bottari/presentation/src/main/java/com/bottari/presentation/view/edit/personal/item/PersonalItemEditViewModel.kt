@@ -10,7 +10,8 @@ import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.ChecklistItemUiModel
+import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.model.BottariItemUiModel
 
 class PersonalItemEditViewModel(
     stateHandle: SavedStateHandle,
@@ -23,7 +24,7 @@ class PersonalItemEditViewModel(
         ),
     ) {
     private val newItemNames = mutableSetOf<String>()
-    private val pendingDeleteItems = mutableSetOf<ChecklistItemUiModel>()
+    private val pendingDeleteItems = mutableSetOf<BottariItemUiModel>()
 
     fun addNewItemIfNeeded(itemName: String) {
         if (itemName.isBlank() || isDuplicateItem(itemName)) return
@@ -82,11 +83,11 @@ class PersonalItemEditViewModel(
         return true
     }
 
-    private fun generateNewItemUiModel(name: String): ChecklistItemUiModel =
-        ChecklistItemUiModel(
+    private fun generateNewItemUiModel(name: String): BottariItemUiModel =
+        BottariItemUiModel(
             id = nextGeneratedItemId(),
-            isChecked = false,
             name = name,
+            type = BottariItemTypeUiModel.PERSONAL,
         )
 
     private fun nextGeneratedItemId(): Long = (currentState.items.maxOfOrNull { it.id } ?: DEFAULT_ITEM_ID) + ITEM_ID_INCREMENT
@@ -103,7 +104,7 @@ class PersonalItemEditViewModel(
         fun Factory(
             bottariId: Long,
             title: String,
-            items: List<ChecklistItemUiModel>,
+            items: List<BottariItemUiModel>,
         ): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
