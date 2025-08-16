@@ -19,12 +19,14 @@ import com.bottari.presentation.model.TeamProductStatusItem
 import kotlinx.coroutines.launch
 
 class TeamBottariStatusViewModel(
-    private val stateHandle: SavedStateHandle,
+    stateHandle: SavedStateHandle,
     private val fetchTeamStatusUseCase: FetchTeamStatusUseCase,
     private val remindTeamBottariItemUseCase: RemindTeamBottariItemUseCase,
 ) : BaseViewModel<TeamBottariStatusUiState, TeamBottariStatusUiEvent>(
         TeamBottariStatusUiState(),
     ) {
+    private val teamBottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
+
     init {
         fetchTeamStatus()
     }
@@ -51,9 +53,7 @@ class TeamBottariStatusViewModel(
         viewModelScope.launch {
             fetchTeamStatusUseCase
                 .invoke(
-                    stateHandle[KEY_BOTTARI_ID] ?: throw IllegalArgumentException(
-                        ERROR_REQUIRE_BOTTARI_ID,
-                    ),
+                    teamBottariId,
                 ).onSuccess { teamBottariStatus ->
                     val teamBottariStatusUiModel = teamBottariStatus.toUiModel()
                     val teamStatusListItems = generateTeamItemsList(teamBottariStatusUiModel)
