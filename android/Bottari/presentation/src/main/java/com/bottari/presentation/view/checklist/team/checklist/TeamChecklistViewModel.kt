@@ -230,9 +230,9 @@ class TeamChecklistViewModel(
 
     private suspend fun executeCheckUseCase(item: TeamChecklistProductUiModel) =
         if (item.isChecked) {
-            checkTeamBottariItemUseCase(item.id, item.type.toString())
+            checkTeamBottariItemUseCase(item.id, item.type.toTypeString())
         } else {
-            unCheckTeamBottariItemUseCase(item.id, item.type.toString())
+            unCheckTeamBottariItemUseCase(item.id, item.type.toTypeString())
         }
 
     companion object {

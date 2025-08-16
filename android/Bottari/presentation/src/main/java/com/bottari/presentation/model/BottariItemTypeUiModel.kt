@@ -15,4 +15,11 @@ sealed interface BottariItemTypeUiModel : Parcelable {
     data class ASSIGNED(
         val members: List<String> = emptyList(),
     ) : BottariItemTypeUiModel
+
+    fun toTypeString() =
+        when (this) {
+            is PERSONAL -> "PERSONAL"
+            is SHARED -> "SHARED"
+            is ASSIGNED -> "ASSIGNED"
+        }
 }
