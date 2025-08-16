@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - an/develop
+  pull_request:
+    branches:
+      - an/develop 
 
 jobs:
   build-and-deploy:
