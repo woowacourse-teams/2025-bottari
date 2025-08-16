@@ -6,7 +6,9 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.usecase.team.CreateTeamPersonalItemUseCase
+import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamPersonalItemsUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
@@ -15,6 +17,7 @@ class TeamPersonalItemEditViewModel(
     stateHandle: SavedStateHandle,
     private val fetchTeamPersonalItemsUseCase: FetchTeamPersonalItemsUseCase,
     private val createTeamPersonalItemUseCase: CreateTeamPersonalItemUseCase,
+    private val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase,
 ) : BaseViewModel<TeamPersonalItemEditUiState, TeamPersonalItemEditEvent>(
         TeamPersonalItemEditUiState(),
     ) {
@@ -34,6 +37,18 @@ class TeamPersonalItemEditViewModel(
             createTeamPersonalItemUseCase(bottariId, currentState.inputText)
                 .onSuccess { fetchPersonalItems() }
                 .onFailure { emitEvent(TeamPersonalItemEditEvent.AddItemFailure) }
+
+            updateState { copy(isLoading = false) }
+        }
+    }
+
+    fun deleteItem(itemId: Long) {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            deleteTeamBottariItemUseCase(itemId, BottariItemType.PERSONAL)
+                .onSuccess { fetchPersonalItems() }
+                .onFailure { emitEvent(TeamPersonalItemEditEvent.DeleteItemFailure) }
 
             updateState { copy(isLoading = false) }
         }
@@ -64,6 +79,7 @@ class TeamPersonalItemEditViewModel(
                         stateHandle,
                         UseCaseProvider.fetchTeamPersonalItemsUseCase,
                         UseCaseProvider.createTeamPersonalItemUseCase,
+                        UseCaseProvider.deleteTeamBottariItemUseCase,
                     )
                 }
             }

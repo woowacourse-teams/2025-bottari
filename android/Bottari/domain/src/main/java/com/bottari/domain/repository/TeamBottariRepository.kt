@@ -58,7 +58,6 @@ interface TeamBottariRepository {
         id: Long,
         type: BottariItemType,
     ): Result<Unit>
-    suspend fun deleteTeamBottariItem(id: Long): Result<Unit>
 
     suspend fun sendRemindByMemberMessage(
         teamBottariId: Long,

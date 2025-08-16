@@ -62,7 +62,6 @@ interface TeamBottariRemoteDataSource {
         id: Long,
         type: DeleteTeamBottariItemRequest,
     ): Result<Unit>
-    suspend fun deleteTeamBottariItem(id: Long): Result<Unit>
 
     suspend fun sendRemindByMemberMessage(
         teamBottariId: Long,

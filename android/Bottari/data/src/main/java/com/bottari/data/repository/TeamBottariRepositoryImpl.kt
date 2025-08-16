@@ -110,7 +110,6 @@ class TeamBottariRepositoryImpl(
             DeleteTeamBottariItemRequest(bottariItemType),
         )
     }
-    override suspend fun deleteTeamBottariItem(id: Long): Result<Unit> = teamBottariRemoteDataSource.deleteTeamBottariItem(id)
 
     override suspend fun sendRemindByMemberMessage(
         teamBottariId: Long,
