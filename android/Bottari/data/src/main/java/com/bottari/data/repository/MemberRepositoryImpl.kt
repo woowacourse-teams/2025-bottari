@@ -8,14 +8,23 @@ import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.member.RegisteredMember
 import com.bottari.domain.repository.MemberRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MemberRepositoryImpl(
     private val memberRemoteDataSource: MemberRemoteDataSource,
     private val memberIdentifierLocalDataSource: MemberIdentifierLocalDataSource,
+    private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : MemberRepository {
     override suspend fun registerMember(fcmToken: String): Result<Long?> =
-        memberRemoteDataSource
-            .registerMember(RegisterMemberRequest(getMemberIdentifier(), fcmToken))
+        withContext(coroutineDispatcher) {
+            memberIdentifierLocalDataSource.getMemberIdentifier()
+        }.mapCatching { memberId ->
+            RegisterMemberRequest(memberId, fcmToken)
+        }.mapCatching { registerMemberRequest ->
+            memberRemoteDataSource.registerMember(registerMemberRequest).getOrThrow()
+        }
 
     override suspend fun saveMemberNickname(nickname: Nickname): Result<Unit> =
         memberRemoteDataSource.saveMemberNickname(nickname.toRequest())
@@ -25,5 +34,8 @@ class MemberRepositoryImpl(
             .checkRegisteredMember()
             .mapCatching { it.toDomain() }
 
-    private fun getMemberIdentifier(): String = memberIdentifierLocalDataSource.getMemberIdentifier().getOrThrow()
+    override suspend fun getMemberIdentifier(): Result<String> =
+        withContext(coroutineDispatcher) {
+            memberIdentifierLocalDataSource.getMemberIdentifier()
+        }
 }
