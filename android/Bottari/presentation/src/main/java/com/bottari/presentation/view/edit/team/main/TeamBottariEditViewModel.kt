@@ -19,8 +19,16 @@ class TeamBottariEditViewModel(
 ) : BaseViewModel<TeamBottariEditUiState, TeamBottariEditUiEvent>(TeamBottariEditUiState()) {
     private val bottariId: Long = createHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID)
 
-    init {
-        fetchTeamBottariDetail()
+    fun fetchTeamBottariDetail() {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            fetchTeamBottariDetailUseCase(bottariId)
+                .onSuccess { handleFetchTeamBottariDetail(it) }
+                .onFailure { emitEvent(TeamBottariEditUiEvent.FetchTeamBottariDetailFailure) }
+
+            updateState { copy(isLoading = false, isFetched = true) }
+        }
     }
 
     fun toggleAlarmState() {
@@ -38,18 +46,6 @@ class TeamBottariEditViewModel(
                 .onSuccess { updateState { copy(alarmSwitchState = newAlarmSwitchState) } }
                 .onFailure { emitEvent(TeamBottariEditUiEvent.ToggleAlarmStateFailure) }
             updateState { copy(isLoading = false) }
-        }
-    }
-
-    private fun fetchTeamBottariDetail() {
-        updateState { copy(isLoading = true) }
-
-        launch {
-            fetchTeamBottariDetailUseCase(bottariId)
-                .onSuccess { handleFetchTeamBottariDetail(it) }
-                .onFailure { emitEvent(TeamBottariEditUiEvent.FetchTeamBottariDetailFailure) }
-
-            updateState { copy(isLoading = false, isFetched = true) }
         }
     }
 

@@ -46,6 +46,11 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
         setupListener()
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.fetchTeamBottariDetail()
+    }
+
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner, ::handleUiState)
         viewModel.uiEvent.observe(viewLifecycleOwner, ::handleUiEvent)
