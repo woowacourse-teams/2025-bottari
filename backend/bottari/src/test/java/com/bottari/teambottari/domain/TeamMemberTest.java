@@ -30,16 +30,16 @@ class TeamMemberTest {
     @Test
     void isTeamBottariOwner_false() {
         // given
-        final Member member = MemberFixture.MEMBER.get();
-        final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+        final Member owner = MemberFixture.MEMBER.get();
+        final Member notOwner = MemberFixture.ANOTHER_MEMBER.get();
 
-        final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+        final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(owner);
 
-        final TeamMember teamMember = new TeamMember(teamBottari, member);
-        final TeamMember anotherTeamMember = new TeamMember(teamBottari, anotherMember);
+        final TeamMember ownerTeamMember = new TeamMember(teamBottari, owner);
+        final TeamMember notOwnerTeamMember = new TeamMember(teamBottari, notOwner);
 
         // when
-        final boolean actual = anotherTeamMember.isTeamBottariOwner();
+        final boolean actual = notOwnerTeamMember.isTeamBottariOwner();
 
         // then
         assertThat(actual).isFalse();
