@@ -26,6 +26,7 @@ import com.bottari.domain.usecase.team.CreateTeamAssignedItemUseCase
 import com.bottari.domain.usecase.team.CreateTeamBottariUseCase
 import com.bottari.domain.usecase.team.CreateTeamPersonalItemUseCase
 import com.bottari.domain.usecase.team.CreateTeamSharedItemUseCase
+import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamAssignedItemsUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariDetailUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariesUseCase
@@ -210,6 +211,9 @@ object UseCaseProvider {
     }
     val createTeamAssignedItemUseCase: CreateTeamAssignedItemUseCase by lazy {
         CreateTeamAssignedItemUseCase(RepositoryProvider.teamBottariRepository)
+    }
+    val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase by lazy {
+        DeleteTeamBottariItemUseCase(RepositoryProvider.teamBottariRepository)
     }
     val saveFcmTokenUseCase: SaveFcmTokenUseCase by lazy {
         SaveFcmTokenUseCase(RepositoryProvider.fcmRepository)
