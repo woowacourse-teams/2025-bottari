@@ -22,7 +22,9 @@ jobs:
         working-directory: ./android/Bottari
 
     permissions:
-      contents: write
+      contents: read
+      pull-requests: write
+      issues: write
 
     steps:
       - name: Checkout repository
@@ -60,15 +62,6 @@ jobs:
         id: assemble
         run: ./gradlew assembleDebug --build-cache --parallel
 
-      - name: Save Gradle cache (after successful build)
-        if: steps.assemble.conclusion == 'success'
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-
       - name: Run Unit Tests
         id: test
         run: ./gradlew testDebugUnitTest --build-cache --parallel
@@ -76,6 +69,15 @@ jobs:
       - name: Run Ktlint Check
         id: ktlint
         run: ./gradlew ktlintCheck
+
+      - name: Save Gradle cache
+        if: steps.assemble.conclusion == 'success'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 
       - name: Post CI summary as PR comment
         if: always()
@@ -100,9 +102,10 @@ jobs:
             body += `- **Unit Tests**: ${emoji[results.test] || results.test}\n`;
             body += `- **Ktlint Check**: ${emoji[results.ktlint] || results.ktlint}\n`;
 
-            await github.rest.issues.createComment({
+            await github.rest.pulls.createReview({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
+              pull_number: context.issue.number,
+              event: 'COMMENT',
               body
             });
