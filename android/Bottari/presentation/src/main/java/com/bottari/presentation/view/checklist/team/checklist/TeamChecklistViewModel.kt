@@ -42,17 +42,18 @@ class TeamChecklistViewModel(
     }
 
     fun toggleParentExpanded(type: BottariItemTypeUiModel) {
-        updateState {
-            val updatedExpandableItems =
-                expandableItems.map { item ->
-                    if (item is TeamChecklistExpandableTypeUiModel && item.type == type) {
-                        val reverseExpandType = item.copy(isExpanded = !item.isExpanded)
-                        return@map reverseExpandType
-                    }
-                    item
+        val updatedExpandableItems =
+            uiState.value?.expandableItems?.map { item ->
+                if (item is TeamChecklistExpandableTypeUiModel && item.type == type) {
+                    val reverseExpandType = item.copy(isExpanded = !item.isExpanded)
+                    return@map reverseExpandType
                 }
+                item
+            } ?: return
 
-            val newExpandableList = generateExpandableTypeList(updatedExpandableItems, items)
+        val newExpandableList =
+            generateExpandableTypeList(updatedExpandableItems, uiState.value?.items ?: return)
+        updateState {
             copy(expandableItems = newExpandableList)
         }
     }
@@ -65,13 +66,15 @@ class TeamChecklistViewModel(
 
         itemToToggle?.let { item ->
             val toggledItem = item.toggle()
+            val newItems =
+                uiState.value?.items?.map { checklistItem ->
+                    if (toggledItem.isSameItem(checklistItem)) return@map toggledItem
+                    checklistItem
+                } ?: return
+            val newExpandableList =
+                uiState.value?.expandableItems?.toggleItemInList(toggledItem) ?: return
+
             updateState {
-                val newItems =
-                    items.map { item ->
-                        if (toggledItem.isSameItem(item)) return@map toggledItem
-                        item
-                    }
-                val newExpandableList = expandableItems.toggleItemInList(toggledItem)
                 copy(
                     items = newItems,
                     expandableItems = newExpandableList,
