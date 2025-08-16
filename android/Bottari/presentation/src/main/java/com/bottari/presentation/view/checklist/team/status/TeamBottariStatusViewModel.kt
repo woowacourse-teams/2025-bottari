@@ -37,24 +37,21 @@ class TeamBottariStatusViewModel(
 
     fun remindTeamBottariItem() {
         viewModelScope.launch {
-            remindTeamBottariItemUseCase
-                .invoke(
-                    currentState.selectedProduct?.id ?: throw IllegalArgumentException(),
-                    currentState.selectedProduct?.type.toString(),
-                ).onSuccess {
-                    emitEvent(TeamBottariStatusUiEvent.SendRemindSuccess)
-                }.onFailure {
-                    emitEvent(TeamBottariStatusUiEvent.SendRemindFailure)
-                }
+            remindTeamBottariItemUseCase(
+                currentState.selectedProduct?.id ?: throw IllegalArgumentException(),
+                currentState.selectedProduct?.type.toString(),
+            ).onSuccess {
+                emitEvent(TeamBottariStatusUiEvent.SendRemindSuccess)
+            }.onFailure {
+                emitEvent(TeamBottariStatusUiEvent.SendRemindFailure)
+            }
         }
     }
 
     private fun fetchTeamStatus() {
         viewModelScope.launch {
-            fetchTeamStatusUseCase
-                .invoke(
-                    teamBottariId,
-                ).onSuccess { teamBottariStatus ->
+            fetchTeamStatusUseCase(teamBottariId)
+                .onSuccess { teamBottariStatus ->
                     val teamBottariStatusUiModel = teamBottariStatus.toUiModel()
                     val teamStatusListItems = generateTeamItemsList(teamBottariStatusUiModel)
                     updateState {
