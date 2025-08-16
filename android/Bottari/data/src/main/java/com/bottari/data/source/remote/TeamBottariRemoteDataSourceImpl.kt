@@ -63,12 +63,12 @@ class TeamBottariRemoteDataSourceImpl(
             teamBottariService.fetchTeamBottariStatus(id)
         }
 
-    override suspend fun remind(
+    override suspend fun remindTeamBottariItem(
         id: Long,
         type: ItemTypeRequest,
     ): Result<Unit> =
         safeApiCall {
-            teamBottariService.remind(id, type)
+            teamBottariService.remindTeamBottariItem(id, type)
         }
 
     override suspend fun fetchTeamMembers(id: Long): Result<FetchTeamMembersResponse> =

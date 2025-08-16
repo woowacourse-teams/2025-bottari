@@ -73,7 +73,7 @@ class TeamStatusFragment :
 
     private fun setupListener() {
         binding.btnTeamBottariItemRemind.setOnClickListener {
-            viewModel.remindItem()
+            viewModel.remindTeamBottariItem()
         }
     }
 

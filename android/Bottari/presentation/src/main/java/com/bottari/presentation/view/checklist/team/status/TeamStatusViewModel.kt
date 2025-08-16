@@ -8,7 +8,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.team.FetchTeamStatusUseCase
-import com.bottari.domain.usecase.team.RemindUseCase
+import com.bottari.domain.usecase.team.RemindTeamBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
@@ -36,7 +36,7 @@ sealed interface TeamStatusUiEvent {
 class TeamStatusViewModel(
     private val stateHandle: SavedStateHandle,
     private val fetchTeamStatusUseCase: FetchTeamStatusUseCase,
-    private val remindUseCase: RemindUseCase,
+    private val remindTeamBottariItemUseCase: RemindTeamBottariItemUseCase,
 ) : BaseViewModel<TeamStatusUiState, TeamStatusUiEvent>(
         TeamStatusUiState(),
     ) {
@@ -48,9 +48,9 @@ class TeamStatusViewModel(
         updateState { copy(item = item) }
     }
 
-    fun remindItem() {
+    fun remindTeamBottariItem() {
         viewModelScope.launch {
-            remindUseCase
+            remindTeamBottariItemUseCase
                 .invoke(
                     currentState.item?.id ?: throw IllegalArgumentException(),
                     currentState.item?.type.toString(),
@@ -108,7 +108,7 @@ class TeamStatusViewModel(
                     TeamStatusViewModel(
                         stateHandle,
                         UseCaseProvider.fetchTeamStatusUseCase,
-                        UseCaseProvider.remindUseCase,
+                        UseCaseProvider.remindTeamBottariItemUseCase,
                     )
                 }
             }
