@@ -58,36 +58,51 @@ jobs:
       - name: Create local.properties
         run: echo "$LOCAL_PROPERTIES_CONTENTS" > ./local.properties
 
-      - name: Assemble Debug APK
-        id: assemble
-        run: ./gradlew assembleDebug --build-cache --parallel
+      - name: Run Ktlint Check
+        id: ktlint
+        run: |
+          start=$(date +%s)
+          ./gradlew ktlintCheck
+          end=$(date +%s)
+          echo "time=$((end-start))" >> $GITHUB_OUTPUT
 
       - name: Run Unit Tests
         id: test
-        run: ./gradlew testDebugUnitTest --build-cache --parallel
+        run: |
+          start=$(date +%s)
+          ./gradlew testDebugUnitTest --build-cache --parallel
+          end=$(date +%s)
+          echo "time=$((end-start))" >> $GITHUB_OUTPUT
 
-      - name: Run Ktlint Check
-        id: ktlint
-        run: ./gradlew ktlintCheck
+      - name: Assemble Debug APK
+        id: assemble
+        run: |
+          start=$(date +%s)
+          ./gradlew assembleDebug --build-cache --parallel
+          end=$(date +%s)
+          echo "time=$((end-start))" >> $GITHUB_OUTPUT
 
-      - name: Save Gradle cache
-        if: steps.assemble.conclusion == 'success'
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-
-      - name: Post CI summary as PR comment
+      - name: PR 코멘트로 CI 요약 게시
         if: always()
         uses: actions/github-script@v7
         with:
           script: |
             const results = {
-              assemble: '${{ steps.assemble.outcome }}',
-              test: '${{ steps.test.outcome }}',
-              ktlint: '${{ steps.ktlint.outcome }}'
+              assemble: {
+                status: '${{ steps.assemble.outcome }}',
+                name: 'Assemble Debug APK',
+                time: '${{ steps.assemble.outputs.time }}'
+              },
+              test: {
+                status: '${{ steps.test.outcome }}',
+                name: 'Unit Tests',
+                time: '${{ steps.test.outputs.time }}'
+              },
+              ktlint: {
+                status: '${{ steps.ktlint.outcome }}',
+                name: 'Ktlint Check',
+                time: '${{ steps.ktlint.outputs.time }}'
+              }
             };
 
             const emoji = {
@@ -97,10 +112,41 @@ jobs:
               skipped: '⏭️'
             };
 
-            let body = `## Android CI Results\n\n`;
-            body += `- **Assemble Debug APK**: ${emoji[results.assemble] || results.assemble}\n`;
-            body += `- **Unit Tests**: ${emoji[results.test] || results.test}\n`;
-            body += `- **Ktlint Check**: ${emoji[results.ktlint] || results.ktlint}\n`;
+            const runUrl = `https://github.com/${process.env.GITHUB_REPOSITORY}/runs/${process.env.GITHUB_RUN_ID}`;
+
+            function formatTime(seconds) {
+              seconds = parseInt(seconds || 0, 10);
+              if (seconds >= 60) {
+                const min = Math.floor(seconds / 60);
+                const sec = seconds % 60;
+                return `${min}m ${sec}s`;
+              }
+              return `${seconds}s`;
+            }
+
+            const totalTime = Object.values(results)
+              .reduce((acc, step) => acc + parseInt(step.time || 0), 0);
+
+            let body = `## 🛠 Android CI 요약\n\n`;
+            body += `| 단계 | 결과 | 소요 시간 |\n`;
+            body += `| ---- | ------ | -------- |\n`;
+
+            for (const step of Object.values(results)) {
+              body += `| [${step.name}](${runUrl}) | ${emoji[step.status] || step.status} | ${formatTime(step.time)} |\n`;
+            }
+
+            body += `\n**총 소요 시간:** ${formatTime(totalTime)}\n`;
+
+            const failedSteps = Object.values(results)
+              .filter(step => step.status !== 'success')
+              .map(step => step.name);
+
+            if (failedSteps.length > 0) {
+              body += `\n⚠️ **주의:** 다음 단계가 실패했습니다: ${failedSteps.join(', ')}\n`;
+              body += `자세한 내용은 [Actions 로그](${runUrl})에서 확인하세요.\n`;
+            } else {
+              body += `\n🎉 모든 단계가 성공적으로 완료되었습니다!`;
+            }
 
             await github.rest.pulls.createReview({
               owner: context.repo.owner,
