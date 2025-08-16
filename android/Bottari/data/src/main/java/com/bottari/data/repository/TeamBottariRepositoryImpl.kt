@@ -58,10 +58,8 @@ class TeamBottariRepositoryImpl(
         teamBottariId: Long,
         memberId: Long,
     ): Result<Unit> =
-        runCatching {
-            teamBottariRemoteDataSource.sendRemindByMemberMessage(
-                teamBottariId,
-                memberId,
-            )
-        }
+        teamBottariRemoteDataSource.sendRemindByMemberMessage(
+            teamBottariId,
+            memberId,
+        )
 }
