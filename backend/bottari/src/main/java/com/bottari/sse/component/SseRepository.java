@@ -25,4 +25,17 @@ public class SseRepository {
                 key -> new ArrayList<>()
         ).add(sseEmitter);
     }
+
+    public void remove(
+            final Long teamBottariId,
+            final SseEmitter sseEmitter
+    ) {
+        final List<SseEmitter> emitters = teamBottariEmitters.get(teamBottariId);
+        if (emitters != null) {
+            emitters.remove(sseEmitter);
+            if (emitters.isEmpty()) {
+                teamBottariEmitters.remove(teamBottariId);
+            }
+        }
+    }
 }

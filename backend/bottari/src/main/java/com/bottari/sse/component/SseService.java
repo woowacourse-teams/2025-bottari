@@ -21,10 +21,19 @@ public class SseService {
         final List<SseEmitter> sseEmitters = sseRepository.findByTeamBottariId(teamBottariId);
         for (final SseEmitter sseEmitter : sseEmitters) {
             try {
-                sseEmitter.send(message, MediaType.APPLICATION_JSON);
+//                sseEmitter.send(message, MediaType.APPLICATION_JSON);
+                sseEmitter.send("test !!");
             } catch (final IOException e) {
-                sseEmitter.completeWithError(e);
+                sseEmitter.complete();
+                sseRepository.remove(teamBottariId, sseEmitter);
             }
         }
+    }
+
+    public void register(
+            final Long teamBottariId,
+            final SseEmitter sseEmitter
+    ) {
+        sseRepository.save(teamBottariId, sseEmitter);
     }
 }
