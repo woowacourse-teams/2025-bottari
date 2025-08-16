@@ -3,9 +3,14 @@ package com.bottari.data.repository
 import com.bottari.data.mapper.TeamBottariMapper.toDomain
 import com.bottari.data.mapper.TeamMapper.toDomain
 import com.bottari.data.mapper.TeamMembersMapper.toDomain
+import com.bottari.data.model.team.CreateTeamBottariAssignedItemRequest
+import com.bottari.data.model.team.CreateTeamBottariPersonalItemRequest
 import com.bottari.data.model.team.CreateTeamBottariRequest
+import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
+import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
+import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.TeamBottariCheckList
 import com.bottari.domain.model.team.TeamBottariDetail
@@ -66,6 +71,45 @@ class TeamBottariRepositoryImpl(
         teamBottariRemoteDataSource
             .fetchTeamMembersStatus(id)
             .mapCatching { responses -> responses.map { response -> response.toDomain() } }
+
+    override suspend fun createTeamBottariSharedItem(
+        id: Long,
+        name: String,
+    ): Result<Unit> =
+        teamBottariRemoteDataSource.createTeamBottariSharedItem(
+            id,
+            CreateTeamBottariSharedItemRequest(name),
+        )
+
+    override suspend fun createTeamBottariPersonalItem(
+        id: Long,
+        name: String,
+    ): Result<Unit> =
+        teamBottariRemoteDataSource.createTeamBottariPersonalItem(
+            id,
+            CreateTeamBottariPersonalItemRequest(name),
+        )
+
+    override suspend fun createTeamBottariAssignedItem(
+        id: Long,
+        name: String,
+        teamMemberNames: List<String>,
+    ): Result<Unit> =
+        teamBottariRemoteDataSource.createTeamBottariAssignedItem(
+            id,
+            CreateTeamBottariAssignedItemRequest(name, teamMemberNames),
+        )
+
+    override suspend fun deleteTeamBottariItem(
+        id: Long,
+        type: BottariItemType,
+    ): Result<Unit> {
+        val bottariItemType = type.toString()
+        return teamBottariRemoteDataSource.deleteTeamBottariItem(
+            id,
+            DeleteTeamBottariItemRequest(bottariItemType),
+        )
+    }
 
     override suspend fun sendRemindByMemberMessage(
         teamBottariId: Long,

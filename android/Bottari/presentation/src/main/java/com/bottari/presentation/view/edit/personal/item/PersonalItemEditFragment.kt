@@ -20,7 +20,6 @@ import com.bottari.presentation.common.extension.getParcelableArrayListCompat
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.model.BottariItemUiModel
-import com.bottari.presentation.model.ChecklistItemUiModel
 import com.bottari.presentation.view.common.alart.CustomAlertDialog
 import com.bottari.presentation.view.common.alart.DialogListener
 import com.bottari.presentation.view.common.alart.DialogPresetType
@@ -154,7 +153,7 @@ class PersonalItemEditFragment :
         binding.tvBottariTitle.text = title
     }
 
-    private fun handleItemState(bottariItems: List<ChecklistItemUiModel>) {
+    private fun handleItemState(bottariItems: List<BottariItemUiModel>) {
         adapter.submitList(bottariItems)
     }
 

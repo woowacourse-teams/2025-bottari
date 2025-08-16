@@ -1,21 +1,20 @@
-package com.bottari.presentation.view.edit.personal.item.adapter
+package com.bottari.presentation.view.edit.team.item.personal.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.databinding.ItemEditPersonalItemBinding
 import com.bottari.presentation.model.BottariItemUiModel
-import com.bottari.presentation.view.edit.personal.item.listener.OnEditItemClickListener
 
-class PersonalItemEditViewHolder(
+class TeamPersonalItemEditViewHolder(
     private val binding: ItemEditPersonalItemBinding,
-    listener: OnEditItemClickListener,
+    eventListener: OnEditItemClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     private var itemId: Long? = null
 
     init {
         binding.btnPersonalItemDelete.setOnClickListener {
-            itemId?.let { listener.onClick(it) }
+            itemId?.let(eventListener::onClickDelete)
         }
     }
 
@@ -24,14 +23,18 @@ class PersonalItemEditViewHolder(
         binding.tvPersonalItemName.text = item.name
     }
 
+    interface OnEditItemClickListener {
+        fun onClickDelete(itemId: Long)
+    }
+
     companion object {
         fun from(
             parent: ViewGroup,
-            listener: OnEditItemClickListener,
-        ): PersonalItemEditViewHolder {
+            eventListener: OnEditItemClickListener,
+        ): TeamPersonalItemEditViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ItemEditPersonalItemBinding.inflate(layoutInflater, parent, false)
-            return PersonalItemEditViewHolder(binding, listener)
+            return TeamPersonalItemEditViewHolder(binding, eventListener)
         }
     }
 }

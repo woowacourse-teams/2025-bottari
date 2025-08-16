@@ -9,6 +9,8 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.ActivityTeamBottariEditBinding
+import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.view.edit.team.item.main.TeamItemEditFragment
 import com.bottari.presentation.view.edit.team.main.TeamBottariEditFragment
 import com.bottari.presentation.view.edit.team.management.TeamManagementFragment
 
@@ -36,6 +38,19 @@ class TeamBottariEditActivity :
     override fun navigateToMemberEdit(teamBottariId: Long) {
         supportFragmentManager.commit {
             replace(R.id.fcv_team_edit, TeamManagementFragment.newInstance(teamBottariId))
+            addToBackStack(null)
+        }
+    }
+
+    override fun navigateToItemEdit(
+        teamBottariId: Long,
+        requireTabType: BottariItemTypeUiModel,
+    ) {
+        supportFragmentManager.commit {
+            replace(
+                R.id.fcv_team_edit,
+                TeamItemEditFragment.newInstance(teamBottariId, requireTabType),
+            )
             addToBackStack(null)
         }
     }

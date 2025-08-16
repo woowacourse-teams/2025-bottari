@@ -22,12 +22,19 @@ import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
 import com.bottari.domain.usecase.report.ReportTemplateUseCase
 import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
+import com.bottari.domain.usecase.team.CreateTeamAssignedItemUseCase
 import com.bottari.domain.usecase.team.CreateTeamBottariUseCase
+import com.bottari.domain.usecase.team.CreateTeamPersonalItemUseCase
+import com.bottari.domain.usecase.team.CreateTeamSharedItemUseCase
+import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
+import com.bottari.domain.usecase.team.FetchTeamAssignedItemsUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariDetailUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
+import com.bottari.domain.usecase.team.FetchTeamPersonalItemsUseCase
+import com.bottari.domain.usecase.team.FetchTeamSharedItemsUseCase
 import com.bottari.domain.usecase.team.FetchTeamStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByItemUseCase
 import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
@@ -186,6 +193,27 @@ object UseCaseProvider {
     }
     val fetchTeamMembersStatusUseCase: FetchTeamMembersStatusUseCase by lazy {
         FetchTeamMembersStatusUseCase(RepositoryProvider.teamBottariRepository)
+    }
+    val fetchTeamPersonalItemsUseCase: FetchTeamPersonalItemsUseCase by lazy {
+        FetchTeamPersonalItemsUseCase(RepositoryProvider.teamBottariRepository)
+    }
+    val fetchTeamAssignedItemsUseCase: FetchTeamAssignedItemsUseCase by lazy {
+        FetchTeamAssignedItemsUseCase(RepositoryProvider.teamBottariRepository)
+    }
+    val fetchTeamSharedItemsUseCase: FetchTeamSharedItemsUseCase by lazy {
+        FetchTeamSharedItemsUseCase(RepositoryProvider.teamBottariRepository)
+    }
+    val createTeamSharedItemUseCase: CreateTeamSharedItemUseCase by lazy {
+        CreateTeamSharedItemUseCase(RepositoryProvider.teamBottariRepository)
+    }
+    val createTeamPersonalItemUseCase: CreateTeamPersonalItemUseCase by lazy {
+        CreateTeamPersonalItemUseCase(RepositoryProvider.teamBottariRepository)
+    }
+    val createTeamAssignedItemUseCase: CreateTeamAssignedItemUseCase by lazy {
+        CreateTeamAssignedItemUseCase(RepositoryProvider.teamBottariRepository)
+    }
+    val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase by lazy {
+        DeleteTeamBottariItemUseCase(RepositoryProvider.teamBottariRepository)
     }
     val saveFcmTokenUseCase: SaveFcmTokenUseCase by lazy {
         SaveFcmTokenUseCase(RepositoryProvider.fcmRepository)

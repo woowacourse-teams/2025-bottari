@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:theme="@style/Theme.Bottari"
-    tools:context=".view.checklist.team.TeamChecklistActivity">
+    android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_bottari"
+    <Toolbar
+        android:id="@+id/toolbar_team_bottari_item_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:contentInsetStart="0dp"
@@ -29,35 +25,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/black"
-            tools:text="팀 보따리" />
-
-        <ImageView
-            android:id="@+id/btn_swipe"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:contentDescription="@string/checklist_swipe_btn_description"
-            android:padding="@dimen/space_small"
-            android:src="@drawable/btn_swipe" />
-
-    </androidx.appcompat.widget.Toolbar>
+            android:text="@string/team_bottari_item_edit_title_text"
+            android:textColor="@color/black" />
+    </Toolbar>
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tl_team_bottari"
+        android:id="@+id/tl_team_bottari_item_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_bottari"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_team_bottari_item_edit"
         app:tabIndicatorColor="@color/black"
+        app:tabSelectedTextAppearance="@style/CustomTabText"
         app:tabSelectedTextColor="@color/black"
+        app:tabTextAppearance="@style/CustomTabText"
         app:tabTextColor="@color/gray_c4c4c4" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vp_team_bottari"
+        android:id="@+id/vp_team_bottari_item_edit"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tl_team_bottari" />
+        android:paddingTop="@dimen/space_small"
+        app:layout_constraintBottom_toTopOf="@id/view_item_input"
+        app:layout_constraintTop_toBottomOf="@id/tl_team_bottari_item_edit" />
+
+    <include
+        android:id="@+id/view_item_input"
+        layout="@layout/view_item_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
