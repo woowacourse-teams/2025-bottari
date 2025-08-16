@@ -22,9 +22,7 @@ jobs:
         working-directory: ./android/Bottari
 
     permissions:
-      contents: read
-      pull-requests: write
-      issues: write
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -39,21 +37,15 @@ jobs:
           distribution: "temurin"
           cache: gradle
 
-      - name: Gradle cache
+      - name: Restore Gradle cache
         uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: > 
-            ${{ runner.os }}-gradle-${{ hashFiles(
-              'android/Bottari/build.gradle.kts',
-              'android/Bottari/gradle/libs.versions.toml',
-              'android/Bottari/gradle-wrapper.properties'
-            ) }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-            ${{ runner.os }}-
 
       - name: Grant execute permission to gradlew
         run: chmod +x gradlew
@@ -64,28 +56,36 @@ jobs:
       - name: Create local.properties
         run: echo "$LOCAL_PROPERTIES_CONTENTS" > ./local.properties
 
-      - name: Run Ktlint Check
-        id: ktlint
-        run: ./gradlew ktlintCheck
+      - name: Assemble Debug APK
+        id: assemble
+        run: ./gradlew assembleDebug --build-cache --parallel
+
+      - name: Save Gradle cache (after successful build)
+        if: steps.assemble.conclusion == 'success'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 
       - name: Run Unit Tests
         id: test
         run: ./gradlew testDebugUnitTest --build-cache --parallel
 
-      - name: Assemble Debug APK
-        id: assemble
-        run: ./gradlew assembleDebug --build-cache --parallel
+      - name: Run Ktlint Check
+        id: ktlint
+        run: ./gradlew ktlintCheck
 
       - name: Post CI summary as PR comment
         if: always()
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const results = {
-              ktlint: '${{ steps.ktlint.outcome }}'
-              test: '${{ steps.test.outcome }}',
               assemble: '${{ steps.assemble.outcome }}',
+              test: '${{ steps.test.outcome }}',
+              ktlint: '${{ steps.ktlint.outcome }}'
             };
 
             const emoji = {
@@ -96,9 +96,9 @@ jobs:
             };
 
             let body = `## Android CI Results\n\n`;
-            body += `- **Ktlint Check**: ${emoji[results.ktlint] || results.ktlint}\n`;
-            body += `- **Unit Tests**: ${emoji[results.test] || results.test}\n`;
             body += `- **Assemble Debug APK**: ${emoji[results.assemble] || results.assemble}\n`;
+            body += `- **Unit Tests**: ${emoji[results.test] || results.test}\n`;
+            body += `- **Ktlint Check**: ${emoji[results.ktlint] || results.ktlint}\n`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
