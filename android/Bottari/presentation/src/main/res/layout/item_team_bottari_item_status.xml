@@ -36,5 +36,4 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="10/20" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
