@@ -2,12 +2,9 @@ package com.bottari.presentation.mapper
 
 import com.bottari.domain.model.team.TeamMemberStatus
 import com.bottari.domain.model.team.TeamMembers
-import com.bottari.logger.BottariLogger
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.model.TeamMemberStatusUiModel
 import com.bottari.presentation.model.TeamMemberUiModel
-import kotlin.sequences.forEach
-import kotlin.time.measureTime
 
 object TeamMembersMapper {
     fun TeamMembers.toUiModel(): List<TeamMemberUiModel> =
