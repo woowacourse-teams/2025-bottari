@@ -9,6 +9,7 @@ import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.TeamBottariCheckList
 import com.bottari.domain.model.team.TeamBottariDetail
+import com.bottari.domain.model.team.TeamBottariStatus
 import com.bottari.domain.model.team.TeamMemberStatus
 import com.bottari.domain.model.team.TeamMembers
 import com.bottari.domain.repository.TeamBottariRepository
@@ -48,6 +49,18 @@ class TeamBottariRepositoryImpl(
         teamBottariRemoteDataSource
             .fetchTeamBottariDetail(teamBottariId)
             .mapCatching { response -> response.toDomain() }
+
+    override suspend fun fetchTeamBottariStatus(id: Long): Result<TeamBottariStatus> =
+        teamBottariRemoteDataSource
+            .fetchTeamBottariStatus(id)
+            .mapCatching { response -> response.toDomain() }
+
+    override suspend fun sendRemindByItem(
+        id: Long,
+        type: String,
+    ): Result<Unit> =
+        teamBottariRemoteDataSource
+            .sendRemindByItem(id, ItemTypeRequest(type))
 
     override suspend fun fetchTeamMembersStatus(id: Long): Result<List<TeamMemberStatus>> =
         teamBottariRemoteDataSource

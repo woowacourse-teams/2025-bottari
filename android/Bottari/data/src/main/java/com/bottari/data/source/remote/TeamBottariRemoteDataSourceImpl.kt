@@ -7,6 +7,7 @@ import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
+import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.ItemTypeRequest
@@ -55,6 +56,19 @@ class TeamBottariRemoteDataSourceImpl(
     override suspend fun fetchTeamBottariDetail(teamBottariId: Long): Result<FetchTeamBottariDetailResponse> =
         safeApiCall {
             teamBottariService.fetchTeamBottariDetail(teamBottariId)
+        }
+
+    override suspend fun fetchTeamBottariStatus(id: Long): Result<FetchTeamBottariStatusResponse> =
+        safeApiCall {
+            teamBottariService.fetchTeamBottariStatus(id)
+        }
+
+    override suspend fun sendRemindByItem(
+        id: Long,
+        type: ItemTypeRequest,
+    ): Result<Unit> =
+        safeApiCall {
+            teamBottariService.sendRemindByItem(id, type)
         }
 
     override suspend fun fetchTeamMembers(id: Long): Result<FetchTeamMembersResponse> =

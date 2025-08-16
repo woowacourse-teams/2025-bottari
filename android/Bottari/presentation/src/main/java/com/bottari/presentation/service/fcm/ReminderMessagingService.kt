@@ -89,7 +89,7 @@ class ReminderMessagingService(
         title: String,
     ) {
         val message =
-            getString(R.string.common_team_bottari_notification_remind_by_member_message_text)
+            getString(R.string.common_team_bottari_notification_send_remind_by_member_message_text)
         notificationHelper.sendTeamNotification(id, title, message)
     }
 
@@ -99,7 +99,7 @@ class ReminderMessagingService(
         item: String,
     ) {
         val message =
-            getString(R.string.common_team_bottari_notification_remind_by_item_message_text, item)
+            getString(R.string.common_team_bottari_notification_send_remind_by_item_message_text, item)
         notificationHelper.sendTeamNotification(id, title, message)
     }
 

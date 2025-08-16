@@ -14,7 +14,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
 class TeamMemberStatusViewHolder private constructor(
-    onRemindClickListener: OnRemindClickListener,
+    onSendRemindClickListener: OnSendRemindClickListener,
     private val binding: ItemTeamMemberStatusBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val sharedItemAdapter: SharedItemAdapter by lazy { SharedItemAdapter() }
@@ -26,7 +26,7 @@ class TeamMemberStatusViewHolder private constructor(
             binding.groupItems.apply { isVisible = !isVisible }
         }
         binding.btnHurryUpAlert.setOnClickListener {
-            member?.let(onRemindClickListener::onClickRemind)
+            member?.let(onSendRemindClickListener::onClickSendRemind)
         }
         setupSharedItems()
         setupAssignedItems()
@@ -76,15 +76,15 @@ class TeamMemberStatusViewHolder private constructor(
     companion object {
         fun from(
             parent: ViewGroup,
-            onRemindClickListener: OnRemindClickListener,
+            onSendRemindClickListener: OnSendRemindClickListener,
         ): TeamMemberStatusViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemTeamMemberStatusBinding.inflate(inflater, parent, false)
-            return TeamMemberStatusViewHolder(onRemindClickListener, binding)
+            return TeamMemberStatusViewHolder(onSendRemindClickListener, binding)
         }
     }
 
-    fun interface OnRemindClickListener {
-        fun onClickRemind(member: TeamMemberUiModel)
+    fun interface OnSendRemindClickListener {
+        fun onClickSendRemind(member: TeamMemberUiModel)
     }
 }

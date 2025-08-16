@@ -14,9 +14,9 @@ import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.model.TeamChecklistExpandableTypeUiModel
 import com.bottari.presentation.model.TeamChecklistItem
 import com.bottari.presentation.model.TeamChecklistProductUiModel
-import com.bottari.presentation.model.TeamChecklistTypeUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -42,17 +42,18 @@ class TeamChecklistViewModel(
     }
 
     fun toggleParentExpanded(type: BottariItemTypeUiModel) {
-        updateState {
-            val updatedExpandableItems =
-                expandableItems.map { item ->
-                    if (item is TeamChecklistTypeUiModel && item.type == type) {
-                        item.copy(isExpanded = !item.isExpanded)
-                    } else {
-                        item
-                    }
+        val updatedExpandableItems =
+            uiState.value?.expandableItems?.map { item ->
+                if (item is TeamChecklistExpandableTypeUiModel && item.type == type) {
+                    val reverseExpandType = item.copy(isExpanded = !item.isExpanded)
+                    return@map reverseExpandType
                 }
+                item
+            } ?: return
 
-            val newExpandableList = generateExpandableTypeList(updatedExpandableItems, items)
+        val newExpandableList =
+            generateExpandableTypeList(updatedExpandableItems, uiState.value?.items ?: return)
+        updateState {
             copy(expandableItems = newExpandableList)
         }
     }
@@ -61,18 +62,19 @@ class TeamChecklistViewModel(
         itemId: Long,
         type: BottariItemTypeUiModel,
     ) {
-        val itemToToggle =
-            findItemToToggle(itemId, type)
+        val itemToToggle = findItemToToggle(itemId, type)
 
         itemToToggle?.let { item ->
             val toggledItem = item.toggle()
+            val newItems =
+                uiState.value?.items?.map { checklistItem ->
+                    if (toggledItem.isSameItem(checklistItem)) return@map toggledItem
+                    checklistItem
+                } ?: return
+            val newExpandableList =
+                uiState.value?.expandableItems?.toggleItemInList(toggledItem) ?: return
+
             updateState {
-                val newItems =
-                    items.map { item ->
-                        if (toggledItem.isSameItem(item)) return@map toggledItem
-                        item
-                    }
-                val newExpandableList = expandableItems.toggleItemInList(toggledItem)
                 copy(
                     items = newItems,
                     expandableItems = newExpandableList,
@@ -85,8 +87,8 @@ class TeamChecklistViewModel(
     }
 
     private fun List<TeamChecklistItem>.toggleItemInList(item: TeamChecklistProductUiModel): List<TeamChecklistItem> =
-        this.map { row ->
-            if (row.isSameItem(item).not()) return@map row
+        this.map { listItem ->
+            if (listItem.isSameItem(item).not()) return@map listItem
             item
         }
 
@@ -120,14 +122,14 @@ class TeamChecklistViewModel(
     }
 
     private fun TeamBottariCheckList.toUIModel() =
-        this.sharedItems.map { it.toTeamUiModel(BottariItemTypeUiModel.SHARED) } +
-            this.assignedItems.map {
-                it.toTeamUiModel(
+        this.sharedItems.map { item -> item.toTeamUiModel(BottariItemTypeUiModel.SHARED) } +
+            this.assignedItems.map { item ->
+                item.toTeamUiModel(
                     BottariItemTypeUiModel.ASSIGNED(),
                 )
             } +
-            this.personalItems.map {
-                it.toTeamUiModel(
+            this.personalItems.map { item ->
+                item.toTeamUiModel(
                     BottariItemTypeUiModel.PERSONAL,
                 )
             }
@@ -169,14 +171,14 @@ class TeamChecklistViewModel(
                 findItemsByType(currentExpandableItems, type)
 
             val newParent =
-                (typePageData ?: TeamChecklistTypeUiModel(type, emptyList()))
+                (typePageData ?: TeamChecklistExpandableTypeUiModel(type, emptyList()))
                     .copy(teamChecklistItems = typeItems[type] ?: emptyList())
 
             newExpandableList.add(newParent)
             if (newParent.isExpanded) {
                 newExpandableList.addAll(
-                    newParent.teamChecklistItems.map {
-                        it
+                    newParent.teamChecklistItems.map { item ->
+                        item
                     },
                 )
             }
@@ -188,14 +190,14 @@ class TeamChecklistViewModel(
         currentExpandableItems: List<TeamChecklistItem>,
         type: BottariItemTypeUiModel,
     ) = currentExpandableItems
-        .filterIsInstance<TeamChecklistTypeUiModel>()
-        .firstOrNull { it.type == type }
+        .filterIsInstance<TeamChecklistExpandableTypeUiModel>()
+        .firstOrNull { item -> item.type == type }
 
     private fun findItemToToggle(
         itemId: Long,
         type: BottariItemTypeUiModel,
-    ) = currentState.expandableItems.find {
-        it.isSameItem(
+    ) = currentState.expandableItems.find { item ->
+        item.isSameItem(
             itemId,
             type,
         )
@@ -221,17 +223,16 @@ class TeamChecklistViewModel(
     }
 
     private suspend fun processItemCheck(item: TeamChecklistProductUiModel) {
-        val result = executeCheckUseCase(item)
-        result.onFailure {
+        executeCheckUseCase(item).onFailure {
             emitEvent(TeamChecklistUiEvent.CheckItemFailure)
         }
     }
 
     private suspend fun executeCheckUseCase(item: TeamChecklistProductUiModel) =
         if (item.isChecked) {
-            checkTeamBottariItemUseCase(item.id, item.type.toString())
+            checkTeamBottariItemUseCase(item.id, item.type.toTypeString())
         } else {
-            unCheckTeamBottariItemUseCase(item.id, item.type.toString())
+            unCheckTeamBottariItemUseCase(item.id, item.type.toTypeString())
         }
 
     companion object {

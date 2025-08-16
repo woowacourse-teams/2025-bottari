@@ -4,6 +4,7 @@ import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
+import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.ItemTypeRequest
@@ -25,15 +26,21 @@ interface TeamBottariService {
         @Path("teamBottariId") teamBottariId: Long,
     ): Response<FetchTeamBottariChecklistResponse>
 
-    @PATCH("/team-items/{id}/check")
+    @PATCH("/team-items/{itemId}/check")
     suspend fun checkTeamBottariItem(
-        @Path("id") id: Long,
+        @Path("itemId") id: Long,
         @Body request: ItemTypeRequest,
     ): Response<Unit>
 
-    @PATCH("/team-items/{id}/uncheck")
+    @PATCH("/team-items/{itemId}/uncheck")
     suspend fun uncheckTeamBottariItem(
-        @Path("id") id: Long,
+        @Path("itemId") id: Long,
+        @Body request: ItemTypeRequest,
+    ): Response<Unit>
+
+    @POST("/team-items/{itemId}/remind")
+    suspend fun sendRemindByItem(
+        @Path("itemId") id: Long,
         @Body request: ItemTypeRequest,
     ): Response<Unit>
 
@@ -45,10 +52,15 @@ interface TeamBottariService {
         @Path("teamBottariId") id: Long,
     ): Response<FetchTeamMembersResponse>
 
-    @GET("/team-bottaries/{id}")
+    @GET("/team-bottaries/{teamBottariId}")
     suspend fun fetchTeamBottariDetail(
-        @Path("id") teamBottariId: Long,
+        @Path("teamBottariId") teamBottariId: Long,
     ): Response<FetchTeamBottariDetailResponse>
+
+    @GET("/team-bottaries/{teamBottariId}/items/status")
+    suspend fun fetchTeamBottariStatus(
+        @Path("teamBottariId") id: Long,
+    ): Response<FetchTeamBottariStatusResponse>
 
     @GET("/team-bottaries/{teamBottariId}/members/status")
     suspend fun fetchTeamMembersStatus(
