@@ -82,6 +82,9 @@ public class Member {
         if (!(o instanceof final Member member)) {
             return false;
         }
+        if (getId() == null && member.getId() == null) {
+            return Objects.equals(getSsaid(), member.getSsaid());
+        }
 
         return Objects.equals(getId(), member.getId());
     }
