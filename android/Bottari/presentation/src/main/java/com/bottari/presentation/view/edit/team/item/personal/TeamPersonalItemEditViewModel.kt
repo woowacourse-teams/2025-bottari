@@ -8,7 +8,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.team.CreateTeamPersonalItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamPersonalItemsUseCase
-import com.bottari.logger.BottariLogger
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
 
@@ -25,10 +24,7 @@ class TeamPersonalItemEditViewModel(
         fetchPersonalItems()
     }
 
-    fun updateInput(input: String) {
-        BottariLogger.debug(input)
-        updateState { copy(inputText = input) }
-    }
+    fun updateInput(input: String) = updateState { copy(inputText = input) }
 
     fun createItem() {
         if (currentState.isAlreadyExist) return

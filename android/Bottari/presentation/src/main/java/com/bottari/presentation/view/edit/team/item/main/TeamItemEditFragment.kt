@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -77,7 +78,7 @@ class TeamItemEditFragment :
     }
 
     private fun setupListener() {
-        binding.viewItemInput.btnPersonalItemSend.setOnClickListener { viewModel.createItem() }
+        binding.viewItemInput.btnPersonalItemSend.setOnClickListener { createItem() }
         binding.btnPrevious.setOnClickListener {
             (requireActivity() as? TeamBottariEditNavigator)?.navigateBack()
         }
@@ -89,6 +90,11 @@ class TeamItemEditFragment :
                 }
             },
         )
+        binding.viewItemInput.etItemInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId != EditorInfo.IME_ACTION_SEND) return@setOnEditorActionListener false
+            createItem()
+            true
+        }
     }
 
     private fun handleUiState(uiState: TeamItemEditUiState) {
@@ -138,6 +144,12 @@ class TeamItemEditFragment :
             isEnabled = canSend
             alpha = if (canSend) SEND_BUTTON_ENABLED_ALPHA else SEND_BUTTON_DISABLED_ALPHA
         }
+    }
+
+    private fun createItem() {
+        viewModel.createItem()
+        binding.viewItemInput.etItemInput.text
+            .clear()
     }
 
     companion object {

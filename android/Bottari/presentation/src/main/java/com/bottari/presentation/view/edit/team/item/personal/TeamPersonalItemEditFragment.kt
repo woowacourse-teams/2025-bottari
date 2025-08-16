@@ -6,7 +6,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bottari.logger.BottariLogger
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
@@ -53,7 +52,6 @@ class TeamPersonalItemEditFragment :
     }
 
     private fun handleParentUiState(uiState: TeamItemEditUiState) {
-        BottariLogger.debug(uiState.itemInputText)
         viewModel.updateInput(uiState.itemInputText)
     }
 
