@@ -30,7 +30,7 @@
         android:gravity="center"
         android:paddingHorizontal="@dimen/space_large"
         android:paddingVertical="@dimen/space_small"
-        android:text="보채기"
+        android:text="@string/team_status_remind_btn_text"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
