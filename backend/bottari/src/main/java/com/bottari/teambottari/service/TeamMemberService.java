@@ -2,9 +2,14 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.fcm.FcmMessageConverter;
+import com.bottari.fcm.FcmMessageSender;
+import com.bottari.fcm.dto.MessageType;
+import com.bottari.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
-import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.TeamAssignedItem;
+import com.bottari.member.repository.MemberRepository;
+import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
@@ -34,6 +39,9 @@ public class TeamMemberService {
     private final TeamAssignedItemRepository teamAssignedItemRepository;
     private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
     private final MemberRepository memberRepository;
+
+    private final FcmMessageSender fcmMessageSender;
+    private final FcmMessageConverter fcmMessageConverter;
 
     @Transactional(readOnly = true)
     public ReadTeamMemberInfoResponse getTeamMemberInfoByTeamBottariId(
@@ -95,6 +103,29 @@ public class TeamMemberService {
         return teamMember.getId();
     }
 
+    public void sendRemindAlarm(
+            final Long teamBottariId,
+            final Long memberId,
+            final String ssaid
+    ) {
+        final Member sender = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        final Member receiver = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "보채기를 받을 멤버를 찾을 수 없습니다."));
+        validateSenderNotEqualsReceiver(sender, receiver);
+        final TeamBottari teamBottari = teamBottariRepository.findById(teamBottariId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_NOT_FOUND));
+        validateMemberInTeam(teamBottari, sender);
+        final TeamMember teamMember = teamMemberRepository.findByTeamBottariIdAndMemberId(
+                teamBottariId,
+                receiver.getId()
+        ).orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI, "보채기 대상 멤버가 팀에 없습니다."));
+        final List<TeamSharedItemInfo> uncheckedSharedItemInfos = getUncheckedSharedItemInfos(teamMember);
+        final List<TeamAssignedItemInfo> uncheckedAssignedItemsInfos = getUncheckedAssignedItemsInfos(teamMember);
+        validateHasUncheckedItem(uncheckedSharedItemInfos, uncheckedAssignedItemsInfos);
+        sendRemindMessageToReceiver(receiver, teamBottari, uncheckedSharedItemInfos, uncheckedAssignedItemsInfos);
+    }
+
     private void addTeamMemberSharedItems(
             final Long teamBottariId,
             final TeamMember teamMember
@@ -116,6 +147,15 @@ public class TeamMemberService {
                 .filter(teamMember -> teamMember.getMember().isSameBySsaid(ssaid))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI));
+    }
+
+    private void validateMemberInTeam(
+            final TeamBottari teamBottari,
+            final Member member
+    ) {
+        if (!teamMemberRepository.existsByTeamBottariIdAndMemberId(teamBottari.getId(), member.getId())) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI);
+        }
     }
 
     private void validateMemberNotInTeam(
@@ -146,6 +186,7 @@ public class TeamMemberService {
                 .toList();
 
         return new ReadTeamMemberStatusResponse(
+                teamMember.getMember().getId(),
                 teamMember.getMember().getName(),
                 teamMember.isTeamBottariOwner(),
                 totalItemsCount,
@@ -167,5 +208,58 @@ public class TeamMemberService {
                 .count();
 
         return checkedSharedItemsCount + checkedAssignedItemsCount;
+    }
+
+    private void validateSenderNotEqualsReceiver(
+            final Member sender,
+            final Member receiver
+    ) {
+        if (sender.equals(receiver)) {
+            throw new BusinessException(ErrorCode.CANNOT_SEND_REMIND_TO_SELF);
+        }
+    }
+
+    private List<TeamAssignedItemInfo> getUncheckedAssignedItemsInfos(final TeamMember teamMember) {
+        final List<TeamAssignedItem> assignedItems = teamAssignedItemRepository.findAllByTeamMemberId(
+                teamMember.getId()
+        );
+
+        return assignedItems.stream()
+                .filter(item -> !item.isChecked())
+                .map(TeamAssignedItem::getInfo)
+                .toList();
+    }
+
+    private List<TeamSharedItemInfo> getUncheckedSharedItemInfos(final TeamMember teamMember) {
+        final List<TeamSharedItem> sharedItems = teamSharedItemRepository.findAllByTeamMemberId(teamMember.getId());
+
+        return sharedItems.stream()
+                .filter(item -> !item.isChecked())
+                .map(TeamSharedItem::getInfo)
+                .toList();
+    }
+
+    private void validateHasUncheckedItem(
+            final List<TeamSharedItemInfo> uncheckedSharedItemInfos,
+            final List<TeamAssignedItemInfo> uncheckedAssignedItemsInfos
+    ) {
+        if (uncheckedSharedItemInfos.isEmpty() && uncheckedAssignedItemsInfos.isEmpty()) {
+            throw new BusinessException(ErrorCode.TEAM_MEMBER_ALREADY_CHECKED_ALL);
+        }
+    }
+
+    private void sendRemindMessageToReceiver(
+            final Member receiver,
+            final TeamBottari teamBottari,
+            final List<TeamSharedItemInfo> uncheckedSharedItemInfos,
+            final List<TeamAssignedItemInfo> uncheckedAssignedItemsInfos
+    ) {
+        final SendMessageRequest message = fcmMessageConverter.convert(
+                teamBottari,
+                uncheckedSharedItemInfos,
+                uncheckedAssignedItemsInfos,
+                MessageType.REMIND_BY_TEAM_MEMBER
+        );
+        fcmMessageSender.sendMessageToMember(receiver.getId(), message);
     }
 }

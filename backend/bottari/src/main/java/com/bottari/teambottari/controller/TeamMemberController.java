@@ -74,4 +74,16 @@ public class TeamMemberController implements TeamMemberApiDocs {
 
         return ResponseEntity.created(URI.create("/team-members/" + id)).build();
     }
+
+    @PostMapping("/team-bottaries/{teamBottariId}/members/{memberId}/remind")
+    @Override
+    public ResponseEntity<Void> sendRemindAlarmByMember(
+            @PathVariable final Long teamBottariId,
+            @PathVariable final Long memberId,
+            @MemberIdentifier final String ssaid
+    ) {
+        teamMemberService.sendRemindAlarm(teamBottariId, memberId, ssaid);
+
+        return ResponseEntity.noContent().build();
+    }
 }
