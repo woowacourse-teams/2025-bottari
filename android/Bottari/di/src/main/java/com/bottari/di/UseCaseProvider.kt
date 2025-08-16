@@ -29,6 +29,7 @@ import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
 import com.bottari.domain.usecase.team.FetchTeamStatusUseCase
 import com.bottari.domain.usecase.team.RemindTeamBottariItemUseCase
+import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
@@ -187,5 +188,8 @@ object UseCaseProvider {
     }
     val saveFcmTokenUseCase: SaveFcmTokenUseCase by lazy {
         SaveFcmTokenUseCase(RepositoryProvider.fcmRepository)
+    }
+    val sendRemindByMemberMessageUseCase: SendRemindByMemberMessageUseCase by lazy {
+        SendRemindByMemberMessageUseCase(RepositoryProvider.teamBottariRepository)
     }
 }

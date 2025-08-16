@@ -9,16 +9,19 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamMembersStatusBinding
+import com.bottari.presentation.model.TeamMemberUiModel
 import com.bottari.presentation.view.checklist.team.member.adapter.TeamMemberStatusAdapter
+import com.bottari.presentation.view.checklist.team.member.adapter.TeamMemberStatusViewHolder
 
 class TeamMembersStatusFragment :
     BaseFragment<FragmentTeamMembersStatusBinding>(
         FragmentTeamMembersStatusBinding::inflate,
-    ) {
+    ),
+    TeamMemberStatusViewHolder.OnRemindClickListener {
     private val viewModel: TeamMembersStatusViewModel by viewModels {
         TeamMembersStatusViewModel.Factory(requireArguments().getLong(ARG_TEAM_BOTTARI_ID))
     }
-    private val adapter: TeamMemberStatusAdapter by lazy { TeamMemberStatusAdapter() }
+    private val adapter: TeamMemberStatusAdapter by lazy { TeamMemberStatusAdapter(this) }
 
     override fun onViewCreated(
         view: View,
@@ -34,6 +37,10 @@ class TeamMembersStatusFragment :
         viewModel.fetchTeamMembersStatus()
     }
 
+    override fun onClickRemind(member: TeamMemberUiModel) {
+        viewModel.sendRemindMessage(member)
+    }
+
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
@@ -41,10 +48,19 @@ class TeamMembersStatusFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                is TeamMembersStatusUiEvent.FetchMembersStatusFailure ->
+                TeamMembersStatusUiEvent.FetchMembersStatusFailure ->
+                    requireView().showSnackbar(R.string.team_members_status_fetch_failure_text)
+
+                is TeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess ->
                     requireView().showSnackbar(
-                        R.string.team_members_status_fetch_failure_text,
+                        getString(
+                            R.string.team_members_status_send_remind_message_success_text,
+                            uiEvent.nickname,
+                        ),
                     )
+
+                TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
+                    requireView().showSnackbar(R.string.team_members_status_send_remind_message_failure_text)
             }
         }
     }

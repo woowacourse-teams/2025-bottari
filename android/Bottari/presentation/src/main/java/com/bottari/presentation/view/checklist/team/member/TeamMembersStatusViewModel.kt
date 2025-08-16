@@ -7,12 +7,15 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
+import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
+import com.bottari.presentation.model.TeamMemberUiModel
 
 class TeamMembersStatusViewModel(
     stateHandle: SavedStateHandle,
     private val fetchTeamMembersStatusUseCase: FetchTeamMembersStatusUseCase,
+    private val sendRemindByMemberMessageUseCase: SendRemindByMemberMessageUseCase,
 ) : BaseViewModel<TeamMembersStatusUiState, TeamMembersStatusUiEvent>(
         TeamMembersStatusUiState(),
     ) {
@@ -30,6 +33,20 @@ class TeamMembersStatusViewModel(
         }
     }
 
+    fun sendRemindMessage(member: TeamMemberUiModel) {
+        val memberId = member.id ?: return
+        launch {
+            sendRemindByMemberMessageUseCase(teamBottariId, memberId)
+                .onSuccess {
+                    emitEvent(
+                        TeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess(
+                            member.nickname,
+                        ),
+                    )
+                }.onFailure { emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure) }
+        }
+    }
+
     companion object {
         private const val KEY_TEAM_BOTTARI_ID = "KEY_TEAM_BOTTARI_ID"
         private const val ERROR_REQUIRE_TEAM_BOTTARI_ID = "[ERROR] 팀 보따리 ID가 존재하지 않습니다."
@@ -42,6 +59,7 @@ class TeamMembersStatusViewModel(
                     TeamMembersStatusViewModel(
                         stateHandle = stateHandle,
                         fetchTeamMembersStatusUseCase = UseCaseProvider.fetchTeamMembersStatusUseCase,
+                        sendRemindByMemberMessageUseCase = UseCaseProvider.sendRemindByMemberMessageUseCase,
                     )
                 }
             }

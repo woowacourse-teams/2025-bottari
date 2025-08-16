@@ -66,4 +66,10 @@ interface TeamBottariService {
     suspend fun fetchTeamMembersStatus(
         @Path("teamBottariId") id: Long,
     ): Response<List<FetchTeamMemberStatusResponse>>
+
+    @POST("/team-bottaries/{teamBottariId}/members/{memberId}/remind")
+    suspend fun sendRemindByMemberMessage(
+        @Path("teamBottariId") teamBottariId: Long,
+        @Path("memberId") memberId: Long,
+    ): Response<Unit>
 }

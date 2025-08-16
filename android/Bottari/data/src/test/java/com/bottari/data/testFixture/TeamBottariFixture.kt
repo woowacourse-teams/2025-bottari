@@ -51,6 +51,7 @@ val TEAM_BOTTARI_DETAIL =
 val TEAM_MEMBERS_STATUS =
     listOf(
         TeamMemberStatus(
+            1L,
             Nickname("Test"),
             true,
             0,
@@ -63,6 +64,7 @@ val TEAM_MEMBERS_STATUS =
 val TEAM_MEMBERS_STATUS_RESPONSE =
     listOf(
         FetchTeamMemberStatusResponse(
+            1L,
             "Test",
             true,
             0,

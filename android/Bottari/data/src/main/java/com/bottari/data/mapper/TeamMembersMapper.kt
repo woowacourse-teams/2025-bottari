@@ -19,6 +19,7 @@ object TeamMembersMapper {
 
     fun FetchTeamMemberStatusResponse.toDomain(): TeamMemberStatus =
         TeamMemberStatus(
+            id = id,
             nickname = Nickname(nickname),
             isHost = isOwner,
             totalItemsCount = totalItemsCount,
