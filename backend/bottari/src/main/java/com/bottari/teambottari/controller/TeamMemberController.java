@@ -3,6 +3,7 @@ package com.bottari.teambottari.controller;
 import com.bottari.config.MemberIdentifier;
 import com.bottari.teambottari.dto.JoinTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
+import com.bottari.teambottari.dto.ReadTeamMemberNameResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
 import com.bottari.teambottari.service.TeamMemberService;
 import java.net.URI;
@@ -28,6 +29,20 @@ public class TeamMemberController implements TeamMemberApiDocs {
             @MemberIdentifier final String ssaid
     ) {
         final ReadTeamMemberInfoResponse response = teamMemberService.getTeamMemberInfoByTeamBottariId(
+                teamBottariId,
+                ssaid
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/team-bottaries/{teamBottariId}/members/name")
+    @Override
+    public ResponseEntity<List<ReadTeamMemberNameResponse>> readTeamMemberNames(
+            @PathVariable final Long teamBottariId,
+            @MemberIdentifier final String ssaid
+    ) {
+        final List<ReadTeamMemberNameResponse> response = teamMemberService.getTeamMemberNamesByTeamBottariId(
                 teamBottariId,
                 ssaid
         );
