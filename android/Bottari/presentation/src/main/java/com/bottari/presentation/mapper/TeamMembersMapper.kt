@@ -10,16 +10,16 @@ import kotlin.sequences.forEach
 object TeamMembersMapper {
     fun TeamMembers.toUiModel(): List<TeamMemberUiModel> =
         buildList {
-            add(TeamMemberUiModel(hostName.value, true))
+            add(TeamMemberUiModel(null, hostName.value, true))
             memberNicknames
                 .asSequence()
                 .filter { nickname -> nickname != hostName }
-                .forEach { nickname -> add(TeamMemberUiModel(nickname.value, false)) }
+                .forEach { nickname -> add(TeamMemberUiModel(null, nickname.value, false)) }
         }
 
     fun TeamMemberStatus.toUiModel(): TeamMemberStatusUiModel =
         TeamMemberStatusUiModel(
-            member = TeamMemberUiModel(nickname.value, isHost),
+            member = TeamMemberUiModel(null, nickname.value, isHost),
             totalItemsCount = totalItemsCount,
             checkedItemsCount = checkedItemsCount,
             sharedItems = sharedItems.map { sharedItem -> sharedItem.toUiModel() },
