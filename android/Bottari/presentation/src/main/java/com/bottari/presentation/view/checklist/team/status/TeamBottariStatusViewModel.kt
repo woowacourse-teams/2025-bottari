@@ -60,8 +60,8 @@ class TeamBottariStatusViewModel(
                             teamChecklistItems = teamStatusListItems,
                             selectedProduct =
                                 teamStatusListItems
-                                    .filter { it is TeamBottariProductStatusUiModel }
-                                    .firstOrNull() as? TeamBottariProductStatusUiModel,
+                                    .filterIsInstance<TeamBottariProductStatusUiModel>()
+                                    .firstOrNull(),
                         )
                     }
                 }.onFailure {
