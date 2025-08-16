@@ -191,7 +191,7 @@ class TeamChecklistViewModel(
         type: BottariItemTypeUiModel,
     ) = currentExpandableItems
         .filterIsInstance<TeamChecklistExpandableTypeUiModel>()
-        .firstOrNull { it.type == type }
+        .firstOrNull { item -> item.type == type }
 
     private fun findItemToToggle(
         itemId: Long,
