@@ -40,6 +40,12 @@ jobs:
           VERSION_NAME=$(./gradlew -q printVersionName)
           echo "VERSION_NAME=${VERSION_NAME}" >> $GITHUB_ENV
 
+      - name: Create google-services.json
+        run: echo "$GOOGLE_SERVICES_JSON" > ./app/google-services.json
+
+      - name: Create local.properties
+        run: echo "$LOCAL_PROPERTIES_CONTENTS" > ./local.properties
+
       - name: Assemble Debug APK
         run: ./gradlew assembleDebug
         env:
@@ -59,7 +65,7 @@ jobs:
         if: always()
         uses: Ilshidur/action-discord@master
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          webhook: ${{ secrets.ANDROID_DEVELOP_APP_DEPLOY_HOOK_URL }}
           message: |
             ${{ github.job }} **Firebase Debug 배포**
             - 브랜치: `an/develop`
