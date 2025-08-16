@@ -5,7 +5,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.TeamMemberStatusUiModel
 
-class TeamMemberStatusAdapter : ListAdapter<TeamMemberStatusUiModel, TeamMemberStatusViewHolder>(DiffUtil) {
+class TeamMemberStatusAdapter(
+    private val onRemindClickListener: TeamMemberStatusViewHolder.OnRemindClickListener,
+) : ListAdapter<TeamMemberStatusUiModel, TeamMemberStatusViewHolder>(DiffUtil) {
     override fun onBindViewHolder(
         holder: TeamMemberStatusViewHolder,
         position: Int,
@@ -16,7 +18,7 @@ class TeamMemberStatusAdapter : ListAdapter<TeamMemberStatusUiModel, TeamMemberS
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): TeamMemberStatusViewHolder = TeamMemberStatusViewHolder.from(parent)
+    ): TeamMemberStatusViewHolder = TeamMemberStatusViewHolder.from(parent, onRemindClickListener)
 
     companion object {
         private val DiffUtil =
