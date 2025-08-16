@@ -4,6 +4,7 @@ import com.bottari.data.model.team.CreateTeamBottariAssignedItemRequest
 import com.bottari.data.model.team.CreateTeamBottariPersonalItemRequest
 import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
+import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
@@ -57,6 +58,10 @@ interface TeamBottariRemoteDataSource {
         request: CreateTeamBottariAssignedItemRequest,
     ): Result<Unit>
 
+    suspend fun deleteTeamBottariItem(
+        id: Long,
+        type: DeleteTeamBottariItemRequest,
+    ): Result<Unit>
     suspend fun deleteTeamBottariItem(id: Long): Result<Unit>
 
     suspend fun sendRemindByMemberMessage(
