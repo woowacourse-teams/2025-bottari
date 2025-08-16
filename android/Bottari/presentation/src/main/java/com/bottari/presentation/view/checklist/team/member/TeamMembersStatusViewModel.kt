@@ -34,12 +34,16 @@ class TeamMembersStatusViewModel(
     }
 
     fun sendRemindMessage(member: TeamMemberUiModel) {
+        val memberId = member.id ?: return
         launch {
-            member.id?.let { id ->
-                sendRemindByMemberMessageUseCase(teamBottariId, id)
-                    .onSuccess { emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess(member.nickname)) }
-                    .onFailure { emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure) }
-            }
+            sendRemindByMemberMessageUseCase(teamBottariId, memberId)
+                .onSuccess {
+                    emitEvent(
+                        TeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess(
+                            member.nickname,
+                        ),
+                    )
+                }.onFailure { emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure) }
         }
     }
 
