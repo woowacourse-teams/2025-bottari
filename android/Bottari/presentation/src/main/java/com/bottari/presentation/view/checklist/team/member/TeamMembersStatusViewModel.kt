@@ -10,6 +10,7 @@ import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
+import com.bottari.presentation.model.TeamMemberUiModel
 
 class TeamMembersStatusViewModel(
     stateHandle: SavedStateHandle,
@@ -32,10 +33,13 @@ class TeamMembersStatusViewModel(
         }
     }
 
-    fun sendRemindMessage(memberId: Long) {
+    fun sendRemindMessage(member: TeamMemberUiModel) {
         launch {
-            sendRemindByMemberMessageUseCase(teamBottariId, memberId)
-                .onFailure { emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure) }
+            member.id?.let { id ->
+                sendRemindByMemberMessageUseCase(teamBottariId, id)
+                    .onSuccess { emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess(member.nickname)) }
+                    .onFailure { emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure) }
+            }
         }
     }
 

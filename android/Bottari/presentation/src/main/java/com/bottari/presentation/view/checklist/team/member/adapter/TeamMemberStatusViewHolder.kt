@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamMemberStatusBinding
 import com.bottari.presentation.model.TeamMemberStatusUiModel
+import com.bottari.presentation.model.TeamMemberUiModel
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -18,21 +19,21 @@ class TeamMemberStatusViewHolder private constructor(
 ) : RecyclerView.ViewHolder(binding.root) {
     private val sharedItemAdapter: SharedItemAdapter by lazy { SharedItemAdapter() }
     private val assignedItemAdapter: AssignedItemAdapter by lazy { AssignedItemAdapter() }
-    private var memberId: Long? = null
+    private var member: TeamMemberUiModel? = null
 
     init {
         itemView.setOnClickListener {
             binding.groupItems.apply { isVisible = !isVisible }
         }
         binding.btnHurryUpAlert.setOnClickListener {
-            memberId?.let(onRemindClickListener::onClickRemind)
+            member?.let(onRemindClickListener::onClickRemind)
         }
         setupSharedItems()
         setupAssignedItems()
     }
 
     fun bind(status: TeamMemberStatusUiModel) {
-        memberId = status.member.id
+        member = status.member
         itemView.isClickable = status.isItemsEmpty.not()
         binding.tvMemberNickname.text = status.member.nickname
         binding.ivTeamHost.isVisible = status.member.isHost
@@ -84,6 +85,6 @@ class TeamMemberStatusViewHolder private constructor(
     }
 
     fun interface OnRemindClickListener {
-        fun onClickRemind(memberId: Long)
+        fun onClickRemind(member: TeamMemberUiModel)
     }
 }

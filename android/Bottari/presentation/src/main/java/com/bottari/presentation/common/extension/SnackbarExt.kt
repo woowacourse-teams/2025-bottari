@@ -24,6 +24,18 @@ fun View.showSnackbar(
     }
 }
 
+fun View.showSnackbar(
+    message: String,
+    duration: SnackBarDuration = SnackBarDuration.SHORT_DELAY,
+    onDismiss: (() -> Unit)? = null,
+) {
+    Snackbar.make(this, message, Snackbar.LENGTH_INDEFINITE).apply {
+        onDismiss?.let { addDismissCallback(it) }
+        show()
+        this.view.postDelayed({ dismiss() }, duration.value)
+    }
+}
+
 private fun Snackbar.addDismissCallback(onDismiss: () -> Unit) =
     addCallback(
         object : Snackbar.Callback() {

@@ -9,6 +9,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamMembersStatusBinding
+import com.bottari.presentation.model.TeamMemberUiModel
 import com.bottari.presentation.view.checklist.team.member.adapter.TeamMemberStatusAdapter
 import com.bottari.presentation.view.checklist.team.member.adapter.TeamMemberStatusViewHolder
 
@@ -36,8 +37,8 @@ class TeamMembersStatusFragment :
         viewModel.fetchTeamMembersStatus()
     }
 
-    override fun onClickRemind(memberId: Long) {
-        viewModel.sendRemindMessage(memberId)
+    override fun onClickRemind(member: TeamMemberUiModel) {
+        viewModel.sendRemindMessage(member)
     }
 
     private fun setupObserver() {
@@ -47,10 +48,18 @@ class TeamMembersStatusFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                is TeamMembersStatusUiEvent.FetchMembersStatusFailure ->
+                TeamMembersStatusUiEvent.FetchMembersStatusFailure ->
                     requireView().showSnackbar(R.string.team_members_status_fetch_failure_text)
 
-                is TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
+                is TeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess ->
+                    requireView().showSnackbar(
+                        getString(
+                            R.string.team_members_status_send_remind_message_success_text,
+                            uiEvent.nickname,
+                        ),
+                    )
+
+                TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
                     requireView().showSnackbar(R.string.team_members_status_send_remind_message_failure_text)
             }
         }
