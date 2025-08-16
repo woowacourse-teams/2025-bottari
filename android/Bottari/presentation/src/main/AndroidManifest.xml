@@ -7,16 +7,22 @@
 
     <application>
         <activity
-            android:name=".view.edit.team.TeamBottariEditActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Bottari.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="bottari.app" />
+                <data android:pathPrefix="/team" />
             </intent-filter>
         </activity>
         <activity
@@ -37,7 +43,13 @@
             android:name=".view.template.TemplateActivity"
             android:exported="false" />
         <activity
+            android:name=".view.edit.team.TeamBottariEditActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.checklist.team.TeamChecklistActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.invite.InviteActivity"
             android:exported="false" />
 
         <receiver android:name=".receiver.AlarmReceiver" />
@@ -50,4 +62,5 @@
             </intent-filter>
         </service>
     </application>
+
 </manifest>
