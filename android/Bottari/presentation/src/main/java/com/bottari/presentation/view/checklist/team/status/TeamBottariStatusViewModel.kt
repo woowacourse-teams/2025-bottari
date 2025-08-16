@@ -39,9 +39,7 @@ class TeamBottariStatusViewModel(
     fun sendRemindByItem() {
         viewModelScope.launch {
             sendRemindByItemUseCase(
-                currentState.selectedProduct?.id ?: throw IllegalArgumentException(
-                    ERROR_REQUIRE_BOTTARI_PRODUCT_ID,
-                ),
+                currentState.selectedProduct?.id ?: return@launch,
                 currentState.selectedProduct?.type.toString(),
             ).onSuccess {
                 emitEvent(TeamBottariStatusUiEvent.SendRemindSuccess)
@@ -91,7 +89,6 @@ class TeamBottariStatusViewModel(
     companion object {
         private const val KEY_ITEM_BOTTARI_ID = "KEY_ITEM_BOTTARI_ID"
         private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
-        private const val ERROR_REQUIRE_BOTTARI_PRODUCT_ID = "선택된 아이템의 id가 존재하지 않습니다"
 
         fun Factory(bottariId: Long): ViewModelProvider.Factory =
             viewModelFactory {
