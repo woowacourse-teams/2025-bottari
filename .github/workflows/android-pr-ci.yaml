@@ -82,7 +82,7 @@ jobs:
           end=$(date +%s)
           echo "time=$((end-start))" >> $GITHUB_OUTPUT
 
-      - name: PR 코멘트로 CI 요약 게시
+      - name: Post CI summary as PR comment
         if: always()
         uses: actions/github-script@v7
         with:
@@ -104,16 +104,16 @@ jobs:
                 time: '${{ steps.ktlint.outputs.time }}'
               }
             };
-
+      
             const emoji = {
               success: '✅',
               failure: '❌',
               cancelled: '⚠️',
               skipped: '⏭️'
             };
-
+      
             const runUrl = `https://github.com/${process.env.GITHUB_REPOSITORY}/runs/${process.env.GITHUB_RUN_ID}`;
-
+      
             function formatTime(seconds) {
               seconds = parseInt(seconds || 0, 10);
               if (seconds >= 60) {
@@ -123,31 +123,31 @@ jobs:
               }
               return `${seconds}s`;
             }
-
+      
             const totalTime = Object.values(results)
               .reduce((acc, step) => acc + parseInt(step.time || 0), 0);
-
-            let body = `## 🛠 Android CI 요약\n\n`;
-            body += `| 단계 | 결과 | 소요 시간 |\n`;
-            body += `| ---- | ------ | -------- |\n`;
-
+      
+            let body = `## 🛠 Android CI 요약\n\n**단계별 결과:**\n`;
+      
             for (const step of Object.values(results)) {
-              body += `| [${step.name}](${runUrl}) | ${emoji[step.status] || step.status} | ${formatTime(step.time)} |\n`;
+              const statusEmoji = emoji[step.status] || step.status;
+              const statusText = step.status === 'success' ? '성공' : '실패';
+              body += `- **${step.name}**: ${statusEmoji} ${statusText} (${formatTime(step.time)})\n`;
             }
-
-            body += `\n**총 소요 시간:** ${formatTime(totalTime)}\n`;
-
+      
+            body += `\n**총 소요 시간:** **${formatTime(totalTime)}**\n`;
+      
             const failedSteps = Object.values(results)
               .filter(step => step.status !== 'success')
               .map(step => step.name);
-
+      
             if (failedSteps.length > 0) {
-              body += `\n⚠️ **주의:** 다음 단계가 실패했습니다: ${failedSteps.join(', ')}\n`;
+              body += `\n⚠️ **주의:** 다음 단계가 실패했습니다: **${failedSteps.join(', ')}**\n`;
               body += `자세한 내용은 [Actions 로그](${runUrl})에서 확인하세요.\n`;
             } else {
               body += `\n🎉 모든 단계가 성공적으로 완료되었습니다!`;
             }
-
+      
             await github.rest.pulls.createReview({
               owner: context.repo.owner,
               repo: context.repo.repo,
