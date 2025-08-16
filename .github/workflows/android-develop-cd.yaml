@@ -57,7 +57,7 @@ jobs:
 
       - name: Send Discord Notification
         if: always()
-        uses: Ilshidur/action-discord@v2
+        uses: Ilshidur/action-discord@master
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
           message: |
