@@ -10,6 +10,7 @@ public record ReadTeamMemberNameResponse(
 
     public static ReadTeamMemberNameResponse of(final TeamMember teamMember) {
         final Member member = teamMember.getMember();
+
         return new ReadTeamMemberNameResponse(member.getId(), member.getName());
     }
 }
