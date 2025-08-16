@@ -46,7 +46,8 @@ class TeamChecklistViewModel(
             val updatedExpandableItems =
                 expandableItems.map { item ->
                     if (item is TeamChecklistExpandableTypeUiModel && item.type == type) {
-                        return@map item.copy(isExpanded = !item.isExpanded)
+                        val reverseExpandType = item.copy(isExpanded = !item.isExpanded)
+                        return@map reverseExpandType
                     }
                     item
                 }
@@ -83,8 +84,8 @@ class TeamChecklistViewModel(
     }
 
     private fun List<TeamChecklistItem>.toggleItemInList(item: TeamChecklistProductUiModel): List<TeamChecklistItem> =
-        this.map { row ->
-            if (row.isSameItem(item).not()) return@map row
+        this.map { listItem ->
+            if (listItem.isSameItem(item).not()) return@map listItem
             item
         }
 
@@ -118,14 +119,14 @@ class TeamChecklistViewModel(
     }
 
     private fun TeamBottariCheckList.toUIModel() =
-        this.sharedItems.map { it.toTeamUiModel(BottariItemTypeUiModel.SHARED) } +
-            this.assignedItems.map {
-                it.toTeamUiModel(
+        this.sharedItems.map { item -> item.toTeamUiModel(BottariItemTypeUiModel.SHARED) } +
+            this.assignedItems.map { item ->
+                item.toTeamUiModel(
                     BottariItemTypeUiModel.ASSIGNED(),
                 )
             } +
-            this.personalItems.map {
-                it.toTeamUiModel(
+            this.personalItems.map { item ->
+                item.toTeamUiModel(
                     BottariItemTypeUiModel.PERSONAL,
                 )
             }
@@ -173,8 +174,8 @@ class TeamChecklistViewModel(
             newExpandableList.add(newParent)
             if (newParent.isExpanded) {
                 newExpandableList.addAll(
-                    newParent.teamChecklistItems.map {
-                        it
+                    newParent.teamChecklistItems.map { item ->
+                        item
                     },
                 )
             }
@@ -192,8 +193,8 @@ class TeamChecklistViewModel(
     private fun findItemToToggle(
         itemId: Long,
         type: BottariItemTypeUiModel,
-    ) = currentState.expandableItems.find {
-        it.isSameItem(
+    ) = currentState.expandableItems.find { item ->
+        item.isSameItem(
             itemId,
             type,
         )
@@ -219,8 +220,7 @@ class TeamChecklistViewModel(
     }
 
     private suspend fun processItemCheck(item: TeamChecklistProductUiModel) {
-        val result = executeCheckUseCase(item)
-        result.onFailure {
+        executeCheckUseCase(item).onFailure {
             emitEvent(TeamChecklistUiEvent.CheckItemFailure)
         }
     }
