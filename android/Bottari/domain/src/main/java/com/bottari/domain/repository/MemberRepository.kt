@@ -9,4 +9,6 @@ interface MemberRepository {
     suspend fun saveMemberNickname(nickname: Nickname): Result<Unit>
 
     suspend fun checkRegisteredMember(): Result<RegisteredMember>
+
+    suspend fun getMemberIdentifier(): Result<String>
 }
