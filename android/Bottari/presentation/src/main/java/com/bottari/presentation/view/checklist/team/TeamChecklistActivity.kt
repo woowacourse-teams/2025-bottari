@@ -50,11 +50,11 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
 
     private fun setupListener() {
         onBackPressedDispatcher.addCallback {
-            if (notificationFlag) {
-                navigateToHome()
-                return@addCallback
+            when {
+                notificationFlag -> navigateToHome()
+                supportFragmentManager.backStackEntryCount == 0 -> finish()
+                else -> supportFragmentManager.popBackStack()
             }
-            onBackPressedDispatcher.onBackPressed()
         }
         binding.btnPrevious.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()

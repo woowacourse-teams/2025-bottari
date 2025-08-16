@@ -63,7 +63,7 @@ class ReminderMessagingService(
                 handleRemindByItemMessage(teamBottariId, teamBottariTitle, item)
             }
 
-            else -> throw IllegalArgumentException(ERROR_UNKNOWN_MESSAGE_TYPE)
+            else -> return
         }
     }
 
@@ -112,6 +112,5 @@ class ReminderMessagingService(
         private const val TYPE_REMIND_BY_MEMBER = "REMIND_BY_MEMBER"
         private const val TYPE_REMIND_BY_ITEM = "REMIND_BY_ITEM"
         private const val KEY_MESSAGE_TYPE = "type"
-        private const val ERROR_UNKNOWN_MESSAGE_TYPE = "[ERROR] 알 수 없는 타입입니다."
     }
 }
