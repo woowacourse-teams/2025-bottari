@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FetchTeamMemberStatusResponse(
+    @SerialName("memberId")
+    val id: Long,
     @SerialName("teamMemberName")
     val nickname: String,
     @SerialName("isOwner")

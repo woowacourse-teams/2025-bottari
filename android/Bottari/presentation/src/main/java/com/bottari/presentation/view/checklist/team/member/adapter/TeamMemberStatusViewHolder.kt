@@ -7,26 +7,33 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamMemberStatusBinding
 import com.bottari.presentation.model.TeamMemberStatusUiModel
+import com.bottari.presentation.model.TeamMemberUiModel
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class TeamMemberStatusViewHolder(
+class TeamMemberStatusViewHolder private constructor(
+    onRemindClickListener: OnRemindClickListener,
     private val binding: ItemTeamMemberStatusBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val sharedItemAdapter: SharedItemAdapter by lazy { SharedItemAdapter() }
     private val assignedItemAdapter: AssignedItemAdapter by lazy { AssignedItemAdapter() }
+    private var member: TeamMemberUiModel? = null
 
     init {
         itemView.setOnClickListener {
             binding.groupItems.apply { isVisible = !isVisible }
+        }
+        binding.btnHurryUpAlert.setOnClickListener {
+            member?.let(onRemindClickListener::onClickRemind)
         }
         setupSharedItems()
         setupAssignedItems()
     }
 
     fun bind(status: TeamMemberStatusUiModel) {
+        member = status.member
         itemView.isClickable = status.isItemsEmpty.not()
         binding.tvMemberNickname.text = status.member.nickname
         binding.ivTeamHost.isVisible = status.member.isHost
@@ -67,10 +74,17 @@ class TeamMemberStatusViewHolder(
         }
 
     companion object {
-        fun from(parent: ViewGroup): TeamMemberStatusViewHolder {
+        fun from(
+            parent: ViewGroup,
+            onRemindClickListener: OnRemindClickListener,
+        ): TeamMemberStatusViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemTeamMemberStatusBinding.inflate(inflater, parent, false)
-            return TeamMemberStatusViewHolder(binding)
+            return TeamMemberStatusViewHolder(onRemindClickListener, binding)
         }
+    }
+
+    fun interface OnRemindClickListener {
+        fun onClickRemind(member: TeamMemberUiModel)
     }
 }

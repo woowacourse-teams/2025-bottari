@@ -289,7 +289,7 @@ class TeamBottariRepositoryImplTest {
 
     @DisplayName("팀 멤버 현황 조회에 실패하면 Failure를 반환한다")
     @Test
-    fun fetchTeamMembersStatusReturnsFailureText() =
+    fun fetchTeamMembersStatusReturnsFailureTest() =
         runTest {
             // given
             val id = 1L
@@ -300,6 +300,49 @@ class TeamBottariRepositoryImplTest {
             val result = repository.fetchTeamMembersStatus(id)
 
             // then
-            result.shouldBeFailure { exception -> exception shouldBe exception }
+            result.shouldBeFailure { error -> error shouldBe exception }
+        }
+
+    @DisplayName("보채기 알림 전송에 성공하면 Success를 반환한다")
+    @Test
+    fun sendRemindByMemberMessageReturnsSuccessTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val memberId = 1L
+            coEvery {
+                dataSource.sendRemindByMemberMessage(
+                    teamBottariId,
+                    memberId,
+                )
+            } returns Result.success(Unit)
+
+            // when
+            val result = repository.sendRemindByMemberMessage(teamBottariId, memberId)
+
+            // then
+            result.shouldBeSuccess()
+        }
+
+    @DisplayName("보채기 알림 전송에 실패하면 Failure를 반환한다")
+    @Test
+    fun sendRemindByMemberMessageReturnsFailureTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val memberId = 1L
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery {
+                dataSource.sendRemindByMemberMessage(
+                    teamBottariId,
+                    memberId,
+                )
+            } returns Result.failure(exception)
+
+            // when
+            val result = repository.sendRemindByMemberMessage(teamBottariId, memberId)
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe exception }
         }
 }

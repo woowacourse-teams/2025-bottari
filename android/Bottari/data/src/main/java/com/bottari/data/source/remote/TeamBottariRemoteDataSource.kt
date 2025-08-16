@@ -30,4 +30,9 @@ interface TeamBottariRemoteDataSource {
     suspend fun fetchTeamMembers(id: Long): Result<FetchTeamMembersResponse>
 
     suspend fun fetchTeamMembersStatus(id: Long): Result<List<FetchTeamMemberStatusResponse>>
+
+    suspend fun sendRemindByMemberMessage(
+        teamBottariId: Long,
+        memberId: Long,
+    ): Result<Unit>
 }

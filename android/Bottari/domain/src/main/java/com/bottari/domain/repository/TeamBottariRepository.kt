@@ -28,4 +28,9 @@ interface TeamBottariRepository {
     suspend fun fetchTeamBottariDetail(teamBottariId: Long): Result<TeamBottariDetail>
 
     suspend fun fetchTeamMembersStatus(id: Long): Result<List<TeamMemberStatus>>
+
+    suspend fun sendRemindByMemberMessage(
+        teamBottariId: Long,
+        memberId: Long,
+    ): Result<Unit>
 }

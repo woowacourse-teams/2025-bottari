@@ -75,12 +75,12 @@ class TeamManagementFragment :
     private fun copyInviteCode() {
         val inviteCode =
             viewModel.uiState.value?.inviteCode ?: run {
-                requireView().showSnackbar(R.string.team_management_copy_invite_code_success_text)
+                requireView().showSnackbar(R.string.team_management_copy_invite_code_failure_text)
                 return
             }
         val clip = ClipData.newPlainText(LABEL_INVITE_CODE, inviteCode)
         clipboardManager.setPrimaryClip(clip)
-        requireView().showSnackbar(R.string.team_management_copy_invite_code_failure_text)
+        requireView().showSnackbar(R.string.team_management_copy_invite_code_success_text)
     }
 
     companion object {
