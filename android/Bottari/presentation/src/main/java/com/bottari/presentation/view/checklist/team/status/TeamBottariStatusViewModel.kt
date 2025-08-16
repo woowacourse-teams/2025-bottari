@@ -25,7 +25,7 @@ class TeamBottariStatusViewModel(
 ) : BaseViewModel<TeamBottariStatusUiState, TeamBottariStatusUiEvent>(
         TeamBottariStatusUiState(),
     ) {
-    private val teamBottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
+    private val teamBottariId: Long = stateHandle[KEY_ITEM_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
     init {
         fetchTeamStatus()
@@ -38,7 +38,7 @@ class TeamBottariStatusViewModel(
     fun remindTeamBottariItem() {
         viewModelScope.launch {
             remindTeamBottariItemUseCase(
-                currentState.selectedProduct?.id ?: throw IllegalArgumentException(),
+                currentState.selectedProduct?.id ?: throw IllegalArgumentException(ERROR_REQUIRE_BOTTARI_PRODUCT_ID),
                 currentState.selectedProduct?.type.toString(),
             ).onSuccess {
                 emitEvent(TeamBottariStatusUiEvent.SendRemindSuccess)
@@ -79,14 +79,15 @@ class TeamBottariStatusViewModel(
         }
 
     companion object {
-        const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
-        const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
+        private const val KEY_ITEM_BOTTARI_ID = "KEY_ITEM_BOTTARI_ID"
+        private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
+        private const val ERROR_REQUIRE_BOTTARI_PRODUCT_ID = "선택된 아이템의 id가 존재하지 않습니다"
 
         fun Factory(bottariId: Long): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_BOTTARI_ID] = bottariId
+                    stateHandle[KEY_ITEM_BOTTARI_ID] = bottariId
                     TeamBottariStatusViewModel(
                         stateHandle,
                         UseCaseProvider.fetchTeamStatusUseCase,
