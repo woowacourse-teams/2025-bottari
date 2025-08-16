@@ -4,6 +4,7 @@ import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
+import com.bottari.data.model.team.JoinTeamBottariRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.data.testFixture.TEAM_BOTTARI
 import com.bottari.data.testFixture.TEAM_BOTTARI_DETAIL
@@ -306,6 +307,9 @@ class TeamBottariRepositoryImplTest {
 
             // then
             result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.fetchTeamMembersStatus(id) }
         }
 
     @DisplayName("보채기 알림 전송에 성공하면 Success를 반환한다")
@@ -410,5 +414,44 @@ class TeamBottariRepositoryImplTest {
 
             // verify
             coVerify(exactly = 1) { dataSource.deleteTeamBottariItem(id, request) }
+        }
+
+    @DisplayName("팀 보따리 참가에 성공하면 Success를 반환한다")
+    @Test
+    fun joinTeamBottariReturnsSuccessTest() =
+        runTest {
+            // given
+            val inviteCode = "TEST123"
+            val request = JoinTeamBottariRequest(inviteCode)
+            coEvery { dataSource.joinTeamBottari(request) } returns Result.success(Unit)
+
+            // when
+            val result = repository.joinTeamBottari(inviteCode)
+
+            // then
+            result.shouldBeSuccess()
+
+            // verify
+            coVerify(exactly = 1) { dataSource.joinTeamBottari(request) }
+        }
+
+    @DisplayName("팀 보따리 참가에 실패하면 Failure를 반환한다")
+    @Test
+    fun joinTeamBottariReturnsFailureTest() =
+        runTest {
+            // given
+            val inviteCode = "TEST123"
+            val request = JoinTeamBottariRequest(inviteCode)
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery { dataSource.joinTeamBottari(request) } returns Result.failure(exception)
+
+            // when
+            val result = repository.joinTeamBottari(inviteCode)
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.joinTeamBottari(request) }
         }
 }
