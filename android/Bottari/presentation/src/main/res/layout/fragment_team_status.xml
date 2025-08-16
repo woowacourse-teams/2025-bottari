@@ -61,7 +61,6 @@
         app:layout_constraintTop_toBottomOf="@+id/rv_team_bottari_item_status_detail"
         tools:listitem="@layout/item_team_bottari_item_status">
 
-
     </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
