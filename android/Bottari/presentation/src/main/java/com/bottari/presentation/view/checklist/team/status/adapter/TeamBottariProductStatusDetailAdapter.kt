@@ -5,12 +5,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.MemberCheckStatusUiModel
 
-class TeamProductStatusDetailAdapter :
-    ListAdapter<MemberCheckStatusUiModel, TeamProductStatusDetailViewHolder>(
+class TeamBottariProductStatusDetailAdapter :
+    ListAdapter<MemberCheckStatusUiModel, TeamBottariProductStatusDetailViewHolder>(
         DiffUtil,
     ) {
     override fun onBindViewHolder(
-        holder: TeamProductStatusDetailViewHolder,
+        holder: TeamBottariProductStatusDetailViewHolder,
         position: Int,
     ) {
         holder.bind(getItem(position))
@@ -19,7 +19,7 @@ class TeamProductStatusDetailAdapter :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): TeamProductStatusDetailViewHolder = TeamProductStatusDetailViewHolder.from(parent)
+    ): TeamBottariProductStatusDetailViewHolder = TeamBottariProductStatusDetailViewHolder.from(parent)
 
     companion object {
         private val DiffUtil =

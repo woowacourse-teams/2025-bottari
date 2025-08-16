@@ -9,7 +9,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemChecklistMiniBinding
 import com.bottari.presentation.model.MemberCheckStatusUiModel
 
-class TeamProductStatusDetailViewHolder private constructor(
+class TeamBottariProductStatusDetailViewHolder private constructor(
     private val binding: ItemChecklistMiniBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: MemberCheckStatusUiModel) {
@@ -28,10 +28,10 @@ class TeamProductStatusDetailViewHolder private constructor(
     }
 
     companion object {
-        fun from(parent: ViewGroup): TeamProductStatusDetailViewHolder {
+        fun from(parent: ViewGroup): TeamBottariProductStatusDetailViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemChecklistMiniBinding.inflate(inflater, parent, false)
-            return TeamProductStatusDetailViewHolder(binding)
+            return TeamBottariProductStatusDetailViewHolder(binding)
         }
     }
 }

@@ -2,7 +2,7 @@ package com.bottari.presentation.model
 
 sealed interface TeamProductStatusItem
 
-data class TeamProductStatusUiModel(
+data class TeamBottariProductStatusUiModel(
     val id: Long,
     val name: String,
     val memberCheckStatus: List<MemberCheckStatusUiModel>,

@@ -12,16 +12,16 @@ import com.bottari.domain.usecase.team.RemindTeamBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.model.TeamBottariProductStatusUiModel
 import com.bottari.presentation.model.TeamBottariStatusUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
 import com.bottari.presentation.model.TeamProductStatusItem
-import com.bottari.presentation.model.TeamProductStatusUiModel
 import kotlinx.coroutines.launch
 
 data class TeamStatusUiState(
     val isLoading: Boolean = false,
     val teamChecklistStatus: TeamBottariStatusUiModel? = null,
-    val item: TeamProductStatusUiModel? = null,
+    val item: TeamBottariProductStatusUiModel? = null,
     val teamChecklistItems: List<TeamProductStatusItem> = listOf(),
 )
 
@@ -44,7 +44,7 @@ class TeamStatusViewModel(
         fetchTeamStatus()
     }
 
-    fun selectItem(item: TeamProductStatusUiModel) {
+    fun selectItem(item: TeamBottariProductStatusUiModel) {
         updateState { copy(item = item) }
     }
 
@@ -78,8 +78,8 @@ class TeamStatusViewModel(
                             teamChecklistItems = teamStatusListItems,
                             item =
                                 teamStatusListItems
-                                    .filter { it is TeamProductStatusUiModel }
-                                    .firstOrNull() as? TeamProductStatusUiModel,
+                                    .filter { it is TeamBottariProductStatusUiModel }
+                                    .firstOrNull() as? TeamBottariProductStatusUiModel,
                         )
                     }
                 }.onFailure {

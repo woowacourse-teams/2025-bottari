@@ -4,12 +4,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bottari.presentation.model.TeamBottariProductStatusUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
 import com.bottari.presentation.model.TeamProductStatusItem
-import com.bottari.presentation.model.TeamProductStatusUiModel
 
-class TeamProductStatusAdapter(
-    private val listener: TeamProductStatusViewHolder.OnTeamProductStatusItemClickListener,
+class TeamBottariProductStatusAdapter(
+    private val listener: TeamBottariProductStatusViewHolder.OnTeamProductStatusItemClickListener,
 ) : ListAdapter<TeamProductStatusItem, RecyclerView.ViewHolder>(
         DiffUtil,
     ) {
@@ -24,7 +24,7 @@ class TeamProductStatusAdapter(
 
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
-            is TeamProductStatusUiModel -> ITEM_VIEW_TYPE_TYPE
+            is TeamBottariProductStatusUiModel -> ITEM_VIEW_TYPE_TYPE
             is TeamChecklistTypeUiModel -> ITEM_VIEW_TYPE_ITEM
         }
 
@@ -34,11 +34,11 @@ class TeamProductStatusAdapter(
     ): RecyclerView.ViewHolder =
         when (viewType) {
             ITEM_VIEW_TYPE_TYPE -> {
-                TeamProductStatusViewHolder.from(parent, listener)
+                TeamBottariProductStatusViewHolder.from(parent, listener)
             }
 
             ITEM_VIEW_TYPE_ITEM -> {
-                TeamProductTypeViewHolder.from(parent)
+                TeamBottariProductTypeViewHolder.from(parent)
             }
 
             else -> throw IllegalArgumentException(ERROR_VIEW_TYPE)
@@ -50,11 +50,11 @@ class TeamProductStatusAdapter(
     ) {
         val item = getItem(position)
         when {
-            item is TeamProductStatusUiModel && holder is TeamProductStatusViewHolder -> {
+            item is TeamBottariProductStatusUiModel && holder is TeamBottariProductStatusViewHolder -> {
                 holder.bind(item, position == selectedPosition)
             }
 
-            item is TeamChecklistTypeUiModel && holder is TeamProductTypeViewHolder -> {
+            item is TeamChecklistTypeUiModel && holder is TeamBottariProductTypeViewHolder -> {
                 holder.bind(item)
             }
         }

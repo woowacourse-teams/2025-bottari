@@ -5,14 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamBottariItemStatusBinding
-import com.bottari.presentation.model.TeamProductStatusUiModel
+import com.bottari.presentation.model.TeamBottariProductStatusUiModel
 
-class TeamProductStatusViewHolder private constructor(
+class TeamBottariProductStatusViewHolder private constructor(
     private val binding: ItemTeamBottariItemStatusBinding,
     private val listener: OnTeamProductStatusItemClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(
-        item: TeamProductStatusUiModel,
+        item: TeamBottariProductStatusUiModel,
         isSelected: Boolean,
     ) {
         binding.root.setOnClickListener {
@@ -39,17 +39,17 @@ class TeamProductStatusViewHolder private constructor(
     }
 
     interface OnTeamProductStatusItemClickListener {
-        fun onItemClick(item: TeamProductStatusUiModel)
+        fun onItemClick(item: TeamBottariProductStatusUiModel)
     }
 
     companion object {
         fun from(
             parent: ViewGroup,
             listener: OnTeamProductStatusItemClickListener,
-        ): TeamProductStatusViewHolder {
+        ): TeamBottariProductStatusViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemTeamBottariItemStatusBinding.inflate(inflater, parent, false)
-            return TeamProductStatusViewHolder(binding, listener)
+            return TeamBottariProductStatusViewHolder(binding, listener)
         }
     }
 }

@@ -9,28 +9,28 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamStatusBinding
-import com.bottari.presentation.model.TeamProductStatusUiModel
-import com.bottari.presentation.view.checklist.team.status.adapter.TeamProductStatusAdapter
-import com.bottari.presentation.view.checklist.team.status.adapter.TeamProductStatusDetailAdapter
-import com.bottari.presentation.view.checklist.team.status.adapter.TeamProductStatusViewHolder
+import com.bottari.presentation.model.TeamBottariProductStatusUiModel
+import com.bottari.presentation.view.checklist.team.status.adapter.TeamBottariProductStatusAdapter
+import com.bottari.presentation.view.checklist.team.status.adapter.TeamBottariProductStatusDetailAdapter
+import com.bottari.presentation.view.checklist.team.status.adapter.TeamBottariProductStatusViewHolder
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class TeamStatusFragment :
+class TeamBottariStatusFragment :
     BaseFragment<FragmentTeamStatusBinding>(FragmentTeamStatusBinding::inflate),
-    TeamProductStatusViewHolder.OnTeamProductStatusItemClickListener {
+    TeamBottariProductStatusViewHolder.OnTeamProductStatusItemClickListener {
     private val viewModel: TeamStatusViewModel by viewModels {
         TeamStatusViewModel.Factory(requireArguments().getLong(ARG_BOTTARI_ID))
     }
 
-    private val teamProductStatusDetailAdapter: TeamProductStatusDetailAdapter by lazy {
-        TeamProductStatusDetailAdapter()
+    private val teamBottariProductStatusDetailAdapter: TeamBottariProductStatusDetailAdapter by lazy {
+        TeamBottariProductStatusDetailAdapter()
     }
 
-    private val teamProductStatusAdapter: TeamProductStatusAdapter by lazy {
-        TeamProductStatusAdapter(this)
+    private val teamBottariProductStatusAdapter: TeamBottariProductStatusAdapter by lazy {
+        TeamBottariProductStatusAdapter(this)
     }
 
     override fun onViewCreated(
@@ -45,10 +45,10 @@ class TeamStatusFragment :
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            teamProductStatusDetailAdapter.submitList(state.item?.memberCheckStatus)
+            teamBottariProductStatusDetailAdapter.submitList(state.item?.memberCheckStatus)
             binding.tvTeamBottariItemStatusTitle.text =
                 getString(R.string.team_product_status_title_format, state.item?.name)
-            teamProductStatusAdapter.submitList(state.teamChecklistItems)
+            teamBottariProductStatusAdapter.submitList(state.teamChecklistItems)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
@@ -60,14 +60,14 @@ class TeamStatusFragment :
     }
 
     private fun setupUI() {
-        binding.rvTeamBottariItemStatusDetail.adapter = teamProductStatusDetailAdapter
+        binding.rvTeamBottariItemStatusDetail.adapter = teamBottariProductStatusDetailAdapter
         binding.rvTeamBottariItemStatusDetail.layoutManager =
             FlexboxLayoutManager(requireContext()).apply {
                 flexDirection = FlexDirection.ROW
                 flexWrap = FlexWrap.WRAP
                 justifyContent = JustifyContent.FLEX_START
             }
-        binding.rvTeamBottariItems.adapter = teamProductStatusAdapter
+        binding.rvTeamBottariItems.adapter = teamBottariProductStatusAdapter
         binding.rvTeamBottariItems.layoutManager = LinearLayoutManager(requireContext())
     }
 
@@ -80,16 +80,16 @@ class TeamStatusFragment :
     companion object {
         private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
 
-        fun newInstance(bottariId: Long): TeamStatusFragment =
-            TeamStatusFragment().apply {
+        fun newInstance(bottariId: Long): TeamBottariStatusFragment =
+            TeamBottariStatusFragment().apply {
                 arguments = bundleOf(ARG_BOTTARI_ID to bottariId)
             }
     }
 
-    override fun onItemClick(item: TeamProductStatusUiModel) {
+    override fun onItemClick(item: TeamBottariProductStatusUiModel) {
         viewModel.selectItem(item)
-        teamProductStatusAdapter.updateSelectedPosition(
-            teamProductStatusAdapter.currentList.indexOf(
+        teamBottariProductStatusAdapter.updateSelectedPosition(
+            teamBottariProductStatusAdapter.currentList.indexOf(
                 item,
             ),
         )

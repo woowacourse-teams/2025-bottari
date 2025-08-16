@@ -9,7 +9,7 @@ import com.bottari.presentation.databinding.ItemTeamBottariTypeBinding
 import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
 
-class TeamProductTypeViewHolder private constructor(
+class TeamBottariProductTypeViewHolder private constructor(
     private val binding: ItemTeamBottariTypeBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: TeamChecklistTypeUiModel) {
@@ -25,10 +25,10 @@ class TeamProductTypeViewHolder private constructor(
         }
 
     companion object {
-        fun from(parent: ViewGroup): TeamProductTypeViewHolder {
+        fun from(parent: ViewGroup): TeamBottariProductTypeViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemTeamBottariTypeBinding.inflate(inflater, parent, false)
-            return TeamProductTypeViewHolder(binding)
+            return TeamBottariProductTypeViewHolder(binding)
         }
     }
 }

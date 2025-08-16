@@ -10,9 +10,9 @@ import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.MemberCheckStatusUiModel
+import com.bottari.presentation.model.TeamBottariProductStatusUiModel
 import com.bottari.presentation.model.TeamBottariStatusUiModel
 import com.bottari.presentation.model.TeamBottariUiModel
-import com.bottari.presentation.model.TeamProductStatusUiModel
 
 object TeamBottariMapper {
     fun TeamBottari.toUiModel(): TeamBottariUiModel =
@@ -38,8 +38,8 @@ object TeamBottariMapper {
             assignedItems = assignedItems.map { item -> item.toAssignedUiModel() },
         )
 
-    private fun TeamProductStatus.toSharedUiModel(): TeamProductStatusUiModel =
-        TeamProductStatusUiModel(
+    private fun TeamProductStatus.toSharedUiModel(): TeamBottariProductStatusUiModel =
+        TeamBottariProductStatusUiModel(
             id = id,
             name = name,
             memberCheckStatus = memberCheckStatus.map { item -> item.toUiModel() },
@@ -48,8 +48,8 @@ object TeamBottariMapper {
             type = BottariItemTypeUiModel.SHARED,
         )
 
-    private fun TeamProductStatus.toAssignedUiModel(): TeamProductStatusUiModel =
-        TeamProductStatusUiModel(
+    private fun TeamProductStatus.toAssignedUiModel(): TeamBottariProductStatusUiModel =
+        TeamBottariProductStatusUiModel(
             id = id,
             name = name,
             memberCheckStatus = memberCheckStatus.map { item -> item.toUiModel() },
