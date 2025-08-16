@@ -12,6 +12,7 @@ import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.ItemTypeRequest
+import com.bottari.data.model.team.JoinTeamBottariRequest
 
 interface TeamBottariRemoteDataSource {
     suspend fun createBottari(request: CreateTeamBottariRequest): Result<Long?>
@@ -67,4 +68,6 @@ interface TeamBottariRemoteDataSource {
         teamBottariId: Long,
         memberId: Long,
     ): Result<Unit>
+
+    suspend fun joinTeamBottari(request: JoinTeamBottariRequest): Result<Unit>
 }

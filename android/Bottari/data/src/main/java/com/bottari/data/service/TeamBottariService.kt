@@ -12,6 +12,7 @@ import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.ItemTypeRequest
+import com.bottari.data.model.team.JoinTeamBottariRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -100,5 +101,10 @@ interface TeamBottariService {
     suspend fun sendRemindByMemberMessage(
         @Path("teamBottariId") teamBottariId: Long,
         @Path("memberId") memberId: Long,
+    ): Response<Unit>
+
+    @POST("/team-bottaries/join")
+    suspend fun joinTeamBottari(
+        @Body request: JoinTeamBottariRequest,
     ): Response<Unit>
 }
