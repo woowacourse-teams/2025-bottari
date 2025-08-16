@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -74,5 +75,19 @@ public class Member {
         if (BadWordValidator.hasBadWord(name)) {
             throw new BusinessException(ErrorCode.MEMBER_NAME_OFFENSIVE);
         }
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (!(o instanceof final Member member)) {
+            return false;
+        }
+
+        return Objects.equals(getId(), member.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
     }
 }

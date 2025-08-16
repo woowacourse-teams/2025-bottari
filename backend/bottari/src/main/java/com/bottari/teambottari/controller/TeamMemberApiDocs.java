@@ -69,4 +69,25 @@ public interface TeamMemberApiDocs {
             final JoinTeamBottariRequest request,
             @Parameter(hidden = true) final String ssaid
     );
+
+    @Operation(summary = "팀 보따리 멤버 보채기")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "팀 보따리 멤버 보채기 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.MEMBER_NOT_FOUND,
+            ErrorCode.CANNOT_SEND_REMIND_TO_SELF,
+            ErrorCode.TEAM_BOTTARI_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI,
+            ErrorCode.TEAM_MEMBER_ALREADY_CHECKED_ALL,
+            ErrorCode.FCM_MESSAGE_CONVERT_FAIL,
+            ErrorCode.FCM_TOKEN_NOT_FOUND,
+            ErrorCode.FCM_INVALID_TOKEN,
+            ErrorCode.FCM_MESSAGE_SEND_FAIL
+    })
+    ResponseEntity<Void> sendRemindAlarmByMember(
+            final Long teamBottariId,
+            final Long memberId,
+            @Parameter(hidden = true) final String ssaid
+    );
 }
