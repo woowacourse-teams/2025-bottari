@@ -56,8 +56,8 @@ class TeamBottariStatusFragment :
                     requireView().showSnackbar(
                         R.string.team_status_fetch_failure_text,
                     )
-                TeamBottariStatusUiEvent.SendRemindSuccess -> requireView().showSnackbar(R.string.team_status_remind_success_text)
-                TeamBottariStatusUiEvent.SendRemindFailure -> requireView().showSnackbar(R.string.team_status_remind_failure_text)
+                TeamBottariStatusUiEvent.SendRemindSuccess -> requireView().showSnackbar(R.string.team_status_send_remind_success_text)
+                TeamBottariStatusUiEvent.SendRemindFailure -> requireView().showSnackbar(R.string.team_status_send_remind_failure_text)
             }
         }
     }
@@ -75,8 +75,8 @@ class TeamBottariStatusFragment :
     }
 
     private fun setupListener() {
-        binding.btnTeamBottariItemRemind.setOnClickListener {
-            viewModel.remindTeamBottariItem()
+        binding.btnTeamBottariItemSendRemind.setOnClickListener {
+            viewModel.sendRemindByItem()
         }
     }
 

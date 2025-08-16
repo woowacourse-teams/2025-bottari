@@ -39,7 +39,7 @@ interface TeamBottariService {
     ): Response<Unit>
 
     @POST("/team-items/{id}/remind")
-    suspend fun remindTeamBottariItem(
+    suspend fun sendRemindByItem(
         @Path("id") id: Long,
         @Body request: ItemTypeRequest,
     ): Response<Unit>

@@ -8,7 +8,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.team.FetchTeamStatusUseCase
-import com.bottari.domain.usecase.team.RemindTeamBottariItemUseCase
+import com.bottari.domain.usecase.team.SendRemindByItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamBottariMapper.toAssignedUiModel
 import com.bottari.presentation.mapper.TeamBottariMapper.toSharedUiModel
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class TeamBottariStatusViewModel(
     stateHandle: SavedStateHandle,
     private val fetchTeamStatusUseCase: FetchTeamStatusUseCase,
-    private val remindTeamBottariItemUseCase: RemindTeamBottariItemUseCase,
+    private val sendRemindByItemUseCase: SendRemindByItemUseCase,
 ) : BaseViewModel<TeamBottariStatusUiState, TeamBottariStatusUiEvent>(
         TeamBottariStatusUiState(),
     ) {
@@ -36,9 +36,9 @@ class TeamBottariStatusViewModel(
         updateState { copy(selectedProduct = item) }
     }
 
-    fun remindTeamBottariItem() {
+    fun sendRemindByItem() {
         viewModelScope.launch {
-            remindTeamBottariItemUseCase(
+            sendRemindByItemUseCase(
                 currentState.selectedProduct?.id ?: throw IllegalArgumentException(
                     ERROR_REQUIRE_BOTTARI_PRODUCT_ID,
                 ),
@@ -101,7 +101,7 @@ class TeamBottariStatusViewModel(
                     TeamBottariStatusViewModel(
                         stateHandle,
                         UseCaseProvider.fetchTeamStatusUseCase,
-                        UseCaseProvider.remindTeamBottariItemUseCase,
+                        UseCaseProvider.sendRemindByItemUseCase,
                     )
                 }
             }

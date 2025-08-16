@@ -30,7 +30,7 @@ interface TeamBottariRepository {
 
     suspend fun fetchTeamBottariStatus(id: Long): Result<TeamBottariStatus>
 
-    suspend fun remindTeamBottariItem(
+    suspend fun sendRemindByItem(
         id: Long,
         type: String,
     ): Result<Unit>

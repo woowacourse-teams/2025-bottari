@@ -55,12 +55,12 @@ class TeamBottariRepositoryImpl(
             .fetchTeamBottariStatus(id)
             .mapCatching { response -> response.toDomain() }
 
-    override suspend fun remindTeamBottariItem(
+    override suspend fun sendRemindByItem(
         id: Long,
         type: String,
     ): Result<Unit> =
         teamBottariRemoteDataSource
-            .remindTeamBottariItem(id, ItemTypeRequest(type))
+            .sendRemindByItem(id, ItemTypeRequest(type))
 
     override suspend fun fetchTeamMembersStatus(id: Long): Result<List<TeamMemberStatus>> =
         teamBottariRemoteDataSource

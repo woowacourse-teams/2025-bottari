@@ -107,8 +107,8 @@
     <string name="common_bottari_notification_message">보따리를 열어보고 준비 완료했는지 확인해보세요!</string>
     <string name="common_team_bottari_notification_title_text">%s</string>
     <string name="common_team_bottari_notification_item_changed_message_text">챙겨야 할 물건이 변경되었어요.</string>
-    <string name="common_team_bottari_notification_remind_by_member_message_text">아직 챙기지 않은 물건이 있어요.</string>
-    <string name="common_team_bottari_notification_remind_by_item_message_text">%s 챙겨 주세요.</string>
+    <string name="common_team_bottari_notification_send_remind_by_member_message_text">아직 챙기지 않은 물건이 있어요.</string>
+    <string name="common_team_bottari_notification_send_remind_by_item_message_text">%s 챙겨 주세요.</string>
 
     <!--  Splash Screen  -->
     <string name="splash_screen_permission_denied_text">권한이 거부되어 일부 기능이 제한돼요.\n기능 사용 시 다시 요청드릴게요.</string>
@@ -283,9 +283,9 @@
     <string name="team_product_status_format">%d / %d</string>
     <string name="team_product_status_title_format">%s 챙김 현황</string>
     <string name="team_status_fetch_failure_text">팀 보따리 현황을 불러오지 못했어요</string>
-    <string name="team_status_remind_success_text">알람을 설정했어요</string>
-    <string name="team_status_remind_failure_text">알람을 설정하지 못했어요</string>
-    <string name="team_status_remind_btn_text">보채기</string>
+    <string name="team_status_send_remind_success_text">알람을 설정했어요</string>
+    <string name="team_status_send_remind_failure_text">알람을 설정하지 못했어요</string>
+    <string name="team_status_send_remind_btn_text">보채기</string>
 
     <!-- Description 접근성 -->
     <string name="bottari_create_btn_description">보따리 만들기 버튼</string>

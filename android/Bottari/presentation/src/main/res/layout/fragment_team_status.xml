@@ -14,13 +14,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_x_large"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_team_bottari_item_remind"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_team_bottari_item_send_remind"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btn_team_bottari_item_remind"
+        app:layout_constraintTop_toTopOf="@+id/btn_team_bottari_item_send_remind"
         tools:text="목걸이 챙김 현황" />
 
     <TextView
-        android:id="@+id/btn_team_bottari_item_remind"
+        android:id="@+id/btn_team_bottari_item_send_remind"
         style="@style/Pretendard_Medium_20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:gravity="center"
         android:paddingHorizontal="@dimen/space_large"
         android:paddingVertical="@dimen/space_small"
-        android:text="@string/team_status_remind_btn_text"
+        android:text="@string/team_status_send_remind_btn_text"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -48,7 +48,7 @@
         android:paddingVertical="@dimen/space_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_team_bottari_item_status_title"
-        app:layout_constraintTop_toBottomOf="@+id/btn_team_bottari_item_remind"
+        app:layout_constraintTop_toBottomOf="@+id/btn_team_bottari_item_send_remind"
         tools:listitem="@layout/item_checklist_mini" />
 
     <androidx.recyclerview.widget.RecyclerView
