@@ -1,9 +1,9 @@
 package com.bottari.sse.component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -22,7 +22,7 @@ public class SseRepository {
     ) {
         teamBottariEmitters.computeIfAbsent(
                 teamBottariId,
-                key -> new ArrayList<>()
+                key -> new CopyOnWriteArrayList<>()
         ).add(sseEmitter);
     }
 
