@@ -18,46 +18,31 @@ import com.bottari.presentation.model.TeamChecklistTypeUiModel
 import com.bottari.presentation.model.TeamProductStatusItem
 import kotlinx.coroutines.launch
 
-data class TeamStatusUiState(
-    val isLoading: Boolean = false,
-    val teamChecklistStatus: TeamBottariStatusUiModel? = null,
-    val item: TeamBottariProductStatusUiModel? = null,
-    val teamChecklistItems: List<TeamProductStatusItem> = listOf(),
-)
-
-sealed interface TeamStatusUiEvent {
-    data object FetchTeamStatusFailure : TeamStatusUiEvent
-
-    data object SendRemindSuccess : TeamStatusUiEvent
-
-    data object SendRemindFailure : TeamStatusUiEvent
-}
-
-class TeamStatusViewModel(
+class TeamBottariStatusViewModel(
     private val stateHandle: SavedStateHandle,
     private val fetchTeamStatusUseCase: FetchTeamStatusUseCase,
     private val remindTeamBottariItemUseCase: RemindTeamBottariItemUseCase,
-) : BaseViewModel<TeamStatusUiState, TeamStatusUiEvent>(
-        TeamStatusUiState(),
+) : BaseViewModel<TeamBottariStatusUiState, TeamBottariStatusUiEvent>(
+        TeamBottariStatusUiState(),
     ) {
     init {
         fetchTeamStatus()
     }
 
     fun selectItem(item: TeamBottariProductStatusUiModel) {
-        updateState { copy(item = item) }
+        updateState { copy(selectedProduct = item) }
     }
 
     fun remindTeamBottariItem() {
         viewModelScope.launch {
             remindTeamBottariItemUseCase
                 .invoke(
-                    currentState.item?.id ?: throw IllegalArgumentException(),
-                    currentState.item?.type.toString(),
+                    currentState.selectedProduct?.id ?: throw IllegalArgumentException(),
+                    currentState.selectedProduct?.type.toString(),
                 ).onSuccess {
-                    emitEvent(TeamStatusUiEvent.SendRemindSuccess)
+                    emitEvent(TeamBottariStatusUiEvent.SendRemindSuccess)
                 }.onFailure {
-                    emitEvent(TeamStatusUiEvent.SendRemindFailure)
+                    emitEvent(TeamBottariStatusUiEvent.SendRemindFailure)
                 }
         }
     }
@@ -76,14 +61,14 @@ class TeamStatusViewModel(
                         copy(
                             teamChecklistStatus = teamBottariStatusUiModel,
                             teamChecklistItems = teamStatusListItems,
-                            item =
+                            selectedProduct =
                                 teamStatusListItems
                                     .filter { it is TeamBottariProductStatusUiModel }
                                     .firstOrNull() as? TeamBottariProductStatusUiModel,
                         )
                     }
                 }.onFailure {
-                    emitEvent(TeamStatusUiEvent.FetchTeamStatusFailure)
+                    emitEvent(TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure)
                 }
         }
     }
@@ -105,7 +90,7 @@ class TeamStatusViewModel(
                 initializer {
                     val stateHandle = createSavedStateHandle()
                     stateHandle[KEY_BOTTARI_ID] = bottariId
-                    TeamStatusViewModel(
+                    TeamBottariStatusViewModel(
                         stateHandle,
                         UseCaseProvider.fetchTeamStatusUseCase,
                         UseCaseProvider.remindTeamBottariItemUseCase,

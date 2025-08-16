@@ -21,8 +21,8 @@ import com.google.android.flexbox.JustifyContent
 class TeamBottariStatusFragment :
     BaseFragment<FragmentTeamStatusBinding>(FragmentTeamStatusBinding::inflate),
     TeamBottariProductStatusViewHolder.OnTeamProductStatusItemClickListener {
-    private val viewModel: TeamStatusViewModel by viewModels {
-        TeamStatusViewModel.Factory(requireArguments().getLong(ARG_BOTTARI_ID))
+    private val viewModel: TeamBottariStatusViewModel by viewModels {
+        TeamBottariStatusViewModel.Factory(requireArguments().getLong(ARG_BOTTARI_ID))
     }
 
     private val teamBottariProductStatusDetailAdapter: TeamBottariProductStatusDetailAdapter by lazy {
@@ -45,16 +45,19 @@ class TeamBottariStatusFragment :
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            teamBottariProductStatusDetailAdapter.submitList(state.item?.memberCheckStatus)
+            teamBottariProductStatusDetailAdapter.submitList(state.selectedProduct?.memberCheckStatus)
             binding.tvTeamBottariItemStatusTitle.text =
-                getString(R.string.team_product_status_title_format, state.item?.name)
+                getString(R.string.team_product_status_title_format, state.selectedProduct?.name)
             teamBottariProductStatusAdapter.submitList(state.teamChecklistItems)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
-                TeamStatusUiEvent.FetchTeamStatusFailure -> requireView().showSnackbar(R.string.team_status_fetch_failure_text)
-                TeamStatusUiEvent.SendRemindSuccess -> requireView().showSnackbar(R.string.team_status_remind_success_text)
-                TeamStatusUiEvent.SendRemindFailure -> requireView().showSnackbar(R.string.team_status_remind_failure_text)
+                TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure ->
+                    requireView().showSnackbar(
+                        R.string.team_status_fetch_failure_text,
+                    )
+                TeamBottariStatusUiEvent.SendRemindSuccess -> requireView().showSnackbar(R.string.team_status_remind_success_text)
+                TeamBottariStatusUiEvent.SendRemindFailure -> requireView().showSnackbar(R.string.team_status_remind_failure_text)
             }
         }
     }
