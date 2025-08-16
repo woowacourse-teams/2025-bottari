@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bottari.presentation.model.TeamChecklistExpendableTypeUiModel
+import com.bottari.presentation.model.TeamChecklistExpandableTypeUiModel
 import com.bottari.presentation.model.TeamChecklistItem
 import com.bottari.presentation.model.TeamChecklistProductUiModel
 
@@ -13,7 +13,7 @@ class TeamChecklistItemAdapter(
 ) : ListAdapter<TeamChecklistItem, RecyclerView.ViewHolder>(DiffCallback) {
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
-            is TeamChecklistExpendableTypeUiModel -> ITEM_VIEW_TYPE_TYPE
+            is TeamChecklistExpandableTypeUiModel -> ITEM_VIEW_TYPE_TYPE
             is TeamChecklistProductUiModel -> ITEM_VIEW_TYPE_ITEM
         }
 
@@ -39,7 +39,7 @@ class TeamChecklistItemAdapter(
     ) {
         val item = getItem(position)
         when {
-            item is TeamChecklistExpendableTypeUiModel && holder is TeamChecklistTypeViewHolder -> {
+            item is TeamChecklistExpandableTypeUiModel && holder is TeamChecklistTypeViewHolder -> {
                 holder.bind(item)
             }
 
@@ -65,7 +65,7 @@ class TeamChecklistItemAdapter(
                     newItem: TeamChecklistItem,
                 ): Boolean =
                     when {
-                        oldItem is TeamChecklistExpendableTypeUiModel && newItem is TeamChecklistExpendableTypeUiModel ->
+                        oldItem is TeamChecklistExpandableTypeUiModel && newItem is TeamChecklistExpandableTypeUiModel ->
                             oldItem.type == newItem.type
 
                         oldItem is TeamChecklistProductUiModel && newItem is TeamChecklistProductUiModel ->

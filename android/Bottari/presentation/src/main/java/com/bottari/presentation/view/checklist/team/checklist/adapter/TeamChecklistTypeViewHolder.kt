@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamChecklistOptionBinding
 import com.bottari.presentation.model.BottariItemTypeUiModel
-import com.bottari.presentation.model.TeamChecklistExpendableTypeUiModel
+import com.bottari.presentation.model.TeamChecklistExpandableTypeUiModel
 
 class TeamChecklistTypeViewHolder(
     private val binding: ItemTeamChecklistOptionBinding,
     private val onTeamChecklistTypeClickListener: OnTeamChecklistTypeClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
-    private var currentType: TeamChecklistExpendableTypeUiModel? = null
+    private var currentType: TeamChecklistExpandableTypeUiModel? = null
 
     init {
         binding.root.setOnClickListener {
@@ -23,7 +23,7 @@ class TeamChecklistTypeViewHolder(
         }
     }
 
-    fun bind(type: TeamChecklistExpendableTypeUiModel) {
+    fun bind(type: TeamChecklistExpandableTypeUiModel) {
         this.currentType = type
         binding.tvTeamChecklistItemTitle.setText(type.type.getStringResId())
         binding.ivTeamChecklistOption.rotation =

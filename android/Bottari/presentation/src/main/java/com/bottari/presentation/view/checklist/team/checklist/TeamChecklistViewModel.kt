@@ -14,7 +14,7 @@ import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
-import com.bottari.presentation.model.TeamChecklistExpendableTypeUiModel
+import com.bottari.presentation.model.TeamChecklistExpandableTypeUiModel
 import com.bottari.presentation.model.TeamChecklistItem
 import com.bottari.presentation.model.TeamChecklistProductUiModel
 import com.bottari.presentation.util.debounce
@@ -45,7 +45,7 @@ class TeamChecklistViewModel(
         updateState {
             val updatedExpandableItems =
                 expandableItems.map { item ->
-                    if (item is TeamChecklistExpendableTypeUiModel && item.type == type) {
+                    if (item is TeamChecklistExpandableTypeUiModel && item.type == type) {
                         item.copy(isExpanded = !item.isExpanded)
                     } else {
                         item
@@ -169,7 +169,7 @@ class TeamChecklistViewModel(
                 findItemsByType(currentExpandableItems, type)
 
             val newParent =
-                (typePageData ?: TeamChecklistExpendableTypeUiModel(type, emptyList()))
+                (typePageData ?: TeamChecklistExpandableTypeUiModel(type, emptyList()))
                     .copy(teamChecklistItems = typeItems[type] ?: emptyList())
 
             newExpandableList.add(newParent)
@@ -188,7 +188,7 @@ class TeamChecklistViewModel(
         currentExpandableItems: List<TeamChecklistItem>,
         type: BottariItemTypeUiModel,
     ) = currentExpandableItems
-        .filterIsInstance<TeamChecklistExpendableTypeUiModel>()
+        .filterIsInstance<TeamChecklistExpandableTypeUiModel>()
         .firstOrNull { it.type == type }
 
     private fun findItemToToggle(
