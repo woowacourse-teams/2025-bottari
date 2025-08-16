@@ -70,7 +70,7 @@ class TeamBottariRemoteDataSourceImpl(
         safeApiCall {
             teamBottariService.remind(id, type)
         }
-        
+
     override suspend fun fetchTeamMembers(id: Long): Result<FetchTeamMembersResponse> =
         safeApiCall { teamBottariService.fetchTeamMembers(id) }
 

@@ -66,5 +66,4 @@ class TeamBottariRepositoryImpl(
         teamBottariRemoteDataSource
             .fetchTeamMembersStatus(id)
             .mapCatching { responses -> responses.map { response -> response.toDomain() } }
-
 }

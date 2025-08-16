@@ -66,5 +66,4 @@ interface TeamBottariService {
     suspend fun fetchTeamMembersStatus(
         @Path("teamBottariId") id: Long,
     ): Response<List<FetchTeamMemberStatusResponse>>
-
 }
