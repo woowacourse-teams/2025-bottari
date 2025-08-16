@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.model.TeamChecklistExpandableTypeUiModel
 import com.bottari.presentation.model.TeamChecklistItem
 import com.bottari.presentation.model.TeamChecklistProductUiModel
-import com.bottari.presentation.model.TeamChecklistTypeUiModel
 
 class TeamChecklistItemAdapter(
     private val teamChecklistEventListener: TeamChecklistEventListener,
