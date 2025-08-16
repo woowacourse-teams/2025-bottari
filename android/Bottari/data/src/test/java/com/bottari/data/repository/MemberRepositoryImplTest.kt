@@ -170,5 +170,50 @@ class MemberRepositoryImplTest {
                 getOrThrow().id shouldBe 1
                 getOrThrow().name shouldBe "test"
             }
+
+            // verify
+            coVerify(exactly = 1) { remoteDataSource.checkRegisteredMember() }
+        }
+
+    @DisplayName("사용자 식별자 조회를 성공하면 Success를 반환한다")
+    @Test
+    fun getMemberIdentifierReturnsSuccess() =
+        runTest {
+            // given
+            val memberId = "test_member_id"
+            coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns
+                Result.success(
+                    memberId,
+                )
+
+            // when
+            val result = repository.getMemberIdentifier()
+
+            // then
+            assertSoftly(result) {
+                shouldBeSuccess()
+                getOrThrow() shouldBe memberId
+            }
+
+            // verify
+            coVerify(exactly = 1) { userInfoLocalDataSource.getMemberIdentifier() }
+        }
+
+    @DisplayName("사용자 식별자 조회를 실패하면 Failure를 반환한다")
+    @Test
+    fun getMemberIdentifierReturnsFailure() =
+        runTest {
+            // given
+            val exception = Exception()
+            coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns Result.failure(exception)
+
+            // when
+            val result = repository.getMemberIdentifier()
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) { userInfoLocalDataSource.getMemberIdentifier() }
         }
 }
