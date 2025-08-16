@@ -17,6 +17,7 @@ import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.TeamChecklistExpandableTypeUiModel
 import com.bottari.presentation.model.TeamChecklistItem
 import com.bottari.presentation.model.TeamChecklistProductUiModel
+import com.bottari.presentation.model.TeamChecklistTypeUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

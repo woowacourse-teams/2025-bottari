@@ -41,6 +41,13 @@
             android:exported="false" />
 
         <receiver android:name=".receiver.AlarmReceiver" />
-    </application>
 
+        <service
+            android:name=".service.fcm.ReminderMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
 </manifest>

@@ -210,7 +210,8 @@
                 android:layout_marginBottom="@dimen/space_2x_small"
                 android:background="@drawable/bg_white_radius_12dp"
                 android:elevation="2dp"
-                android:padding="@dimen/space_median">
+                android:padding="@dimen/space_median"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_alarm_location"

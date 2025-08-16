@@ -83,13 +83,8 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
         }
         onBackPressedDispatcher.addCallback {
             when {
-                notificationFlag && isMainChecklist() -> {
-                    navigateToHome()
-                    finish()
-                }
-
+                notificationFlag && isMainChecklist() -> navigateToHome()
                 isMainChecklist() -> finish()
-                else -> onBackPressedDispatcher.onBackPressed()
             }
         }
     }

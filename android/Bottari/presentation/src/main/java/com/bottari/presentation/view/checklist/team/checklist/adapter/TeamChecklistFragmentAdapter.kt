@@ -3,6 +3,7 @@ package com.bottari.presentation.view.checklist.team.checklist.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.bottari.presentation.view.checklist.team.TeamStatusFragment
 import com.bottari.presentation.view.checklist.team.checklist.TeamChecklistFragment
 import com.bottari.presentation.view.checklist.team.member.TeamMembersStatusFragment
 import com.bottari.presentation.view.checklist.team.status.TeamBottariStatusFragment
