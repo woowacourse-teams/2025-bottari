@@ -16,7 +16,7 @@ abstract class BaseFragment<VB : ViewBinding>(
     private var _binding: VB? = null
     val binding: VB get() = _binding!!
 
-    private val loadingDialog: LoadingDialog by lazy { LoadingDialog() }
+    private var loadingDialog: LoadingDialog? = null
     private var enterTime: Long = System.currentTimeMillis()
     private val stayDuration: Long get() = System.currentTimeMillis() - enterTime
 
@@ -76,6 +76,8 @@ abstract class BaseFragment<VB : ViewBinding>(
     override fun onDestroyView() {
         super.onDestroyView()
         BottariLogger.lifecycle(javaClass.simpleName)
+        loadingDialog?.dismiss()
+        loadingDialog = null
         _binding = null
     }
 
@@ -85,15 +87,16 @@ abstract class BaseFragment<VB : ViewBinding>(
     }
 
     protected fun toggleLoadingIndicator(isShow: Boolean) {
-        if (isShow) {
-            if (loadingDialog.isAdded || loadingDialog.isVisible || loadingDialog.isRemoving) return
-            if (childFragmentManager.isStateSaved) return
-
-            loadingDialog.show(childFragmentManager, LoadingDialog::class.java.name)
-            return
+        if (loadingDialog?.context != requireContext()) {
+            loadingDialog?.dismiss()
+            loadingDialog = LoadingDialog(requireContext())
         }
 
-        if (!loadingDialog.isAdded) return
-        loadingDialog.dismissAllowingStateLoss()
+        val dialog = loadingDialog ?: return
+        if (isShow) {
+            if (dialog.isShowing.not()) dialog.show()
+            return
+        }
+        if (dialog.isShowing) dialog.dismiss()
     }
 }
