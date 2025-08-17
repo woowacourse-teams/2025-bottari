@@ -12,6 +12,7 @@ import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
+import com.bottari.teambottari.dto.ReadPersonalItemResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
 import java.util.List;
@@ -31,6 +32,52 @@ class TeamPersonalItemServiceTest {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Nested
+    class GetAllByTeamBottariIdTest {
+
+        @DisplayName("팀 보따리 ID로 팀 보따리 개인 물품을 조회한다.")
+        @Test
+        void getAllByTeamBottariId() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(member);
+            entityManager.persist(anotherMember);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            final TeamMember anotherTeamMember = new TeamMember(teamBottari, anotherMember);
+            entityManager.persist(teamMember);
+            entityManager.persist(anotherTeamMember);
+
+            final TeamPersonalItem teamPersonalItem = new TeamPersonalItem("개인 물품", teamMember);
+            entityManager.persist(teamPersonalItem);
+            final TeamPersonalItem anotherTeamPersonalItem = new TeamPersonalItem("다른 개인 물품", anotherTeamMember);
+            entityManager.persist(anotherTeamPersonalItem);
+
+            // when
+            final List<ReadPersonalItemResponse> actual = teamPersonalItemService.getAllByTeamBottariId(
+                    teamBottari.getId(),
+                    member.getId()
+            );
+
+            // then
+            final List<ReadPersonalItemResponse> expected = List.of(
+                    // 다른 팀원의 개인 물품은 안나옴
+                    new ReadPersonalItemResponse(
+                            teamPersonalItem.getId(),
+                            teamPersonalItem.getName()
+                    )
+            );
+            assertAll(
+                    () -> assertThat(actual).hasSize(1),
+                    () -> assertThat(actual).isEqualTo(expected)
+            );
+        }
+    }
 
     @Nested
     class CreateTest {

@@ -9,6 +9,7 @@ import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.ReadAssignedItemResponse;
+import com.bottari.teambottari.dto.ReadPersonalItemResponse;
 import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
@@ -57,6 +58,19 @@ public class TeamItemFacade {
         validateMemberInTeam(teamBottari.getId(), member);
 
         return teamAssignedItemService.getAllByTeamBottariId(teamBottariId);
+    }
+
+    public List<ReadPersonalItemResponse> getPersonalItems(
+            final Long teamBottariId,
+            final String ssaid
+    ) {
+        final TeamBottari teamBottari = teamBottariRepository.findById(teamBottariId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_NOT_FOUND, "존재하지 않는 팀 보따리입니다."));
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        validateMemberInTeam(teamBottari.getId(), member);
+
+        return teamPersonalItemService.getAllByTeamBottariId(teamBottariId, member.getId());
     }
 
     @Transactional

@@ -5,6 +5,7 @@ import com.bottari.error.ErrorCode;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
+import com.bottari.teambottari.dto.ReadPersonalItemResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamPersonalItemRepository;
 import java.util.List;
@@ -17,6 +18,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class TeamPersonalItemService {
 
     private final TeamPersonalItemRepository teamPersonalItemRepository;
+
+    public List<ReadPersonalItemResponse> getAllByTeamBottariId(
+            final Long teamBottariId,
+            final Long memberId
+    ) {
+        final List<TeamPersonalItem> items = teamPersonalItemRepository.findAllByTeamBottariIdAndMemberId(
+                teamBottariId,
+                memberId
+        );
+
+        return items.stream()
+                .map(ReadPersonalItemResponse::from)
+                .toList();
+    }
 
     @Transactional
     public Long create(
