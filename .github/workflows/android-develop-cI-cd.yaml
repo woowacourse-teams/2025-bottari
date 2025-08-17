@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - an/develop
+  pull_request:
+    branches:
+      - an/develop 
 
 jobs:
   build-and-deploy:
@@ -64,6 +67,21 @@ jobs:
           VERSION_CODE: ${{ env.VERSION_CODE }}
           VERSION_NAME: ${{ env.VERSION_NAME }}
 
+      - name: Get commits since last release
+        id: commit-log
+        run: |
+          LAST_RELEASE_COMMIT=$(git log --grep="\[AN\].*Release v" --pretty=format:"%H" -n 1)
+
+          if [ -z "$LAST_RELEASE_COMMIT" ]; then
+            COMMITS=$(git log --pretty=format:"- %s")
+          else
+            COMMITS=$(git log ${LAST_RELEASE_COMMIT}..HEAD --pretty=format:"- %s")
+          fi
+
+          echo "COMMITS<<EOF" >> $GITHUB_ENV
+          echo "$COMMITS" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Deploy to Firebase
         id: firebase
         uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -72,6 +90,14 @@ jobs:
           serviceCredentialsFileContent: ${{ secrets.ANDROID_CREDENTIAL_FILE_CONTENT }}
           groups: BOTTARI_TEST_GROUP
           file: android/Bottari/app/build/outputs/apk/debug/app-debug.apk
+          releaseNotes: |
+            🚀 배포 노트
+            버전: ${{ env.VERSION_NAME }}-dev
+            빌드 번호: #${{ github.run_number }}
+            빌드 날짜: $(date +%Y-%m-%d)
+
+            주요 변경 사항:
+            ${{ env.COMMITS }}
 
       - name: Send Discord Notification
         if: always()
