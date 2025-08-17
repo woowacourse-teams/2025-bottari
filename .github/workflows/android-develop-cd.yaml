@@ -79,7 +79,7 @@ jobs:
           appId: ${{ secrets.ANDROID_FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.ANDROID_CREDENTIAL_FILE_CONTENT }}
           groups: BOTTARI_TEST_GROUP
-          file: ./app/build/outputs/apk/debug/app-debug.apk
+          file: android/Bottari/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Send Discord Notification
         if: always()
