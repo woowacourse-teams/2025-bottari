@@ -89,11 +89,8 @@ jobs:
                   "description": "an/develop 브랜치에 대한 Debug APK 배포가 완료되었습니다.",
                   "color": ${{ job.status == 'success' && 3066993 || 15158332 }},
                   "fields": [
-                    {"name": "🏷  VersionCode", "value": "${{ env.VERSION_CODE }}"},
-                    {"name": "🏷  VersionName", "value": "${{ env.VERSION_NAME }}", "inline": true},
-                    {"name": "🔨  빌드 번호", "value": "${{ github.run_number }}", "inline": true},
-                    {"name": "🌿  브랜치", "value": "an/develop"},
-                    {"name": "🔗  빌드 URL", "value": "[Action Log로 이동하기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": true}
+                    {"name": "🏷  버전", "value": "${{ env.VERSION_CODE }} · ${{ env.VERSION_NAME }} · #${{ github.run_number }}"},
+                    {"name": "🌿  브랜치 & 빌드", "value": "an/develop · [Action Log로 이동하기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"}
                   ],
                   "footer": {"text": "Bottari Develop CI/CD"},
                   "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.pushed_at }}"
