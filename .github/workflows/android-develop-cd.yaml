@@ -57,21 +57,6 @@ jobs:
           VERSION_CODE: ${{ env.VERSION_CODE }}
           VERSION_NAME: ${{ env.VERSION_NAME }}
 
-      - name: Check app directory
-        run: ls -al ./app
-
-      - name: Check build directory
-        run: ls -al ./app/build
-
-      - name: Check outputs directory
-        run: ls -al ./app/build/outputs
-
-      - name: Check apk directory
-        run: ls -al ./app/build/outputs/apk
-
-      - name: Check debug apk directory
-        run: ls -al ./app/build/outputs/apk/debug
-
       - name: Deploy to Firebase
         id: firebase
         uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -80,7 +65,7 @@ jobs:
           serviceCredentialsFileContent: ${{ secrets.ANDROID_CREDENTIAL_FILE_CONTENT }}
           groups: BOTTARI_TEST_GROUP
           file: android/Bottari/app/build/outputs/apk/debug/app-debug.apk
-
+      
       - name: Send Discord Notification
         if: always()
         uses: Ilshidur/action-discord@master
@@ -88,10 +73,43 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.ANDROID_DEVELOP_APP_DEPLOY_HOOK_URL }}
         with:
           args: |
-            ${{ github.job }} **Firebase Debug 배포**
-            - 브랜치: `an/develop`
-            - versionCode: `${{ env.VERSION_CODE }}`
-            - versionName: `${{ env.VERSION_NAME }}`
-            - 빌드 번호: `${{ github.run_number }}`
-            - 상태: ${{ job.status }}
-            - 빌드 URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            --embed '{
+              "title": "${{ job.status == 'success' && '✅ Firebase Debug 배포 성공' || '❌ Firebase Debug 배포 실패' }}",
+              "color": ${{ job.status == 'success' && 3066993 || 15158332 }},
+              "fields": [
+                {
+                  "name": "🌿 브랜치",
+                  "value": "an/develop",
+                  "inline": true
+                },
+                {
+                  "name": "🔢 versionCode",
+                  "value": "${{ env.VERSION_CODE }}",
+                  "inline": true
+                },
+                {
+                  "name": "🏷 versionName",
+                  "value": "${{ env.VERSION_NAME }}",
+                  "inline": true
+                },
+                {
+                  "name": "🔨 빌드 번호",
+                  "value": "${{ github.run_number }}",
+                  "inline": true
+                },
+                {
+                  "name": "⚡ 상태",
+                  "value": "${{ job.status }}",
+                  "inline": true
+                },
+                {
+                  "name": "🔗 빌드 URL",
+                  "value": "[View Build](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})",
+                  "inline": false
+                }
+              ],
+              "footer": {
+                "text": "Bottari Develop CD"
+              },
+              "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.pushed_at }}"
+            }'
