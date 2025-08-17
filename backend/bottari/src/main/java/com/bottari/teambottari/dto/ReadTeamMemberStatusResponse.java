@@ -3,6 +3,7 @@ package com.bottari.teambottari.dto;
 import java.util.List;
 
 public record ReadTeamMemberStatusResponse(
+        Long memberId,
         String teamMemberName,
         boolean isOwner,
         int totalItemsCount,

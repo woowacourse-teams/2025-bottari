@@ -1,6 +1,7 @@
 package com.bottari.teambottari.controller;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -10,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.dto.JoinTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamMemberInfoResponse;
+import com.bottari.teambottari.dto.ReadTeamMemberNameResponse;
 import com.bottari.teambottari.dto.ReadTeamMemberStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.service.TeamMemberService;
@@ -57,7 +59,27 @@ class TeamMemberControllerTest {
 
         // when & then
         mockMvc.perform(get("/team-bottaries/{teamBottariId}/members", teamBottariId)
-                        .header("ssaid", ssaid))
+                                .header("ssaid", ssaid))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @DisplayName("팀원들의 이름을 조회한다.")
+    @Test
+    void readTeamMemberNameInfo() throws Exception {
+        // given
+        final Long teamBottariId = 1L;
+        final String ssaid = "ssaid";
+        final List<ReadTeamMemberNameResponse> response = List.of(
+                new ReadTeamMemberNameResponse(1L, "nameA"),
+                new ReadTeamMemberNameResponse(2L, "nameB")
+        );
+        given(teamMemberService.getTeamMemberNamesByTeamBottariId(teamBottariId, ssaid))
+                .willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/team-bottaries/{teamBottariId}/members/name", teamBottariId)
+                                .header("ssaid", ssaid))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(response)));
     }
@@ -70,6 +92,7 @@ class TeamMemberControllerTest {
         final String ssaid = "ssaid";
         final List<ReadTeamMemberStatusResponse> response = List.of(
                 new ReadTeamMemberStatusResponse(
+                        1L,
                         "owner_name",
                         true,
                         2,
@@ -80,6 +103,7 @@ class TeamMemberControllerTest {
                         ),
                         List.of()
                 ), new ReadTeamMemberStatusResponse(
+                        2L,
                         "member_name",
                         false,
                         3,
@@ -119,5 +143,21 @@ class TeamMemberControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/team-members/" + teamMemberId));
+    }
+
+    @DisplayName("팀 보따리 멤버 보채기를 한다.")
+    @Test
+    void sendRemindAlarmByMember() throws Exception {
+        // given
+        final Long teamBottariId = 1L;
+        final Long memberId = 2L;
+        final String ssaid = "ssaid";
+        willDoNothing().given(teamMemberService)
+                .sendRemindAlarm(teamBottariId, memberId, ssaid);
+
+        // when & then
+        mockMvc.perform(post("/team-bottaries/{teamBottariId}/members/{memberId}/remind", teamBottariId, memberId)
+                        .header("ssaid", ssaid))
+                .andExpect(status().isNoContent());
     }
 }
