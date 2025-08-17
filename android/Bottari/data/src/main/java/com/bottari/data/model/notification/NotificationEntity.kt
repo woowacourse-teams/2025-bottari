@@ -9,7 +9,7 @@ import java.time.LocalTime
 data class NotificationEntity(
     @PrimaryKey val bottariId: Long,
     val bottariTitle: String,
-    val alarmId: Long,
+    val alarmId: Long?,
     val isActive: Boolean,
     val alarmType: String,
     val time: LocalTime,

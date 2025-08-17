@@ -15,7 +15,7 @@ object NotificationMapper {
         NotificationEntity(
             bottariId = bottariId,
             bottariTitle = bottariTitle,
-            alarmId = alarm.id!!,
+            alarmId = alarm.id,
             isActive = alarm.isActive,
             alarmType = alarm.alarmType.toTypeString(),
             time = alarm.time,
