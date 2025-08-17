@@ -57,6 +57,21 @@ jobs:
           VERSION_CODE: ${{ env.VERSION_CODE }}
           VERSION_NAME: ${{ env.VERSION_NAME }}
 
+      - name: Check app directory
+        run: ls -al ./app
+
+      - name: Check build directory
+        run: ls -al ./app/build
+
+      - name: Check outputs directory
+        run: ls -al ./app/build/outputs
+
+      - name: Check apk directory
+        run: ls -al ./app/build/outputs/apk
+
+      - name: Check debug apk directory
+        run: ls -al ./app/build/outputs/apk/debug
+
       - name: Deploy to Firebase
         id: firebase
         uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -69,9 +84,10 @@ jobs:
       - name: Send Discord Notification
         if: always()
         uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.ANDROID_DEVELOP_APP_DEPLOY_HOOK_URL }}
         with:
-          webhook: ${{ secrets.ANDROID_DEVELOP_APP_DEPLOY_HOOK_URL }}
-          message: |
+          args: |
             ${{ github.job }} **Firebase Debug 배포**
             - 브랜치: `an/develop`
             - versionCode: `${{ env.VERSION_CODE }}`
