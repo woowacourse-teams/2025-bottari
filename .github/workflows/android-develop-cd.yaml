@@ -47,7 +47,9 @@ jobs:
         run: echo "$LOCAL_PROPERTIES_CONTENTS" > ./local.properties
 
       - name: Assemble Debug APK
-        run: ./gradlew assembleDebug
+        run: |
+          ls -a
+          ./gradlew assembleDebug
         env:
           VERSION_CODE: ${{ env.VERSION_CODE }}
           VERSION_NAME: ${{ env.VERSION_NAME }}
