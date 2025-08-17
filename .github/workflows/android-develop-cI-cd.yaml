@@ -1,4 +1,4 @@
-name: Android Develop CD [ an/develop ]
+name: Android Develop CI/CD [ an/develop ]
 
 on:
   push:
@@ -81,18 +81,33 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.ANDROID_DEVELOP_APP_DEPLOY_HOOK_URL }}
         run: |
-          curl -H "Content-Type: application/json" \
-               -X POST \
-               -d '{
-                "embeds": [{
-                  "title": "${{ job.status == 'success' && '✅  Firebase Debug 배포 성공' || '❌  Firebase Debug 배포 실패' }}",
-                  "description": "Firebase Distribution - Debug APK 배포가 완료되었습니다.",
-                  "color": ${{ job.status == 'success' && 3066993 || 15158332 }},
-                  "fields": [
-                    {"name": "🌿  브랜치", "value": "an/develop"}
-                    {"name": "🏷  버전", "value": "CODE: ${{ env.VERSION_CODE }} NAME: ${{ env.VERSION_NAME }}-dev | BUILD_NUMVER: #${{ github.run_number }}"},
-                  ],
-                  "footer": {"text": "[Bottari Develop CI/CD](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"},
-                  "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.pushed_at }}"
-                }]
-               }' $DISCORD_WEBHOOK
+          STATUS_TITLE="${{ job.status == 'success' && '✅ Firebase Debug 배포 성공' || '❌ Firebase Debug 배포 실패' }}"
+          STATUS_COLOR="${{ job.status == 'success' && 3066993 || 15158332 }}"
+          BUILD_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          curl -H "Content-Type: application/json" -X POST -d "$(cat <<EOF
+          {
+            "embeds": [
+              {
+                "title": "$STATUS_TITLE",
+                "description": "Firebase Distribution - Debug APK 배포가 완료되었습니다.",
+                "color": $STATUS_COLOR,
+                "fields": [
+                  {
+                    "name": "🏷 버전 / 빌드",
+                    "value": "CODE: ${{ env.VERSION_CODE }} | NAME: ${{ env.VERSION_NAME }}-dev | #${{ github.run_number }}"
+                  },
+                  {
+                    "name": "🌿 브랜치 / Action Log",
+                    "value": "an/develop · [바로가기]($BUILD_URL)"
+                  }
+                ],
+                "footer": {
+                  "text": "Bottari Develop CI/CD · Action Log: $BUILD_URL"
+                },
+                "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.pushed_at }}"
+              }
+            ]
+          }
+          EOF
+          )" $DISCORD_WEBHOOK
