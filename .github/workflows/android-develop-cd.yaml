@@ -86,11 +86,11 @@ jobs:
                -d '{
                 "embeds": [{
                   "title": "${{ job.status == 'success' && '✅  Firebase Debug 배포 성공' || '❌  Firebase Debug 배포 실패' }}",
-                  "description": "an/develop 브랜치에 대한 Debug APK 배포가 완료되었습니다.",
+                  "description": "Debug APK 배포가 완료되었습니다.",
                   "color": ${{ job.status == 'success' && 3066993 || 15158332 }},
                   "fields": [
-                    {"name": "🏷  버전", "value": "${{ env.VERSION_CODE }} · ${{ env.VERSION_NAME }} · #${{ github.run_number }}"},
-                    {"name": "🌿  브랜치 & 빌드", "value": "an/develop · [Action Log로 이동하기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"}
+                    {"name": "🏷  버전", "value": "${{ env.VERSION_CODE }}  < ${{ env.VERSION_NAME }}-dev | #${{ github.run_number }} >"},
+                    {"name": "🌿  브랜치 & 빌드", "value": "an/develop · [Action Log](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"}
                   ],
                   "footer": {"text": "Bottari Develop CI/CD"},
                   "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.pushed_at }}"
