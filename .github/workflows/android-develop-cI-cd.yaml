@@ -75,7 +75,7 @@ jobs:
           serviceCredentialsFileContent: ${{ secrets.ANDROID_CREDENTIAL_FILE_CONTENT }}
           groups: BOTTARI_TEST_GROUP
           file: android/Bottari/app/build/outputs/apk/debug/app-debug.apk
-          
+
       - name: Send Discord Notification
         if: always()
         env:
@@ -84,7 +84,7 @@ jobs:
           STATUS_TITLE="${{ job.status == 'success' && '✅ Firebase Debug 배포 성공' || '❌ Firebase Debug 배포 실패' }}"
           STATUS_COLOR="${{ job.status == 'success' && 3066993 || 15158332 }}"
           BUILD_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-
+      
           curl -H "Content-Type: application/json" -X POST -d "$(cat <<EOF
           {
             "embeds": [
@@ -94,16 +94,20 @@ jobs:
                 "color": $STATUS_COLOR,
                 "fields": [
                   {
-                    "name": "🏷 버전 / 빌드",
-                    "value": "CODE: ${{ env.VERSION_CODE }} | NAME: ${{ env.VERSION_NAME }}-dev | #${{ github.run_number }}"
+                    "name": "🌿 브랜치",
+                    "value": "an/develop"
                   },
                   {
-                    "name": "🌿 브랜치 / Action Log",
-                    "value": "an/develop · [바로가기]($BUILD_URL)"
+                    "name": "🏷 버전 정보",
+                    "value": "CODE: ${{ env.VERSION_CODE }}   |   NAME: ${{ env.VERSION_NAME }}-dev   |   BUILD: #${{ github.run_number }}"
+                  },
+                  {
+                    "name": "🔗 Action Log",
+                    "value": "[바로가기]($BUILD_URL)"
                   }
                 ],
                 "footer": {
-                  "text": "Bottari Develop CI/CD · Action Log: $BUILD_URL"
+                  "text": "Bottari Develop CI/CD"
                 },
                 "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.pushed_at }}"
               }
