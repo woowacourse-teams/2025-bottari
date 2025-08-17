@@ -58,19 +58,6 @@ class InviteActivity : BaseActivity<ActivityInviteBinding>(ActivityInviteBinding
         viewModel.joinTeamBottari(inviteCode)
     }
 
-    private fun navigateToHome(isJoinSuccess: Boolean) {
-        val intent =
-            if (isJoinSuccess) {
-                HomeActivity.newIntentForDeeplink(this)
-            } else {
-                HomeActivity.newIntent(
-                    this,
-                )
-            }
-        startActivity(intent)
-        finish()
-    }
-
     private fun toggleLoadingIndicator(isShow: Boolean) {
         if (isShow) {
             if (loadingDialog.isAdded || loadingDialog.isVisible || loadingDialog.isRemoving) return
@@ -82,6 +69,17 @@ class InviteActivity : BaseActivity<ActivityInviteBinding>(ActivityInviteBinding
 
         if (!loadingDialog.isAdded) return
         loadingDialog.dismissAllowingStateLoss()
+    }
+
+    private fun navigateToHome(isJoinSuccess: Boolean) {
+        val intent = createIntent(isJoinSuccess)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun createIntent(isJoinSuccess: Boolean): Intent {
+        if (isJoinSuccess) return HomeActivity.newIntentForDeeplink(this)
+        return HomeActivity.newIntent(this)
     }
 
     companion object {
