@@ -16,12 +16,15 @@ import com.bottari.presentation.view.home.template.TemplateFragment
 import com.bottari.presentation.view.setting.SettingActivity
 
 class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::inflate) {
+    private val deeplinkFlag: Boolean by lazy { intent.getBooleanExtra(KEY_DEEPLINK, false) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupUI()
         setupListener()
         if (savedInstanceState == null) {
-            binding.bnvHome.selectedItemId = R.id.menu_personal_bottari
+            binding.bnvHome.selectedItemId =
+                if (deeplinkFlag) R.id.menu_team_bottari else R.id.menu_personal_bottari
         }
     }
 
@@ -63,6 +66,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
     }
 
     companion object {
+        private const val KEY_DEEPLINK = "KEY_DEEPLINK"
+
         fun newIntent(context: Context) = Intent(context, HomeActivity::class.java)
+
+        fun newIntentForDeeplink(context: Context) =
+            Intent(context, HomeActivity::class.java).apply {
+                putExtra(KEY_DEEPLINK, true)
+            }
     }
 }

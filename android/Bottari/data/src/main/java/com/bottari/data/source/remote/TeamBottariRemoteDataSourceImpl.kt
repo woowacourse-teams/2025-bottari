@@ -15,6 +15,7 @@ import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.ItemTypeRequest
+import com.bottari.data.model.team.JoinTeamBottariRequest
 import com.bottari.data.service.TeamBottariService
 
 class TeamBottariRemoteDataSourceImpl(
@@ -117,6 +118,9 @@ class TeamBottariRemoteDataSourceImpl(
         teamBottariId: Long,
         memberId: Long,
     ): Result<Unit> = safeApiCall { teamBottariService.sendRemindByMemberMessage(teamBottariId, memberId) }
+
+    override suspend fun joinTeamBottari(request: JoinTeamBottariRequest): Result<Unit> =
+        safeApiCall { teamBottariService.joinTeamBottari(request) }
 
     companion object {
         private const val HEADER_TEAM_BOTTARI_ID_PREFIX = "/team-bottaries/"

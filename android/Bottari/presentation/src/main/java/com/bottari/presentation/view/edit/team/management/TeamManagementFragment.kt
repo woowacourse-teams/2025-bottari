@@ -11,6 +11,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamManagementBinding
+import com.bottari.presentation.util.DeeplinkHelper.createDeeplink
 import com.bottari.presentation.view.edit.team.management.adapter.TeamMemberAdapter
 
 class TeamManagementFragment :
@@ -78,7 +79,8 @@ class TeamManagementFragment :
                 requireView().showSnackbar(R.string.team_management_copy_invite_code_failure_text)
                 return
             }
-        val clip = ClipData.newPlainText(LABEL_INVITE_CODE, inviteCode)
+        val inviteLink = createDeeplink(inviteCode)
+        val clip = ClipData.newPlainText(LABEL_INVITE_CODE, inviteLink)
         clipboardManager.setPrimaryClip(clip)
         requireView().showSnackbar(R.string.team_management_copy_invite_code_success_text)
     }

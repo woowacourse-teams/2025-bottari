@@ -9,6 +9,7 @@ import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
 import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.ItemTypeRequest
+import com.bottari.data.model.team.JoinTeamBottariRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.TeamBottari
@@ -119,4 +120,7 @@ class TeamBottariRepositoryImpl(
             teamBottariId,
             memberId,
         )
+
+    override suspend fun joinTeamBottari(inviteCode: String): Result<Unit> =
+        teamBottariRemoteDataSource.joinTeamBottari(JoinTeamBottariRequest(inviteCode))
 }

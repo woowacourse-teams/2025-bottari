@@ -63,4 +63,6 @@ interface TeamBottariRepository {
         teamBottariId: Long,
         memberId: Long,
     ): Result<Unit>
+
+    suspend fun joinTeamBottari(inviteCode: String): Result<Unit>
 }

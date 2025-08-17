@@ -18,7 +18,7 @@ object TeamMembersMapper {
 
     fun TeamMemberStatus.toUiModel(): TeamMemberStatusUiModel =
         TeamMemberStatusUiModel(
-            member = TeamMemberUiModel(null, nickname.value, isHost),
+            member = TeamMemberUiModel(id, nickname.value, isHost),
             totalItemsCount = totalItemsCount,
             checkedItemsCount = checkedItemsCount,
             sharedItems = sharedItems.map { sharedItem -> sharedItem.toUiModel() },
