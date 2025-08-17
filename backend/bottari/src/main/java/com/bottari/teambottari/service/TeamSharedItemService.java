@@ -16,6 +16,7 @@ import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
+import com.bottari.teambottari.event.CreateTeamSharedItemEvent;
 import com.bottari.teambottari.repository.TeamMemberRepository;
 import com.bottari.teambottari.repository.TeamSharedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamSharedItemRepository;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,7 @@ public class TeamSharedItemService {
 
     private final FcmMessageSender fcmMessageSender;
     private final FcmMessageConverter fcmMessageConverter;
+    private final ApplicationEventPublisher applicationEventPublisher;
     private final TeamSharedItemRepository teamSharedItemRepository;
     private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
     private final TeamMemberRepository teamMemberRepository;
@@ -58,6 +61,7 @@ public class TeamSharedItemService {
         final TeamSharedItemInfo savedTeamSharedItemInfo = saveTeamSharedItemInfo(request.name(), teamBottari);
         final List<TeamMember> teamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId());
         saveSharedItemToTeamMembers(savedTeamSharedItemInfo, teamMembers);
+        publishCreateEvent(savedTeamSharedItemInfo);
 
         return savedTeamSharedItemInfo.getId();
     }
@@ -166,6 +170,17 @@ public class TeamSharedItemService {
                 .map(member -> new TeamSharedItem(savedTeamSharedItemInfo, member))
                 .toList();
         teamSharedItemRepository.saveAll(teamSharedItems);
+    }
+
+    private void publishCreateEvent(
+            final TeamSharedItemInfo info
+    ) {
+        final CreateTeamSharedItemEvent event = new CreateTeamSharedItemEvent(
+                info.getTeamBottari().getId(),
+                info.getId(),
+                info.getName()
+        );
+        applicationEventPublisher.publishEvent(event);
     }
 
     private Map<TeamSharedItemInfo, List<TeamSharedItem>> groupByInfo(final List<TeamSharedItem> items) {
