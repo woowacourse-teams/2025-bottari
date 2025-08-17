@@ -43,7 +43,7 @@ class TeamPersonalItemEditFragment :
     }
 
     private fun setupObserver() {
-        parentViewModel.uiEvent.observe(viewLifecycleOwner, ::handleParentUiEvent)
+        parentViewModel.createItemEvent.observe(viewLifecycleOwner, ::handleParentUiEvent)
         parentViewModel.uiState.observe(viewLifecycleOwner, ::handleParentUiState)
         viewModel.uiState.observe(viewLifecycleOwner, ::handleUiState)
         viewModel.uiEvent.observe(viewLifecycleOwner, ::handleUiEvent)
@@ -59,7 +59,7 @@ class TeamPersonalItemEditFragment :
         viewModel.updateInput(uiState.itemInputText)
     }
 
-    private fun handleParentUiEvent(uiEvent: TeamItemEditUiEvent) {
+    private fun handleParentUiEvent(uiEvent: TeamItemEditUiEvent?) {
         if (uiEvent !is TeamItemEditUiEvent.CreateTeamPersonalItem) return
         viewModel.createItem()
     }
