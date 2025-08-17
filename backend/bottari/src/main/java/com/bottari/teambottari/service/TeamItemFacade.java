@@ -38,10 +38,8 @@ public class TeamItemFacade {
             final Long teamBottariId,
             final String ssaid
     ) {
-        final TeamBottari teamBottari = teamBottariRepository.findById(teamBottariId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_NOT_FOUND, "존재하지 않는 팀 보따리입니다."));
-        final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        final TeamBottari teamBottari = getTeamBottariById(teamBottariId);
+        final Member member = getMemberBySsaid(ssaid);
         validateMemberInTeam(teamBottari.getId(), member);
 
         return teamSharedItemService.getAllByTeamBottariId(teamBottariId);
@@ -51,10 +49,8 @@ public class TeamItemFacade {
             final Long teamBottariId,
             final String ssaid
     ) {
-        final TeamBottari teamBottari = teamBottariRepository.findById(teamBottariId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_NOT_FOUND, "존재하지 않는 팀 보따리입니다."));
-        final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        final TeamBottari teamBottari = getTeamBottariById(teamBottariId);
+        final Member member = getMemberBySsaid(ssaid);
         validateMemberInTeam(teamBottari.getId(), member);
 
         return teamAssignedItemService.getAllByTeamBottariId(teamBottariId);
@@ -64,10 +60,8 @@ public class TeamItemFacade {
             final Long teamBottariId,
             final String ssaid
     ) {
-        final TeamBottari teamBottari = teamBottariRepository.findById(teamBottariId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_NOT_FOUND, "존재하지 않는 팀 보따리입니다."));
-        final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        final TeamBottari teamBottari = getTeamBottariById(teamBottariId);
+        final Member member = getMemberBySsaid(ssaid);
         validateMemberInTeam(teamBottari.getId(), member);
 
         return teamPersonalItemService.getAllByTeamBottariId(teamBottariId, member.getId());
@@ -80,8 +74,7 @@ public class TeamItemFacade {
             final String ssaid
     ) {
         validateTeamBottari(teamBottariId);
-        final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        final Member member = getMemberBySsaid(ssaid);
         validateMemberInTeam(teamBottariId, member);
         final TeamMember teamMember = getTeamMemberByTeamBottariIdAndSsaid(teamBottariId, ssaid);
 
@@ -107,8 +100,7 @@ public class TeamItemFacade {
             final String ssaid
     ) {
         validateTeamBottari(teamBottariId);
-        final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        final Member member = getMemberBySsaid(ssaid);
         validateMemberInTeam(teamBottariId, member);
         final TeamMember teamMember = getTeamMemberByTeamBottariIdAndSsaid(teamBottariId, ssaid);
 
@@ -132,8 +124,7 @@ public class TeamItemFacade {
             final String ssaid
     ) {
         validateTeamBottari(teamBottariId);
-        final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        final Member member = getMemberBySsaid(ssaid);
         validateMemberInTeam(teamBottariId, member);
         final List<TeamItemStatusResponse> sharedItemResponses = teamSharedItemService.getAllWithMemberStatusByTeamBottariId(
                 teamBottariId);
@@ -190,6 +181,16 @@ public class TeamItemFacade {
             case PERSONAL -> throw new BusinessException(
                     ErrorCode.TEAM_BOTTARI_ITEM_INAPPROPRIATE_TYPE, "보채기 알람은 공통/담당 물품만 가능합니다.");
         }
+    }
+
+    private TeamBottari getTeamBottariById(final Long teamBottariId) {
+        return teamBottariRepository.findById(teamBottariId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_NOT_FOUND));
+    }
+
+    private Member getMemberBySsaid(final String ssaid) {
+        return memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
     }
 
     private TeamMember getTeamMemberByTeamBottariIdAndSsaid(

@@ -154,7 +154,7 @@ public class TeamItemFacadeTest {
             // when & then
             assertThatThrownBy(() -> teamItemFacade.getSharedItems(invalid_teamBottariId, ssaid))
                     .isInstanceOf(BusinessException.class)
-                    .hasMessage("팀 보따리를 찾을 수 없습니다. - 존재하지 않는 팀 보따리입니다.");
+                    .hasMessage("팀 보따리를 찾을 수 없습니다.");
         }
 
         @DisplayName("공통 물품을 조회할 때, 가입되지 않은 멤버의 ssaid를 입력하면 예외를 던진다.")
@@ -263,7 +263,7 @@ public class TeamItemFacadeTest {
             // when & then
             assertThatThrownBy(() -> teamItemFacade.getAssignedItems(invalid_teamBottariId, ssaid))
                     .isInstanceOf(BusinessException.class)
-                    .hasMessage("팀 보따리를 찾을 수 없습니다. - 존재하지 않는 팀 보따리입니다.");
+                    .hasMessage("팀 보따리를 찾을 수 없습니다.");
         }
 
         @DisplayName("담당 물품을 조회할 때, 가입되지 않은 멤버의 ssaid를 입력하면 예외를 던진다.")
@@ -361,7 +361,7 @@ public class TeamItemFacadeTest {
             // when & then
             assertThatThrownBy(() -> teamItemFacade.getPersonalItems(invalid_teamBottariId, ssaid))
                     .isInstanceOf(BusinessException.class)
-                    .hasMessage("팀 보따리를 찾을 수 없습니다. - 존재하지 않는 팀 보따리입니다.");
+                    .hasMessage("팀 보따리를 찾을 수 없습니다.");
         }
 
         @DisplayName("개인 물품을 조회할 때, 가입되지 않은 멤버의 ssaid를 입력하면 예외를 던진다.")
