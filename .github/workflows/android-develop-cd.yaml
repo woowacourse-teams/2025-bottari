@@ -48,7 +48,7 @@ jobs:
 
       - name: Assemble Debug APK
         run: |
-          ls -a ./app
+          cat ./app/google-services.json
           ./gradlew assembleDebug
         env:
           VERSION_CODE: ${{ env.VERSION_CODE }}
