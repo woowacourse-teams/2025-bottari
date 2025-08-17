@@ -11,8 +11,7 @@ public record ReadAssignedItemResponse(
 ) {
 
     public static ReadAssignedItemResponse from(
-            final
-            TeamAssignedItemInfo teamAssignedItemInfo,
+            final TeamAssignedItemInfo teamAssignedItemInfo,
             final List<Member> members
     ) {
         return new ReadAssignedItemResponse(
