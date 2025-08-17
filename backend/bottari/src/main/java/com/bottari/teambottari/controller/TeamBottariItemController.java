@@ -3,6 +3,7 @@ package com.bottari.teambottari.controller;
 import com.bottari.config.MemberIdentifier;
 import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
+import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemTypeRequest;
@@ -33,6 +34,17 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
             @MemberIdentifier final String ssaid
     ) {
         final List<ReadSharedItemResponse> responses = teamItemFacade.getSharedItems(teamBottariId, ssaid);
+
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/team-bottaries/{teamBottariId}/assigned-items")
+    @Override
+    public ResponseEntity<List<ReadAssignedItemResponse>> readAssignedItems(
+            @PathVariable final Long teamBottariId,
+            @MemberIdentifier final String ssaid
+    ) {
+        final List<ReadAssignedItemResponse> responses = teamItemFacade.getAssignedItems(teamBottariId, ssaid);
 
         return ResponseEntity.ok(responses);
     }

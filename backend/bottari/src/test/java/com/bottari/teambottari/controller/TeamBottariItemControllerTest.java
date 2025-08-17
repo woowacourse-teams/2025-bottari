@@ -15,6 +15,7 @@ import com.bottari.log.LogFormatter;
 import com.bottari.teambottari.domain.TeamItemType;
 import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
+import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
@@ -66,6 +67,42 @@ class TeamBottariItemControllerTest {
 
         // when & then
         mockMvc.perform(get("/team-bottaries/{teamBottariId}/shared-items", teamBottariId)
+                        .header("ssaid", ssaid))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(responses)));
+    }
+
+    @DisplayName("팀 보따리 담당 물품을 성공적으로 조회한다.")
+    @Test
+    void readAssignedItems() throws Exception {
+        // given
+        final Long teamBottariId = 1L;
+        final String ssaid = "test-ssaid";
+
+        final List<ReadAssignedItemResponse> responses = List.of(
+                new ReadAssignedItemResponse(
+                        1L,
+                        "담당 물품1",
+                        List.of(
+                                new ReadAssignedItemResponse.Assignee(1L, "다이스"),
+                                new ReadAssignedItemResponse.Assignee(2L, "방벨로")
+                        )
+                ),
+                new ReadAssignedItemResponse(
+                        2L,
+                        "담당 물품2",
+                        List.of(
+                                new ReadAssignedItemResponse.Assignee(1L, "이오이"),
+                                new ReadAssignedItemResponse.Assignee(2L, "방벨로")
+                        )
+                )
+        );
+
+        given(teamItemFacade.getAssignedItems(teamBottariId, ssaid))
+                .willReturn(responses);
+
+        // when & then
+        mockMvc.perform(get("/team-bottaries/{teamBottariId}/assigned-items", teamBottariId)
                         .header("ssaid", ssaid))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(responses)));
