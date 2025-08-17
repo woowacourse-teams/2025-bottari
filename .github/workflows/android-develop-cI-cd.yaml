@@ -6,7 +6,15 @@ on:
       - an/develop
   pull_request:
     branches:
-      - an/develop 
+      - an/develop
+  workflow_dispatch:
+    inputs:
+      versionName:
+        description: '버전 이름 (예: 1.0.5)'
+        required: false
+      releaseNotes:
+        description: '릴리즈 노트'
+        required: false
 
 jobs:
   build-and-deploy:
@@ -50,9 +58,13 @@ jobs:
           DATE_CODE=$(date +%y%m%d)
           echo "VERSION_CODE=1${DATE_CODE}${BUILD_NUMBER}" >> $GITHUB_ENV
 
-      - name: Get versionName from Gradle
+      - name: Get versionName
         run: |
-          VERSION_NAME=$(./gradlew -q printVersionName)
+          if [ -n "${{ github.event.inputs.versionName }}" ]; then
+            VERSION_NAME="${{ github.event.inputs.versionName }}"
+          else
+            VERSION_NAME=$(./gradlew -q printVersionName)
+          fi
           echo "VERSION_NAME=${VERSION_NAME}" >> $GITHUB_ENV
 
       - name: Create google-services.json
@@ -71,20 +83,23 @@ jobs:
         id: commit-log
         run: |
           git fetch origin an/develop
-      
+
           LAST_RELEASE_COMMIT=$(git log origin/an/develop --grep="\[AN\].*Release v" --pretty=format:"%H" -n 1)
-      
+
           if [ -z "$LAST_RELEASE_COMMIT" ]; then
             COMMITS=$(git log origin/an/develop --pretty=format:"- %s" --no-merges | grep "\[AN\]")
           else
-          
             COMMITS=$(git log ${LAST_RELEASE_COMMIT}..origin/an/develop --pretty=format:"- %s" --no-merges | grep "\[AN\]")
           fi
-      
+
           echo "COMMITS<<EOF" >> $GITHUB_ENV
-          echo "$COMMITS" >> $GITHUB_ENV
+          if [ -n "${{ github.event.inputs.releaseNotes }}" ]; then
+            echo "${{ github.event.inputs.releaseNotes }}" >> $GITHUB_ENV
+          else
+            echo "$COMMITS" >> $GITHUB_ENV
+          fi
           echo "EOF" >> $GITHUB_ENV
-      
+
           echo "📝 릴리즈 노트에 포함될 커밋 목록:"
           echo "$COMMITS"
 
@@ -100,7 +115,6 @@ jobs:
             🚀 배포 노트
             버전: ${{ env.VERSION_NAME }}-dev
             빌드 번호: #${{ github.run_number }}
-            빌드 날짜: $(date +%Y-%m-%d)
 
             주요 변경 사항:
             ${{ env.COMMITS }}
@@ -113,7 +127,7 @@ jobs:
           STATUS_TITLE="${{ job.status == 'success' && '✅ Firebase Debug 배포 성공' || '❌ Firebase Debug 배포 실패' }}"
           STATUS_COLOR="${{ job.status == 'success' && 3066993 || 15158332 }}"
           BUILD_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-      
+
           curl -H "Content-Type: application/json" -X POST -d "$(cat <<EOF
           {
             "embeds": [
@@ -128,7 +142,7 @@ jobs:
                   },
                   {
                     "name": "🏷 버전 정보",
-                   "value": " ${{ env.VERSION_NAME }}-dev ・ #${{ github.run_number }} (code: ${{ env.VERSION_CODE }})"
+                    "value": " ${{ env.VERSION_NAME }}-dev ・ #${{ github.run_number }} <${{ env.VERSION_CODE }}>"
                   },
                   {
                     "name": "🔗 Action Log",
