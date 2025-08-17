@@ -1,25 +1,24 @@
-package com.bottari.presentation.view.edit.personal.item.adapter
+package com.bottari.presentation.view.edit.team.item.personal.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.BottariItemUiModel
-import com.bottari.presentation.view.edit.personal.item.listener.OnEditItemClickListener
 
-class PersonalItemEditAdapter(
-    private val onEditItemClickListener: OnEditItemClickListener,
-) : ListAdapter<BottariItemUiModel, PersonalItemEditViewHolder>(DiffUtil) {
+class TeamPersonalItemEditAdapter(
+    private val eventListener: TeamPersonalItemEditEventListener,
+) : ListAdapter<BottariItemUiModel, TeamPersonalItemEditViewHolder>(DiffUtil) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): PersonalItemEditViewHolder = PersonalItemEditViewHolder.from(parent, onEditItemClickListener)
+    ): TeamPersonalItemEditViewHolder = TeamPersonalItemEditViewHolder.from(parent, eventListener)
 
     override fun onBindViewHolder(
-        holder: PersonalItemEditViewHolder,
+        holder: TeamPersonalItemEditViewHolder,
         position: Int,
-    ) {
-        holder.bind(getItem(position))
-    }
+    ) = holder.bind(getItem(position))
+
+    interface TeamPersonalItemEditEventListener : TeamPersonalItemEditViewHolder.OnEditItemClickListener
 
     companion object {
         private val DiffUtil =

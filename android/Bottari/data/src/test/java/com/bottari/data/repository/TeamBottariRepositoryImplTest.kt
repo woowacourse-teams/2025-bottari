@@ -1,6 +1,7 @@
 package com.bottari.data.repository
 
 import com.bottari.data.model.team.CreateTeamBottariRequest
+import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
@@ -10,6 +11,7 @@ import com.bottari.data.testFixture.TEAM_BOTTARI_DETAIL_RESPONSE
 import com.bottari.data.testFixture.TEAM_BOTTARI_RESPONSE
 import com.bottari.data.testFixture.TEAM_MEMBERS_STATUS
 import com.bottari.data.testFixture.TEAM_MEMBERS_STATUS_RESPONSE
+import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.HeadCount
 import com.bottari.domain.model.team.TeamBottariCheckList
@@ -285,6 +287,9 @@ class TeamBottariRepositoryImplTest {
                 shouldBeSuccess()
                 getOrThrow().shouldBe(TEAM_MEMBERS_STATUS)
             }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.fetchTeamMembersStatus(id) }
         }
 
     @DisplayName("팀 멤버 현황 조회에 실패하면 Failure를 반환한다")
@@ -322,6 +327,11 @@ class TeamBottariRepositoryImplTest {
 
             // then
             result.shouldBeSuccess()
+
+            // verify
+            coVerify(exactly = 1) {
+                dataSource.sendRemindByMemberMessage(teamBottariId, memberId)
+            }
         }
 
     @DisplayName("보채기 알림 전송에 실패하면 Failure를 반환한다")
@@ -344,5 +354,61 @@ class TeamBottariRepositoryImplTest {
 
             // then
             result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) {
+                dataSource.sendRemindByMemberMessage(teamBottariId, memberId)
+            }
+        }
+
+    @DisplayName("팀 보따리 개인 아이템 삭제에 성공하면 Success를 반환한다")
+    @Test
+    fun fetchTeamBottariPersonalItemReturnsSuccessTest() =
+        runTest {
+            // given
+            val id = 1L
+            val bottariItemType = BottariItemType.PERSONAL
+            val request = DeleteTeamBottariItemRequest(bottariItemType.toString())
+            coEvery {
+                dataSource.deleteTeamBottariItem(
+                    id,
+                    request,
+                )
+            } returns Result.success(Unit)
+
+            // when
+            val result = repository.deleteTeamBottariItem(id, bottariItemType)
+
+            // then
+            result.shouldBeSuccess()
+
+            // verify
+            coVerify(exactly = 1) { dataSource.deleteTeamBottariItem(id, request) }
+        }
+
+    @DisplayName("팀 보따리 개인 아이템 삭제에 실패하면 Failure를 반환한다")
+    @Test
+    fun fetchTeamBottariPersonalItemReturnsFailureTest() =
+        runTest {
+            // given
+            val id = 1L
+            val bottariItemType = BottariItemType.PERSONAL
+            val request = DeleteTeamBottariItemRequest(bottariItemType.toString())
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery {
+                dataSource.deleteTeamBottariItem(
+                    id,
+                    request,
+                )
+            } returns Result.failure(exception)
+
+            // when
+            val result = repository.deleteTeamBottariItem(id, bottariItemType)
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.deleteTeamBottariItem(id, request) }
         }
 }

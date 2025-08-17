@@ -1,5 +1,6 @@
 package com.bottari.domain.repository
 
+import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.TeamBottariCheckList
 import com.bottari.domain.model.team.TeamBottariDetail
@@ -36,6 +37,27 @@ interface TeamBottariRepository {
     ): Result<Unit>
 
     suspend fun fetchTeamMembersStatus(id: Long): Result<List<TeamMemberStatus>>
+
+    suspend fun createTeamBottariSharedItem(
+        id: Long,
+        name: String,
+    ): Result<Unit>
+
+    suspend fun createTeamBottariPersonalItem(
+        id: Long,
+        name: String,
+    ): Result<Unit>
+
+    suspend fun createTeamBottariAssignedItem(
+        id: Long,
+        name: String,
+        teamMemberNames: List<String>,
+    ): Result<Unit>
+
+    suspend fun deleteTeamBottariItem(
+        id: Long,
+        type: BottariItemType,
+    ): Result<Unit>
 
     suspend fun sendRemindByMemberMessage(
         teamBottariId: Long,

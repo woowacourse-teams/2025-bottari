@@ -46,6 +46,11 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
         setupListener()
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.fetchTeamBottariDetail()
+    }
+
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner, ::handleUiState)
         viewModel.uiEvent.observe(viewLifecycleOwner, ::handleUiEvent)
@@ -67,6 +72,25 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
         binding.viewTeamMemberEdit.root.setOnClickListener {
             (requireActivity() as? TeamBottariEditNavigator)?.navigateToMemberEdit(teamBottariId)
         }
+        binding.viewTeamPersonalItemEdit.root.setOnClickListener {
+            navigateToItemEdit(
+                BottariItemTypeUiModel.PERSONAL,
+            )
+        }
+        binding.viewTeamSharedItemEdit.root.setOnClickListener {
+            navigateToItemEdit(
+                BottariItemTypeUiModel.SHARED,
+            )
+        }
+        binding.viewTeamAssignedItemEdit.root.setOnClickListener {
+            navigateToItemEdit(
+                BottariItemTypeUiModel.ASSIGNED(),
+            )
+        }
+    }
+
+    private fun navigateToItemEdit(type: BottariItemTypeUiModel) {
+        (requireActivity() as? TeamBottariEditNavigator)?.navigateToItemEdit(teamBottariId, type)
     }
 
     private fun handleUiState(uiState: TeamBottariEditUiState) {
