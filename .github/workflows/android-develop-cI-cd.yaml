@@ -99,7 +99,7 @@ jobs:
                   },
                   {
                     "name": "🏷 버전 정보",
-                    "value": "📝 **Code:** `${{ env.VERSION_CODE }}`\n🔖 **Name:** `${{ env.VERSION_NAME }}-dev`\n🚀 **Build:** `#${{ github.run_number }}`"
+                   "value": "• **Code**:  ${{ env.VERSION_CODE }}\n• **Name**:  ${{ env.VERSION_NAME }}-dev\n• **Build**:  #${{ github.run_number }}"
                   },
                   {
                     "name": "🔗 Action Log",
