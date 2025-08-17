@@ -7,6 +7,7 @@ import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
 import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
+import com.bottari.data.model.team.FetchTeamBottariMemberResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
@@ -107,4 +108,9 @@ interface TeamBottariService {
     suspend fun joinTeamBottari(
         @Body request: JoinTeamBottariRequest,
     ): Response<Unit>
+
+    @GET("/team-bottaries/{teamBottariId}/members/name")
+    suspend fun fetchTeamBottariMembers(
+        @Path("teamBottariId") teamBottariId: Long,
+    ): Response<List<FetchTeamBottariMemberResponse>>
 }

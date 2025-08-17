@@ -16,6 +16,7 @@ import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.TeamBottariCheckList
 import com.bottari.domain.model.team.TeamBottariDetail
 import com.bottari.domain.model.team.TeamBottariStatus
+import com.bottari.domain.model.team.TeamMember
 import com.bottari.domain.model.team.TeamMemberStatus
 import com.bottari.domain.model.team.TeamMembers
 import com.bottari.domain.repository.TeamBottariRepository
@@ -123,4 +124,11 @@ class TeamBottariRepositoryImpl(
 
     override suspend fun joinTeamBottari(inviteCode: String): Result<Unit> =
         teamBottariRemoteDataSource.joinTeamBottari(JoinTeamBottariRequest(inviteCode))
+
+    override suspend fun fetchTeamBottariMembers(teamBottariId: Long): Result<List<TeamMember>> =
+        teamBottariRemoteDataSource
+            .fetchTeamBottariMembers(teamBottariId)
+            .mapCatching { members ->
+                members.map { member -> member.toDomain() }
+            }
 }

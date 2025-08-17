@@ -5,6 +5,7 @@ import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.TeamBottariCheckList
 import com.bottari.domain.model.team.TeamBottariDetail
 import com.bottari.domain.model.team.TeamBottariStatus
+import com.bottari.domain.model.team.TeamMember
 import com.bottari.domain.model.team.TeamMemberStatus
 import com.bottari.domain.model.team.TeamMembers
 
@@ -65,4 +66,6 @@ interface TeamBottariRepository {
     ): Result<Unit>
 
     suspend fun joinTeamBottari(inviteCode: String): Result<Unit>
+
+    suspend fun fetchTeamBottariMembers(teamBottariId: Long): Result<List<TeamMember>>
 }

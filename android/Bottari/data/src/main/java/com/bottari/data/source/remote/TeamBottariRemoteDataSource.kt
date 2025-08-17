@@ -7,6 +7,7 @@ import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
 import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
+import com.bottari.data.model.team.FetchTeamBottariMemberResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
@@ -70,4 +71,6 @@ interface TeamBottariRemoteDataSource {
     ): Result<Unit>
 
     suspend fun joinTeamBottari(request: JoinTeamBottariRequest): Result<Unit>
+
+    suspend fun fetchTeamBottariMembers(teamBottariId: Long): Result<List<FetchTeamBottariMemberResponse>>
 }
