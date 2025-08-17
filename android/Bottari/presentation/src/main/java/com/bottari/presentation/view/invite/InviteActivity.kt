@@ -19,7 +19,7 @@ class InviteActivity : BaseActivity<ActivityInviteBinding>(ActivityInviteBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupObserver()
-        handleAppLink()
+        handleInviteCode()
     }
 
     private fun setupObserver() {
@@ -49,7 +49,7 @@ class InviteActivity : BaseActivity<ActivityInviteBinding>(ActivityInviteBinding
         }
     }
 
-    private fun handleAppLink() {
+    private fun handleInviteCode() {
         val inviteCode = intent.getStringExtra(KEY_INVITE_CODE)
         if (inviteCode == null) {
             navigateToHome(false)
