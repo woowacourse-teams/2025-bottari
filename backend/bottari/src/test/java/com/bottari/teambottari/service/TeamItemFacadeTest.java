@@ -22,6 +22,7 @@ import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
+import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
@@ -86,6 +87,17 @@ public class TeamItemFacadeTest {
                 entityManager.persist(item);
                 yield item.getId();
             }
+        };
+    }
+
+    private boolean getItemCheckedStatus(
+            final TeamItemType type,
+            final Long itemId
+    ) {
+        return switch (type) {
+            case SHARED -> entityManager.find(TeamSharedItem.class, itemId).isChecked();
+            case ASSIGNED -> entityManager.find(TeamAssignedItem.class, itemId).isChecked();
+            case PERSONAL -> entityManager.find(TeamPersonalItem.class, itemId).isChecked();
         };
     }
 
@@ -177,6 +189,115 @@ public class TeamItemFacadeTest {
             final String ssaid = member_not_in_team.getSsaid();
             // when & then
             assertThatThrownBy(() -> teamItemFacade.getSharedItems(teamBottari.getId(), ssaid))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
+        }
+    }
+
+    @Nested
+    class GetAssignedItems {
+
+        @DisplayName("담당 물품을 조회한다.")
+        @Test
+        void getAssignedItems() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(member);
+            entityManager.persist(anotherMember);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            final TeamMember anotherTeamMember = new TeamMember(teamBottari, anotherMember);
+            entityManager.persist(teamMember);
+            entityManager.persist(anotherTeamMember);
+
+            final TeamAssignedItemInfo itemInfo = new TeamAssignedItemInfo("담당 물품", teamBottari);
+            entityManager.persist(itemInfo);
+            final TeamAssignedItem item = new TeamAssignedItem(itemInfo, teamMember);
+            final TeamAssignedItem anotherItem = new TeamAssignedItem(itemInfo, anotherTeamMember);
+            entityManager.persist(item);
+            entityManager.persist(anotherItem);
+
+            final String ssaid = member.getSsaid();
+
+            // when
+            final List<ReadAssignedItemResponse> actual = teamItemFacade.getAssignedItems(teamBottari.getId(), ssaid);
+
+            // then
+            final List<ReadAssignedItemResponse> expected = List.of(
+                    new ReadAssignedItemResponse(
+                            itemInfo.getId(),
+                            itemInfo.getName(),
+                            List.of(
+                                    new ReadAssignedItemResponse.Assignee(
+                                            member.getId(),
+                                            member.getName()
+                                    ),
+                                    new ReadAssignedItemResponse.Assignee(
+                                            anotherMember.getId(),
+                                            anotherMember.getName()
+                                    )
+                            )
+                    )
+            );
+            assertAll(
+                    () -> assertThat(actual).hasSize(1),
+                    () -> assertThat(actual).isEqualTo(expected)
+            );
+        }
+
+        @DisplayName("담당 물품을 조회할 때, 팀 보따리가 존재하지 않는다면 예외를 던진다.")
+        @Test
+        void getAssignedItems_Exception_NotFoundTeamBottari() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final Long invalid_teamBottariId = -1L;
+            final String ssaid = member.getSsaid();
+
+            // when & then
+            assertThatThrownBy(() -> teamItemFacade.getAssignedItems(invalid_teamBottariId, ssaid))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("팀 보따리를 찾을 수 없습니다. - 존재하지 않는 팀 보따리입니다.");
+        }
+
+        @DisplayName("담당 물품을 조회할 때, 가입되지 않은 멤버의 ssaid를 입력하면 예외를 던진다.")
+        @Test
+        void getAssignedItems_Exception_NotMember() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final String invalidSsaid = "invalid_ssaid";
+
+            // when & then
+            assertThatThrownBy(() -> teamItemFacade.getAssignedItems(teamBottari.getId(), invalidSsaid))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("사용자를 찾을 수 없습니다. - 등록되지 않은 ssaid입니다.");
+        }
+
+        @DisplayName("담당 물품을 조회할 때, 팀 멤버가 아니라면 예외를 던진다.")
+        @Test
+        void getAssignedItems_Exception_NotTeamMember() {
+            // given
+            final Member member_in_team = MemberFixture.MEMBER.get();
+            final Member member_not_in_team = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(member_in_team);
+            entityManager.persist(member_not_in_team);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member_in_team);
+            entityManager.persist(teamBottari);
+            final String ssaid = member_not_in_team.getSsaid();
+
+            // when & then
+            assertThatThrownBy(() -> teamItemFacade.getAssignedItems(teamBottari.getId(), ssaid))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }
@@ -912,16 +1033,5 @@ public class TeamItemFacadeTest {
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("적절하지 않은 아이템 타입입니다. - 보채기 알람은 공통/담당 물품만 가능합니다.");
         }
-    }
-
-    private boolean getItemCheckedStatus(
-            final TeamItemType type,
-            final Long itemId
-    ) {
-        return switch (type) {
-            case SHARED -> entityManager.find(TeamSharedItem.class, itemId).isChecked();
-            case ASSIGNED -> entityManager.find(TeamAssignedItem.class, itemId).isChecked();
-            case PERSONAL -> entityManager.find(TeamPersonalItem.class, itemId).isChecked();
-        };
     }
 }
