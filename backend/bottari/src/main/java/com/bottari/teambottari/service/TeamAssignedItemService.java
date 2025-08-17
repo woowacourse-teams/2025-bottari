@@ -49,17 +49,9 @@ public class TeamAssignedItemService {
 
     public List<ReadAssignedItemResponse> getAllByTeamBottariId(final Long teamBottariId) {
         final List<TeamAssignedItem> assignedItems = teamAssignedItemRepository.findAllByTeamBottariId(teamBottariId);
-        final Map<TeamAssignedItemInfo, List<Member>> membersGroupedByAssignedItemInfo = assignedItems.stream()
-                .collect(Collectors.groupingBy(
-                        TeamAssignedItem::getInfo,
-                        LinkedHashMap::new,
-                        Collectors.mapping(
-                                teamAssignedItem -> teamAssignedItem.getTeamMember().getMember(),
-                                Collectors.toList()
-                        )
-                ));
+        final Map<TeamAssignedItemInfo, List<Member>> assigneesByInfo = groupMembersByAssignedItemInfo(assignedItems);
 
-        return membersGroupedByAssignedItemInfo.entrySet()
+        return assigneesByInfo.entrySet()
                 .stream()
                 .map(entry -> {
                     final TeamAssignedItemInfo teamAssignedItemInfo = entry.getKey();
@@ -136,6 +128,18 @@ public class TeamAssignedItemService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND, "담당"));
         validateOwner(ssaid, item);
         item.uncheck();
+    }
+
+    private Map<TeamAssignedItemInfo, List<Member>> groupMembersByAssignedItemInfo(final List<TeamAssignedItem> assignedItems) {
+        return assignedItems.stream()
+                .collect(Collectors.groupingBy(
+                        TeamAssignedItem::getInfo,
+                        LinkedHashMap::new,
+                        Collectors.mapping(
+                                teamAssignedItem -> teamAssignedItem.getTeamMember().getMember(),
+                                Collectors.toList()
+                        )
+                ));
     }
 
     private void validateDuplicateName(
