@@ -16,7 +16,7 @@ import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
-import com.bottari.teambottari.event.TeamAssignedItemCheckEvent;
+import com.bottari.teambottari.event.CheckTeamAssignedItemEvent;
 import com.bottari.teambottari.repository.TeamAssignedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamAssignedItemRepository;
 import com.bottari.teambottari.repository.TeamMemberRepository;
@@ -214,7 +214,7 @@ public class TeamAssignedItemService {
 
     private void publishCheckEvent(final TeamAssignedItem item) {
         final TeamMember teamMember = item.getTeamMember();
-        final TeamAssignedItemCheckEvent event = new TeamAssignedItemCheckEvent(
+        final CheckTeamAssignedItemEvent event = new CheckTeamAssignedItemEvent(
                 teamMember.getTeamBottari().getId(),
                 teamMember.getMember().getId(),
                 item.getInfo().getId(),

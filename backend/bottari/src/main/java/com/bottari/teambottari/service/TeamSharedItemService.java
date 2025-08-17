@@ -16,7 +16,7 @@ import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
-import com.bottari.teambottari.event.TeamSharedItemCheckEvent;
+import com.bottari.teambottari.event.CheckTeamSharedItemEvent;
 import com.bottari.teambottari.repository.TeamMemberRepository;
 import com.bottari.teambottari.repository.TeamSharedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamSharedItemRepository;
@@ -215,7 +215,7 @@ public class TeamSharedItemService {
 
     private void publishCheckEvent(final TeamSharedItem item) {
         final TeamMember teamMember = item.getTeamMember();
-        final TeamSharedItemCheckEvent event = new TeamSharedItemCheckEvent(
+        final CheckTeamSharedItemEvent event = new CheckTeamSharedItemEvent(
                 teamMember.getTeamBottari().getId(),
                 teamMember.getMember().getId(),
                 item.getInfo().getId(),

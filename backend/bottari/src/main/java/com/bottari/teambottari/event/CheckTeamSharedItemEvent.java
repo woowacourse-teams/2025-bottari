@@ -1,6 +1,6 @@
 package com.bottari.teambottari.event;
 
-public record TeamAssignedItemCheckEvent(
+public record CheckTeamSharedItemEvent(
         Long teamBottariId,
         Long memberId,
         Long infoId,
