@@ -11,6 +11,11 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    env:
+      GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+      LOCAL_PROPERTIES_CONTENTS: ${{ secrets.LOCAL_PROPERTIES_CONTENTS }}
+    
     defaults:
       run:
         working-directory: ./android/Bottari
@@ -45,11 +50,6 @@ jobs:
 
       - name: Create local.properties
         run: echo "$LOCAL_PROPERTIES_CONTENTS" > ./local.properties
-
-      - name: Check google-services.json
-        run: |
-          echo "=== google-services.json preview ==="
-          head -n 20 app/google-services.json
 
       - name: Assemble Debug APK
         run: ./gradlew assembleDebug
