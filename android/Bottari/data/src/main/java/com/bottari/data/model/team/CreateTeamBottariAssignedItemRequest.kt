@@ -7,6 +7,6 @@ import kotlinx.serialization.Serializable
 data class CreateTeamBottariAssignedItemRequest(
     @SerialName("name")
     val name: String,
-    @SerialName("teamMemberNames")
-    val teamMemberNames: List<String>,
+    @SerialName("teamMemberIds")
+    val teamMemberIds: List<Long>,
 )

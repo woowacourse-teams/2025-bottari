@@ -94,11 +94,11 @@ class TeamBottariRepositoryImpl(
     override suspend fun createTeamBottariAssignedItem(
         id: Long,
         name: String,
-        teamMemberNames: List<String>,
+        teamMemberIds: List<Long>,
     ): Result<Unit> =
         teamBottariRemoteDataSource.createTeamBottariAssignedItem(
             id,
-            CreateTeamBottariAssignedItemRequest(name, teamMemberNames),
+            CreateTeamBottariAssignedItemRequest(name, teamMemberIds),
         )
 
     override suspend fun deleteTeamBottariItem(

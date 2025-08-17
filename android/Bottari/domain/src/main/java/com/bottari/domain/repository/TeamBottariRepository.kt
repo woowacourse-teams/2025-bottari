@@ -51,7 +51,7 @@ interface TeamBottariRepository {
     suspend fun createTeamBottariAssignedItem(
         id: Long,
         name: String,
-        teamMemberNames: List<String>,
+        teamMemberIds: List<Long>,
     ): Result<Unit>
 
     suspend fun deleteTeamBottariItem(
