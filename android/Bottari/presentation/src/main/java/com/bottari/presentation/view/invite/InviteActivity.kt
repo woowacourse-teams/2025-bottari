@@ -14,7 +14,7 @@ import com.bottari.presentation.view.home.HomeActivity
 
 class InviteActivity : BaseActivity<ActivityInviteBinding>(ActivityInviteBinding::inflate) {
     private val viewModel: InviteViewModel by viewModels { InviteViewModel.Factory() }
-    private val loadingDialog: LoadingDialog by lazy { LoadingDialog() }
+    private var loadingDialog: LoadingDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,16 +59,16 @@ class InviteActivity : BaseActivity<ActivityInviteBinding>(ActivityInviteBinding
     }
 
     private fun toggleLoadingIndicator(isShow: Boolean) {
+        if (loadingDialog?.context != this) {
+            loadingDialog?.dismiss()
+            loadingDialog = LoadingDialog(this)
+        }
+        val dialog = loadingDialog ?: return
         if (isShow) {
-            if (loadingDialog.isAdded || loadingDialog.isVisible || loadingDialog.isRemoving) return
-            if (supportFragmentManager.isStateSaved) return
-
-            loadingDialog.show(supportFragmentManager, LoadingDialog::class.java.name)
+            if (dialog.isShowing.not()) dialog.show()
             return
         }
-
-        if (!loadingDialog.isAdded) return
-        loadingDialog.dismissAllowingStateLoss()
+        if (dialog.isShowing) dialog.dismiss()
     }
 
     private fun navigateToHome(isJoinSuccess: Boolean) {
