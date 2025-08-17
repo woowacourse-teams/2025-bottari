@@ -59,7 +59,7 @@ class TeamSharedItemEditViewModel(
 
         launch {
             fetchTeamSharedItemsUseCase(bottariId)
-                .onSuccess { items -> updateState { copy(personalItems = items.map { it.toUiModel() }) } }
+                .onSuccess { items -> updateState { copy(sharedItems = items.map { it.toUiModel() }) } }
                 .onFailure { emitEvent(TeamSharedItemEditEvent.FetchTeamPersonalItemsFailure) }
 
             updateState { copy(isLoading = false, isFetched = true) }

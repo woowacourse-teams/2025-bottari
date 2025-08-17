@@ -10,6 +10,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamPersonalItemEditBinding
+import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiEvent
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiState
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditViewModel
@@ -54,6 +55,7 @@ class TeamPersonalItemEditFragment :
     }
 
     private fun handleParentUiState(uiState: TeamItemEditUiState) {
+        if (uiState.currentTabType != BottariItemTypeUiModel.PERSONAL) return
         viewModel.updateInput(uiState.itemInputText)
     }
 

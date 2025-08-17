@@ -10,6 +10,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamSharedItemEditBinding
+import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiEvent
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiState
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditViewModel
@@ -54,6 +55,7 @@ class TeamSharedItemEditFragment :
     }
 
     private fun handleParentUiState(uiState: TeamItemEditUiState) {
+        if (uiState.currentTabType != BottariItemTypeUiModel.SHARED) return
         viewModel.updateInput(uiState.itemInputText)
     }
 
@@ -66,7 +68,7 @@ class TeamSharedItemEditFragment :
         toggleLoadingIndicator(uiState.isLoading)
         parentViewModel.updateIsAlreadyExistState(uiState.isAlreadyExist)
         binding.emptyView.root.isVisible = uiState.isEmpty
-        adapter.submitList(uiState.personalItems)
+        adapter.submitList(uiState.sharedItems)
     }
 
     private fun handleUiEvent(uiEvent: TeamSharedItemEditEvent) {
