@@ -16,6 +16,7 @@ import com.bottari.teambottari.domain.TeamItemType;
 import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.ReadAssignedItemResponse;
+import com.bottari.teambottari.dto.ReadPersonalItemResponse;
 import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
@@ -103,6 +104,28 @@ class TeamBottariItemControllerTest {
 
         // when & then
         mockMvc.perform(get("/team-bottaries/{teamBottariId}/assigned-items", teamBottariId)
+                        .header("ssaid", ssaid))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(responses)));
+    }
+
+    @DisplayName("팀 보따리 개인 물품을 성공적으로 조회한다.")
+    @Test
+    void readPersonalItems() throws Exception {
+        // given
+        final Long teamBottariId = 1L;
+        final String ssaid = "test-ssaid";
+
+        final List<ReadPersonalItemResponse> responses = List.of(
+                new ReadPersonalItemResponse(1L, "개인 물품1"),
+                new ReadPersonalItemResponse(2L, "개인 물품2")
+        );
+
+        given(teamItemFacade.getPersonalItems(teamBottariId, ssaid))
+                .willReturn(responses);
+
+        // when & then
+        mockMvc.perform(get("/team-bottaries/{teamBottariId}/personal-items", teamBottariId)
                         .header("ssaid", ssaid))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(responses)));
