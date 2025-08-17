@@ -10,7 +10,9 @@ object DeeplinkHelper {
     private const val KEY_INVITE_CODE = "code"
 
     fun validateUri(uri: Uri?): Boolean =
-        uri != null && uri.scheme == BASE_URI.scheme && uri.host == BASE_URI.host &&
+        uri != null &&
+            uri.scheme == BASE_URI.scheme &&
+            uri.host == BASE_URI.host &&
             uri.pathSegments.contains(
                 DEEPLINK_URI_PATH,
             )
