@@ -85,18 +85,17 @@ jobs:
                -X POST \
                -d '{
                 "embeds": [{
-                  "title": "${{ job.status == 'success' && '✅ Firebase Debug 배포 성공' || '❌ Firebase Debug 배포 실패' }}",
+                  "title": "${{ job.status == 'success' && '✅  Firebase Debug 배포 성공' || '❌  Firebase Debug 배포 실패' }}",
                   "description": "an/develop 브랜치에 대한 Debug APK 배포가 완료되었습니다.",
                   "color": ${{ job.status == 'success' && 3066993 || 15158332 }},
                   "fields": [
-                    {"name": "🌿 브랜치", "value": "an/develop", "inline": true},
-                    {"name": "🔢 versionCode", "value": "${{ env.VERSION_CODE }}"},
-                    {"name": "🏷 versionName", "value": "${{ env.VERSION_NAME }}", "inline": true},
-                    {"name": "🔨 빌드 번호", "value": "${{ github.run_number }}", "inline": true},
-                    {"name": "⚡ 상태", "value": "${{ job.status }}"},
-                    {"name": "🔗 빌드 URL", "value": "[Action Log로 이동하기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false}
+                    {"name": "🌿  브랜치", "value": "an/develop"},
+                    {"name": "🏷  VersionCode", "value": "${{ env.VERSION_CODE }}", "inline": true},
+                    {"name": "🏷  VersionName", "value": "${{ env.VERSION_NAME }}", "inline": true},
+                    {"name": "🔨  빌드 번호", "value": "${{ github.run_number }}", "inline": true},
+                    {"name": "🔗  빌드 URL", "value": "[Action Log로 이동하기](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false}
                   ],
-                  "footer": {"text": "Bottari CI/CD"},
+                  "footer": {"text": "Bottari Develop CI/CD"},
                   "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.pushed_at }}"
                 }]
                }' $DISCORD_WEBHOOK
