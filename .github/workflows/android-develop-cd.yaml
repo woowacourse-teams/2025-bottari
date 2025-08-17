@@ -46,10 +46,13 @@ jobs:
       - name: Create local.properties
         run: echo "$LOCAL_PROPERTIES_CONTENTS" > ./local.properties
 
-      - name: Assemble Debug APK
+      - name: Check google-services.json
         run: |
-          cat ./app/google-services.json
-          ./gradlew assembleDebug
+          echo "=== google-services.json preview ==="
+          head -n 20 app/google-services.json
+
+      - name: Assemble Debug APK
+        run: ./gradlew assembleDebug
         env:
           VERSION_CODE: ${{ env.VERSION_CODE }}
           VERSION_NAME: ${{ env.VERSION_NAME }}
