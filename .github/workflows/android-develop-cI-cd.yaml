@@ -70,17 +70,23 @@ jobs:
       - name: Get commits since last release
         id: commit-log
         run: |
-          LAST_RELEASE_COMMIT=$(git log --grep="\[AN\].*Release v" --pretty=format:"%H" -n 1)
-
+          git fetch origin an/develop
+      
+          LAST_RELEASE_COMMIT=$(git log origin/an/develop --grep="\[AN\].*Release v" --pretty=format:"%H" -n 1)
+      
           if [ -z "$LAST_RELEASE_COMMIT" ]; then
-            COMMITS=$(git log --pretty=format:"- %s")
+            COMMITS=$(git log origin/an/develop --pretty=format:"- %s" --no-merges | grep "\[AN\]")
           else
-            COMMITS=$(git log ${LAST_RELEASE_COMMIT}..HEAD --pretty=format:"- %s")
+          
+            COMMITS=$(git log ${LAST_RELEASE_COMMIT}..origin/an/develop --pretty=format:"- %s" --no-merges | grep "\[AN\]")
           fi
-
+      
           echo "COMMITS<<EOF" >> $GITHUB_ENV
           echo "$COMMITS" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
+      
+          echo "📝 릴리즈 노트에 포함될 커밋 목록:"
+          echo "$COMMITS"
 
       - name: Deploy to Firebase
         id: firebase
