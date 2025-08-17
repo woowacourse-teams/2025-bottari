@@ -31,6 +31,16 @@ jobs:
           java-version: 21
           distribution: temurin
 
+      - name: Restore Gradle cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Grant execute permission
         run: chmod +x gradlew
 
@@ -65,51 +75,28 @@ jobs:
           serviceCredentialsFileContent: ${{ secrets.ANDROID_CREDENTIAL_FILE_CONTENT }}
           groups: BOTTARI_TEST_GROUP
           file: android/Bottari/app/build/outputs/apk/debug/app-debug.apk
-      
+          
       - name: Send Discord Notification
         if: always()
-        uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.ANDROID_DEVELOP_APP_DEPLOY_HOOK_URL }}
-        with:
-          args: |
-            --embed '{
-              "title": "${{ job.status == 'success' && '✅ Firebase Debug 배포 성공' || '❌ Firebase Debug 배포 실패' }}",
-              "color": ${{ job.status == 'success' && 3066993 || 15158332 }},
-              "fields": [
-                {
-                  "name": "🌿 브랜치",
-                  "value": "an/develop",
-                  "inline": true
-                },
-                {
-                  "name": "🔢 versionCode",
-                  "value": "${{ env.VERSION_CODE }}",
-                  "inline": true
-                },
-                {
-                  "name": "🏷 versionName",
-                  "value": "${{ env.VERSION_NAME }}",
-                  "inline": true
-                },
-                {
-                  "name": "🔨 빌드 번호",
-                  "value": "${{ github.run_number }}",
-                  "inline": true
-                },
-                {
-                  "name": "⚡ 상태",
-                  "value": "${{ job.status }}",
-                  "inline": true
-                },
-                {
-                  "name": "🔗 빌드 URL",
-                  "value": "[View Build](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})",
-                  "inline": false
-                }
-              ],
-              "footer": {
-                "text": "Bottari Develop CD"
-              },
-              "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.pushed_at }}"
-            }'
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{
+                "embeds": [{
+                  "title": "${{ job.status == 'success' && '✅ Firebase Debug 배포 성공' || '❌ Firebase Debug 배포 실패' }}",
+                  "description": "an/develop 브랜치에 대한 Debug APK 배포가 완료되었습니다.",
+                  "color": ${{ job.status == 'success' && 3066993 || 15158332 }},
+                  "fields": [
+                    {"name": "🌿 브랜치", "value": "an/develop", "inline": true},
+                    {"name": "🔢 versionCode", "value": "${{ env.VERSION_CODE }}", "inline": true},
+                    {"name": "🏷 versionName", "value": "${{ env.VERSION_NAME }}", "inline": true},
+                    {"name": "🔨 빌드 번호", "value": "${{ github.run_number }}", "inline": true},
+                    {"name": "⚡ 상태", "value": "${{ job.status }}", "inline": true},
+                    {"name": "🔗 빌드 URL", "value": "[View Build](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false}
+                  ],
+                  "footer": {"text": "Bottari CI/CD"},
+                  "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.pushed_at }}"
+                }]
+               }' $DISCORD_WEBHOOK
