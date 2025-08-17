@@ -86,13 +86,13 @@ jobs:
                -d '{
                 "embeds": [{
                   "title": "${{ job.status == 'success' && '✅  Firebase Debug 배포 성공' || '❌  Firebase Debug 배포 실패' }}",
-                  "description": "Debug APK 배포가 완료되었습니다.",
+                  "description": "Firebase Distribution - Debug APK 배포가 완료되었습니다.",
                   "color": ${{ job.status == 'success' && 3066993 || 15158332 }},
                   "fields": [
-                    {"name": "🏷  버전", "value": "${{ env.VERSION_CODE }}  < ${{ env.VERSION_NAME }}-dev | #${{ github.run_number }} >"},
-                    {"name": "🌿  브랜치 & 빌드", "value": "an/develop · [Action Log](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"}
+                    {"name": "🌿  브랜치", "value": "an/develop"}
+                    {"name": "🏷  버전", "value": "CODE: ${{ env.VERSION_CODE }} NAME: ${{ env.VERSION_NAME }}-dev | BUILD_NUMVER: #${{ github.run_number }}"},
                   ],
-                  "footer": {"text": "Bottari Develop CI/CD"},
+                  "footer": {"text": "[Bottari Develop CI/CD](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"},
                   "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.pushed_at }}"
                 }]
                }' $DISCORD_WEBHOOK
