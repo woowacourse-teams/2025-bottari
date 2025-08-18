@@ -734,10 +734,7 @@ class TeamBottariRepositoryImplTest {
             val teamBottariId = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
 
-            coEvery { dataSource.fetchTeamPersonalItems(teamBottariId) } returns
-                Result.failure(
-                    exception,
-                )
+            coEvery { dataSource.fetchTeamPersonalItems(teamBottariId) } returns Result.failure(exception)
 
             // when
             val result = repository.fetchTeamPersonalItems(teamBottariId)
@@ -756,10 +753,7 @@ class TeamBottariRepositoryImplTest {
             // given
             val teamBottariId = 1L
             val sharedItems = listOf(BOTTARI_SHARED_ITEM_RESPONSE_FIXTURE)
-            coEvery { dataSource.fetchTeamSharedItems(teamBottariId) } returns
-                Result.success(
-                    sharedItems,
-                )
+            coEvery { dataSource.fetchTeamSharedItems(teamBottariId) } returns Result.success(sharedItems)
 
             // when
             val result = repository.fetchTeamSharedItems(teamBottariId)
@@ -781,10 +775,7 @@ class TeamBottariRepositoryImplTest {
             // given
             val teamBottariId = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
-            coEvery { dataSource.fetchTeamSharedItems(teamBottariId) } returns
-                Result.failure(
-                    exception,
-                )
+            coEvery { dataSource.fetchTeamSharedItems(teamBottariId) } returns Result.failure(exception)
 
             // when
             val result = repository.fetchTeamSharedItems(teamBottariId)
@@ -803,10 +794,7 @@ class TeamBottariRepositoryImplTest {
             // given
             val teamBottariId = 1L
             val assignedItems = listOf(BOTTARI_ASSIGNED_ITEM_RESPONSE_FIXTURE)
-            coEvery { dataSource.fetchTeamAssignedItems(teamBottariId) } returns
-                Result.success(
-                    assignedItems,
-                )
+            coEvery { dataSource.fetchTeamAssignedItems(teamBottariId) } returns Result.success(assignedItems)
 
             // when
             val result = repository.fetchTeamAssignedItems(teamBottariId)
@@ -828,10 +816,7 @@ class TeamBottariRepositoryImplTest {
             // given
             val teamBottariId = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
-            coEvery { dataSource.fetchTeamAssignedItems(teamBottariId) } returns
-                Result.failure(
-                    exception,
-                )
+            coEvery { dataSource.fetchTeamAssignedItems(teamBottariId) } returns Result.failure(exception)
 
             // when
             val result = repository.fetchTeamAssignedItems(teamBottariId)
@@ -850,12 +835,7 @@ class TeamBottariRepositoryImplTest {
             // given
             val teamBottariId = 1L
             val type = "PERSONAL"
-            coEvery {
-                dataSource.checkBottariItem(
-                    teamBottariId,
-                    ItemTypeRequest(type),
-                )
-            } returns Result.success(Unit)
+            coEvery { dataSource.checkBottariItem(teamBottariId, ItemTypeRequest(type)) } returns Result.success(Unit)
 
             // when
             val result = repository.checkBottariItem(teamBottariId, type)
@@ -883,12 +863,7 @@ class TeamBottariRepositoryImplTest {
             val teamBottariId = 1L
             val type = "ERROR"
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
-            coEvery {
-                dataSource.checkBottariItem(
-                    teamBottariId,
-                    ItemTypeRequest(type),
-                )
-            } returns Result.failure(exception)
+            coEvery { dataSource.checkBottariItem(teamBottariId, ItemTypeRequest(type)) } returns Result.failure(exception)
 
             // when
             val result = repository.checkBottariItem(teamBottariId, type)
