@@ -13,6 +13,7 @@ import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
+import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.event.CreateAssignedItemEvent;
@@ -22,6 +23,7 @@ import com.bottari.teambottari.repository.TeamAssignedItemRepository;
 import com.bottari.teambottari.repository.TeamMemberRepository;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,6 +46,21 @@ public class TeamAssignedItemService {
     private final FcmMessageConverter fcmMessageConverter;
 
     private final ApplicationEventPublisher applicationEventPublisher;
+
+    public List<ReadAssignedItemResponse> getAllByTeamBottariId(final Long teamBottariId) {
+        final List<TeamAssignedItem> assignedItems = teamAssignedItemRepository.findAllByTeamBottariId(teamBottariId);
+        final Map<TeamAssignedItemInfo, List<Member>> assigneesByInfo = groupMembersByAssignedItemInfo(assignedItems);
+
+        return assigneesByInfo.entrySet()
+                .stream()
+                .map(entry -> {
+                    final TeamAssignedItemInfo teamAssignedItemInfo = entry.getKey();
+                    final List<Member> assignees = entry.getValue();
+
+                    return ReadAssignedItemResponse.from(teamAssignedItemInfo, assignees);
+                })
+                .toList();
+    }
 
     @Transactional
     public Long create(
@@ -122,6 +139,18 @@ public class TeamAssignedItemService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND, "담당"));
         validateOwner(ssaid, item);
         item.uncheck();
+    }
+
+    private Map<TeamAssignedItemInfo, List<Member>> groupMembersByAssignedItemInfo(final List<TeamAssignedItem> assignedItems) {
+        return assignedItems.stream()
+                .collect(Collectors.groupingBy(
+                        TeamAssignedItem::getInfo,
+                        LinkedHashMap::new,
+                        Collectors.mapping(
+                                teamAssignedItem -> teamAssignedItem.getTeamMember().getMember(),
+                                Collectors.toList()
+                        )
+                ));
     }
 
     private void validateDuplicateName(
@@ -239,11 +268,11 @@ public class TeamAssignedItemService {
     private List<Long> collectUncheckedMemberIds(final List<TeamAssignedItem> items) {
         return items.stream()
                 .filter(item -> !item.isChecked())
-                .map(TeamAssignedItemService::memberIdByItem)
+                .map(this::memberIdByItem)
                 .toList();
     }
 
-    private static Long memberIdByItem(final TeamAssignedItem item) {
+    private Long memberIdByItem(final TeamAssignedItem item) {
         return item.getTeamMember()
                 .getMember()
                 .getId();
