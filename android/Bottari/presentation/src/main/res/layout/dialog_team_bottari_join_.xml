@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_2x_small"
         android:paddingHorizontal="@dimen/space_x_small"
-        android:text="@string/team_bottari_join_dialog_description_text"
+        android:text="@string/team_bottari_join_invalid_invite_code_text"
         android:textColor="@color/red_soft"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/et_team_bottari_join_invite_code"
