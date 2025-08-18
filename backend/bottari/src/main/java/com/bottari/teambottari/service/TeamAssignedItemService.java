@@ -35,13 +35,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TeamAssignedItemService {
 
-    private final ApplicationEventPublisher publisher;
-    private final FcmMessageSender fcmMessageSender;
-    private final FcmMessageConverter fcmMessageConverter;
     private final TeamAssignedItemRepository teamAssignedItemRepository;
     private final TeamAssignedItemInfoRepository teamAssignedItemInfoRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
+
+    private final FcmMessageSender fcmMessageSender;
+    private final FcmMessageConverter fcmMessageConverter;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
     public Long create(
@@ -54,7 +56,12 @@ public class TeamAssignedItemService {
         final List<TeamMember> teamMembers = getAssignedTeamMembersByRequest(requestAssignedMemberNames, teamBottari);
         final TeamAssignedItemInfo savedTeamAssignedItemInfo = saveTeamAssignedItemInfo(request.name(), teamBottari);
         saveAssignedItemToTeamMembers(savedTeamAssignedItemInfo, teamMembers);
-        publishCreateAssignedItemEvent(teamBottari, savedTeamAssignedItemInfo, teamMembers);
+        applicationEventPublisher.publishEvent(new CreateAssignedItemEvent(
+                teamBottari.getId(),
+                savedTeamAssignedItemInfo.getId(),
+                savedTeamAssignedItemInfo.getName(),
+                request.memberIds()
+        ));
 
         return savedTeamAssignedItemInfo.getId();
     }
@@ -69,7 +76,7 @@ public class TeamAssignedItemService {
         validateMemberInTeam(teamAssignedItemInfo.getTeamBottari().getId(), ssaid);
         teamAssignedItemRepository.deleteAllByInfo(teamAssignedItemInfo);
         teamAssignedItemInfoRepository.delete(teamAssignedItemInfo);
-        publisher.publishEvent(new DeleteAssignedItemEvent(
+        applicationEventPublisher.publishEvent(new DeleteAssignedItemEvent(
                 teamAssignedItemInfo.getTeamBottari().getId(),
                 id,
                 teamAssignedItemInfo.getName()
@@ -252,23 +259,6 @@ public class TeamAssignedItemService {
                 MessageType.REMIND_BY_ITEM
         );
         fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
-    }
-
-    private void publishCreateAssignedItemEvent(
-            final TeamBottari teamBottari,
-            final TeamAssignedItemInfo savedTeamAssignedItemInfo,
-            final List<TeamMember> teamMembers
-    ) {
-        final List<Long> memberIds = teamMembers.stream()
-                .map(member -> member.getMember().getId())
-                .toList();
-        final CreateAssignedItemEvent event = new CreateAssignedItemEvent(
-                teamBottari.getId(),
-                savedTeamAssignedItemInfo.getId(),
-                savedTeamAssignedItemInfo.getName(),
-                memberIds
-        );
-        publisher.publishEvent(event);
     }
 
     private void validateOwner(
