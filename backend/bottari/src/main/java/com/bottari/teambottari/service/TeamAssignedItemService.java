@@ -17,6 +17,7 @@ import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.dto.UpdateAssignedItemRequest;
+import com.bottari.teambottari.event.CheckTeamAssignedItemEvent;
 import com.bottari.teambottari.repository.TeamAssignedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamAssignedItemRepository;
 import com.bottari.teambottari.repository.TeamMemberRepository;
@@ -28,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +39,7 @@ public class TeamAssignedItemService {
 
     private final FcmMessageSender fcmMessageSender;
     private final FcmMessageConverter fcmMessageConverter;
+    private final ApplicationEventPublisher applicationEventPublisher;
     private final TeamAssignedItemRepository teamAssignedItemRepository;
     private final TeamAssignedItemInfoRepository teamAssignedItemInfoRepository;
     private final TeamMemberRepository teamMemberRepository;
@@ -121,10 +124,11 @@ public class TeamAssignedItemService {
             final Long itemId,
             final String ssaid
     ) {
-        final TeamAssignedItem item = teamAssignedItemRepository.findById(itemId)
+        final TeamAssignedItem item = teamAssignedItemRepository.findByIdWithTeamMember(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND, "담당"));
         validateOwner(ssaid, item);
         item.check();
+        publishCheckEvent(item);
     }
 
     @Transactional
@@ -132,10 +136,11 @@ public class TeamAssignedItemService {
             final Long itemId,
             final String ssaid
     ) {
-        final TeamAssignedItem item = teamAssignedItemRepository.findById(itemId)
+        final TeamAssignedItem item = teamAssignedItemRepository.findByIdWithTeamMember(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND, "담당"));
         validateOwner(ssaid, item);
         item.uncheck();
+        publishCheckEvent(item);
     }
 
     public void sendRemindAlarm(
@@ -237,6 +242,18 @@ public class TeamAssignedItemService {
                 .map(member -> new TeamAssignedItem(savedTeamAssignedItemInfo, member))
                 .toList();
         teamAssignedItemRepository.saveAll(teamAssignedItems);
+    }
+
+    private void publishCheckEvent(final TeamAssignedItem item) {
+        final TeamMember teamMember = item.getTeamMember();
+        final CheckTeamAssignedItemEvent event = new CheckTeamAssignedItemEvent(
+                teamMember.getTeamBottari().getId(),
+                teamMember.getMember().getId(),
+                item.getInfo().getId(),
+                item.getId(),
+                item.isChecked()
+        );
+        applicationEventPublisher.publishEvent(event);
     }
 
     private void updateNameIfNeeded(
