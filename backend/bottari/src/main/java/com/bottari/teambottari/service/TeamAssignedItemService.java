@@ -2,12 +2,13 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.member.domain.Member;
-import com.bottari.member.repository.MemberRepository;
 import com.bottari.fcm.FcmMessageConverter;
 import com.bottari.fcm.FcmMessageSender;
 import com.bottari.fcm.dto.MessageType;
 import com.bottari.fcm.dto.SendMessageRequest;
+import com.bottari.member.domain.Member;
+import com.bottari.member.repository.MemberRepository;
+import com.bottari.teambottari.event.CreateAssignedItemEvent;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TeamAssignedItemService {
 
+    private final ApplicationEventPublisher publisher;
     private final FcmMessageSender fcmMessageSender;
     private final FcmMessageConverter fcmMessageConverter;
     private final TeamAssignedItemRepository teamAssignedItemRepository;
@@ -50,6 +53,7 @@ public class TeamAssignedItemService {
         final List<TeamMember> teamMembers = getAssignedTeamMembersByRequest(requestAssignedMemberNames, teamBottari);
         final TeamAssignedItemInfo savedTeamAssignedItemInfo = saveTeamAssignedItemInfo(request.name(), teamBottari);
         saveAssignedItemToTeamMembers(savedTeamAssignedItemInfo, teamMembers);
+        publishCreateAssignedItemEvent(teamBottari, savedTeamAssignedItemInfo, teamMembers);
 
         return savedTeamAssignedItemInfo.getId();
     }
@@ -242,6 +246,23 @@ public class TeamAssignedItemService {
                 MessageType.REMIND_BY_ITEM
         );
         fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
+    }
+
+    private void publishCreateAssignedItemEvent(
+            final TeamBottari teamBottari,
+            final TeamAssignedItemInfo savedTeamAssignedItemInfo,
+            final List<TeamMember> teamMembers
+    ) {
+        final List<Long> memberIds = teamMembers.stream()
+                .map(member -> member.getMember().getId())
+                .toList();
+        final CreateAssignedItemEvent event = new CreateAssignedItemEvent(
+                teamBottari.getId(),
+                savedTeamAssignedItemInfo.getId(),
+                savedTeamAssignedItemInfo.getName(),
+                memberIds
+        );
+        publisher.publishEvent(event);
     }
 
     private void validateOwner(
