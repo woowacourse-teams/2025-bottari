@@ -9,6 +9,7 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
@@ -33,13 +34,12 @@ import com.google.android.flexbox.JustifyContent
 class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
         val bottariId = requireArguments().getLong(ARG_BOTTARI_ID)
-        PersonalBottariEditViewModel.Factory(bottariId)
+        PersonalBottariEditViewModel.Factory(bottariId, AlarmScheduler())
     }
     private lateinit var popupMenu: PopupMenu
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val permissionLauncher = getPermissionLauncher()
     private val alarmViewBinder: AlarmViewBinder by lazy { AlarmViewBinder(requireContext()) }
-    private val scheduler: AlarmScheduler by lazy { AlarmScheduler() }
 
     private fun getPermissionLauncher() =
         registerForActivityResult(
@@ -228,10 +228,10 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         fragmentClass: Class<out Fragment>,
         bundle: Bundle? = null,
     ) {
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.fcv_personal_edit, fragmentClass, bundle)
-        transaction.addToBackStack(fragmentClass.simpleName)
-        transaction.commit()
+        parentFragmentManager.commit {
+            replace(R.id.fcv_personal_edit, fragmentClass, bundle)
+            addToBackStack(fragmentClass.simpleName)
+        }
     }
 
     private fun checkAndRequestSpecialPermission() {

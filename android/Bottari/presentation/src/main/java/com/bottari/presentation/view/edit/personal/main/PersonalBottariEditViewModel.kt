@@ -15,6 +15,9 @@ import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.AlarmMapper.toDomain
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
+import com.bottari.presentation.model.AlarmUiModel
+import com.bottari.presentation.model.NotificationUiModel
+import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.launch
 
@@ -23,6 +26,7 @@ class PersonalBottariEditViewModel(
     private val fetchBottariDetailUseCase: FetchBottariDetailUseCase,
     private val toggleAlarmStateUseCase: ToggleAlarmStateUseCase,
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
+    private val alarmScheduler: AlarmScheduler,
 ) : BaseViewModel<PersonalBottariEditUiState, PersonalBottariEditUiEvent>(
         PersonalBottariEditUiState(
             id = savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID_MISSING),
@@ -99,6 +103,7 @@ class PersonalBottariEditViewModel(
                     if (isActive) UiEventType.ALARM_ACTIVE else UiEventType.ALARM_INACTIVE,
                     mapOf("alarm_id" to alarm.id!!),
                 )
+                alarmScheduler.cancelAlarm(createNotification(alarm))
                 updateState { copy(alarm = alarm.copy(isActive = isActive)) }
             }.onFailure {
                 emitEvent(PersonalBottariEditUiEvent.ToggleAlarmStateFailure)
@@ -106,13 +111,23 @@ class PersonalBottariEditViewModel(
         }
     }
 
+    private fun createNotification(alarm: AlarmUiModel): NotificationUiModel =
+        NotificationUiModel(
+            id = currentState.id,
+            title = currentState.title,
+            alarm = alarm,
+        )
+
     companion object {
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
         private const val ERROR_BOTTARI_ID_MISSING = "[ERROR] 보따리 Id가 없습니다"
 
         private const val DEBOUNCE_DELAY = 500L
 
-        fun Factory(bottariId: Long): ViewModelProvider.Factory =
+        fun Factory(
+            bottariId: Long,
+            alarmScheduler: AlarmScheduler,
+        ): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
@@ -123,6 +138,7 @@ class PersonalBottariEditViewModel(
                         UseCaseProvider.fetchBottariDetailUseCase,
                         UseCaseProvider.toggleAlarmStateUseCase,
                         UseCaseProvider.createBottariTemplateUseCase,
+                        alarmScheduler = alarmScheduler,
                     )
                 }
             }
