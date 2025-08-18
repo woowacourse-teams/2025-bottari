@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -55,9 +57,9 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
     }
 
     private boolean isSseRequest(final HttpServletRequest request) {
-        final String acceptHeader = request.getHeader("Accept");
+        final String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
 
-        return acceptHeader != null && acceptHeader.contains("text/event-stream");
+        return acceptHeader != null && acceptHeader.contains(MediaType.TEXT_EVENT_STREAM_VALUE);
     }
 
     private void doLog(
