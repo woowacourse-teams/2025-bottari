@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:background="@drawable/bg_primary_radius_16dp"
-            android:contentDescription="@string/bottari_create_btn_description"
+            android:contentDescription="@string/team_bottari_join_btn_description"
             android:elevation="2dp"
             android:padding="@dimen/space_median"
             android:text="@string/team_bottari_join_btn_text"

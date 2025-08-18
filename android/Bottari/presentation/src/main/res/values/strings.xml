@@ -328,5 +328,6 @@
     <string name="team_management_host_iv_description">방장 이미지</string>
     <string name="team_bottari_edit_member_edit_btn_description">멤버 편집 버튼</string>
     <string name="team_bottari_create_option_btn_description">팀 보따리 생성 옵션 버튼</string>
+    <string name="team_bottari_join_btn_description">팀 보따리 참가 버튼</string>
 
 </resources>
