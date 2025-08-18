@@ -7,12 +7,17 @@ import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.MemberCheckStatusResponse
 import com.bottari.data.model.team.TeamProductStatusResponse
+import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
+import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
+import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
+import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.MemberCheckStatus
 import com.bottari.domain.model.team.TeamBottariDetail
 import com.bottari.domain.model.team.TeamBottariProductStatus
 import com.bottari.domain.model.team.TeamBottariStatus
+import com.bottari.domain.model.team.TeamMember
 
 object TeamBottariMapper {
     fun FetchTeamBottariResponse.toDomain(): TeamBottari =
@@ -39,6 +44,33 @@ object TeamBottariMapper {
         TeamBottariStatus(
             sharedItems = sharedItems.map { it.toDomain() },
             assignedItems = assignedItems.map { it.toDomain() },
+        )
+
+    fun FetchTeamAssignedItemResponse.toDomain(): BottariItem =
+        BottariItem(
+            id = id,
+            name = name,
+            type = BottariItemType.ASSIGNED(assignees.map { it.toDomain() }),
+        )
+
+    fun FetchTeamSharedItemResponse.toDomain(): BottariItem =
+        BottariItem(
+            id = id,
+            name = name,
+            type = BottariItemType.SHARED,
+        )
+
+    fun FetchTeamPersonalItemResponse.toDomain(): BottariItem =
+        BottariItem(
+            id = id,
+            name = name,
+            type = BottariItemType.PERSONAL,
+        )
+
+    private fun FetchTeamAssignedItemResponse.Assignee.toDomain() =
+        TeamMember(
+            memberId = memberId,
+            nickname = name,
         )
 
     private fun TeamProductStatusResponse.toDomain(): TeamBottariProductStatus =

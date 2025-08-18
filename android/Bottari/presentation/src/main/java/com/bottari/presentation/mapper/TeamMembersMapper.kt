@@ -1,5 +1,6 @@
 package com.bottari.presentation.mapper
 
+import com.bottari.domain.model.team.TeamMember
 import com.bottari.domain.model.team.TeamMemberStatus
 import com.bottari.domain.model.team.TeamMembers
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
@@ -24,4 +25,6 @@ object TeamMembersMapper {
             sharedItems = sharedItems.map { sharedItem -> sharedItem.toUiModel() },
             assignedItems = assignedItems.map { assignedItem -> assignedItem.toUiModel() },
         )
+
+    fun TeamMember.toUiModel(): TeamMemberUiModel = TeamMemberUiModel(memberId, nickname, false)
 }

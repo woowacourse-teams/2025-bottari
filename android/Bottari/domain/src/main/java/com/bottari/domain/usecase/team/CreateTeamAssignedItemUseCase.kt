@@ -8,6 +8,6 @@ class CreateTeamAssignedItemUseCase(
     suspend operator fun invoke(
         bottariId: Long,
         name: String,
-        teamMemberNames: List<String>,
-    ): Result<Unit> = teamBottariRepository.createTeamBottariAssignedItem(bottariId, name, teamMemberNames)
+        teamMemberIds: List<Long>,
+    ): Result<Unit> = teamBottariRepository.createTeamBottariAssignedItem(bottariId, name, teamMemberIds)
 }

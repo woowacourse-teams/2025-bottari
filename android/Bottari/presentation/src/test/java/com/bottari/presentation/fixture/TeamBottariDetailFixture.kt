@@ -3,6 +3,7 @@ package com.bottari.presentation.fixture
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.team.TeamBottariDetail
+import com.bottari.domain.model.team.TeamMember
 
 val TEAM_BOTTARI_DETAIL_FIXTURE: TeamBottariDetail by lazy {
     TeamBottariDetail(
@@ -36,7 +37,10 @@ val BOTTARI_ASSIGNED_ITEM_FIXTURE: BottariItem by lazy {
         1L,
         "TEST_ITEM",
         BottariItemType.ASSIGNED(
-            listOf("Member1", "Member2"),
+            listOf(
+                TeamMember(1L, "Member1"),
+                TeamMember(2L, "Member2"),
+            ),
         ),
     )
 }

@@ -7,12 +7,16 @@ import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
 import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
+import com.bottari.data.model.team.FetchTeamBottariMemberResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.JoinTeamBottariRequest
+import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
+import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
+import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -107,4 +111,24 @@ interface TeamBottariService {
     suspend fun joinTeamBottari(
         @Body request: JoinTeamBottariRequest,
     ): Response<Unit>
+
+    @GET("/team-bottaries/{teamBottariId}/members/name")
+    suspend fun fetchTeamBottariMembers(
+        @Path("teamBottariId") teamBottariId: Long,
+    ): Response<List<FetchTeamBottariMemberResponse>>
+
+    @GET("/team-bottaries/{teamBottariId}/assigned-items")
+    suspend fun fetchTeamAssignedItems(
+        @Path("teamBottariId") teamBottariId: Long,
+    ): Response<List<FetchTeamAssignedItemResponse>>
+
+    @GET("/team-bottaries/{teamBottariId}/shared-items")
+    suspend fun fetchTeamSharedItems(
+        @Path("teamBottariId") teamBottariId: Long,
+    ): Response<List<FetchTeamSharedItemResponse>>
+
+    @GET("/team-bottaries/{teamBottariId}/personal-items")
+    suspend fun fetchTeamPersonalItems(
+        @Path("teamBottariId") teamBottariId: Long,
+    ): Response<List<FetchTeamPersonalItemResponse>>
 }

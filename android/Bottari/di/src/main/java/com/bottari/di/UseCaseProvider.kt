@@ -29,6 +29,7 @@ import com.bottari.domain.usecase.team.CreateTeamSharedItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamAssignedItemsUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariDetailUseCase
+import com.bottari.domain.usecase.team.FetchTeamBottariMembersUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
@@ -227,5 +228,8 @@ object UseCaseProvider {
     }
     val joinTeamBottariUseCase: JoinTeamBottariUseCase by lazy {
         JoinTeamBottariUseCase(RepositoryProvider.teamBottariRepository)
+    }
+    val fetchTeamBottariMembersUseCase: FetchTeamBottariMembersUseCase by lazy {
+        FetchTeamBottariMembersUseCase(RepositoryProvider.teamBottariRepository)
     }
 }

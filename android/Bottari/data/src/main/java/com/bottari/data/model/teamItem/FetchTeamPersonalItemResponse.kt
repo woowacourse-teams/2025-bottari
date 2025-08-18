@@ -1,12 +1,12 @@
-package com.bottari.data.model.team
+package com.bottari.data.model.teamItem
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateTeamBottariAssignedItemRequest(
+data class FetchTeamPersonalItemResponse(
+    @SerialName("id")
+    val id: Long,
     @SerialName("name")
     val name: String,
-    @SerialName("memberIds")
-    val memberIds: List<Long>,
 )

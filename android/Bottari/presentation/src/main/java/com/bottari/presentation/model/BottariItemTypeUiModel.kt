@@ -13,7 +13,7 @@ sealed interface BottariItemTypeUiModel : Parcelable {
 
     @Parcelize
     data class ASSIGNED(
-        val members: List<String> = emptyList(),
+        val members: List<TeamMemberUiModel> = emptyList(),
     ) : BottariItemTypeUiModel
 
     fun toTypeString() =

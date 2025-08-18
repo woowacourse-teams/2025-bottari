@@ -27,7 +27,10 @@ class TeamSharedItemEditViewModel(
         fetchPersonalItems()
     }
 
-    fun updateInput(input: String) = updateState { copy(inputText = input) }
+    fun updateInput(input: String) {
+        if (currentState.inputText == input) return
+        updateState { copy(inputText = input) }
+    }
 
     fun createItem() {
         if (currentState.isAlreadyExist) return
@@ -35,8 +38,11 @@ class TeamSharedItemEditViewModel(
 
         launch {
             createTeamSharedItemUseCase(bottariId, currentState.inputText)
-                .onSuccess { fetchPersonalItems() }
-                .onFailure { emitEvent(TeamSharedItemEditEvent.AddItemFailure) }
+                .onFailure { emitEvent(TeamSharedItemEditEvent.CreateItemFailure) }
+                .onSuccess {
+                    fetchPersonalItems()
+                    emitEvent(TeamSharedItemEditEvent.CreateItemSuccuss)
+                }
 
             updateState { copy(isLoading = false) }
         }

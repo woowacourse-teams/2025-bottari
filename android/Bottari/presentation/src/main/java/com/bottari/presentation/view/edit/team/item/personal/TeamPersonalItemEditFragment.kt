@@ -43,7 +43,7 @@ class TeamPersonalItemEditFragment :
     }
 
     private fun setupObserver() {
-        parentViewModel.uiEvent.observe(viewLifecycleOwner, ::handleParentUiEvent)
+        parentViewModel.createItemEvent.observe(viewLifecycleOwner, ::handleParentUiEvent)
         parentViewModel.uiState.observe(viewLifecycleOwner, ::handleParentUiState)
         viewModel.uiState.observe(viewLifecycleOwner, ::handleUiState)
         viewModel.uiEvent.observe(viewLifecycleOwner, ::handleUiEvent)
@@ -59,7 +59,7 @@ class TeamPersonalItemEditFragment :
         viewModel.updateInput(uiState.itemInputText)
     }
 
-    private fun handleParentUiEvent(uiEvent: TeamItemEditUiEvent) {
+    private fun handleParentUiEvent(uiEvent: TeamItemEditUiEvent?) {
         if (uiEvent !is TeamItemEditUiEvent.CreateTeamPersonalItem) return
         viewModel.createItem()
     }
@@ -67,6 +67,7 @@ class TeamPersonalItemEditFragment :
     private fun handleUiState(uiState: TeamPersonalItemEditUiState) {
         toggleLoadingIndicator(uiState.isLoading)
         parentViewModel.updateIsAlreadyExistState(uiState.isAlreadyExist)
+        parentViewModel.updateSendCondition(true)
         binding.emptyView.root.isVisible = uiState.isEmpty
         adapter.submitList(uiState.personalItems)
     }
@@ -74,13 +75,16 @@ class TeamPersonalItemEditFragment :
     private fun handleUiEvent(uiEvent: TeamPersonalItemEditEvent) {
         when (uiEvent) {
             TeamPersonalItemEditEvent.FetchTeamPersonalItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
-            TeamPersonalItemEditEvent.AddItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
+            TeamPersonalItemEditEvent.CreateItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
             TeamPersonalItemEditEvent.DeleteItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
+            TeamPersonalItemEditEvent.CreateItemSuccess ->
+                parentViewModel.updateInput(RESET_INPUT_TEXT)
         }
     }
 
     companion object {
         private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
+        private const val RESET_INPUT_TEXT = ""
 
         fun newInstance(bottariId: Long): TeamPersonalItemEditFragment =
             TeamPersonalItemEditFragment().apply {
