@@ -42,39 +42,6 @@ class TeamSwipeChecklistFragment :
         setupListener()
     }
 
-    private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            toggleLoadingIndicator(uiState.isLoading)
-            handleSwipeChecklistStatus(uiState)
-            handleProgressBar(uiState)
-            updateSwipeList(uiState.nonSwipedItems)
-            handleCompleteView(uiState)
-            handleEmptyView(uiState.isItemsEmpty)
-        }
-        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
-            when (uiEvent) {
-                TeamChecklistUiEvent.CheckItemFailure -> requireView().showSnackbar(R.string.checklist_check_failure_text)
-                TeamChecklistUiEvent.FetchChecklistFailure -> requireView().showSnackbar(R.string.checklist_fetch_failure_text)
-            }
-        }
-    }
-
-    private fun setupUI() {
-        setupCardStackView()
-    }
-
-    private fun setupListener() {
-        binding.btnSwipeChecklistYes.setOnClickListener {
-            swipeCardTo(Direction.Right)
-        }
-        binding.btnSwipeChecklistNot.setOnClickListener {
-            swipeCardTo(Direction.Left)
-        }
-        binding.btnSwipeChecklistReturn.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
-    }
-
     override fun onCardAppeared(
         view: View?,
         position: Int,
@@ -109,6 +76,39 @@ class TeamSwipeChecklistFragment :
             )
         }
         viewModel.addSwipedItem(currentItem.id)
+    }
+
+    private fun setupObserver() {
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            toggleLoadingIndicator(uiState.isLoading)
+            handleSwipeChecklistStatus(uiState)
+            handleProgressBar(uiState)
+            updateSwipeList(uiState.nonSwipedItems)
+            handleCompleteView(uiState)
+            handleEmptyView(uiState.isItemsEmpty)
+        }
+        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+            when (uiEvent) {
+                TeamChecklistUiEvent.CheckItemFailure -> requireView().showSnackbar(R.string.checklist_check_failure_text)
+                TeamChecklistUiEvent.FetchChecklistFailure -> requireView().showSnackbar(R.string.checklist_fetch_failure_text)
+            }
+        }
+    }
+
+    private fun setupUI() {
+        setupCardStackView()
+    }
+
+    private fun setupListener() {
+        binding.btnSwipeChecklistYes.setOnClickListener {
+            swipeCardTo(Direction.Right)
+        }
+        binding.btnSwipeChecklistNot.setOnClickListener {
+            swipeCardTo(Direction.Left)
+        }
+        binding.btnSwipeChecklistReturn.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun handleSwipeChecklistStatus(uiState: TeamChecklistUiState) {
