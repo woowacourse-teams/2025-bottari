@@ -4,10 +4,19 @@ import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface TeamSharedItemRepository extends JpaRepository<TeamSharedItem, Long> {
+
+    @Query("""
+            SELECT tsi
+            FROM TeamSharedItem tsi
+            JOIN FETCH tsi.teamMember tm
+            WHERE tsi.id = :id
+            """)
+    Optional<TeamSharedItem> findByIdWithTeamMember(final Long id);
 
     @Query("""
             SELECT tsi

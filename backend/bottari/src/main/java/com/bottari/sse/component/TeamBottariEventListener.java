@@ -7,6 +7,9 @@ import com.bottari.sse.message.SseMessage;
 import com.bottari.sse.message.SseResourceType;
 import com.bottari.teambottari.event.CreateAssignedItemEvent;
 import com.bottari.teambottari.event.DeleteAssignedItemEvent;
+import com.bottari.sse.dto.CheckTeamItemData;
+import com.bottari.teambottari.event.CheckTeamAssignedItemEvent;
+import com.bottari.teambottari.event.CheckTeamSharedItemEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -18,6 +21,28 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class TeamBottariEventListener {
 
     private final SseService sseService;
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void handleCheckTeamSharedItemEvent(final CheckTeamSharedItemEvent event) {
+        final SseMessage message = new SseMessage(
+                SseResourceType.SHARED_ITEM,
+                SseEventType.CHANGE,
+                CheckTeamItemData.from(event)
+        );
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+    }
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void handleCheckTeamAssignedItemEvent(final CheckTeamAssignedItemEvent event) {
+        final SseMessage message = new SseMessage(
+                SseResourceType.ASSIGNED_ITEM,
+                SseEventType.CHANGE,
+                CheckTeamItemData.from(event)
+        );
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+    }
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

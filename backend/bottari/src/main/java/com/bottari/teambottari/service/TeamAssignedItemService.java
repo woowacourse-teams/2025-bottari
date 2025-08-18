@@ -16,6 +16,7 @@ import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
+import com.bottari.teambottari.event.CheckTeamAssignedItemEvent;
 import com.bottari.teambottari.event.CreateAssignedItemEvent;
 import com.bottari.teambottari.event.DeleteAssignedItemEvent;
 import com.bottari.teambottari.repository.TeamAssignedItemInfoRepository;
@@ -124,10 +125,11 @@ public class TeamAssignedItemService {
             final Long itemId,
             final String ssaid
     ) {
-        final TeamAssignedItem item = teamAssignedItemRepository.findById(itemId)
+        final TeamAssignedItem item = teamAssignedItemRepository.findByIdWithTeamMember(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND, "담당"));
         validateOwner(ssaid, item);
         item.check();
+        publishCheckEvent(item);
     }
 
     @Transactional
@@ -135,10 +137,11 @@ public class TeamAssignedItemService {
             final Long itemId,
             final String ssaid
     ) {
-        final TeamAssignedItem item = teamAssignedItemRepository.findById(itemId)
+        final TeamAssignedItem item = teamAssignedItemRepository.findByIdWithTeamMember(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND, "담당"));
         validateOwner(ssaid, item);
         item.uncheck();
+        publishCheckEvent(item);
     }
 
     private Map<TeamAssignedItemInfo, List<Member>> groupMembersByAssignedItemInfo(final List<TeamAssignedItem> assignedItems) {
@@ -222,6 +225,18 @@ public class TeamAssignedItemService {
                 .map(member -> new TeamAssignedItem(savedTeamAssignedItemInfo, member))
                 .toList();
         teamAssignedItemRepository.saveAll(teamAssignedItems);
+    }
+
+    private void publishCheckEvent(final TeamAssignedItem item) {
+        final TeamMember teamMember = item.getTeamMember();
+        final CheckTeamAssignedItemEvent event = new CheckTeamAssignedItemEvent(
+                teamMember.getTeamBottari().getId(),
+                teamMember.getMember().getId(),
+                item.getInfo().getId(),
+                item.getId(),
+                item.isChecked()
+        );
+        applicationEventPublisher.publishEvent(event);
     }
 
     public void sendRemindAlarm(
