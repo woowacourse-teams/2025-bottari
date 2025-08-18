@@ -1,10 +1,12 @@
 package com.bottari.sse.component;
 
 import com.bottari.sse.dto.CreateAssignedItemData;
+import com.bottari.sse.dto.DeleteAssignedItemData;
 import com.bottari.sse.message.SseEventType;
 import com.bottari.sse.message.SseMessage;
 import com.bottari.sse.message.SseResourceType;
 import com.bottari.teambottari.event.CreateAssignedItemEvent;
+import com.bottari.teambottari.event.DeleteAssignedItemEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,17 @@ public class TeamBottariEventListener {
                 SseResourceType.ASSIGNED_ITEM,
                 SseEventType.CREATE,
                 CreateAssignedItemData.from(event)
+        );
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+    }
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void handleDeleteAssignedItemEvent(final DeleteAssignedItemEvent event) {
+        final SseMessage message = new SseMessage(
+                SseResourceType.ASSIGNED_ITEM,
+                SseEventType.DELETE,
+                DeleteAssignedItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
     }

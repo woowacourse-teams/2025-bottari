@@ -8,7 +8,6 @@ import com.bottari.fcm.dto.MessageType;
 import com.bottari.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
-import com.bottari.teambottari.event.CreateAssignedItemEvent;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
@@ -16,6 +15,8 @@ import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
+import com.bottari.teambottari.event.CreateAssignedItemEvent;
+import com.bottari.teambottari.event.DeleteAssignedItemEvent;
 import com.bottari.teambottari.repository.TeamAssignedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamAssignedItemRepository;
 import com.bottari.teambottari.repository.TeamMemberRepository;
@@ -68,6 +69,11 @@ public class TeamAssignedItemService {
         validateMemberInTeam(teamAssignedItemInfo.getTeamBottari().getId(), ssaid);
         teamAssignedItemRepository.deleteAllByInfo(teamAssignedItemInfo);
         teamAssignedItemInfoRepository.delete(teamAssignedItemInfo);
+        publisher.publishEvent(new DeleteAssignedItemEvent(
+                teamAssignedItemInfo.getTeamBottari().getId(),
+                id,
+                teamAssignedItemInfo.getName()
+        ));
     }
 
     public List<TeamItemStatusResponse> getAllWithMemberStatusByTeamBottariId(final Long teamBottariId) {
