@@ -9,12 +9,10 @@ import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.usecase.alarm.CreateAlarmUseCase
 import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
-import com.bottari.domain.usecase.notification.SaveNotificationsUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.AlarmMapper.toDomain
-import com.bottari.presentation.mapper.NotificationMapper.toDomain
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.NotificationUiModel
@@ -26,7 +24,6 @@ class AlarmEditViewModel(
     stateHandle: SavedStateHandle,
     private val createAlarmUseCase: CreateAlarmUseCase,
     private val saveAlarmUseCase: SaveAlarmUseCase,
-    private val saveNotificationsUseCase: SaveNotificationsUseCase,
 ) : BaseViewModel<AlarmUiState, AlarmUiEvent>(
         AlarmUiState(
             alarm = stateHandle[KEY_ALARM] ?: AlarmUiModel.DEFAULT_ALARM_UI_MODEL,
@@ -79,7 +76,7 @@ class AlarmEditViewModel(
     private fun createAlarm(alarm: Alarm) {
         updateState { copy(isLoading = true) }
         launch {
-            createAlarmUseCase(bottariId, alarm)
+            createAlarmUseCase(bottariId, bottariTitle, alarm)
                 .onSuccess {
                     BottariLogger.ui(
                         UiEventType.ALARM_CREATE,
@@ -90,14 +87,13 @@ class AlarmEditViewModel(
                     emitEvent(AlarmUiEvent.AlarmCreateFailure)
                 }
         }
-        saveNotification()
         updateState { copy(isLoading = false) }
     }
 
     private fun saveAlarm(alarm: Alarm) {
         updateState { copy(isLoading = true) }
         launch {
-            saveAlarmUseCase(alarm.id!!, alarm)
+            saveAlarmUseCase(bottariId, bottariTitle, alarm)
                 .onSuccess {
                     BottariLogger.ui(
                         UiEventType.ALARM_EDIT,
@@ -112,17 +108,7 @@ class AlarmEditViewModel(
                     emitEvent(AlarmUiEvent.AlarmSaveFailure)
                 }
         }
-        saveNotification()
         updateState { copy(isLoading = false) }
-    }
-
-    private fun saveNotification() {
-        launch {
-            val notification = createNotification()
-            saveNotificationsUseCase(notification.toDomain())
-                .onSuccess { AlarmUiEvent.AlarmSaveSuccess(notification) }
-                .onFailure { emitEvent(AlarmUiEvent.AlarmSaveFailure) }
-        }
     }
 
     private fun createNotification(): NotificationUiModel =
@@ -154,7 +140,6 @@ class AlarmEditViewModel(
                         stateHandle = stateHandle,
                         createAlarmUseCase = UseCaseProvider.createAlarmUseCase,
                         saveAlarmUseCase = UseCaseProvider.saveAlarmUseCase,
-                        saveNotificationsUseCase = UseCaseProvider.saveNotificationsUseCase,
                     )
                 }
             }
