@@ -11,9 +11,7 @@ public record CheckTeamItemData(
         LocalDateTime publishedAt
 ) {
 
-    public static CheckTeamItemData from(
-            final CheckTeamSharedItemEvent event
-    ) {
+    public static CheckTeamItemData from(final CheckTeamSharedItemEvent event) {
         return new CheckTeamItemData(
                 event.getInfoId(),
                 event.getMemberId(),
@@ -22,9 +20,7 @@ public record CheckTeamItemData(
         );
     }
 
-    public static CheckTeamItemData from(
-            final CheckTeamAssignedItemEvent event
-    ) {
+    public static CheckTeamItemData from(final CheckTeamAssignedItemEvent event) {
         return new CheckTeamItemData(
                 event.getInfoId(),
                 event.getMemberId(),
