@@ -17,6 +17,8 @@ import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.event.CheckTeamAssignedItemEvent;
+import com.bottari.teambottari.event.CreateAssignedItemEvent;
+import com.bottari.teambottari.event.DeleteAssignedItemEvent;
 import com.bottari.teambottari.repository.TeamAssignedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamAssignedItemRepository;
 import com.bottari.teambottari.repository.TeamMemberRepository;
@@ -36,13 +38,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TeamAssignedItemService {
 
-    private final FcmMessageSender fcmMessageSender;
-    private final FcmMessageConverter fcmMessageConverter;
-    private final ApplicationEventPublisher applicationEventPublisher;
     private final TeamAssignedItemRepository teamAssignedItemRepository;
     private final TeamAssignedItemInfoRepository teamAssignedItemInfoRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
+
+    private final FcmMessageSender fcmMessageSender;
+    private final FcmMessageConverter fcmMessageConverter;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public List<ReadAssignedItemResponse> getAllByTeamBottariId(final Long teamBottariId) {
         final List<TeamAssignedItem> assignedItems = teamAssignedItemRepository.findAllByTeamBottariId(teamBottariId);
@@ -70,6 +74,12 @@ public class TeamAssignedItemService {
         final List<TeamMember> teamMembers = getAssignedTeamMembersByRequest(requestAssignedMemberNames, teamBottari);
         final TeamAssignedItemInfo savedTeamAssignedItemInfo = saveTeamAssignedItemInfo(request.name(), teamBottari);
         saveAssignedItemToTeamMembers(savedTeamAssignedItemInfo, teamMembers);
+        applicationEventPublisher.publishEvent(new CreateAssignedItemEvent(
+                teamBottari.getId(),
+                savedTeamAssignedItemInfo.getId(),
+                savedTeamAssignedItemInfo.getName(),
+                request.memberIds()
+        ));
 
         return savedTeamAssignedItemInfo.getId();
     }
@@ -84,6 +94,11 @@ public class TeamAssignedItemService {
         validateMemberInTeam(teamAssignedItemInfo.getTeamBottari().getId(), ssaid);
         teamAssignedItemRepository.deleteAllByInfo(teamAssignedItemInfo);
         teamAssignedItemInfoRepository.delete(teamAssignedItemInfo);
+        applicationEventPublisher.publishEvent(new DeleteAssignedItemEvent(
+                teamAssignedItemInfo.getTeamBottari().getId(),
+                id,
+                teamAssignedItemInfo.getName()
+        ));
     }
 
     public List<TeamItemStatusResponse> getAllWithMemberStatusByTeamBottariId(final Long teamBottariId) {
