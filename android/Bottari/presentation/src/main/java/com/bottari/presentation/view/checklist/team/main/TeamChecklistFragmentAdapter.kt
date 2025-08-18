@@ -1,16 +1,15 @@
-package com.bottari.presentation.view.checklist.team.main.checklist.adapter
+package com.bottari.presentation.view.checklist.team.main
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bottari.presentation.view.checklist.team.main.checklist.TeamChecklistFragment
 import com.bottari.presentation.view.checklist.team.main.member.TeamMembersStatusFragment
 import com.bottari.presentation.view.checklist.team.main.status.TeamBottariStatusFragment
 
 class TeamChecklistFragmentAdapter(
-    fragmentActivity: FragmentActivity,
+    fragment: Fragment,
     private val bottariId: Long,
-) : FragmentStateAdapter(fragmentActivity) {
+) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = 3
 
     override fun createFragment(position: Int): Fragment =

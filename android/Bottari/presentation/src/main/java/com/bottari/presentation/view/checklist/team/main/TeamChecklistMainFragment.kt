@@ -6,7 +6,6 @@ import androidx.core.os.bundleOf
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.databinding.FragmentTeamChecklistMainBinding
-import com.bottari.presentation.view.checklist.team.main.checklist.adapter.TeamChecklistFragmentAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
 class TeamChecklistMainFragment : BaseFragment<FragmentTeamChecklistMainBinding>(FragmentTeamChecklistMainBinding::inflate) {
@@ -19,7 +18,7 @@ class TeamChecklistMainFragment : BaseFragment<FragmentTeamChecklistMainBinding>
         super.onViewCreated(view, savedInstanceState)
         adapter =
             TeamChecklistFragmentAdapter(
-                requireActivity(),
+                this,
                 requireArguments().getLong(ARG_BOTTARI_ID),
             )
         binding.vpTeamChecklist.adapter = adapter
