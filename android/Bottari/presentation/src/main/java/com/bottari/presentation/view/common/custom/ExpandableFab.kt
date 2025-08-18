@@ -189,7 +189,6 @@ class ExpandableFab
         fun toggle() {
             isExpanded = !isExpanded
             if (isExpanded) expand() else collapse()
-            rotateMainButton(isExpanded)
         }
 
         // 서브 버튼 확장
