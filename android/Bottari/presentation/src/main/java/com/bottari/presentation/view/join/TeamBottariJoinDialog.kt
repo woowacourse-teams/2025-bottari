@@ -106,6 +106,7 @@ class TeamBottariJoinDialog : DialogFragment() {
     }
 
     private fun setInviteCodeFromClipboard() {
+        if (binding.etTeamBottariJoinInviteCode.text?.isNotBlank() == true) return
         val clipData = clipboardManager.primaryClip ?: return
         if (clipData.itemCount <= 0) return
 
