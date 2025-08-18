@@ -68,7 +68,6 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
 
     private fun setupListener() {
         binding.btnPrevious.setOnClickListener { handlePreviousButtonClick() }
-        binding.viewTeamAlarmEdit.switchAlarmEdit.setOnClickListener { viewModel.toggleAlarmState() }
         binding.viewTeamMemberEdit.root.setOnClickListener {
             (requireActivity() as? TeamBottariEditNavigator)?.navigateToMemberEdit(teamBottariId)
         }
