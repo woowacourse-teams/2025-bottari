@@ -124,11 +124,12 @@ public interface TeamBottariItemApiDocs {
             @ApiResponse(responseCode = "204", description = "팀 보따리 담당 물품 수정 성공"),
     })
     @ApiErrorCodes({
+            ErrorCode.TEAM_BOTTARI_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI,
             ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND,
-            ErrorCode.TEAM_BOTTARI_ITEM_NOT_OWNED,
             ErrorCode.TEAM_BOTTARI_ITEM_NO_ASSIGNED_MEMBERS,
-            ErrorCode.TEAM_BOTTARI_ITEM_NAME_BLANK,
-            ErrorCode.TEAM_BOTTARI_ITEM_NAME_TOO_LONG,
+            ErrorCode.TEAM_BOTTARI_ITEM_INFO_NOT_FOUND,
             ErrorCode.TEAM_BOTTARI_ITEM_ALREADY_EXISTS
     })
     ResponseEntity<Void> updateAssigned(
