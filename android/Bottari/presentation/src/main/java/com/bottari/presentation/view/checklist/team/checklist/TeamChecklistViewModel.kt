@@ -43,16 +43,16 @@ class TeamChecklistViewModel(
 
     fun toggleParentExpanded(type: BottariItemTypeUiModel) {
         val updatedExpandableItems =
-            uiState.value?.expandableItems?.map { item ->
+            currentState.expandableItems.map { item ->
                 if (item is TeamChecklistExpandableTypeUiModel && item.type == type) {
                     val reverseExpandType = item.copy(isExpanded = !item.isExpanded)
                     return@map reverseExpandType
                 }
                 item
-            } ?: return
+            }
 
         val newExpandableList =
-            generateExpandableTypeList(updatedExpandableItems, uiState.value?.items ?: return)
+            generateExpandableTypeList(updatedExpandableItems, uiState.value?.bottariItems ?: return)
         updateState {
             copy(expandableItems = newExpandableList)
         }
@@ -67,16 +67,16 @@ class TeamChecklistViewModel(
         itemToToggle?.let { item ->
             val toggledItem = item.toggle()
             val newItems =
-                uiState.value?.items?.map { checklistItem ->
+                currentState.bottariItems.map { checklistItem ->
                     if (toggledItem.isSameItem(checklistItem)) return@map toggledItem
                     checklistItem
-                } ?: return
+                }
             val newExpandableList =
-                uiState.value?.expandableItems?.toggleItemInList(toggledItem) ?: return
+                currentState.expandableItems.toggleItemInList(toggledItem) ?: return
 
             updateState {
                 copy(
-                    items = newItems,
+                    bottariItems = newItems,
                     expandableItems = newExpandableList,
                 )
             }
@@ -84,6 +84,14 @@ class TeamChecklistViewModel(
             pendingCheckStatusMap[toggledItem.id] = toggledItem
             debouncedCheck(pendingCheckStatusMap.values.toList())
         }
+    }
+
+    fun resetSwipeState() {
+        updateState { copy(swipedItemIds = emptySet()) }
+    }
+
+    fun addSwipedItem(itemId: Long) {
+        updateState { copy(swipedItemIds = this.swipedItemIds + itemId) }
     }
 
     private fun List<TeamChecklistItem>.toggleItemInList(item: TeamChecklistProductUiModel): List<TeamChecklistItem> =
@@ -110,7 +118,7 @@ class TeamChecklistViewModel(
 
     private fun setTeamCheckList(checklistData: TeamBottariCheckList) {
         val newItems = checklistData.toUIModel()
-        updateState { copy(items = newItems) }
+        updateState { copy(bottariItems = newItems) }
         val newExpandableList =
             generateExpandableTypeList(currentState.expandableItems, newItems)
         updateState {

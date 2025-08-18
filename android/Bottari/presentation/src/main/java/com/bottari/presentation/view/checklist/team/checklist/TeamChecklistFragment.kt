@@ -3,7 +3,7 @@ package com.bottari.presentation.view.checklist.team.checklist
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
@@ -15,7 +15,7 @@ import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamCheckl
 class TeamChecklistFragment :
     BaseFragment<FragmentTeamChecklistBinding>(FragmentTeamChecklistBinding::inflate),
     TeamChecklistItemAdapter.TeamChecklistEventListener {
-    private val viewModel: TeamChecklistViewModel by viewModels {
+    private val viewModel: TeamChecklistViewModel by activityViewModels {
         TeamChecklistViewModel.Factory(requireArguments().getLong(ARG_BOTTARI_ID))
     }
 

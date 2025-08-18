@@ -4,17 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.addCallback
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityTeamChecklistBinding
-import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamChecklistFragmentAdapter
+import com.bottari.presentation.view.checklist.team.checklist.swipe.TeamSwipeChecklistFragment
 import com.bottari.presentation.view.home.HomeActivity
-import com.google.android.material.tabs.TabLayoutMediator
 
 class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(ActivityTeamChecklistBinding::inflate) {
-    private val adapter: TeamChecklistFragmentAdapter by lazy {
-        TeamChecklistFragmentAdapter(this, bottariId)
-    }
     private val bottariId: Long by lazy {
         intent.getLongExtra(
             EXTRA_BOTTARI_ID,
@@ -36,22 +35,18 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
 
     private fun setupUI() {
         binding.tvBottariTitle.text = intent.getStringExtra(EXTRA_BOTTARI_TITLE)
-        binding.vpTeamBottari.adapter = adapter
-        TabLayoutMediator(binding.tlTeamBottari, binding.vpTeamBottari) { tab, position ->
-            tab.text =
-                when (position) {
-                    0 -> getString(R.string.team_checklist_tap_checklist_text)
-                    1 -> getString(R.string.team_checklist_tap_team_current_text)
-                    2 -> getString(R.string.team_checklist_tap_member_checklist_text)
-                    else -> throw IllegalArgumentException(ERROR_UNKNOWN_TYPE)
-                }
-        }.attach()
+        navigateToTeamChecklistMain()
     }
 
     private fun setupListener() {
         onBackPressedDispatcher.addCallback {
             when {
                 notificationFlag -> navigateToHome()
+                currentFragmentIsSwipe() -> {
+                    supportFragmentManager.popBackStack()
+                    navigateToTeamChecklistMain()
+                }
+
                 supportFragmentManager.backStackEntryCount == 0 -> finish()
                 else -> supportFragmentManager.popBackStack()
             }
@@ -59,7 +54,13 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
         binding.btnPrevious.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+        binding.btnSwipe.setOnClickListener {
+            navigateToSwipeChecklist()
+        }
     }
+
+    private fun currentFragmentIsSwipe(): Boolean =
+        supportFragmentManager.findFragmentById(R.id.fcv_team_checklist) is TeamSwipeChecklistFragment
 
     private fun navigateToHome() {
         val intent = HomeActivity.newIntent(this)
@@ -67,12 +68,33 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
         finish()
     }
 
+    private fun navigateToTeamChecklistMain() {
+        val intent = TeamChecklistMainFragment.newInstance(bottariId)
+        replaceChecklistFragment(intent, false)
+        binding.btnSwipe.isVisible = true
+    }
+
+    private fun navigateToSwipeChecklist() {
+        val intent = TeamSwipeChecklistFragment.newInstance(bottariId)
+        replaceChecklistFragment(intent, false)
+        binding.btnSwipe.isVisible = false
+    }
+
+    private fun replaceChecklistFragment(
+        fragment: Fragment,
+        addToBackStack: Boolean,
+    ) {
+        supportFragmentManager.commit {
+            replace(R.id.fcv_team_checklist, fragment)
+            if (addToBackStack) addToBackStack(fragment::class.simpleName)
+        }
+    }
+
     companion object {
         private const val INVALID_BOTTARI_ID = -1L
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
         private const val EXTRA_BOTTARI_TITLE = "EXTRA_BOTTARI_TITLE"
         private const val EXTRA_NOTIFICATION_FLAG = "EXTRA_NOTIFICATION_FLAG"
-        private const val ERROR_UNKNOWN_TYPE = "[ERROR] 알 수 없는 타입입니다."
 
         fun newIntent(
             context: Context,
