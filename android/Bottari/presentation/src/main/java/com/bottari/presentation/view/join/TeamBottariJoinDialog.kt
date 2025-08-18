@@ -78,18 +78,15 @@ class TeamBottariJoinDialog : DialogFragment() {
         setInviteCodeFromClipboard()
     }
 
-    private fun setupDialog() {
-        val metrics = Resources.getSystem().displayMetrics
-        val width = (metrics.widthPixels * WIDTH_RATIO).toInt()
+    private fun setupDialog() =
         dialog?.run {
             setCancelable(false)
             window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
             window?.setLayout(
-                width,
+                (resources.displayMetrics.widthPixels * WIDTH_RATIO).toInt(),
                 ViewGroup.LayoutParams.WRAP_CONTENT,
             )
         }
-    }
 
     private fun setupListener() {
         binding.etTeamBottariJoinInviteCode.doAfterTextChanged { newText ->
