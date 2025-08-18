@@ -17,9 +17,9 @@ import com.bottari.presentation.util.PermissionUtil.hasAllRuntimePermissions
 import com.bottari.presentation.util.PermissionUtil.hasExactAlarmPermission
 import com.bottari.presentation.util.PermissionUtil.requiredPermissions
 import com.bottari.presentation.view.common.PermissionDescriptionDialog
-import com.bottari.presentation.view.common.alart.CustomAlertDialog
-import com.bottari.presentation.view.common.alart.DialogListener
-import com.bottari.presentation.view.common.alart.DialogPresetType
+import com.bottari.presentation.view.common.alert.CustomAlertDialog
+import com.bottari.presentation.view.common.alert.DialogListener
+import com.bottari.presentation.view.common.alert.DialogPresetType
 import com.bottari.presentation.view.home.HomeActivity
 import com.bottari.presentation.view.invite.InviteActivity
 

@@ -20,9 +20,9 @@ import com.bottari.presentation.common.extension.getParcelableArrayListCompat
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.model.BottariItemUiModel
-import com.bottari.presentation.view.common.alart.CustomAlertDialog
-import com.bottari.presentation.view.common.alart.DialogListener
-import com.bottari.presentation.view.common.alart.DialogPresetType
+import com.bottari.presentation.view.common.alert.CustomAlertDialog
+import com.bottari.presentation.view.common.alert.DialogListener
+import com.bottari.presentation.view.common.alert.DialogPresetType
 import com.bottari.presentation.view.edit.personal.item.adapter.PersonalItemEditAdapter
 
 class PersonalItemEditFragment :

@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.common.alart
+package com.bottari.presentation.view.common.alert
 
 import com.bottari.presentation.R
 
