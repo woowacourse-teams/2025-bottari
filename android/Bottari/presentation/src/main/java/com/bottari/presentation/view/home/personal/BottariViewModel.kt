@@ -6,14 +6,17 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
+import com.bottari.domain.usecase.notification.DeleteNotificationUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
+import com.bottari.presentation.model.BottariUiModel
 
 class BottariViewModel(
     private val fetchBottariesUseCase: FetchBottariesUseCase,
     private val deleteBottariUseCase: DeleteBottariUseCase,
+    private val deleteNotificationUseCase: DeleteNotificationUseCase,
 ) : BaseViewModel<BottariUiState, BottariUiEvent>(BottariUiState()) {
     init {
         fetchBottaries()
@@ -50,6 +53,7 @@ class BottariViewModel(
                             "bottari_title" to bottari?.title.orEmpty(),
                         ),
                     )
+                    deleteNotification(bottari)
                     fetchBottaries()
                     emitEvent(BottariUiEvent.BottariDeleteSuccess)
                 }.onFailure {
@@ -60,6 +64,19 @@ class BottariViewModel(
         }
     }
 
+    private fun deleteNotification(bottari: BottariUiModel?) {
+        if (bottari == null) return
+        launch {
+            deleteNotificationUseCase(bottari.id)
+                .onFailure { exception ->
+                    BottariLogger.error(
+                        exception.stackTraceToString(),
+                        exception,
+                    )
+                }
+        }
+    }
+
     companion object {
         fun Factory(): ViewModelProvider.Factory =
             viewModelFactory {
@@ -67,6 +84,7 @@ class BottariViewModel(
                     BottariViewModel(
                         UseCaseProvider.fetchBottariesUseCase,
                         UseCaseProvider.deleteBottariUseCase,
+                        UseCaseProvider.deleteNotificationsUseCase,
                     )
                 }
             }
