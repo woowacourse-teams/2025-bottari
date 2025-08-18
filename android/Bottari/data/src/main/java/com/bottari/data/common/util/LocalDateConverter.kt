@@ -5,8 +5,12 @@ import java.time.LocalDate
 
 class LocalDateConverter {
     @TypeConverter
-    fun fromDate(date: LocalDate?): String? = date.toString()
+    fun fromDate(date: LocalDate?): String? = date?.toString()
 
     @TypeConverter
-    fun toDate(value: String?): LocalDate? = LocalDate.parse(value)
+    fun toDate(value: String?): LocalDate? = value?.takeIf { it != NULL_STRING }?.let(LocalDate::parse)
+
+    companion object {
+        private const val NULL_STRING = "null"
+    }
 }

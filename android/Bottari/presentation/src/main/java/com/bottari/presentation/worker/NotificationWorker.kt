@@ -12,8 +12,8 @@ import com.bottari.presentation.util.AlarmScheduler
 class NotificationWorker(
     context: Context,
     workerParams: WorkerParameters,
-    private val getNotificationsUseCase: GetNotificationsUseCase = UseCaseProvider.getNotificationsUseCase,
 ) : CoroutineWorker(context, workerParams) {
+    private val getNotificationsUseCase: GetNotificationsUseCase by lazy { UseCaseProvider.getNotificationsUseCase }
     private val scheduler: AlarmScheduler by lazy { AlarmScheduler() }
 
     override suspend fun doWork(): Result =
