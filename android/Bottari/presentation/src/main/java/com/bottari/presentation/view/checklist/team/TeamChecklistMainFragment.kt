@@ -32,11 +32,6 @@ class TeamChecklistMainFragment : BaseFragment<FragmentTeamChecklistMainBinding>
         }.attach()
     }
 
-    override fun onDestroyView() {
-        binding.vpTeamChecklist.adapter = null
-        super.onDestroyView()
-    }
-
     companion object {
         private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
         private const val ERROR_UNKNOWN_TYPE = "[ERROR] 알 수 없는 타입입니다."

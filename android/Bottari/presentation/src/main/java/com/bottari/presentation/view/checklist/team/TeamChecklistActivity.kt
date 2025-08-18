@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
@@ -85,9 +86,19 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
         addToBackStack: Boolean,
     ) {
         supportFragmentManager.commit {
+            setSlideFastAnimation()
             replace(R.id.fcv_team_checklist, fragment)
             if (addToBackStack) addToBackStack(fragment::class.simpleName)
         }
+    }
+
+    private fun FragmentTransaction.setSlideFastAnimation() {
+        setCustomAnimations(
+            R.anim.slide_in_right_fast,
+            R.anim.slide_out_right_fast,
+            R.anim.slide_in_right_fast,
+            R.anim.slide_out_right_fast,
+        )
     }
 
     companion object {
