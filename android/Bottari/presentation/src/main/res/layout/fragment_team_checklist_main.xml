@@ -14,24 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tabIndicatorColor="@android:color/black"
         app:tabSelectedTextColor="@android:color/black"
-        app:tabTextColor="@android:color/darker_gray">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/team_checklist_tap_checklist_text" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/team_checklist_tap_team_current_text" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/team_checklist_tap_member_checklist_text" />
-
-    </com.google.android.material.tabs.TabLayout>
+        app:tabTextAppearance="@style/CustomTabText" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp_team_checklist"
