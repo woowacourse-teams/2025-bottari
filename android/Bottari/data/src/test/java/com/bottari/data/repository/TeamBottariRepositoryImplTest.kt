@@ -1,11 +1,20 @@
 package com.bottari.data.repository
 
+import com.bottari.data.model.team.CreateTeamBottariAssignedItemRequest
+import com.bottari.data.model.team.CreateTeamBottariPersonalItemRequest
 import com.bottari.data.model.team.CreateTeamBottariRequest
+import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
 import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.JoinTeamBottariRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
+import com.bottari.data.testFixture.BOTTARI_ASSIGNED_ITEM_FIXTURE
+import com.bottari.data.testFixture.BOTTARI_ASSIGNED_ITEM_RESPONSE_FIXTURE
+import com.bottari.data.testFixture.BOTTARI_PERSONAL_ITEM_FIXTURE
+import com.bottari.data.testFixture.BOTTARI_PERSONAL_ITEM_RESPONSE_FIXTURE
+import com.bottari.data.testFixture.BOTTARI_SHARED_ITEM_FIXTURE
+import com.bottari.data.testFixture.BOTTARI_SHARED_ITEM_RESPONSE_FIXTURE
 import com.bottari.data.testFixture.TEAM_BOTTARI
 import com.bottari.data.testFixture.TEAM_BOTTARI_DETAIL
 import com.bottari.data.testFixture.TEAM_BOTTARI_DETAIL_RESPONSE
@@ -504,5 +513,317 @@ class TeamBottariRepositoryImplTest {
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamBottariMembers(teamBottariId) }
+        }
+
+    @DisplayName("팀 보따리 개인 물건을 추가에 성공하면 Success를 반환한다")
+    @Test
+    fun createTeamBottariPersonalItemReturnsSuccessTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val itemName = "item"
+            coEvery {
+                dataSource.createTeamBottariPersonalItem(
+                    teamBottariId,
+                    CreateTeamBottariPersonalItemRequest(itemName),
+                )
+            } returns Result.success(Unit)
+
+            // when
+            val result = repository.createTeamBottariPersonalItem(teamBottariId, itemName)
+
+            // then
+            result.shouldBeSuccess()
+
+            // verify
+            coVerify(exactly = 1) {
+                dataSource.createTeamBottariPersonalItem(
+                    teamBottariId,
+                    CreateTeamBottariPersonalItemRequest(itemName),
+                )
+            }
+        }
+
+    @DisplayName("팀 보따리 개인 물건을 추가에 실패하면 Failure를 반환한다")
+    @Test
+    fun createTeamBottariPersonalItemReturnsFailureTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val itemName = "item"
+
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery {
+                dataSource.createTeamBottariPersonalItem(
+                    teamBottariId,
+                    CreateTeamBottariPersonalItemRequest(itemName),
+                )
+            } returns Result.failure(exception)
+
+            // when
+            val result = repository.createTeamBottariPersonalItem(teamBottariId, itemName)
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) {
+                dataSource.createTeamBottariPersonalItem(
+                    teamBottariId,
+                    CreateTeamBottariPersonalItemRequest(itemName),
+                )
+            }
+        }
+
+    @DisplayName("팀 보따리 공통 물건을 추가에 성공하면 Succuss를 반환한다")
+    @Test
+    fun createTeamBottariSharedItemReturnsSuccessTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val itemName = "item"
+
+            coEvery {
+                dataSource.createTeamBottariSharedItem(
+                    teamBottariId,
+                    CreateTeamBottariSharedItemRequest(itemName),
+                )
+            } returns Result.success(Unit)
+
+            // when
+            val result = repository.createTeamBottariSharedItem(teamBottariId, itemName)
+
+            // then
+            result.shouldBeSuccess()
+
+            // verify
+            coVerify(exactly = 1) {
+                dataSource.createTeamBottariSharedItem(
+                    teamBottariId,
+                    CreateTeamBottariSharedItemRequest(itemName),
+                )
+            }
+        }
+
+    @DisplayName("팀 보따리 공통 물건을 추가에 실패하면 Failure를 반환한다")
+    @Test
+    fun createTeamBottariSharedItemReturnsFailureTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val itemName = "item"
+
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery {
+                dataSource.createTeamBottariSharedItem(
+                    teamBottariId,
+                    CreateTeamBottariSharedItemRequest(itemName),
+                )
+            } returns Result.failure(exception)
+
+            // when
+            val result = repository.createTeamBottariSharedItem(teamBottariId, itemName)
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) {
+                dataSource.createTeamBottariSharedItem(
+                    teamBottariId,
+                    CreateTeamBottariSharedItemRequest(itemName),
+                )
+            }
+        }
+
+    @DisplayName("팀 보따리 담당 물건을 추가에 성공하면 Success를 반환한다")
+    @Test
+    fun createTeamBottariAssignedItemReturnsSuccessTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val itemName = "item"
+
+            coEvery {
+                dataSource.createTeamBottariAssignedItem(
+                    teamBottariId,
+                    CreateTeamBottariAssignedItemRequest(itemName, listOf(1L)),
+                )
+            } returns Result.success(Unit)
+
+            // when
+            val result =
+                repository.createTeamBottariAssignedItem(teamBottariId, itemName, listOf(1L))
+
+            // then
+            result.shouldBeSuccess()
+
+            // verify
+            coVerify(exactly = 1) {
+                dataSource.createTeamBottariAssignedItem(
+                    teamBottariId,
+                    CreateTeamBottariAssignedItemRequest(itemName, listOf(1L)),
+                )
+            }
+        }
+
+    @DisplayName("팀 보따리 담당 물건을 추가에 실패하면 Failure를 반환한다")
+    @Test
+    fun createTeamBottariAssignedItemReturnsFailureTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val itemName = "item"
+
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery {
+                dataSource.createTeamBottariAssignedItem(
+                    teamBottariId,
+                    CreateTeamBottariAssignedItemRequest(itemName, listOf(1L)),
+                )
+            } returns Result.failure(exception)
+
+            // when
+            val result =
+                repository.createTeamBottariAssignedItem(teamBottariId, itemName, listOf(1L))
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) {
+                dataSource.createTeamBottariAssignedItem(
+                    teamBottariId,
+                    CreateTeamBottariAssignedItemRequest(itemName, listOf(1L)),
+                )
+            }
+        }
+
+    @DisplayName("팀 보따리 개인 물건 목록 조회에 성공하면 Success를 반환한다")
+    @Test
+    fun fetchTeamPersonalItemsReturnsSuccessTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+
+            val personalItems = listOf(BOTTARI_PERSONAL_ITEM_RESPONSE_FIXTURE)
+            coEvery { dataSource.fetchTeamPersonalItems(teamBottariId) } returns
+                Result.success(
+                    personalItems,
+                )
+
+            // when
+            val result = repository.fetchTeamPersonalItems(teamBottariId)
+
+            // then
+            assertSoftly(result) {
+                shouldBeSuccess()
+                getOrThrow().shouldBe(listOf(BOTTARI_PERSONAL_ITEM_FIXTURE))
+            }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.fetchTeamPersonalItems(teamBottariId) }
+        }
+
+    @DisplayName("팀 보따리 개인 물건 목록 조회에 실패하면 Failure를 반환한다")
+    @Test
+    fun fetchTeamPersonalItemsReturnsFailureTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+
+            coEvery { dataSource.fetchTeamPersonalItems(teamBottariId) } returns Result.failure(exception)
+
+            // when
+            val result = repository.fetchTeamPersonalItems(teamBottariId)
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.fetchTeamPersonalItems(teamBottariId) }
+        }
+
+    @DisplayName("팀 보따리 공통 물건 목록 조회에 성공하면 Success를 반환한다")
+    @Test
+    fun fetchTeamSharedItemsReturnsSuccessTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val sharedItems = listOf(BOTTARI_SHARED_ITEM_RESPONSE_FIXTURE)
+            coEvery { dataSource.fetchTeamSharedItems(teamBottariId) } returns Result.success(sharedItems)
+
+            // when
+            val result = repository.fetchTeamSharedItems(teamBottariId)
+
+            // then
+            assertSoftly(result) {
+                shouldBeSuccess()
+                getOrThrow().shouldBe(listOf(BOTTARI_SHARED_ITEM_FIXTURE))
+            }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.fetchTeamSharedItems(teamBottariId) }
+        }
+
+    @DisplayName("팀 보따리 공통 물건 목록 조회에 실패하면 Failure를 반환한다")
+    @Test
+    fun fetchTeamSharedItemsReturnsFailureTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery { dataSource.fetchTeamSharedItems(teamBottariId) } returns Result.failure(exception)
+
+            // when
+            val result = repository.fetchTeamSharedItems(teamBottariId)
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.fetchTeamSharedItems(teamBottariId) }
+        }
+
+    @DisplayName("팀 보따리 담당 물건 목록 조회에 성공하면 Success를 반환한다")
+    @Test
+    fun fetchTeamAssignedItemsReturnsSuccessTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val assignedItems = listOf(BOTTARI_ASSIGNED_ITEM_RESPONSE_FIXTURE)
+            coEvery { dataSource.fetchTeamAssignedItems(teamBottariId) } returns Result.success(assignedItems)
+
+            // when
+            val result = repository.fetchTeamAssignedItems(teamBottariId)
+
+            // then
+            assertSoftly(result) {
+                shouldBeSuccess()
+                getOrThrow().shouldBe(listOf(BOTTARI_ASSIGNED_ITEM_FIXTURE))
+            }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.fetchTeamAssignedItems(teamBottariId) }
+        }
+
+    @DisplayName("팀 보따리 담당 물건 목록 조회에 실패하면 Failure를 반환한다")
+    @Test
+    fun fetchTeamAssignedItemsReturnsFailureTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery { dataSource.fetchTeamAssignedItems(teamBottariId) } returns Result.failure(exception)
+
+            // when
+            val result = repository.fetchTeamAssignedItems(teamBottariId)
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.fetchTeamAssignedItems(teamBottariId) }
         }
 }
