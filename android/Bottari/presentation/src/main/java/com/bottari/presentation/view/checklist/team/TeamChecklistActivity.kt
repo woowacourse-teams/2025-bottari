@@ -37,7 +37,9 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
 
     private fun setupUI() {
         binding.tvBottariTitle.text = intent.getStringExtra(EXTRA_BOTTARI_TITLE)
-        navigateToTeamChecklistMain()
+        if (supportFragmentManager.findFragmentById(R.id.fcv_team_checklist) == null) {
+            navigateToTeamChecklistMain()
+        }
     }
 
     private fun setupListener() {
