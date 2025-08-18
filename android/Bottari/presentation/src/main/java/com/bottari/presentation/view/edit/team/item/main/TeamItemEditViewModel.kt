@@ -1,5 +1,7 @@
 package com.bottari.presentation.view.edit.team.item.main
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
@@ -15,7 +17,18 @@ class TeamItemEditViewModel(
             currentTabType = stateHandle[KEY_TAB_TYPE] ?: error(ERROR_TYPE_NULL),
         ),
     ) {
-    fun updateInput(input: String) = updateState { copy(itemInputText = input) }
+    private val _createItemEvent: MutableLiveData<TeamItemEditUiEvent?> = MutableLiveData()
+    val createItemEvent: LiveData<TeamItemEditUiEvent?> get() = _createItemEvent
+
+    fun updateInput(input: String) {
+        if (currentState.itemInputText == input) return
+        updateState { copy(itemInputText = input) }
+    }
+
+    fun updateSendCondition(sendCondition: Boolean) {
+        if (currentState.sendCondition == sendCondition) return
+        updateState { copy(sendCondition = sendCondition) }
+    }
 
     fun updateIsAlreadyExistState(isAlreadyExist: Boolean) {
         if (currentState.isAlreadyExist == isAlreadyExist) return
@@ -26,10 +39,19 @@ class TeamItemEditViewModel(
 
     fun createItem() {
         when (currentState.currentTabType) {
-            BottariItemTypeUiModel.SHARED -> emitEvent(TeamItemEditUiEvent.CreateTeamSharedItem)
-            BottariItemTypeUiModel.PERSONAL -> emitEvent(TeamItemEditUiEvent.CreateTeamPersonalItem)
-            is BottariItemTypeUiModel.ASSIGNED -> emitEvent(TeamItemEditUiEvent.CreateTeamAssignedItem)
+            BottariItemTypeUiModel.SHARED -> emitCreateEvent(TeamItemEditUiEvent.CreateTeamSharedItem)
+            BottariItemTypeUiModel.PERSONAL -> emitCreateEvent(TeamItemEditUiEvent.CreateTeamPersonalItem)
+            is BottariItemTypeUiModel.ASSIGNED -> emitCreateEvent(TeamItemEditUiEvent.CreateTeamAssignedItem)
         }
+        resetCreateEvent()
+    }
+
+    private fun emitCreateEvent(event: TeamItemEditUiEvent) {
+        _createItemEvent.value = event
+    }
+
+    private fun resetCreateEvent() {
+        _createItemEvent.value = null
     }
 
     companion object {

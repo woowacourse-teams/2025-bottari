@@ -6,6 +6,5 @@ import com.bottari.domain.repository.TeamBottariRepository
 class FetchTeamPersonalItemsUseCase(
     private val teamBottariRepository: TeamBottariRepository,
 ) {
-    suspend operator fun invoke(bottariId: Long): Result<List<BottariItem>> =
-        teamBottariRepository.fetchTeamBottariDetail(bottariId).mapCatching { it.personalItems }
+    suspend operator fun invoke(bottariId: Long): Result<List<BottariItem>> = teamBottariRepository.fetchTeamPersonalItems(bottariId)
 }

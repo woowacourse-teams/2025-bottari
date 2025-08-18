@@ -43,7 +43,7 @@ class TeamSharedItemEditFragment :
     }
 
     private fun setupObserver() {
-        parentViewModel.uiEvent.observe(viewLifecycleOwner, ::handleParentUiEvent)
+        parentViewModel.createItemEvent.observe(viewLifecycleOwner, ::handleParentUiEvent)
         parentViewModel.uiState.observe(viewLifecycleOwner, ::handleParentUiState)
         viewModel.uiState.observe(viewLifecycleOwner, ::handleUiState)
         viewModel.uiEvent.observe(viewLifecycleOwner, ::handleUiEvent)
@@ -59,7 +59,7 @@ class TeamSharedItemEditFragment :
         viewModel.updateInput(uiState.itemInputText)
     }
 
-    private fun handleParentUiEvent(uiEvent: TeamItemEditUiEvent) {
+    private fun handleParentUiEvent(uiEvent: TeamItemEditUiEvent?) {
         if (uiEvent !is TeamItemEditUiEvent.CreateTeamSharedItem) return
         viewModel.createItem()
     }
@@ -67,6 +67,7 @@ class TeamSharedItemEditFragment :
     private fun handleUiState(uiState: TeamSharedItemEditUiState) {
         toggleLoadingIndicator(uiState.isLoading)
         parentViewModel.updateIsAlreadyExistState(uiState.isAlreadyExist)
+        parentViewModel.updateSendCondition(true)
         binding.emptyView.root.isVisible = uiState.isEmpty
         adapter.submitList(uiState.sharedItems)
     }
@@ -74,13 +75,16 @@ class TeamSharedItemEditFragment :
     private fun handleUiEvent(uiEvent: TeamSharedItemEditEvent) {
         when (uiEvent) {
             TeamSharedItemEditEvent.FetchTeamPersonalItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
-            TeamSharedItemEditEvent.AddItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
             TeamSharedItemEditEvent.DeleteItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
+            TeamSharedItemEditEvent.CreateItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
+            TeamSharedItemEditEvent.CreateItemSuccuss ->
+                parentViewModel.updateInput(RESET_INPUT_TEXT)
         }
     }
 
     companion object {
         private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
+        private const val RESET_INPUT_TEXT = ""
 
         fun newInstance(bottariId: Long): TeamSharedItemEditFragment =
             TeamSharedItemEditFragment().apply {

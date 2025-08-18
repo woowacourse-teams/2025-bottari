@@ -1,10 +1,12 @@
 package com.bottari.domain.repository
 
+import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.TeamBottariCheckList
 import com.bottari.domain.model.team.TeamBottariDetail
 import com.bottari.domain.model.team.TeamBottariStatus
+import com.bottari.domain.model.team.TeamMember
 import com.bottari.domain.model.team.TeamMemberStatus
 import com.bottari.domain.model.team.TeamMembers
 
@@ -51,7 +53,7 @@ interface TeamBottariRepository {
     suspend fun createTeamBottariAssignedItem(
         id: Long,
         name: String,
-        teamMemberNames: List<String>,
+        teamMemberIds: List<Long>,
     ): Result<Unit>
 
     suspend fun deleteTeamBottariItem(
@@ -65,4 +67,12 @@ interface TeamBottariRepository {
     ): Result<Unit>
 
     suspend fun joinTeamBottari(inviteCode: String): Result<Unit>
+
+    suspend fun fetchTeamBottariMembers(teamBottariId: Long): Result<List<TeamMember>>
+
+    suspend fun fetchTeamAssignedItems(teamBottariId: Long): Result<List<BottariItem>>
+
+    suspend fun fetchTeamSharedItems(teamBottariId: Long): Result<List<BottariItem>>
+
+    suspend fun fetchTeamPersonalItems(teamBottariId: Long): Result<List<BottariItem>>
 }

@@ -1,11 +1,13 @@
 package com.bottari.data.testFixture
 
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
+import com.bottari.data.model.team.FetchTeamBottariMemberResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.TeamBottariDetail
+import com.bottari.domain.model.team.TeamMember
 import com.bottari.domain.model.team.TeamMemberStatus
 
 val TEAM_BOTTARI_RESPONSE: FetchTeamBottariResponse by lazy {
@@ -73,3 +75,11 @@ val TEAM_MEMBERS_STATUS_RESPONSE =
             emptyList(),
         ),
     )
+
+val TEAM_MEMBER_RESPONSE =
+    FetchTeamBottariMemberResponse(
+        1L,
+        "member1",
+    )
+
+val TEAM_MEMBER = TeamMember(1L, "member1")

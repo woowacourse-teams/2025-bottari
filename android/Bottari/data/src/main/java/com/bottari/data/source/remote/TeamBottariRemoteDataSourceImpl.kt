@@ -10,12 +10,16 @@ import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
 import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
+import com.bottari.data.model.team.FetchTeamBottariMemberResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.JoinTeamBottariRequest
+import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
+import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
+import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
 import com.bottari.data.service.TeamBottariService
 
 class TeamBottariRemoteDataSourceImpl(
@@ -121,6 +125,18 @@ class TeamBottariRemoteDataSourceImpl(
 
     override suspend fun joinTeamBottari(request: JoinTeamBottariRequest): Result<Unit> =
         safeApiCall { teamBottariService.joinTeamBottari(request) }
+
+    override suspend fun fetchTeamBottariMembers(teamBottariId: Long): Result<List<FetchTeamBottariMemberResponse>> =
+        safeApiCall { teamBottariService.fetchTeamBottariMembers(teamBottariId) }
+
+    override suspend fun fetchTeamAssignedItems(teamBottariId: Long): Result<List<FetchTeamAssignedItemResponse>> =
+        safeApiCall { teamBottariService.fetchTeamAssignedItems(teamBottariId) }
+
+    override suspend fun fetchTeamSharedItems(teamBottariId: Long): Result<List<FetchTeamSharedItemResponse>> =
+        safeApiCall { teamBottariService.fetchTeamSharedItems(teamBottariId) }
+
+    override suspend fun fetchTeamPersonalItems(teamBottariId: Long): Result<List<FetchTeamPersonalItemResponse>> =
+        safeApiCall { teamBottariService.fetchTeamPersonalItems(teamBottariId) }
 
     companion object {
         private const val HEADER_TEAM_BOTTARI_ID_PREFIX = "/team-bottaries/"
