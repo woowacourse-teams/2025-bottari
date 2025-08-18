@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.checklist.team
+package com.bottari.presentation.view.checklist.team.main
 
 import android.os.Bundle
 import android.view.View

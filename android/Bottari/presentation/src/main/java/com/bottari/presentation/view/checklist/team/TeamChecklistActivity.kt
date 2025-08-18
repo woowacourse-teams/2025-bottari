@@ -11,6 +11,7 @@ import androidx.fragment.app.commit
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityTeamChecklistBinding
+import com.bottari.presentation.view.checklist.team.main.TeamChecklistMainFragment
 import com.bottari.presentation.view.checklist.team.swipe.TeamSwipeChecklistFragment
 import com.bottari.presentation.view.home.HomeActivity
 
