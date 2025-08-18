@@ -295,6 +295,8 @@ class TeamAssignedItemServiceTest {
 
             // when
             teamAssignedItemService.update(teamBottari.getId(), teamAssignedItem.getId(), request);
+            entityManager.flush();
+            entityManager.clear();
 
             // then
             final TeamAssignedItemInfo actual = entityManager.find(
@@ -311,9 +313,80 @@ class TeamAssignedItemServiceTest {
                     () -> assertThat(actual.getName()).isEqualTo(updatedName),
                     () -> assertThat(actualItems).hasSize(1),
                     // 담당 멤버를 member에서 anotherMember로 변경했으므로, anotherTeamMember가 담당하는 물품이 된다.
-                    () -> assertThat(actualItems.getFirst().getTeamMember()).isEqualTo(anotherTeamMember),
+                    () -> assertThat(actualItems.getFirst().getTeamMember().getId())
+                            .isEqualTo(anotherTeamMember.getId()),
                     () -> assertThat(actualItems.getFirst().getInfo()).isEqualTo(actual)
             );
+        }
+
+        @DisplayName("팀 보따리 담당 물품 수정 시, 담당자가 바뀌지 않더라도 물품 이름만 수정할 수 있다.")
+        @Test
+        void update_NameOnly() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamAssignedItemInfo teamAssignedItemInfo = new TeamAssignedItemInfo("담당 물품", teamBottari);
+            entityManager.persist(teamAssignedItemInfo);
+
+            final TeamAssignedItem teamAssignedItem = new TeamAssignedItem(teamAssignedItemInfo, teamMember);
+            entityManager.persist(teamAssignedItem);
+
+            final String updatedName = "수정된 담당 물품";
+            final UpdateAssignedItemRequest request = new UpdateAssignedItemRequest(
+                    updatedName,
+                    List.of(member.getId())
+            );
+
+            // when
+            teamAssignedItemService.update(teamBottari.getId(), teamAssignedItemInfo.getId(), request);
+
+            // then
+            final TeamAssignedItemInfo actual = entityManager.find(
+                    TeamAssignedItemInfo.class,
+                    teamAssignedItemInfo.getId()
+            );
+            assertThat(actual.getName()).isEqualTo(updatedName);
+        }
+
+        @DisplayName("팀 보따리 담당 물품 수정 시, 담당자를 아무도 지정하지 않는다면, 예외를 던진다.")
+        @Test
+        void update_Exception_NoAssignedMembers() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamAssignedItemInfo teamAssignedItemInfo = new TeamAssignedItemInfo("담당 물품", teamBottari);
+            entityManager.persist(teamAssignedItemInfo);
+
+            final TeamAssignedItem teamAssignedItem = new TeamAssignedItem(teamAssignedItemInfo, teamMember);
+            entityManager.persist(teamAssignedItem);
+
+            final UpdateAssignedItemRequest request = new UpdateAssignedItemRequest(
+                    "수정된 담당 물품",
+                    List.of()
+            );
+
+            // when & then
+            assertThatThrownBy(() -> teamAssignedItemService.update(
+                    teamBottari.getId(),
+                    teamAssignedItemInfo.getId(),
+                    request
+            ))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("팀 보따리 담당 물품에 팀원이 지정되지 않았습니다.");
         }
 
         @DisplayName("팀 보따리 담당 물품 수정 시, 물품을 찾을 수 없다면, 예외를 던진다.")
@@ -380,6 +453,44 @@ class TeamAssignedItemServiceTest {
             ))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다. - 요청된 팀원 중 일부가 팀에 속해 있지 않습니다.");
+        }
+
+        @DisplayName("팀 보따리 담당 물품 수정 시, 이미 존재하는 물품 이름이라면, 예외를 던진다.")
+        @Test
+        void update_Exception_AlreadyExistsName() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            entityManager.persist(teamMember);
+
+            final TeamAssignedItemInfo teamAssignedItemInfo = new TeamAssignedItemInfo("담당 물품", teamBottari);
+            entityManager.persist(teamAssignedItemInfo);
+
+            final TeamAssignedItem teamAssignedItem = new TeamAssignedItem(teamAssignedItemInfo, teamMember);
+            entityManager.persist(teamAssignedItem);
+
+            final String anotherItemName = "다른 담당 물품";
+            final TeamAssignedItemInfo anotherAssignedItemInfo = new TeamAssignedItemInfo(anotherItemName, teamBottari);
+            entityManager.persist(anotherAssignedItemInfo);
+
+            final UpdateAssignedItemRequest request = new UpdateAssignedItemRequest(
+                    anotherItemName,
+                    List.of(member.getId())
+            );
+
+            // when & then
+            assertThatThrownBy(() -> teamAssignedItemService.update(
+                    teamBottari.getId(),
+                    teamAssignedItemInfo.getId(),
+                    request
+            ))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("이미 존재하는 팀 보따리 물품입니다. - 담당");
         }
     }
 
