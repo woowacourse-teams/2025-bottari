@@ -294,7 +294,7 @@
 
     <!-- Team Bottari Fab -->
     <string name="team_bottari_create_btn_text">팀 보따리 생성</string>
-    <string name="team_bottari_enter_btn_text">코드로 입장</string>
+    <string name="team_bottari_join_btn_text">코드로 입장</string>
 
     <!-- Description 접근성 -->
     <string name="bottari_create_btn_description">보따리 만들기 버튼</string>
