@@ -78,7 +78,7 @@ class TeamItemEditFragment :
     }
 
     private fun setupListener() {
-        binding.viewItemInput.btnPersonalItemSend.setOnClickListener { createItem() }
+        binding.viewItemInput.btnPersonalItemSend.setOnClickListener { viewModel.createItem() }
         binding.btnPrevious.setOnClickListener {
             (requireActivity() as? TeamBottariEditNavigator)?.navigateBack()
         }
@@ -92,7 +92,7 @@ class TeamItemEditFragment :
         )
         binding.viewItemInput.etItemInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId != EditorInfo.IME_ACTION_SEND) return@setOnEditorActionListener false
-            createItem()
+            viewModel.createItem()
             true
         }
     }
@@ -106,6 +106,7 @@ class TeamItemEditFragment :
     private fun setupTabLayout() {
         binding.vpTeamBottariItemEdit.adapter = adapter
         binding.vpTeamBottariItemEdit.offscreenPageLimit = adapter.itemCount
+        binding.vpTeamBottariItemEdit.isUserInputEnabled = false
         TabLayoutMediator(
             binding.tlTeamBottariItemEdit,
             binding.vpTeamBottariItemEdit,
@@ -144,12 +145,6 @@ class TeamItemEditFragment :
             isEnabled = canSend
             alpha = if (canSend) SEND_BUTTON_ENABLED_ALPHA else SEND_BUTTON_DISABLED_ALPHA
         }
-    }
-
-    private fun createItem() {
-        viewModel.createItem()
-        binding.viewItemInput.etItemInput.text
-            .clear()
     }
 
     companion object {

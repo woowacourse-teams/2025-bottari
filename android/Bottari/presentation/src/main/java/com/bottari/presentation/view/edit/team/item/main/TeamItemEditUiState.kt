@@ -6,6 +6,7 @@ data class TeamItemEditUiState(
     val itemInputText: String = "",
     val isAlreadyExist: Boolean = false,
     val currentTabType: BottariItemTypeUiModel,
+    val sendCondition: Boolean = true,
 ) {
-    val canSend: Boolean = itemInputText.isNotBlank() && isAlreadyExist.not()
+    val canSend: Boolean = itemInputText.isNotBlank() && isAlreadyExist.not() && sendCondition
 }

@@ -18,7 +18,7 @@ class TeamAssignedItemEditAdapter(
         position: Int,
     ) = holder.bind(getItem(position))
 
-    interface TeamAssignedItemEditEventListener : TeamAssignedItemEditViewHolder.OnEditItemClickListener
+    interface TeamAssignedItemEditEventListener : TeamAssignedItemEditViewHolder.AssignedItemEventListener
 
     companion object {
         private val DiffUtil =

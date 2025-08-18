@@ -22,6 +22,8 @@ class TeamItemEditViewModel(
 
     fun updateInput(input: String) = updateState { copy(itemInputText = input) }
 
+    fun updateSendCondition(sendCondition: Boolean) = updateState { copy(sendCondition = sendCondition) }
+
     fun updateIsAlreadyExistState(isAlreadyExist: Boolean) {
         if (currentState.isAlreadyExist == isAlreadyExist) return
         updateState { copy(isAlreadyExist = isAlreadyExist) }

@@ -8,17 +8,21 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamAssignedItemEditBinding
 import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.view.common.decoration.ItemSpacingDecoration
 import com.bottari.presentation.view.edit.team.item.assigned.adapter.TeamAssignedItemEditAdapter
+import com.bottari.presentation.view.edit.team.item.assigned.adapter.TeamAssignedItemEditMemberAdapter
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiEvent
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiState
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditViewModel
 
 class TeamAssignedItemEditFragment :
     BaseFragment<FragmentTeamAssignedItemEditBinding>(FragmentTeamAssignedItemEditBinding::inflate),
-    TeamAssignedItemEditAdapter.TeamAssignedItemEditEventListener {
+    TeamAssignedItemEditAdapter.TeamAssignedItemEditEventListener,
+    TeamAssignedItemEditMemberAdapter.TeamAssignedItemEditMemberEventListener {
     private val parentViewModel: TeamItemEditViewModel by viewModels(
         ownerProducer = { requireParentFragment() },
     )
@@ -27,7 +31,12 @@ class TeamAssignedItemEditFragment :
             requireArguments().getLong(ARG_BOTTARI_ID),
         )
     }
-    private val adapter: TeamAssignedItemEditAdapter by lazy { TeamAssignedItemEditAdapter(this) }
+    private val itemAdapter: TeamAssignedItemEditAdapter by lazy { TeamAssignedItemEditAdapter(this) }
+    private val memberAdapter: TeamAssignedItemEditMemberAdapter by lazy {
+        TeamAssignedItemEditMemberAdapter(
+            this,
+        )
+    }
 
     override fun onViewCreated(
         view: View,
@@ -42,6 +51,18 @@ class TeamAssignedItemEditFragment :
         viewModel.deleteItem(itemId)
     }
 
+    override fun onClickAssignedItem(
+        itemName: String,
+        itemId: Long,
+    ) {
+        viewModel.selectAssignedItem(itemId)
+        parentViewModel.updateInput(itemName)
+    }
+
+    override fun onClickMember(memberId: Long) {
+        viewModel.selectMember(memberId)
+    }
+
     private fun setupObserver() {
         parentViewModel.createItemEvent.observe(viewLifecycleOwner, ::handleParentUiEvent)
         parentViewModel.uiState.observe(viewLifecycleOwner, ::handleParentUiState)
@@ -50,12 +71,21 @@ class TeamAssignedItemEditFragment :
     }
 
     private fun setupUI() {
-        binding.rvTeamAssignedItemEdit.adapter = adapter
-        binding.rvTeamAssignedItemMember.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvTeamAssignedItemEdit.adapter = itemAdapter
+        binding.rvTeamAssignedItemEdit.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvTeamAssignedItemMember.adapter = memberAdapter
+        binding.rvTeamAssignedItemMember.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvTeamAssignedItemMember.addItemDecoration(
+            ItemSpacingDecoration(
+                requireContext().dpToPx(ITEM_SPACING_VALUE),
+                true,
+            ),
+        )
     }
 
     private fun handleParentUiState(uiState: TeamItemEditUiState) {
-        if (uiState.currentTabType != BottariItemTypeUiModel.SHARED) return
+        if (uiState.currentTabType !is BottariItemTypeUiModel.ASSIGNED) return
         viewModel.updateInput(uiState.itemInputText)
     }
 
@@ -66,21 +96,26 @@ class TeamAssignedItemEditFragment :
 
     private fun handleUiState(uiState: TeamAssignedItemEditUiState) {
         toggleLoadingIndicator(uiState.isLoading)
-        parentViewModel.updateIsAlreadyExistState(uiState.isAlreadyExist)
+        parentViewModel.updateSendCondition(uiState.sendCondition)
         binding.emptyView.root.isVisible = uiState.isEmpty
-        adapter.submitList(uiState.assignedItems)
+        itemAdapter.submitList(uiState.assignedItems)
+        memberAdapter.submitList(uiState.members)
     }
 
     private fun handleUiEvent(uiEvent: TeamAssignedItemEditEvent) {
         when (uiEvent) {
             TeamAssignedItemEditEvent.FetchTeamAssignedItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
-            TeamAssignedItemEditEvent.AddItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
             TeamAssignedItemEditEvent.DeleteItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
+            TeamAssignedItemEditEvent.CreateItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
+            TeamAssignedItemEditEvent.CreateItemSuccess ->
+                parentViewModel.updateInput(RESET_INPUT_TEXT)
         }
     }
 
     companion object {
         private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
+        private const val RESET_INPUT_TEXT = ""
+        private const val ITEM_SPACING_VALUE = 8
 
         fun newInstance(bottariId: Long): TeamAssignedItemEditFragment =
             TeamAssignedItemEditFragment().apply {

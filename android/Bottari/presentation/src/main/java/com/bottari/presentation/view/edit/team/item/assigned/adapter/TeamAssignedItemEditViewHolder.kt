@@ -9,33 +9,41 @@ import com.bottari.presentation.model.BottariItemUiModel
 
 class TeamAssignedItemEditViewHolder(
     private val binding: ItemEditAssignedItemBinding,
-    eventListener: OnEditItemClickListener,
+    eventListener: AssignedItemEventListener,
 ) : RecyclerView.ViewHolder(binding.root) {
-    private var itemId: Long? = null
+    private var currentItem: BottariItemUiModel? = null
 
     init {
         binding.btnAssignedItemDelete.setOnClickListener {
-            itemId?.let(eventListener::onClickDelete)
+            currentItem?.let { item -> eventListener.onClickDelete(item.id) }
+        }
+        binding.root.setOnClickListener {
+            currentItem?.let { item -> eventListener.onClickAssignedItem(item.name, item.id) }
         }
     }
 
     fun bind(item: BottariItemUiModel) {
-        itemId = item.id
+        currentItem = item
         binding.tvAssignedItemName.text = item.name
 
         if (item.type is BottariItemTypeUiModel.ASSIGNED) {
-            binding.tvAssignedItemMemberNames.text = item.type.members.joinToString()
+            binding.tvAssignedItemMemberNames.text = item.type.members.joinToString { member -> member.nickname }
         }
     }
 
-    interface OnEditItemClickListener {
+    interface AssignedItemEventListener {
         fun onClickDelete(itemId: Long)
+
+        fun onClickAssignedItem(
+            itemName: String,
+            itemId: Long,
+        )
     }
 
     companion object {
         fun from(
             parent: ViewGroup,
-            eventListener: OnEditItemClickListener,
+            eventListener: AssignedItemEventListener,
         ): TeamAssignedItemEditViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ItemEditAssignedItemBinding.inflate(layoutInflater, parent, false)

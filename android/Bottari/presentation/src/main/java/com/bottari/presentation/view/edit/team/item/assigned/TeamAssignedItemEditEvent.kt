@@ -5,5 +5,7 @@ sealed interface TeamAssignedItemEditEvent {
 
     data object DeleteItemFailure : TeamAssignedItemEditEvent
 
-    data object AddItemFailure : TeamAssignedItemEditEvent
+    data object CreateItemFailure : TeamAssignedItemEditEvent
+
+    data object CreateItemSuccess : TeamAssignedItemEditEvent
 }
