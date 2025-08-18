@@ -48,7 +48,7 @@ public class TeamBottariEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCreateAssignedItemEvent(final CreateAssignedItemEvent event) {
         final SseMessage message = new SseMessage(
-                SseResourceType.ASSIGNED_ITEM,
+                SseResourceType.ASSIGNED_ITEM_INFO,
                 SseEventType.CREATE,
                 CreateAssignedItemData.from(event)
         );
@@ -59,7 +59,7 @@ public class TeamBottariEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleDeleteAssignedItemEvent(final DeleteAssignedItemEvent event) {
         final SseMessage message = new SseMessage(
-                SseResourceType.ASSIGNED_ITEM,
+                SseResourceType.ASSIGNED_ITEM_INFO,
                 SseEventType.DELETE,
                 DeleteAssignedItemData.from(event)
         );
