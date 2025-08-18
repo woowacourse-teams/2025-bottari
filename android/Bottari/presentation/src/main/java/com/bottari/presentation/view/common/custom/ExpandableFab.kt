@@ -290,7 +290,12 @@ class ExpandableFab
             subButton: View,
             gravity: Int,
         ): Int =
-            when (gravity and Gravity.HORIZONTAL_GRAVITY_MASK) {
+            when (
+                Gravity.getAbsoluteGravity(
+                    gravity,
+                    this@ExpandableFab.layoutDirection,
+                ) and Gravity.HORIZONTAL_GRAVITY_MASK
+            ) {
                 Gravity.LEFT -> mainLeft
                 Gravity.CENTER_HORIZONTAL -> mainLeft + (mainButton.measuredWidth - subButton.measuredWidth) / 2
                 Gravity.RIGHT -> mainLeft + mainButton.measuredWidth - subButton.measuredWidth
@@ -326,16 +331,19 @@ class ExpandableFab
             parentWidth: Int,
             mainWidth: Int,
             gravity: Int = Gravity.NO_GRAVITY,
-        ) = when (gravity and Gravity.HORIZONTAL_GRAVITY_MASK) {
-            Gravity.LEFT -> 0
-            Gravity.RIGHT -> parentWidth - mainWidth
-            Gravity.CENTER_HORIZONTAL -> (parentWidth - mainWidth) / 2
-            else ->
-                when (this) {
-                    Direction.LEFT -> parentWidth - mainWidth
-                    Direction.RIGHT -> 0
-                    else -> (parentWidth - mainWidth) / 2
-                }
+        ): Int {
+            val abs = Gravity.getAbsoluteGravity(gravity, this@ExpandableFab.layoutDirection)
+            return when (abs and Gravity.HORIZONTAL_GRAVITY_MASK) {
+                Gravity.LEFT -> return 0
+                Gravity.RIGHT -> return parentWidth - mainWidth
+                Gravity.CENTER_HORIZONTAL -> (parentWidth - mainWidth) / 2
+                else ->
+                    when (this) {
+                        Direction.LEFT -> parentWidth - mainWidth
+                        Direction.RIGHT -> 0
+                        else -> (parentWidth - mainWidth) / 2
+                    }
+            }
         }
 
         // 메인 버튼 세로 위치 계산
