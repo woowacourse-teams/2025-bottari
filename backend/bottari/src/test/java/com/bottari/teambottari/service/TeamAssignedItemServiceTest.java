@@ -21,6 +21,7 @@ import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
+import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import jakarta.persistence.EntityManager;
 import java.util.List;
@@ -48,6 +49,58 @@ class TeamAssignedItemServiceTest {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Nested
+    class GetAllByTeamBottariIdTest {
+
+        @DisplayName("팀 보따리 ID로 담당 물품을 조회한다.")
+        @Test
+        void getAllByTeamBottariId() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            final Member anotherMember = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(member);
+            entityManager.persist(anotherMember);
+
+            final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
+            entityManager.persist(teamBottari);
+
+            final TeamMember teamMember = new TeamMember(teamBottari, member);
+            final TeamMember anotherTeamMember = new TeamMember(teamBottari, anotherMember);
+            entityManager.persist(teamMember);
+            entityManager.persist(anotherTeamMember);
+
+            final TeamAssignedItemInfo teamAssignedItemInfo = new TeamAssignedItemInfo("담당 물품", teamBottari);
+            entityManager.persist(teamAssignedItemInfo);
+
+            final TeamAssignedItem teamAssignedItem = new TeamAssignedItem(teamAssignedItemInfo, teamMember);
+            final TeamAssignedItem anotherTeamAssignedItem = new TeamAssignedItem(teamAssignedItemInfo,
+                    anotherTeamMember);
+            entityManager.persist(teamAssignedItem);
+            entityManager.persist(anotherTeamAssignedItem);
+
+            // when
+            final List<ReadAssignedItemResponse> actual = teamAssignedItemService.getAllByTeamBottariId(
+                    teamBottari.getId());
+
+            // then
+            final List<ReadAssignedItemResponse> expected = List.of(
+                    new ReadAssignedItemResponse(
+                            teamAssignedItemInfo.getId(),
+                            teamAssignedItemInfo.getName(),
+                            List.of(
+                                    new ReadAssignedItemResponse.Assignee(member.getId(), member.getName()),
+                                    new ReadAssignedItemResponse.Assignee(anotherMember.getId(), anotherMember.getName()
+                                    )
+                            )
+                    )
+            );
+            assertAll(
+                    () -> assertThat(actual).hasSize(1),
+                    () -> assertThat(actual).isEqualTo(expected)
+            );
+        }
+    }
 
     @Nested
     class CreateTest {

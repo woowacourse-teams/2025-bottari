@@ -22,4 +22,15 @@ public interface TeamPersonalItemRepository extends JpaRepository<TeamPersonalIt
             final Long teamMemberId,
             final String name
     );
+
+    @Query("""
+            SELECT tpi
+            FROM TeamPersonalItem tpi
+            WHERE tpi.teamMember.teamBottari.id = :teamBottariId
+              AND tpi.teamMember.member.id = :memberId
+            """)
+    List<TeamPersonalItem> findAllByTeamBottariIdAndMemberId(
+            final Long teamBottariId,
+            final Long memberId
+    );
 }

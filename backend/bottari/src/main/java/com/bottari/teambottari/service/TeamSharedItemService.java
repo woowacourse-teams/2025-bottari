@@ -13,6 +13,7 @@ import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
+import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.repository.TeamMemberRepository;
@@ -36,6 +37,16 @@ public class TeamSharedItemService {
     private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
+
+    public List<ReadSharedItemResponse> getAllByTeamBottariId(final Long teamBottariId) {
+        final List<TeamSharedItemInfo> sharedItemInfos = teamSharedItemInfoRepository.findAllByTeamBottariId(
+                teamBottariId
+        );
+
+        return sharedItemInfos.stream()
+                .map(ReadSharedItemResponse::from)
+                .toList();
+    }
 
     @Transactional
     public Long create(
