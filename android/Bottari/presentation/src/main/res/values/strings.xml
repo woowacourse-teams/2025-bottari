@@ -48,7 +48,7 @@
     <string name="common_save_failure_text">저장하지 못했어요</string>
     <string name="common_save_success_text">저장했어요!</string>
     <string name="common_fetch_failure_text">정보를 불러오지 못했어요</string>
-    <string name="common_permission_failure_text">권한 요청이 실패했어요</string>
+    <string name="common_permission_failure_text">권한 요청에 실패했어요</string>
 
     <!-- Common: 포맷 -->
     <string name="common_format_quantity_status">%d개 중 %d개</string>
