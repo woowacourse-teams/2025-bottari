@@ -292,6 +292,10 @@
     <string name="team_status_send_remind_failure_text">알람을 설정하지 못했어요</string>
     <string name="team_status_send_remind_btn_text">보채기</string>
 
+    <!-- Team Bottari Fab -->
+    <string name="team_bottari_create_btn_text">팀 보따리 생성</string>
+    <string name="team_bottari_enter_btn_text">코드로 입장</string>
+
     <!-- Description 접근성 -->
     <string name="bottari_create_btn_description">보따리 만들기 버튼</string>
     <string name="checklist_swipe_btn_description">스와이프 전환 버튼</string>
@@ -316,5 +320,6 @@
     <string name="team_management_clipboard_btn_description">링크 복사 버튼</string>
     <string name="team_management_host_iv_description">방장 이미지</string>
     <string name="team_bottari_edit_member_edit_btn_description">멤버 편집 버튼</string>
+    <string name="team_bottari_create_option_btn_description">팀 보따리 생성 옵션 버튼</string>
 
 </resources>
