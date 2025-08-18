@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -62,10 +63,9 @@ class TeamBottariJoinDialog : DialogFragment() {
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            handleJoinButtonState(uiState.isCanJoin)
             handleEditTextState(uiState.inviteCode)
+            handleJoinButtonState(uiState.isCanJoin)
         }
-
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
                 TeamBottariJoinUiEvent.JoinTeamBottariFailure -> handleJoinTeamBottariFailure()
@@ -89,9 +89,15 @@ class TeamBottariJoinDialog : DialogFragment() {
         }
 
     private fun setupListener() {
-        binding.etTeamBottariJoinInviteCode.doAfterTextChanged { newText ->
-            viewModel.updateInviteCode(newText.toString())
+        binding.etTeamBottariJoinInviteCode.doAfterTextChanged {
+            viewModel.updateInviteCode(it?.toString().orEmpty())
             handleDescriptionTextVisibility(false)
+        }
+        binding.etTeamBottariJoinInviteCode.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId != IME_ACTION_DONE) return@setOnEditorActionListener false
+            if (binding.btnTeamBottariJoin.isEnabled.not()) return@setOnEditorActionListener false
+            viewModel.joinTeamBottari()
+            true
         }
         binding.btnTeamBottariJoinClose.setOnClickListener { dismiss() }
         binding.btnTeamBottariJoin.setOnClickListener {
