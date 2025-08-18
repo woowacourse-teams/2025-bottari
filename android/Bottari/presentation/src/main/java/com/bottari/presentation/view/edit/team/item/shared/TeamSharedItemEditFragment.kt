@@ -67,6 +67,7 @@ class TeamSharedItemEditFragment :
     private fun handleUiState(uiState: TeamSharedItemEditUiState) {
         toggleLoadingIndicator(uiState.isLoading)
         parentViewModel.updateIsAlreadyExistState(uiState.isAlreadyExist)
+        parentViewModel.updateSendCondition(true)
         binding.emptyView.root.isVisible = uiState.isEmpty
         adapter.submitList(uiState.sharedItems)
     }
