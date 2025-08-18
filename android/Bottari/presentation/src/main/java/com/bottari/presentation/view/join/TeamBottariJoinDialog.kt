@@ -4,13 +4,12 @@ import android.content.ClipboardManager
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
@@ -19,9 +18,7 @@ import com.bottari.presentation.databinding.DialogTeamBottariJoinBinding
 import com.bottari.presentation.util.DeeplinkHelper
 import com.bottari.presentation.view.home.team.TeamBottariFragment.Companion.REQUEST_KEY_REQUIRE_REFRESH
 
-class TeamBottariJoinDialog :
-    DialogFragment(),
-    TextWatcher {
+class TeamBottariJoinDialog : DialogFragment() {
     private val viewModel: TeamBottariJoinViewModel by viewModels { TeamBottariJoinViewModel.Factory() }
     private var _binding: DialogTeamBottariJoinBinding? = null
     val binding: DialogTeamBottariJoinBinding get() = _binding!!
@@ -63,27 +60,6 @@ class TeamBottariJoinDialog :
         _binding = null
     }
 
-    override fun beforeTextChanged(
-        s: CharSequence?,
-        start: Int,
-        count: Int,
-        after: Int,
-    ) {
-    }
-
-    override fun afterTextChanged(s: Editable?) {
-        viewModel.updateInviteCode(s.toString())
-        handleDescriptionTextVisibility(false)
-    }
-
-    override fun onTextChanged(
-        s: CharSequence?,
-        start: Int,
-        before: Int,
-        count: Int,
-    ) {
-    }
-
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             handleJoinButtonState(uiState.isCanJoin)
@@ -116,7 +92,10 @@ class TeamBottariJoinDialog :
     }
 
     private fun setupListener() {
-        binding.etTeamBottariJoinInviteCode.addTextChangedListener(this)
+        binding.etTeamBottariJoinInviteCode.doAfterTextChanged { newText ->
+            viewModel.updateInviteCode(newText.toString())
+            handleDescriptionTextVisibility(false)
+        }
         binding.btnTeamBottariJoinClose.setOnClickListener { dismiss() }
         binding.btnTeamBottariJoin.setOnClickListener {
             viewModel.joinTeamBottari()
