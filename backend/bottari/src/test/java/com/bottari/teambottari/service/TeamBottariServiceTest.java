@@ -69,7 +69,7 @@ class TeamBottariServiceTest {
             assertThat(teamBottariPreviews)
                     .hasSize(2)
                     .extracting(ReadTeamBottariPreviewResponse::title)
-                    .containsExactly("팀 보따리1", "팀 보따리2");
+                    .containsExactly("팀 보따리2", "팀 보따리1");
         }
 
         @DisplayName("사용자가 속한 팀 보따리 목록을 조회할 때, 팀 보따리에 속한 멤버 수를 포함한다.")
