@@ -172,6 +172,7 @@ class TeamSwipeChecklistFragment :
             }
         binding.csvChecklist.layoutManager = cardStackLayoutManager
         binding.csvChecklist.adapter = adapter
+        binding.csvChecklist.itemAnimator = null
     }
 
     private fun swipeCardTo(direction: Direction) {

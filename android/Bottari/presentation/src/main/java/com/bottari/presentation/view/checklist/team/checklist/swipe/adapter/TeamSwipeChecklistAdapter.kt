@@ -4,14 +4,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.TeamChecklistProductUiModel
-import java.util.Objects
 
 class TeamSwipeChecklistAdapter : ListAdapter<TeamChecklistProductUiModel, TeamSwipeChecklistViewHolder>(DiffUtil) {
-    override fun getItemId(position: Int): Long {
-        val item = getItem(position)
-        return Objects.hash(item.id, item.type).toLong()
-    }
-
     override fun onBindViewHolder(
         holder: TeamSwipeChecklistViewHolder,
         position: Int,
