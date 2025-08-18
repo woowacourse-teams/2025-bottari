@@ -6,6 +6,7 @@ import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.ChecklistItem
 import com.bottari.presentation.mapper.AlarmMapper.toUiModel
+import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
 import com.bottari.presentation.model.BottariDetailUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.BottariItemUiModel
@@ -57,6 +58,6 @@ object BottariMapper {
         when (this) {
             BottariItemType.PERSONAL -> BottariItemTypeUiModel.PERSONAL
             BottariItemType.SHARED -> BottariItemTypeUiModel.SHARED
-            is BottariItemType.ASSIGNED -> BottariItemTypeUiModel.ASSIGNED(members)
+            is BottariItemType.ASSIGNED -> BottariItemTypeUiModel.ASSIGNED(members.map { member -> member.toUiModel() })
         }
 }
