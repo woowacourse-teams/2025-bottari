@@ -47,7 +47,6 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
                     supportFragmentManager.popBackStack()
                     navigateToTeamChecklistMain()
                 }
-
                 supportFragmentManager.backStackEntryCount == 0 -> finish()
                 else -> supportFragmentManager.popBackStack()
             }
