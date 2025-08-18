@@ -207,7 +207,7 @@ public class TeamAssignedItemService {
         final List<TeamMember> allTeamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId());
         final Set<String> requestNames = new HashSet<>(teamMemberNames);
         final Set<String> allTeamMemberNames = allTeamMembers.stream()
-                .map(teamMembers -> teamMembers.getMember().getName())
+                .map(teamMember -> teamMember.getMember().getName())
                 .collect(Collectors.toSet());
         if (!allTeamMemberNames.containsAll(requestNames)) {
             throw new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI, "요청된 팀원 중 일부가 팀에 속해 있지 않습니다.");
@@ -268,41 +268,33 @@ public class TeamAssignedItemService {
                 .map(TeamMember::getMember)
                 .map(Member::getId)
                 .collect(Collectors.toSet());
-        final List<TeamAssignedItem> itemsToRemove = extractItemsToRemove(
-                currentAssignedMemberIds,
-                requestedAssignMemberIds,
-                currentAssignments
-        );
-        final List<TeamAssignedItem> itemsToAdd = createItemsToAdd(
+        deleteItemsToRemove(currentAssignedMemberIds, requestedAssignMemberIds, currentAssignments);
+        createItemsToAdd(
                 teamAssignedItemInfo,
                 currentAssignedMemberIds,
                 requestedAssignMemberIds,
                 requestedAssignTeamMembers
         );
-        if (!itemsToRemove.isEmpty()) {
-            teamAssignedItemRepository.deleteAllInBatch(itemsToRemove);
-        }
-        if (!itemsToAdd.isEmpty()) {
-            teamAssignedItemRepository.saveAll(itemsToAdd);
-        }
     }
 
     // 삭제할 담당자 계산: (현재 담당자) - (요청된 담당자)
-    private List<TeamAssignedItem> extractItemsToRemove(
+    private void deleteItemsToRemove(
             final Set<Long> currentAssignedMemberIds,
             final Set<Long> requestedAssignMemberIds,
             final List<TeamAssignedItem> currentItems
     ) {
         final Set<Long> idsToRemove = new HashSet<>(currentAssignedMemberIds);
         idsToRemove.removeAll(requestedAssignMemberIds);
-
-        return currentItems.stream()
+        final List<TeamAssignedItem> itemsToRemove = currentItems.stream()
                 .filter(item -> idsToRemove.contains(item.getTeamMember().getMember().getId()))
                 .toList();
+        if (!itemsToRemove.isEmpty()) {
+            teamAssignedItemRepository.deleteAllInBatch(itemsToRemove);
+        }
     }
 
     // 추가할 담당자 계산: (요청된 담당자) - (현재 담당자)
-    private List<TeamAssignedItem> createItemsToAdd(
+    private void createItemsToAdd(
             final TeamAssignedItemInfo teamAssignedItemInfo,
             final Set<Long> currentTeamMemberIds,
             final Set<Long> requestedTeamMemberIds,
@@ -310,11 +302,14 @@ public class TeamAssignedItemService {
     ) {
         final Set<Long> idsToAdd = new HashSet<>(requestedTeamMemberIds);
         idsToAdd.removeAll(currentTeamMemberIds);
-
-        return requestedAssignTeamMembers.stream()
+        final List<TeamAssignedItem> itemsToAdd = requestedAssignTeamMembers.stream()
                 .filter(teamMember -> idsToAdd.contains(teamMember.getMember().getId()))
                 .map(teamMember -> new TeamAssignedItem(teamAssignedItemInfo, teamMember))
                 .toList();
+
+        if (!itemsToAdd.isEmpty()) {
+            teamAssignedItemRepository.saveAll(itemsToAdd);
+        }
     }
 
     private List<TeamMember> getValidateTeamMembers(
