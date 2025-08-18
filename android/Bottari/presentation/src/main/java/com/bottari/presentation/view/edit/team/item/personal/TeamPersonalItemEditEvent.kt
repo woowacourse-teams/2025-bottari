@@ -5,5 +5,7 @@ sealed interface TeamPersonalItemEditEvent {
 
     data object DeleteItemFailure : TeamPersonalItemEditEvent
 
-    data object AddItemFailure : TeamPersonalItemEditEvent
+    data object CreateItemFailure : TeamPersonalItemEditEvent
+
+    data object CreateItemSuccess : TeamPersonalItemEditEvent
 }

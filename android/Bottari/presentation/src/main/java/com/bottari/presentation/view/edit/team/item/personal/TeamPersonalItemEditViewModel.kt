@@ -35,8 +35,11 @@ class TeamPersonalItemEditViewModel(
 
         launch {
             createTeamPersonalItemUseCase(bottariId, currentState.inputText)
-                .onSuccess { fetchPersonalItems() }
-                .onFailure { emitEvent(TeamPersonalItemEditEvent.AddItemFailure) }
+                .onFailure { emitEvent(TeamPersonalItemEditEvent.CreateItemFailure) }
+                .onSuccess {
+                    fetchPersonalItems()
+                    emitEvent(TeamPersonalItemEditEvent.CreateItemSuccess)
+                }
 
             updateState { copy(isLoading = false) }
         }

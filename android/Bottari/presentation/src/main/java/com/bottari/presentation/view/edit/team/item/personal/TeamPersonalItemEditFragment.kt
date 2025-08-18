@@ -6,6 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bottari.logger.BottariLogger
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
@@ -67,6 +68,8 @@ class TeamPersonalItemEditFragment :
     private fun handleUiState(uiState: TeamPersonalItemEditUiState) {
         toggleLoadingIndicator(uiState.isLoading)
         parentViewModel.updateIsAlreadyExistState(uiState.isAlreadyExist)
+        parentViewModel.updateSendCondition(true)
+        BottariLogger.debug("isEmpty : ${uiState.isFetched} / ${uiState.isEmpty}")
         binding.emptyView.root.isVisible = uiState.isEmpty
         adapter.submitList(uiState.personalItems)
     }
@@ -74,13 +77,16 @@ class TeamPersonalItemEditFragment :
     private fun handleUiEvent(uiEvent: TeamPersonalItemEditEvent) {
         when (uiEvent) {
             TeamPersonalItemEditEvent.FetchTeamPersonalItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
-            TeamPersonalItemEditEvent.AddItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
+            TeamPersonalItemEditEvent.CreateItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
             TeamPersonalItemEditEvent.DeleteItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
+            TeamPersonalItemEditEvent.CreateItemSuccess ->
+                parentViewModel.updateInput(RESET_INPUT_TEXT)
         }
     }
 
     companion object {
         private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
+        private const val RESET_INPUT_TEXT = ""
 
         fun newInstance(bottariId: Long): TeamPersonalItemEditFragment =
             TeamPersonalItemEditFragment().apply {
