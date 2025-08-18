@@ -11,7 +11,7 @@ import androidx.fragment.app.commit
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityTeamChecklistBinding
-import com.bottari.presentation.view.checklist.team.checklist.swipe.TeamSwipeChecklistFragment
+import com.bottari.presentation.view.checklist.team.swipe.TeamSwipeChecklistFragment
 import com.bottari.presentation.view.home.HomeActivity
 
 class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(ActivityTeamChecklistBinding::inflate) {
@@ -43,10 +43,6 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
         onBackPressedDispatcher.addCallback {
             when {
                 notificationFlag -> navigateToHome()
-                currentFragmentIsSwipe() -> {
-                    supportFragmentManager.popBackStack()
-                    navigateToTeamChecklistMain()
-                }
                 supportFragmentManager.backStackEntryCount == 0 -> finish()
                 else -> supportFragmentManager.popBackStack()
             }
@@ -58,9 +54,6 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
             navigateToSwipeChecklist()
         }
     }
-
-    private fun currentFragmentIsSwipe(): Boolean =
-        supportFragmentManager.findFragmentById(R.id.fcv_team_checklist) is TeamSwipeChecklistFragment
 
     private fun navigateToHome() {
         val intent = HomeActivity.newIntent(this)
@@ -76,7 +69,7 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
 
     private fun navigateToSwipeChecklist() {
         val intent = TeamSwipeChecklistFragment.newInstance(bottariId)
-        replaceChecklistFragment(intent, false)
+        replaceChecklistFragment(intent, true)
         binding.btnSwipe.isVisible = false
     }
 
