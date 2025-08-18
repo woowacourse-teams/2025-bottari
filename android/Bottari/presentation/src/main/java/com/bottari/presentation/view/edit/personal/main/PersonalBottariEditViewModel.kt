@@ -19,7 +19,6 @@ import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.model.NotificationUiModel
 import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.util.debounce
-import kotlinx.coroutines.launch
 
 class PersonalBottariEditViewModel(
     savedStateHandle: SavedStateHandle,
@@ -103,12 +102,24 @@ class PersonalBottariEditViewModel(
                     if (isActive) UiEventType.ALARM_ACTIVE else UiEventType.ALARM_INACTIVE,
                     mapOf("alarm_id" to alarm.id!!),
                 )
-                alarmScheduler.cancelAlarm(createNotification(alarm))
+                scheduleAlarm(isActive, alarm)
                 updateState { copy(alarm = alarm.copy(isActive = isActive)) }
             }.onFailure {
                 emitEvent(PersonalBottariEditUiEvent.ToggleAlarmStateFailure)
             }
         }
+    }
+
+    private fun scheduleAlarm(
+        isActive: Boolean,
+        alarm: AlarmUiModel,
+    ) {
+        val notification = createNotification(alarm)
+        if (isActive) {
+            alarmScheduler.scheduleAlarm(notification)
+            return
+        }
+        alarmScheduler.cancelAlarm(notification)
     }
 
     private fun createNotification(alarm: AlarmUiModel): NotificationUiModel =
