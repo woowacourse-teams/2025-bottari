@@ -25,6 +25,6 @@ public class TeamBottariEventListener {
                 SseEventType.CREATE,
                 CreateAssignedItemData.from(event)
         );
-        sseService.sendByTeamBottariId(event.teamBottariId(), message);
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
     }
 }
