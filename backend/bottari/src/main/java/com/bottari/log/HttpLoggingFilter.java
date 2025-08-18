@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -45,9 +47,19 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(final HttpServletRequest request) {
-        final String uri = request.getRequestURI();
+        return isSwaggerRequest(request) || isSseRequest(request);
+    }
 
-        return uri.startsWith("/swagger") || uri.startsWith("/v3/api-docs");
+    private boolean isSwaggerRequest(final HttpServletRequest request) {
+        final String requestURI = request.getRequestURI();
+
+        return requestURI.startsWith("/swagger") || requestURI.startsWith("/v3/api-docs");
+    }
+
+    private boolean isSseRequest(final HttpServletRequest request) {
+        final String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
+
+        return acceptHeader != null && acceptHeader.contains(MediaType.TEXT_EVENT_STREAM_VALUE);
     }
 
     private void doLog(
