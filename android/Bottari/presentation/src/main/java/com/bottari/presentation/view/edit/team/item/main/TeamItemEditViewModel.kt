@@ -20,9 +20,15 @@ class TeamItemEditViewModel(
     private val _createItemEvent: MutableLiveData<TeamItemEditUiEvent?> = MutableLiveData()
     val createItemEvent: LiveData<TeamItemEditUiEvent?> get() = _createItemEvent
 
-    fun updateInput(input: String) = updateState { copy(itemInputText = input) }
+    fun updateInput(input: String) {
+        if (currentState.itemInputText == input) return
+        updateState { copy(itemInputText = input) }
+    }
 
-    fun updateSendCondition(sendCondition: Boolean) = updateState { copy(sendCondition = sendCondition) }
+    fun updateSendCondition(sendCondition: Boolean) {
+        if (currentState.sendCondition == sendCondition) return
+        updateState { copy(sendCondition = sendCondition) }
+    }
 
     fun updateIsAlreadyExistState(isAlreadyExist: Boolean) {
         if (currentState.isAlreadyExist == isAlreadyExist) return
