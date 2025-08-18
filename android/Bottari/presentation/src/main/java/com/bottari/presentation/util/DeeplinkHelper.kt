@@ -19,6 +19,8 @@ object DeeplinkHelper {
 
     fun getInviteCode(uri: Uri): String? = uri.getQueryParameter(KEY_INVITE_CODE)
 
+    fun getInviteCode(uriString: String): String? = runCatching { getInviteCode(uriString.toUri()) }.getOrNull()
+
     fun createDeeplink(inviteCode: String): String =
         Uri
             .Builder()

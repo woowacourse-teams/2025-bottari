@@ -1,5 +1,6 @@
 package com.bottari.presentation.view.join
 
+import android.content.ClipboardManager
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.databinding.DialogTeamBottariJoinBinding
+import com.bottari.presentation.util.DeeplinkHelper
 import com.bottari.presentation.view.home.team.TeamBottariFragment.Companion.REQUEST_KEY_REQUIRE_REFRESH
 
 class TeamBottariJoinDialog :
@@ -23,6 +25,9 @@ class TeamBottariJoinDialog :
     private val viewModel: TeamBottariJoinViewModel by viewModels { TeamBottariJoinViewModel.Factory() }
     private var _binding: DialogTeamBottariJoinBinding? = null
     val binding: DialogTeamBottariJoinBinding get() = _binding!!
+    private val clipboardManager: ClipboardManager by lazy {
+        requireContext().getSystemService(ClipboardManager::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +49,7 @@ class TeamBottariJoinDialog :
     ) {
         super.onViewCreated(view, savedInstanceState)
         setupObserver()
+        setupUI()
         setupListener()
     }
 
@@ -80,7 +86,7 @@ class TeamBottariJoinDialog :
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            handleCreateButtonState(uiState.isCanJoin)
+            handleJoinButtonState(uiState.isCanJoin)
             handleEditTextState(uiState.inviteCode)
         }
 
@@ -90,6 +96,10 @@ class TeamBottariJoinDialog :
                 TeamBottariJoinUiEvent.JoinTeamBottariSuccess -> handleJoinTeamBottariSuccess()
             }
         }
+    }
+
+    private fun setupUI() {
+        setInviteCodeFromClipboard()
     }
 
     private fun setupDialog() {
@@ -113,6 +123,16 @@ class TeamBottariJoinDialog :
         }
     }
 
+    private fun setInviteCodeFromClipboard() {
+        val clipData = clipboardManager.primaryClip ?: return
+        if (clipData.itemCount <= 0) return
+
+        val clipItem = clipData.getItemAt(0)
+        val clipText = clipItem.text?.toString().orEmpty()
+        val code = DeeplinkHelper.getInviteCode(clipText) ?: return
+        viewModel.updateInviteCode(code)
+    }
+
     private fun handleDescriptionTextVisibility(isVisible: Boolean) {
         binding.teamBottariJoinDialogDescriptionText.isVisible = isVisible
     }
@@ -123,10 +143,10 @@ class TeamBottariJoinDialog :
         binding.etTeamBottariJoinInviteCode.setSelection(inviteCode.length)
     }
 
-    private fun handleCreateButtonState(isCanCreate: Boolean) {
-        binding.btnTeamBottariJoin.isEnabled = isCanCreate
+    private fun handleJoinButtonState(isCanJoin: Boolean) {
+        binding.btnTeamBottariJoin.isEnabled = isCanJoin
         binding.btnTeamBottariJoin.alpha =
-            if (isCanCreate) ENABLED_ALPHA_VALUE else DISABLED_ALPHA_VALUE
+            if (isCanJoin) ENABLED_ALPHA_VALUE else DISABLED_ALPHA_VALUE
     }
 
     private fun handleJoinTeamBottariSuccess() {
