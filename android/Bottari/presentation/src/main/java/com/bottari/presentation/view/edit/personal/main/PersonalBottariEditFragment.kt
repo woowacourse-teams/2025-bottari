@@ -15,8 +15,12 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
 import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.util.PermissionUtil
 import com.bottari.presentation.util.PermissionUtil.requiredPermissions
+import com.bottari.presentation.view.common.alert.CustomAlertDialog
+import com.bottari.presentation.view.common.alert.DialogListener
+import com.bottari.presentation.view.common.alert.DialogPresetType
 import com.bottari.presentation.view.edit.alarm.AlarmEditFragment
 import com.bottari.presentation.view.edit.personal.item.PersonalItemEditFragment
 import com.bottari.presentation.view.edit.personal.main.adapter.PersonalBottariEditItemAdapter
@@ -35,6 +39,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val permissionLauncher = getPermissionLauncher()
     private val alarmViewBinder: AlarmViewBinder by lazy { AlarmViewBinder(requireContext()) }
+    private val scheduler: AlarmScheduler by lazy { AlarmScheduler() }
 
     private fun getPermissionLauncher() =
         registerForActivityResult(
@@ -81,10 +86,12 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                     requireView().showSnackbar(
                         R.string.bottari_edit_create_template_failure_text,
                     )
+
                 PersonalBottariEditUiEvent.CreateTemplateSuccess ->
                     requireView().showSnackbar(
                         R.string.bottari_edit_create_template_success_text,
                     )
+
                 is PersonalBottariEditUiEvent.ToggleAlarmStateFailure ->
                     requireView().showSnackbar(
                         R.string.bottari_edit_toggle_alarm_state_failure_text,
@@ -248,27 +255,31 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun showSettingsDialog() {
-        AlertDialog
-            .Builder(requireContext())
-            .setTitle(R.string.common_permission_dialog_title_text)
-            .setMessage(R.string.common_notification_permission_dialog_message_text)
-            .setPositiveButton(R.string.common_permission_dialog_positive_btn_text) { _, _ ->
-                PermissionUtil.openAppSettings(requireContext())
-            }.setNegativeButton(R.string.common_permission_dialog_negative_btn_text, null)
-            .show()
+        CustomAlertDialog
+            .newInstance(DialogPresetType.NAVIGATE_TO_NOTIFICATION_SETTINGS)
+            .setDialogListener(
+                object : DialogListener {
+                    override fun onClickNegative() {}
+
+                    override fun onClickPositive() {
+                        PermissionUtil.openAppSettings(requireContext())
+                    }
+                },
+            ).show(parentFragmentManager, DialogPresetType.NAVIGATE_TO_NOTIFICATION_SETTINGS.name)
     }
 
     private fun showExactAlarmSettingsDialog() {
-        AlertDialog
-            .Builder(requireContext())
-            .setTitle(R.string.common_permission_dialog_title_text)
-            .setMessage(R.string.alarm_edit_exact_alarm_permission_dialog_message_text)
-            .setPositiveButton(R.string.common_permission_dialog_positive_btn_text) { _, _ ->
-                PermissionUtil.requestExactAlarmPermission(
-                    requireContext(),
-                )
-            }.setNegativeButton(R.string.common_permission_dialog_negative_btn_text, null)
-            .show()
+        CustomAlertDialog
+            .newInstance(DialogPresetType.NAVIGATE_TO_ALARM_SETTINGS)
+            .setDialogListener(
+                object : DialogListener {
+                    override fun onClickNegative() {}
+
+                    override fun onClickPositive() {
+                        PermissionUtil.requestExactAlarmPermission(requireContext())
+                    }
+                },
+            ).show(parentFragmentManager, DialogPresetType.NAVIGATE_TO_ALARM_SETTINGS.name)
     }
 
     private fun showRenameDialog() {

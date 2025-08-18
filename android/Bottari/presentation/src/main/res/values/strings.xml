@@ -81,13 +81,13 @@
     <string name="common_permission_check_btn_text">확인했어요</string>
     <string name="common_permission_dialog_title_text">권한 안내</string>
     <string name="common_notification_permission_dialog_message_text">알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
-    <string name="common_alarm_permission_dialog_message_text">알람을 설정하려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
+    <string name="common_alarm_permission_dialog_message_text">알람을 설정하려면 알람 및 리마인더 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
     <string name="common_permission_dialog_positive_btn_text">설정으로 가기</string>
     <string name="common_permission_dialog_negative_btn_text">나중에 하기</string>
 
     <!-- Dialog: 데이터 저장 다이얼로그 텍스트-->
-    <string name="common_alert_dialog_title_text">주의</string>
-    <string name="common_alert_unsaved_dialog_message_text">저장하지 않고 나가시겠습니까?</string>
+    <string name="common_alert_dialog_title_text">저장 알림</string>
+    <string name="common_alert_unsaved_dialog_message_text">저장하지 않고 나가시겠어요?</string>
 
     <!-- Dialog: 신고 다이얼로그 텍스트 -->
     <string name="common_report_dialog_title_text">신고 내용 확인</string>

@@ -86,7 +86,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun showExactAlarmSettingsDialog() {
         CustomAlertDialog
-            .newInstance(DialogPresetType.NAVIGATE_TO_SETTINGS)
+            .newInstance(DialogPresetType.NAVIGATE_TO_ALARM_SETTINGS)
             .setDialogListener(
                 object : DialogListener {
                     override fun onClickNegative() {
@@ -98,7 +98,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         isNavigatedToSettings = true
                     }
                 },
-            ).show(supportFragmentManager, DialogPresetType.NAVIGATE_TO_SETTINGS.name)
+            ).show(supportFragmentManager, DialogPresetType.NAVIGATE_TO_ALARM_SETTINGS.name)
     }
 
     private fun hasRequiredPermission(permissionFlag: Boolean) =
