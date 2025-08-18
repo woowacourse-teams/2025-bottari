@@ -41,12 +41,6 @@ public class TeamAssignedItemService {
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
 
-    private static Long memberIdByItem(final TeamAssignedItem item) {
-        return item.getTeamMember()
-                .getMember()
-                .getId();
-    }
-
     public List<ReadAssignedItemResponse> getAllByTeamBottariId(final Long teamBottariId) {
         final List<TeamAssignedItem> assignedItems = teamAssignedItemRepository.findAllByTeamBottariId(teamBottariId);
         final Map<TeamAssignedItemInfo, List<Member>> assigneesByInfo = groupMembersByAssignedItemInfo(assignedItems);
@@ -257,8 +251,14 @@ public class TeamAssignedItemService {
     private List<Long> collectUncheckedMemberIds(final List<TeamAssignedItem> items) {
         return items.stream()
                 .filter(item -> !item.isChecked())
-                .map(TeamAssignedItemService::memberIdByItem)
+                .map(this::memberIdByItem)
                 .toList();
+    }
+
+    private Long memberIdByItem(final TeamAssignedItem item) {
+        return item.getTeamMember()
+                .getMember()
+                .getId();
     }
 
     private void sendRemindMessageToMembers(
