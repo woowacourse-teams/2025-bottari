@@ -69,7 +69,6 @@ class TeamPersonalItemEditFragment :
         toggleLoadingIndicator(uiState.isLoading)
         parentViewModel.updateIsAlreadyExistState(uiState.isAlreadyExist)
         parentViewModel.updateSendCondition(true)
-        BottariLogger.debug("isEmpty : ${uiState.isFetched} / ${uiState.isEmpty}")
         binding.emptyView.root.isVisible = uiState.isEmpty
         adapter.submitList(uiState.personalItems)
     }
