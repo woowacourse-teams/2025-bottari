@@ -166,6 +166,13 @@
     <string name="bottari_create_default_title_text">새 보따리</string>
     <string name="bottari_create_success_text">보따리를 만들었어요</string>
 
+    <!-- Team Bottari Join Dialog -->
+    <string name="team_bottari_join_dialog_title_text">초대 코드를 입력해 주세요</string>
+    <string name="team_bottari_join_dialog_description_text">유효하지 않은 초대 코드입니다</string>
+    <string name="team_bottari_join_dialog_name_hint_text">초대 코드를 입력해 주세요</string>
+    <string name="team_bottari_join_dialog_btn_text">참가하기</string>
+    <string name="team_bottari_join_success_text">팀 보따리에 참가했어요</string>
+
     <!-- Bottari Edit -->
     <string name="bottari_edit_item_list_title">내 물건</string>
     <string name="bottari_edit_add_item_title">물건 추가하기</string>

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,7 @@ import com.bottari.presentation.view.create.BottariCreateDialog
 import com.bottari.presentation.view.edit.team.TeamBottariEditActivity
 import com.bottari.presentation.view.home.team.adapter.TeamBottariAdapter
 import com.bottari.presentation.view.home.team.adapter.TeamBottariViewHolder
+import com.bottari.presentation.view.join.TeamBottariJoinDialog
 
 class TeamBottariFragment :
     BaseFragment<FragmentTeamBottariBinding>(FragmentTeamBottariBinding::inflate),
@@ -93,6 +95,15 @@ class TeamBottariFragment :
                 .newInstance(BottariType.TEAM)
                 .show(parentFragmentManager, BottariCreateDialog::class.java.name)
         }
+        binding.btnTeamBottariJoin.setOnClickListener {
+            binding.expandableTeamBottari.collapse()
+            TeamBottariJoinDialog
+                .newInstance()
+                .show(parentFragmentManager, TeamBottariJoinDialog::class.java.name)
+        }
+        setFragmentResultListener(REQUEST_KEY_REQUIRE_REFRESH) { _, _ ->
+            viewModel.fetchBottaries()
+        }
     }
 
     private fun navigateToChecklist(
@@ -126,6 +137,7 @@ class TeamBottariFragment :
         }
 
     companion object {
+        const val REQUEST_KEY_REQUIRE_REFRESH = "REFRESH"
         private const val PADDING_HEIGHT_RATIO = 1.2f
     }
 }
