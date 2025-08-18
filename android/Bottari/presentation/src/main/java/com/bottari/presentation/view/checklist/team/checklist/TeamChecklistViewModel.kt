@@ -52,7 +52,7 @@ class TeamChecklistViewModel(
             }
 
         val newExpandableList =
-            generateExpandableTypeList(updatedExpandableItems, uiState.value?.bottariItems ?: return)
+            generateExpandableTypeList(updatedExpandableItems, currentState.bottariItems)
         updateState {
             copy(expandableItems = newExpandableList)
         }
@@ -72,8 +72,7 @@ class TeamChecklistViewModel(
                     checklistItem
                 }
             val newExpandableList =
-                currentState.expandableItems.toggleItemInList(toggledItem) ?: return
-
+                currentState.expandableItems.toggleItemInList(toggledItem)
             updateState {
                 copy(
                     bottariItems = newItems,
