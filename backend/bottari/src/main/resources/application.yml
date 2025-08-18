@@ -2,10 +2,6 @@ spring:
   application:
     name: bottari
   jpa:
-    show-sql: true   # SQL을 콘솔에 출력
-    properties:
-      hibernate:
-        format_sql: true
     hibernate:
       ddl-auto: create
     defer-datasource-initialization: true
@@ -13,7 +9,6 @@ spring:
   sql:
     init:
       mode: always
-
 
 firebase:
   service:
