@@ -1,5 +1,6 @@
 package com.bottari.domain.repository
 
+import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.TeamBottariCheckList
@@ -68,4 +69,10 @@ interface TeamBottariRepository {
     suspend fun joinTeamBottari(inviteCode: String): Result<Unit>
 
     suspend fun fetchTeamBottariMembers(teamBottariId: Long): Result<List<TeamMember>>
+
+    suspend fun fetchTeamAssignedItems(teamBottariId: Long): Result<List<BottariItem>>
+
+    suspend fun fetchTeamSharedItems(teamBottariId: Long): Result<List<BottariItem>>
+
+    suspend fun fetchTeamPersonalItems(teamBottariId: Long): Result<List<BottariItem>>
 }

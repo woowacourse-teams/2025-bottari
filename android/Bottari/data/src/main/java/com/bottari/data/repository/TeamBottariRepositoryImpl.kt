@@ -11,6 +11,7 @@ import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.JoinTeamBottariRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
+import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.TeamBottariCheckList
@@ -106,7 +107,7 @@ class TeamBottariRepositoryImpl(
         id: Long,
         type: BottariItemType,
     ): Result<Unit> {
-        val bottariItemType = type.toString()
+        val bottariItemType = type.javaClass.simpleName
         return teamBottariRemoteDataSource.deleteTeamBottariItem(
             id,
             DeleteTeamBottariItemRequest(bottariItemType),
@@ -131,4 +132,19 @@ class TeamBottariRepositoryImpl(
             .mapCatching { members ->
                 members.map { member -> member.toDomain() }
             }
+
+    override suspend fun fetchTeamAssignedItems(teamBottariId: Long): Result<List<BottariItem>> =
+        teamBottariRemoteDataSource
+            .fetchTeamAssignedItems(teamBottariId)
+            .mapCatching { assignedItems -> assignedItems.map { assignedItem -> assignedItem.toDomain() } }
+
+    override suspend fun fetchTeamSharedItems(teamBottariId: Long): Result<List<BottariItem>> =
+        teamBottariRemoteDataSource
+            .fetchTeamSharedItems(teamBottariId)
+            .mapCatching { sharedItems -> sharedItems.map { sharedItem -> sharedItem.toDomain() } }
+
+    override suspend fun fetchTeamPersonalItems(teamBottariId: Long): Result<List<BottariItem>> =
+        teamBottariRemoteDataSource
+            .fetchTeamPersonalItems(teamBottariId)
+            .mapCatching { personalItems -> personalItems.map { personalItem -> personalItem.toDomain() } }
 }
