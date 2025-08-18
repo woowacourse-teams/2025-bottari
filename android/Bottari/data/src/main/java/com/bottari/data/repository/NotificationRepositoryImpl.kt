@@ -15,11 +15,11 @@ class NotificationRepositoryImpl(
             .mapCatching { entities -> entities.map { entity -> entity.toDomain() } }
 
     override suspend fun saveNotification(vararg notification: Notification): Result<Unit> =
-        dataSource.saveNotification(
-            *notification
-                .map { notification -> notification.toEntity() }
-                .toTypedArray(),
-        )
+        runCatching {
+            val entities =
+                notification.map { notification -> notification.toEntity() }.toTypedArray()
+            dataSource.saveNotification(*entities).getOrThrow()
+        }
 
     override suspend fun deleteNotification(bottariId: Long): Result<Unit> = dataSource.deleteNotification(bottariId)
 }
