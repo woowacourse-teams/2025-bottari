@@ -47,12 +47,20 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
                 else -> supportFragmentManager.popBackStack()
             }
         }
+        supportFragmentManager.addOnBackStackChangedListener {
+            handleToolbar()
+        }
         binding.btnPrevious.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
         binding.btnSwipe.setOnClickListener {
             navigateToSwipeChecklist()
         }
+    }
+
+    private fun handleToolbar() {
+        val isSwipeFragmentVisible = supportFragmentManager.backStackEntryCount > 0
+        binding.btnSwipe.isVisible = !isSwipeFragmentVisible
     }
 
     private fun navigateToHome() {
@@ -64,13 +72,11 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     private fun navigateToTeamChecklistMain() {
         val intent = TeamChecklistMainFragment.newInstance(bottariId)
         replaceChecklistFragment(intent, false)
-        binding.btnSwipe.isVisible = true
     }
 
     private fun navigateToSwipeChecklist() {
         val intent = TeamSwipeChecklistFragment.newInstance(bottariId)
         replaceChecklistFragment(intent, true)
-        binding.btnSwipe.isVisible = false
     }
 
     private fun replaceChecklistFragment(
