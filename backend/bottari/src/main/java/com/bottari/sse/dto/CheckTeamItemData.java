@@ -2,20 +2,23 @@ package com.bottari.sse.dto;
 
 import com.bottari.teambottari.event.CheckTeamAssignedItemEvent;
 import com.bottari.teambottari.event.CheckTeamSharedItemEvent;
+import java.time.LocalDateTime;
 
 public record CheckTeamItemData(
         Long infoId,
         Long memberId,
-        boolean isChecked
+        boolean isChecked,
+        LocalDateTime publishedAt
 ) {
 
     public static CheckTeamItemData from(
             final CheckTeamSharedItemEvent event
     ) {
         return new CheckTeamItemData(
-                event.infoId(),
-                event.memberId(),
-                event.isChecked()
+                event.getInfoId(),
+                event.getMemberId(),
+                event.isChecked(),
+                event.getPublishedAt()
         );
     }
 
@@ -23,9 +26,10 @@ public record CheckTeamItemData(
             final CheckTeamAssignedItemEvent event
     ) {
         return new CheckTeamItemData(
-                event.infoId(),
-                event.memberId(),
-                event.isChecked()
+                event.getInfoId(),
+                event.getMemberId(),
+                event.isChecked(),
+                event.getPublishedAt()
         );
     }
 }

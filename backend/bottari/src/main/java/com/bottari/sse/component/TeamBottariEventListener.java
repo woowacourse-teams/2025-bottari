@@ -26,7 +26,7 @@ public class TeamBottariEventListener {
                 SseEventType.CHANGE,
                 CheckTeamItemData.from(event)
         );
-        sseService.sendByTeamBottariId(event.teamBottariId(), message);
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
     }
 
     @Async
@@ -37,6 +37,6 @@ public class TeamBottariEventListener {
                 SseEventType.CHANGE,
                 CheckTeamItemData.from(event)
         );
-        sseService.sendByTeamBottariId(event.teamBottariId(), message);
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
     }
 }
