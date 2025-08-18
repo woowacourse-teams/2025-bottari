@@ -277,7 +277,9 @@ public class TeamAssignedItemService {
                 teamAssignedItemInfo.getId()
         );
         final Set<Long> currentAssignedMemberIds = currentAssignments.stream()
-                .map(item -> item.getTeamMember().getMember().getId())
+                .map(TeamAssignedItem::getTeamMember)
+                .map(TeamMember::getMember)
+                .map(Member::getId)
                 .collect(Collectors.toSet());
         final List<TeamMember> requestedAssignTeamMembers = getValidateTeamMembers(teamBottariId,
                 requestedAssigneeMemberIds);
