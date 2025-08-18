@@ -74,13 +74,16 @@ class TeamSharedItemEditFragment :
     private fun handleUiEvent(uiEvent: TeamSharedItemEditEvent) {
         when (uiEvent) {
             TeamSharedItemEditEvent.FetchTeamPersonalItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
-            TeamSharedItemEditEvent.AddItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
             TeamSharedItemEditEvent.DeleteItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
+            TeamSharedItemEditEvent.CreateItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
+            TeamSharedItemEditEvent.CreateItemSuccuss ->
+                parentViewModel.updateInput(RESET_INPUT_TEXT)
         }
     }
 
     companion object {
         private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
+        private const val RESET_INPUT_TEXT = ""
 
         fun newInstance(bottariId: Long): TeamSharedItemEditFragment =
             TeamSharedItemEditFragment().apply {

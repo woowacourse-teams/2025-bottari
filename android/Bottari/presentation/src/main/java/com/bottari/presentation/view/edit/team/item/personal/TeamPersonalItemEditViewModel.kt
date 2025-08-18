@@ -27,7 +27,10 @@ class TeamPersonalItemEditViewModel(
         fetchPersonalItems()
     }
 
-    fun updateInput(input: String) = updateState { copy(inputText = input) }
+    fun updateInput(input: String) {
+        if (currentState.inputText == input) return
+        updateState { copy(inputText = input) }
+    }
 
     fun createItem() {
         if (currentState.isAlreadyExist) return
