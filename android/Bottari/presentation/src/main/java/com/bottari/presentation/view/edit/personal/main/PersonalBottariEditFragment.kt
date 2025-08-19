@@ -33,7 +33,7 @@ import com.google.android.flexbox.JustifyContent
 class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
         val bottariId = requireArguments().getLong(ARG_BOTTARI_ID)
-        PersonalBottariEditViewModel.Factory(bottariId, AlarmScheduler())
+        PersonalBottariEditViewModel.Factory(bottariId)
     }
     private lateinit var popupMenu: PopupMenu
     private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }

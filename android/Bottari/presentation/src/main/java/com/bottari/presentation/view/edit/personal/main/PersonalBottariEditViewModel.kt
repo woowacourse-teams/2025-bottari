@@ -25,7 +25,6 @@ class PersonalBottariEditViewModel(
     private val fetchBottariDetailUseCase: FetchBottariDetailUseCase,
     private val toggleAlarmStateUseCase: ToggleAlarmStateUseCase,
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
-    private val alarmScheduler: AlarmScheduler,
 ) : BaseViewModel<PersonalBottariEditUiState, PersonalBottariEditUiEvent>(
         PersonalBottariEditUiState(
             id = savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID_MISSING),
@@ -40,6 +39,8 @@ class PersonalBottariEditViewModel(
             timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
         ) { isActive -> toggleAlarmState(isActive) }
+
+    private val alarmScheduler: AlarmScheduler = AlarmScheduler()
 
     fun fetchBottari() {
         updateState { copy(isLoading = true) }
@@ -135,10 +136,7 @@ class PersonalBottariEditViewModel(
 
         private const val DEBOUNCE_DELAY = 500L
 
-        fun Factory(
-            bottariId: Long,
-            alarmScheduler: AlarmScheduler,
-        ): ViewModelProvider.Factory =
+        fun Factory(bottariId: Long): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
@@ -149,7 +147,6 @@ class PersonalBottariEditViewModel(
                         UseCaseProvider.fetchBottariDetailUseCase,
                         UseCaseProvider.toggleAlarmStateUseCase,
                         UseCaseProvider.createBottariTemplateUseCase,
-                        alarmScheduler = alarmScheduler,
                     )
                 }
             }
