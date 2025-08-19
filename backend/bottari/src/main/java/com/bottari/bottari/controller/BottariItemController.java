@@ -56,6 +56,7 @@ public class BottariItemController implements BottariItemApiDocs {
     }
 
     @PatchMapping("/bottaries/{bottariId}/bottari-items/reset")
+    @Override
     public ResponseEntity<Void> resetChecklist(
             @PathVariable final Long bottariId,
             @MemberIdentifier final String ssaid
