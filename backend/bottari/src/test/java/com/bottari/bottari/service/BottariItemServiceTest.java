@@ -483,4 +483,88 @@ class BottariItemServiceTest {
                     .hasMessage("보따리 물품을 찾을 수 없습니다.");
         }
     }
+
+    @Nested
+    class resetCheckListTest {
+
+        @DisplayName("보따리에 해당되는 모든 아이템들의 체크 상태를 초기화한다.")
+        @Test
+        void resetCheckList() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final Bottari bottari = BottariFixture.BOTTARI.get(member);
+            entityManager.persist(bottari);
+            final Bottari anotherBottari = BottariFixture.ANOTHER_BOTTARI.get(member);
+            entityManager.persist(anotherBottari);
+
+            final BottariItem bottariItem1 = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
+            bottariItem1.check();
+            final BottariItem bottariItem2 = BottariItemFixture.BOTTARI_ITEM_2.get(bottari);
+            final BottariItem another_bottariItem = BottariItemFixture.BOTTARI_ITEM_1.get(anotherBottari);
+            another_bottariItem.check();
+            entityManager.persist(bottariItem1);
+            entityManager.persist(bottariItem2);
+            entityManager.persist(another_bottariItem);
+            entityManager.flush();
+            entityManager.clear();
+
+            // when
+            bottariItemService.resetCheckList(bottari.getId(), member.getSsaid());
+
+            // then
+            final List<BottariItem> actualBottariItems = entityManager.createQuery("""
+                     SELECT bi
+                     FROM BottariItem bi
+                     WHERE bi.bottari.id = :bottariId
+            """, BottariItem.class)
+                    .setParameter("bottariId", bottari.getId())
+                    .getResultList();
+            final BottariItem actualAnotherBottariItem = entityManager.find(
+                    BottariItem.class, another_bottariItem.getId());
+            assertAll(
+                    () -> assertThat(actualBottariItems).hasSize(2),
+                    () -> assertThat(actualBottariItems.getFirst().isChecked()).isFalse(),
+                    () -> assertThat(actualBottariItems.get(1).isChecked()).isFalse(),
+                    () -> assertThat(actualAnotherBottariItem.isChecked()).isTrue()
+            );
+        }
+
+        @DisplayName("보따리 체크리스트 초기화 시, 보따리가 존재하지 않은 경우 예외가 발생한다.")
+        @Test
+        void resetCheckList_Exception_NotExistBottari() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final Long invalidBottariId = 1L;
+
+            // when & then
+            assertThatThrownBy(() -> bottariItemService.resetCheckList(invalidBottariId, member.getSsaid()))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("보따리를 찾을 수 없습니다.");
+        }
+
+        @DisplayName("보따리 체크리스트 초기화 시, 주인이 아닌 경우 예외가 발생한다.")
+        @Test
+        void resetCheckList_Exception_NotOwner() {
+            // given
+            final Member owner = MemberFixture.MEMBER.get();
+            entityManager.persist(owner);
+            final Member notOwner = MemberFixture.ANOTHER_MEMBER.get();
+            entityManager.persist(notOwner);
+
+            final Bottari bottari = BottariFixture.BOTTARI.get(owner);
+            entityManager.persist(bottari);
+
+            final BottariItem bottariItem = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
+            entityManager.persist(bottariItem);
+
+            // when & then
+            assertThatThrownBy(() -> bottariItemService.resetCheckList(bottari.getId(), notOwner.getSsaid()))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("해당 보따리에 접근할 수 있는 권한이 없습니다.");
+        }
+    }
 }
