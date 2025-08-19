@@ -1,0 +1,71 @@
+name: deploy-test-for-backup-server
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  deploy-from-backup:
+    runs-on: [self-hosted, bottari-dev]
+
+    steps:
+    # 가장 최신 백업 jar 파일이 있다면 선택
+      - name: Pick latest backup jar
+        id: pick
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ls ./artifacts/backup/*.jar 1> /dev/null 2>&1; then
+            LATEST_JAR=$(ls -t ./artifacts/backup/*.jar | head -n 1)
+            echo "Found latest backup: $LATEST_JAR"
+            echo "BACKUP_JAR=$LATEST_JAR" >> "$GITHUB_OUTPUT"
+          else
+            echo "No jar found in ./artifacts/backup"
+            exit 1
+          fi
+
+    # 현재 ./artifacts jar 파일 삭제
+      - name: Remove current artifacts jar(s)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ls ./artifacts/*.jar 1> /dev/null 2>&1; then
+            rm -f ./artifacts/*.jar
+            echo "Removing existing artifacts/*.jar"
+          else
+            echo "No existing artifacts/*.jar to remove"
+          fi
+          
+    # 선택된 최신 백업 jar 파일을 ./artifacts로 복사
+      - name: Copy latest backup into ./artifacts
+        id: copy
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="${{ steps.pick.outputs.BACKUP_JAR }}"
+          BASENAME=$(basename "$SRC")
+          DEST="./artifacts/$BASENAME"
+          cp "$SRC" "$DEST"
+          echo "Copied $SRC -> $DEST"
+          echo "JAR=$DEST" >> "$GITHUB_OUTPUT"
+
+      - name: Kill Existing Server On Port 8080
+        run: |
+          PID=$(lsof -t -i :8080 || true)
+          if [ -n "$PID" ]; then
+            echo "Killing existing process: $PID"
+            kill -9 $PID
+          fi
+
+      - name: Run App From Latest Backup On Port 8080
+        run: |
+          JAR_FILE="${{ steps.copy.outputs.JAR }}"
+          echo "Starting server with $JAR_FILE"
+          RUNNER_TRACKING_ID=""
+          
+          DATABASE_URL='${{ secrets.DATABASE_DEV_URL }}' \
+          DATABASE_USERNAME='${{ secrets.DATABASE_DEV_USERNAME }}' \
+          DATABASE_PASSWORD='${{ secrets.DATABASE_DEV_PASSWORD }}' \
+          SPRING_PROFILES_ACTIVE=dev \
+          
+          nohup java -Duser.timezone=Asia/Seoul -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
+          echo "Started from backup: $JAR_FILE"
