@@ -54,6 +54,20 @@ class ChecklistViewModel(
         }
     }
 
+    fun resetItemsCheckState() {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            resetBottariItemCheckStateUseCase(bottariId)
+                .onSuccess {
+                    val clearedItems = currentState.bottariItems.map { it.copy(isChecked = false) }
+                    updateState { copy(bottariItems = clearedItems) }
+                }.onFailure { emitEvent(ChecklistUiEvent.ResetCheckStateFailure) }
+
+            updateState { copy(isLoading = false) }
+        }
+    }
+
     fun resetSwipeState() {
         updateState { copy(swipedItemIds = emptySet()) }
     }
@@ -84,20 +98,6 @@ class ChecklistViewModel(
         }
     }
 
-    fun resetItemsCheckState() {
-        updateState { copy(isLoading = true) }
-
-        launch {
-            resetBottariItemCheckStateUseCase(bottariId)
-                .onSuccess {
-                    val clearedItems = currentState.bottariItems.map { it.copy(isChecked = false) }
-                    updateState { copy(bottariItems = clearedItems) }
-                }.onFailure { emitEvent(ChecklistUiEvent.ResetCheckStateFailure) }
-
-            updateState { copy(isLoading = false) }
-        }
-    }
-
     private fun performCheck(items: List<ChecklistItemUiModel>) {
         launch {
             val originalItemsById = currentState.initialItems.associateBy { it.id }
@@ -121,7 +121,6 @@ class ChecklistViewModel(
                 updateOriginalItem(item)
             }.onFailure {
                 revertItemCheckStatus(item.id)
-                emitEvent(ChecklistUiEvent.CheckItemFailure)
             }
     }
 
@@ -154,21 +153,7 @@ class ChecklistViewModel(
             checkBottariItemUseCase(item.id)
         } else {
             unCheckBottariItemUseCase(item.id)
-            val result = toggleItemCheck(item)
-            result.onFailure { restoreItem(item) }
         }
-
-    private suspend fun toggleItemCheck(item: ChecklistItemUiModel) =
-        if (item.isChecked) {
-            checkBottariItemUseCase(item.id)
-        } else {
-            unCheckBottariItemUseCase(item.id)
-        }
-
-    private fun restoreItem(item: ChecklistItemUiModel) {
-        val restored = currentState.bottariItems.map { if (it.id == item.id) item else it }
-        updateState { copy(bottariItems = restored) }
-    }
 
     private fun recordPendingCheckStatus(item: ChecklistItemUiModel) {
         pendingCheckStatusMap[item.id] = item

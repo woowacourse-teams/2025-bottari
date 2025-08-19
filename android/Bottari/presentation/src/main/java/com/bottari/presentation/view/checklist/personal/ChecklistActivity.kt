@@ -14,6 +14,7 @@ import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityChecklistBinding
+import com.bottari.presentation.model.ChecklistItemUiModel
 import com.bottari.presentation.view.checklist.personal.main.MainChecklistFragment
 import com.bottari.presentation.view.checklist.personal.swipe.SwipeChecklistFragment
 import com.bottari.presentation.view.common.alert.CustomAlertDialog
@@ -53,15 +54,8 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
     private fun setupObserver() {
         viewModel.uiState.observe(this) { uiState ->
             updateToolbar(isMainChecklist() && uiState.bottariItems.isNotEmpty())
-            if (uiState.isAllChecked) {
-                BottariLogger.ui(
-                    UiEventType.CHECKLIST_COMPLETE,
-                    mapOf(
-                        "bottari_id" to bottariId,
-                        "checklist_items" to uiState.bottariItems.toString(),
-                    ),
-                )
-            }
+            binding.btnReset.isVisible = uiState.isAnyChecked
+            if (uiState.isAllChecked) logChecklistFinished(uiState.bottariItems)
         }
     }
 
@@ -113,7 +107,6 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
 
     private fun updateToolbar(isVisible: Boolean) {
         binding.btnSwipe.isVisible = isVisible
-        binding.btnReset.isVisible = isVisible
         val imageRes = if (isVisible) R.drawable.btn_previous else R.drawable.btn_close
         binding.btnPrevious.setImageResource(imageRes)
     }
@@ -156,6 +149,16 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
                     override fun onClickNegative() = Unit
                 },
             ).show(supportFragmentManager, DialogPresetType.RESET_BOTTARI_ITEMS_CHECK_STATE.name)
+    }
+
+    private fun logChecklistFinished(items: List<ChecklistItemUiModel>) {
+        BottariLogger.ui(
+            UiEventType.CHECKLIST_COMPLETE,
+            mapOf(
+                "bottari_id" to bottariId,
+                "checklist_items" to items.toString(),
+            ),
+        )
     }
 
     companion object {

@@ -48,7 +48,8 @@
             android:layout_gravity="end"
             android:contentDescription="@string/checklist_swipe_btn_description"
             android:padding="@dimen/space_small"
-            android:src="@drawable/btn_reset" />
+            android:src="@drawable/btn_reset"
+            android:visibility="invisible" />
     </Toolbar>
 
     <androidx.fragment.app.FragmentContainerView

@@ -8,29 +8,15 @@ data class ChecklistUiState(
     val bottariItems: List<ChecklistItemUiModel> = emptyList(),
     val swipedItemIds: Set<Long> = emptySet(),
 ) {
-    val totalQuantity: Int
-        get() = bottariItems.size
-
-    val checkedQuantity: Int
-        get() = bottariItems.count { it.isChecked }
-
-    val nonSwipedItems: List<ChecklistItemUiModel> by lazy {
-        nonCheckedItems.filterNot { it.id in swipedItemIds }
-    }
-
-    val isItemsEmpty: Boolean
-        get() = bottariItems.isEmpty()
-
-    val isAllChecked: Boolean
-        get() = bottariItems.isNotEmpty() && nonCheckedItems.isEmpty()
-
-    val isAllSwiped: Boolean
-        get() = bottariItems.isNotEmpty() && nonSwipedItems.isEmpty()
-
-    val isDone: Boolean
-        get() = isAllSwiped || isItemsEmpty
-
-    private val nonCheckedItems: List<ChecklistItemUiModel> by lazy {
+    private val nonCheckedItems: List<ChecklistItemUiModel> =
         bottariItems.filterNot { it.isChecked }
-    }
+    val totalQuantity: Int = bottariItems.size
+    val checkedQuantity: Int = bottariItems.count { it.isChecked }
+    val nonSwipedItems: List<ChecklistItemUiModel> =
+        nonCheckedItems.filterNot { it.id in swipedItemIds }
+    val isItemsEmpty: Boolean = bottariItems.isEmpty()
+    val isAllChecked: Boolean = bottariItems.isNotEmpty() && nonCheckedItems.isEmpty()
+    val isAllSwiped: Boolean = bottariItems.isNotEmpty() && nonSwipedItems.isEmpty()
+    val isDone: Boolean = isAllSwiped || isItemsEmpty
+    val isAnyChecked: Boolean = bottariItems.any { it.isChecked }
 }
