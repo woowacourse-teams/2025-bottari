@@ -3,6 +3,7 @@ package com.bottari.sse.component;
 import com.bottari.sse.dto.ChangeAssignedItemData;
 import com.bottari.sse.dto.CheckTeamItemData;
 import com.bottari.sse.dto.CreateAssignedItemData;
+import com.bottari.sse.dto.CreateTeamMemberData;
 import com.bottari.sse.dto.CreateTeamSharedItemData;
 import com.bottari.sse.dto.DeleteAssignedItemData;
 import com.bottari.sse.dto.DeleteTeamSharedItemData;
@@ -16,6 +17,7 @@ import com.bottari.teambottari.event.CreateAssignedItemEvent;
 import com.bottari.teambottari.event.CreateTeamSharedItemEvent;
 import com.bottari.teambottari.event.DeleteAssignedItemEvent;
 import com.bottari.teambottari.event.DeleteTeamSharedItemEvent;
+import com.bottari.teambottari.service.CreateTeamMemberEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,17 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class TeamBottariEventListener {
 
     private final SseService sseService;
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void handleCreateTeamMemberEvent(final CreateTeamMemberEvent event) {
+        final SseMessage sseMessage = new SseMessage(
+                SseResourceType.TEAM_MEMBER,
+                SseEventType.CREATE,
+                CreateTeamMemberData.from(event)
+        );
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), sseMessage);
+    }
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

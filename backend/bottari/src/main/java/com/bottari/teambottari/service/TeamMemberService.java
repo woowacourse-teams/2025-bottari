@@ -26,6 +26,7 @@ import com.bottari.teambottari.repository.TeamSharedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamSharedItemRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,8 @@ public class TeamMemberService {
 
     private final FcmMessageSender fcmMessageSender;
     private final FcmMessageConverter fcmMessageConverter;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional(readOnly = true)
     public ReadTeamMemberInfoResponse getTeamMemberInfoByTeamBottariId(
@@ -99,6 +102,12 @@ public class TeamMemberService {
         final TeamMember teamMember = new TeamMember(teamBottari, member);
         teamMemberRepository.save(teamMember);
         addTeamMemberSharedItems(teamBottari.getId(), teamMember);
+        applicationEventPublisher.publishEvent(new CreateTeamMemberEvent(
+                teamBottari.getId(),
+                member.getId(),
+                member.getName(),
+                teamMember.isTeamBottariOwner()
+        ));
 
         return teamMember.getId();
     }
