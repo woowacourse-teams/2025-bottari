@@ -2,6 +2,8 @@ name: BE PR Review & Merge Notification
 
 on:
   pull_request_review:
+    branches:
+      - be/develop
     types: [submitted] # 리뷰 제출 시
   pull_request:
     branches:
