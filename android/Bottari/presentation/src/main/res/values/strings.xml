@@ -292,7 +292,6 @@
 
     <!-- Team Bottari -->
     <string name="team_product_status_format">%d / %d</string>
-    <string name="team_product_status_title_format">%s 챙김 현황</string>
     <string name="team_status_fetch_failure_text">팀 보따리 현황을 불러오지 못했어요</string>
     <string name="team_status_send_remind_success_text">알람을 설정했어요</string>
     <string name="team_status_send_remind_failure_text">알람을 설정하지 못했어요</string>

@@ -5,10 +5,10 @@
         <item name="android:textSize">32sp</item>
     </style>
 
-    <style name="Pretendard_Bold_28">
+    <style name="Pretendard_Bold_22">
         <item name="fontFamily">@font/pretendard</item>
         <item name="android:textFontWeight">700</item>
-        <item name="android:textSize">28sp</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
     <style name="Pretendard_Bold_20">

@@ -9,15 +9,16 @@
 
     <TextView
         android:id="@+id/tv_team_bottari_item_status_title"
-        style="@style/Pretendard_Bold_28"
-        android:layout_width="wrap_content"
+        style="@style/Pretendard_Bold_22"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_x_large"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/btn_team_bottari_item_send_remind"
+        app:layout_constraintEnd_toStartOf="@+id/btn_team_bottari_item_send_remind"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btn_team_bottari_item_send_remind"
-        tools:text="목걸이 챙김 현황" />
+        tools:text="이것은물건글자가열다섯개입니다" />
 
     <TextView
         android:id="@+id/btn_team_bottari_item_send_remind"
@@ -28,8 +29,8 @@
         android:layout_marginEnd="@dimen/space_x_large"
         android:background="@drawable/bg_primary_radius_16dp"
         android:gravity="center"
-        android:paddingHorizontal="@dimen/space_large"
-        android:paddingVertical="@dimen/space_small"
+        android:paddingHorizontal="@dimen/space_small"
+        android:paddingVertical="@dimen/space_x_small"
         android:text="@string/team_status_send_remind_btn_text"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"

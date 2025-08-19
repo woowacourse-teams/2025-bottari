@@ -4,6 +4,7 @@ import com.bottari.presentation.model.ChecklistItemUiModel
 
 data class ChecklistUiState(
     val isLoading: Boolean = false,
+    val initialItems: List<ChecklistItemUiModel> = emptyList(),
     val bottariItems: List<ChecklistItemUiModel> = emptyList(),
     val swipedItemIds: Set<Long> = emptySet(),
 ) {
