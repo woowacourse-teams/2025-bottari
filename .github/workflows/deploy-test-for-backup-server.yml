@@ -1,8 +1,7 @@
 name: deploy-test-for-backup-server
 
 on:
-  push:
-    branches: test/deploy-file-backup
+  workflow_dispatch: {}
 
 jobs:
   build:

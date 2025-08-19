@@ -1,7 +1,8 @@
 name: deploy-backup-to-latest-version-test
 
 on:
-  workflow_dispatch: {}
+  push:
+    branches: test/deploy-file-backup
 
 jobs:
   deploy-from-backup:
