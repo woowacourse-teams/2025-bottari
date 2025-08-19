@@ -1,5 +1,6 @@
 package com.bottari.domain.usecase.alarm
 
+import com.bottari.domain.extension.flatMap
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.AlarmRepository
@@ -23,19 +24,16 @@ class ToggleAlarmStateUseCase(
             } else {
                 alarmRepository.inactiveAlarm(alarmId)
             }
-        val notification = Notification(bottariId, bottariTitle, alarm.copy(isActive = isActive))
-        return toggleAlarmResult.onSuccessSuspend {
+        return toggleAlarmResult.flatMap {
             notificationRepository.saveNotification(
-                notification,
+                Notification(
+                    bottariId,
+                    bottariTitle,
+                    alarm.copy(isActive = isActive),
+                ),
             )
         }
     }
-
-    private suspend fun <T> Result<T>.onSuccessSuspend(action: suspend (T) -> Result<Unit>): Result<Unit> =
-        fold(
-            onSuccess = { action(it) },
-            onFailure = { exception -> Result.failure(exception) },
-        )
 
     companion object {
         private const val ERROR_REQUIRE_ALARM_ID = "[ERROR] 알람 ID가 존재하지 않습니다."

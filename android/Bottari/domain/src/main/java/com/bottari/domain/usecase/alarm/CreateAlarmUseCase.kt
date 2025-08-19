@@ -1,5 +1,6 @@
 package com.bottari.domain.usecase.alarm
 
+import com.bottari.domain.extension.flatMap
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.AlarmRepository
@@ -16,17 +17,9 @@ class CreateAlarmUseCase(
     ): Result<Unit> =
         alarmRepository
             .createAlarm(bottariId, alarm)
-            .fold(
-                onSuccess = {
-                    notificationRepository.saveNotification(
-                        Notification(
-                            bottariId,
-                            bottariTitle,
-                            alarm,
-                        ),
-                    )
-                    Result.success(Unit)
-                },
-                onFailure = { exception -> Result.failure(exception) },
-            )
+            .flatMap {
+                notificationRepository.saveNotification(
+                    Notification(bottariId, bottariTitle, alarm),
+                )
+            }
 }
