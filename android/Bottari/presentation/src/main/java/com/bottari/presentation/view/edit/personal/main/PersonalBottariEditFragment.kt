@@ -1,6 +1,5 @@
 package com.bottari.presentation.view.edit.personal.main
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View

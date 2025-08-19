@@ -4,9 +4,6 @@ import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.AlarmRepository
 import com.bottari.domain.repository.NotificationRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
 
 class CreateAlarmUseCase(
     private val alarmRepository: AlarmRepository,
