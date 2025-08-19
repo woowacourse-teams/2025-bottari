@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,7 @@ import com.bottari.presentation.view.create.BottariCreateDialog
 import com.bottari.presentation.view.edit.team.TeamBottariEditActivity
 import com.bottari.presentation.view.home.team.adapter.TeamBottariAdapter
 import com.bottari.presentation.view.home.team.adapter.TeamBottariViewHolder
+import com.bottari.presentation.view.join.TeamBottariJoinDialog
 
 class TeamBottariFragment :
     BaseFragment<FragmentTeamBottariBinding>(FragmentTeamBottariBinding::inflate),
@@ -78,19 +80,29 @@ class TeamBottariFragment :
     }
 
     private fun setupUI() {
-        binding.rvBottari.adapter = adapter
-        binding.rvBottari.layoutManager = LinearLayoutManager(requireContext())
-        binding.btnBottariCreate.doOnPreDraw {
-            binding.rvBottari.addItemDecoration(BottomPaddingDecoration((it.height * PADDING_HEIGHT_RATIO).toInt()))
+        binding.rvTeamBottari.adapter = adapter
+        binding.rvTeamBottari.layoutManager = LinearLayoutManager(requireContext())
+        binding.btnExpand.doOnPreDraw {
+            binding.rvTeamBottari.addItemDecoration(BottomPaddingDecoration((it.height * PADDING_HEIGHT_RATIO).toInt()))
         }
     }
 
     private fun setupListener() {
-        binding.rvBottari.addOnScrollListener(handleScrollState())
-        binding.btnBottariCreate.setOnClickListener {
+        binding.rvTeamBottari.addOnScrollListener(handleScrollState())
+        binding.btnTeamBottariCreate.setOnClickListener {
+            binding.expandableTeamBottari.collapse()
             BottariCreateDialog
                 .newInstance(BottariType.TEAM)
                 .show(parentFragmentManager, BottariCreateDialog::class.java.name)
+        }
+        binding.btnTeamBottariJoin.setOnClickListener {
+            binding.expandableTeamBottari.collapse()
+            TeamBottariJoinDialog
+                .newInstance()
+                .show(parentFragmentManager, TeamBottariJoinDialog::class.java.name)
+        }
+        setFragmentResultListener(REQUEST_KEY_REQUIRE_REFRESH) { _, _ ->
+            viewModel.fetchBottaries()
         }
     }
 
@@ -116,15 +128,16 @@ class TeamBottariFragment :
                 when (newState) {
                     RecyclerView.SCROLL_STATE_DRAGGING,
                     RecyclerView.SCROLL_STATE_SETTLING,
-                    -> binding.btnBottariCreate.fadeOut()
+                    -> binding.expandableTeamBottari.fadeOut()
 
                     RecyclerView.SCROLL_STATE_IDLE ->
-                        binding.btnBottariCreate.fadeIn()
+                        binding.expandableTeamBottari.fadeIn()
                 }
             }
         }
 
     companion object {
+        const val REQUEST_KEY_REQUIRE_REFRESH = "REFRESH"
         private const val PADDING_HEIGHT_RATIO = 1.2f
     }
 }

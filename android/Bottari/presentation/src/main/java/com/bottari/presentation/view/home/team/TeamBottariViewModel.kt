@@ -15,10 +15,6 @@ class TeamBottariViewModel(
     private val fetchTeamBottariesUseCase: FetchTeamBottariesUseCase,
     private val deleteBottariUseCase: DeleteBottariUseCase,
 ) : BaseViewModel<TeamBottariUiState, TeamBottariUiEvent>(TeamBottariUiState()) {
-    init {
-        fetchBottaries()
-    }
-
     fun fetchBottaries() {
         updateState { copy(isLoading = true) }
 

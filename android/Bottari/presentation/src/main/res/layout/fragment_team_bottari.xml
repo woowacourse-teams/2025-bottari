@@ -8,7 +8,7 @@
     tools:context=".view.home.personal.BottariFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_bottari"
+        android:id="@+id/rv_team_bottari"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fadingEdgeLength="8dp"
@@ -21,20 +21,57 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/rv_bottari"
-        app:layout_constraintTop_toTopOf="@id/rv_bottari" />
+        app:layout_constraintBottom_toBottomOf="@id/rv_team_bottari"
+        app:layout_constraintTop_toTopOf="@id/rv_team_bottari" />
 
-    <ImageView
-        android:id="@+id/btn_bottari_create"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+    <com.bottari.presentation.view.common.custom.ExpandableFab
+        android:id="@+id/expandable_team_bottari"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/space_large"
         android:layout_marginBottom="@dimen/space_median"
-        android:background="@drawable/bg_primary_oval"
-        android:contentDescription="@string/bottari_create_btn_description"
-        android:elevation="2dp"
-        android:padding="@dimen/space_large"
-        android:src="@drawable/btn_plus"
+        app:buttonSpacing="@dimen/space_x_small"
+        app:direction="up"
+        app:expanded="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rotateOnExpand="true">
+
+        <ImageView
+            android:id="@+id/btn_expand"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="end"
+            android:background="@drawable/bg_primary_oval"
+            android:contentDescription="@string/team_bottari_create_option_btn_description"
+            android:elevation="2dp"
+            android:padding="@dimen/space_large"
+            android:src="@drawable/btn_plus" />
+
+        <TextView
+            android:id="@+id/btn_team_bottari_create"
+            style="@style/Pretendard_SemiBold_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/bg_primary_radius_16dp"
+            android:contentDescription="@string/bottari_create_btn_description"
+            android:elevation="2dp"
+            android:padding="@dimen/space_median"
+            android:text="@string/team_bottari_create_btn_text"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/btn_team_bottari_join"
+            style="@style/Pretendard_SemiBold_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/bg_primary_radius_16dp"
+            android:contentDescription="@string/team_bottari_join_btn_description"
+            android:elevation="2dp"
+            android:padding="@dimen/space_median"
+            android:text="@string/team_bottari_join_btn_text"
+            android:textColor="@color/white" />
+    </com.bottari.presentation.view.common.custom.ExpandableFab>
 </androidx.constraintlayout.widget.ConstraintLayout>

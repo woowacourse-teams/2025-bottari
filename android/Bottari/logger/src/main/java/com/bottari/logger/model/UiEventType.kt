@@ -81,6 +81,14 @@ enum class UiEventType {
     TEAM_BOTTARI_CREATE,
 
     /**
+     * 팀 보따리 입장 이벤트
+     *
+     * 파라미터:
+     * - bottari_id: 생성된 보따리 고유 ID
+     */
+    TEAM_BOTTARI_JOIN,
+
+    /**
      * 체크리스트 완료 이벤트
      *
      * 파라미터:
