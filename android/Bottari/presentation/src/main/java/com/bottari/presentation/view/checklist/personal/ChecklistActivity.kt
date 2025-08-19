@@ -14,8 +14,12 @@ import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityChecklistBinding
+import com.bottari.presentation.model.ChecklistItemUiModel
 import com.bottari.presentation.view.checklist.personal.main.MainChecklistFragment
 import com.bottari.presentation.view.checklist.personal.swipe.SwipeChecklistFragment
+import com.bottari.presentation.view.common.alert.CustomAlertDialog
+import com.bottari.presentation.view.common.alert.DialogListener
+import com.bottari.presentation.view.common.alert.DialogPresetType
 import com.bottari.presentation.view.home.HomeActivity
 import java.time.LocalDateTime
 
@@ -50,15 +54,8 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
     private fun setupObserver() {
         viewModel.uiState.observe(this) { uiState ->
             updateToolbar(isMainChecklist() && uiState.bottariItems.isNotEmpty())
-            if (uiState.isAllChecked) {
-                BottariLogger.ui(
-                    UiEventType.CHECKLIST_COMPLETE,
-                    mapOf(
-                        "bottari_id" to bottariId,
-                        "checklist_items" to uiState.bottariItems.toString(),
-                    ),
-                )
-            }
+            binding.btnReset.isVisible = uiState.isAnyChecked
+            if (uiState.isAllChecked) logChecklistFinished(uiState.bottariItems)
         }
     }
 
@@ -78,6 +75,7 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
             updateToolbar(isMainChecklist())
         }
         binding.btnSwipe.setOnClickListener { navigateToSwipeChecklist() }
+        binding.btnReset.setOnClickListener { showResetChecklistDialog() }
         supportFragmentManager.addOnBackStackChangedListener {
             updateToolbar(isMainChecklist())
         }
@@ -138,6 +136,28 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
             R.anim.slide_out_right_fast,
             R.anim.slide_in_right_fast,
             R.anim.slide_out_right_fast,
+        )
+    }
+
+    private fun showResetChecklistDialog() {
+        CustomAlertDialog
+            .newInstance(DialogPresetType.RESET_BOTTARI_ITEMS_CHECK_STATE)
+            .setDialogListener(
+                object : DialogListener {
+                    override fun onClickPositive() = viewModel.resetItemsCheckState()
+
+                    override fun onClickNegative() = Unit
+                },
+            ).show(supportFragmentManager, DialogPresetType.RESET_BOTTARI_ITEMS_CHECK_STATE.name)
+    }
+
+    private fun logChecklistFinished(items: List<ChecklistItemUiModel>) {
+        BottariLogger.ui(
+            UiEventType.CHECKLIST_COMPLETE,
+            mapOf(
+                "bottari_id" to bottariId,
+                "checklist_items" to items.toString(),
+            ),
         )
     }
 

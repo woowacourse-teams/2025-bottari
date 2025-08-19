@@ -10,6 +10,7 @@ import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.bottari.ChecklistItem
 import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
+import com.bottari.domain.usecase.item.ResetBottariItemCheckStateUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
@@ -23,6 +24,7 @@ class ChecklistViewModel(
     private val fetchChecklistUseCase: FetchChecklistUseCase,
     private val checkBottariItemUseCase: CheckBottariItemUseCase,
     private val unCheckBottariItemUseCase: UnCheckBottariItemUseCase,
+    private val resetBottariItemCheckStateUseCase: ResetBottariItemCheckStateUseCase,
 ) : BaseViewModel<ChecklistUiState, ChecklistUiEvent>(ChecklistUiState()) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val pendingCheckStatusMap = mutableMapOf<Long, ChecklistItemUiModel>()
@@ -47,6 +49,20 @@ class ChecklistViewModel(
                 }.onFailure {
                     emitEvent(ChecklistUiEvent.FetchChecklistFailure)
                 }
+
+            updateState { copy(isLoading = false) }
+        }
+    }
+
+    fun resetItemsCheckState() {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            resetBottariItemCheckStateUseCase(bottariId)
+                .onSuccess {
+                    val clearedItems = currentState.bottariItems.map { it.copy(isChecked = false) }
+                    updateState { copy(bottariItems = clearedItems) }
+                }.onFailure { emitEvent(ChecklistUiEvent.ResetCheckStateFailure) }
 
             updateState { copy(isLoading = false) }
         }
@@ -105,7 +121,6 @@ class ChecklistViewModel(
                 updateOriginalItem(item)
             }.onFailure {
                 revertItemCheckStatus(item.id)
-                emitEvent(ChecklistUiEvent.CheckItemFailure)
             }
     }
 
@@ -159,6 +174,7 @@ class ChecklistViewModel(
                         UseCaseProvider.fetchChecklistUseCase,
                         UseCaseProvider.checkBottariItemUseCase,
                         UseCaseProvider.unCheckBottariItemUseCase,
+                        UseCaseProvider.resetBottariItemCheckStateUseCase,
                     )
                 }
             }

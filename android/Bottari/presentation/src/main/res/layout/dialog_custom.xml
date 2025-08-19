@@ -81,6 +81,7 @@
         android:paddingEnd="0dp"
         android:paddingBottom="@dimen/space_x_large"
         android:src="@drawable/btn_close"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

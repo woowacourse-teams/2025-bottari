@@ -61,6 +61,7 @@
 
     <!-- Common: 공통 버튼 텍스트 -->
     <string name="common_confirm_btn_text">확인</string>
+    <string name="common_save_btn_text">저장</string>
     <string name="common_cancel_btn_text">취소</string>
     <string name="common_yes_btn_text">예</string>
     <string name="common_no_btn_text">아니오</string>
@@ -99,6 +100,10 @@
     <string name="common_report_dialog_privacy_exposure_radio_button_text">개인정보 노출</string>
     <string name="common_report_dialog_submit_success_text">신고가 정상적으로 접수되었어요</string>
     <string name="common_report_dialog_submit_failure_text">신고 접수에 실패했어요</string>
+
+    <!-- Dialog: 체크리스트 초기화 다이얼로그 텍스트 -->
+    <string name="reset_bottari_items_check_state_dialog_title_text">체크리스트 초기화</string>
+    <string name="reset_bottari_items_check_state_dialog_description_text">체크 상태를 모두 지우시겠어요?</string>
 
     <!--  Common: 보따리 알림  -->
     <string name="common_bottari_notification_channel_name">나의 보따리 알림</string>
@@ -145,6 +150,7 @@
     <string name="checklist_swipe_not_btn_text">아직이에요</string>
     <string name="checklist_swipe_yes_btn_text">챙겼어요</string>
     <string name="checklist_fetch_failure_text">체크리스트를 불러오지 못했어요</string>
+    <string name="checklist_reset_failure_text">체크리스트를 초기화하지 못했어요</string>
     <string name="checklist_check_failure_text">체크에 실패했어요</string>
     <string name="checklist_swipe_yes_overlay_view_text">챙겼어요!</string>
     <string name="checklist_swipe_no_overlay_view_text">아직이에요</string>
@@ -304,6 +310,7 @@
     <!-- Description 접근성 -->
     <string name="bottari_create_btn_description">보따리 만들기 버튼</string>
     <string name="checklist_swipe_btn_description">스와이프 전환 버튼</string>
+    <string name="checklist_reset_btn_description">체크리스트 초기화 버튼</string>
     <string name="item_delete_btn_description">물건 삭제 버튼</string>
     <string name="bottari_template_delete_btn_description">보따리 템플릿 삭제 버튼</string>
     <string name="nickname_edit_btn_description">닉네임 수정 버튼</string>

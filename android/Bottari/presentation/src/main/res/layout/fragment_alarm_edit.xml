@@ -36,7 +36,7 @@
             android:layout_height="48dp"
             android:layout_gravity="end"
             android:gravity="center"
-            android:text="@string/common_confirm_btn_text"
+            android:text="@string/common_save_btn_text"
             android:textColor="@color/black" />
     </Toolbar>
 
