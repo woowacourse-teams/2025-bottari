@@ -6,8 +6,8 @@ data class PersonalItemEditUiState(
     val isLoading: Boolean = false,
     val bottariId: Long,
     val title: String,
+    var orignalItems: List<BottariItemUiModel>,
     var items: List<BottariItemUiModel>,
 ) {
-    val initialItems: List<String> = items.map { it.name }
-    val initialItemIds: List<Long> = items.map { it.id }
+    val isNotEqual: Boolean = orignalItems != items
 }

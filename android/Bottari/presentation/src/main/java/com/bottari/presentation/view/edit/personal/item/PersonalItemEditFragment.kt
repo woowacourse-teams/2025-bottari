@@ -82,6 +82,7 @@ class PersonalItemEditFragment :
             handleBottariNameState(uiState.title)
             handleItemState(uiState.items)
             handleEmptyView(uiState.items.isEmpty())
+            handleDialog(uiState.isNotEqual)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
@@ -118,13 +119,11 @@ class PersonalItemEditFragment :
             requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
                 showExitConfirmationDialog()
             }
-        onBackPressedCallback.isEnabled = false
     }
 
     private fun addItemFromInput() {
         viewModel.addNewItemIfNeeded(binding.etPersonalItem.text.toString())
         binding.etPersonalItem.text.clear()
-        onBackPressedCallback.isEnabled = true
     }
 
     private fun updateDuplicateStateUI(text: String) {
@@ -159,6 +158,10 @@ class PersonalItemEditFragment :
 
     private fun handleEmptyView(isEmpty: Boolean) {
         binding.emptyView.clPersonalBottariItemEmptyView.isVisible = isEmpty
+    }
+
+    private fun handleDialog(isNotEqual: Boolean) {
+        onBackPressedCallback.isEnabled = isNotEqual
     }
 
     private fun showExitConfirmationDialog() {
