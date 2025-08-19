@@ -18,6 +18,7 @@ import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.event.CreateTeamSharedItemEvent;
 import com.bottari.teambottari.event.DeleteTeamSharedItemEvent;
+import com.bottari.teambottari.event.CheckTeamSharedItemEvent;
 import com.bottari.teambottari.repository.TeamMemberRepository;
 import com.bottari.teambottari.repository.TeamSharedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamSharedItemRepository;
@@ -104,10 +105,11 @@ public class TeamSharedItemService {
             final Long itemId,
             final String ssaid
     ) {
-        final TeamSharedItem item = teamSharedItemRepository.findById(itemId)
+        final TeamSharedItem item = teamSharedItemRepository.findByIdWithTeamMember(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND, "공통"));
         validateOwner(ssaid, item);
         item.check();
+        publishCheckEvent(item);
     }
 
     @Transactional
@@ -115,10 +117,11 @@ public class TeamSharedItemService {
             final Long itemId,
             final String ssaid
     ) {
-        final TeamSharedItem item = teamSharedItemRepository.findById(itemId)
+        final TeamSharedItem item = teamSharedItemRepository.findByIdWithTeamMember(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND, "공통"));
         validateOwner(ssaid, item);
         item.uncheck();
+        publishCheckEvent(item);
     }
 
     public void sendRemindAlarm(
@@ -232,6 +235,18 @@ public class TeamSharedItemService {
         return item.getTeamMember()
                 .getMember()
                 .getId();
+    }
+
+    private void publishCheckEvent(final TeamSharedItem item) {
+        final TeamMember teamMember = item.getTeamMember();
+        final CheckTeamSharedItemEvent event = new CheckTeamSharedItemEvent(
+                teamMember.getTeamBottari().getId(),
+                teamMember.getMember().getId(),
+                item.getInfo().getId(),
+                item.getId(),
+                item.isChecked()
+        );
+        applicationEventPublisher.publishEvent(event);
     }
 
     private void sendRemindMessageToMembers(
