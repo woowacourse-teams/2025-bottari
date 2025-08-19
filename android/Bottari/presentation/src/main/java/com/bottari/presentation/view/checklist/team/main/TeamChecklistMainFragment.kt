@@ -17,6 +17,10 @@ class TeamChecklistMainFragment : BaseFragment<FragmentTeamChecklistMainBinding>
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        setupUI()
+    }
+
+    private fun setupUI() {
         adapter =
             TeamChecklistFragmentAdapter(
                 this,
@@ -24,7 +28,10 @@ class TeamChecklistMainFragment : BaseFragment<FragmentTeamChecklistMainBinding>
             )
         binding.vpTeamChecklist.adapter = adapter
         tabMediator =
-            TabLayoutMediator(binding.tlTeamChecklistMain, binding.vpTeamChecklist) { tab, position ->
+            TabLayoutMediator(
+                binding.tlTeamChecklistMain,
+                binding.vpTeamChecklist,
+            ) { tab, position ->
                 tab.text =
                     when (position) {
                         0 -> getString(R.string.team_checklist_tap_checklist_text)
