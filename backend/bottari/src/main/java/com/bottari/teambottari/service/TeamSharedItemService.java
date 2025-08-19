@@ -16,9 +16,9 @@ import com.bottari.teambottari.dto.CreateTeamItemRequest;
 import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
+import com.bottari.teambottari.event.CheckTeamSharedItemEvent;
 import com.bottari.teambottari.event.CreateTeamSharedItemEvent;
 import com.bottari.teambottari.event.DeleteTeamSharedItemEvent;
-import com.bottari.teambottari.event.CheckTeamSharedItemEvent;
 import com.bottari.teambottari.repository.TeamMemberRepository;
 import com.bottari.teambottari.repository.TeamSharedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamSharedItemRepository;
@@ -183,9 +183,7 @@ public class TeamSharedItemService {
         teamSharedItemRepository.saveAll(teamSharedItems);
     }
 
-    private void publishCreateEvent(
-            final TeamSharedItemInfo info
-    ) {
+    private void publishCreateEvent(final TeamSharedItemInfo info) {
         final CreateTeamSharedItemEvent event = new CreateTeamSharedItemEvent(
                 info.getTeamBottari().getId(),
                 info.getId(),
