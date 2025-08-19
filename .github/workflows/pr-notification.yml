@@ -10,6 +10,7 @@ on:
 
 jobs:
   pr-notification:
+    if: github.event.pull_request.base.ref == 'be/develop'
     runs-on: ubuntu-latest
     steps:
       - name: Determine Webhook

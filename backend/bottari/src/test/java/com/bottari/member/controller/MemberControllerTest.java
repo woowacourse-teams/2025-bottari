@@ -41,7 +41,7 @@ class MemberControllerTest {
     @Test
     void register() throws Exception {
         // given
-        final CreateMemberRequest request = new CreateMemberRequest("ssaid");
+        final CreateMemberRequest request = new CreateMemberRequest("ssaid", "token");
         given(memberService.create(request))
                 .willReturn(1L);
 

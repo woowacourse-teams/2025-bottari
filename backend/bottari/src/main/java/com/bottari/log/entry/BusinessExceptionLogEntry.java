@@ -9,7 +9,9 @@ public class BusinessExceptionLogEntry {
 
     private String exceptionType;
     private String message;
-    private String at;
+    private String httpMethod;
+    private String requestUri;
+    private String ssaid;
 
     public String toLogString() {
         return String.format("""
@@ -17,12 +19,16 @@ public class BusinessExceptionLogEntry {
                         ================ BUSINESS EXCEPTION LOG ===============
                         Exception Type : %s
                         Message        : %s
-                        At             : %s
+                        HTTP Method    : %s
+                        Request URI    : %s
+                        Ssaid          : %s
                         =======================================================
                         """,
                 exceptionType,
                 message,
-                at
+                httpMethod,
+                requestUri,
+                ssaid
         );
     }
 }

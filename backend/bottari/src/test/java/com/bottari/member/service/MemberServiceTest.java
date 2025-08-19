@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.error.BusinessException;
+import com.bottari.fcm.domain.FcmToken;
 import com.bottari.member.domain.Member;
 import com.bottari.member.dto.CheckRegistrationResponse;
 import com.bottari.member.dto.CreateMemberRequest;
@@ -34,7 +35,7 @@ class MemberServiceTest {
         @Test
         void create() {
             // given
-            final CreateMemberRequest request = new CreateMemberRequest("ssaid");
+            final CreateMemberRequest request = new CreateMemberRequest("ssaid", "token");
 
             // when
             final Long actual = memberService.create(request);
@@ -43,12 +44,30 @@ class MemberServiceTest {
             assertThat(actual).isNotNull();
         }
 
+        @DisplayName("사용자를 생성하면 FCM 토큰 또한 함께 생성된다.")
+        @Test
+        void create_WithFcmToken() {
+            // given
+            final CreateMemberRequest request = new CreateMemberRequest("ssaid", "token");
+
+            // when
+            final Long actual = memberService.create(request);
+
+            // then
+            final FcmToken actualFcmToken = entityManager.createQuery("""
+                          SELECT f FROM FcmToken f WHERE f.member.id = :memberId
+                    """, FcmToken.class)
+                    .setParameter("memberId", actual)
+                    .getSingleResult();
+            assertThat(actualFcmToken).isNotNull();
+        }
+
         @DisplayName("사용자를 생성하면 고유한 임시 이름이 부여된다.")
         @Test
         void create_AssignTemporaryName() {
             // given
             final String ssaid = "ssaid";
-            final CreateMemberRequest request = new CreateMemberRequest(ssaid);
+            final CreateMemberRequest request = new CreateMemberRequest(ssaid, "token");
 
             // when
             final Long memberId = memberService.create(request);
@@ -67,7 +86,7 @@ class MemberServiceTest {
             // given
             final String duplicateSsaid = "duplicateSsaid";
             entityManager.persist(new Member(duplicateSsaid, "name"));
-            final CreateMemberRequest request = new CreateMemberRequest(duplicateSsaid);
+            final CreateMemberRequest request = new CreateMemberRequest(duplicateSsaid, "token");
 
             // when & then
             assertThatThrownBy(() -> memberService.create(request))

@@ -21,6 +21,7 @@ import com.bottari.fixture.MemberFixture;
 import com.bottari.member.domain.Member;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -647,6 +648,11 @@ class BottariTemplateServiceTest {
             final List<BottariTemplateItem> remainingItems = entityManager
                     .createQuery("SELECT bti FROM BottariTemplateItem bti", BottariTemplateItem.class)
                     .getResultList();
+            final Optional<BottariTemplateItem> findBottariTemplateItem = entityManager.createNativeQuery(
+                            "SELECT * FROM bottari_template_item WHERE id = :id", BottariTemplateItem.class)
+                    .setParameter("id", bottariTemplate1Item1.getId())
+                    .getResultStream()
+                    .findFirst();
 
             assertAll(
                     () -> assertThat(remainingTemplates)
@@ -657,7 +663,10 @@ class BottariTemplateServiceTest {
                     () -> assertThat(remainingItems)
                             .hasSize(1)
                             .extracting(BottariTemplateItem::getName)
-                            .containsExactly("name3")
+                            .containsExactly("name3"),
+
+                    () -> assertThat(findBottariTemplateItem).isNotEmpty(),
+                    () -> assertThat(findBottariTemplateItem.get().getDeletedAt()).isNotNull()
             );
         }
 

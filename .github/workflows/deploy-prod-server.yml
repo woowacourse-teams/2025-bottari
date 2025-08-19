@@ -82,6 +82,7 @@ jobs:
           DATABASE_URL='${{ secrets.DATABASE_PROD_URL }}' \
           DATABASE_USERNAME='${{ secrets.DATABASE_PROD_USERNAME }}' \
           DATABASE_PASSWORD='${{ secrets.DATABASE_PROD_PASSWORD }}' \
+          FIREBASE_SERVICE_ACCOUNT_JSON='${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}' \
           SPRING_PROFILES_ACTIVE=prod \
           nohup java -Duser.timezone=Asia/Seoul -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
           

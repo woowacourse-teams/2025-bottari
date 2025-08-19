@@ -69,8 +69,8 @@ public interface BottariTemplateApiDocs {
             ErrorCode.BOTTARI_TEMPLATE_TITLE_BLANK,
             ErrorCode.BOTTARI_TEMPLATE_TITLE_TOO_LONG,
             ErrorCode.BOTTARI_TEMPLATE_ITEM_DUPLICATE_IN_REQUEST,
-            ErrorCode.BOTTARI_TEMPLATE_ITEM_NAME_BLANK,
-            ErrorCode.BOTTARI_TEMPLATE_ITEM_NAME_TOO_LONG
+            ErrorCode.ITEM_NAME_BLANK,
+            ErrorCode.ITEM_NAME_TOO_LONG
     })
     ResponseEntity<Void> create(
             final CreateBottariTemplateRequest request,
@@ -86,8 +86,8 @@ public interface BottariTemplateApiDocs {
             ErrorCode.BOTTARI_TEMPLATE_NOT_FOUND,
             ErrorCode.BOTTARI_TITLE_BLANK,
             ErrorCode.BOTTARI_TITLE_TOO_LONG,
-            ErrorCode.BOTTARI_ITEM_NAME_BLANK,
-            ErrorCode.BOTTARI_ITEM_NAME_TOO_LONG
+            ErrorCode.ITEM_NAME_BLANK,
+            ErrorCode.ITEM_NAME_TOO_LONG
     })
     ResponseEntity<Void> createBottari(
             final Long id,

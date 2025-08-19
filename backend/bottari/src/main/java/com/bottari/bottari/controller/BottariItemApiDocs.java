@@ -34,8 +34,8 @@ public interface BottariItemApiDocs {
     @ApiErrorCodes({
             ErrorCode.BOTTARI_NOT_FOUND,
             ErrorCode.BOTTARI_ITEM_ALREADY_EXISTS,
-            ErrorCode.BOTTARI_ITEM_NAME_BLANK,
-            ErrorCode.BOTTARI_ITEM_NAME_TOO_LONG
+            ErrorCode.ITEM_NAME_BLANK,
+            ErrorCode.ITEM_NAME_TOO_LONG
     })
     ResponseEntity<Void> create(
             final Long bottariId,
@@ -52,12 +52,25 @@ public interface BottariItemApiDocs {
             ErrorCode.BOTTARI_ITEM_MAXIMUM_EXCEEDED,
             ErrorCode.BOTTARI_ITEM_DUPLICATE_IN_REQUEST,
             ErrorCode.BOTTARI_ITEM_ALREADY_EXISTS,
-            ErrorCode.BOTTARI_ITEM_NAME_BLANK,
-            ErrorCode.BOTTARI_ITEM_NAME_TOO_LONG
+            ErrorCode.ITEM_NAME_BLANK,
+            ErrorCode.ITEM_NAME_TOO_LONG
     })
     ResponseEntity<Void> update(
             final Long bottariId,
             final EditBottariItemsRequest request
+    );
+
+    @Operation(summary = "보따리 물품 체크리스트 초기화")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "보따리 물품 체크리스트 초기화 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.BOTTARI_NOT_FOUND,
+            ErrorCode.BOTTARI_NOT_OWNED,
+    })
+    ResponseEntity<Void> resetChecklist(
+            final Long bottariId,
+            @Parameter(hidden = true) final String ssaid
     );
 
     @Operation(summary = "보따리 물품 삭제")

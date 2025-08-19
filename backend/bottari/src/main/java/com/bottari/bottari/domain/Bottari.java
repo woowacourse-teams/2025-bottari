@@ -1,8 +1,10 @@
 package com.bottari.bottari.domain;
 
-import com.bottari.member.domain.Member;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.member.domain.Member;
+import com.bottari.vo.BottariTitle;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
@@ -16,10 +18,14 @@ import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
+@SQLDelete(sql = "UPDATE bottari SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -29,7 +35,7 @@ public class Bottari {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private BottariTitle title;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -38,12 +44,14 @@ public class Bottari {
     @CreatedDate
     private LocalDateTime createdAt;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     public Bottari(
             final String title,
             final Member member
     ) {
-        validateTitle(title);
-        this.title = title;
+        this.title = new BottariTitle(title);
         this.member = member;
     }
 
@@ -52,20 +60,14 @@ public class Bottari {
     }
 
     public void updateTitle(final String newTitle) {
-        if (title.equals(newTitle)) {
+        if (title.title().equals(newTitle)) {
             throw new BusinessException(ErrorCode.BOTTARI_TITLE_UNCHANGED);
         }
-        validateTitle(newTitle);
-        this.title = newTitle;
+        this.title = new BottariTitle(newTitle);
     }
 
-    private void validateTitle(final String title) {
-        if (title.isBlank()) {
-            throw new BusinessException(ErrorCode.BOTTARI_TITLE_BLANK);
-        }
-        if (title.length() > 15) {
-            throw new BusinessException(ErrorCode.BOTTARI_TITLE_TOO_LONG, "최대 15자까지 입력 가능합니다.");
-        }
+    public String getTitle() {
+        return title.title();
     }
 
     @Override

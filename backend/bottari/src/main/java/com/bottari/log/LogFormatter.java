@@ -49,6 +49,15 @@ public class LogFormatter {
         return new String(contentAsByteArray, StandardCharsets.UTF_8);
     }
 
+    public String toSsaidLog(final HttpServletRequest request) {
+        final String ssaid = request.getHeader("ssaid");
+        if (ssaid == null || ssaid.isEmpty()) {
+            return "GUEST";
+        }
+        
+        return ssaid;
+    }
+
     public String toResponseHeadersLog(final HttpServletResponse response) {
         final StringBuilder headers = new StringBuilder();
         final Collection<String> headerNames = response.getHeaderNames();

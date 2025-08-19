@@ -36,4 +36,12 @@ public class TeamMember {
         this.teamBottari = teamBottari;
         this.member = member;
     }
+
+    public boolean isTeamBottariOwner() {
+        return teamBottari.getOwner().equals(member);
+    }
+
+    public boolean isSameBySsaid(final String ssaid) {
+        return member.isSameBySsaid(ssaid);
+    }
 }

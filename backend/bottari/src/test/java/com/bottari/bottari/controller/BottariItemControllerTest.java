@@ -70,8 +70,8 @@ class BottariItemControllerTest {
 
         // when & then
         mockMvc.perform(post("/bottaries/" + bottariId + "/bottari-items")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(header().string(HttpHeaders.LOCATION, "/bottaries/" + bottariId + "/bottari-items/1"));
     }
@@ -90,8 +90,23 @@ class BottariItemControllerTest {
 
         // when & then
         mockMvc.perform(patch("/bottaries/" + bottariId + "/bottari-items")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent());
+    }
+
+    @DisplayName("보따리 물품 체크리스트를 초기화한다.")
+    @Test
+    void resetChecklist() throws Exception {
+        // given
+        final Long bottariId = 1L;
+        final String ssaid = "ssaid";
+        willDoNothing().given(bottariItemService)
+                .resetCheckList(bottariId, ssaid);
+
+        // when & then
+        mockMvc.perform(patch("/bottaries/" + bottariId + "/bottari-items/reset")
+                                .header("ssaid", ssaid))
                 .andExpect(status().isNoContent());
     }
 
@@ -119,7 +134,7 @@ class BottariItemControllerTest {
 
         // when & then
         mockMvc.perform(patch("/bottari-items/" + bottariItemId + "/check")
-                        .header("ssaid", ssaid))
+                                .header("ssaid", ssaid))
                 .andExpect(status().isNoContent());
     }
 
@@ -134,7 +149,7 @@ class BottariItemControllerTest {
 
         // when & then
         mockMvc.perform(patch("/bottari-items/" + bottariItemId + "/uncheck")
-                        .header("ssaid", ssaid))
+                                .header("ssaid", ssaid))
                 .andExpect(status().isNoContent());
     }
 }
