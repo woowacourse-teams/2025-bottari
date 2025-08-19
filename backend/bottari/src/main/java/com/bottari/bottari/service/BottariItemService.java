@@ -94,6 +94,17 @@ public class BottariItemService {
         bottariItem.uncheck();
     }
 
+    @Transactional
+    public void resetCheckList(
+            final Long bottariId,
+            final String ssaid
+    ) {
+        final Bottari bottari = bottariRepository.findByIdWithMember(bottariId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_NOT_FOUND));
+        validateBottariOwner(ssaid, bottari);
+        bottariItemRepository.resetCheckStatusByBottariId(bottariId);
+    }
+
     private void validateExistsBottari(final Long bottariId) {
         if (!bottariRepository.existsById(bottariId)) {
             throw new BusinessException(ErrorCode.BOTTARI_NOT_FOUND);
@@ -172,6 +183,14 @@ public class BottariItemService {
     ) {
         if (!bottariItem.isOwner(ssaid)) {
             throw new BusinessException(ErrorCode.BOTTARI_ITEM_NOT_OWNED, "본인의 보따리 물품이 아닙니다.");
+        }
+    }
+
+    private void validateBottariOwner(
+            final String ssaid,
+            final Bottari bottari) {
+        if (!bottari.isOwner(ssaid)) {
+            throw new BusinessException(ErrorCode.BOTTARI_NOT_OWNED);
         }
     }
 }

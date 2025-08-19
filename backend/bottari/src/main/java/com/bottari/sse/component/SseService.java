@@ -1,5 +1,6 @@
 package com.bottari.sse.component;
 
+import com.bottari.sse.dto.ConnectSuccessData;
 import com.bottari.sse.message.SseMessage;
 import java.io.IOException;
 import java.util.List;
@@ -41,5 +42,9 @@ public class SseService {
         sseEmitter.onTimeout(() -> sseRepository.remove(teamBottariId, sseEmitter));
         sseEmitter.onError(throwable -> sseRepository.remove(teamBottariId, sseEmitter));
         sseRepository.save(teamBottariId, sseEmitter);
+        try {
+            sseEmitter.send(new ConnectSuccessData("Connect Success"), MediaType.APPLICATION_JSON);
+        } catch (final Exception ignored) {
+        }
     }
 }

@@ -60,6 +60,19 @@ public interface BottariItemApiDocs {
             final EditBottariItemsRequest request
     );
 
+    @Operation(summary = "보따리 물품 체크리스트 초기화")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "보따리 물품 체크리스트 초기화 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.BOTTARI_NOT_FOUND,
+            ErrorCode.BOTTARI_NOT_OWNED,
+    })
+    ResponseEntity<Void> resetChecklist(
+            final Long bottariId,
+            @Parameter(hidden = true) final String ssaid
+    );
+
     @Operation(summary = "보따리 물품 삭제")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "보따리 물품 삭제 성공"),

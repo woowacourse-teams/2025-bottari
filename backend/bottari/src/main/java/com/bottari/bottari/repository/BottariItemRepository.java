@@ -42,6 +42,14 @@ public interface BottariItemRepository extends JpaRepository<BottariItem, Long> 
 
     @Modifying(clearAutomatically = true)
     @Query("""
+            UPDATE BottariItem bi
+            SET bi.isChecked = false
+            WHERE bi.bottari.id = :bottariId
+            """)
+    void resetCheckStatusByBottariId(final Long bottariId);
+
+    @Modifying(clearAutomatically = true)
+    @Query("""
             UPDATE BottariItem bt
             SET bt.deletedAt = CURRENT_TIMESTAMP
             WHERE bt.bottari.id = :bottariId
