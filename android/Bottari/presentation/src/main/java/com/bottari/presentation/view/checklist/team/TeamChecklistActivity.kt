@@ -96,6 +96,7 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
         addToBackStack: Boolean,
     ) {
         supportFragmentManager.commit {
+            setReorderingAllowed(true)
             setSlideFastAnimation()
             replace(R.id.fcv_team_checklist, fragment)
             if (addToBackStack) addToBackStack(fragment::class.simpleName)
