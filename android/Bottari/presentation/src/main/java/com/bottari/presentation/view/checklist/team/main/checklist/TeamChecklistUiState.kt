@@ -14,6 +14,8 @@ data class TeamChecklistUiState(
 
     val checkedQuantity: Int = bottariItems.count { it.isChecked }
 
+    val unCheckedQuantity: Int = totalQuantity - checkedQuantity
+
     val nonSwipedItems: List<TeamChecklistProductUiModel> by lazy {
         nonCheckedItems.filterNot { it in swipedItems }
     }

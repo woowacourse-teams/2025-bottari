@@ -116,7 +116,7 @@ class TeamSwipeChecklistFragment :
             getString(
                 R.string.common_format_checklist_swipe_status,
                 uiState.totalQuantity,
-                uiState.totalQuantity - uiState.checkedQuantity,
+                uiState.unCheckedQuantity,
             )
     }
 
