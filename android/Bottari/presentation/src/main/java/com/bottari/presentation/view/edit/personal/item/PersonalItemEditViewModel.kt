@@ -34,7 +34,7 @@ class PersonalItemEditViewModel(
 
         val itemToRestore =
             currentState.initialItems.firstOrNull { originalItem ->
-                originalItem.name == itemName && currentState.items.none { it.id == originalItem.id }
+                originalItem.name == itemName && currentState.items.none { item -> item.id == originalItem.id }
             }
 
         if (itemToRestore != null) {
@@ -70,8 +70,8 @@ class PersonalItemEditViewModel(
         val deleteItemIds = initialItemIds.filterNot { it in finalItemIds }
         val createItemNames =
             finalItems
-                .filterNot { it.id in initialItemIds }
-                .map { it.name }
+                .filterNot { item -> item.id in initialItemIds }
+                .map { item -> item.name }
 
         return ItemChanges(deleteItemIds, createItemNames)
     }
@@ -113,12 +113,12 @@ class PersonalItemEditViewModel(
 
         val sortedList =
             restoredList.sortedWith(
-                compareBy { originalOrderMap[it.id] ?: Int.MAX_VALUE },
+                compareBy { item -> originalOrderMap[item.id] ?: Int.MAX_VALUE },
             )
         updateState { copy(items = sortedList) }
     }
 
-    private fun isDuplicateItem(name: String): Boolean = currentState.items.any { it.name == name }
+    private fun isDuplicateItem(name: String): Boolean = currentState.items.any { item -> item.name == name }
 
     private fun generateNewItemUiModel(name: String): BottariItemUiModel =
         BottariItemUiModel(
@@ -127,7 +127,7 @@ class PersonalItemEditViewModel(
             type = BottariItemTypeUiModel.PERSONAL,
         )
 
-    private fun nextGeneratedItemId(): Long = (currentState.items.maxOfOrNull { it.id } ?: DEFAULT_ITEM_ID) + ITEM_ID_INCREMENT
+    private fun nextGeneratedItemId(): Long = (currentState.items.maxOfOrNull { item -> item.id } ?: DEFAULT_ITEM_ID) + ITEM_ID_INCREMENT
 
     companion object {
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
