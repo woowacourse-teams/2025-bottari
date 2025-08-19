@@ -67,9 +67,8 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     }
 
     private fun handleToolbar() {
-        val isSwipeFragmentVisible =
-            supportFragmentManager.findFragmentById(R.id.fcv_team_checklist) is TeamSwipeChecklistFragment
-        binding.btnSwipe.isVisible = !isSwipeFragmentVisible
+        val isOnMain = supportFragmentManager.backStackEntryCount == 0
+        binding.btnSwipe.isVisible = isOnMain
     }
 
     private fun navigateToHome() {
