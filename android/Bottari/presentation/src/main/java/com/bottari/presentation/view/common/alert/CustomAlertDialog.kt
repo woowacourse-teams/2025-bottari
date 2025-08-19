@@ -107,6 +107,7 @@ class CustomAlertDialog : DialogFragment() {
     }
 
     fun setCloseButton() {
+        binding.btnDialogCustomClose.isVisible = true
         binding.btnDialogCustomClose.setOnClickListener { dismiss() }
     }
 
