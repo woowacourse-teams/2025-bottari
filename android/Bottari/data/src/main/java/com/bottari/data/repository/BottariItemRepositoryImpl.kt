@@ -31,4 +31,7 @@ class BottariItemRepositoryImpl(
                 createItemNames = createItemNames,
             ),
         )
+
+    override suspend fun resetBottariItemCheckState(bottariId: Long): Result<Unit> =
+        bottariItemRemoteDataSource.resetBottariItemCheckState(bottariId)
 }

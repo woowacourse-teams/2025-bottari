@@ -29,4 +29,9 @@ interface BottariItemService {
         @Path("bottariId") bottariId: Long,
         @Body request: SaveBottariItemsRequest,
     ): Response<Unit>
+
+    @PATCH("/bottaries/{bottariId}/bottari-items/reset")
+    suspend fun resetBottariItemCheckState(
+        @Path("bottariId") bottariId: Long,
+    ): Response<Unit>
 }

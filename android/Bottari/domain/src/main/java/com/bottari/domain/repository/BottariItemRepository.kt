@@ -14,4 +14,6 @@ interface BottariItemRepository {
         deleteItemIds: List<Long>,
         createItemNames: List<String>,
     ): Result<Unit>
+
+    suspend fun resetBottariItemCheckState(bottariId: Long): Result<Unit>
 }
