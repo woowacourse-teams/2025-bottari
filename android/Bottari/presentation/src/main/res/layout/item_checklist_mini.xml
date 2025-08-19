@@ -7,8 +7,9 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_primary_radius_100dp"
     android:layout_marginEnd="@dimen/space_x_small"
-    android:layout_marginTop="@dimen/space_x_small"
     android:paddingHorizontal="@dimen/space_small"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
     android:paddingVertical="4dp">
 
     <TextView
