@@ -129,8 +129,7 @@ class SwipeChecklistFragment :
     }
 
     private fun showDoneButton(isDone: Boolean) {
-        binding.btnSwipeChecklistNot.isVisible = !isDone
-        binding.btnSwipeChecklistYes.isVisible = !isDone
+        setSwipeActionButtonsVisible(!isDone)
         binding.btnSwipeChecklistReturn.isVisible = isDone
     }
 
@@ -172,6 +171,11 @@ class SwipeChecklistFragment :
 
         cardStackLayoutManager.setSwipeAnimationSetting(setting)
         binding.csvChecklist.swipe()
+    }
+
+    private fun setSwipeActionButtonsVisible(visible: Boolean) {
+        binding.btnSwipeChecklistNot.isVisible = visible
+        binding.btnSwipeChecklistYes.isVisible = visible
     }
 
     companion object {
