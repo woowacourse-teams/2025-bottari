@@ -9,5 +9,5 @@ data class PersonalItemEditUiState(
     var initialItems: List<BottariItemUiModel>,
     var items: List<BottariItemUiModel>,
 ) {
-    val isNotEqual: Boolean = initialItems != items
+    val isDifferent: Boolean = initialItems != items
 }

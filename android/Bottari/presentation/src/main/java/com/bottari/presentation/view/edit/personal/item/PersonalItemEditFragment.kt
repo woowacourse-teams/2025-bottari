@@ -82,7 +82,7 @@ class PersonalItemEditFragment :
             handleBottariNameState(uiState.title)
             handleItemState(uiState.items)
             handleEmptyView(uiState.items.isEmpty())
-            handleDialog(uiState.isNotEqual)
+            handleDialog(uiState.isDifferent)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
