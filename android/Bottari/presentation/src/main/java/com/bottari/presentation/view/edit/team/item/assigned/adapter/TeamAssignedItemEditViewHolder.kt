@@ -31,10 +31,11 @@ class TeamAssignedItemEditViewHolder(
         binding.tvAssignedItemName.text = item.name
         handleSelectedState(item.isSelected)
 
-        if (item.type is BottariItemTypeUiModel.ASSIGNED) {
-            binding.tvAssignedItemMemberNames.text =
-                item.type.members.joinToString { member -> member.nickname }
+        if (item.type !is BottariItemTypeUiModel.ASSIGNED) {
+            binding.tvAssignedItemMemberNames.text = EMPTY_TEXT
+            return
         }
+        binding.tvAssignedItemMemberNames.text = item.type.members.joinToString { member -> member.nickname }
     }
 
     private fun handleSelectedState(isSelected: Boolean) {
@@ -54,6 +55,7 @@ class TeamAssignedItemEditViewHolder(
 
     companion object {
         private const val DUPLICATE_BORDER_WIDTH_DP = 2
+        private const val EMPTY_TEXT = ""
 
         fun from(
             parent: ViewGroup,
