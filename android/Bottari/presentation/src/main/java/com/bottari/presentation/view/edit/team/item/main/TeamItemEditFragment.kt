@@ -14,6 +14,7 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.applyImeBottomPadding
 import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.extension.getParcelableCompat
+import com.bottari.presentation.common.extension.hideKeyboard
 import com.bottari.presentation.common.extension.setTextIfDifferent
 import com.bottari.presentation.common.extension.showKeyboard
 import com.bottari.presentation.databinding.FragmentTeamBottariItemEditBinding
@@ -120,8 +121,12 @@ class TeamItemEditFragment :
         }
 
         binding.viewItemInput.etItemInput.setTextIfDifferent(uiState.itemInputText)
-        showKeyboard(binding.viewItemInput.etItemInput)
-        binding.viewItemInput.etItemInput.setSelection(uiState.itemInputText.length)
+        if (uiState.itemInputText.isNotBlank()) {
+            binding.viewItemInput.etItemInput.setSelection(uiState.itemInputText.length)
+            showKeyboard(binding.viewItemInput.etItemInput)
+            return
+        }
+        binding.viewItemInput.etItemInput.clearFocus()
     }
 
     private fun handleSendButtonState(canSend: Boolean) {

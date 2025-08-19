@@ -61,8 +61,6 @@ class TeamAssignedItemEditFragment :
     private fun setupUI() {
         setupRvMember()
         setupRvAssignedItem()
-        binding.rvTeamAssignedItemMember.itemAnimator = null
-        binding.rvTeamAssignedItemEdit.itemAnimator = null
     }
 
     private fun handleParentUiState(uiState: TeamItemEditUiState) {
@@ -99,9 +97,12 @@ class TeamAssignedItemEditFragment :
             TeamAssignedItemEditEvent.SaveItemFailure,
             -> requireView().showSnackbar(R.string.common_save_failure_text)
 
+            TeamAssignedItemEditEvent.SaveItemSuccess -> handleItemEditSuccess()
             TeamAssignedItemEditEvent.CreateItemSuccess,
-            TeamAssignedItemEditEvent.SaveItemSuccess,
-            -> parentViewModel.updateInput(RESET_INPUT_TEXT)
+            -> {
+                handleItemEditSuccess()
+                binding.rvTeamAssignedItemEdit.smoothScrollToPosition(itemAdapter.itemCount - 1)
+            }
         }
     }
 
@@ -118,6 +119,11 @@ class TeamAssignedItemEditFragment :
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(decoration)
         }
+    }
+
+    private fun handleItemEditSuccess() {
+        requireView().showSnackbar(R.string.common_save_success_text)
+        parentViewModel.updateInput(RESET_INPUT_TEXT)
     }
 
     companion object {
