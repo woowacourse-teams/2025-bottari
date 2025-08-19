@@ -21,7 +21,8 @@ public class SseConnector implements SseConnectorApiDocs {
     public SseEmitter connectTeamBottari(
             @PathVariable final Long teamBottariId
     ) {
-        final SseEmitter sseEmitter = new SseEmitter();
+        final long timeout = 60 * 60 * 1000L;
+        final SseEmitter sseEmitter = new SseEmitter(timeout);
         sseService.register(teamBottariId, sseEmitter);
 
         return sseEmitter;
