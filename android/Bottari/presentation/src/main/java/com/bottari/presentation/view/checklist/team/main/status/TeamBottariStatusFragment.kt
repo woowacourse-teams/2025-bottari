@@ -46,8 +46,7 @@ class TeamBottariStatusFragment :
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
             teamBottariProductStatusDetailAdapter.submitList(state.selectedProduct?.memberCheckStatus)
-            binding.tvTeamBottariItemStatusTitle.text =
-                getString(R.string.team_product_status_title_format, state.selectedProduct?.name)
+            binding.tvTeamBottariItemStatusTitle.text = state.selectedProduct?.name ?: ""
             teamBottariProductStatusAdapter.submitList(state.teamChecklistItems)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
