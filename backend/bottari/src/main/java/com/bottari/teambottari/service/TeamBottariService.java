@@ -13,7 +13,6 @@ import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
-import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.ReadTeamBottariPreviewResponse;
 import com.bottari.teambottari.dto.ReadTeamBottariResponse;
 import com.bottari.teambottari.repository.TeamAssignedItemInfoRepository;
