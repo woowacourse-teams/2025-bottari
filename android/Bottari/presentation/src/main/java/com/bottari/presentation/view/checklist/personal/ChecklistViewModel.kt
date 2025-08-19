@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.domain.model.bottari.ChecklistItem
 import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
@@ -42,8 +43,7 @@ class ChecklistViewModel(
         launch {
             fetchChecklistUseCase(bottariId)
                 .onSuccess { items ->
-                    val itemUiModels = items.map { it.toUiModel() }
-                    updateState { copy(bottariItems = itemUiModels) }
+                    setChecklist(items)
                 }.onFailure {
                     emitEvent(ChecklistUiEvent.FetchChecklistFailure)
                 }
@@ -72,11 +72,24 @@ class ChecklistViewModel(
         debouncedCheck(pendingCheckStatusMap.values.toList())
     }
 
+    private fun setChecklist(items: List<ChecklistItem>) {
+        val itemUiModels = items.map { it.toUiModel() }
+        updateState { copy(bottariItems = itemUiModels, originalBottariItems = itemUiModels) }
+    }
+
     private fun performCheck(items: List<ChecklistItemUiModel>) {
         launch {
+            val originalItems = currentState.originalBottariItems
+            val itemsToUpdate = mutableListOf<ChecklistItemUiModel>()
+
             val jobs =
-                items.map { item ->
-                    async { processItemCheck(item) }
+                items.mapNotNull { pendingItem ->
+                    val originalItem = originalItems.find { it.id == pendingItem.id }
+                    if (originalItem == null || originalItem.isChecked == pendingItem.isChecked) {
+                        return@mapNotNull null
+                    }
+                    itemsToUpdate.add(pendingItem)
+                    async { processItemCheck(pendingItem) }
                 }
             jobs.awaitAll()
             pendingCheckStatusMap.clear()
@@ -84,16 +97,30 @@ class ChecklistViewModel(
     }
 
     private suspend fun processItemCheck(item: ChecklistItemUiModel) {
-        val result =
-            if (item.isChecked) {
-                checkBottariItemUseCase(item.id)
-            } else {
-                unCheckBottariItemUseCase(item.id)
+        executeCheckUseCase(item)
+            .onSuccess {
+                updateOriginalItem(item)
+            }.onFailure {
+                emitEvent(ChecklistUiEvent.CheckItemFailure)
             }
-        result.onFailure {
-            emitEvent(ChecklistUiEvent.CheckItemFailure)
-        }
     }
+
+    private fun updateOriginalItem(updatedItem: ChecklistItemUiModel) {
+        val currentOriginals = currentState.originalBottariItems.toMutableList()
+        val index = currentOriginals.indexOfFirst { it.id == updatedItem.id }
+        if (index != -1) {
+            currentOriginals[index] = updatedItem
+        }
+
+        updateState { copy(originalBottariItems = currentOriginals) }
+    }
+
+    private suspend fun executeCheckUseCase(item: ChecklistItemUiModel) =
+        if (item.isChecked) {
+            checkBottariItemUseCase(item.id)
+        } else {
+            unCheckBottariItemUseCase(item.id)
+        }
 
     private fun recordPendingCheckStatus(item: ChecklistItemUiModel) {
         pendingCheckStatusMap[item.id] = item
