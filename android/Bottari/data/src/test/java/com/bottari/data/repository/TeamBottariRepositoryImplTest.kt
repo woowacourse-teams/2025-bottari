@@ -16,6 +16,7 @@ import com.bottari.data.testFixture.BOTTARI_PERSONAL_ITEM_FIXTURE
 import com.bottari.data.testFixture.BOTTARI_PERSONAL_ITEM_RESPONSE_FIXTURE
 import com.bottari.data.testFixture.BOTTARI_SHARED_ITEM_FIXTURE
 import com.bottari.data.testFixture.BOTTARI_SHARED_ITEM_RESPONSE_FIXTURE
+import com.bottari.data.testFixture.SAVE_TEAM_BOTTARI_ASSIGNED_ITEM_REQUEST_FIXTURE
 import com.bottari.data.testFixture.TEAM_BOTTARI
 import com.bottari.data.testFixture.TEAM_BOTTARI_DETAIL
 import com.bottari.data.testFixture.TEAM_BOTTARI_DETAIL_RESPONSE
@@ -794,7 +795,10 @@ class TeamBottariRepositoryImplTest {
             // given
             val teamBottariId = 1L
             val assignedItems = listOf(BOTTARI_ASSIGNED_ITEM_RESPONSE_FIXTURE)
-            coEvery { dataSource.fetchTeamAssignedItems(teamBottariId) } returns Result.success(assignedItems)
+            coEvery { dataSource.fetchTeamAssignedItems(teamBottariId) } returns
+                Result.success(
+                    assignedItems,
+                )
 
             // when
             val result = repository.fetchTeamAssignedItems(teamBottariId)
@@ -816,7 +820,10 @@ class TeamBottariRepositoryImplTest {
             // given
             val teamBottariId = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
-            coEvery { dataSource.fetchTeamAssignedItems(teamBottariId) } returns Result.failure(exception)
+            coEvery { dataSource.fetchTeamAssignedItems(teamBottariId) } returns
+                Result.failure(
+                    exception,
+                )
 
             // when
             val result = repository.fetchTeamAssignedItems(teamBottariId)
@@ -826,6 +833,76 @@ class TeamBottariRepositoryImplTest {
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamAssignedItems(teamBottariId) }
+        }
+
+    @DisplayName("팀 보따리 담당 물건 수정에 성공하면 Success를 반환한다")
+    @Test
+    fun saveTeamBottariAssignedItemReturnsSuccessTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val itemId = 1L
+            val newName = "new name"
+
+            coEvery {
+                dataSource.saveTeamBottariAssignedItem(
+                    teamBottariId,
+                    itemId,
+                    SAVE_TEAM_BOTTARI_ASSIGNED_ITEM_REQUEST_FIXTURE,
+                )
+            } returns Result.success(Unit)
+
+            // when
+            val result =
+                repository.saveTeamBottariAssignedItem(teamBottariId, itemId, newName, listOf(1L, 2L))
+
+            // then
+            result.shouldBeSuccess()
+
+            // verify
+            coVerify(exactly = 1) {
+                dataSource.saveTeamBottariAssignedItem(
+                    teamBottariId,
+                    itemId,
+                    SAVE_TEAM_BOTTARI_ASSIGNED_ITEM_REQUEST_FIXTURE,
+                )
+            }
+        }
+
+    @DisplayName("팀 보따리 담당 물건 수정에 실패하면 Failure를 반환한다")
+    @Test
+    fun saveTeamBottariAssignedItemReturnsFailureTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val itemId = 1L
+            val newName = "new name"
+
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+
+            coEvery {
+                dataSource.saveTeamBottariAssignedItem(
+                    teamBottariId,
+                    itemId,
+                    SAVE_TEAM_BOTTARI_ASSIGNED_ITEM_REQUEST_FIXTURE,
+                )
+            } returns Result.failure(exception)
+
+            // when
+            val result =
+                repository.saveTeamBottariAssignedItem(teamBottariId, itemId, newName, listOf(1L, 2L))
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) {
+                dataSource.saveTeamBottariAssignedItem(
+                    teamBottariId,
+                    itemId,
+                    SAVE_TEAM_BOTTARI_ASSIGNED_ITEM_REQUEST_FIXTURE,
+                )
+            }
         }
 
     @DisplayName("팀 보따리 물건 체크에 성공하면 Success를 반환한다")
