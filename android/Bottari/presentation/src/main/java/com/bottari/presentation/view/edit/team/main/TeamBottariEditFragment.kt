@@ -71,17 +71,17 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
         binding.viewTeamMemberEdit.root.setOnClickListener {
             (requireActivity() as? TeamBottariEditNavigator)?.navigateToMemberEdit(teamBottariId)
         }
-        binding.viewTeamPersonalItemEdit.root.setOnClickListener {
+        binding.viewTeamPersonalItemEdit.btnRoot.setOnClickListener {
             navigateToItemEdit(
                 BottariItemTypeUiModel.PERSONAL,
             )
         }
-        binding.viewTeamSharedItemEdit.root.setOnClickListener {
+        binding.viewTeamSharedItemEdit.btnRoot.setOnClickListener {
             navigateToItemEdit(
                 BottariItemTypeUiModel.SHARED,
             )
         }
-        binding.viewTeamAssignedItemEdit.root.setOnClickListener {
+        binding.viewTeamAssignedItemEdit.btnRoot.setOnClickListener {
             navigateToItemEdit(
                 BottariItemTypeUiModel.ASSIGNED(),
             )

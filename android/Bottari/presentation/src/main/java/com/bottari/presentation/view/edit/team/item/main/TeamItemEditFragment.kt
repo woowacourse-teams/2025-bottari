@@ -14,7 +14,6 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.applyImeBottomPadding
 import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.extension.getParcelableCompat
-import com.bottari.presentation.common.extension.hideKeyboard
 import com.bottari.presentation.common.extension.setTextIfDifferent
 import com.bottari.presentation.common.extension.showKeyboard
 import com.bottari.presentation.databinding.FragmentTeamBottariItemEditBinding
