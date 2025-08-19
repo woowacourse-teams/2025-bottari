@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class CreateAssignedItemEvent extends CustomApplicationEvent {
+public class ChangeTeamAssignedItemEvent extends CustomApplicationEvent {
 
     private final Long teamBottariId;
     private final Long infoId;
