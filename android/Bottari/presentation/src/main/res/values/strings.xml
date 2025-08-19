@@ -61,6 +61,7 @@
 
     <!-- Common: 공통 버튼 텍스트 -->
     <string name="common_confirm_btn_text">확인</string>
+    <string name="common_save_btn_text">저장</string>
     <string name="common_cancel_btn_text">취소</string>
     <string name="common_yes_btn_text">예</string>
     <string name="common_no_btn_text">아니오</string>

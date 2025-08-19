@@ -36,9 +36,8 @@
             android:layout_height="48dp"
             android:layout_gravity="end"
             android:gravity="center"
-            android:text="@string/common_confirm_btn_text"
+            android:text="@string/common_save_btn_text"
             android:textColor="@color/black" />
-
     </Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -49,7 +48,9 @@
         android:fadingEdgeLength="8dp"
         android:requiresFadingEdge="vertical"
         app:layout_constraintBottom_toTopOf="@id/et_personal_item"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_personal_item_edit" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar_personal_item_edit"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_edit_personal_item" />
 
     <include
         android:id="@+id/empty_view"
