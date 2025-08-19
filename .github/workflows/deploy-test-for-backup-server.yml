@@ -36,11 +36,11 @@ jobs:
     # 1) 기존 JAR 백업
       - name: Backup existing artifact (if any)
         run: |
-          mkdir -p ./backup
+          mkdir -p .artifacts/backup
           if ls ./artifacts/*.jar 1> /dev/null 2>&1; then
             for f in ./artifacts/*.jar; do
-              cp "$f" ./backup/
-              echo "Backed up $f -> ./backup/"
+              cp "$f" .artifacts/backup/
+              echo "Backed up $f -> .artifacts/backup/"
             done
             rm -f ./artifacts/*.jar
           else
