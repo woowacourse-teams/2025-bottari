@@ -82,7 +82,8 @@ class TeamPersonalItemEditFragment :
             TeamPersonalItemEditEvent.CreateItemSuccess -> {
                 requireView().showSnackbar(R.string.common_save_success_text)
                 parentViewModel.updateInput(RESET_INPUT_TEXT)
-                binding.rvTeamPersonalItemEdit.smoothScrollToPosition(adapter.itemCount - 1)
+                val target = (adapter.itemCount - 1).coerceAtLeast(0)
+                binding.rvTeamPersonalItemEdit.smoothScrollToPosition(target)
             }
         }
     }

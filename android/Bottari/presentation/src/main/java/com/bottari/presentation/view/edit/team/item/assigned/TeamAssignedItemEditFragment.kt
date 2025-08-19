@@ -101,7 +101,8 @@ class TeamAssignedItemEditFragment :
             TeamAssignedItemEditEvent.CreateItemSuccess,
             -> {
                 handleItemEditSuccess()
-                binding.rvTeamAssignedItemEdit.smoothScrollToPosition(itemAdapter.itemCount - 1)
+                val target = (itemAdapter.itemCount - 1).coerceAtLeast(0)
+                binding.rvTeamAssignedItemEdit.smoothScrollToPosition(target)
             }
         }
     }
