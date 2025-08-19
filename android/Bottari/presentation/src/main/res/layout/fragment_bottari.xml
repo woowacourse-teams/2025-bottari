@@ -5,7 +5,7 @@
     android:id="@+id/cl_bottari"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.home.bottari.BottariFragment">
+    tools:context=".view.home.personal.BottariFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_bottari"

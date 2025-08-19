@@ -5,15 +5,21 @@ import com.bottari.data.repository.AppConfigRepositoryImpl
 import com.bottari.data.repository.BottariItemRepositoryImpl
 import com.bottari.data.repository.BottariRepositoryImpl
 import com.bottari.data.repository.BottariTemplateRepositoryImpl
+import com.bottari.data.repository.FcmRepositoryImpl
 import com.bottari.data.repository.MemberRepositoryImpl
+import com.bottari.data.repository.NotificationRepositoryImpl
 import com.bottari.data.repository.ReportRepositoryImpl
+import com.bottari.data.repository.TeamBottariRepositoryImpl
 import com.bottari.domain.repository.AlarmRepository
 import com.bottari.domain.repository.AppConfigRepository
 import com.bottari.domain.repository.BottariItemRepository
 import com.bottari.domain.repository.BottariRepository
 import com.bottari.domain.repository.BottariTemplateRepository
+import com.bottari.domain.repository.FcmRepository
 import com.bottari.domain.repository.MemberRepository
+import com.bottari.domain.repository.NotificationRepository
 import com.bottari.domain.repository.ReportRepository
+import com.bottari.domain.repository.TeamBottariRepository
 
 object RepositoryProvider {
     val memberRepository: MemberRepository by lazy {
@@ -43,5 +49,18 @@ object RepositoryProvider {
         ReportRepositoryImpl(
             DataSourceProvider.reportRemoteDataSource,
         )
+    }
+    val notificationRepository: NotificationRepository by lazy {
+        NotificationRepositoryImpl(
+            DataSourceProvider.notificationLocalDataSource,
+        )
+    }
+    val teamBottariRepository: TeamBottariRepository by lazy {
+        TeamBottariRepositoryImpl(
+            DataSourceProvider.teamBottariRemoteDataSource,
+        )
+    }
+    val fcmRepository: FcmRepository by lazy {
+        FcmRepositoryImpl(DataSourceProvider.fcmRemoteDataSource)
     }
 }

@@ -20,7 +20,7 @@ class AlarmReceiver : BroadcastReceiver() {
         intent: Intent,
     ) {
         val notification = intent.getParcelableCompat<NotificationUiModel>(EXTRA_NOTIFICATION)
-        notificationHelper.sendNotification(notification.id, notification.title)
+        notificationHelper.sendPersonalNotification(notification.id, notification.title)
         scheduler.scheduleNextAlarm(notification)
         BottariLogger.ui(
             UiEventType.NOTIFICATION_CREATE,

@@ -9,8 +9,7 @@ class MemberIdentifierLocalDataSourceImpl : MemberIdentifierLocalDataSource {
 
     override fun getMemberIdentifier(): Result<String> =
         runCatching {
-            cachedMemberIdentifier
-                ?: initialize().also { cachedMemberIdentifier = it }
+            cachedMemberIdentifier ?: initialize().also { cachedMemberIdentifier = it }
         }
 
     private fun initialize(): String = Tasks.await(FirebaseInstallations.getInstance().id, 10, TimeUnit.SECONDS)

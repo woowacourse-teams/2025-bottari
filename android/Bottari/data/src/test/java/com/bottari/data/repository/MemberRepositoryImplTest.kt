@@ -5,6 +5,7 @@ import com.bottari.data.model.member.RegisterMemberRequest
 import com.bottari.data.model.member.SaveMemberNicknameRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
+import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.repository.MemberRepository
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.result.shouldBeFailure
@@ -41,12 +42,12 @@ class MemberRepositoryImplTest {
     fun registerMemberSuccessReturnsSuccess() =
         runTest {
             // given
-            val request = RegisterMemberRequest("ssaid")
+            val request = RegisterMemberRequest("ssaid", "token")
             coEvery { remoteDataSource.registerMember(request) } returns Result.success(1)
             coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns Result.success("ssaid")
 
             // when
-            val result = repository.registerMember()
+            val result = repository.registerMember("token")
 
             // then
             result.shouldBeSuccess()
@@ -60,13 +61,13 @@ class MemberRepositoryImplTest {
     fun registerMemberFailsReturnsFailure() =
         runTest {
             // given
-            val request = RegisterMemberRequest("ssaid")
+            val request = RegisterMemberRequest("ssaid", "token")
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { remoteDataSource.registerMember(request) } returns Result.failure(exception)
             coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns Result.success("ssaid")
 
             // when
-            val result = repository.registerMember()
+            val result = repository.registerMember("token")
 
             // then
             result.shouldBeFailure { it shouldBe exception }
@@ -80,8 +81,8 @@ class MemberRepositoryImplTest {
     fun saveMemberNicknameSuccess() =
         runTest {
             // given
-            val newNickname = "nickname"
-            val request = SaveMemberNicknameRequest(newNickname)
+            val newNickname = Nickname("nickname")
+            val request = SaveMemberNicknameRequest("nickname")
             coEvery {
                 remoteDataSource.saveMemberNickname(
                     request,
@@ -103,8 +104,8 @@ class MemberRepositoryImplTest {
     fun saveMemberNicknameFailsReturnsFailure() =
         runTest {
             // given
-            val newNickname = "nickname"
-            val request = SaveMemberNicknameRequest(newNickname)
+            val newNickname = Nickname("nickname")
+            val request = SaveMemberNicknameRequest("nickname")
             val httpException = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery {
                 remoteDataSource.saveMemberNickname(
@@ -169,5 +170,50 @@ class MemberRepositoryImplTest {
                 getOrThrow().id shouldBe 1
                 getOrThrow().name shouldBe "test"
             }
+
+            // verify
+            coVerify(exactly = 1) { remoteDataSource.checkRegisteredMember() }
+        }
+
+    @DisplayName("사용자 식별자 조회를 성공하면 Success를 반환한다")
+    @Test
+    fun getMemberIdentifierReturnsSuccess() =
+        runTest {
+            // given
+            val memberId = "test_member_id"
+            coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns
+                Result.success(
+                    memberId,
+                )
+
+            // when
+            val result = repository.getMemberIdentifier()
+
+            // then
+            assertSoftly(result) {
+                shouldBeSuccess()
+                getOrThrow() shouldBe memberId
+            }
+
+            // verify
+            coVerify(exactly = 1) { userInfoLocalDataSource.getMemberIdentifier() }
+        }
+
+    @DisplayName("사용자 식별자 조회를 실패하면 Failure를 반환한다")
+    @Test
+    fun getMemberIdentifierReturnsFailure() =
+        runTest {
+            // given
+            val exception = Exception()
+            coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns Result.failure(exception)
+
+            // when
+            val result = repository.getMemberIdentifier()
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) { userInfoLocalDataSource.getMemberIdentifier() }
         }
 }

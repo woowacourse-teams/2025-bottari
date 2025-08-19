@@ -20,9 +20,9 @@ import com.bottari.presentation.common.extension.getParcelableArrayListCompat
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.model.BottariItemUiModel
-import com.bottari.presentation.view.common.alart.CustomAlertDialog
-import com.bottari.presentation.view.common.alart.DialogListener
-import com.bottari.presentation.view.common.alart.DialogPresetType
+import com.bottari.presentation.view.common.alert.CustomAlertDialog
+import com.bottari.presentation.view.common.alert.DialogListener
+import com.bottari.presentation.view.common.alert.DialogPresetType
 import com.bottari.presentation.view.edit.personal.item.adapter.PersonalItemEditAdapter
 
 class PersonalItemEditFragment :
@@ -82,6 +82,7 @@ class PersonalItemEditFragment :
             handleBottariNameState(uiState.title)
             handleItemState(uiState.items)
             handleEmptyView(uiState.items.isEmpty())
+            handleDialog(uiState.isDifferent)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
@@ -98,6 +99,10 @@ class PersonalItemEditFragment :
         binding.rvPersonalItemEdit.adapter = adapter
         binding.rvPersonalItemEdit.layoutManager = LinearLayoutManager(requireContext())
         binding.root.applyImeBottomPadding()
+        onBackPressedCallback =
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, false) {
+                showExitConfirmationDialog()
+            }
     }
 
     private fun setupListener() {
@@ -114,17 +119,11 @@ class PersonalItemEditFragment :
             addItemFromInput()
             true
         }
-        onBackPressedCallback =
-            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-                showExitConfirmationDialog()
-            }
-        onBackPressedCallback.isEnabled = false
     }
 
     private fun addItemFromInput() {
         viewModel.addNewItemIfNeeded(binding.etPersonalItem.text.toString())
         binding.etPersonalItem.text.clear()
-        onBackPressedCallback.isEnabled = true
     }
 
     private fun updateDuplicateStateUI(text: String) {
@@ -159,6 +158,12 @@ class PersonalItemEditFragment :
 
     private fun handleEmptyView(isEmpty: Boolean) {
         binding.emptyView.clPersonalBottariItemEmptyView.isVisible = isEmpty
+    }
+
+    private fun handleDialog(isNotEqual: Boolean) {
+        if (::onBackPressedCallback.isInitialized) {
+            onBackPressedCallback.isEnabled = isNotEqual
+        }
     }
 
     private fun showExitConfirmationDialog() {

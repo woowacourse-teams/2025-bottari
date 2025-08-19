@@ -1,18 +1,17 @@
 package com.bottari.presentation.common.base
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.ViewGroup
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.children
 import androidx.viewbinding.ViewBinding
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.LogEventHelper
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 abstract class BaseActivity<VB : ViewBinding>(
     private val bindingFactory: (LayoutInflater) -> VB,
@@ -22,43 +21,53 @@ abstract class BaseActivity<VB : ViewBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        BottariLogger.lifecycle(javaClass.simpleName)
+        logLifecycle("onCreate")
         LogEventHelper.logScreenEnter(javaClass.simpleName)
 
         binding = bindingFactory(layoutInflater)
         setContentView(binding.root)
+
         setWindowInsets()
-        setupStatusBar()
-        setupNavigationBar()
+        setupSystemBars()
     }
 
     override fun onStart() {
         super.onStart()
-        BottariLogger.lifecycle(javaClass.simpleName)
+        logLifecycle("onStart")
     }
 
     override fun onResume() {
         super.onResume()
-        BottariLogger.lifecycle(javaClass.simpleName)
+        logLifecycle("onResume")
     }
 
     override fun onPause() {
         super.onPause()
-        BottariLogger.lifecycle(javaClass.simpleName)
+        logLifecycle("onPause")
     }
 
     override fun onStop() {
         super.onStop()
-        BottariLogger.lifecycle(javaClass.simpleName)
+        logLifecycle("onStop")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        BottariLogger.lifecycle(javaClass.simpleName)
+        logLifecycle("onDestroy")
+    }
+
+    private fun logLifecycle(event: String) {
+        BottariLogger.lifecycle("${javaClass.simpleName} - $event")
     }
 
     private fun setWindowInsets() {
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            navigationBarStyle =
+                SystemBarStyle.light(
+                    scrim = Color.WHITE,
+                    darkScrim = Color.WHITE,
+                ),
+        )
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -67,25 +76,9 @@ abstract class BaseActivity<VB : ViewBinding>(
         }
     }
 
-    private fun setupStatusBar() {
-        WindowCompat
-            .getInsetsController(window, window.decorView)
-            .isAppearanceLightStatusBars = true
-    }
-
-    private fun setupNavigationBar() {
-        WindowCompat
-            .getInsetsController(window, window.decorView)
-            .isAppearanceLightNavigationBars = true
-    }
-
-    private fun hasBottomNavigationView(): Boolean =
-        (binding.root as? ViewGroup)
-            ?.children
-            ?.filterIsInstance<BottomNavigationView>()
-            ?.count() != 0
-
-    companion object {
-        private const val DEFAULT_BOTTOM_INSET = 0
+    private fun setupSystemBars() {
+        val controller = WindowCompat.getInsetsController(window, window.decorView)
+        controller.isAppearanceLightStatusBars = true
+        controller.isAppearanceLightNavigationBars = true
     }
 }

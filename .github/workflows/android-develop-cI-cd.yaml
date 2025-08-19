@@ -1,0 +1,158 @@
+name: Android Develop CI/CD [ an/develop ]
+
+on:
+  push:
+    branches:
+      - an/develop
+      
+  workflow_dispatch:
+    inputs:
+      versionName:
+        description: '버전 이름 (예: 1.0.5)'
+        required: false
+      releaseNotes:
+        description: '릴리즈 노트'
+        required: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+      LOCAL_PROPERTIES_CONTENTS: ${{ secrets.LOCAL_PROPERTIES_CONTENTS }}
+    
+    defaults:
+      run:
+        working-directory: ./android/Bottari
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: temurin
+
+      - name: Restore Gradle cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      - name: Calculate versionCode
+        run: |
+          BUILD_NUMBER=$(printf "%02d" $GITHUB_RUN_NUMBER)
+          DATE_CODE=$(date +%y%m%d)
+          echo "VERSION_CODE=1${DATE_CODE}${BUILD_NUMBER}" >> $GITHUB_ENV
+
+      - name: Get versionName
+        run: |
+          if [ -n "${{ github.event.inputs.versionName }}" ]; then
+            VERSION_NAME="${{ github.event.inputs.versionName }}"
+          else
+            VERSION_NAME=$(./gradlew -q printVersionName)
+          fi
+          echo "VERSION_NAME=${VERSION_NAME}" >> $GITHUB_ENV
+
+      - name: Create google-services.json
+        run: echo "$GOOGLE_SERVICES_JSON" > ./app/google-services.json
+
+      - name: Create local.properties
+        run: echo "$LOCAL_PROPERTIES_CONTENTS" > ./local.properties
+
+      - name: Assemble Debug APK
+        run: ./gradlew assembleDebug
+        env:
+          VERSION_CODE: ${{ env.VERSION_CODE }}
+          VERSION_NAME: ${{ env.VERSION_NAME }}
+
+      - name: Get commits since last release
+        id: commit-log
+        run: |
+          git fetch origin an/develop
+
+          LAST_RELEASE_COMMIT=$(git log origin/an/develop --grep="\[AN\].*Release v" --pretty=format:"%H" -n 1)
+
+          if [ -z "$LAST_RELEASE_COMMIT" ]; then
+            COMMITS=$(git log origin/an/develop --pretty=format:"- %s" --no-merges | grep "\[AN\]")
+          else
+            COMMITS=$(git log ${LAST_RELEASE_COMMIT}..origin/an/develop --pretty=format:"- %s" --no-merges | grep "\[AN\]")
+          fi
+
+          echo "COMMITS<<EOF" >> $GITHUB_ENV
+          if [ -n "${{ github.event.inputs.releaseNotes }}" ]; then
+            echo "${{ github.event.inputs.releaseNotes }}" >> $GITHUB_ENV
+          else
+            echo "$COMMITS" >> $GITHUB_ENV
+          fi
+          echo "EOF" >> $GITHUB_ENV
+
+          echo "📝 릴리즈 노트에 포함될 커밋 목록:"
+          echo "$COMMITS"
+
+      - name: Deploy to Firebase
+        id: firebase
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.ANDROID_FIREBASE_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.ANDROID_CREDENTIAL_FILE_CONTENT }}
+          groups: BOTTARI_TEST_GROUP
+          file: android/Bottari/app/build/outputs/apk/debug/app-debug.apk
+          releaseNotes: |
+            🚀 배포 노트
+            버전: ${{ env.VERSION_NAME }}-dev
+            빌드 번호: #${{ github.run_number }}
+
+            주요 변경 사항:
+            ${{ env.COMMITS }}
+
+      - name: Send Discord Notification
+        if: always()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.ANDROID_DEVELOP_APP_DEPLOY_HOOK_URL }}
+        run: |
+          STATUS_TITLE="${{ job.status == 'success' && '✅ Firebase Debug 배포 성공' || '❌ Firebase Debug 배포 실패' }}"
+          STATUS_COLOR="${{ job.status == 'success' && 3066993 || 15158332 }}"
+          BUILD_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          curl -H "Content-Type: application/json" -X POST -d "$(cat <<EOF
+          {
+            "embeds": [
+              {
+                "title": "$STATUS_TITLE",
+                "description": "Firebase Distribution - Debug APK 배포가 완료되었습니다.",
+                "color": $STATUS_COLOR,
+                "fields": [
+                  {
+                    "name": "🌿 브랜치",
+                    "value": "an/develop"
+                  },
+                  {
+                    "name": "🏷 버전 정보",
+                    "value": " ${{ env.VERSION_NAME }}-dev ・ #${{ github.run_number }} <${{ env.VERSION_CODE }}>"
+                  },
+                  {
+                    "name": "🔗 Action Log",
+                    "value": "[바로가기]($BUILD_URL)"
+                  }
+                ],
+                "footer": {
+                  "text": "Bottari Develop CI/CD"
+                },
+                "timestamp": "${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.pushed_at }}"
+              }
+            ]
+          }
+          EOF
+          )" $DISCORD_WEBHOOK

@@ -7,8 +7,10 @@ import com.bottari.data.service.AlarmService
 import com.bottari.data.service.BottariItemService
 import com.bottari.data.service.BottariService
 import com.bottari.data.service.BottariTemplateService
+import com.bottari.data.service.FcmService
 import com.bottari.data.service.MemberService
 import com.bottari.data.service.ReportService
+import com.bottari.data.service.TeamBottariService
 import okhttp3.logging.HttpLoggingInterceptor
 
 object NetworkProvider {
@@ -37,4 +39,6 @@ object NetworkProvider {
     val bottariItemService: BottariItemService by lazy { retrofitClient.create() }
     val bottariTemplateService: BottariTemplateService by lazy { retrofitClient.create() }
     val reportService: ReportService by lazy { retrofitClient.create() }
+    val teamBottariService: TeamBottariService by lazy { retrofitClient.create() }
+    val fcmService: FcmService by lazy { retrofitClient.create() }
 }

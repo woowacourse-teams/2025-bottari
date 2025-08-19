@@ -1,5 +1,6 @@
 package com.bottari.data.repository
 
+import com.bottari.data.model.report.ReportTemplateRequest
 import com.bottari.data.source.remote.ReportRemoteDataSource
 import com.bottari.domain.repository.ReportRepository
 import io.kotest.matchers.result.shouldBeFailure
@@ -33,9 +34,10 @@ class ReportRepositoryImplTest {
             // given
             val templateId = 1L
             val reason = "reason"
+            val request = ReportTemplateRequest("reason")
 
             coEvery {
-                remoteDataSource.reportTemplate(templateId, reason)
+                remoteDataSource.reportTemplate(templateId, request)
             } returns Result.success(Unit)
 
             // when
@@ -45,7 +47,7 @@ class ReportRepositoryImplTest {
             result.shouldBeSuccess()
 
             // verify
-            coVerify(exactly = 1) { remoteDataSource.reportTemplate(templateId, reason) }
+            coVerify(exactly = 1) { remoteDataSource.reportTemplate(templateId, request) }
         }
 
     @DisplayName("이미 신고한 템플릿을 신고하면 HttpException으로 Failure를 반환한다")
@@ -55,6 +57,7 @@ class ReportRepositoryImplTest {
             // given
             val templateId = 1L
             val reason = "reason"
+            val request = ReportTemplateRequest(reason)
 
             val errorResponse =
                 Response.error<Unit>(
@@ -64,7 +67,7 @@ class ReportRepositoryImplTest {
             val httpException = HttpException(errorResponse)
 
             coEvery {
-                remoteDataSource.reportTemplate(templateId, reason)
+                remoteDataSource.reportTemplate(templateId, request)
             } returns Result.failure(httpException)
 
             // when
@@ -74,6 +77,6 @@ class ReportRepositoryImplTest {
             result.shouldBeFailure<HttpException>()
 
             // verify
-            coVerify(exactly = 1) { remoteDataSource.reportTemplate(templateId, reason) }
+            coVerify(exactly = 1) { remoteDataSource.reportTemplate(templateId, request) }
         }
 }

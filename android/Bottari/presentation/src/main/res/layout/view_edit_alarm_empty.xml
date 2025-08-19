@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_radius_12dp_dotted_border"
+    android:paddingVertical="@dimen/space_2x_large">
+
+    <TextView
+        android:id="@+id/tv_edit_alarm_title"
+        style="@style/Pretendard_Bold_18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bottari_edit_add_alarm_title"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/tv_edit_alarm_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tv_edit_alarm_description"
+        style="@style/Pretendard_Medium_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/bottari_edit_alarm_description_text"
+        android:textColor="@color/gray_a6a6a6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_edit_alarm_title" />
+</androidx.constraintlayout.widget.ConstraintLayout>

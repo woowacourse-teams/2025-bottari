@@ -7,5 +7,6 @@ import kotlinx.parcelize.Parcelize
 data class BottariItemUiModel(
     val id: Long,
     val name: String,
-    val isChecked: Boolean,
+    val type: BottariItemTypeUiModel,
+    val isSelected: Boolean = false,
 ) : Parcelable

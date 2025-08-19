@@ -30,4 +30,9 @@ class BottariItemRemoteDataSourceImpl(
         safeApiCall {
             bottariItemService.saveBottariItems(bottariId, request)
         }
+
+    override suspend fun resetBottariItemCheckState(bottariId: Long): Result<Unit> =
+        safeApiCall {
+            bottariItemService.resetBottariItemCheckState(bottariId)
+        }
 }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".view.checklist.team.main.status.TeamBottariStatusFragment">
+
+    <TextView
+        android:id="@+id/tv_team_bottari_item_status_title"
+        style="@style/Pretendard_Bold_22"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_x_large"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_team_bottari_item_send_remind"
+        app:layout_constraintEnd_toStartOf="@+id/btn_team_bottari_item_send_remind"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_team_bottari_item_send_remind"
+        tools:text="이것은물건글자가열다섯개입니다" />
+
+    <TextView
+        android:id="@+id/btn_team_bottari_item_send_remind"
+        style="@style/Pretendard_Medium_20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_x_large"
+        android:layout_marginEnd="@dimen/space_x_large"
+        android:background="@drawable/bg_primary_radius_16dp"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/space_small"
+        android:paddingVertical="@dimen/space_x_small"
+        android:text="@string/team_status_send_remind_btn_text"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_team_bottari_item_status_detail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/space_x_large"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:elevation="2dp"
+        android:nestedScrollingEnabled="false"
+        android:paddingHorizontal="@dimen/space_large"
+        android:paddingVertical="@dimen/space_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_team_bottari_item_status_title"
+        app:layout_constraintTop_toBottomOf="@+id/btn_team_bottari_item_send_remind"
+        tools:listitem="@layout/item_checklist_mini" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_team_bottari_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/space_x_large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_team_bottari_item_status_detail"
+        tools:listitem="@layout/item_team_bottari_item_status">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

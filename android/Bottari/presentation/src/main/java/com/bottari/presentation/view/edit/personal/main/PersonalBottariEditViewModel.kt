@@ -13,9 +13,12 @@ import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
+import com.bottari.presentation.mapper.AlarmMapper.toDomain
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
+import com.bottari.presentation.model.AlarmUiModel
+import com.bottari.presentation.model.NotificationUiModel
+import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.util.debounce
-import kotlinx.coroutines.launch
 
 class PersonalBottariEditViewModel(
     savedStateHandle: SavedStateHandle,
@@ -36,6 +39,8 @@ class PersonalBottariEditViewModel(
             timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
         ) { isActive -> toggleAlarmState(isActive) }
+
+    private val alarmScheduler: AlarmScheduler = AlarmScheduler()
 
     fun fetchBottari() {
         updateState { copy(isLoading = true) }
@@ -85,22 +90,45 @@ class PersonalBottariEditViewModel(
     }
 
     private fun toggleAlarmState(isActive: Boolean) {
-        val alarmId = currentState.alarm?.id ?: return
+        val alarm = currentState.alarm ?: return
 
         launch {
-            toggleAlarmStateUseCase(alarmId, isActive)
-                .onSuccess {
-                    BottariLogger.ui(
-                        if (isActive) UiEventType.ALARM_ACTIVE else UiEventType.ALARM_INACTIVE,
-                        mapOf("alarm_id" to alarmId),
-                    )
-                    updateState { copy(alarm = alarm?.copy(isActive = isActive)) }
-                }.onFailure {
-                    updateState { copy(alarm = alarm?.copy(isActive = isActive.not())) }
-                    emitEvent(PersonalBottariEditUiEvent.ToggleAlarmStateFailure)
-                }
+            toggleAlarmStateUseCase(
+                currentState.id,
+                currentState.title,
+                alarm.toDomain(),
+                isActive,
+            ).onSuccess {
+                BottariLogger.ui(
+                    if (isActive) UiEventType.ALARM_ACTIVE else UiEventType.ALARM_INACTIVE,
+                    mapOf("alarm_id" to alarm.id!!),
+                )
+                scheduleAlarm(isActive, alarm)
+                updateState { copy(alarm = alarm.copy(isActive = isActive)) }
+            }.onFailure {
+                emitEvent(PersonalBottariEditUiEvent.ToggleAlarmStateFailure)
+            }
         }
     }
+
+    private fun scheduleAlarm(
+        isActive: Boolean,
+        alarm: AlarmUiModel,
+    ) {
+        val notification = createNotification(alarm)
+        if (isActive) {
+            alarmScheduler.scheduleAlarm(notification)
+            return
+        }
+        alarmScheduler.cancelAlarm(notification)
+    }
+
+    private fun createNotification(alarm: AlarmUiModel): NotificationUiModel =
+        NotificationUiModel(
+            id = currentState.id,
+            title = currentState.title,
+            alarm = alarm,
+        )
 
     companion object {
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"

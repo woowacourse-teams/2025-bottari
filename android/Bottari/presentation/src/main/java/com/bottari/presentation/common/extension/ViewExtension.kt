@@ -1,9 +1,12 @@
 package com.bottari.presentation.common.extension
 
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.children
 import androidx.core.view.isVisible
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 fun View.fadeIn(duration: Long = 200L) {
     if (!isVisible || alpha < 1f) {
@@ -38,6 +41,20 @@ fun View.applyImeBottomPadding() {
     }
 }
 
+fun ViewGroup.applyWindowInsetsWithBottomNavigation() {
+    ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
+        val bottomNavigation = findBottomNavigationView()
+        bottomNavigation ?: return@setOnApplyWindowInsetsListener insets
+
+        val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        bottomNavigation.apply {
+            setPadding(paddingLeft, paddingTop, paddingRight, systemBars.bottom)
+        }
+        view.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+        insets
+    }
+}
+
 private fun calculateBottomInset(
     insets: WindowInsetsCompat,
     imeVisible: Boolean,
@@ -48,4 +65,14 @@ private fun calculateBottomInset(
     val systemBarInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
 
     return (imeInset - systemBarInset).coerceAtLeast(0)
+}
+
+private fun ViewGroup.findBottomNavigationView(): BottomNavigationView? {
+    children.forEach { child ->
+        if (child is BottomNavigationView) return child
+        if (child is ViewGroup) {
+            child.findBottomNavigationView()?.let { return it }
+        }
+    }
+    return null
 }

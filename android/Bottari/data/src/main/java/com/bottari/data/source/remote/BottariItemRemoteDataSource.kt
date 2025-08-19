@@ -14,4 +14,6 @@ interface BottariItemRemoteDataSource {
         bottariId: Long,
         request: SaveBottariItemsRequest,
     ): Result<Unit>
+
+    suspend fun resetBottariItemCheckState(bottariId: Long): Result<Unit>
 }

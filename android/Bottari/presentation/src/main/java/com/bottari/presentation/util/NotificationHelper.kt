@@ -10,7 +10,8 @@ import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import com.bottari.di.ApplicationContextProvider
 import com.bottari.presentation.R
-import com.bottari.presentation.view.checklist.ChecklistActivity
+import com.bottari.presentation.view.checklist.personal.ChecklistActivity
+import com.bottari.presentation.view.checklist.team.TeamChecklistActivity
 
 class NotificationHelper(
     private val context: Context = ApplicationContextProvider.applicationContext,
@@ -18,23 +19,38 @@ class NotificationHelper(
     private val manager: NotificationManager =
         context.getSystemService(NotificationManager::class.java)
 
-    fun sendNotification(
+    fun sendPersonalNotification(
         bottariId: Long,
         bottariTitle: String,
     ) {
-        createNotificationChannel()
-        val pendingIntent = createClickIntent(bottariId, bottariTitle)
-        val notification = createNotification(pendingIntent, bottariTitle)
-        manager.notify(bottariTitle.hashCode(), notification)
+        createPersonalNotificationChannel()
+        val pendingIntent = createPersonalPendingIntent(bottariId, bottariTitle)
+        val notification = createPersonalNotification(pendingIntent, bottariTitle)
+        manager.notify(bottariId.toInt(), notification)
     }
 
-    private fun createNotificationChannel() {
-        val audioAttributes = createAudioAttributes()
-        val channel = createBottariNotificationChannel(audioAttributes)
+    fun sendTeamNotification(
+        teamBottariId: Long,
+        teamBottariTitle: String,
+        message: String,
+    ) {
+        createTeamNotificationChannel()
+        val pendingIntent = createTeamPendingIntent(teamBottariId, teamBottariTitle)
+        val notification = createTeamNotification(pendingIntent, teamBottariTitle, message)
+        manager.notify(teamBottariId.toInt(), notification)
+    }
+
+    private fun createPersonalNotificationChannel() {
+        val channel = createBottariNotificationChannel(BOTTARI_CHANNEL_ID)
         manager.createNotificationChannel(channel)
     }
 
-    private fun createClickIntent(
+    private fun createTeamNotificationChannel() {
+        val channel = createBottariNotificationChannel(TEAM_BOTTARI_CHANNEL_ID)
+        manager.createNotificationChannel(channel)
+    }
+
+    private fun createPersonalPendingIntent(
         bottariId: Long,
         bottariTitle: String,
     ): PendingIntent {
@@ -46,13 +62,13 @@ class NotificationHelper(
             )
         return PendingIntent.getActivity(
             context,
-            bottariTitle.hashCode(),
+            bottariId.toInt(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
     }
 
-    private fun createNotification(
+    private fun createPersonalNotification(
         intent: PendingIntent,
         bottariTitle: String,
     ): Notification =
@@ -60,23 +76,50 @@ class NotificationHelper(
             .Builder(context, BOTTARI_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_bottari_logo)
             .setContentTitle(
-                context.getString(R.string.common_bottari_notification_title).format(bottariTitle),
+                context.getString(R.string.common_bottari_notification_title, bottariTitle),
             ).setContentText(context.getString(R.string.common_bottari_notification_message))
             .setContentIntent(intent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .build()
 
-    private fun createAudioAttributes(): AudioAttributes =
-        AudioAttributes
-            .Builder()
-            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+    private fun createTeamPendingIntent(
+        teamBottariId: Long,
+        teamBottariTitle: String,
+    ): PendingIntent {
+        val intent =
+            TeamChecklistActivity.newIntentForNotification(
+                context,
+                teamBottariId,
+                teamBottariTitle,
+            )
+        return PendingIntent.getActivity(
+            context,
+            teamBottariId.toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+    }
+
+    private fun createTeamNotification(
+        intent: PendingIntent,
+        bottariTitle: String,
+        message: String,
+    ): Notification =
+        NotificationCompat
+            .Builder(context, TEAM_BOTTARI_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_bottari_logo)
+            .setContentTitle(context.getString(R.string.common_team_bottari_notification_title_text, bottariTitle))
+            .setContentText(message)
+            .setContentIntent(intent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
             .build()
 
-    private fun createBottariNotificationChannel(audioAttributes: AudioAttributes): NotificationChannel =
-        NotificationChannel(
-            BOTTARI_CHANNEL_ID,
+    private fun createBottariNotificationChannel(channelId: String): NotificationChannel {
+        val audioAttributes = createAudioAttributes()
+        return NotificationChannel(
+            channelId,
             context.getString(R.string.common_bottari_notification_channel_name),
             NotificationManager.IMPORTANCE_HIGH,
         ).apply {
@@ -88,9 +131,18 @@ class NotificationHelper(
                 audioAttributes,
             )
         }
+    }
+
+    private fun createAudioAttributes(): AudioAttributes =
+        AudioAttributes
+            .Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .build()
 
     companion object {
         private const val BOTTARI_CHANNEL_ID = "BOTTARI_CHANNEL_ID"
+        private const val TEAM_BOTTARI_CHANNEL_ID = "TEAM_BOTTARI_CHANNEL_ID"
         private val VIBRATION_PATTERN = longArrayOf(0, 300, 200, 300)
     }
 }

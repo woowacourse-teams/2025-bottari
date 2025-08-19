@@ -72,6 +72,23 @@ enum class UiEventType {
     PERSONAL_BOTTARI_ITEM_EDIT,
 
     /**
+     * 팀 보따리 생성 이벤트
+     *
+     * 파라미터:
+     * - bottari_id: 생성된 보따리 고유 ID
+     * - bottari_title: 보따리 제목
+     */
+    TEAM_BOTTARI_CREATE,
+
+    /**
+     * 팀 보따리 입장 이벤트
+     *
+     * 파라미터:
+     * - bottari_id: 생성된 보따리 고유 ID
+     */
+    TEAM_BOTTARI_JOIN,
+
+    /**
      * 체크리스트 완료 이벤트
      *
      * 파라미터:
@@ -79,6 +96,17 @@ enum class UiEventType {
      * - completed_item_count: 완료된 항목 수
      */
     CHECKLIST_COMPLETE,
+
+    /**
+     * 팀원 조회 이벤트
+     *
+     * 파라미터:
+     * - invite_code: 초대 코드
+     * - member_head_count: 인원 수
+     * - host_name: 방장 닉네임
+     * - members: 팀원 명단
+     */
+    TEAM_BOTTARI_MEMBERS_FETCH,
 
     /**
      * 모두의 보따리 템플릿 검색 이벤트

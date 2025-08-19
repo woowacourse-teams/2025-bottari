@@ -11,6 +11,7 @@ appcompat = "1.7.1"
 activity = "1.10.1"
 fragment = "1.8.8"
 constraintlayout = "2.2.1"
+work = "2.10.3"
 
 # UI Components
 coreSplashscreen = "1.0.1"
@@ -59,6 +60,7 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 
 # --- UI ---
@@ -99,6 +101,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk" }
 firebase-installations = { module = "com.google.firebase:firebase-installations" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 
 [plugins]
 # --- Android Plugins ---
