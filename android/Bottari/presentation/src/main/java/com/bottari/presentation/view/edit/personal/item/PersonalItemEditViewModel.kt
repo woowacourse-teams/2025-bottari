@@ -67,10 +67,10 @@ class PersonalItemEditViewModel(
 
         val initialItemIds = initialItems.map { it.id }.toSet()
         val finalItemIds = finalItems.map { it.id }.toSet()
-        val deleteItemIds = initialItemIds.filter { it !in finalItemIds }
+        val deleteItemIds = initialItemIds.filterNot { it in finalItemIds }
         val createItemNames =
             finalItems
-                .filter { it.id !in initialItemIds }
+                .filterNot { it.id in initialItemIds }
                 .map { it.name }
 
         return ItemChanges(deleteItemIds, createItemNames)
