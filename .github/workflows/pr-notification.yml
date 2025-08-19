@@ -2,7 +2,6 @@ name: BE PR Review & Merge Notification
 
 on:
   pull_request_review:
-    if: ${{ github.event.pull_request.base.ref == 'be/develop' }}
     types: [submitted] # 리뷰 제출 시
   pull_request:
     branches:
@@ -11,6 +10,7 @@ on:
 
 jobs:
   pr-notification:
+    if: github.event.pull_request.base.ref == 'be/develop'
     runs-on: ubuntu-latest
     steps:
       - name: Determine Webhook
