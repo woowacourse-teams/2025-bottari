@@ -235,28 +235,27 @@ class TeamChecklistViewModel(
                 }
 
             jobs.awaitAll()
-            updateOriginalItems(itemsToUpdate)
             pendingCheckStatusMap.clear()
         }
     }
 
-    private fun updateOriginalItems(updatedItems: List<TeamChecklistProductUiModel>) {
+    private fun updateOriginalItem(updatedItem: TeamChecklistProductUiModel) {
         val currentOriginals = currentState.originalBottariItems.toMutableList()
-
-        updatedItems.forEach { updatedItem ->
-            val index = currentOriginals.indexOfFirst { it.isSameItem(updatedItem) }
-            if (index != -1) {
-                currentOriginals[index] = updatedItem
-            }
+        val index = currentOriginals.indexOfFirst { it.isSameItem(updatedItem) }
+        if (index != -1) {
+            currentOriginals[index] = updatedItem
         }
 
         updateState { copy(originalBottariItems = currentOriginals) }
     }
 
     private suspend fun processItemCheck(item: TeamChecklistProductUiModel) {
-        executeCheckUseCase(item).onFailure {
-            emitEvent(TeamChecklistUiEvent.CheckItemFailure)
-        }
+        executeCheckUseCase(item)
+            .onSuccess {
+                updateOriginalItem(item)
+            }.onFailure {
+                emitEvent(TeamChecklistUiEvent.CheckItemFailure)
+            }
     }
 
     private suspend fun executeCheckUseCase(item: TeamChecklistProductUiModel) =
