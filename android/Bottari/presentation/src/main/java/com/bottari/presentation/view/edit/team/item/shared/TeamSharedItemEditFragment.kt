@@ -74,7 +74,7 @@ class TeamSharedItemEditFragment :
 
     private fun handleUiEvent(uiEvent: TeamSharedItemEditEvent) {
         when (uiEvent) {
-            TeamSharedItemEditEvent.FetchTeamPersonalItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
+            TeamSharedItemEditEvent.FetchTeamSharedItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
             TeamSharedItemEditEvent.DeleteItemFailure,
             TeamSharedItemEditEvent.CreateItemFailure,
             -> requireView().showSnackbar(R.string.common_save_failure_text)
