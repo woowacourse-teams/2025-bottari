@@ -8,9 +8,14 @@ import com.bottari.sse.message.SseResourceType;
 import com.bottari.teambottari.event.CreateTeamSharedItemEvent;
 import com.bottari.teambottari.event.DeleteTeamSharedItemEvent;
 import com.bottari.sse.dto.CheckTeamItemData;
+import com.bottari.sse.dto.CreateAssignedItemData;
+import com.bottari.sse.dto.DeleteAssignedItemData;
 import com.bottari.sse.message.SseEventType;
 import com.bottari.sse.message.SseMessage;
 import com.bottari.sse.message.SseResourceType;
+import com.bottari.teambottari.event.CreateAssignedItemEvent;
+import com.bottari.teambottari.event.DeleteAssignedItemEvent;
+import com.bottari.sse.dto.CheckTeamItemData;
 import com.bottari.teambottari.event.CheckTeamAssignedItemEvent;
 import com.bottari.teambottari.event.CheckTeamSharedItemEvent;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +70,28 @@ public class TeamBottariEventListener {
                 SseResourceType.ASSIGNED_ITEM,
                 SseEventType.CHANGE,
                 CheckTeamItemData.from(event)
+        );
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+    }
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void handleCreateAssignedItemEvent(final CreateAssignedItemEvent event) {
+        final SseMessage message = new SseMessage(
+                SseResourceType.ASSIGNED_ITEM_INFO,
+                SseEventType.CREATE,
+                CreateAssignedItemData.from(event)
+        );
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+    }
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void handleDeleteAssignedItemEvent(final DeleteAssignedItemEvent event) {
+        final SseMessage message = new SseMessage(
+                SseResourceType.ASSIGNED_ITEM_INFO,
+                SseEventType.DELETE,
+                DeleteAssignedItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
     }

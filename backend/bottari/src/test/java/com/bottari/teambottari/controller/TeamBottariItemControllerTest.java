@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,6 +25,7 @@ import com.bottari.teambottari.dto.TeamItemStatusResponse.MemberCheckStatusRespo
 import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
+import com.bottari.teambottari.dto.UpdateAssignedItemRequest;
 import com.bottari.teambottari.service.TeamItemFacade;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -210,6 +212,34 @@ class TeamBottariItemControllerTest {
                         "Location",
                         "/team-bottaries/" + teamBottariId + "/personal-items/" + createdItemId
                 ));
+    }
+
+    @DisplayName("팀 보따리 담당 물품을 성공적으로 수정한다.")
+    @Test
+    void updateAssignedItem() throws Exception {
+        // given
+        final Long teamBottariId = 1L;
+        final Long assignedItemId = 1L;
+        final String ssaid = "test-ssaid";
+        final String itemName = "수정된 담당 물품";
+
+        final UpdateAssignedItemRequest request = new UpdateAssignedItemRequest(
+                itemName,
+                List.of(1L, 2L)
+        );
+
+        willDoNothing().given(teamItemFacade)
+                .updateAssignedItem(teamBottariId, assignedItemId, request, ssaid);
+
+        // when & then
+        mockMvc.perform(
+                        put("/team-bottaries/{teamBottariId}/assigned-items/{assignedItemId}",
+                                teamBottariId,
+                                assignedItemId)
+                                .header("ssaid", ssaid)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent());
     }
 
     @DisplayName("팀 보따리 물품을 성공적으로 삭제한다.")
