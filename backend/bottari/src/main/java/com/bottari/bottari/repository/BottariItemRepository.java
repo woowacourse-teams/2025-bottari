@@ -45,8 +45,7 @@ public interface BottariItemRepository extends JpaRepository<BottariItem, Long> 
             UPDATE BottariItem bi
             SET bi.isChecked = false
             WHERE bi.bottari.id = :bottariId
-            """
-    )
+            """)
     void resetCheckStatusByBottariId(final Long bottariId);
 
     @Modifying(clearAutomatically = true)
