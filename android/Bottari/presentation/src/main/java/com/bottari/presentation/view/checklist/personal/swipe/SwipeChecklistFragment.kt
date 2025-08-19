@@ -76,6 +76,7 @@ class SwipeChecklistFragment :
             updateSwipeList(uiState.nonSwipedItems)
             handleCompleteView(uiState)
             handleEmptyView(uiState.isItemsEmpty)
+            showDoneButton(uiState.isDone)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
@@ -119,25 +120,22 @@ class SwipeChecklistFragment :
     }
 
     private fun handleEmptyView(isEmpty: Boolean) {
-        if (!isEmpty) return
-        showDoneButton()
-        showEmptyView()
+        showEmptyView(isEmpty)
     }
 
     private fun showCompleteState(isComplete: Boolean) {
-        showDoneButton()
         binding.viewSwipeCompleteNotAll.clSwipeCompleteNotAll.isVisible = !isComplete
         binding.viewSwipeCompleteAll.clSwipeCompleteAll.isVisible = isComplete
     }
 
-    private fun showDoneButton() {
-        binding.btnSwipeChecklistNot.isVisible = false
-        binding.btnSwipeChecklistYes.isVisible = false
-        binding.btnSwipeChecklistReturn.isVisible = true
+    private fun showDoneButton(isDone: Boolean) {
+        binding.btnSwipeChecklistNot.isVisible = !isDone
+        binding.btnSwipeChecklistYes.isVisible = !isDone
+        binding.btnSwipeChecklistReturn.isVisible = isDone
     }
 
-    private fun showEmptyView() {
-        binding.viewSwipeEmpty.clSwipeEmpty.isVisible = true
+    private fun showEmptyView(isEmpty: Boolean) {
+        binding.viewSwipeEmpty.clSwipeEmpty.isVisible = isEmpty
     }
 
     private fun setupCardStackView() {
