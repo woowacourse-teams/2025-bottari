@@ -75,4 +75,11 @@ interface TeamBottariRepository {
     suspend fun fetchTeamSharedItems(teamBottariId: Long): Result<List<BottariItem>>
 
     suspend fun fetchTeamPersonalItems(teamBottariId: Long): Result<List<BottariItem>>
+
+    suspend fun saveTeamBottariAssignedItem(
+        teamBottariId: Long,
+        assignedItemId: Long,
+        name: String,
+        assigneeIds: List<Long>,
+    ): Result<Unit>
 }

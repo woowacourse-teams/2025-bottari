@@ -17,6 +17,7 @@ import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.JoinTeamBottariRequest
+import com.bottari.data.model.team.SaveTeamBottariAssignedItemRequest
 import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
 import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
 import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
@@ -137,6 +138,15 @@ class TeamBottariRemoteDataSourceImpl(
 
     override suspend fun fetchTeamPersonalItems(teamBottariId: Long): Result<List<FetchTeamPersonalItemResponse>> =
         safeApiCall { teamBottariService.fetchTeamPersonalItems(teamBottariId) }
+
+    override suspend fun saveTeamBottariAssignedItem(
+        teamBottariId: Long,
+        assignedItemId: Long,
+        request: SaveTeamBottariAssignedItemRequest,
+    ): Result<Unit> =
+        safeApiCall {
+            teamBottariService.saveTeamAssignedItem(teamBottariId, assignedItemId, request)
+        }
 
     companion object {
         private const val HEADER_TEAM_BOTTARI_ID_PREFIX = "/team-bottaries/"
