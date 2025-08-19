@@ -25,7 +25,7 @@ abstract class NotificationDatabase : RoomDatabase() {
             instance ?: synchronized(this) {
                 Room
                     .databaseBuilder(
-                        context,
+                        context.applicationContext,
                         NotificationDatabase::class.java,
                         DATABASE_NAME,
                     ).build()
