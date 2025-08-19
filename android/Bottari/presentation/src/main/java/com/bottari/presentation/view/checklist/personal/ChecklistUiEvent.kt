@@ -4,4 +4,6 @@ sealed interface ChecklistUiEvent {
     data object FetchChecklistFailure : ChecklistUiEvent
 
     data object CheckItemFailure : ChecklistUiEvent
+
+    data object ResetCheckStateFailure : ChecklistUiEvent
 }

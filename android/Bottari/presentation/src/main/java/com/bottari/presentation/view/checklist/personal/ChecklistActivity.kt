@@ -78,6 +78,7 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
             updateToolbar(isMainChecklist())
         }
         binding.btnSwipe.setOnClickListener { navigateToSwipeChecklist() }
+        binding.btnReset.setOnClickListener { viewModel.resetItemsCheckState() }
         supportFragmentManager.addOnBackStackChangedListener {
             updateToolbar(isMainChecklist())
         }
