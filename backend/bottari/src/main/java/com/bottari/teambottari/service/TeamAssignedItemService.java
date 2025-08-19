@@ -17,6 +17,7 @@ import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.dto.UpdateAssignedItemRequest;
+import com.bottari.teambottari.event.ChangeTeamAssignedItemEvent;
 import com.bottari.teambottari.event.CheckTeamAssignedItemEvent;
 import com.bottari.teambottari.event.CreateAssignedItemEvent;
 import com.bottari.teambottari.event.DeleteAssignedItemEvent;
@@ -297,7 +298,8 @@ public class TeamAssignedItemService {
                 .map(Member::getId)
                 .collect(Collectors.toSet());
         final List<TeamMember> requestedAssignTeamMembers = getValidateTeamMembers(teamBottariId,
-                requestedAssigneeMemberIds);
+                requestedAssigneeMemberIds
+        );
         final Set<Long> requestedAssignMemberIds = requestedAssignTeamMembers.stream()
                 .map(TeamMember::getMember)
                 .map(Member::getId)
@@ -309,6 +311,12 @@ public class TeamAssignedItemService {
                 requestedAssignMemberIds,
                 requestedAssignTeamMembers
         );
+        applicationEventPublisher.publishEvent(new ChangeTeamAssignedItemEvent(
+                teamBottariId,
+                teamAssignedItemInfo.getId(),
+                teamAssignedItemInfo.getName(),
+                requestedAssigneeMemberIds
+        ));
     }
 
     // 삭제할 담당자 계산: (현재 담당자) - (요청된 담당자)
