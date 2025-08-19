@@ -87,13 +87,13 @@ class ChecklistViewModel(
             val originalItemsById = currentState.initialItems.associateBy { it.id }
 
             val jobs =
-                items.mapNotNull { pendingItem ->
-                    val originalItem = originalItemsById[pendingItem.id]
-                    if (originalItem == null || originalItem.isChecked == pendingItem.isChecked) {
-                        return@mapNotNull null
+                items
+                    .filter { pendingItem ->
+                        val originalItem = originalItemsById[pendingItem.id]
+                        originalItem != null && originalItem.isChecked != pendingItem.isChecked
+                    }.map { changedItem ->
+                        async { processItemCheck(changedItem) }
                     }
-                    async { processItemCheck(pendingItem) }
-                }
             jobs.awaitAll()
             pendingCheckStatusMap.clear()
         }
