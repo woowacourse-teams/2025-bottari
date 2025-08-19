@@ -57,7 +57,8 @@ class TeamAssignedItemEditViewModel(
     fun selectMember(memberId: Long) = updateState { copy(members = toggleMemberSelection(memberId)) }
 
     fun submitItem() {
-        if (currentState.isEditing) saveAssignedItem() else createAssignedItem()
+        if (currentState.isEditing) return saveAssignedItem()
+        createAssignedItem()
     }
 
     fun deleteItem(itemId: Long) {
