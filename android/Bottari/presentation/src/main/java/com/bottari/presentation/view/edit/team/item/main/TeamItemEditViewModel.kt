@@ -43,6 +43,7 @@ class TeamItemEditViewModel(
             BottariItemTypeUiModel.PERSONAL -> emitCreateEvent(TeamItemEditUiEvent.CreateTeamPersonalItem)
             is BottariItemTypeUiModel.ASSIGNED -> emitCreateEvent(TeamItemEditUiEvent.CreateTeamAssignedItem)
         }
+        updateState { copy(itemInputText = RESET_INPUT_VALUE) }
         resetCreateEvent()
     }
 
@@ -57,6 +58,7 @@ class TeamItemEditViewModel(
     companion object {
         private const val KEY_TAB_TYPE = "KEY_TAB_TYPE"
         private const val ERROR_TYPE_NULL = "[ERROR] type이 null입니다"
+        private const val RESET_INPUT_VALUE = ""
 
         fun Factory(initialTabType: BottariItemTypeUiModel): ViewModelProvider.Factory =
             viewModelFactory {
