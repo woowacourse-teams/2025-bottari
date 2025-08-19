@@ -1,12 +1,11 @@
-name: deploy-backup-to-latest-version-test
+name: deploy-prod-backup-to-latest-version
 
 on:
-  push:
-    branches: test/deploy-file-backup
+  workflow_dispatch: {}
 
 jobs:
   deploy-from-backup:
-    runs-on: [self-hosted, bottari-dev]
+    runs-on: [self-hosted, bottari-prod]
 
     steps:
     # 가장 최신 백업 jar 파일이 있다면 선택
@@ -63,10 +62,11 @@ jobs:
           echo "Starting server with $JAR_FILE"
           RUNNER_TRACKING_ID=""
           
-          DATABASE_URL='${{ secrets.DATABASE_DEV_URL }}' \
-          DATABASE_USERNAME='${{ secrets.DATABASE_DEV_USERNAME }}' \
-          DATABASE_PASSWORD='${{ secrets.DATABASE_DEV_PASSWORD }}' \
-          SPRING_PROFILES_ACTIVE=dev \
+          DATABASE_URL='${{ secrets.DATABASE_PROD_URL }}' \
+          DATABASE_USERNAME='${{ secrets.DATABASE_PROD_USERNAME }}' \
+          DATABASE_PASSWORD='${{ secrets.DATABASE_PROD_PASSWORD }}' \
+          SPRING_PROFILES_ACTIVE=prod \
           
           nohup java -Duser.timezone=Asia/Seoul -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
+          
           echo "Started from backup: $JAR_FILE"
