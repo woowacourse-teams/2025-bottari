@@ -76,7 +76,7 @@ class AlarmEditViewModel(
     private fun createAlarm(alarm: Alarm) {
         updateState { copy(isLoading = true) }
         launch {
-            createAlarmUseCase(bottariId, alarm)
+            createAlarmUseCase(bottariId, bottariTitle, alarm)
                 .onSuccess {
                     BottariLogger.ui(
                         UiEventType.ALARM_CREATE,
@@ -86,14 +86,14 @@ class AlarmEditViewModel(
                 }.onFailure {
                     emitEvent(AlarmUiEvent.AlarmCreateFailure)
                 }
-            updateState { copy(isLoading = false) }
         }
+        updateState { copy(isLoading = false) }
     }
 
     private fun saveAlarm(alarm: Alarm) {
         updateState { copy(isLoading = true) }
         launch {
-            saveAlarmUseCase(alarm.id!!, alarm)
+            saveAlarmUseCase(bottariId, bottariTitle, alarm)
                 .onSuccess {
                     BottariLogger.ui(
                         UiEventType.ALARM_EDIT,
@@ -107,8 +107,8 @@ class AlarmEditViewModel(
                 }.onFailure {
                     emitEvent(AlarmUiEvent.AlarmSaveFailure)
                 }
-            updateState { copy(isLoading = false) }
         }
+        updateState { copy(isLoading = false) }
     }
 
     private fun createNotification(): NotificationUiModel =

@@ -14,6 +14,9 @@ import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentBottariBinding
+import com.bottari.presentation.model.BottariUiModel
+import com.bottari.presentation.model.NotificationUiModel
+import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.view.checklist.personal.ChecklistActivity
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
 import com.bottari.presentation.view.create.BottariCreateDialog
@@ -28,6 +31,7 @@ class BottariFragment :
         BottariViewModel.Factory()
     }
     private val adapter: BottariAdapter by lazy { BottariAdapter(this) }
+    private val scheduler: AlarmScheduler by lazy { AlarmScheduler() }
 
     override fun onViewCreated(
         view: View,
@@ -55,8 +59,10 @@ class BottariFragment :
         navigateToEdit(bottariId)
     }
 
-    override fun onBottariDeleteClick(bottariId: Long) {
-        viewModel.deleteBottari(bottariId)
+    override fun onBottariDeleteClick(bottari: BottariUiModel) {
+        viewModel.deleteBottari(bottari.id)
+        if (bottari.alarm == null) return
+        scheduler.cancelAlarm(NotificationUiModel(bottari.id, bottari.title, bottari.alarm))
     }
 
     private fun setupObserver() {

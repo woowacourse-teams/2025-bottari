@@ -34,20 +34,20 @@ class BottariViewHolder private constructor(
     private val dateFormat: String = getString(R.string.common_format_date_alarm)
     private val timeFormat: String = getString(R.string.common_format_time_alarm)
     private val separator: String = getString(R.string.common_separator_text)
-    private var bottariId: Long? = null
+    private var bottari: BottariUiModel? = null
 
     init {
         itemView.setOnClickListener {
-            bottariId?.let { id ->
+            bottari?.let { bottari ->
                 val bottariTitle = binding.tvBottariTitle.text.toString()
-                bottariEventListener.onBottariClick(id, bottariTitle)
+                bottariEventListener.onBottariClick(bottari.id, bottariTitle)
             }
         }
         binding.btnBottariMore.setOnClickListener(::showBottariOptionsPopup)
     }
 
     fun bind(bottari: BottariUiModel) {
-        bottariId = bottari.id
+        this@BottariViewHolder.bottari = bottari
         with(binding) {
             clBottariItem.clipToOutline = true
             tvBottariTitle.text = bottari.title
@@ -184,12 +184,12 @@ class BottariViewHolder private constructor(
         popupWindow: PopupWindow,
     ) {
         binding.btnEdit.setOnClickListener {
-            bottariId?.let { bottariEventListener.onBottariEditClick(it) }
+            bottari?.let { bottari -> bottariEventListener.onBottariEditClick(bottari.id) }
             popupWindow.dismiss()
         }
 
         binding.btnDelete.setOnClickListener {
-            bottariId?.let { bottariEventListener.onBottariDeleteClick(it) }
+            bottari?.let { bottari -> bottariEventListener.onBottariDeleteClick(bottari) }
             popupWindow.dismiss()
         }
     }
@@ -202,7 +202,7 @@ class BottariViewHolder private constructor(
 
         fun onBottariEditClick(bottariId: Long)
 
-        fun onBottariDeleteClick(bottariId: Long)
+        fun onBottariDeleteClick(bottari: BottariUiModel)
     }
 
     companion object {

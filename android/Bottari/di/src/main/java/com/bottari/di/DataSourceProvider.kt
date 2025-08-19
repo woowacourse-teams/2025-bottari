@@ -16,6 +16,8 @@ import com.bottari.data.source.remote.FcmRemoteDataSource
 import com.bottari.data.source.remote.FcmRemoteDataSourceImpl
 import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSourceImpl
+import com.bottari.data.source.remote.NotificationLocalDataSource
+import com.bottari.data.source.remote.NotificationLocalDataSourceImpl
 import com.bottari.data.source.remote.ReportRemoteDataSource
 import com.bottari.data.source.remote.ReportRemoteDataSourceImpl
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
@@ -53,6 +55,11 @@ object DataSourceProvider {
     val reportRemoteDataSource: ReportRemoteDataSource by lazy {
         ReportRemoteDataSourceImpl(
             NetworkProvider.reportService,
+        )
+    }
+    val notificationLocalDataSource: NotificationLocalDataSource by lazy {
+        NotificationLocalDataSourceImpl(
+            DatabaseProvider.notificationDatabase.notificationDao(),
         )
     }
     val memberIdentifierLocalDataSource: MemberIdentifierLocalDataSource by lazy {

@@ -20,6 +20,8 @@ import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.GetMemberIdentifierUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
+import com.bottari.domain.usecase.notification.DeleteNotificationUseCase
+import com.bottari.domain.usecase.notification.GetNotificationsUseCase
 import com.bottari.domain.usecase.report.ReportTemplateUseCase
 import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.CreateTeamAssignedItemUseCase
@@ -74,13 +76,22 @@ object UseCaseProvider {
         FetchBottariDetailUseCase(RepositoryProvider.bottariRepository)
     }
     val saveAlarmUseCase: SaveAlarmUseCase by lazy {
-        SaveAlarmUseCase(RepositoryProvider.alarmRepository)
+        SaveAlarmUseCase(
+            RepositoryProvider.alarmRepository,
+            RepositoryProvider.notificationRepository,
+        )
     }
     val createAlarmUseCase: CreateAlarmUseCase by lazy {
-        CreateAlarmUseCase(RepositoryProvider.alarmRepository)
+        CreateAlarmUseCase(
+            RepositoryProvider.alarmRepository,
+            RepositoryProvider.notificationRepository,
+        )
     }
     val toggleAlarmStateUseCase: ToggleAlarmStateUseCase by lazy {
-        ToggleAlarmStateUseCase(RepositoryProvider.alarmRepository)
+        ToggleAlarmStateUseCase(
+            RepositoryProvider.alarmRepository,
+            RepositoryProvider.notificationRepository,
+        )
     }
     val fetchChecklistUseCase: FetchChecklistUseCase by lazy {
         FetchChecklistUseCase(
@@ -165,6 +176,12 @@ object UseCaseProvider {
     }
     val reportTemplateUseCase: ReportTemplateUseCase by lazy {
         ReportTemplateUseCase(RepositoryProvider.reportRepository)
+    }
+    val getNotificationsUseCase: GetNotificationsUseCase by lazy {
+        GetNotificationsUseCase(RepositoryProvider.notificationRepository)
+    }
+    val deleteNotificationsUseCase: DeleteNotificationUseCase by lazy {
+        DeleteNotificationUseCase(RepositoryProvider.notificationRepository)
     }
     val createTeamBottariUseCase: CreateTeamBottariUseCase by lazy {
         CreateTeamBottariUseCase(RepositoryProvider.teamBottariRepository)

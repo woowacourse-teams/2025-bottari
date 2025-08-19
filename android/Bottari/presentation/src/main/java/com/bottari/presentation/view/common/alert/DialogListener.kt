@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.common.alart
+package com.bottari.presentation.view.common.alert
 
 interface DialogListener {
     fun onClickPositive()
