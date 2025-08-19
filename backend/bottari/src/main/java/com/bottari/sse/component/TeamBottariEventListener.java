@@ -1,5 +1,13 @@
 package com.bottari.sse.component;
 
+import com.bottari.sse.dto.CreateTeamSharedItemData;
+import com.bottari.sse.dto.DeleteTeamSharedItemData;
+import com.bottari.sse.message.SseEventType;
+import com.bottari.sse.message.SseMessage;
+import com.bottari.sse.message.SseResourceType;
+import com.bottari.teambottari.event.CreateTeamSharedItemEvent;
+import com.bottari.teambottari.event.DeleteTeamSharedItemEvent;
+import com.bottari.sse.dto.CheckTeamItemData;
 import com.bottari.sse.dto.CreateAssignedItemData;
 import com.bottari.sse.dto.DeleteAssignedItemData;
 import com.bottari.sse.message.SseEventType;
@@ -21,6 +29,28 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class TeamBottariEventListener {
 
     private final SseService sseService;
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void handleCreateTeamSharedItemEvent(final CreateTeamSharedItemEvent event) {
+        final SseMessage message = new SseMessage(
+                SseResourceType.SHARED_ITEM_INFO,
+                SseEventType.CHANGE,
+                CreateTeamSharedItemData.from(event)
+        );
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+    }
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void handleDeleteTeamSharedItemEvent(final DeleteTeamSharedItemEvent event) {
+        final SseMessage message = new SseMessage(
+                SseResourceType.SHARED_ITEM_INFO,
+                SseEventType.CHANGE,
+                DeleteTeamSharedItemData.from(event)
+        );
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+    }
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

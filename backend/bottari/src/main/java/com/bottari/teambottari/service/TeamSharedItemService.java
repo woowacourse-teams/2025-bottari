@@ -17,6 +17,8 @@ import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
 import com.bottari.teambottari.event.CheckTeamSharedItemEvent;
+import com.bottari.teambottari.event.CreateTeamSharedItemEvent;
+import com.bottari.teambottari.event.DeleteTeamSharedItemEvent;
 import com.bottari.teambottari.repository.TeamMemberRepository;
 import com.bottari.teambottari.repository.TeamSharedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamSharedItemRepository;
@@ -67,6 +69,7 @@ public class TeamSharedItemService {
         final TeamSharedItemInfo savedTeamSharedItemInfo = saveTeamSharedItemInfo(request.name(), teamBottari);
         final List<TeamMember> teamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId());
         saveSharedItemToTeamMembers(savedTeamSharedItemInfo, teamMembers);
+        publishCreateEvent(savedTeamSharedItemInfo);
 
         return savedTeamSharedItemInfo.getId();
     }
@@ -81,6 +84,7 @@ public class TeamSharedItemService {
         validateMemberInTeam(teamSharedItemInfo.getTeamBottari().getId(), ssaid);
         teamSharedItemRepository.deleteAllByInfo(teamSharedItemInfo);
         teamSharedItemInfoRepository.delete(teamSharedItemInfo);
+        publishDeleteInfoEvent(teamSharedItemInfo);
     }
 
     public List<TeamItemStatusResponse> getAllWithMemberStatusByTeamBottariId(final Long teamBottariId) {
@@ -177,6 +181,24 @@ public class TeamSharedItemService {
                 .map(member -> new TeamSharedItem(savedTeamSharedItemInfo, member))
                 .toList();
         teamSharedItemRepository.saveAll(teamSharedItems);
+    }
+
+    private void publishCreateEvent(final TeamSharedItemInfo info) {
+        final CreateTeamSharedItemEvent event = new CreateTeamSharedItemEvent(
+                info.getTeamBottari().getId(),
+                info.getId(),
+                info.getName()
+        );
+        applicationEventPublisher.publishEvent(event);
+    }
+
+    private void publishDeleteInfoEvent(final TeamSharedItemInfo info) {
+        final DeleteTeamSharedItemEvent event = new DeleteTeamSharedItemEvent(
+                info.getTeamBottari().getId(),
+                info.getId(),
+                info.getName()
+        );
+        applicationEventPublisher.publishEvent(event);
     }
 
     private Map<TeamSharedItemInfo, List<TeamSharedItem>> groupByInfo(final List<TeamSharedItem> items) {
