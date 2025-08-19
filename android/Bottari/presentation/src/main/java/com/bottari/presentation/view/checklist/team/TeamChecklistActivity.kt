@@ -36,10 +36,15 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     }
 
     private fun setupUI() {
-        binding.tvBottariTitle.text = intent.getStringExtra(EXTRA_BOTTARI_TITLE)
+        binding.tvBottariTitle.text = intent.getStringExtra(EXTRA_BOTTARI_TITLE).orEmpty()
+        if (bottariId == INVALID_BOTTARI_ID) {
+            finish()
+            return
+        }
         if (supportFragmentManager.findFragmentById(R.id.fcv_team_checklist) == null) {
             navigateToTeamChecklistMain()
         }
+        handleToolbar()
     }
 
     private fun setupListener() {
@@ -62,7 +67,8 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     }
 
     private fun handleToolbar() {
-        val isSwipeFragmentVisible = supportFragmentManager.backStackEntryCount > 0
+        val isSwipeFragmentVisible =
+            supportFragmentManager.findFragmentById(R.id.fcv_team_checklist) is TeamSwipeChecklistFragment
         binding.btnSwipe.isVisible = !isSwipeFragmentVisible
     }
 
@@ -73,13 +79,17 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     }
 
     private fun navigateToTeamChecklistMain() {
-        val intent = TeamChecklistMainFragment.newInstance(bottariId)
-        replaceChecklistFragment(intent, false)
+        val current = supportFragmentManager.findFragmentById(R.id.fcv_team_checklist)
+        if (current is TeamChecklistMainFragment) return
+        val fragment = TeamChecklistMainFragment.newInstance(bottariId)
+        replaceChecklistFragment(fragment, false)
     }
 
     private fun navigateToSwipeChecklist() {
-        val intent = TeamSwipeChecklistFragment.newInstance(bottariId)
-        replaceChecklistFragment(intent, true)
+        val current = supportFragmentManager.findFragmentById(R.id.fcv_team_checklist)
+        if (current is TeamSwipeChecklistFragment) return
+        val fragment = TeamSwipeChecklistFragment.newInstance(bottariId)
+        replaceChecklistFragment(fragment, true)
     }
 
     private fun replaceChecklistFragment(

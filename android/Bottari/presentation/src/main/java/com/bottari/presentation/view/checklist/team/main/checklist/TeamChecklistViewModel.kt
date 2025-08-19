@@ -29,7 +29,8 @@ class TeamChecklistViewModel(
 ) : BaseViewModel<TeamChecklistUiState, TeamChecklistUiEvent>(TeamChecklistUiState()) {
     private val teamBottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
-    private val pendingCheckStatusMap = mutableMapOf<Long, TeamChecklistProductUiModel>()
+    private val pendingCheckStatusMap =
+        mutableMapOf<Pair<Long, BottariItemTypeUiModel>, TeamChecklistProductUiModel>()
 
     private val debouncedCheck: (List<TeamChecklistProductUiModel>) -> Unit =
         debounce(
@@ -80,17 +81,17 @@ class TeamChecklistViewModel(
                 )
             }
 
-            pendingCheckStatusMap[toggledItem.id] = toggledItem
+            pendingCheckStatusMap[Pair(toggledItem.id, toggledItem.type)] = toggledItem
             debouncedCheck(pendingCheckStatusMap.values.toList())
         }
     }
 
     fun resetSwipeState() {
-        updateState { copy(swipedItemItems = emptyList()) }
+        updateState { copy(swipedItems = emptyList()) }
     }
 
     fun addSwipedItem(item: TeamChecklistItem) {
-        updateState { copy(swipedItemItems = this.swipedItemItems + item) }
+        updateState { copy(swipedItems = this.swipedItems + item) }
     }
 
     private fun List<TeamChecklistItem>.toggleItemInList(item: TeamChecklistProductUiModel): List<TeamChecklistItem> =
@@ -122,7 +123,6 @@ class TeamChecklistViewModel(
             generateExpandableTypeList(currentState.expandableItems, newItems)
         updateState {
             copy(
-                isLoading = false,
                 expandableItems = newExpandableList,
             )
         }

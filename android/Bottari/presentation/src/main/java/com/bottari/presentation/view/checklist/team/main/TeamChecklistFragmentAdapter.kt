@@ -10,14 +10,20 @@ class TeamChecklistFragmentAdapter(
     fragment: Fragment,
     private val bottariId: Long,
 ) : FragmentStateAdapter(fragment) {
-    override fun getItemCount(): Int = 3
+    private enum class Page {
+        CHECKLIST,
+        BOTTARI_STATUS,
+        MEMBERS_STATUS,
+    }
+
+    override fun getItemCount(): Int = Page.entries.size
 
     override fun createFragment(position: Int): Fragment =
-        when (position) {
-            0 -> TeamChecklistFragment.newInstance(bottariId)
-            1 -> TeamBottariStatusFragment.newInstance(bottariId)
-            2 -> TeamMembersStatusFragment.newInstance(bottariId)
-            else -> throw IllegalArgumentException(ERROR_UNKNOWN_FRAGMENT)
+        when (Page.entries.getOrNull(position)) {
+            Page.CHECKLIST -> TeamChecklistFragment.newInstance(bottariId)
+            Page.BOTTARI_STATUS -> TeamBottariStatusFragment.newInstance(bottariId)
+            Page.MEMBERS_STATUS -> TeamMembersStatusFragment.newInstance(bottariId)
+            null -> throw IllegalArgumentException(ERROR_UNKNOWN_FRAGMENT)
         }
 
     companion object {
