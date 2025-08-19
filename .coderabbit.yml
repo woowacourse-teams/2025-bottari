@@ -12,23 +12,20 @@ reviews:
     enabled: true
     drafts: false
     base_branches: [".*"]
-    suggestions:
-      commit: false
-      auto_fix: false
-  status_checks:
-    fail_commit_status: false
+  commit_status: true
+  fail_commit_status: false
 
-path_filters:
-  - "!**/node_modules/**"
-  - "!**/.gradle/**"
-  - "!**/.idea/**"
-  - "!**/build/**"
-  - "!**/dist/**"
-  - "!**/out/**"
-  - "!**/*.log"
-  - "!**/coverage/**"
-  - "backend/**"
-  - "android/**"
+  path_filters:
+    - "!**/node_modules/**"
+    - "!**/.gradle/**"
+    - "!**/.idea/**"
+    - "!**/build/**"
+    - "!**/dist/**"
+    - "!**/out/**"
+    - "!**/*.log"
+    - "!**/coverage/**"
+    - "backend/**"
+    - "android/**"
 
 instructions:
   - paths: ["backend/**"]
