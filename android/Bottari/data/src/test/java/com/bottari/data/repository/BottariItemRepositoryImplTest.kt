@@ -159,4 +159,43 @@ class BottariItemRepositoryImplTest {
             // verify
             coVerify { remoteDataSource.uncheckBottariItem(itemId) }
         }
+
+    @DisplayName("체크 상태 초기화에 성공하면 성공 결과를 반환한다")
+    @Test
+    fun resetCheckStateSuccessReturnsSuccess() =
+        runTest {
+            // given
+            val bottariId = 1L
+            coEvery { remoteDataSource.resetBottariItemCheckState(bottariId) } returns
+                Result.success(Unit)
+
+            // when
+            val result = repository.resetBottariItemCheckState(bottariId)
+
+            // then
+            result.shouldBeSuccess()
+
+            // verify
+            coVerify { remoteDataSource.resetBottariItemCheckState(bottariId) }
+        }
+
+    @DisplayName("체크 상태 초기화에 실패하면 실패를 반환한다")
+    @Test
+    fun resetCheckStateFailureReturnsFailure() =
+        runTest {
+            // given
+            val bottariId = 1L
+            val expectedException = Exception()
+            coEvery { remoteDataSource.resetBottariItemCheckState(bottariId) } returns
+                Result.failure(expectedException)
+
+            // when
+            val result = repository.resetBottariItemCheckState(bottariId)
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe expectedException }
+
+            // verify
+            coVerify { remoteDataSource.resetBottariItemCheckState(bottariId) }
+        }
 }
