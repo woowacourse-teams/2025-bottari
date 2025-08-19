@@ -8,4 +8,12 @@ sealed interface TeamAssignedItemEditEvent {
     data object CreateItemFailure : TeamAssignedItemEditEvent
 
     data object CreateItemSuccess : TeamAssignedItemEditEvent
+
+    data object SaveItemSuccess : TeamAssignedItemEditEvent
+
+    data object SaveItemFailure : TeamAssignedItemEditEvent
+
+    data class SelectAssignedItem(
+        val itemName: String,
+    ) : TeamAssignedItemEditEvent
 }

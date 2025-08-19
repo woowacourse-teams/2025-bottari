@@ -13,6 +13,7 @@ import com.bottari.domain.usecase.team.CreateTeamAssignedItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamAssignedItemsUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariMembersUseCase
+import com.bottari.domain.usecase.team.SaveTeamBottariAssignedItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
 import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
@@ -27,6 +28,7 @@ class TeamAssignedItemEditViewModel(
     private val createTeamAssignedItemUseCase: CreateTeamAssignedItemUseCase,
     private val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase,
     private val fetchTeamBottariMembersUseCase: FetchTeamBottariMembersUseCase,
+    private val saveTeamBottariAssignedItemUseCase: SaveTeamBottariAssignedItemUseCase,
 ) : BaseViewModel<TeamAssignedItemEditUiState, TeamAssignedItemEditEvent>(
         TeamAssignedItemEditUiState(),
     ) {
@@ -39,17 +41,43 @@ class TeamAssignedItemEditViewModel(
     fun updateInput(input: String) {
         if (currentState.inputText == input) return
         updateState { copy(inputText = input) }
-        currentState.matchingItem.let(::applyAssignedMembersSelection)
     }
 
-    fun selectAssignedItem(itemId: Long) {
-        val selectedItem = currentState.assignedItems.find { it.id == itemId } ?: return
-        applyAssignedMembersSelection(selectedItem)
+    fun toggleEditState(itemId: Long) {
+        val newItems =
+            currentState.assignedItems.map { assignedItem -> assignedItem.toggleSelection(itemId) }
+        updateState { copy(assignedItems = newItems, hasRestoreState = false) }
+
+        currentState.selectedAssignedItem?.name?.let { itemName ->
+            emitEvent(TeamAssignedItemEditEvent.SelectAssignedItem(itemName))
+        }
+        applyAssignedMembersSelection()
     }
 
     fun selectMember(memberId: Long) = updateState { copy(members = toggleMemberSelection(memberId)) }
 
-    fun createItem() {
+    fun submitItem() {
+        if (currentState.isEditing) saveAssignedItem() else createAssignedItem()
+    }
+
+    fun deleteItem(itemId: Long) {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            deleteTeamBottariItemUseCase(itemId, BottariItemType.ASSIGNED())
+                .onSuccess { refreshAssignedItemsAndMembers() }
+                .onFailure { emitEvent(TeamAssignedItemEditEvent.DeleteItemFailure) }
+
+            updateState { copy(isLoading = false) }
+        }
+    }
+
+    fun saveSelectedState() {
+        if (currentState.hasRestoreState) return
+        updateState { copy(hasRestoreState = true) }
+    }
+
+    private fun createAssignedItem() {
         updateState { copy(isLoading = true) }
 
         launch {
@@ -60,19 +88,29 @@ class TeamAssignedItemEditViewModel(
             ).onSuccess {
                 refreshAssignedItemsAndMembers()
                 emitEvent(TeamAssignedItemEditEvent.CreateItemSuccess)
-            }.onFailure { emitEvent(TeamAssignedItemEditEvent.CreateItemFailure) }
+            }.onFailure {
+                emitEvent(TeamAssignedItemEditEvent.CreateItemFailure)
+            }
 
             updateState { copy(isLoading = false) }
         }
     }
 
-    fun deleteItem(itemId: Long) {
+    private fun saveAssignedItem() {
         updateState { copy(isLoading = true) }
 
         launch {
-            deleteTeamBottariItemUseCase(itemId, BottariItemType.ASSIGNED())
-                .onSuccess { refreshAssignedItemsAndMembers() }
-                .onFailure { emitEvent(TeamAssignedItemEditEvent.DeleteItemFailure) }
+            saveTeamBottariAssignedItemUseCase(
+                bottariId,
+                requireNotNull(currentState.selectedAssignedItem?.id),
+                currentState.inputText,
+                currentState.selectedMemberIds,
+            ).onSuccess {
+                refreshAssignedItemsAndMembers()
+                emitEvent(TeamAssignedItemEditEvent.SaveItemSuccess)
+            }.onFailure {
+                emitEvent(TeamAssignedItemEditEvent.SaveItemFailure)
+            }
 
             updateState { copy(isLoading = false) }
         }
@@ -92,10 +130,11 @@ class TeamAssignedItemEditViewModel(
                 copy(
                     assignedItems = assignedItems.map { it.toUiModel() },
                     members = members.map { it.toUiModel() },
-                    isLoading = false,
                     isFetched = true,
                 )
             }
+
+            updateState { copy(isLoading = false, isFetched = true) }
         }
     }
 
@@ -114,32 +153,31 @@ class TeamAssignedItemEditViewModel(
             if (member.id != memberId) member else member.copy(isHost = !member.isHost)
         }
 
-    private fun applyAssignedMembersSelection(selectedItem: BottariItemUiModel?) {
-        if (selectedItem == null) {
+    private fun applyAssignedMembersSelection() {
+        if (!currentState.isEditing) {
             clearMemberSelections()
             return
         }
-
-        val assignedMembersIds = selectedItem.assignedMemberIds()
-        val updatedMembers = mapMembersWithAssignedIds(assignedMembersIds)
+        val assignedIds = currentState.selectedAssignedItem.assignedMemberIds()
+        val updatedMembers = mapMembersWithAssignedIds(assignedIds)
         updateState { copy(members = updatedMembers) }
     }
 
     private fun clearMemberSelections() {
-        val clearedMembers = currentState.members.map { it.copy(isHost = false) }
-        updateState { copy(members = clearedMembers) }
+        val cleared = currentState.members.map { it.copy(isHost = false) }
+        updateState { copy(members = cleared) }
     }
 
-    private fun BottariItemUiModel.assignedMemberIds(): List<Long> =
-        (type as? BottariItemTypeUiModel.ASSIGNED)
+    private fun BottariItemUiModel?.assignedMemberIds(): List<Long> =
+        (this?.type as? BottariItemTypeUiModel.ASSIGNED)
             ?.members
             ?.mapNotNull { it.id }
             ?: emptyList()
 
-    private fun mapMembersWithAssignedIds(assignedMembersIds: List<Long>): List<TeamMemberUiModel> =
-        currentState.members.map { member ->
-            member.copy(isHost = member.id in assignedMembersIds)
-        }
+    private fun BottariItemUiModel.toggleSelection(targetId: Long): BottariItemUiModel = copy(isSelected = (id == targetId && !isSelected))
+
+    private fun mapMembersWithAssignedIds(ids: List<Long>): List<TeamMemberUiModel> =
+        currentState.members.map { it.copy(isHost = it.id in ids) }
 
     companion object {
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
@@ -156,6 +194,7 @@ class TeamAssignedItemEditViewModel(
                         UseCaseProvider.createTeamAssignedItemUseCase,
                         UseCaseProvider.deleteTeamBottariItemUseCase,
                         UseCaseProvider.fetchTeamBottariMembersUseCase,
+                        UseCaseProvider.saveTeamBottariAssignedItemUseCase,
                     )
                 }
             }
