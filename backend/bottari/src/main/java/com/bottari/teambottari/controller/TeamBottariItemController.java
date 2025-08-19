@@ -3,11 +3,16 @@ package com.bottari.teambottari.controller;
 import com.bottari.config.MemberIdentifier;
 import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.CreateTeamItemRequest;
+import com.bottari.teambottari.dto.ReadAssignedItemResponse;
+import com.bottari.teambottari.dto.ReadPersonalItemResponse;
+import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
+import com.bottari.teambottari.dto.UpdateAssignedItemRequest;
 import com.bottari.teambottari.service.TeamItemFacade;
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +29,39 @@ import org.springframework.web.bind.annotation.RestController;
 public class TeamBottariItemController implements TeamBottariItemApiDocs {
 
     private final TeamItemFacade teamItemFacade;
+
+    @GetMapping("/team-bottaries/{teamBottariId}/shared-items")
+    @Override
+    public ResponseEntity<List<ReadSharedItemResponse>> readSharedItems(
+            @PathVariable final Long teamBottariId,
+            @MemberIdentifier final String ssaid
+    ) {
+        final List<ReadSharedItemResponse> responses = teamItemFacade.getSharedItems(teamBottariId, ssaid);
+
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/team-bottaries/{teamBottariId}/assigned-items")
+    @Override
+    public ResponseEntity<List<ReadAssignedItemResponse>> readAssignedItems(
+            @PathVariable final Long teamBottariId,
+            @MemberIdentifier final String ssaid
+    ) {
+        final List<ReadAssignedItemResponse> responses = teamItemFacade.getAssignedItems(teamBottariId, ssaid);
+
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/team-bottaries/{teamBottariId}/personal-items")
+    @Override
+    public ResponseEntity<List<ReadPersonalItemResponse>> readPersonalItems(
+            @PathVariable final Long teamBottariId,
+            @MemberIdentifier final String ssaid
+    ) {
+        final List<ReadPersonalItemResponse> responses = teamItemFacade.getPersonalItems(teamBottariId, ssaid);
+
+        return ResponseEntity.ok(responses);
+    }
 
     @PostMapping("/team-bottaries/{teamBottariId}/shared-items")
     @Override
@@ -61,6 +100,19 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
         final URI location = URI.create("/team-bottaries/" + teamBottariId + "/personal-items/" + id);
 
         return ResponseEntity.created(location).build();
+    }
+
+    @PutMapping("/team-bottaries/{teamBottariId}/assigned-items/{assignedItemId}")
+    @Override
+    public ResponseEntity<Void> updateAssigned(
+            @PathVariable final Long teamBottariId,
+            @PathVariable final Long assignedItemId,
+            @RequestBody final UpdateAssignedItemRequest request,
+            @MemberIdentifier final String ssaid
+    ) {
+        teamItemFacade.updateAssignedItem(teamBottariId, assignedItemId, request, ssaid);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/team-items/{id}")
