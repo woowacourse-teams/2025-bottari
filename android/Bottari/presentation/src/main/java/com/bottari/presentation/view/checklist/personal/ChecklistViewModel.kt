@@ -112,15 +112,14 @@ class ChecklistViewModel(
     private fun revertItemCheckStatus(failedItemId: Long) {
         val originalItem =
             currentState.initialItems.find { it.id == failedItemId } ?: return
-
-        updateState {
-            val revertedItems =
-                bottariItems.map { uiItem ->
-                    if (uiItem.id == failedItemId) {
-                        return@map uiItem.copy(isChecked = originalItem.isChecked)
-                    }
-                    uiItem
+        val revertedItems =
+            currentState.bottariItems.map { uiItem ->
+                if (uiItem.id == failedItemId) {
+                    return@map uiItem.copy(isChecked = originalItem.isChecked)
                 }
+                uiItem
+            }
+        updateState {
             copy(bottariItems = revertedItems)
         }
     }
@@ -131,7 +130,6 @@ class ChecklistViewModel(
         if (index != -1) {
             currentOriginals[index] = updatedItem
         }
-
         updateState { copy(initialItems = currentOriginals) }
     }
 
