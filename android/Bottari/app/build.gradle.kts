@@ -15,7 +15,7 @@ android {
         applicationId = "com.bottari.bottari"
         minSdk = 28
         targetSdk = 35
-        versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 1
+        versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 7
         versionName = "1.2.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
