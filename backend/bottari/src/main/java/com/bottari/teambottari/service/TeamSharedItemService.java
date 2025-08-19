@@ -41,6 +41,12 @@ public class TeamSharedItemService {
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
 
+    private static Long memberIdByItem(final TeamSharedItem item) {
+        return item.getTeamMember()
+                .getMember()
+                .getId();
+    }
+
     public List<ReadSharedItemResponse> getAllByTeamBottariId(final Long teamBottariId) {
         final List<TeamSharedItemInfo> sharedItemInfos = teamSharedItemInfoRepository.findAllByTeamBottariId(
                 teamBottariId
@@ -205,12 +211,6 @@ public class TeamSharedItemService {
                 .filter(item -> !item.isChecked())
                 .map(TeamSharedItemService::memberIdByItem)
                 .toList();
-    }
-
-    private static Long memberIdByItem(final TeamSharedItem item) {
-        return item.getTeamMember()
-                .getMember()
-                .getId();
     }
 
     private void publishCheckEvent(final TeamSharedItem item) {

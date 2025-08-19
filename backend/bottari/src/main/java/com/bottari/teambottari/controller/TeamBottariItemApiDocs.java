@@ -10,6 +10,7 @@ import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
+import com.bottari.teambottari.dto.UpdateAssignedItemRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -115,6 +116,26 @@ public interface TeamBottariItemApiDocs {
     ResponseEntity<Void> createPersonal(
             final Long teamBottariId,
             final CreateTeamItemRequest request,
+            @Parameter(hidden = true) final String ssaid
+    );
+
+    @Operation(summary = "팀 보따리 담당 물품 수정")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "팀 보따리 담당 물품 수정 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.TEAM_BOTTARI_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI,
+            ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND,
+            ErrorCode.TEAM_BOTTARI_ITEM_NO_ASSIGNED_MEMBERS,
+            ErrorCode.TEAM_BOTTARI_ITEM_INFO_NOT_FOUND,
+            ErrorCode.TEAM_BOTTARI_ITEM_ALREADY_EXISTS
+    })
+    ResponseEntity<Void> updateAssigned(
+            final Long teamBottariId,
+            final Long assignedItemId,
+            final UpdateAssignedItemRequest request,
             @Parameter(hidden = true) final String ssaid
     );
 

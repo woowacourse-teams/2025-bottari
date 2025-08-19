@@ -16,6 +16,7 @@ import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
+import com.bottari.teambottari.dto.UpdateAssignedItemRequest;
 import com.bottari.teambottari.repository.TeamBottariRepository;
 import com.bottari.teambottari.repository.TeamMemberRepository;
 import java.util.List;
@@ -105,6 +106,19 @@ public class TeamItemFacade {
         final TeamMember teamMember = getTeamMemberByTeamBottariIdAndSsaid(teamBottariId, ssaid);
 
         return teamPersonalItemService.create(teamMember, request);
+    }
+
+    @Transactional
+    public void updateAssignedItem(
+            final Long teamBottariId,
+            final Long assignedItemId,
+            final UpdateAssignedItemRequest request,
+            final String ssaid
+    ) {
+        final TeamBottari teamBottari = getTeamBottariById(teamBottariId);
+        final Member member = getMemberBySsaid(ssaid);
+        validateMemberInTeam(teamBottari.getId(), member);
+        teamAssignedItemService.update(teamBottariId, assignedItemId, request);
     }
 
     public void delete(

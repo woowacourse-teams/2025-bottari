@@ -16,6 +16,7 @@ import com.bottari.teambottari.dto.CreateTeamAssignedItemRequest;
 import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.TeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamMemberItemResponse;
+import com.bottari.teambottari.dto.UpdateAssignedItemRequest;
 import com.bottari.teambottari.event.CheckTeamAssignedItemEvent;
 import com.bottari.teambottari.event.CreateAssignedItemEvent;
 import com.bottari.teambottari.event.DeleteAssignedItemEvent;
@@ -85,6 +86,19 @@ public class TeamAssignedItemService {
     }
 
     @Transactional
+    public void update(
+            final Long teamBottariId,
+            final Long assignedItemId,
+            final UpdateAssignedItemRequest request
+    ) {
+        validateEmptyAssignee(request.assigneeIds());
+        final TeamAssignedItemInfo teamAssignedItemInfo = teamAssignedItemInfoRepository.findById(assignedItemId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_INFO_NOT_FOUND, "담당"));
+        updateNameIfNeeded(teamBottariId, teamAssignedItemInfo, request.name());
+        updateAssignees(teamBottariId, teamAssignedItemInfo, request.assigneeIds());
+    }
+
+    @Transactional
     public void delete(
             final Long id,
             final String ssaid
@@ -144,6 +158,20 @@ public class TeamAssignedItemService {
         publishCheckEvent(item);
     }
 
+    public void sendRemindAlarm(
+            final Long infoId,
+            final String ssaid
+    ) {
+        final TeamAssignedItemInfo info = teamAssignedItemInfoRepository.findById(infoId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_INFO_NOT_FOUND, "담당"));
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+        validateMemberInTeam(info.getTeamBottari(), member);
+        final List<TeamAssignedItem> items = teamAssignedItemRepository.findAllByInfoIdWithMember(infoId);
+        final List<Long> uncheckedMemberIds = collectUncheckedMemberIds(items);
+        sendRemindMessageToMembers(info, uncheckedMemberIds);
+    }
+
     private Map<TeamAssignedItemInfo, List<Member>> groupMembersByAssignedItemInfo(final List<TeamAssignedItem> assignedItems) {
         return assignedItems.stream()
                 .collect(Collectors.groupingBy(
@@ -166,9 +194,7 @@ public class TeamAssignedItemService {
     }
 
     private List<String> getRequestAssignedMemberNames(final List<Long> memberIds) {
-        if (memberIds == null || memberIds.isEmpty()) {
-            throw new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NO_ASSIGNED_MEMBERS);
-        }
+        validateEmptyAssignee(memberIds);
         final List<Member> members = memberRepository.findAllById(memberIds);
         if (members.size() != memberIds.size()) {
             throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "요청된 팀원 중 일부가 존재하지 않습니다.");
@@ -177,6 +203,12 @@ public class TeamAssignedItemService {
         return members.stream()
                 .map(Member::getName)
                 .toList();
+    }
+
+    private void validateEmptyAssignee(final List<Long> memberIds) {
+        if (memberIds == null || memberIds.isEmpty()) {
+            throw new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NO_ASSIGNED_MEMBERS);
+        }
     }
 
     private TeamAssignedItemInfo saveTeamAssignedItemInfo(
@@ -195,7 +227,7 @@ public class TeamAssignedItemService {
         final List<TeamMember> allTeamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId());
         final Set<String> requestNames = new HashSet<>(teamMemberNames);
         final Set<String> allTeamMemberNames = allTeamMembers.stream()
-                .map(m -> m.getMember().getName())
+                .map(teamMember -> teamMember.getMember().getName())
                 .collect(Collectors.toSet());
         if (!allTeamMemberNames.containsAll(requestNames)) {
             throw new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI, "요청된 팀원 중 일부가 팀에 속해 있지 않습니다.");
@@ -239,18 +271,94 @@ public class TeamAssignedItemService {
         applicationEventPublisher.publishEvent(event);
     }
 
-    public void sendRemindAlarm(
-            final Long infoId,
-            final String ssaid
+    private void updateNameIfNeeded(
+            final Long teamBottariId,
+            final TeamAssignedItemInfo teamAssignedItemInfo,
+            final String newName
     ) {
-        final TeamAssignedItemInfo info = teamAssignedItemInfoRepository.findById(infoId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_INFO_NOT_FOUND, "담당"));
-        final Member member = memberRepository.findBySsaid(ssaid)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
-        validateMemberInTeam(info.getTeamBottari(), member);
-        final List<TeamAssignedItem> items = teamAssignedItemRepository.findAllByInfoIdWithMember(infoId);
-        final List<Long> uncheckedMemberIds = collectUncheckedMemberIds(items);
-        sendRemindMessageToMembers(info, uncheckedMemberIds);
+        if (teamAssignedItemInfo.isSameByName(newName)) {
+            return;
+        }
+        validateDuplicateName(teamBottariId, newName);
+        teamAssignedItemInfo.updateName(newName);
+    }
+
+    private void updateAssignees(
+            final Long teamBottariId,
+            final TeamAssignedItemInfo teamAssignedItemInfo,
+            final List<Long> requestedAssigneeMemberIds
+    ) {
+        final List<TeamAssignedItem> currentAssignments = teamAssignedItemRepository.findAllByInfoIdWithMember(
+                teamAssignedItemInfo.getId()
+        );
+        final Set<Long> currentAssignedMemberIds = currentAssignments.stream()
+                .map(TeamAssignedItem::getTeamMember)
+                .map(TeamMember::getMember)
+                .map(Member::getId)
+                .collect(Collectors.toSet());
+        final List<TeamMember> requestedAssignTeamMembers = getValidateTeamMembers(teamBottariId,
+                requestedAssigneeMemberIds);
+        final Set<Long> requestedAssignMemberIds = requestedAssignTeamMembers.stream()
+                .map(TeamMember::getMember)
+                .map(Member::getId)
+                .collect(Collectors.toSet());
+        deleteItemsToRemove(currentAssignedMemberIds, requestedAssignMemberIds, currentAssignments);
+        createItemsToAdd(
+                teamAssignedItemInfo,
+                currentAssignedMemberIds,
+                requestedAssignMemberIds,
+                requestedAssignTeamMembers
+        );
+    }
+
+    // 삭제할 담당자 계산: (현재 담당자) - (요청된 담당자)
+    private void deleteItemsToRemove(
+            final Set<Long> currentAssignedMemberIds,
+            final Set<Long> requestedAssignMemberIds,
+            final List<TeamAssignedItem> currentItems
+    ) {
+        final Set<Long> idsToRemove = new HashSet<>(currentAssignedMemberIds);
+        idsToRemove.removeAll(requestedAssignMemberIds);
+        final List<TeamAssignedItem> itemsToRemove = currentItems.stream()
+                .filter(item -> idsToRemove.contains(item.getTeamMember().getMember().getId()))
+                .toList();
+        if (!itemsToRemove.isEmpty()) {
+            teamAssignedItemRepository.deleteAllInBatch(itemsToRemove);
+        }
+    }
+
+    // 추가할 담당자 계산: (요청된 담당자) - (현재 담당자)
+    private void createItemsToAdd(
+            final TeamAssignedItemInfo teamAssignedItemInfo,
+            final Set<Long> currentTeamMemberIds,
+            final Set<Long> requestedTeamMemberIds,
+            final List<TeamMember> requestedAssignTeamMembers
+    ) {
+        final Set<Long> idsToAdd = new HashSet<>(requestedTeamMemberIds);
+        idsToAdd.removeAll(currentTeamMemberIds);
+        final List<TeamAssignedItem> itemsToAdd = requestedAssignTeamMembers.stream()
+                .filter(teamMember -> idsToAdd.contains(teamMember.getMember().getId()))
+                .map(teamMember -> new TeamAssignedItem(teamAssignedItemInfo, teamMember))
+                .toList();
+
+        if (!itemsToAdd.isEmpty()) {
+            teamAssignedItemRepository.saveAll(itemsToAdd);
+        }
+    }
+
+    private List<TeamMember> getValidateTeamMembers(
+            final Long teamBottariId,
+            final List<Long> memberIds
+    ) {
+        final List<TeamMember> teamMembers = teamMemberRepository.findAllByTeamBottariIdAndMemberIds(
+                teamBottariId,
+                memberIds
+        );
+        if (teamMembers.size() != memberIds.size()) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI, "요청된 팀원 중 일부가 팀에 속해 있지 않습니다.");
+        }
+
+        return teamMembers;
     }
 
     private Map<TeamAssignedItemInfo, List<TeamAssignedItem>> groupByInfo(final List<TeamAssignedItem> assignedItems) {

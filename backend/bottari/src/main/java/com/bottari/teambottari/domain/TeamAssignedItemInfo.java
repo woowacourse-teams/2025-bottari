@@ -43,6 +43,17 @@ public class TeamAssignedItemInfo {
         this.teamBottari = teamBottari;
     }
 
+    public boolean isSameByName(final String otherName) {
+        return name.equals(new ItemName(otherName));
+    }
+
+    public void updateName(final String updatedName) {
+        if (name.name().equals(updatedName)) {
+            return;
+        }
+        this.name = new ItemName(updatedName);
+    }
+
     public String getName() {
         return name.name();
     }

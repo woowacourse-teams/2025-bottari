@@ -9,6 +9,7 @@ import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.ReadTeamItemStatusResponse;
 import com.bottari.teambottari.dto.TeamItemTypeRequest;
 import com.bottari.teambottari.dto.TeamMemberChecklistResponse;
+import com.bottari.teambottari.dto.UpdateAssignedItemRequest;
 import com.bottari.teambottari.service.TeamItemFacade;
 import java.net.URI;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -98,6 +100,19 @@ public class TeamBottariItemController implements TeamBottariItemApiDocs {
         final URI location = URI.create("/team-bottaries/" + teamBottariId + "/personal-items/" + id);
 
         return ResponseEntity.created(location).build();
+    }
+
+    @PutMapping("/team-bottaries/{teamBottariId}/assigned-items/{assignedItemId}")
+    @Override
+    public ResponseEntity<Void> updateAssigned(
+            @PathVariable final Long teamBottariId,
+            @PathVariable final Long assignedItemId,
+            @RequestBody final UpdateAssignedItemRequest request,
+            @MemberIdentifier final String ssaid
+    ) {
+        teamItemFacade.updateAssignedItem(teamBottariId, assignedItemId, request, ssaid);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/team-items/{id}")
