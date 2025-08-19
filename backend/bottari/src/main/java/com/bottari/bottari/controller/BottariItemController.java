@@ -55,6 +55,16 @@ public class BottariItemController implements BottariItemApiDocs {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/bottaries/{bottariId}/bottari-items/reset")
+    public ResponseEntity<Void> resetChecklist(
+            @PathVariable final Long bottariId,
+            @MemberIdentifier final String ssaid
+    ) {
+        bottariItemService.resetCheckList(bottariId, ssaid);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/bottari-items/{id}")
     @Override
     public ResponseEntity<Void> delete(
