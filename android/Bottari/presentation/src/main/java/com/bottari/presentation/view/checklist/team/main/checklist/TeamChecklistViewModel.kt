@@ -118,11 +118,12 @@ class TeamChecklistViewModel(
 
     private fun setTeamCheckList(checklistData: TeamBottariCheckList) {
         val newItems = checklistData.toUIModel()
-        updateState { copy(bottariItems = newItems) }
         val newExpandableList =
             generateExpandableTypeList(currentState.expandableItems, newItems)
         updateState {
             copy(
+                bottariItems = newItems,
+                originalBottariItems = newItems,
                 expandableItems = newExpandableList,
             )
         }
@@ -220,13 +221,36 @@ class TeamChecklistViewModel(
 
     private fun performItemCheck(items: List<TeamChecklistProductUiModel>) {
         launch {
+            val originalItems = currentState.originalBottariItems
+            val itemsToUpdate = mutableListOf<TeamChecklistProductUiModel>()
+
             val jobs =
-                items.map { item ->
-                    async { processItemCheck(item) }
+                items.mapNotNull { pendingItem ->
+                    val originalItem = originalItems.find { it.isSameItem(pendingItem) }
+                    if (originalItem == null || originalItem.isChecked == pendingItem.isChecked) {
+                        return@mapNotNull null
+                    }
+                    itemsToUpdate.add(pendingItem)
+                    async { processItemCheck(pendingItem) }
                 }
+
             jobs.awaitAll()
+            updateOriginalItems(itemsToUpdate)
             pendingCheckStatusMap.clear()
         }
+    }
+
+    private fun updateOriginalItems(updatedItems: List<TeamChecklistProductUiModel>) {
+        val currentOriginals = currentState.originalBottariItems.toMutableList()
+
+        updatedItems.forEach { updatedItem ->
+            val index = currentOriginals.indexOfFirst { it.isSameItem(updatedItem) }
+            if (index != -1) {
+                currentOriginals[index] = updatedItem
+            }
+        }
+
+        updateState { copy(originalBottariItems = currentOriginals) }
     }
 
     private suspend fun processItemCheck(item: TeamChecklistProductUiModel) {

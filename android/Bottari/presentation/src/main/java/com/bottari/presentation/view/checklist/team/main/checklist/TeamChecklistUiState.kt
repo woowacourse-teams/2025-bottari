@@ -5,6 +5,7 @@ import com.bottari.presentation.model.TeamChecklistProductUiModel
 
 data class TeamChecklistUiState(
     val isLoading: Boolean = false,
+    val originalBottariItems: List<TeamChecklistProductUiModel> = emptyList(),
     val bottariItems: List<TeamChecklistProductUiModel> = emptyList(),
     val expandableItems: List<TeamChecklistItem> = emptyList(),
     val swipedItems: List<TeamChecklistItem> = emptyList(),
