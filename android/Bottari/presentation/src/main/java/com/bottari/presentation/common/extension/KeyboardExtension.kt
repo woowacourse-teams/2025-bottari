@@ -16,7 +16,7 @@ fun Activity.showKeyboard(target: View) {
     if (target.requestFocus().not()) return
     try {
         WindowInsetsControllerCompat(window, target).show(WindowInsetsCompat.Type.ime())
-    } catch (_: Throwable) {
+    } catch (_: Exception) {
         imm().showSoftInput(target, InputMethodManager.SHOW_IMPLICIT)
     }
 }
@@ -26,7 +26,7 @@ fun Activity.hideKeyboard() {
     val current = currentFocus ?: findViewById(android.R.id.content) ?: return
     try {
         WindowInsetsControllerCompat(window, current).hide(WindowInsetsCompat.Type.ime())
-    } catch (_: Throwable) {
+    } catch (_: Exception) {
         imm().hideSoftInputFromWindow(current.windowToken, 0)
     }
 }
