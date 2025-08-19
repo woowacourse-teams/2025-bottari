@@ -1,7 +1,6 @@
 package com.bottari.presentation.view.join
 
 import android.content.ClipboardManager
-import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
