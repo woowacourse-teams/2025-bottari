@@ -110,7 +110,12 @@ class TeamBottariFragment :
         bottariId: Long,
         bottariTitle: String,
     ) {
-        val intent = TeamChecklistActivity.newIntent(requireContext(), bottariId, bottariTitle)
+        val intent =
+            TeamChecklistActivity.newIntent(
+                requireContext(),
+                bottariId,
+                bottariTitle,
+            )
         startActivity(intent)
     }
 

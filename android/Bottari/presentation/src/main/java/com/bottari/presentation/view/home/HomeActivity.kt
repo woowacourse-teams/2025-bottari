@@ -20,16 +20,20 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupUI()
+        setupUI(savedInstanceState)
         setupListener()
+    }
+
+    private fun setupUI(savedInstanceState: Bundle?) {
+        setBottomNavigationView()
         if (savedInstanceState == null) {
             binding.bnvHome.selectedItemId =
                 if (deeplinkFlag) R.id.menu_team_bottari else R.id.menu_personal_bottari
+            return
         }
-    }
-
-    private fun setupUI() {
-        setBottomNavigationView()
+        binding.bnvHome.menu.findItem(binding.bnvHome.selectedItemId)?.let {
+            changeToolbarTitle(it)
+        }
     }
 
     private fun setupListener() {

@@ -7,6 +7,7 @@ import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
 import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
+import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.JoinTeamBottariRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.data.testFixture.BOTTARI_ASSIGNED_ITEM_FIXTURE
@@ -825,5 +826,59 @@ class TeamBottariRepositoryImplTest {
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamAssignedItems(teamBottariId) }
+        }
+
+    @DisplayName("팀 보따리 물건 체크에 성공하면 Success를 반환한다")
+    @Test
+    fun fetchTeamCheckBottariItemsReturnsSuccessTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val type = "PERSONAL"
+            coEvery { dataSource.checkBottariItem(teamBottariId, ItemTypeRequest(type)) } returns Result.success(Unit)
+
+            // when
+            val result = repository.checkBottariItem(teamBottariId, type)
+
+            // then
+            assertSoftly(result) {
+                shouldBeSuccess()
+                getOrThrow().shouldBe(Unit)
+            }
+
+            // verify
+            coVerify(exactly = 1) {
+                dataSource.checkBottariItem(
+                    teamBottariId,
+                    ItemTypeRequest(type),
+                )
+            }
+        }
+
+    @DisplayName("팀 보따리 물건 체크에 실패하면 Failure를 반환한다")
+    @Test
+    fun fetchTeamCheckBottariItemsReturnsFailureTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val type = "ERROR"
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery { dataSource.checkBottariItem(teamBottariId, ItemTypeRequest(type)) } returns Result.failure(exception)
+
+            // when
+            val result = repository.checkBottariItem(teamBottariId, type)
+
+            // then
+            assertSoftly(result) {
+                result.shouldBeFailure { error -> error shouldBe exception }
+            }
+
+            // verify
+            coVerify(exactly = 1) {
+                dataSource.checkBottariItem(
+                    teamBottariId,
+                    ItemTypeRequest(type),
+                )
+            }
         }
 }

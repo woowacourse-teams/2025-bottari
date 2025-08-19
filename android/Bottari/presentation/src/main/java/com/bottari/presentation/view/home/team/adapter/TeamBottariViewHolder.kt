@@ -39,6 +39,7 @@ class TeamBottariViewHolder private constructor(
     private val timeFormat = getString(R.string.common_format_time_alarm)
     private val separator = getString(R.string.common_separator_text)
     private var bottariId: Long? = null
+    private var bottariTitle: String? = null
 
     init {
         setupClickListeners()
@@ -46,6 +47,7 @@ class TeamBottariViewHolder private constructor(
 
     fun bind(bottari: TeamBottariUiModel) {
         bottariId = bottari.id
+        bottariTitle = bottari.title
         with(binding) {
             clBottariItem.clipToOutline = true
             tvBottariTitle.text = formatTitleWithMemberCount(bottari.title, bottari.memberCount)
@@ -58,9 +60,9 @@ class TeamBottariViewHolder private constructor(
 
     private fun setupClickListeners() {
         itemView.setOnClickListener {
-            bottariId?.let { id ->
-                bottariEventListener.onBottariClick(id, binding.tvBottariTitle.text.toString())
-            }
+            val id = bottariId ?: return@setOnClickListener
+            val title = bottariTitle ?: return@setOnClickListener
+            bottariEventListener.onBottariClick(id, title)
         }
         binding.btnBottariMore.setOnClickListener(::showBottariOptionsPopup)
     }

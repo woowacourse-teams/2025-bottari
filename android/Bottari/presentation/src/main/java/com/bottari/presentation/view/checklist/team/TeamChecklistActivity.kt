@@ -4,17 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.addCallback
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commit
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityTeamChecklistBinding
-import com.bottari.presentation.view.checklist.team.checklist.adapter.TeamChecklistFragmentAdapter
+import com.bottari.presentation.view.checklist.team.main.TeamChecklistMainFragment
+import com.bottari.presentation.view.checklist.team.swipe.TeamSwipeChecklistFragment
 import com.bottari.presentation.view.home.HomeActivity
-import com.google.android.material.tabs.TabLayoutMediator
 
 class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(ActivityTeamChecklistBinding::inflate) {
-    private val adapter: TeamChecklistFragmentAdapter by lazy {
-        TeamChecklistFragmentAdapter(this, bottariId)
-    }
     private val bottariId: Long by lazy {
         intent.getLongExtra(
             EXTRA_BOTTARI_ID,
@@ -35,17 +36,15 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     }
 
     private fun setupUI() {
-        binding.tvBottariTitle.text = intent.getStringExtra(EXTRA_BOTTARI_TITLE)
-        binding.vpTeamBottari.adapter = adapter
-        TabLayoutMediator(binding.tlTeamBottari, binding.vpTeamBottari) { tab, position ->
-            tab.text =
-                when (position) {
-                    0 -> getString(R.string.team_checklist_tap_checklist_text)
-                    1 -> getString(R.string.team_checklist_tap_team_current_text)
-                    2 -> getString(R.string.team_checklist_tap_member_checklist_text)
-                    else -> throw IllegalArgumentException(ERROR_UNKNOWN_TYPE)
-                }
-        }.attach()
+        binding.tvBottariTitle.text = intent.getStringExtra(EXTRA_BOTTARI_TITLE).orEmpty()
+        if (bottariId == INVALID_BOTTARI_ID) {
+            finish()
+            return
+        }
+        if (supportFragmentManager.findFragmentById(R.id.fcv_team_checklist) == null) {
+            navigateToTeamChecklistMain()
+        }
+        handleToolbar()
     }
 
     private fun setupListener() {
@@ -56,9 +55,20 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
                 else -> supportFragmentManager.popBackStack()
             }
         }
+        supportFragmentManager.addOnBackStackChangedListener {
+            handleToolbar()
+        }
         binding.btnPrevious.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+        binding.btnSwipe.setOnClickListener {
+            navigateToSwipeChecklist()
+        }
+    }
+
+    private fun handleToolbar() {
+        val isOnMain = supportFragmentManager.backStackEntryCount == 0
+        binding.btnSwipe.isVisible = isOnMain
     }
 
     private fun navigateToHome() {
@@ -67,12 +77,46 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
         finish()
     }
 
+    private fun navigateToTeamChecklistMain() {
+        val current = supportFragmentManager.findFragmentById(R.id.fcv_team_checklist)
+        if (current is TeamChecklistMainFragment) return
+        val fragment = TeamChecklistMainFragment.newInstance(bottariId)
+        replaceChecklistFragment(fragment, false)
+    }
+
+    private fun navigateToSwipeChecklist() {
+        val current = supportFragmentManager.findFragmentById(R.id.fcv_team_checklist)
+        if (current is TeamSwipeChecklistFragment) return
+        val fragment = TeamSwipeChecklistFragment.newInstance(bottariId)
+        replaceChecklistFragment(fragment, true)
+    }
+
+    private fun replaceChecklistFragment(
+        fragment: Fragment,
+        addToBackStack: Boolean,
+    ) {
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            setSlideFastAnimation()
+            replace(R.id.fcv_team_checklist, fragment)
+            if (addToBackStack) addToBackStack(fragment::class.simpleName)
+        }
+    }
+
+    private fun FragmentTransaction.setSlideFastAnimation() {
+        setCustomAnimations(
+            R.anim.slide_in_right_fast,
+            R.anim.slide_out_right_fast,
+            R.anim.slide_in_right_fast,
+            R.anim.slide_out_right_fast,
+        )
+    }
+
     companion object {
         private const val INVALID_BOTTARI_ID = -1L
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
         private const val EXTRA_BOTTARI_TITLE = "EXTRA_BOTTARI_TITLE"
         private const val EXTRA_NOTIFICATION_FLAG = "EXTRA_NOTIFICATION_FLAG"
-        private const val ERROR_UNKNOWN_TYPE = "[ERROR] 알 수 없는 타입입니다."
 
         fun newIntent(
             context: Context,
