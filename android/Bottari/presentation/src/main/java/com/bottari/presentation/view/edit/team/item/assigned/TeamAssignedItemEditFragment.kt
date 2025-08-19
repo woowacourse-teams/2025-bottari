@@ -107,14 +107,18 @@ class TeamAssignedItemEditFragment :
     }
 
     private fun setupRvAssignedItem() {
-        binding.rvTeamAssignedItemEdit.adapter = itemAdapter
-        binding.rvTeamAssignedItemEdit.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvTeamAssignedItemEdit.apply {
+            adapter = itemAdapter
+            itemAnimator = null
+            layoutManager = LinearLayoutManager(requireContext())
+        }
     }
 
     private fun setupRvMember() {
         val decoration = ItemSpacingDecoration(requireContext().dpToPx(ITEM_SPACING_VALUE), true)
         binding.rvTeamAssignedItemMember.apply {
             adapter = memberAdapter
+            itemAnimator = null
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(decoration)

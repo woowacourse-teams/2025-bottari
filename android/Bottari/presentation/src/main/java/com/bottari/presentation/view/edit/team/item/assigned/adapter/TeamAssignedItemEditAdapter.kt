@@ -31,7 +31,7 @@ class TeamAssignedItemEditAdapter(
                 override fun areItemsTheSame(
                     oldItem: BottariItemUiModel,
                     newItem: BottariItemUiModel,
-                ): Boolean = oldItem.id == newItem.id
+                ): Boolean = oldItem.id == newItem.id && oldItem.isSelected == newItem.isSelected
             }
     }
 }
