@@ -5,17 +5,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record ChangeAssignedItemData(
-        Long assignedItemInfoId,
+        Long infoId,
         String name,
-        List<Long> assigneeIds,
+        List<Long> memberIds,
         LocalDateTime publishedAt
 ) {
 
     public static ChangeAssignedItemData from(final ChangeTeamAssignedItemEvent event) {
         return new ChangeAssignedItemData(
-                event.getAssignedItemInfoId(),
+                event.getInfoId(),
                 event.getName(),
-                event.getAssigneeIds(),
+                event.getMemberIds(),
                 event.getPublishedAt()
         );
     }

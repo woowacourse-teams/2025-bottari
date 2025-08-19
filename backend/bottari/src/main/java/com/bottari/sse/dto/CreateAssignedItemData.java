@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record CreateAssignedItemData(
-        Long id,
+        Long infoId,
         String name,
         List<Long> memberIds,
         LocalDateTime publishedAt
@@ -13,7 +13,7 @@ public record CreateAssignedItemData(
 
     public static CreateAssignedItemData from(final CreateAssignedItemEvent event) {
         return new CreateAssignedItemData(
-                event.getAssignedItemId(),
+                event.getInfoId(),
                 event.getName(),
                 event.getMemberIds(),
                 event.getPublishedAt()

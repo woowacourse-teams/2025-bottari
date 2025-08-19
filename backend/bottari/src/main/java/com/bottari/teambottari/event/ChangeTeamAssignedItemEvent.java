@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 public class ChangeTeamAssignedItemEvent extends CustomApplicationEvent {
 
     private final Long teamBottariId;
-    private final Long assignedItemInfoId;
+    private final Long infoId;
     private final String name;
-    private final List<Long> assigneeIds;
+    private final List<Long> memberIds;
 }
