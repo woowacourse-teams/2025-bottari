@@ -77,14 +77,14 @@ class ChecklistViewModel(
         updateState {
             copy(
                 bottariItems = itemUiModels,
-                originalBottariItems = itemUiModels.toList(),
+                initialItems = itemUiModels.toList(),
             )
         }
     }
 
     private fun performCheck(items: List<ChecklistItemUiModel>) {
         launch {
-            val originalItemsById = currentState.originalBottariItems.associateBy { it.id }
+            val originalItemsById = currentState.initialItems.associateBy { it.id }
 
             val jobs =
                 items.mapNotNull { pendingItem ->
@@ -111,7 +111,7 @@ class ChecklistViewModel(
 
     private fun revertItemCheckStatus(failedItemId: Long) {
         val originalItem =
-            currentState.originalBottariItems.find { it.id == failedItemId } ?: return
+            currentState.initialItems.find { it.id == failedItemId } ?: return
 
         updateState {
             val revertedItems =
@@ -126,13 +126,13 @@ class ChecklistViewModel(
     }
 
     private fun updateOriginalItem(updatedItem: ChecklistItemUiModel) {
-        val currentOriginals = currentState.originalBottariItems.toMutableList()
+        val currentOriginals = currentState.initialItems.toMutableList()
         val index = currentOriginals.indexOfFirst { it.id == updatedItem.id }
         if (index != -1) {
             currentOriginals[index] = updatedItem
         }
 
-        updateState { copy(originalBottariItems = currentOriginals) }
+        updateState { copy(initialItems = currentOriginals) }
     }
 
     private suspend fun executeCheckUseCase(item: ChecklistItemUiModel) =

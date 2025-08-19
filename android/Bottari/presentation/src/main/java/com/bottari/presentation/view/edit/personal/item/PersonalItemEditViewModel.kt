@@ -20,7 +20,7 @@ class PersonalItemEditViewModel(
         PersonalItemEditUiState(
             bottariId = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID),
             title = stateHandle[KEY_BOTTARI_TITLE] ?: "",
-            originalItems = stateHandle[KEY_BOTTARI_ITEMS] ?: emptyList(),
+            initialItems = stateHandle[KEY_BOTTARI_ITEMS] ?: emptyList(),
             items = stateHandle[KEY_BOTTARI_ITEMS] ?: emptyList(),
         ),
     ) {
@@ -33,7 +33,7 @@ class PersonalItemEditViewModel(
         if (itemName.isBlank() || isDuplicateItem(itemName)) return
 
         val itemToRestore =
-            currentState.originalItems.firstOrNull { originalItem ->
+            currentState.initialItems.firstOrNull { originalItem ->
                 originalItem.name == itemName && currentState.items.none { it.id == originalItem.id }
             }
 
@@ -62,7 +62,7 @@ class PersonalItemEditViewModel(
     }
 
     private fun calculateItemChanges(): ItemChanges {
-        val initialItems = currentState.originalItems
+        val initialItems = currentState.initialItems
         val finalItems = currentState.items
 
         val initialItemIds = initialItems.map { it.id }.toSet()
@@ -97,7 +97,7 @@ class PersonalItemEditViewModel(
             UiEventType.PERSONAL_BOTTARI_ITEM_EDIT,
             mapOf(
                 "bottari_id" to currentState.bottariId.toString(),
-                "old_items" to currentState.originalItems.toString(),
+                "old_items" to currentState.initialItems.toString(),
                 "new_items" to currentState.items.toString(),
             ),
         )
@@ -107,7 +107,7 @@ class PersonalItemEditViewModel(
         val restoredList = currentState.items + itemToRestore
 
         val originalOrderMap =
-            currentState.originalItems
+            currentState.initialItems
                 .withIndex()
                 .associate { (index, item) -> item.id to index }
 
