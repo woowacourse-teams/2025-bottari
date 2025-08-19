@@ -15,7 +15,6 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
 import com.bottari.presentation.model.BottariItemUiModel
-import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.util.PermissionUtil
 import com.bottari.presentation.util.PermissionUtil.requiredPermissions
 import com.bottari.presentation.view.common.alert.CustomAlertDialog
