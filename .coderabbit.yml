@@ -14,6 +14,8 @@ reviews:
     base_branches: [".*"]
   commit_status: true
   fail_commit_status: false
+  poem: true
+  sequence_diagram: true
 
   path_filters:
     - "!**/node_modules/**"
