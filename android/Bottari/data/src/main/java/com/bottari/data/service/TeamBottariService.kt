@@ -14,6 +14,7 @@ import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.JoinTeamBottariRequest
+import com.bottari.data.model.team.SaveTeamBottariAssignedItemRequest
 import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
 import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
 import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
@@ -23,6 +24,7 @@ import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface TeamBottariService {
@@ -131,4 +133,11 @@ interface TeamBottariService {
     suspend fun fetchTeamPersonalItems(
         @Path("teamBottariId") teamBottariId: Long,
     ): Response<List<FetchTeamPersonalItemResponse>>
+
+    @PUT("/team-bottaries/{teamBottariId}/assigned-items/{assignedItemId}")
+    suspend fun saveTeamAssignedItem(
+        @Path("teamBottariId") teamBottariId: Long,
+        @Path("assignedItemId") assignedItemId: Long,
+        @Body request: SaveTeamBottariAssignedItemRequest,
+    ): Response<Unit>
 }

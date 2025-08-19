@@ -4,6 +4,7 @@ import com.bottari.data.model.bottari.AlarmResponse
 import com.bottari.data.model.bottari.BottariResponse
 import com.bottari.data.model.bottari.FetchBottariesResponse
 import com.bottari.data.model.bottari.RoutineResponse
+import com.bottari.data.model.team.SaveTeamBottariAssignedItemRequest
 import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
 import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
 import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
@@ -106,4 +107,10 @@ val BOTTARI_ASSIGNED_ITEM_FIXTURE =
                 TeamMember(2L, "member 2"),
             ),
         ),
+    )
+
+val SAVE_TEAM_BOTTARI_ASSIGNED_ITEM_REQUEST_FIXTURE =
+    SaveTeamBottariAssignedItemRequest(
+        name = "new name",
+        assigneeIds = listOf(1L, 2L),
     )

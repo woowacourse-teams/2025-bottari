@@ -10,6 +10,7 @@ import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
 import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.JoinTeamBottariRequest
+import com.bottari.data.model.team.SaveTeamBottariAssignedItemRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
@@ -147,4 +148,16 @@ class TeamBottariRepositoryImpl(
         teamBottariRemoteDataSource
             .fetchTeamPersonalItems(teamBottariId)
             .mapCatching { personalItems -> personalItems.map { personalItem -> personalItem.toDomain() } }
+
+    override suspend fun saveTeamBottariAssignedItem(
+        teamBottariId: Long,
+        assignedItemId: Long,
+        name: String,
+        assigneeIds: List<Long>,
+    ): Result<Unit> =
+        teamBottariRemoteDataSource.saveTeamBottariAssignedItem(
+            teamBottariId,
+            assignedItemId,
+            SaveTeamBottariAssignedItemRequest(name, assigneeIds),
+        )
 }

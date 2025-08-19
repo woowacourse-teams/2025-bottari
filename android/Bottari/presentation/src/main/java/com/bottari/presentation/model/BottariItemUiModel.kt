@@ -8,4 +8,5 @@ data class BottariItemUiModel(
     val id: Long,
     val name: String,
     val type: BottariItemTypeUiModel,
+    val isSelected: Boolean = false,
 ) : Parcelable

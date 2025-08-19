@@ -31,7 +31,7 @@ class TeamAssignedItemEditMemberAdapter(
                 override fun areItemsTheSame(
                     oldItem: TeamMemberUiModel,
                     newItem: TeamMemberUiModel,
-                ): Boolean = oldItem.id == newItem.id
+                ): Boolean = oldItem.id == newItem.id && oldItem.isHost == newItem.isHost
             }
     }
 }

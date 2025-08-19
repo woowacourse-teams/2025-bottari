@@ -75,10 +75,16 @@ class TeamPersonalItemEditFragment :
     private fun handleUiEvent(uiEvent: TeamPersonalItemEditEvent) {
         when (uiEvent) {
             TeamPersonalItemEditEvent.FetchTeamPersonalItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
-            TeamPersonalItemEditEvent.CreateItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
-            TeamPersonalItemEditEvent.DeleteItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
-            TeamPersonalItemEditEvent.CreateItemSuccess ->
+            TeamPersonalItemEditEvent.CreateItemFailure,
+            TeamPersonalItemEditEvent.DeleteItemFailure,
+            -> requireView().showSnackbar(R.string.common_save_failure_text)
+
+            TeamPersonalItemEditEvent.CreateItemSuccess -> {
+                requireView().showSnackbar(R.string.common_save_success_text)
                 parentViewModel.updateInput(RESET_INPUT_TEXT)
+                val target = (adapter.itemCount - 1).coerceAtLeast(0)
+                binding.rvTeamPersonalItemEdit.smoothScrollToPosition(target)
+            }
         }
     }
 

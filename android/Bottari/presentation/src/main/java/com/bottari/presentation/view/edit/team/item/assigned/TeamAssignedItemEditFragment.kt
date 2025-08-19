@@ -33,9 +33,7 @@ class TeamAssignedItemEditFragment :
     }
     private val itemAdapter: TeamAssignedItemEditAdapter by lazy { TeamAssignedItemEditAdapter(this) }
     private val memberAdapter: TeamAssignedItemEditMemberAdapter by lazy {
-        TeamAssignedItemEditMemberAdapter(
-            this,
-        )
+        TeamAssignedItemEditMemberAdapter(this)
     }
 
     override fun onViewCreated(
@@ -47,21 +45,11 @@ class TeamAssignedItemEditFragment :
         setupUI()
     }
 
-    override fun onClickDelete(itemId: Long) {
-        viewModel.deleteItem(itemId)
-    }
+    override fun onClickAssignedItemDelete(itemId: Long) = viewModel.deleteItem(itemId)
 
-    override fun onClickAssignedItem(
-        itemName: String,
-        itemId: Long,
-    ) {
-        viewModel.selectAssignedItem(itemId)
-        parentViewModel.updateInput(itemName)
-    }
+    override fun onClickAssignedItem(itemId: Long) = viewModel.toggleEditState(itemId)
 
-    override fun onClickMember(memberId: Long) {
-        viewModel.selectMember(memberId)
-    }
+    override fun onClickMember(memberId: Long) = viewModel.selectMember(memberId)
 
     private fun setupObserver() {
         parentViewModel.createItemEvent.observe(viewLifecycleOwner, ::handleParentUiEvent)
@@ -71,45 +59,76 @@ class TeamAssignedItemEditFragment :
     }
 
     private fun setupUI() {
-        binding.rvTeamAssignedItemEdit.adapter = itemAdapter
-        binding.rvTeamAssignedItemEdit.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvTeamAssignedItemMember.adapter = memberAdapter
-        binding.rvTeamAssignedItemMember.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.rvTeamAssignedItemMember.addItemDecoration(
-            ItemSpacingDecoration(
-                requireContext().dpToPx(ITEM_SPACING_VALUE),
-                true,
-            ),
-        )
+        setupRvMember()
+        setupRvAssignedItem()
     }
 
     private fun handleParentUiState(uiState: TeamItemEditUiState) {
-        if (uiState.currentTabType !is BottariItemTypeUiModel.ASSIGNED) return
+        if (uiState.currentTabType !is BottariItemTypeUiModel.ASSIGNED) {
+            viewModel.saveSelectedState()
+            parentViewModel.updateSendCondition(true)
+            return
+        }
         viewModel.updateInput(uiState.itemInputText)
     }
 
     private fun handleParentUiEvent(uiEvent: TeamItemEditUiEvent?) {
         if (uiEvent !is TeamItemEditUiEvent.CreateTeamAssignedItem) return
-        viewModel.createItem()
+        viewModel.submitItem()
     }
 
     private fun handleUiState(uiState: TeamAssignedItemEditUiState) {
         toggleLoadingIndicator(uiState.isLoading)
-        parentViewModel.updateSendCondition(uiState.sendCondition)
         binding.emptyView.root.isVisible = uiState.isEmpty
+
+        parentViewModel.updateSendCondition(uiState.canSend)
+        parentViewModel.updateIsAlreadyExistState(uiState.isAlreadyExist)
+
         itemAdapter.submitList(uiState.assignedItems)
         memberAdapter.submitList(uiState.members)
     }
 
     private fun handleUiEvent(uiEvent: TeamAssignedItemEditEvent) {
         when (uiEvent) {
+            is TeamAssignedItemEditEvent.SelectAssignedItem -> parentViewModel.updateInput(uiEvent.itemName)
             TeamAssignedItemEditEvent.FetchTeamAssignedItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
-            TeamAssignedItemEditEvent.DeleteItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
-            TeamAssignedItemEditEvent.CreateItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
-            TeamAssignedItemEditEvent.CreateItemSuccess ->
-                parentViewModel.updateInput(RESET_INPUT_TEXT)
+            TeamAssignedItemEditEvent.DeleteItemFailure,
+            TeamAssignedItemEditEvent.CreateItemFailure,
+            TeamAssignedItemEditEvent.SaveItemFailure,
+            -> requireView().showSnackbar(R.string.common_save_failure_text)
+
+            TeamAssignedItemEditEvent.SaveItemSuccess -> handleItemEditSuccess()
+            TeamAssignedItemEditEvent.CreateItemSuccess,
+            -> {
+                handleItemEditSuccess()
+                val target = (itemAdapter.itemCount - 1).coerceAtLeast(0)
+                binding.rvTeamAssignedItemEdit.smoothScrollToPosition(target)
+            }
         }
+    }
+
+    private fun setupRvAssignedItem() {
+        binding.rvTeamAssignedItemEdit.apply {
+            adapter = itemAdapter
+            itemAnimator = null
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
+
+    private fun setupRvMember() {
+        val decoration = ItemSpacingDecoration(requireContext().dpToPx(ITEM_SPACING_VALUE), true)
+        binding.rvTeamAssignedItemMember.apply {
+            adapter = memberAdapter
+            itemAnimator = null
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            addItemDecoration(decoration)
+        }
+    }
+
+    private fun handleItemEditSuccess() {
+        requireView().showSnackbar(R.string.common_save_success_text)
+        parentViewModel.updateInput(RESET_INPUT_TEXT)
     }
 
     companion object {

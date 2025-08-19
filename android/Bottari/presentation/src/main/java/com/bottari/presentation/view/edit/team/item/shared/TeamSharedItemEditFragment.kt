@@ -74,11 +74,17 @@ class TeamSharedItemEditFragment :
 
     private fun handleUiEvent(uiEvent: TeamSharedItemEditEvent) {
         when (uiEvent) {
-            TeamSharedItemEditEvent.FetchTeamPersonalItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
-            TeamSharedItemEditEvent.DeleteItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
-            TeamSharedItemEditEvent.CreateItemFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
-            TeamSharedItemEditEvent.CreateItemSuccuss ->
+            TeamSharedItemEditEvent.FetchTeamSharedItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
+            TeamSharedItemEditEvent.DeleteItemFailure,
+            TeamSharedItemEditEvent.CreateItemFailure,
+            -> requireView().showSnackbar(R.string.common_save_failure_text)
+
+            TeamSharedItemEditEvent.CreateItemSuccuss -> {
+                requireView().showSnackbar(R.string.common_save_success_text)
                 parentViewModel.updateInput(RESET_INPUT_TEXT)
+                val target = (adapter.itemCount - 1).coerceAtLeast(0)
+                binding.rvTeamSharedItemEdit.smoothScrollToPosition(target)
+            }
         }
     }
 
