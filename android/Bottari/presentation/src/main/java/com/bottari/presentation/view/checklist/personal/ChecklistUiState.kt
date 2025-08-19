@@ -26,6 +26,9 @@ data class ChecklistUiState(
     val isAllSwiped: Boolean
         get() = bottariItems.isNotEmpty() && nonSwipedItems.isEmpty()
 
+    val isDone: Boolean
+        get() = isAllSwiped || isItemsEmpty
+
     private val nonCheckedItems: List<ChecklistItemUiModel> by lazy {
         bottariItems.filterNot { it.isChecked }
     }
