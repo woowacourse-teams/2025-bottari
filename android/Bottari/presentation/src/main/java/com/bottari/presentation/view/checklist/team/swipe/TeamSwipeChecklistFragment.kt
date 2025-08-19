@@ -75,7 +75,7 @@ class TeamSwipeChecklistFragment :
                 currentItem.type,
             )
         }
-        viewModel.addSwipedItem(currentItem.id)
+        viewModel.addSwipedItem(currentItem)
     }
 
     private fun setupObserver() {

@@ -86,11 +86,11 @@ class TeamChecklistViewModel(
     }
 
     fun resetSwipeState() {
-        updateState { copy(swipedItemIds = emptySet()) }
+        updateState { copy(swipedItemItems = emptyList()) }
     }
 
-    fun addSwipedItem(itemId: Long) {
-        updateState { copy(swipedItemIds = this.swipedItemIds + itemId) }
+    fun addSwipedItem(item: TeamChecklistItem) {
+        updateState { copy(swipedItemItems = this.swipedItemItems + item) }
     }
 
     private fun List<TeamChecklistItem>.toggleItemInList(item: TeamChecklistProductUiModel): List<TeamChecklistItem> =

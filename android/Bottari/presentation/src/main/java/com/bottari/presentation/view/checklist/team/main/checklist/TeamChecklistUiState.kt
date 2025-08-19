@@ -7,7 +7,7 @@ data class TeamChecklistUiState(
     val isLoading: Boolean = false,
     val bottariItems: List<TeamChecklistProductUiModel> = emptyList(),
     val expandableItems: List<TeamChecklistItem> = emptyList(),
-    val swipedItemIds: Set<Long> = emptySet(),
+    val swipedItemItems: List<TeamChecklistItem> = emptyList(),
 ) {
     val totalQuantity: Int
         get() = bottariItems.size
@@ -16,7 +16,7 @@ data class TeamChecklistUiState(
         get() = bottariItems.count { it.isChecked }
 
     val nonSwipedItems: List<TeamChecklistProductUiModel> by lazy {
-        nonCheckedItems.filterNot { it.id in swipedItemIds }
+        nonCheckedItems.filterNot { it in swipedItemItems }
     }
 
     val isItemsEmpty: Boolean
