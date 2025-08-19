@@ -101,6 +101,10 @@
     <string name="common_report_dialog_submit_success_text">신고가 정상적으로 접수되었어요</string>
     <string name="common_report_dialog_submit_failure_text">신고 접수에 실패했어요</string>
 
+    <!-- Dialog: 체크리스트 초기화 다이얼로그 텍스트 -->
+    <string name="reset_bottari_items_check_state_dialog_title_text">체크리스트 초기화</string>
+    <string name="reset_bottari_items_check_state_dialog_description_text">체크 상태를 모두 지우시겠어요?</string>
+
     <!--  Common: 보따리 알림  -->
     <string name="common_bottari_notification_channel_name">나의 보따리 알림</string>
     <string name="common_team_bottari_notification_channel_name">우리 보따리 알림</string>

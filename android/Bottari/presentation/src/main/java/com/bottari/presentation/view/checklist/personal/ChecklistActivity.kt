@@ -16,6 +16,9 @@ import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityChecklistBinding
 import com.bottari.presentation.view.checklist.personal.main.MainChecklistFragment
 import com.bottari.presentation.view.checklist.personal.swipe.SwipeChecklistFragment
+import com.bottari.presentation.view.common.alert.CustomAlertDialog
+import com.bottari.presentation.view.common.alert.DialogListener
+import com.bottari.presentation.view.common.alert.DialogPresetType
 import com.bottari.presentation.view.home.HomeActivity
 import java.time.LocalDateTime
 
@@ -78,7 +81,7 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
             updateToolbar(isMainChecklist())
         }
         binding.btnSwipe.setOnClickListener { navigateToSwipeChecklist() }
-        binding.btnReset.setOnClickListener { viewModel.resetItemsCheckState() }
+        binding.btnReset.setOnClickListener { showResetChecklistDialog() }
         supportFragmentManager.addOnBackStackChangedListener {
             updateToolbar(isMainChecklist())
         }
@@ -141,6 +144,18 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
             R.anim.slide_in_right_fast,
             R.anim.slide_out_right_fast,
         )
+    }
+
+    private fun showResetChecklistDialog() {
+        CustomAlertDialog
+            .newInstance(DialogPresetType.RESET_BOTTARI_ITEMS_CHECK_STATE)
+            .setDialogListener(
+                object : DialogListener {
+                    override fun onClickPositive() = viewModel.resetItemsCheckState()
+
+                    override fun onClickNegative() = Unit
+                },
+            ).show(supportFragmentManager, DialogPresetType.RESET_BOTTARI_ITEMS_CHECK_STATE.name)
     }
 
     companion object {
