@@ -1,4 +1,4 @@
-name: deploy-test-for-backup-server
+name: deploy-backup-to-latest-version-test
 
 on:
   workflow_dispatch: {}
