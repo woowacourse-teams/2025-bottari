@@ -74,21 +74,24 @@ class ChecklistViewModel(
 
     private fun setChecklist(items: List<ChecklistItem>) {
         val itemUiModels = items.map { it.toUiModel() }
-        updateState { copy(bottariItems = itemUiModels, originalBottariItems = itemUiModels) }
+        updateState {
+            copy(
+                bottariItems = itemUiModels,
+                originalBottariItems = itemUiModels.toList(),
+            )
+        }
     }
 
     private fun performCheck(items: List<ChecklistItemUiModel>) {
         launch {
-            val originalItems = currentState.originalBottariItems
-            val itemsToUpdate = mutableListOf<ChecklistItemUiModel>()
+            val originalItemsById = currentState.originalBottariItems.associateBy { it.id }
 
             val jobs =
                 items.mapNotNull { pendingItem ->
-                    val originalItem = originalItems.find { it.id == pendingItem.id }
+                    val originalItem = originalItemsById[pendingItem.id]
                     if (originalItem == null || originalItem.isChecked == pendingItem.isChecked) {
                         return@mapNotNull null
                     }
-                    itemsToUpdate.add(pendingItem)
                     async { processItemCheck(pendingItem) }
                 }
             jobs.awaitAll()

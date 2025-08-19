@@ -99,6 +99,10 @@ class PersonalItemEditFragment :
         binding.rvPersonalItemEdit.adapter = adapter
         binding.rvPersonalItemEdit.layoutManager = LinearLayoutManager(requireContext())
         binding.root.applyImeBottomPadding()
+        onBackPressedCallback =
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, false) {
+                showExitConfirmationDialog()
+            }
     }
 
     private fun setupListener() {
@@ -115,10 +119,6 @@ class PersonalItemEditFragment :
             addItemFromInput()
             true
         }
-        onBackPressedCallback =
-            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-                showExitConfirmationDialog()
-            }
     }
 
     private fun addItemFromInput() {
@@ -161,7 +161,9 @@ class PersonalItemEditFragment :
     }
 
     private fun handleDialog(isNotEqual: Boolean) {
-        onBackPressedCallback.isEnabled = isNotEqual
+        if (::onBackPressedCallback.isInitialized) {
+            onBackPressedCallback.isEnabled = isNotEqual
+        }
     }
 
     private fun showExitConfirmationDialog() {
