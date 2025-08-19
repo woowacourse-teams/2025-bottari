@@ -43,4 +43,15 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
             final Long teamBottariId,
             final Long memberId
     );
+
+    @Query("""
+            SELECT tm
+            FROM TeamMember tm
+            WHERE tm.teamBottari.id = :teamBottariId
+              AND tm.member.id IN :memberIds
+            """)
+    List<TeamMember> findAllByTeamBottariIdAndMemberIds(
+            final Long teamBottariId,
+            final List<Long> memberIds
+    );
 }

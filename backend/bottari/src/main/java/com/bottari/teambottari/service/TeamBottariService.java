@@ -13,6 +13,7 @@ import com.bottari.teambottari.domain.TeamPersonalItem;
 import com.bottari.teambottari.domain.TeamSharedItem;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
+import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.dto.ReadTeamBottariPreviewResponse;
 import com.bottari.teambottari.dto.ReadTeamBottariResponse;
 import com.bottari.teambottari.repository.TeamAssignedItemInfoRepository;
@@ -133,6 +134,7 @@ public class TeamBottariService {
                             null // TODO: 알람 매핑 방향 의논 필요, 우선 null 반환
                     );
                 })
+                .sorted((a, b) -> Long.compare(b.id(), a.id()))
                 .toList();
     }
 
