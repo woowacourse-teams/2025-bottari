@@ -104,8 +104,25 @@ class ChecklistViewModel(
             .onSuccess {
                 updateOriginalItem(item)
             }.onFailure {
+                revertItemCheckStatus(item.id)
                 emitEvent(ChecklistUiEvent.CheckItemFailure)
             }
+    }
+
+    private fun revertItemCheckStatus(failedItemId: Long) {
+        val originalItem =
+            currentState.originalBottariItems.find { it.id == failedItemId } ?: return
+
+        updateState {
+            val revertedItems =
+                bottariItems.map { uiItem ->
+                    if (uiItem.id == failedItemId) {
+                        return@map uiItem.copy(isChecked = originalItem.isChecked)
+                    }
+                    uiItem
+                }
+            copy(bottariItems = revertedItems)
+        }
     }
 
     private fun updateOriginalItem(updatedItem: ChecklistItemUiModel) {
