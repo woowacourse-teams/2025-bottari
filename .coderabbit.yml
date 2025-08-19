@@ -1,0 +1,74 @@
+# .coderabbit.yml
+
+language: "ko-KR"
+early_access: false
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches: [".*"]
+    suggestions:
+      commit: false
+      auto_fix: false
+  status_checks:
+    fail_commit_status: false
+
+path_filters:
+  - "!**/node_modules/**"
+  - "!**/.gradle/**"
+  - "!**/.idea/**"
+  - "!**/build/**"
+  - "!**/dist/**"
+  - "!**/out/**"
+  - "!**/*.log"
+  - "!**/coverage/**"
+  - "backend/**"
+  - "android/**"
+
+instructions:
+  - paths: ["backend/**"]
+    body: |
+      # Backend 규칙
+      - 파일 끝 개행
+      - class 선언 후 개행, static/비static 구분
+      - record 필드 개행, 바디 없으면 개행 X
+      - 모든 파라미터·지역변수 final, 파라미터 개행
+      - 조건문: 조건식/메서드만 사용 (boolean 추출 X)
+      - 테스트: 메서드명 `메서드명_테스트케이스`, @DisplayName, given/when/then, @Nested, @Autowired 사이 공백
+      - Controller 및 Domain 테스트는 @Nested 적용하지 않아도 됨
+      - Lombok 어노테이션은 다른 것보다 하위
+      - DTO 이름: 동사+도메인+Request/Response
+      - @Transactional: 메서드 레벨
+      - 메서드 순서: public static → private static → public → private
+      - 내부 메서드 정렬: RCUD
+      - equals: instanceOf + getter
+      - 쿼리/멀티라인 문자열: Text Blocks
+
+  - paths: ["android/**"]
+    body: |
+      # Android Kotlin 규칙
+      - 람다 변수명 명시, 3줄↑ 중복 시 수신 객체 지정 람다
+      - 파라미터 2개↑ 줄바꿈
+      - if: 한 줄이면 중괄호 생략
+      - when: 조건 여러 개면 줄바꿈
+      - onViewCreated: setupObserver → setupUI → setupListener 순서, 선언도 호출 순서대로
+      - 패키지명: 소문자, `_` 금지
+      - 함수명: setupXXX/fetchXXX/saveXXX/getXXX/findXXX, 복수는 s
+      - ViewModel: SavedStateHandle 첫 인자
+      - UseCase: 단일 기능, 리스트 반환은 GetXXXListUseCase + getXXXs
+
+  - paths: ["android/**"]
+    body: |
+      # Android XML 규칙
+      ## Layout: activity_/fragment_/dialog_/view_/item_/layout_
+      ## ID: tv_/iv_/cb_/rv_/et_/pb_/fl_/nsv_/space_/switch_/custom_view
+      ## Drawable: btn_/ic_/bg_/img_/div_ + 상태 suffix(_normal/_pressed/…)
+      ## Dimension: space_x_small/… , height_xxx, size_xxx
+      ## String: all_ prefix(공통), \n 줄바꿈
+      ## Theme/Style: theme.xml, style.xml, 항상 parent 지정
+      - Base.Theme → BottariTheme 구조 사용
