@@ -154,7 +154,21 @@ class ChecklistViewModel(
             checkBottariItemUseCase(item.id)
         } else {
             unCheckBottariItemUseCase(item.id)
+            val result = toggleItemCheck(item)
+            result.onFailure { restoreItem(item) }
         }
+
+    private suspend fun toggleItemCheck(item: ChecklistItemUiModel) =
+        if (item.isChecked) {
+            checkBottariItemUseCase(item.id)
+        } else {
+            unCheckBottariItemUseCase(item.id)
+        }
+
+    private fun restoreItem(item: ChecklistItemUiModel) {
+        val restored = currentState.bottariItems.map { if (it.id == item.id) item else it }
+        updateState { copy(bottariItems = restored) }
+    }
 
     private fun recordPendingCheckStatus(item: ChecklistItemUiModel) {
         pendingCheckStatusMap[item.id] = item

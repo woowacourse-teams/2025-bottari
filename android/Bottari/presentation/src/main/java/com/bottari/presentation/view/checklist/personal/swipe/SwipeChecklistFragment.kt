@@ -81,7 +81,6 @@ class SwipeChecklistFragment :
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
                 ChecklistUiEvent.FetchChecklistFailure -> requireView().showSnackbar(R.string.checklist_fetch_failure_text)
-                ChecklistUiEvent.CheckItemFailure -> requireView().showSnackbar(R.string.checklist_check_failure_text)
                 ChecklistUiEvent.ResetCheckStateFailure -> requireView().showSnackbar(R.string.checklist_reset_failure_text)
             }
         }
