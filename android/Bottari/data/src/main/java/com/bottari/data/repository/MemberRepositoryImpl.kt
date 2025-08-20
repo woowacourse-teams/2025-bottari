@@ -23,7 +23,10 @@ class MemberRepositoryImpl(
         }.mapCatching { memberId ->
             RegisterMemberRequest(memberId, fcmToken)
         }.mapCatching { registerMemberRequest ->
-            memberRemoteDataSource.registerMember(registerMemberRequest).getOrThrow()
+            memberRemoteDataSource
+                .registerMember(registerMemberRequest)
+                .getOrThrow()
+                ?.also { memberIdentifierLocalDataSource.saveMemberId(it) }
         }
 
     override suspend fun saveMemberNickname(nickname: Nickname): Result<Unit> =
@@ -33,9 +36,16 @@ class MemberRepositoryImpl(
         memberRemoteDataSource
             .checkRegisteredMember()
             .mapCatching { it.toDomain() }
+            .onSuccess { registeredMember ->
+                if (registeredMember.isRegistered) {
+                    registeredMember.id?.let { memberIdentifierLocalDataSource.saveMemberId(it) }
+                }
+            }
 
     override suspend fun getMemberIdentifier(): Result<String> =
         withContext(coroutineDispatcher) {
             memberIdentifierLocalDataSource.getMemberIdentifier()
         }
+
+    override fun getMemberId(): Result<Long> = memberIdentifierLocalDataSource.getMemberId()
 }

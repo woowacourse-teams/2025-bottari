@@ -17,13 +17,14 @@ object TeamMembersMapper {
                 }
         }
 
-    fun TeamMemberStatus.toUiModel(): TeamMemberStatusUiModel =
+    fun TeamMemberStatus.toUiModel(myId: Long): TeamMemberStatusUiModel =
         TeamMemberStatusUiModel(
             member = TeamMemberUiModel(id, nickname.value, isHost),
             totalItemsCount = totalItemsCount,
             checkedItemsCount = checkedItemsCount,
             sharedItems = sharedItems.map { sharedItem -> sharedItem.toUiModel() },
             assignedItems = assignedItems.map { assignedItem -> assignedItem.toUiModel() },
+            isMe = id == myId,
         )
 
     fun TeamMember.toUiModel(): TeamMemberUiModel = TeamMemberUiModel(memberId, nickname, false)

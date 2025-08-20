@@ -6,6 +6,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.presentation.common.base.BaseViewModel
@@ -16,18 +17,24 @@ class TeamMembersStatusViewModel(
     stateHandle: SavedStateHandle,
     private val fetchTeamMembersStatusUseCase: FetchTeamMembersStatusUseCase,
     private val sendRemindByMemberMessageUseCase: SendRemindByMemberMessageUseCase,
+    private val getMemberIdUseCase: GetMemberIdUseCase,
 ) : BaseViewModel<TeamMembersStatusUiState, TeamMembersStatusUiEvent>(
         TeamMembersStatusUiState(),
     ) {
     private val teamBottariId: Long =
         stateHandle[KEY_TEAM_BOTTARI_ID] ?: error(ERROR_REQUIRE_TEAM_BOTTARI_ID)
 
+    init {
+        getMemberIdUseCase()
+            .onSuccess { updateState { copy(myId = it) } }
+    }
+
     fun fetchTeamMembersStatus() {
         updateState { copy(isLoading = true) }
         launch {
             fetchTeamMembersStatusUseCase(teamBottariId)
                 .onSuccess { membersStatus ->
-                    updateState { copy(membersStatus = membersStatus.map { memberStatus -> memberStatus.toUiModel() }) }
+                    updateState { copy(membersStatus = membersStatus.map { memberStatus -> memberStatus.toUiModel(currentState.myId) }) }
                 }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure) }
             updateState { copy(isLoading = false) }
         }
@@ -60,6 +67,7 @@ class TeamMembersStatusViewModel(
                         stateHandle = stateHandle,
                         fetchTeamMembersStatusUseCase = UseCaseProvider.fetchTeamMembersStatusUseCase,
                         sendRemindByMemberMessageUseCase = UseCaseProvider.sendRemindByMemberMessageUseCase,
+                        getMemberIdUseCase = UseCaseProvider.getMemberIdUseCase,
                     )
                 }
             }
