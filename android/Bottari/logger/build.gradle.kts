@@ -6,7 +6,7 @@ plugins {
 android {
     namespace = "com.bottari.logger"
     compileSdk =
-        libs.versions.complieSdk
+        libs.versions.compileSdk
             .get()
             .toInt()
 

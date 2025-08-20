@@ -7,7 +7,7 @@ plugins {
 android {
     namespace = "com.bottari.di"
     compileSdk =
-        libs.versions.complieSdk
+        libs.versions.compileSdk
             .get()
             .toInt()
 

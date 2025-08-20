@@ -3,7 +3,7 @@
 versionName = "1.2.0"
 minSdk = "28"
 targetSdk = "35"
-complieSdk = "35"
+compileSdk = "35"
 versionCode = "7"
 
 # Android Gradle Plugin & Kotlin
