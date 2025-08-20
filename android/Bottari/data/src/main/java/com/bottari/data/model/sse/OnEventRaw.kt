@@ -1,7 +1,6 @@
 package com.bottari.data.model.sse
 
 import com.bottari.data.common.util.LocalDateTimeSerializer
-import com.bottari.logger.BottariLogger
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -22,7 +21,6 @@ data class OnEventRaw(
 )
 
 fun OnEventRaw.toEvent(json: Json): EventStateResponse.OnEventResponse {
-    BottariLogger.debug("resource: $resource, event: $event")
     val eventData: EventDataResponse =
         when (resource to event) {
             ResourceResponse.TEAM_MEMBER to EventResponse.CREATE ->
