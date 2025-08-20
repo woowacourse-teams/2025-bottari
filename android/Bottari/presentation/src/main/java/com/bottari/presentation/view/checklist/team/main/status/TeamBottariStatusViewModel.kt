@@ -3,10 +3,10 @@ package com.bottari.presentation.view.checklist.team.main.status
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.domain.model.team.TeamBottariStatus
 import com.bottari.domain.usecase.team.FetchTeamStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
@@ -16,7 +16,6 @@ import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.TeamBottariProductStatusUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
 import com.bottari.presentation.model.TeamProductStatusItem
-import kotlinx.coroutines.launch
 
 class TeamBottariStatusViewModel(
     stateHandle: SavedStateHandle,
@@ -37,41 +36,29 @@ class TeamBottariStatusViewModel(
     }
 
     fun sendRemindByItem() {
-        viewModelScope.launch {
-            sendRemindByItemUseCase(
-                currentState.selectedProduct?.id ?: return@launch,
-                currentState.selectedProduct?.type.toString(),
-            ).onSuccess {
-                emitEvent(TeamBottariStatusUiEvent.SendRemindSuccess)
-            }.onFailure {
-                emitEvent(TeamBottariStatusUiEvent.SendRemindFailure)
-            }
+        val selectedProduct =
+            currentState.selectedProduct ?: return emitEvent(
+                TeamBottariStatusUiEvent.SendRemindFailure,
+            )
+        val itemId = selectedProduct.id
+        val itemType = selectedProduct.type.toTypeString()
+
+        launch {
+            sendRemindByItemUseCase(itemId, itemType)
+                .onSuccess { emitEvent(TeamBottariStatusUiEvent.SendRemindSuccess) }
+                .onFailure { emitEvent(TeamBottariStatusUiEvent.SendRemindFailure) }
         }
     }
 
     private fun fetchTeamStatus() {
-        viewModelScope.launch {
+        updateState { copy(isLoading = true) }
+
+        launch {
             fetchTeamStatusUseCase(teamBottariId)
-                .onSuccess { teamBottariStatus ->
-                    val sharedItems: List<TeamBottariProductStatusUiModel> =
-                        teamBottariStatus.sharedItems.map { it.toSharedUiModel() }
-                    val assignedItems =
-                        teamBottariStatus.assignedItems.map { it.toAssignedUiModel() }
-                    val teamStatusListItems = generateTeamItemsList(sharedItems, assignedItems)
-                    updateState {
-                        copy(
-                            sharedItems = sharedItems,
-                            assignedItems = assignedItems,
-                            teamChecklistItems = teamStatusListItems,
-                            selectedProduct =
-                                teamStatusListItems
-                                    .filterIsInstance<TeamBottariProductStatusUiModel>()
-                                    .firstOrNull(),
-                        )
-                    }
-                }.onFailure {
-                    emitEvent(TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure)
-                }
+                .onSuccess { teamBottariStatus -> handleFetchTeamStatusSuccess(teamBottariStatus) }
+                .onFailure { emitEvent(TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure) }
+
+            updateState { copy(isLoading = false) }
         }
     }
 
@@ -85,6 +72,22 @@ class TeamBottariStatusViewModel(
             add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.ASSIGNED()))
             addAll(assignedItems)
         }
+
+    private fun handleFetchTeamStatusSuccess(teamBottariStatus: TeamBottariStatus) {
+        val sharedItems = teamBottariStatus.sharedItems.map { it.toSharedUiModel() }
+        val assignedItems = teamBottariStatus.assignedItems.map { it.toAssignedUiModel() }
+        val teamStatusListItems = generateTeamItemsList(sharedItems, assignedItems)
+        val selectedProduct =
+            teamStatusListItems.filterIsInstance<TeamBottariProductStatusUiModel>().firstOrNull()
+        updateState {
+            copy(
+                sharedItems = sharedItems,
+                assignedItems = assignedItems,
+                teamChecklistItems = teamStatusListItems,
+                selectedProduct = selectedProduct,
+            )
+        }
+    }
 
     companion object {
         private const val KEY_ITEM_BOTTARI_ID = "KEY_ITEM_BOTTARI_ID"
