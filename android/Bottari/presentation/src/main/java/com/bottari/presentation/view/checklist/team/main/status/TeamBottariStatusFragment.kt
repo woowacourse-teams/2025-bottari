@@ -3,6 +3,7 @@ package com.bottari.presentation.view.checklist.team.main.status
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
@@ -45,6 +46,8 @@ class TeamBottariStatusFragment :
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            binding.btnTeamBottariItemSendRemind.isVisible =
+                state.selectedProduct?.isAllChecked?.not() ?: false
             teamBottariProductStatusDetailAdapter.submitList(state.selectedProduct?.memberCheckStatus)
             binding.tvTeamBottariItemStatusTitle.text = state.selectedProduct?.name ?: ""
             teamBottariProductStatusAdapter.submitList(state.teamChecklistItems)
