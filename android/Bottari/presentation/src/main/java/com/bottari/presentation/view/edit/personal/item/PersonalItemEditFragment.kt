@@ -83,6 +83,7 @@ class PersonalItemEditFragment :
             handleItemState(uiState.items)
             handleEmptyView(uiState.items.isEmpty())
             handleDialog(uiState.isDifferent)
+            handleSaveBtn(uiState.isDifferent)
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
@@ -160,10 +161,14 @@ class PersonalItemEditFragment :
         binding.emptyView.clPersonalBottariItemEmptyView.isVisible = isEmpty
     }
 
-    private fun handleDialog(isNotEqual: Boolean) {
+    private fun handleDialog(isDifferent: Boolean) {
         if (::onBackPressedCallback.isInitialized) {
-            onBackPressedCallback.isEnabled = isNotEqual
+            onBackPressedCallback.isEnabled = isDifferent
         }
+    }
+
+    private fun handleSaveBtn(isDifferent: Boolean) {
+        binding.btnConfirm.isVisible = isDifferent
     }
 
     private fun showExitConfirmationDialog() {
