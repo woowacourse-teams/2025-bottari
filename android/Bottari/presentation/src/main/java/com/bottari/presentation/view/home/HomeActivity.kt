@@ -9,11 +9,10 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.applyWindowInsetsWithBottomNavigation
 import com.bottari.presentation.databinding.ActivityHomeBinding
+import com.bottari.presentation.view.home.more.MoreFragment
 import com.bottari.presentation.view.home.personal.BottariFragment
-import com.bottari.presentation.view.home.profile.ProfileFragment
 import com.bottari.presentation.view.home.team.TeamBottariFragment
 import com.bottari.presentation.view.home.template.TemplateFragment
-import com.bottari.presentation.view.setting.SettingActivity
 
 class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::inflate) {
     private val deeplinkFlag: Boolean by lazy { intent.getBooleanExtra(KEY_DEEPLINK, false) }
@@ -21,7 +20,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupUI(savedInstanceState)
-        setupListener()
     }
 
     private fun setupUI(savedInstanceState: Bundle?) {
@@ -36,10 +34,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
         }
     }
 
-    private fun setupListener() {
-        binding.btnSetting.setOnClickListener { startActivity(SettingActivity.newIntent(this)) }
-    }
-
     private fun setBottomNavigationView() {
         binding.root.applyWindowInsetsWithBottomNavigation()
         binding.bnvHome.setOnItemSelectedListener { item ->
@@ -47,7 +41,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
                 R.id.menu_personal_bottari -> showFragment(BottariFragment::class.java)
                 R.id.menu_team_bottari -> showFragment(TeamBottariFragment::class.java)
                 R.id.menu_template -> showFragment(TemplateFragment::class.java)
-                R.id.menu_more -> showFragment(ProfileFragment::class.java)
+                R.id.menu_more -> showFragment(MoreFragment::class.java)
             }
             changeToolbarTitle(item)
             true

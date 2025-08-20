@@ -1,6 +1,6 @@
-package com.bottari.presentation.view.home.profile
+package com.bottari.presentation.view.home.more
 
-data class ProfileUiState(
+data class MoreUiState(
     val isLoading: Boolean = false,
     val nickname: String = "",
     val editingNickname: String = "",

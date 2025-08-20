@@ -1,22 +1,25 @@
-package com.bottari.presentation.view.home.profile
+package com.bottari.presentation.view.home.more
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import com.bottari.presentation.BuildConfig
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
-import com.bottari.presentation.databinding.FragmentProfileBinding
+import com.bottari.presentation.databinding.FragmentMoreBinding
 
-class ProfileFragment :
-    BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate),
+class MoreFragment :
+    BaseFragment<FragmentMoreBinding>(FragmentMoreBinding::inflate),
     TextWatcher {
-    private val viewModel: ProfileViewModel by viewModels { ProfileViewModel.Factory() }
+    private val viewModel: MoreViewModel by viewModels { MoreViewModel.Factory() }
     private val inputManager: InputMethodManager by lazy {
         requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }
@@ -60,10 +63,10 @@ class ProfileFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                ProfileUiEvent.FetchMemberInfoFailure -> requireView().showSnackbar(R.string.profile_fetch_failure_text)
-                ProfileUiEvent.SaveMemberNicknameSuccess -> requireView().showSnackbar(R.string.profile_nickname_save_success_text)
-                ProfileUiEvent.SaveMemberNicknameFailure -> requireView().showSnackbar(R.string.profile_nickname_save_failure_text)
-                ProfileUiEvent.InvalidNicknameRule -> requireView().showSnackbar(R.string.profile_invalid_nickname_rule_text)
+                MoreUiEvent.FetchMemberInfoFailure -> requireView().showSnackbar(R.string.profile_fetch_failure_text)
+                MoreUiEvent.SaveMemberNicknameSuccess -> requireView().showSnackbar(R.string.profile_nickname_save_success_text)
+                MoreUiEvent.SaveMemberNicknameFailure -> requireView().showSnackbar(R.string.profile_nickname_save_failure_text)
+                MoreUiEvent.InvalidNicknameRule -> requireView().showSnackbar(R.string.profile_invalid_nickname_rule_text)
             }
         }
     }
@@ -71,6 +74,8 @@ class ProfileFragment :
     private fun setupListener() {
         setupNicknameEditListener()
         setupNicknameEditButtonClickListener()
+        binding.btnPrivacyPolicy.setOnClickListener { launchInBrowser(BuildConfig.PRIVACY_POLICY_URL) }
+        binding.btnUserFeedback.setOnClickListener { launchInBrowser(BuildConfig.USER_FEEDBACK_URL) }
     }
 
     private fun setupNicknameEditListener() {
@@ -137,5 +142,10 @@ class ProfileFragment :
     private fun hideKeyboard(view: View) {
         inputManager.hideSoftInputFromWindow(view.windowToken, 0)
         view.clearFocus()
+    }
+
+    private fun launchInBrowser(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+        startActivity(intent)
     }
 }

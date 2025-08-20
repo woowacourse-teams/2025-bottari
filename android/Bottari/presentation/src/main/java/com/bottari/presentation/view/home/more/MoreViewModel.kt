@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.home.profile
+package com.bottari.presentation.view.home.more
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
@@ -10,10 +10,10 @@ import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 
-class ProfileViewModel(
+class MoreViewModel(
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
     private val saveMemberNicknameUseCase: SaveMemberNicknameUseCase,
-) : BaseViewModel<ProfileUiState, ProfileUiEvent>(ProfileUiState()) {
+) : BaseViewModel<MoreUiState, MoreUiEvent>(MoreUiState()) {
     init {
         fetchMemberInfo()
     }
@@ -37,13 +37,13 @@ class ProfileViewModel(
                         ),
                     )
                     updateState { copy(nickname = editingNickname) }
-                    emitEvent(ProfileUiEvent.SaveMemberNicknameSuccess)
+                    emitEvent(MoreUiEvent.SaveMemberNicknameSuccess)
                 }.onFailure { error ->
                     updateState { copy(editingNickname = this.nickname) }
                     emitEvent(
                         when (error) {
-                            is IllegalArgumentException -> ProfileUiEvent.InvalidNicknameRule
-                            else -> ProfileUiEvent.SaveMemberNicknameFailure
+                            is IllegalArgumentException -> MoreUiEvent.InvalidNicknameRule
+                            else -> MoreUiEvent.SaveMemberNicknameFailure
                         },
                     )
                 }
@@ -62,7 +62,7 @@ class ProfileViewModel(
                             editingNickname = it.name.orEmpty(),
                         )
                     }
-                }.onFailure { emitEvent(ProfileUiEvent.FetchMemberInfoFailure) }
+                }.onFailure { emitEvent(MoreUiEvent.FetchMemberInfoFailure) }
 
             updateState { copy(isLoading = false) }
         }
@@ -72,7 +72,7 @@ class ProfileViewModel(
         fun Factory(): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    ProfileViewModel(
+                    MoreViewModel(
                         UseCaseProvider.checkRegisteredMemberUseCase,
                         UseCaseProvider.saveMemberNicknameUseCase,
                     )

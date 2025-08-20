@@ -16,17 +16,7 @@
         tools:title="@string/home_nav_personal_bottari_title_text"
         android:titleTextColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/fcv_home"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/btn_setting"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:contentDescription="@string/common_setting_btn_description"
-            android:padding="@dimen/space_small"
-            android:src="@drawable/btn_setting" />
-    </Toolbar>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcv_home"
