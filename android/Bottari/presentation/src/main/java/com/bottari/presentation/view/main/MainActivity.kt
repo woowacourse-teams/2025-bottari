@@ -28,7 +28,7 @@ import com.bottari.presentation.view.invite.InviteActivity
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
     private val viewModel: MainViewModel by viewModels { MainViewModel.Factory() }
     private val permissionLauncher: ActivityResultLauncher<Array<String>> =
-        registerForActivityForResult(
+        registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions(),
         ) { showExactAlarmSettingsDialog() }
     private var isNavigatedToSettings: Boolean = false
