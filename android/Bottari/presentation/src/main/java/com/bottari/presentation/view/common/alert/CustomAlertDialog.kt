@@ -124,6 +124,7 @@ class CustomAlertDialog : DialogFragment() {
         }
 
         button.apply {
+            isVisible = true
             setText(textRes)
             textColorRes?.let { setTextColor(ContextCompat.getColor(context, it)) }
             backgroundTintList =
