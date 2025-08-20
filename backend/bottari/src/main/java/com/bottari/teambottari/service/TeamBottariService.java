@@ -23,7 +23,9 @@ import com.bottari.teambottari.repository.TeamPersonalItemRepository;
 import com.bottari.teambottari.repository.TeamSharedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamSharedItemRepository;
 import com.bottari.teambottari.repository.dto.TeamBottariMemberCountProjection;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -94,12 +96,53 @@ public class TeamBottariService {
         }
     }
 
+    @Transactional
+    public void exit(
+            final Long id,
+            final String ssaid
+    ) {
+        final TeamBottari teamBottari = teamBottariRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_NOT_FOUND));
+        final List<TeamMember> allTeamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId());
+        final TeamMember exitTeamMember = findExitTeamMember(ssaid, allTeamMembers);
+        teamPersonalItemRepository.deleteByTeamMemberId(exitTeamMember.getId());
+        teamSharedItemRepository.deleteByTeamMemberId(exitTeamMember.getId());
+        final List<TeamAssignedItem> teamAssignedItems = teamAssignedItemRepository.findAllByTeamMemberId(
+                exitTeamMember.getId());
+        teamAssignedItemRepository.deleteByTeamMemberId(exitTeamMember.getId());
+        final List<Long> toDelete = new ArrayList<>();
+        for (final TeamAssignedItem teamAssignedItem : teamAssignedItems) {
+            final TeamAssignedItemInfo info = teamAssignedItem.getInfo();
+            if (!teamAssignedItemRepository.existsByInfoId(info.getId())) {
+                toDelete.add(info.getId());
+            }
+        }
+        teamAssignedItemInfoRepository.deleteByInfoIds(toDelete);
+        final List<TeamMember> remainMembers = allTeamMembers.stream()
+                .filter(teamMember -> !teamMember.getMember().isSameBySsaid(ssaid))
+                .collect(Collectors.toList());
+        // 왕관 옮기기
+        if (!remainMembers.isEmpty() && teamBottari.isOwner(exitTeamMember.getMember())) {
+            remainMembers.sort(Comparator.comparing(TeamMember::getCreatedAt));
+            final TeamMember newOwner = remainMembers.getFirst();
+            teamBottari.changeOwner(newOwner.getMember());
+        }
+        // 혼자면 삭제
+        teamMemberRepository.deleteById(exitTeamMember.getId());
+        if (remainMembers.isEmpty()) {
+            // 공통 info 삭제
+            teamSharedItemInfoRepository.deleteByTeamBottariId();
+            teamBottariRepository.deleteById(teamBottari.getId());
+        }
+    }
+
     private Member getMemberBySsaid(final String ssaid) {
         return memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
     }
 
-    private List<ReadTeamBottariPreviewResponse> buildReadTeamBottariPreviewResponses(final List<TeamMember> teamMembers) {
+    private List<ReadTeamBottariPreviewResponse> buildReadTeamBottariPreviewResponses(
+            final List<TeamMember> teamMembers) {
         final Map<TeamMember, List<TeamSharedItem>> teamSharedItemsGroup = groupingTeamSharedItem(teamMembers);
         final Map<TeamMember, List<TeamAssignedItem>> teamAssignedItemsGroup = groupingTeamAssignedItem(teamMembers);
         final Map<TeamMember, List<TeamPersonalItem>> teamPersonalItemsGroup = groupingTeamPersonalItem(teamMembers);
@@ -203,5 +246,15 @@ public class TeamBottariService {
 
     private List<TeamPersonalItem> findPersonalItemsByMember(final Long teamMemberId) {
         return teamPersonalItemRepository.findAllByTeamMemberId(teamMemberId);
+    }
+
+    private TeamMember findExitTeamMember(
+            final String ssaid,
+            final List<TeamMember> teamMembers
+    ) {
+        return teamMembers.stream()
+                .filter(teamMember -> teamMember.getMember().isSameBySsaid(ssaid))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI));
     }
 }

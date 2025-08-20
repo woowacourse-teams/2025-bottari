@@ -1,5 +1,6 @@
 package com.bottari.teambottari.controller;
 
+import com.bottari.config.MemberIdentifier;
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(name = "Team Bottari", description = "팀 보따리 API")
 public interface TeamBottariApiDocs {
@@ -52,6 +54,15 @@ public interface TeamBottariApiDocs {
     })
     ResponseEntity<Void> create(
             final CreateTeamBottariRequest request,
+            @Parameter(hidden = true) final String ssaid
+    );
+
+    @Operation(summary = "팀 보따리 나가기")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "팀 보따리 생성 성공"),
+    })
+    ResponseEntity<Void> exit(
+            final Long id,
             @Parameter(hidden = true) final String ssaid
     );
 }
