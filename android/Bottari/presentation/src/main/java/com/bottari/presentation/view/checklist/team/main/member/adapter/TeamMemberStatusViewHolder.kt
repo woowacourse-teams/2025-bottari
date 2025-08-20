@@ -27,7 +27,8 @@ class TeamMemberStatusViewHolder private constructor(
             currentStatus?.let { status ->
                 binding.btnHurryUpAlert.isVisible =
                     binding.groupItems.isVisible &&
-                    status.isAllChecked.not()
+                    status.isAllChecked.not() &&
+                    currentStatus?.isMe?.not() ?: false
             }
         }
         binding.btnHurryUpAlert.setOnClickListener {
@@ -45,6 +46,7 @@ class TeamMemberStatusViewHolder private constructor(
         handleItemsCountStatus(status)
         sharedItemAdapter.submitList(status.sharedItems)
         assignedItemAdapter.submitList(status.assignedItems)
+        binding.btnHurryUpAlert.isVisible = status.isMe.not()
     }
 
     private fun handleItemsCountStatus(status: TeamMemberStatusUiModel) {

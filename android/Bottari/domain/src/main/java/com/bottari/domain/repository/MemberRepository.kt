@@ -11,4 +11,6 @@ interface MemberRepository {
     suspend fun checkRegisteredMember(): Result<RegisteredMember>
 
     suspend fun getMemberIdentifier(): Result<String>
+
+    fun getMemberId(): Result<Long>
 }
