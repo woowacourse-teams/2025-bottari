@@ -19,21 +19,26 @@ class TeamMemberStatusViewHolder private constructor(
 ) : RecyclerView.ViewHolder(binding.root) {
     private val sharedItemAdapter: SharedItemAdapter by lazy { SharedItemAdapter() }
     private val assignedItemAdapter: AssignedItemAdapter by lazy { AssignedItemAdapter() }
-    private var member: TeamMemberUiModel? = null
+    private var currentStatus: TeamMemberStatusUiModel? = null
 
     init {
         itemView.setOnClickListener {
             binding.groupItems.apply { isVisible = !isVisible }
+            currentStatus?.let { status ->
+                binding.btnHurryUpAlert.isVisible =
+                    binding.groupItems.isVisible &&
+                    status.isAllChecked.not()
+            }
         }
         binding.btnHurryUpAlert.setOnClickListener {
-            member?.let(onSendRemindClickListener::onClickSendRemind)
+            currentStatus?.member?.let(onSendRemindClickListener::onClickSendRemind)
         }
         setupSharedItems()
         setupAssignedItems()
     }
 
     fun bind(status: TeamMemberStatusUiModel) {
-        member = status.member
+        currentStatus = status
         itemView.isClickable = status.isItemsEmpty.not()
         binding.tvMemberNickname.text = status.member.nickname
         binding.ivTeamHost.isVisible = status.member.isHost
