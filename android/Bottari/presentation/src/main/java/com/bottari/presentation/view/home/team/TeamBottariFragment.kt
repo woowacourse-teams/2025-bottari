@@ -65,7 +65,9 @@ class TeamBottariFragment :
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             binding.emptyView.clBottariEmptyView.isVisible = uiState.isEmpty
             toggleLoadingIndicator(uiState.isLoading)
-            adapter.submitList(uiState.bottaries)
+            adapter.submitList(uiState.bottaries) {
+                binding.rvTeamBottari.invalidateItemDecorations()
+            }
         }
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
