@@ -19,14 +19,16 @@ class MemberRepositoryImpl(
 ) : MemberRepository {
     override suspend fun registerMember(fcmToken: String): Result<Long?> =
         withContext(coroutineDispatcher) {
-            memberIdentifierLocalDataSource.getInstallationId()
-        }.mapCatching { memberId ->
-            RegisterMemberRequest(memberId, fcmToken)
-        }.mapCatching { registerMemberRequest ->
-            memberRemoteDataSource
-                .registerMember(registerMemberRequest)
-                .getOrThrow()
-                ?.also { memberIdentifierLocalDataSource.saveMemberId(it) }
+            memberIdentifierLocalDataSource
+                .getInstallationId()
+                .mapCatching { installationId ->
+                    RegisterMemberRequest(installationId, fcmToken)
+                }.mapCatching { request ->
+                    memberRemoteDataSource
+                        .registerMember(request)
+                        .getOrThrow()
+                        ?.also { memberIdentifierLocalDataSource.saveMemberId(it) }
+                }
         }
 
     override suspend fun saveMemberNickname(nickname: Nickname): Result<Unit> =
