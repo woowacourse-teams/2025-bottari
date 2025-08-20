@@ -29,10 +29,7 @@ class TeamMembersStatusViewModel(
     }
 
     fun fetchTeamMembersStatus() {
-        val myId =
-            currentState.myId.takeIf { it > 0 }
-                ?: getMemberIdUseCase().getOrNull()
-                ?: -1L
+        val myId = currentState.myId ?: return
         updateState { copy(isLoading = true) }
         launch {
             fetchTeamMembersStatusUseCase(teamBottariId)
