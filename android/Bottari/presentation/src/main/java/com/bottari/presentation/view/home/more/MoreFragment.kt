@@ -50,7 +50,7 @@ class MoreFragment :
     }
 
     override fun afterTextChanged(p0: Editable?) {
-        viewModel.updateNickname(p0.toString().trim())
+        viewModel.updateNickname(p0?.toString()?.trim().orEmpty())
     }
 
     private fun setupObserver() {

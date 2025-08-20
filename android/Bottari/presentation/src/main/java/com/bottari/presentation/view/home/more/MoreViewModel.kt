@@ -25,7 +25,7 @@ class MoreViewModel(
     fun saveNickname() {
         if (currentState.isNicknameChanged.not()) return
         val editingNickname = currentState.editingNickname
-
+        updateState { copy(isLoading = true) }
         launch {
             saveMemberNicknameUseCase(editingNickname)
                 .onSuccess {
@@ -47,6 +47,7 @@ class MoreViewModel(
                         },
                     )
                 }
+            updateState { copy(isLoading = false) }
         }
     }
 
