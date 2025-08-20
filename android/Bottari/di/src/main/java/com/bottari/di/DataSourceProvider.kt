@@ -1,6 +1,6 @@
 package com.bottari.di
 
-import com.bottari.data.remote.FirebaseRemoteConfig
+import com.bottari.data.remote.FirebaseRemoteConfigImpl
 import com.bottari.data.source.local.AppConfigDataSource
 import com.bottari.data.source.local.AppConfigLocalDataSourceImpl
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
@@ -79,7 +79,7 @@ object DataSourceProvider {
         FcmRemoteDataSourceImpl(NetworkProvider.fcmService)
     }
     val firebaseRemoteConfigDataSource: RemoteConfigRemoteDataSource by lazy {
-        RemoteConfigRemoteDataSourceImpl(FirebaseRemoteConfig())
+        RemoteConfigRemoteDataSourceImpl(FirebaseRemoteConfigImpl())
     }
     val eventRemoteDataSource: EventRemoteDataSource by lazy {
         EventRemoteDataSourceImpl(NetworkProvider.sseClient)
