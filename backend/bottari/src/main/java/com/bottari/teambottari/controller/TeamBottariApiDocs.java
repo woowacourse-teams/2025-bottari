@@ -61,6 +61,10 @@ public interface TeamBottariApiDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "팀 보따리 생성 성공"),
     })
+    @ApiErrorCodes({
+            ErrorCode.TEAM_BOTTARI_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI
+    })
     ResponseEntity<Void> exit(
             final Long id,
             @Parameter(hidden = true) final String ssaid
