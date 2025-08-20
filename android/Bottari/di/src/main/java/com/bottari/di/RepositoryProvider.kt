@@ -9,6 +9,7 @@ import com.bottari.data.repository.EventRepositoryImpl
 import com.bottari.data.repository.FcmRepositoryImpl
 import com.bottari.data.repository.MemberRepositoryImpl
 import com.bottari.data.repository.NotificationRepositoryImpl
+import com.bottari.data.repository.RemoteConfigRepositoryImpl
 import com.bottari.data.repository.ReportRepositoryImpl
 import com.bottari.data.repository.TeamBottariRepositoryImpl
 import com.bottari.domain.repository.AlarmRepository
@@ -20,6 +21,7 @@ import com.bottari.domain.repository.EventRepository
 import com.bottari.domain.repository.FcmRepository
 import com.bottari.domain.repository.MemberRepository
 import com.bottari.domain.repository.NotificationRepository
+import com.bottari.domain.repository.RemoteConfigRepository
 import com.bottari.domain.repository.ReportRepository
 import com.bottari.domain.repository.TeamBottariRepository
 
@@ -64,6 +66,9 @@ object RepositoryProvider {
     }
     val fcmRepository: FcmRepository by lazy {
         FcmRepositoryImpl(DataSourceProvider.fcmRemoteDataSource)
+    }
+    val remoteConfigRepository: RemoteConfigRepository by lazy {
+        RemoteConfigRepositoryImpl(DataSourceProvider.firebaseRemoteConfigDataSource)
     }
     val eventRepository: EventRepository by lazy {
         EventRepositoryImpl(DataSourceProvider.eventRemoteDataSource)
