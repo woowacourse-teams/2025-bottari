@@ -35,7 +35,13 @@ android {
             "USER_FEEDBACK_URL",
             "\"${getPropertyOrThrow("USER_FEEDBACK_URL")}\"",
         )
-        buildConfigField("int", "APP_VERSION_CODE", "${libs.versions.versionCode.get().toInt()}")
+        buildConfigField(
+            "int",
+            "APP_VERSION_CODE",
+            "${System.getenv("VERSION_CODE")?.toIntOrNull() ?: libs.versions.versionCode
+                .get()
+                .toInt()}",
+        )
     }
 
     buildTypes {
