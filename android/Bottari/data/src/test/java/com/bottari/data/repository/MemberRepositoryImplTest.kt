@@ -179,7 +179,7 @@ class MemberRepositoryImplTest {
 
     @DisplayName("사용자 식별자 조회를 성공하면 Success를 반환한다")
     @Test
-    fun getMemberIdentifierReturnsSuccess() =
+    fun getInstallationIdReturnsSuccess() =
         runTest {
             // given
             val memberId = "test_member_id"
@@ -189,7 +189,7 @@ class MemberRepositoryImplTest {
                 )
 
             // when
-            val result = repository.getMemberIdentifier()
+            val result = repository.getInstallationId()
 
             // then
             assertSoftly(result) {
@@ -203,14 +203,14 @@ class MemberRepositoryImplTest {
 
     @DisplayName("사용자 식별자 조회를 실패하면 Failure를 반환한다")
     @Test
-    fun getMemberIdentifierReturnsFailure() =
+    fun getInstallationIdReturnsFailure() =
         runTest {
             // given
             val exception = Exception()
             coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.failure(exception)
 
             // when
-            val result = repository.getMemberIdentifier()
+            val result = repository.getInstallationId()
 
             // then
             result.shouldBeFailure { error -> error shouldBe exception }

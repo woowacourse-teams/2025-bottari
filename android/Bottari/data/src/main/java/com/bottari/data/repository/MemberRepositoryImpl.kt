@@ -44,7 +44,7 @@ class MemberRepositoryImpl(
                 }
             }
 
-    override suspend fun getMemberIdentifier(): Result<String> =
+    override suspend fun getInstallationId(): Result<String> =
         withContext(coroutineDispatcher) {
             memberIdentifierLocalDataSource.getInstallationId()
         }
