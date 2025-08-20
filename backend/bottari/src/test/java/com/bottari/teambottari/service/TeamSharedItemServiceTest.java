@@ -72,7 +72,8 @@ class TeamSharedItemServiceTest {
             entityManager.persist(teamSharedItem);
 
             // when
-            final List<ReadSharedItemResponse> actual = teamSharedItemService.getAllByTeamBottariId(teamBottari.getId());
+            final List<ReadSharedItemResponse> actual = teamSharedItemService.getAllByTeamBottariId(
+                    teamBottari.getId());
 
             // then
             final List<ReadSharedItemResponse> expected = List.of(
@@ -433,28 +434,35 @@ class TeamSharedItemServiceTest {
         void sendRemindAlarm() {
             // given
             final Member member = MemberFixture.MEMBER.get();
+            final Member antherMember = MemberFixture.ANOTHER_MEMBER.get();
             entityManager.persist(member);
+            entityManager.persist(antherMember);
 
             final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
             entityManager.persist(teamBottari);
 
             final TeamMember teamMember = new TeamMember(teamBottari, member);
+            final TeamMember anotherTeamMember = new TeamMember(teamBottari, antherMember);
             entityManager.persist(teamMember);
+            entityManager.persist(anotherTeamMember);
 
-            final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo("공통 물품", teamBottari);
-            entityManager.persist(teamSharedItemInfo);
+            final TeamSharedItemInfo info = new TeamSharedItemInfo("담당 물품", teamBottari);
+            entityManager.persist(info);
 
-            final TeamSharedItem teamSharedItem = new TeamSharedItem(teamSharedItemInfo, teamMember);
-            entityManager.persist(teamSharedItem);
+            final TeamSharedItem item = new TeamSharedItem(info, teamMember);
+            item.check();
+            final TeamSharedItem anotherMemberItem = new TeamSharedItem(info, anotherTeamMember);
+            entityManager.persist(item);
+            entityManager.persist(anotherMemberItem);
 
             final List<Long> uncheckedMemberIds = List.of(
-                    member.getId()
+                    antherMember.getId()
             );
 
             doNothing().when(fcmMessageSender).sendMessageToMembers(eq(uncheckedMemberIds), any());
 
             // when & then
-            assertThatCode(() -> teamSharedItemService.sendRemindAlarm(teamSharedItemInfo.getId(), member.getSsaid()))
+            assertThatCode(() -> teamSharedItemService.sendRemindAlarm(info.getId(), member.getSsaid()))
                     .doesNotThrowAnyException();
             verify(fcmMessageSender).sendMessageToMembers(eq(uncheckedMemberIds), any());
         }
