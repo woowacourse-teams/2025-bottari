@@ -26,11 +26,11 @@ public interface TeamSharedItemInfoRepository extends JpaRepository<TeamSharedIt
             final String name
     );
 
-    @Modifying(flushAutomatically = true)
+    @Modifying
     @Query("""
         UPDATE TeamSharedItemInfo tsi
         SET tsi.deletedAt = CURRENT_TIMESTAMP 
         WHERE tsi.teamBottari.id = :teamBottariId
         """)
-    void deleteByTeamBottariId();
+    void deleteByTeamBottariId(final Long teamBottariId);
 }

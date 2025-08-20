@@ -110,6 +110,38 @@ public class TeamBottariService {
         final List<TeamAssignedItem> teamAssignedItems = teamAssignedItemRepository.findAllByTeamMemberId(
                 exitTeamMember.getId());
         teamAssignedItemRepository.deleteByTeamMemberId(exitTeamMember.getId());
+        removeOrphanAssignedItemInfos(teamAssignedItems);
+        final List<TeamMember> remainMembers = allTeamMembers.stream()
+                .filter(teamMember -> !teamMember.getMember().isSameBySsaid(ssaid))
+                .collect(Collectors.toList());
+        transferOwnershipIfNeeded(remainMembers, teamBottari, exitTeamMember);
+        teamMemberRepository.deleteById(exitTeamMember.getId());
+        deleteTeamBottariIfEmpty(remainMembers, teamBottari);
+    }
+
+    private void deleteTeamBottariIfEmpty(
+            final List<TeamMember> remainMembers,
+            final TeamBottari teamBottari
+    ) {
+        if (remainMembers.isEmpty()) {
+            teamSharedItemInfoRepository.deleteByTeamBottariId(teamBottari.getId());
+            teamBottariRepository.deleteById(teamBottari.getId());
+        }
+    }
+
+    private void transferOwnershipIfNeeded(
+            final List<TeamMember> remainMembers,
+            final TeamBottari teamBottari,
+            final TeamMember exitTeamMember
+    ) {
+        if (!remainMembers.isEmpty() && teamBottari.isOwner(exitTeamMember.getMember())) {
+            remainMembers.sort(Comparator.comparing(TeamMember::getCreatedAt));
+            final TeamMember newOwner = remainMembers.getFirst();
+            teamBottari.changeOwner(newOwner.getMember());
+        }
+    }
+
+    private void removeOrphanAssignedItemInfos(final List<TeamAssignedItem> teamAssignedItems) {
         final List<Long> toDelete = new ArrayList<>();
         for (final TeamAssignedItem teamAssignedItem : teamAssignedItems) {
             final TeamAssignedItemInfo info = teamAssignedItem.getInfo();
@@ -118,22 +150,6 @@ public class TeamBottariService {
             }
         }
         teamAssignedItemInfoRepository.deleteByInfoIds(toDelete);
-        final List<TeamMember> remainMembers = allTeamMembers.stream()
-                .filter(teamMember -> !teamMember.getMember().isSameBySsaid(ssaid))
-                .collect(Collectors.toList());
-        // 왕관 옮기기
-        if (!remainMembers.isEmpty() && teamBottari.isOwner(exitTeamMember.getMember())) {
-            remainMembers.sort(Comparator.comparing(TeamMember::getCreatedAt));
-            final TeamMember newOwner = remainMembers.getFirst();
-            teamBottari.changeOwner(newOwner.getMember());
-        }
-        // 혼자면 삭제
-        teamMemberRepository.deleteById(exitTeamMember.getId());
-        if (remainMembers.isEmpty()) {
-            // 공통 info 삭제
-            teamSharedItemInfoRepository.deleteByTeamBottariId();
-            teamBottariRepository.deleteById(teamBottari.getId());
-        }
     }
 
     private Member getMemberBySsaid(final String ssaid) {

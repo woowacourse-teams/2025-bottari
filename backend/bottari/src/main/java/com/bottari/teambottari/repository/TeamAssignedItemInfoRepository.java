@@ -26,7 +26,7 @@ public interface TeamAssignedItemInfoRepository extends JpaRepository<TeamAssign
             final String name
     );
 
-    @Modifying(flushAutomatically = true)
+    @Modifying
     @Query("""
         UPDATE TeamAssignedItemInfo tai
         SET tai.deletedAt = CURRENT_TIMESTAMP 

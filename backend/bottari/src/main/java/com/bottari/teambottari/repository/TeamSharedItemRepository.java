@@ -41,7 +41,7 @@ public interface TeamSharedItemRepository extends JpaRepository<TeamSharedItem, 
 
     void deleteAllByInfo(final TeamSharedItemInfo teamSharedItemInfo);
 
-    @Modifying(flushAutomatically = true)
+    @Modifying
     @Query("""
             UPDATE TeamSharedItem tsi
             SET tsi.deletedAt = CURRENT_TIMESTAMP

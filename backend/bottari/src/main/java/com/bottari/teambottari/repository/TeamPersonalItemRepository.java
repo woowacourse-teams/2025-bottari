@@ -35,7 +35,7 @@ public interface TeamPersonalItemRepository extends JpaRepository<TeamPersonalIt
             final Long memberId
     );
 
-    @Modifying(flushAutomatically = true)
+    @Modifying
     @Query("""
             UPDATE TeamPersonalItem tpi
             SET tpi.deletedAt = CURRENT_TIMESTAMP
