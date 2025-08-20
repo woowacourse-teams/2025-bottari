@@ -34,14 +34,10 @@ class TeamMembersStatusViewModel(
         launch {
             fetchTeamMembersStatusUseCase(teamBottariId)
                 .onSuccess { membersStatus ->
+                    val memberStatusUiModel = membersStatus.map { status -> status.toUiModel(myId) }
                     updateState {
                         copy(
-                            membersStatus =
-                                membersStatus.map { memberStatus ->
-                                    memberStatus.toUiModel(
-                                        myId,
-                                    )
-                                },
+                            membersStatus = memberStatusUiModel,
                         )
                     }
                 }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure) }
