@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
-sealed interface SSEDataResponse {
+sealed interface EventDataResponse {
     val publishedAt: LocalDateTime
 
     @Serializable
@@ -19,7 +19,7 @@ sealed interface SSEDataResponse {
         val name: String,
         @SerialName("isOwner")
         val isOwner: Boolean,
-    ) : SSEDataResponse
+    ) : EventDataResponse
 
     @Serializable
     data class SharedItemInfoCreateResponse(
@@ -30,7 +30,7 @@ sealed interface SSEDataResponse {
         val infoId: Long,
         @SerialName("name")
         val name: String,
-    ) : SSEDataResponse
+    ) : EventDataResponse
 
     @Serializable
     data class SharedItemInfoDeleteResponse(
@@ -41,7 +41,7 @@ sealed interface SSEDataResponse {
         val infoId: Long,
         @SerialName("name")
         val name: String,
-    ) : SSEDataResponse
+    ) : EventDataResponse
 
     @Serializable
     data class AssignedItemInfoCreateResponse(
@@ -54,7 +54,7 @@ sealed interface SSEDataResponse {
         val name: String,
         @SerialName("memberIds")
         val memberIds: List<Long>,
-    ) : SSEDataResponse
+    ) : EventDataResponse
 
     @Serializable
     data class AssignedItemInfoChangeResponse(
@@ -67,7 +67,7 @@ sealed interface SSEDataResponse {
         val name: String,
         @SerialName("memberIds")
         val memberIds: List<Long>,
-    ) : SSEDataResponse
+    ) : EventDataResponse
 
     @Serializable
     data class AssignedItemInfoDeleteResponse(
@@ -78,7 +78,7 @@ sealed interface SSEDataResponse {
         val infoId: Long,
         @SerialName("name")
         val name: String,
-    ) : SSEDataResponse
+    ) : EventDataResponse
 
     @Serializable
     data class SharedItemChangeResponse(
@@ -91,7 +91,7 @@ sealed interface SSEDataResponse {
         val memberId: Long,
         @SerialName("isChecked")
         val isChecked: Boolean,
-    ) : SSEDataResponse
+    ) : EventDataResponse
 
     @Serializable
     data class AssignedItemChangeResponse(
@@ -104,5 +104,5 @@ sealed interface SSEDataResponse {
         val memberId: Long,
         @SerialName("isChecked")
         val isChecked: Boolean,
-    ) : SSEDataResponse
+    ) : EventDataResponse
 }

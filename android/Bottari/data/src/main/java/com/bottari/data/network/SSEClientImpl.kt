@@ -1,8 +1,8 @@
 package com.bottari.data.network
 
 import com.bottari.data.BuildConfig
+import com.bottari.data.model.sse.EventStateResponse
 import com.bottari.data.model.sse.OnEventRaw
-import com.bottari.data.model.sse.SSEEventState
 import com.bottari.data.model.sse.toEvent
 import com.bottari.logger.BottariLogger
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +27,7 @@ class SSEClientImpl(
     SSEClient {
     private var eventSource: EventSource? = null
     private lateinit var request: Request
-    private lateinit var eventFlow: MutableStateFlow<SSEEventState>
+    private lateinit var eventFlow: MutableStateFlow<EventStateResponse>
     private val json =
         Json {
             ignoreUnknownKeys = true
@@ -40,7 +40,7 @@ class SSEClientImpl(
         response: Response,
     ) {
         super.onOpen(eventSource, response)
-        eventFlow.value = SSEEventState.OnOpen
+        eventFlow.value = EventStateResponse.OnOpen
     }
 
     override fun onEvent(
@@ -57,7 +57,7 @@ class SSEClientImpl(
             eventFlow.value = event
         }.onFailure { exception ->
             BottariLogger.error(exception.message, exception)
-            eventFlow.value = SSEEventState.OnFailure(exception)
+            eventFlow.value = EventStateResponse.OnFailure(exception)
         }
     }
 
@@ -67,7 +67,7 @@ class SSEClientImpl(
         response: Response?,
     ) {
         super.onFailure(eventSource, t, response)
-        eventFlow.value = SSEEventState.OnFailure(t)
+        eventFlow.value = EventStateResponse.OnFailure(t)
         t?.let { exception ->
             BottariLogger.error(exception.message, exception)
         }
@@ -75,11 +75,11 @@ class SSEClientImpl(
 
     override fun onClosed(eventSource: EventSource) {
         super.onClosed(eventSource)
-        eventFlow.value = SSEEventState.OnClosed
+        eventFlow.value = EventStateResponse.OnClosed
     }
 
-    override suspend fun connect(teamBottariId: Long): Flow<SSEEventState> {
-        eventFlow = MutableStateFlow(SSEEventState.Empty)
+    override suspend fun connect(teamBottariId: Long): Flow<EventStateResponse> {
+        eventFlow = MutableStateFlow(EventStateResponse.Empty)
         coroutineScope.launch {
             request = createRequest(teamBottariId)
             eventSource = createEventSource(request)

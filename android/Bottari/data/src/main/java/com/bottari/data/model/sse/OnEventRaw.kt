@@ -21,59 +21,59 @@ data class OnEventRaw(
     val publishedAt: LocalDateTime,
 )
 
-fun OnEventRaw.toEvent(json: Json): SSEEventState.OnEvent {
+fun OnEventRaw.toEvent(json: Json): EventStateResponse.OnEventResponse {
     BottariLogger.debug("resource: $resource, event: $event")
-    val eventData: SSEDataResponse =
+    val eventData: EventDataResponse =
         when (resource to event) {
             ResourceResponse.TEAM_MEMBER to EventResponse.CREATE ->
                 json.decodeFromJsonElement(
-                    SSEDataResponse.TeamMemberCreateResponse.serializer(),
+                    EventDataResponse.TeamMemberCreateResponse.serializer(),
                     data,
                 )
 
             ResourceResponse.SHARED_ITEM to EventResponse.CHANGE ->
                 json.decodeFromJsonElement(
-                    SSEDataResponse.SharedItemChangeResponse.serializer(),
+                    EventDataResponse.SharedItemChangeResponse.serializer(),
                     data,
                 )
 
             ResourceResponse.SHARED_ITEM_INFO to EventResponse.CREATE ->
                 json.decodeFromJsonElement(
-                    SSEDataResponse.SharedItemInfoCreateResponse.serializer(),
+                    EventDataResponse.SharedItemInfoCreateResponse.serializer(),
                     data,
                 )
 
             ResourceResponse.SHARED_ITEM_INFO to EventResponse.DELETE ->
                 json.decodeFromJsonElement(
-                    SSEDataResponse.SharedItemInfoDeleteResponse.serializer(),
+                    EventDataResponse.SharedItemInfoDeleteResponse.serializer(),
                     data,
                 )
 
             ResourceResponse.ASSIGNED_ITEM to EventResponse.CHANGE ->
                 json.decodeFromJsonElement(
-                    SSEDataResponse.AssignedItemChangeResponse.serializer(),
+                    EventDataResponse.AssignedItemChangeResponse.serializer(),
                     data,
                 )
 
             ResourceResponse.ASSIGNED_ITEM_INFO to EventResponse.CREATE ->
                 json.decodeFromJsonElement(
-                    SSEDataResponse.AssignedItemInfoCreateResponse.serializer(),
+                    EventDataResponse.AssignedItemInfoCreateResponse.serializer(),
                     data,
                 )
 
             ResourceResponse.ASSIGNED_ITEM_INFO to EventResponse.CHANGE ->
                 json.decodeFromJsonElement(
-                    SSEDataResponse.AssignedItemInfoChangeResponse.serializer(),
+                    EventDataResponse.AssignedItemInfoChangeResponse.serializer(),
                     data,
                 )
 
             ResourceResponse.ASSIGNED_ITEM_INFO to EventResponse.DELETE ->
                 json.decodeFromJsonElement(
-                    SSEDataResponse.AssignedItemInfoDeleteResponse.serializer(),
+                    EventDataResponse.AssignedItemInfoDeleteResponse.serializer(),
                     data,
                 )
 
             else -> throw IllegalArgumentException("[ERROR] Unknown event or resource.")
         }
-    return SSEEventState.OnEvent(resource, event, eventData, publishedAt)
+    return EventStateResponse.OnEventResponse(resource, event, eventData, publishedAt)
 }
