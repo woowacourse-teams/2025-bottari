@@ -294,7 +294,7 @@ class TeamAssignedItemServiceTest {
             );
 
             // when
-            teamAssignedItemService.update(teamBottari.getId(), teamAssignedItem.getId(), request);
+            teamAssignedItemService.update(teamBottari.getId(), teamAssignedItemInfo.getId(), request);
             entityManager.flush();
             entityManager.clear();
 
@@ -517,7 +517,7 @@ class TeamAssignedItemServiceTest {
             entityManager.persist(teamAssignedItem);
 
             // when
-            teamAssignedItemService.delete(teamAssignedItem.getId(), member.getSsaid());
+            teamAssignedItemService.delete(teamAssignedItemInfo.getId(), member.getSsaid());
 
             // then
             final TeamAssignedItem actualItem = entityManager.find(TeamAssignedItem.class, teamAssignedItem.getId());
@@ -751,6 +751,7 @@ class TeamAssignedItemServiceTest {
             final TeamAssignedItem teamAssignedItem = new TeamAssignedItem(teamAssignedItemInfo, teamMember);
             teamAssignedItem.check();
             final TeamAssignedItem anotherMemberItem = new TeamAssignedItem(teamAssignedItemInfo, anotherTeamMember);
+            // anotherMemberItem은 체크하지 않음 (기본값이 false)
             entityManager.persist(teamAssignedItem);
             entityManager.persist(anotherMemberItem);
 

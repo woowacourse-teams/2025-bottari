@@ -225,7 +225,7 @@ class TeamSharedItemServiceTest {
             entityManager.persist(teamSharedItem);
 
             // when & then
-            assertThatThrownBy(() -> teamSharedItemService.delete(teamSharedItem.getId(), anotherMember.getSsaid()))
+            assertThatThrownBy(() -> teamSharedItemService.delete(teamSharedItemInfo.getId(), anotherMember.getSsaid()))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("해당 팀 보따리의 팀 멤버가 아닙니다.");
         }
