@@ -215,16 +215,16 @@ VALUES
     ('방벨로의 출장 준비', 2, 'team-2-invite-code', '2024-07-12 10:05:00');
 
 -- 팀 멤버 데이터
-INSERT INTO team_member (team_bottari_id, member_id)
+INSERT INTO team_member (team_bottari_id, member_id, created_at)
 VALUES
     -- '다이스의 첫 여행 준비' (team_bottari_id: 1) -> team_member_id: 1, 2, 3
-    (1, 1), -- owner
-    (1, 2),
-    (1, 3),
+    (1, 1,'2024-01-10 10:00:00'), -- owner
+    (1, 2,'2024-01-10 12:00:00'),
+    (1, 3,'2024-01-10 11:00:00'),
     -- '방벨로의 출장 준비' (team_bottari_id: 2) -> team_member_id: 4, 5, 6
-    (2, 2), -- owner
-    (2, 1),
-    (2, 5);
+    (2, 2,'2024-01-10 10:00:00'), -- owner
+    (2, 1,'2024-01-10 10:00:00'),
+    (2, 5,'2024-01-10 10:00:00');
 
 -- 팀 공유 아이템 정보 (team_shared_item_info)
 INSERT INTO team_shared_item_info (team_bottari_id, name, created_at)
