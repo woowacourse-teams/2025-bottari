@@ -53,7 +53,7 @@ class TeamBottariStatusFragment :
             when (event) {
                 TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure ->
                     requireView().showSnackbar(
-                        R.string.team_status_fetch_failure_text,
+                        R.string.team_product_status_fetch_failure_text,
                     )
                 TeamBottariStatusUiEvent.SendRemindSuccess -> requireView().showSnackbar(R.string.team_status_send_remind_success_text)
                 TeamBottariStatusUiEvent.SendRemindFailure -> requireView().showSnackbar(R.string.team_status_send_remind_failure_text)
