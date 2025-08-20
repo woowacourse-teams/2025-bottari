@@ -1,22 +1,22 @@
 package com.bottari.data.model.sse
 
-sealed class SSEEventState {
-    object Empty : SSEEventState()
+import java.time.LocalDateTime
 
-    object OnClosed : SSEEventState()
+sealed interface SSEEventState {
+    data object Empty : SSEEventState
 
-    object OnOpen : SSEEventState()
+    data object OnClosed : SSEEventState
 
-    data class OnMessage(
-        val event: String?,
-        val data: String?,
-    ) : SSEEventState()
+    data object OnOpen : SSEEventState
 
-    data class OnComment(
-        val comment: String,
-    ) : SSEEventState()
+    data class OnEvent(
+        val resource: ResourceResponse,
+        val event: EventResponse,
+        val data: SSEDataResponse,
+        val publishedAt: LocalDateTime,
+    ) : SSEEventState
 
-    data class OnError(
+    data class OnFailure(
         val exception: Throwable?,
-    ) : SSEEventState()
+    ) : SSEEventState
 }
