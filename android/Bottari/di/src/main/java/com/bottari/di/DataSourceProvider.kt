@@ -20,6 +20,8 @@ import com.bottari.data.source.remote.NotificationLocalDataSource
 import com.bottari.data.source.remote.NotificationLocalDataSourceImpl
 import com.bottari.data.source.remote.ReportRemoteDataSource
 import com.bottari.data.source.remote.ReportRemoteDataSourceImpl
+import com.bottari.data.source.remote.SSERemoteDataSource
+import com.bottari.data.source.remote.SSERemoteDataSourceImpl
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.data.source.remote.TeamBottariRemoteDataSourceImpl
 
@@ -72,5 +74,8 @@ object DataSourceProvider {
     }
     val fcmRemoteDataSource: FcmRemoteDataSource by lazy {
         FcmRemoteDataSourceImpl(NetworkProvider.fcmService)
+    }
+    val sseRemoteDataSource: SSERemoteDataSource by lazy {
+        SSERemoteDataSourceImpl(NetworkProvider.sseClient)
     }
 }

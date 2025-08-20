@@ -2,6 +2,8 @@ package com.bottari.di
 
 import com.bottari.data.common.util.PrettyJsonLogger
 import com.bottari.data.network.RetrofitClient
+import com.bottari.data.network.SSEClient
+import com.bottari.data.network.SSEClientImpl
 import com.bottari.data.network.interceptor.AuthInterceptor
 import com.bottari.data.service.AlarmService
 import com.bottari.data.service.BottariItemService
@@ -11,7 +13,9 @@ import com.bottari.data.service.FcmService
 import com.bottari.data.service.MemberService
 import com.bottari.data.service.ReportService
 import com.bottari.data.service.TeamBottariService
+import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import java.util.concurrent.TimeUnit
 
 object NetworkProvider {
     private val loggingInterceptor: HttpLoggingInterceptor by lazy {
@@ -23,15 +27,28 @@ object NetworkProvider {
         AuthInterceptor(DataSourceProvider.memberIdentifierLocalDataSource)
     }
 
-    private val okHttpClient: okhttp3.OkHttpClient by lazy {
-        okhttp3.OkHttpClient
+    private val okHttpClient: OkHttpClient by lazy {
+        OkHttpClient
             .Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
             .build()
     }
 
+    private val sseOkHttpClient: OkHttpClient by lazy {
+        OkHttpClient
+            .Builder()
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor)
+            .connectTimeout(0, TimeUnit.MILLISECONDS)
+            .readTimeout(0, TimeUnit.MILLISECONDS)
+            .writeTimeout(0, TimeUnit.MILLISECONDS)
+            .retryOnConnectionFailure(true)
+            .build()
+    }
+
     private val retrofitClient: RetrofitClient by lazy { RetrofitClient(okHttpClient) }
+    val sseClient: SSEClient by lazy { SSEClientImpl(sseOkHttpClient) }
 
     val memberService: MemberService by lazy { retrofitClient.create() }
     val bottariService: BottariService by lazy { retrofitClient.create() }

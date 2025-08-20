@@ -9,6 +9,7 @@ import com.bottari.data.repository.FcmRepositoryImpl
 import com.bottari.data.repository.MemberRepositoryImpl
 import com.bottari.data.repository.NotificationRepositoryImpl
 import com.bottari.data.repository.ReportRepositoryImpl
+import com.bottari.data.repository.SSERepositoryImpl
 import com.bottari.data.repository.TeamBottariRepositoryImpl
 import com.bottari.domain.repository.AlarmRepository
 import com.bottari.domain.repository.AppConfigRepository
@@ -19,6 +20,7 @@ import com.bottari.domain.repository.FcmRepository
 import com.bottari.domain.repository.MemberRepository
 import com.bottari.domain.repository.NotificationRepository
 import com.bottari.domain.repository.ReportRepository
+import com.bottari.domain.repository.SSERepository
 import com.bottari.domain.repository.TeamBottariRepository
 
 object RepositoryProvider {
@@ -62,5 +64,8 @@ object RepositoryProvider {
     }
     val fcmRepository: FcmRepository by lazy {
         FcmRepositoryImpl(DataSourceProvider.fcmRemoteDataSource)
+    }
+    val sseRepository: SSERepository by lazy {
+        SSERepositoryImpl(DataSourceProvider.sseRemoteDataSource)
     }
 }
