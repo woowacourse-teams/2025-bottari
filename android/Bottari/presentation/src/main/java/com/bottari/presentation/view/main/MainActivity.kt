@@ -140,7 +140,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun launchPlayStore() {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = "https://play.google.com/store/apps/details?id=$packageName".toUri()
+        intent.data = "market://details?id=$packageName".toUri()
         startActivity(intent)
         finishAffinity()
     }
