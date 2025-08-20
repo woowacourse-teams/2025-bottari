@@ -5,5 +5,5 @@ import com.bottari.domain.repository.MemberRepository
 class GetMemberIdUseCase(
     private val memberRepository: MemberRepository,
 ) {
-    operator fun invoke(): Result<Long> = memberRepository.getMemberId()
+    suspend operator fun invoke(): Result<Long> = memberRepository.getMemberId()
 }

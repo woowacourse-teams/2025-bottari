@@ -47,5 +47,5 @@ class MemberRepositoryImpl(
             memberIdentifierLocalDataSource.getMemberIdentifier()
         }
 
-    override fun getMemberId(): Result<Long> = memberIdentifierLocalDataSource.getMemberId()
+    override suspend fun getMemberId(): Result<Long> = memberIdentifierLocalDataSource.getMemberId()
 }
