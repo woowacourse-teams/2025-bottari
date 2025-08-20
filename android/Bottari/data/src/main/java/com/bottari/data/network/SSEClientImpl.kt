@@ -26,8 +26,11 @@ class SSEClientImpl(
 ) : EventSourceListener(),
     SSEClient {
     private var eventSource: EventSource? = null
-    private lateinit var request: Request
-    private lateinit var eventFlow: MutableStateFlow<EventStateResponse>
+
+    private val eventFlow: MutableStateFlow<EventStateResponse> =
+        MutableStateFlow(
+            EventStateResponse.Empty,
+        )
     private val json =
         Json {
             ignoreUnknownKeys = true
@@ -79,16 +82,15 @@ class SSEClientImpl(
     }
 
     override suspend fun connect(teamBottariId: Long): Flow<EventStateResponse> {
-        eventFlow = MutableStateFlow(EventStateResponse.Empty)
+        disconnect()
         coroutineScope.launch {
-            request = createRequest(teamBottariId)
+            val request = createRequest(teamBottariId)
             eventSource = createEventSource(request)
-            client.newCall(request).execute()
         }
         return eventFlow
     }
 
-    override suspend fun disconnect() {
+    override fun disconnect() {
         eventSource?.cancel()
         eventSource = null
     }
