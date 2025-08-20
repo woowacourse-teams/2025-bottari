@@ -75,7 +75,7 @@ jobs:
 
       - name: Run App On Port 8080
         run: |
-          JAR_FILE=$(find ./artifacts -name "*.jar" | head -n 1)
+          JAR_FILE=$(ls -t ./artifacts/*.jar 2>/dev/null | head -n 1)
           echo "Starting server with $JAR_FILE"
           RUNNER_TRACKING_ID=""
 
@@ -84,5 +84,6 @@ jobs:
           DATABASE_PASSWORD='${{ secrets.DATABASE_PROD_PASSWORD }}' \
           FIREBASE_SERVICE_ACCOUNT_JSON='${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}' \
           SPRING_PROFILES_ACTIVE=prod \
-          nohup java -Duser.timezone=Asia/Seoul -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
           
+          nohup java -Duser.timezone=Asia/Seoul -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
+                    
