@@ -178,6 +178,10 @@
     <string name="team_bottari_join_dialog_name_hint_text">초대 코드를 입력해 주세요</string>
     <string name="team_bottari_join_dialog_btn_text">참가하기</string>
 
+    <!-- Force Update Dialog -->
+    <string name="force_update_dialog_title_text">업데이트가 필요합니다</string>
+    <string name="force_update_dialog_description_text">원활한 서비스 이용을 위해\n최신 버전으로 업데이트가 필요합니다</string>
+
     <!-- Bottari Edit -->
     <string name="bottari_edit_item_list_title">내 물건</string>
     <string name="bottari_edit_add_item_title">물건 추가하기</string>
