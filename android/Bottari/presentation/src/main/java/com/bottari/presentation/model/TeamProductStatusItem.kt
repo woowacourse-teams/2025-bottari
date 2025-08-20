@@ -11,7 +11,7 @@ data class TeamBottariProductStatusUiModel(
     val type: BottariItemTypeUiModel,
 ) : TeamProductStatusItem {
     val isAllChecked: Boolean =
-        this.memberCheckStatus.all { memberCheckStatus -> memberCheckStatus.checked }
+        memberCheckStatus.isNotEmpty() && memberCheckStatus.all { it.checked }
 }
 
 data class TeamChecklistTypeUiModel(
