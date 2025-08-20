@@ -32,11 +32,6 @@ class TeamMembersStatusFragment :
         setupUI()
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.fetchTeamMembersStatus()
-    }
-
     override fun onClickSendRemind(member: TeamMemberUiModel) {
         viewModel.sendRemindMessage(member)
     }

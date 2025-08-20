@@ -28,13 +28,22 @@ class TeamMembersStatusViewModel(
         fetchMemberId()
     }
 
-    fun fetchTeamMembersStatus() {
+    private fun fetchTeamMembersStatus() {
         val myId = currentState.myId ?: return
         updateState { copy(isLoading = true) }
         launch {
             fetchTeamMembersStatusUseCase(teamBottariId)
                 .onSuccess { membersStatus ->
-                    updateState { copy(membersStatus = membersStatus.map { memberStatus -> memberStatus.toUiModel(myId) }) }
+                    updateState {
+                        copy(
+                            membersStatus =
+                                membersStatus.map { memberStatus ->
+                                    memberStatus.toUiModel(
+                                        myId,
+                                    )
+                                },
+                        )
+                    }
                 }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure) }
             updateState { copy(isLoading = false) }
         }
@@ -55,12 +64,12 @@ class TeamMembersStatusViewModel(
     }
 
     private fun fetchMemberId() {
-        updateState { copy(isLoading = true) }
         launch {
             getMemberIdUseCase()
-                .onSuccess { updateState { copy(myId = it) } }
-                .onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMemberIdFailure) }
-            updateState { copy(isLoading = false) }
+                .onSuccess { id ->
+                    updateState { copy(myId = id) }
+                    fetchTeamMembersStatus()
+                }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMemberIdFailure) }
         }
     }
 
