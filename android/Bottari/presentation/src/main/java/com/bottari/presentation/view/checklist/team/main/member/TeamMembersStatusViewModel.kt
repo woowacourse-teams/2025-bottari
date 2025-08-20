@@ -25,16 +25,19 @@ class TeamMembersStatusViewModel(
         stateHandle[KEY_TEAM_BOTTARI_ID] ?: error(ERROR_REQUIRE_TEAM_BOTTARI_ID)
 
     init {
-        getMemberIdUseCase()
-            .onSuccess { updateState { copy(myId = it) } }
+        fetchMemberId()
     }
 
     fun fetchTeamMembersStatus() {
+        val myId =
+            currentState.myId.takeIf { it > 0 }
+                ?: getMemberIdUseCase().getOrNull()
+                ?: -1L
         updateState { copy(isLoading = true) }
         launch {
             fetchTeamMembersStatusUseCase(teamBottariId)
                 .onSuccess { membersStatus ->
-                    updateState { copy(membersStatus = membersStatus.map { memberStatus -> memberStatus.toUiModel(currentState.myId) }) }
+                    updateState { copy(membersStatus = membersStatus.map { memberStatus -> memberStatus.toUiModel(myId) }) }
                 }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure) }
             updateState { copy(isLoading = false) }
         }
@@ -51,6 +54,16 @@ class TeamMembersStatusViewModel(
                         ),
                     )
                 }.onFailure { emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure) }
+        }
+    }
+
+    private fun fetchMemberId() {
+        updateState { copy(isLoading = true) }
+        launch {
+            getMemberIdUseCase()
+                .onSuccess { updateState { copy(myId = it) } }
+                .onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMemberIdFailure) }
+            updateState { copy(isLoading = false) }
         }
     }
 
