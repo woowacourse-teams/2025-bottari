@@ -18,8 +18,8 @@ import com.bottari.domain.usecase.item.ResetBottariItemCheckStateUseCase
 import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
+import com.bottari.domain.usecase.member.GetInstallationIdUseCase
 import com.bottari.domain.usecase.member.GetMemberIdUseCase
-import com.bottari.domain.usecase.member.GetMemberIdentifierUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
 import com.bottari.domain.usecase.notification.DeleteNotificationUseCase
@@ -243,8 +243,8 @@ object UseCaseProvider {
     val sendRemindByMemberMessageUseCase: SendRemindByMemberMessageUseCase by lazy {
         SendRemindByMemberMessageUseCase(RepositoryProvider.teamBottariRepository)
     }
-    val getMemberIdentifierUseCase: GetMemberIdentifierUseCase by lazy {
-        GetMemberIdentifierUseCase(RepositoryProvider.memberRepository)
+    val getInstallationIdUseCase: GetInstallationIdUseCase by lazy {
+        GetInstallationIdUseCase(RepositoryProvider.memberRepository)
     }
     val getMemberIdUseCase: GetMemberIdUseCase by lazy {
         GetMemberIdUseCase(RepositoryProvider.memberRepository)

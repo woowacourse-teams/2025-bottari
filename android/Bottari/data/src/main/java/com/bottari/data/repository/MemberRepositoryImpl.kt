@@ -19,7 +19,7 @@ class MemberRepositoryImpl(
 ) : MemberRepository {
     override suspend fun registerMember(fcmToken: String): Result<Long?> =
         withContext(coroutineDispatcher) {
-            memberIdentifierLocalDataSource.getMemberIdentifier()
+            memberIdentifierLocalDataSource.getInstallationId()
         }.mapCatching { memberId ->
             RegisterMemberRequest(memberId, fcmToken)
         }.mapCatching { registerMemberRequest ->
@@ -44,7 +44,7 @@ class MemberRepositoryImpl(
 
     override suspend fun getMemberIdentifier(): Result<String> =
         withContext(coroutineDispatcher) {
-            memberIdentifierLocalDataSource.getMemberIdentifier()
+            memberIdentifierLocalDataSource.getInstallationId()
         }
 
     override suspend fun getMemberId(): Result<Long> = memberIdentifierLocalDataSource.getMemberId()

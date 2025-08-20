@@ -13,11 +13,11 @@ class MemberIdentifierLocalDataSourceImpl(
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(MEMBER_IDENTIFIER_PREFERENCES, Context.MODE_PRIVATE)
 
-    private var cachedMemberIdentifier: String? = null
+    private var cachedInstallationId: String? = null
 
-    override fun getMemberIdentifier(): Result<String> =
+    override fun getInstallationId(): Result<String> =
         runCatching {
-            cachedMemberIdentifier ?: initialize().also { cachedMemberIdentifier = it }
+            cachedInstallationId ?: initialize().also { cachedInstallationId = it }
         }
 
     override fun saveMemberId(id: Long) {
