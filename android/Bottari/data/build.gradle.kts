@@ -68,7 +68,6 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.bundles.network)
-    implementation(libs.okhttp.eventsource)
     implementation(libs.bundles.local)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.installations)
