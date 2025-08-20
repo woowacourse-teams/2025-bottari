@@ -54,6 +54,7 @@ class PersonalItemEditViewModel(
         val changes = calculateItemChanges()
 
         if (changes.deleteItemIds.isEmpty() && changes.createItemNames.isEmpty()) {
+            emitEvent(PersonalItemEditUiEvent.SaveBottariItemsSuccess)
             return
         }
 
