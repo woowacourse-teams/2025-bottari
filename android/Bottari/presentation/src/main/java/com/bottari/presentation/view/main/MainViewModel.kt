@@ -5,10 +5,13 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.member.RegisteredMember
+import com.bottari.domain.usecase.appConfig.CheckForceUpdateUseCase
 import com.bottari.domain.usecase.appConfig.GetPermissionFlagUseCase
 import com.bottari.domain.usecase.appConfig.SavePermissionFlagUseCase
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.presentation.BuildConfig
 import com.bottari.presentation.common.base.BaseViewModel
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
@@ -18,9 +21,10 @@ class MainViewModel(
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
     private val savePermissionFlagUseCase: SavePermissionFlagUseCase,
     private val getPermissionFlagUseCase: GetPermissionFlagUseCase,
+    private val checkForceUpdateUseCase: CheckForceUpdateUseCase,
 ) : BaseViewModel<MainUiState, MainUiEvent>(MainUiState()) {
     init {
-        checkPermissionFlag()
+        checkForceUpdate()
     }
 
     fun checkRegisteredMember() {
@@ -79,6 +83,21 @@ class MainViewModel(
         }
     }
 
+    private fun checkForceUpdate() {
+        if (BuildConfig.DEBUG) return checkPermissionFlag()
+        updateState { copy(isLoading = true) }
+
+        launch {
+            checkForceUpdateUseCase(BuildConfig.APP_VERSION_CODE)
+                .onSuccess { isForceUpdate ->
+                    if (isForceUpdate) return@onSuccess emitEvent(MainUiEvent.ForceUpdate)
+                    checkPermissionFlag()
+                }.onFailure { exception -> BottariLogger.error(exception.message, exception) }
+
+            updateState { copy(isLoading = false) }
+        }
+    }
+
     companion object {
         fun Factory(): ViewModelProvider.Factory =
             viewModelFactory {
@@ -88,6 +107,7 @@ class MainViewModel(
                         UseCaseProvider.checkRegisteredMemberUseCase,
                         UseCaseProvider.savePermissionFlagUseCase,
                         UseCaseProvider.getPermissionFlagUseCase,
+                        UseCaseProvider.checkForceUpdateUseCase,
                     )
                 }
             }
