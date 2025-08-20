@@ -8,42 +8,57 @@ plugins {
 
 android {
     namespace = "com.bottari.presentation"
-    compileSdk = 35
+    compileSdk =
+        libs.versions.complieSdk
+            .get()
+            .toInt()
+
+    val localProperties = gradleLocalProperties(rootDir, providers)
 
     defaultConfig {
-        minSdk = 28
+        minSdk =
+            libs.versions.minSdk
+                .get()
+                .toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        val devId = gradleLocalProperties(rootDir, providers).getProperty("DEV_ID") ?: ""
-        buildConfigField("String", "DEV_ID", "\"$devId\"")
-
-        val privacyPolicyUrl =
-            gradleLocalProperties(rootDir, providers).getProperty("PRIVACY_POLICY_URL") ?: ""
-        buildConfigField("String", "PRIVACY_POLICY_URL", "\"$privacyPolicyUrl\"")
-
-        val userFeedbackUrl =
-            gradleLocalProperties(rootDir, providers).getProperty("USER_FEEDBACK_URL") ?: ""
-        buildConfigField("String", "USER_FEEDBACK_URL", "\"$userFeedbackUrl\"")
+        buildConfigField(
+            "String",
+            "PRIVACY_POLICY_URL",
+            "\"${localProperties.getProperty("PRIVACY_POLICY_URL") ?: ""}\"",
+        )
+        buildConfigField(
+            "String",
+            "USER_FEEDBACK_URL",
+            "\"${localProperties.getProperty("USER_FEEDBACK_URL") ?: ""}\"",
+        )
+        buildConfigField(
+            "int",
+            "APP_VERSION_CODE",
+            "${libs.versions.versionCode.get().toInt()}",
+        )
     }
 
     buildTypes {
-        val localProperties = gradleLocalProperties(rootDir, providers)
-        val debugBaseUrl: String = localProperties.getProperty("DEBUG_BASE_URL") ?: ""
-        val releaseBaseUrl: String = localProperties.getProperty("RELEASE_BASE_URL") ?: ""
-
         release {
-            isMinifyEnabled = false
-            buildConfigField("String", "BASE_URL", "\"$releaseBaseUrl\"")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"${localProperties.getProperty("RELEASE_BASE_URL") ?: ""}\"",
+            )
         }
         debug {
-            isMinifyEnabled = false
-            buildConfigField("String", "BASE_URL", "\"$debugBaseUrl\"")
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"${localProperties.getProperty("DEBUG_BASE_URL") ?: ""}\"",
+            )
         }
     }
 
@@ -53,7 +68,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "21"
+        jvmTarget = libs.versions.jvmTarget.get()
     }
 
     testOptions {

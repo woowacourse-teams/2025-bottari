@@ -9,30 +9,36 @@ plugins {
 
 android {
     namespace = "com.bottari.data"
-    compileSdk = 35
+    compileSdk =
+        libs.versions.complieSdk
+            .get()
+            .toInt()
 
     defaultConfig {
-        minSdk = 28
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         val localProperties = gradleLocalProperties(rootDir, providers)
-        val debugBaseUrl: String = localProperties.getProperty("DEBUG_BASE_URL") ?: ""
-        val releaseBaseUrl: String = localProperties.getProperty("RELEASE_BASE_URL") ?: ""
 
         release {
-            isMinifyEnabled = false
-            buildConfigField("String", "BASE_URL", "\"$releaseBaseUrl\"")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"${localProperties.getProperty("RELEASE_BASE_URL") ?: ""}\"",
+            )
         }
         debug {
-            isMinifyEnabled = false
-            buildConfigField("String", "BASE_URL", "\"$debugBaseUrl\"")
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"${localProperties.getProperty("DEBUG_BASE_URL") ?: ""}\"",
+            )
         }
     }
 
@@ -42,7 +48,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "21"
+        jvmTarget = libs.versions.jvmTarget.get()
     }
 
     buildFeatures {
@@ -71,6 +77,7 @@ dependencies {
     implementation(libs.bundles.local)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.installations)
+    implementation(libs.firebase.config)
 
     testImplementation(libs.bundles.test)
     testImplementation(libs.kotest.assertions.core)

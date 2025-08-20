@@ -9,20 +9,34 @@ plugins {
 
 android {
     namespace = "com.bottari.bottari"
-    compileSdk = 35
+    compileSdk =
+        libs.versions.complieSdk
+            .get()
+            .toInt()
 
     defaultConfig {
         applicationId = "com.bottari.bottari"
-        minSdk = 28
-        targetSdk = 35
-        versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 7
-        versionName = "1.2.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        versionName = libs.versions.versionName.get()
+        versionCode = System.getenv("VERSION_CODE")?.toIntOrNull()
+            ?: libs.versions.versionCode
+                .get()
+                .toInt()
+        minSdk =
+            libs.versions.minSdk
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.targetSdk
+                .get()
+                .toInt()
+
+//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -51,7 +65,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "21"
+        jvmTarget = libs.versions.jvmTarget.get()
     }
 
     buildFeatures {

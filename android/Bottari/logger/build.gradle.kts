@@ -5,11 +5,10 @@ plugins {
 
 android {
     namespace = "com.bottari.logger"
-    compileSdk = 35
-
-    defaultConfig {
-        minSdk = 28
-    }
+    compileSdk =
+        libs.versions.complieSdk
+            .get()
+            .toInt()
 
     buildFeatures {
         buildConfig = true
@@ -20,7 +19,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "21"
+        jvmTarget = libs.versions.jvmTarget.get()
     }
 }
 

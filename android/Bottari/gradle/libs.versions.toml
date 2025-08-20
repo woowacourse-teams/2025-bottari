@@ -1,7 +1,15 @@
 [versions]
+# App Config
+versionName = "1.2.0"
+minSdk = "28"
+targetSdk = "35"
+complieSdk = "35"
+versionCode = "7"
+
 # Android Gradle Plugin & Kotlin
 agp = "8.9.0"
 kotlin = "2.0.21"
+jvmTarget = "21"
 jetbrainsKotlinJvm = "2.0.21"
 kotlinxCoroutinesCore = "1.10.2"
 
@@ -103,6 +111,7 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk" }
 firebase-installations = { module = "com.google.firebase:firebase-installations" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
+firebase-config = { module = "com.google.firebase:firebase-config" }
 
 [plugins]
 # --- Android Plugins ---
