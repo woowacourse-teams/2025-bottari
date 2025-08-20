@@ -17,8 +17,8 @@ android {
     defaultConfig {
         applicationId = "com.bottari.bottari"
         versionName = libs.versions.versionName.get()
-        versionCode = System.getenv("VERSION_CODE")?.toIntOrNull()
-            ?: libs.versions.versionCode
+        versionCode =
+            System.getenv("VERSION_CODE")?.toIntOrNull() ?: libs.versions.versionCode
                 .get()
                 .toInt()
         minSdk =
@@ -29,8 +29,6 @@ android {
             libs.versions.targetSdk
                 .get()
                 .toInt()
-
-//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -48,10 +46,6 @@ android {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-dev"
             resValue("string", "app_name", "보따리 (Dev)")
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
 
             configure<CrashlyticsExtension> {
                 mappingFileUploadEnabled = false

@@ -15,30 +15,27 @@ android {
 
     val localProperties = gradleLocalProperties(rootDir, providers)
 
+    fun getPropertyOrThrow(key: String): String = localProperties.getProperty(key) ?: error("$key is missing in local.properties")
+
     defaultConfig {
         minSdk =
             libs.versions.minSdk
                 .get()
                 .toInt()
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
         buildConfigField(
             "String",
             "PRIVACY_POLICY_URL",
-            "\"${localProperties.getProperty("PRIVACY_POLICY_URL") ?: ""}\"",
+            "\"${getPropertyOrThrow("PRIVACY_POLICY_URL")}\"",
         )
         buildConfigField(
             "String",
             "USER_FEEDBACK_URL",
-            "\"${localProperties.getProperty("USER_FEEDBACK_URL") ?: ""}\"",
+            "\"${getPropertyOrThrow("USER_FEEDBACK_URL")}\"",
         )
-        buildConfigField(
-            "int",
-            "APP_VERSION_CODE",
-            "${libs.versions.versionCode.get().toInt()}",
-        )
+        buildConfigField("int", "APP_VERSION_CODE", "${libs.versions.versionCode.get().toInt()}")
     }
 
     buildTypes {
@@ -47,18 +44,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            buildConfigField(
-                "String",
-                "BASE_URL",
-                "\"${localProperties.getProperty("RELEASE_BASE_URL") ?: ""}\"",
-            )
+            buildConfigField("String", "BASE_URL", "\"${getPropertyOrThrow("RELEASE_BASE_URL")}\"")
         }
         debug {
-            buildConfigField(
-                "String",
-                "BASE_URL",
-                "\"${localProperties.getProperty("DEBUG_BASE_URL") ?: ""}\"",
-            )
+            buildConfigField("String", "BASE_URL", "\"${getPropertyOrThrow("DEBUG_BASE_URL")}\"")
         }
     }
 
@@ -72,9 +61,7 @@ android {
     }
 
     testOptions {
-        unitTests.all {
-            it.useJUnitPlatform()
-        }
+        unitTests.all { it.useJUnitPlatform() }
     }
 
     buildFeatures {
@@ -94,13 +81,15 @@ dependencies {
     implementation(project(":di"))
     implementation(project(":logger"))
 
-    implementation(libs.timber)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.core.splashscreen)
+
     implementation(libs.material)
     implementation(libs.cardstackview)
     implementation(libs.flexbox)
@@ -108,10 +97,10 @@ dependencies {
     implementation(libs.spinkit)
     implementation(libs.material.calendarview)
     implementation(libs.threetenabp)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.work.runtime.ktx)
+
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)
+
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

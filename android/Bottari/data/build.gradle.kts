@@ -14,31 +14,25 @@ android {
             .get()
             .toInt()
 
+    val localProperties = gradleLocalProperties(rootDir, providers)
+
+    fun getPropertyOrThrow(key: String) = localProperties.getProperty(key) ?: error("$key is missing in local.properties")
+
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
-        val localProperties = gradleLocalProperties(rootDir, providers)
-
         release {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            buildConfigField(
-                "String",
-                "BASE_URL",
-                "\"${localProperties.getProperty("RELEASE_BASE_URL") ?: ""}\"",
-            )
+            buildConfigField("String", "BASE_URL", "\"${getPropertyOrThrow("RELEASE_BASE_URL")}\"")
         }
         debug {
-            buildConfigField(
-                "String",
-                "BASE_URL",
-                "\"${localProperties.getProperty("DEBUG_BASE_URL") ?: ""}\"",
-            )
+            buildConfigField("String", "BASE_URL", "\"${getPropertyOrThrow("DEBUG_BASE_URL")}\"")
         }
     }
 
@@ -75,6 +69,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.bundles.network)
     implementation(libs.bundles.local)
+
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.installations)
     implementation(libs.firebase.config)
