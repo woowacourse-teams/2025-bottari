@@ -94,13 +94,15 @@ enum class DialogPresetType {
         with(dialog) {
             binding.tvDialogCustomTitle.setText(R.string.force_update_dialog_title_text)
             binding.tvDialogCustomDescription.setText(R.string.force_update_dialog_description_text)
+            isCancelable = false
+            requireDialog().setCanceledOnTouchOutside(false)
             setPositiveButton(
-                textRes = R.string.common_yes_btn_text,
+                textRes = R.string.force_update_dialog_update_btn_text,
                 textColorRes = R.color.white,
                 backgroundColorRes = R.color.primary,
             )
             setNegativeButton(
-                textRes = R.string.common_no_btn_text,
+                textRes = R.string.force_update_dialog_close_btn_text,
                 textColorRes = R.color.gray_787878,
                 backgroundColorRes = R.color.white,
             )
