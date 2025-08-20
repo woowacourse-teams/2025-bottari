@@ -46,7 +46,7 @@ public class TeamBottariEventListener {
     public void handleCreateTeamSharedItemEvent(final CreateTeamSharedItemEvent event) {
         final SseMessage message = new SseMessage(
                 SseResourceType.SHARED_ITEM_INFO,
-                SseEventType.CHANGE,
+                SseEventType.CREATE,
                 CreateTeamSharedItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
@@ -57,7 +57,7 @@ public class TeamBottariEventListener {
     public void handleDeleteTeamSharedItemEvent(final DeleteTeamSharedItemEvent event) {
         final SseMessage message = new SseMessage(
                 SseResourceType.SHARED_ITEM_INFO,
-                SseEventType.CHANGE,
+                SseEventType.DELETE,
                 DeleteTeamSharedItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), message);

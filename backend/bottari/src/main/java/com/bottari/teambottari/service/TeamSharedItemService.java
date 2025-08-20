@@ -43,12 +43,6 @@ public class TeamSharedItemService {
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
 
-    private static Long memberIdByItem(final TeamSharedItem item) {
-        return item.getTeamMember()
-                .getMember()
-                .getId();
-    }
-
     public List<ReadSharedItemResponse> getAllByTeamBottariId(final Long teamBottariId) {
         final List<TeamSharedItemInfo> sharedItemInfos = teamSharedItemInfoRepository.findAllByTeamBottariId(
                 teamBottariId
@@ -140,7 +134,7 @@ public class TeamSharedItemService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         validateMemberInTeam(info.getTeamBottari(), member);
         final List<TeamSharedItem> items = teamSharedItemRepository.findAllByInfoIdWithMember(infoId);
-        final List<Long> uncheckedMemberIds = collectUncheckedMemberIds(items);
+        final List<Long> uncheckedMemberIds = collectUncheckedMemberIds(member, items);
         sendRemindMessageToMembers(info, uncheckedMemberIds);
     }
 
@@ -228,11 +222,21 @@ public class TeamSharedItemService {
         return Math.toIntExact(count);
     }
 
-    private List<Long> collectUncheckedMemberIds(final List<TeamSharedItem> items) {
+    private List<Long> collectUncheckedMemberIds(
+            final Member member,
+            final List<TeamSharedItem> items
+    ) {
         return items.stream()
                 .filter(item -> !item.isChecked())
-                .map(TeamSharedItemService::memberIdByItem)
+                .filter(item -> !item.isOwner(member.getSsaid()))
+                .map(this::memberIdByItem)
                 .toList();
+    }
+
+    private Long memberIdByItem(final TeamSharedItem item) {
+        return item.getTeamMember()
+                .getMember()
+                .getId();
     }
 
     private void publishCheckEvent(final TeamSharedItem item) {
