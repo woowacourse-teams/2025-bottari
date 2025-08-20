@@ -22,7 +22,7 @@
         tools:text="이것은물건글자가열다섯개입니다" />
 
     <TextView
-        android:id="@+id/btn_team_bottari_item_send_remind"
+        android:id="@+id/btn_team_bottari_item_send_hurry_up"
         style="@style/Pretendard_Medium_20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

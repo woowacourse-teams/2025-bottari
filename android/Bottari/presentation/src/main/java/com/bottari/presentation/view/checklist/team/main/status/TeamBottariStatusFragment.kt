@@ -46,7 +46,7 @@ class TeamBottariStatusFragment :
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            binding.btnTeamBottariItemSendRemind.isVisible =
+            binding.btnTeamBottariItemSendHurryUp.isVisible =
                 state.selectedProduct?.isAllChecked?.not() ?: false
             teamBottariProductStatusDetailAdapter.submitList(state.selectedProduct?.memberCheckStatus)
             binding.tvTeamBottariItemStatusTitle.text = state.selectedProduct?.name ?: ""
@@ -77,7 +77,7 @@ class TeamBottariStatusFragment :
     }
 
     private fun setupListener() {
-        binding.btnTeamBottariItemSendRemind.setOnClickListener {
+        binding.btnTeamBottariItemSendHurryUp.setOnClickListener {
             viewModel.sendRemindByItem()
         }
     }
