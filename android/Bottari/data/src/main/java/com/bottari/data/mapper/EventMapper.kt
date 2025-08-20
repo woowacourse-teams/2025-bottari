@@ -8,13 +8,12 @@ object EventMapper {
         when (this) {
             EventStateResponse.Empty -> EventState.Empty
             EventStateResponse.OnClosed -> EventState.OnClosed
+            EventStateResponse.OnOpen -> EventState.OnOpen
+            is EventStateResponse.OnFailure -> EventState.OnFailure(exception)
             is EventStateResponse.OnEventResponse ->
                 EventState.OnEvent(
                     data.toDomain(),
                     publishedAt,
                 )
-
-            is EventStateResponse.OnFailure -> EventState.OnFailure(exception)
-            EventStateResponse.OnOpen -> EventState.OnOpen
         }
 }
