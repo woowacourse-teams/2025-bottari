@@ -38,11 +38,9 @@ object NetworkProvider {
     private val sseOkHttpClient: OkHttpClient by lazy {
         OkHttpClient
             .Builder()
-            .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
             .connectTimeout(0, TimeUnit.MILLISECONDS)
             .readTimeout(0, TimeUnit.MILLISECONDS)
-            .writeTimeout(0, TimeUnit.MILLISECONDS)
             .retryOnConnectionFailure(true)
             .build()
     }
