@@ -28,6 +28,7 @@ class ReminderMessagingService(
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
+        BottariLogger.data("[FCM] onMessageReceived!\n${message.data}")
         if (message.data.isEmpty()) return
         handleMessageData(message.data)
     }
@@ -68,6 +69,11 @@ class ReminderMessagingService(
             TYPE_REMIND_BY_ITEM -> {
                 val item = data[KEY_TEAM_ITEM_NAME].orEmpty()
                 handleRemindByItemMessage(teamBottariId, teamBottariTitle, item)
+            }
+
+            TYPE_EXIT_TEAM_BOTTARI -> {
+                val memberName = data[KEY_EXIT_MEMBER_NAME].orEmpty()
+                handleExitTeamBottariMessage(teamBottariId, teamBottariTitle, memberName)
             }
         }
     }
@@ -110,6 +116,20 @@ class ReminderMessagingService(
         notificationHelper.sendTeamNotification(id, title, message)
     }
 
+    private fun handleExitTeamBottariMessage(
+        id: Long,
+        title: String,
+        memberName: String,
+    ) {
+        val message =
+            getString(
+                R.string.common_team_bottari_notification_exit_team_bottari_message_text,
+                memberName,
+                title,
+            )
+        notificationHelper.sendTeamNotification(id, title, message)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         serviceScope.coroutineContext.cancel()
@@ -122,10 +142,12 @@ class ReminderMessagingService(
         private const val KEY_TEAM_BOTTARI_ID = "teamBottariId"
         private const val KEY_TEAM_BOTTARI_TITLE = "teamBottariTitle"
         private const val KEY_TEAM_ITEM_NAME = "teamItemName"
+        private const val KEY_EXIT_MEMBER_NAME = "exitMemberName"
         private const val KEY_MESSAGE_TYPE = "type"
 
         private const val TYPE_TEAM_ITEM_CHANGED = "TEAM_ITEM_CHANGED"
         private const val TYPE_REMIND_BY_TEAM_MEMBER = "REMIND_BY_TEAM_MEMBER"
         private const val TYPE_REMIND_BY_ITEM = "REMIND_BY_ITEM"
+        private const val TYPE_EXIT_TEAM_BOTTARI = "EXIT_TEAM_BOTTARI"
     }
 }

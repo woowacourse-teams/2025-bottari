@@ -114,7 +114,7 @@
     <string name="common_team_bottari_notification_item_changed_message_text">챙겨야 할 물건이 변경되었어요.</string>
     <string name="common_team_bottari_notification_send_remind_by_member_message_text">아직 챙기지 않은 물건이 있어요.</string>
     <string name="common_team_bottari_notification_send_remind_by_item_message_text">%s 챙겨 주세요.</string>
-
+    <string name="common_team_bottari_notification_exit_team_bottari_message_text">%s님이 %s에서 나갔어요.</string>
     <!--  Splash Screen  -->
     <string name="splash_screen_permission_denied_text">권한이 거부되어 일부 기능이 제한돼요.\n기능 사용 시 다시 요청드릴게요.</string>
 
