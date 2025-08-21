@@ -1,6 +1,7 @@
 package com.bottari.data.repository
 
 import com.bottari.data.model.fcm.SaveFcmTokenRequest
+import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.FcmRemoteDataSource
 import com.bottari.domain.repository.FcmRepository
 import io.kotest.matchers.result.shouldBeFailure
@@ -8,6 +9,7 @@ import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import okhttp3.MediaType.Companion.toMediaType
@@ -20,6 +22,7 @@ import retrofit2.Response
 
 class FcmRepositoryTest {
     private lateinit var dataSource: FcmRemoteDataSource
+    private lateinit var localDataSource: MemberIdentifierLocalDataSource
     private lateinit var repository: FcmRepository
     private val errorResponseBody =
         """{"message":"FCM 토큰 정보가 존재하지 않습니다."}""".toResponseBody("application/json".toMediaType())
@@ -27,7 +30,9 @@ class FcmRepositoryTest {
     @BeforeEach
     fun setUp() {
         dataSource = mockk<FcmRemoteDataSource>()
-        repository = FcmRepositoryImpl(dataSource)
+        localDataSource = mockk<MemberIdentifierLocalDataSource>()
+        repository = FcmRepositoryImpl(dataSource, localDataSource)
+        every { localDataSource.getMemberId() } returns Result.success(1)
     }
 
     @DisplayName("FCM 토큰 저장에 성공하는 경우 Success를 반환한다")

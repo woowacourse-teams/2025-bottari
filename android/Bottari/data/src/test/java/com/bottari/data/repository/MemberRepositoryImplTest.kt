@@ -45,8 +45,8 @@ class MemberRepositoryImplTest {
             // given
             val request = RegisterMemberRequest("ssaid", "token")
             coEvery { remoteDataSource.registerMember(request) } returns Result.success(1)
-            every { userInfoLocalDataSource.saveMemberId(1) } returns Unit
             coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.success("ssaid")
+            every { userInfoLocalDataSource.saveMemberId(1) } returns Result.success(Unit)
 
             // when
             val result = repository.registerMember("token")
@@ -85,11 +85,7 @@ class MemberRepositoryImplTest {
             // given
             val newNickname = Nickname("nickname")
             val request = SaveMemberNicknameRequest("nickname")
-            coEvery {
-                remoteDataSource.saveMemberNickname(
-                    request,
-                )
-            } returns Result.success(Unit)
+            coEvery { remoteDataSource.saveMemberNickname(request) } returns Result.success(Unit)
 
             // when
             val result = repository.saveMemberNickname(newNickname)
@@ -109,11 +105,8 @@ class MemberRepositoryImplTest {
             val newNickname = Nickname("nickname")
             val request = SaveMemberNicknameRequest("nickname")
             val httpException = HttpException(Response.error<Unit>(400, errorResponseBody))
-            coEvery {
-                remoteDataSource.saveMemberNickname(
-                    request,
-                )
-            } returns Result.failure(httpException)
+            coEvery { remoteDataSource.saveMemberNickname(request) } returns
+                Result.failure(httpException)
 
             // when
             val result = repository.saveMemberNickname(newNickname)
@@ -131,11 +124,8 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val response = CheckRegisteredMemberResponse(true, 1, "test")
-            every { userInfoLocalDataSource.saveMemberId(1) } returns Unit
-            coEvery { remoteDataSource.checkRegisteredMember() } returns
-                Result.success(
-                    response,
-                )
+            coEvery { remoteDataSource.checkRegisteredMember() } returns Result.success(response)
+            every { userInfoLocalDataSource.saveMemberId(1) } returns Result.success(Unit)
 
             // when
             val result = repository.checkRegisteredMember()
@@ -158,10 +148,7 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val response = CheckRegisteredMemberResponse(false, 1, "test")
-            coEvery { remoteDataSource.checkRegisteredMember() } returns
-                Result.success(
-                    response,
-                )
+            coEvery { remoteDataSource.checkRegisteredMember() } returns Result.success(response)
 
             // when
             val result = repository.checkRegisteredMember()
@@ -184,10 +171,7 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val memberId = "test_member_id"
-            coEvery { userInfoLocalDataSource.getInstallationId() } returns
-                Result.success(
-                    memberId,
-                )
+            coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.success(memberId)
 
             // when
             val result = repository.getInstallationId()
