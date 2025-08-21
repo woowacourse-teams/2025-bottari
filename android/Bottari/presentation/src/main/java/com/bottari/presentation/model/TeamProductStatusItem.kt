@@ -16,4 +16,5 @@ data class TeamBottariProductStatusUiModel(
 
 data class TeamChecklistTypeUiModel(
     val type: BottariItemTypeUiModel,
+    val hasItems: Boolean,
 ) : TeamProductStatusItem

@@ -67,9 +67,9 @@ class TeamBottariStatusViewModel(
         assignedItems: List<TeamBottariProductStatusUiModel>,
     ): List<TeamProductStatusItem> =
         buildList {
-            add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.SHARED))
+            add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.SHARED, sharedItems.isNotEmpty()))
             addAll(sharedItems)
-            add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.ASSIGNED()))
+            add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.ASSIGNED(), assignedItems.isNotEmpty()))
             addAll(assignedItems)
         }
 
