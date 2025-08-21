@@ -1,6 +1,5 @@
 package com.bottari.presentation.view.checklist.team.main.checklist.adapter
 
-import TeamChecklistTypeViewHolder
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -23,14 +22,8 @@ class TeamChecklistItemAdapter(
         viewType: Int,
     ): RecyclerView.ViewHolder =
         when (viewType) {
-            ITEM_VIEW_TYPE_TYPE -> {
-                TeamChecklistTypeViewHolder.from(parent, teamChecklistEventListener)
-            }
-
-            ITEM_VIEW_TYPE_ITEM -> {
-                TeamChecklistViewHolder.from(parent, teamChecklistEventListener)
-            }
-
+            ITEM_VIEW_TYPE_TYPE -> TeamChecklistTypeViewHolder.from(parent, teamChecklistEventListener)
+            ITEM_VIEW_TYPE_ITEM -> TeamChecklistViewHolder.from(parent, teamChecklistEventListener)
             else -> throw IllegalArgumentException(ERROR_VIEW_TYPE)
         }
 

@@ -1,3 +1,5 @@
+package com.bottari.presentation.view.checklist.team.main.checklist.adapter
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.StringRes
@@ -10,20 +12,20 @@ import com.bottari.presentation.model.TeamChecklistExpandableTypeUiModel
 
 class TeamChecklistTypeViewHolder(
     private val binding: ItemTeamChecklistOptionBinding,
-    private val onTeamChecklistTypeClickListener: OnTeamChecklistTypeClickListener,
+    onTeamChecklistTypeClickListener: OnTeamChecklistTypeClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
     private var currentType: TeamChecklistExpandableTypeUiModel? = null
 
     init {
         binding.root.setOnClickListener {
             currentType?.let { item ->
-                onTeamChecklistTypeClickListener.onClick(item.type)
+                onTeamChecklistTypeClickListener.onTypeClick(item.type)
             }
         }
     }
 
     fun bind(type: TeamChecklistExpandableTypeUiModel) {
-        this.currentType = type
+        currentType = type
         binding.tvTeamChecklistItemTitle.setText(type.type.getStringResId())
         binding.ivTeamChecklistOption.rotation =
             if (type.isExpanded) TOGGLE_SHAPE_OPENED else TOGGLE_SHAPE_UNOPENED
@@ -39,7 +41,7 @@ class TeamChecklistTypeViewHolder(
         }
 
     interface OnTeamChecklistTypeClickListener {
-        fun onClick(type: BottariItemTypeUiModel)
+        fun onTypeClick(type: BottariItemTypeUiModel)
     }
 
     companion object {

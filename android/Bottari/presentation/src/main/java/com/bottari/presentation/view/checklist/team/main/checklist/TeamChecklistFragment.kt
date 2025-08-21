@@ -23,11 +23,11 @@ class TeamChecklistFragment :
         TeamChecklistItemAdapter(this)
     }
 
-    override fun onClick(type: BottariItemTypeUiModel) {
+    override fun onTypeClick(type: BottariItemTypeUiModel) {
         viewModel.toggleParentExpanded(type)
     }
 
-    override fun onClick(
+    override fun onItemClick(
         id: Long,
         type: BottariItemTypeUiModel,
     ) {
