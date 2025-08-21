@@ -7,6 +7,17 @@
     android:fillViewport="true"
     tools:context=".view.checklist.team.main.status.TeamBottariStatusFragment">
 
+    <include
+        android:id="@+id/view_team_bottari_status_empty"
+        layout="@layout/view_team_bottari_status_empty"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tv_team_bottari_item_status_title"
         style="@style/Pretendard_Bold_22"

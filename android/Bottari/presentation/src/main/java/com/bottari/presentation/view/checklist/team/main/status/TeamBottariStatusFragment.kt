@@ -51,6 +51,7 @@ class TeamBottariStatusFragment :
             teamBottariProductStatusDetailAdapter.submitList(state.selectedProduct?.memberCheckStatus)
             binding.tvTeamBottariItemStatusTitle.text = state.selectedProduct?.name ?: ""
             teamBottariProductStatusAdapter.submitList(state.teamChecklistItems)
+            handleEmptyView(state.sharedItems.isEmpty() && state.assignedItems.isEmpty())
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
@@ -80,6 +81,14 @@ class TeamBottariStatusFragment :
         binding.btnTeamBottariItemSendHurryUp.setOnClickListener {
             viewModel.sendRemindByItem()
         }
+    }
+
+    private fun handleEmptyView(isEmpty: Boolean) {
+        binding.viewTeamBottariStatusEmpty.clTeamBottariStatusEmptyView.isVisible = isEmpty
+        binding.rvTeamBottariItems.isVisible = isEmpty.not()
+        binding.rvTeamBottariItemStatusDetail.isVisible = isEmpty.not()
+        binding.tvTeamBottariItemStatusTitle.isVisible = isEmpty.not()
+        binding.btnTeamBottariItemSendHurryUp.isVisible = isEmpty.not()
     }
 
     companion object {
