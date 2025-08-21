@@ -46,7 +46,7 @@ class ReminderMessagingService(
     private fun saveToken(token: String) {
         CoroutineScope(Dispatchers.IO).launch {
             saveFcmTokenUseCase(token)
-                .onFailure { error -> BottariLogger.error(error.message, error) }
+                .onFailure { error -> BottariLogger.error(LOG_FORMAT.format(error.message), error) }
         }
     }
 
@@ -71,7 +71,7 @@ class ReminderMessagingService(
         runCatching {
             stringId?.toLong()
         }.onFailure { error ->
-            BottariLogger.error(error.message, error)
+            BottariLogger.error(LOG_FORMAT.format(error.message), error)
         }.getOrNull()
 
     private fun String?.orNullIfBlank(): String? = this?.takeIf { it.isNotBlank() }
@@ -99,11 +99,15 @@ class ReminderMessagingService(
         item: String,
     ) {
         val message =
-            getString(R.string.common_team_bottari_notification_send_remind_by_item_message_text, item)
+            getString(
+                R.string.common_team_bottari_notification_send_remind_by_item_message_text,
+                item,
+            )
         notificationHelper.sendTeamNotification(id, title, message)
     }
 
     companion object {
+        private const val LOG_FORMAT = "[Reminder Messaging Service] %s"
         private const val NOTIFICATION_PREFIX_OLD = "gcm.notification"
         private const val KEY_TEAM_BOTTARI_ID = "teamBottariId"
         private const val KEY_TEAM_BOTTARI_TITLE = "teamBottariTitle"
