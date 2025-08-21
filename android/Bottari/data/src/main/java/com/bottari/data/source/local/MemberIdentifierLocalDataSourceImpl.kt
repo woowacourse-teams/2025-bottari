@@ -1,42 +1,25 @@
 package com.bottari.data.source.local
 
-import android.content.Context
-import android.content.SharedPreferences
-import androidx.core.content.edit
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.installations.FirebaseInstallations
 import java.util.concurrent.TimeUnit
 
-class MemberIdentifierLocalDataSourceImpl(
-    context: Context,
-) : MemberIdentifierLocalDataSource {
-    private val sharedPreferences: SharedPreferences =
-        context.getSharedPreferences(MEMBER_IDENTIFIER_PREFERENCES, Context.MODE_PRIVATE)
-
+class MemberIdentifierLocalDataSourceImpl : MemberIdentifierLocalDataSource {
     private var cachedInstallationId: String? = null
+    private var cachedMemberId: Long? = null
 
     override fun getInstallationId(): Result<String> =
         runCatching {
             cachedInstallationId ?: initialize().also { cachedInstallationId = it }
         }
 
-    override fun saveMemberId(id: Long) {
-        sharedPreferences.edit { putLong(MEMBER_ID, id) }
-    }
+    override fun saveMemberId(id: Long): Result<Unit> = runCatching { cachedMemberId = id }
 
-    override fun getMemberId(): Result<Long> {
-        val id = sharedPreferences.getLong(MEMBER_ID, -1)
-        return if (id == -1L) {
-            Result.failure(IllegalStateException("No member id found"))
-        } else {
-            Result.success(id)
-        }
-    }
+    override fun getMemberId(): Result<Long> = runCatching { requireNotNull(cachedMemberId) { ERROR_MEMBER_ID_NULL } }
 
     private fun initialize(): String = Tasks.await(FirebaseInstallations.getInstance().id, 10, TimeUnit.SECONDS)
 
     companion object {
-        private const val MEMBER_IDENTIFIER_PREFERENCES = "MEMBER_IDENTIFIER_PREFERENCES"
-        private const val MEMBER_ID = "MEMBER_ID"
+        private const val ERROR_MEMBER_ID_NULL = "[ERROR] 회원 ID가 null 입니다"
     }
 }
