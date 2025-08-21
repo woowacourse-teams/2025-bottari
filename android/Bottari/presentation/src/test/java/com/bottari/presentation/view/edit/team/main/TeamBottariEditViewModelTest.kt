@@ -2,6 +2,8 @@ package com.bottari.presentation.view.edit.team.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
+import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
+import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariDetailUseCase
 import com.bottari.presentation.CoroutinesTestExtension
 import com.bottari.presentation.InstantTaskExecutorExtension
@@ -22,14 +24,24 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(InstantTaskExecutorExtension::class, CoroutinesTestExtension::class)
 class TeamBottariEditViewModelTest {
     private lateinit var fetchTeamBottariDetailUseCase: FetchTeamBottariDetailUseCase
+    private lateinit var connectTeamEventUseCase: ConnectTeamEventUseCase
+    private lateinit var disconnectTeamEventUseCase: DisconnectTeamEventUseCase
     private lateinit var stateHandle: SavedStateHandle
     private lateinit var viewModel: TeamBottariEditViewModel
 
     @BeforeEach
     fun setUp() {
         fetchTeamBottariDetailUseCase = mockk<FetchTeamBottariDetailUseCase>()
+        connectTeamEventUseCase = mockk<ConnectTeamEventUseCase>()
+        disconnectTeamEventUseCase = mockk<DisconnectTeamEventUseCase>()
         stateHandle = SavedStateHandle(mapOf("KEY_BOTTARI_ID" to 1L))
-        viewModel = TeamBottariEditViewModel(stateHandle, fetchTeamBottariDetailUseCase)
+        viewModel =
+            TeamBottariEditViewModel(
+                stateHandle,
+                fetchTeamBottariDetailUseCase,
+                connectTeamEventUseCase,
+                disconnectTeamEventUseCase,
+            )
     }
 
     @DisplayName("팀 보따리 상세 정보를 조회한다")

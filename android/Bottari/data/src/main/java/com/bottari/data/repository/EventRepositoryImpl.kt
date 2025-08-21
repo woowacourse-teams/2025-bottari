@@ -14,4 +14,6 @@ class EventRepositoryImpl(
         eventRemoteDataSource.connectEvent(teamBottariId).map { eventStateResponse ->
             eventStateResponse.toDomain()
         }
+
+    override suspend fun disconnectEvent() = eventRemoteDataSource.disconnectEvent()
 }

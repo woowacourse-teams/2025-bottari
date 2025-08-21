@@ -22,7 +22,7 @@ class SSEClientImpl(
 ) : EventSourceListener(),
     SSEClient {
     private var eventSource: EventSource? = null
-
+    private var id: Long? = null
     private val eventFlow: MutableStateFlow<EventStateResponse> =
         MutableStateFlow(
             EventStateResponse.Empty,
@@ -39,6 +39,7 @@ class SSEClientImpl(
         response: Response,
     ) {
         super.onOpen(eventSource, response)
+        BottariLogger.network("[Event] Team Bottari $id open")
         eventFlow.value = EventStateResponse.OnOpen
     }
 
@@ -53,6 +54,7 @@ class SSEClientImpl(
             val rawEvent = json.decodeFromString(OnEventRaw.serializer(), data)
             rawEvent.toEvent(json)
         }.onSuccess { event ->
+            BottariLogger.network("[Event] $data")
             eventFlow.value = event
         }.onFailure { exception ->
             BottariLogger.error(exception.message, exception)
@@ -68,25 +70,31 @@ class SSEClientImpl(
         super.onFailure(eventSource, t, response)
         eventFlow.value = EventStateResponse.OnFailure(t)
         t?.let { exception ->
-            BottariLogger.error(exception.message, exception)
+            BottariLogger.error("[Event] ${exception.message}", exception)
         }
     }
 
     override fun onClosed(eventSource: EventSource) {
         super.onClosed(eventSource)
+        BottariLogger.network("[Event] Team Bottari $id close")
         eventFlow.value = EventStateResponse.OnClosed
     }
 
     override fun connect(teamBottariId: Long): Flow<EventStateResponse> {
-        disconnect()
+        if (eventSource != null) return eventFlow
+        id = teamBottariId
         val request = createRequest(teamBottariId)
         eventSource = createEventSource(request)
+        BottariLogger.network("[Event] Team Bottari $id stream connect")
         return eventFlow
     }
 
     override fun disconnect() {
+        if (id == null || eventSource == null) return
+        BottariLogger.network("[Event] Team Bottari $id stream disconnect")
         eventSource?.cancel()
         eventSource = null
+        id = null
     }
 
     private fun createRequest(teamBottariId: Long): Request =

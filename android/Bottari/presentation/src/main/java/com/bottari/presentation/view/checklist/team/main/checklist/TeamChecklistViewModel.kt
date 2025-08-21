@@ -8,7 +8,11 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.bottari.ChecklistItem
+import com.bottari.domain.model.event.EventData
+import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.TeamBottariCheckList
+import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
+import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
@@ -18,14 +22,26 @@ import com.bottari.presentation.model.TeamChecklistExpandableTypeUiModel
 import com.bottari.presentation.model.TeamChecklistItem
 import com.bottari.presentation.model.TeamChecklistProductUiModel
 import com.bottari.presentation.util.debounce
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class TeamChecklistViewModel(
     stateHandle: SavedStateHandle,
     private val fetchTeamBottariChecklistUseCase: FetchTeamChecklistUseCase,
     private val checkTeamBottariItemUseCase: CheckTeamBottariItemUseCase,
     private val unCheckTeamBottariItemUseCase: UnCheckTeamBottariItemUseCase,
+    private val connectTeamEventUseCase: ConnectTeamEventUseCase,
+    private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
 ) : BaseViewModel<TeamChecklistUiState, TeamChecklistUiEvent>(TeamChecklistUiState()) {
     private val teamBottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
@@ -40,6 +56,12 @@ class TeamChecklistViewModel(
 
     init {
         fetchTeamCheckList()
+        handleEvent()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        CoroutineScope(Dispatchers.IO).launch { disconnectTeamEventUseCase() }
     }
 
     fun toggleParentExpanded(type: BottariItemTypeUiModel) {
@@ -113,6 +135,19 @@ class TeamChecklistViewModel(
                     emitEvent(TeamChecklistUiEvent.FetchChecklistFailure)
                 }
             updateState { copy(isLoading = false) }
+        }
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun handleEvent() {
+        launch {
+            connectTeamEventUseCase(teamBottariId)
+                .filterIsInstance<EventState.OnEvent>()
+                .map { event -> event.data }
+                .filter { eventData -> eventData !is EventData.TeamMemberCreate }
+                .debounce(DEBOUNCE_DELAY)
+                .onEach { fetchTeamCheckList() }
+                .launchIn(this)
         }
     }
 
@@ -280,6 +315,8 @@ class TeamChecklistViewModel(
                         UseCaseProvider.fetchTeamChecklistUseCase,
                         UseCaseProvider.checkTeamBottariItemUseCase,
                         UseCaseProvider.unCheckTeamBottariItemUseCase,
+                        UseCaseProvider.connectTeamEventUseCase,
+                        UseCaseProvider.disconnectTeamEventUseCase,
                     )
                 }
             }
