@@ -30,7 +30,7 @@ class TeamMembersStatusViewModel(
         debounce(
             timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
-        ) { items -> sendRemindMessage(items) }
+        ) { member -> sendRemindMessage(member) }
 
     init {
         fetchMemberId()
