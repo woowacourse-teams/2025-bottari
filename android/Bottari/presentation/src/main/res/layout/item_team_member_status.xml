@@ -89,7 +89,7 @@
         android:id="@+id/rv_assigned_items"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_2x_small"
+        android:layout_marginTop="@dimen/space_small"
         android:layout_marginBottom="@dimen/space_median"
         android:nestedScrollingEnabled="false"
         app:layout_constrainedHeight="true"
