@@ -3,6 +3,7 @@ package com.bottari.di
 import com.bottari.domain.usecase.alarm.CreateAlarmUseCase
 import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
 import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
+import com.bottari.domain.usecase.appConfig.CheckForceUpdateUseCase
 import com.bottari.domain.usecase.appConfig.GetPermissionFlagUseCase
 import com.bottari.domain.usecase.appConfig.SavePermissionFlagUseCase
 import com.bottari.domain.usecase.bottari.CreateBottariUseCase
@@ -11,6 +12,8 @@ import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
 import com.bottari.domain.usecase.bottari.SaveBottariTitleUseCase
 import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
+import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
+import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.fcm.SaveFcmTokenUseCase
 import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
@@ -260,5 +263,14 @@ object UseCaseProvider {
     }
     val resetBottariItemCheckStateUseCase: ResetBottariItemCheckStateUseCase by lazy {
         ResetBottariItemCheckStateUseCase(RepositoryProvider.bottariItemRepository)
+    }
+    val checkForceUpdateUseCase: CheckForceUpdateUseCase by lazy {
+        CheckForceUpdateUseCase(RepositoryProvider.remoteConfigRepository)
+    }
+    val connectTeamEventUseCase: ConnectTeamEventUseCase by lazy {
+        ConnectTeamEventUseCase(RepositoryProvider.eventRepository)
+    }
+    val disconnectTeamEventUseCase: DisconnectTeamEventUseCase by lazy {
+        DisconnectTeamEventUseCase(RepositoryProvider.eventRepository)
     }
 }

@@ -3,7 +3,7 @@ package com.bottari.data.source.local
 interface MemberIdentifierLocalDataSource {
     fun getInstallationId(): Result<String>
 
-    fun saveMemberId(id: Long)
+    suspend fun saveMemberId(id: Long): Result<Unit>
 
-    fun getMemberId(): Result<Long>
+    suspend fun getMemberId(): Result<Long>
 }

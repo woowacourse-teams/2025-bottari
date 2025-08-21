@@ -14,4 +14,6 @@ sealed interface MainUiEvent {
     data object SavePermissionFlagFailure : MainUiEvent
 
     data object IncompletePermissionFlow : MainUiEvent
+
+    data object ForceUpdate : MainUiEvent
 }

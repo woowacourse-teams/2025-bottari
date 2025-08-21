@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.bottari.presentation.model.TeamMemberStatusUiModel
 
 class TeamMemberStatusAdapter(
-    private val onSendRemindClickListener: TeamMemberStatusViewHolder.OnSendRemindClickListener,
+    private val memberStatusClickListener: TeamMemberStatusViewHolder.MemberStatusClickListener,
 ) : ListAdapter<TeamMemberStatusUiModel, TeamMemberStatusViewHolder>(DiffUtil) {
     override fun onBindViewHolder(
         holder: TeamMemberStatusViewHolder,
@@ -18,7 +18,7 @@ class TeamMemberStatusAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): TeamMemberStatusViewHolder = TeamMemberStatusViewHolder.from(parent, onSendRemindClickListener)
+    ): TeamMemberStatusViewHolder = TeamMemberStatusViewHolder.from(parent, memberStatusClickListener)
 
     companion object {
         private val DiffUtil =

@@ -5,10 +5,14 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.member.RegisteredMember
+import com.bottari.domain.usecase.appConfig.CheckForceUpdateUseCase
 import com.bottari.domain.usecase.appConfig.GetPermissionFlagUseCase
 import com.bottari.domain.usecase.appConfig.SavePermissionFlagUseCase
+import com.bottari.domain.usecase.fcm.SaveFcmTokenUseCase
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.presentation.BuildConfig
 import com.bottari.presentation.common.base.BaseViewModel
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
@@ -17,10 +21,12 @@ class MainViewModel(
     private val registerMemberUseCase: RegisterMemberUseCase,
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
     private val savePermissionFlagUseCase: SavePermissionFlagUseCase,
+    private val saveFcmTokenUseCase: SaveFcmTokenUseCase,
     private val getPermissionFlagUseCase: GetPermissionFlagUseCase,
+    private val checkForceUpdateUseCase: CheckForceUpdateUseCase,
 ) : BaseViewModel<MainUiState, MainUiEvent>(MainUiState()) {
     init {
-        checkPermissionFlag()
+        checkForceUpdate()
     }
 
     fun checkRegisteredMember() {
@@ -28,9 +34,8 @@ class MainViewModel(
 
         launch {
             checkRegisteredMemberUseCase()
-                .onSuccess { result ->
-                    handleCheckRegistrationResult(result)
-                }.onFailure { emitEvent(MainUiEvent.LoginFailure) }
+                .onSuccess { result -> handleCheckRegistrationResult(result) }
+                .onFailure { emitEvent(MainUiEvent.LoginFailure) }
         }
     }
 
@@ -50,11 +55,7 @@ class MainViewModel(
     }
 
     private fun handleCheckRegistrationResult(result: RegisteredMember) {
-        if (result.isRegistered) {
-            updateState { copy(isLoading = false, isReady = true) }
-            emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))
-            return
-        }
+        if (result.isRegistered) return saveFcmToken()
         registerMember()
     }
 
@@ -72,10 +73,37 @@ class MainViewModel(
         launch {
             val fcmToken = FirebaseMessaging.getInstance().token.await()
             registerMemberUseCase(fcmToken)
+                .onFailure { emitEvent(MainUiEvent.RegisterFailure) }
                 .onSuccess {
                     updateState { copy(isLoading = false, isReady = true) }
                     emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))
-                }.onFailure { emitEvent(MainUiEvent.RegisterFailure) }
+                }
+        }
+    }
+
+    private fun saveFcmToken() {
+        launch {
+            val fcmToken = FirebaseMessaging.getInstance().token.await()
+            saveFcmTokenUseCase(fcmToken)
+                .onFailure { exception -> BottariLogger.error(exception.message, exception) }
+
+            updateState { copy(isLoading = false, isReady = true) }
+            emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))
+        }
+    }
+
+    private fun checkForceUpdate() {
+        if (BuildConfig.DEBUG) return checkPermissionFlag()
+        updateState { copy(isLoading = true) }
+
+        launch {
+            checkForceUpdateUseCase(BuildConfig.APP_VERSION_CODE)
+                .onSuccess { isForceUpdate ->
+                    if (isForceUpdate) return@onSuccess emitEvent(MainUiEvent.ForceUpdate)
+                    checkPermissionFlag()
+                }.onFailure { exception -> BottariLogger.error(exception.message, exception) }
+
+            updateState { copy(isLoading = false) }
         }
     }
 
@@ -87,7 +115,9 @@ class MainViewModel(
                         UseCaseProvider.registerMemberUseCase,
                         UseCaseProvider.checkRegisteredMemberUseCase,
                         UseCaseProvider.savePermissionFlagUseCase,
+                        UseCaseProvider.saveFcmTokenUseCase,
                         UseCaseProvider.getPermissionFlagUseCase,
+                        UseCaseProvider.checkForceUpdateUseCase,
                     )
                 }
             }

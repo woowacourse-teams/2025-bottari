@@ -22,14 +22,8 @@ class TeamChecklistItemAdapter(
         viewType: Int,
     ): RecyclerView.ViewHolder =
         when (viewType) {
-            ITEM_VIEW_TYPE_TYPE -> {
-                TeamChecklistTypeViewHolder.from(parent, teamChecklistEventListener)
-            }
-
-            ITEM_VIEW_TYPE_ITEM -> {
-                TeamChecklistViewHolder.from(parent, teamChecklistEventListener)
-            }
-
+            ITEM_VIEW_TYPE_TYPE -> TeamChecklistTypeViewHolder.from(parent, teamChecklistEventListener)
+            ITEM_VIEW_TYPE_ITEM -> TeamChecklistViewHolder.from(parent, teamChecklistEventListener)
             else -> throw IllegalArgumentException(ERROR_VIEW_TYPE)
         }
 

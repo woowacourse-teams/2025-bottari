@@ -4,8 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     tools:context=".view.checklist.team.main.status.TeamBottariStatusFragment">
+
+    <include
+        android:id="@+id/view_team_bottari_status_empty"
+        layout="@layout/view_team_bottari_status_empty"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_team_bottari_item_status_title"
@@ -57,7 +67,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_team_bottari_items"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/space_x_large"
         app:layout_constraintEnd_toEndOf="parent"

@@ -7,19 +7,35 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.domain.model.event.EventState
+import com.bottari.domain.model.team.TeamMemberStatus
+import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
+import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
+import com.bottari.presentation.model.TeamMemberStatusUiModel
 import com.bottari.presentation.model.TeamMemberUiModel
 import com.bottari.presentation.util.debounce
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class TeamMembersStatusViewModel(
     stateHandle: SavedStateHandle,
     private val fetchTeamMembersStatusUseCase: FetchTeamMembersStatusUseCase,
     private val sendRemindByMemberMessageUseCase: SendRemindByMemberMessageUseCase,
     private val getMemberIdUseCase: GetMemberIdUseCase,
+    private val connectTeamEventUseCase: ConnectTeamEventUseCase,
+    private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
 ) : BaseViewModel<TeamMembersStatusUiState, TeamMembersStatusUiEvent>(
         TeamMembersStatusUiState(),
     ) {
@@ -34,23 +50,12 @@ class TeamMembersStatusViewModel(
 
     init {
         fetchMemberId()
+        handleEvent()
     }
 
-    private fun fetchTeamMembersStatus() {
-        val myId = currentState.myId
-        updateState { copy(isLoading = true) }
-        launch {
-            fetchTeamMembersStatusUseCase(teamBottariId)
-                .onSuccess { membersStatus ->
-                    val memberStatusUiModel = membersStatus.map { status -> status.toUiModel(myId) }
-                    updateState {
-                        copy(
-                            membersStatus = memberStatusUiModel,
-                        )
-                    }
-                }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure) }
-            updateState { copy(isLoading = false) }
-        }
+    override fun onCleared() {
+        super.onCleared()
+        CoroutineScope(Dispatchers.IO).launch { disconnectTeamEventUseCase() }
     }
 
     private fun sendRemindMessage(member: TeamMemberUiModel) {
@@ -71,6 +76,15 @@ class TeamMembersStatusViewModel(
         }
     }
 
+    fun updateExpandState(id: Long) {
+        val newMembersStatus =
+            currentState.membersStatus.map { memberStatus ->
+                if (memberStatus.member.id == id) return@map memberStatus.copy(isExpanded = !memberStatus.isExpanded)
+                memberStatus
+            }
+        updateState { copy(membersStatus = newMembersStatus) }
+    }
+
     private fun fetchMemberId() {
         launch {
             getMemberIdUseCase()
@@ -80,6 +94,51 @@ class TeamMembersStatusViewModel(
                 }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMemberIdFailure) }
         }
     }
+
+    private fun fetchTeamMembersStatus() {
+        val myId = currentState.myId
+        updateState { copy(isLoading = true) }
+        launch {
+            fetchTeamMembersStatusUseCase(teamBottariId)
+                .onSuccess { membersStatus ->
+                    val updated = mergeWithPreviousState(membersStatus, myId)
+                    updateState {
+                        copy(
+                            membersStatus = updated,
+                        )
+                    }
+                }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure) }
+            updateState { copy(isLoading = false) }
+        }
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun handleEvent() {
+        launch {
+            connectTeamEventUseCase(teamBottariId)
+                .filterIsInstance<EventState.OnEvent>()
+                .map { event -> event.data }
+                .debounce(DEBOUNCE_DELAY)
+                .onEach { fetchMemberId() }
+                .launchIn(this)
+        }
+    }
+
+    private fun mergeWithPreviousState(
+        teamMembersStatus: List<TeamMemberStatus>,
+        id: Long,
+    ): List<TeamMemberStatusUiModel> =
+        teamMembersStatus.map { memberStatus ->
+            val uiModel = memberStatus.toUiModel(id)
+            val previousState =
+                currentState.membersStatus.find { it.member.id == uiModel.member.id }
+            if (previousState != null && uiModel.isItemsEmpty.not()) {
+                return@map uiModel.copy(
+                    isExpanded = previousState.isExpanded,
+                )
+            }
+            uiModel
+        }
 
     companion object {
         private const val KEY_TEAM_BOTTARI_ID = "KEY_TEAM_BOTTARI_ID"
@@ -97,6 +156,8 @@ class TeamMembersStatusViewModel(
                         fetchTeamMembersStatusUseCase = UseCaseProvider.fetchTeamMembersStatusUseCase,
                         sendRemindByMemberMessageUseCase = UseCaseProvider.sendRemindByMemberMessageUseCase,
                         getMemberIdUseCase = UseCaseProvider.getMemberIdUseCase,
+                        connectTeamEventUseCase = UseCaseProvider.connectTeamEventUseCase,
+                        disconnectTeamEventUseCase = UseCaseProvider.disconnectTeamEventUseCase,
                     )
                 }
             }

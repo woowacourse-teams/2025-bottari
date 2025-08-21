@@ -14,32 +14,36 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
 class TeamMemberStatusViewHolder private constructor(
-    onSendRemindClickListener: OnSendRemindClickListener,
+    memberStatusClickListener: MemberStatusClickListener,
     private val binding: ItemTeamMemberStatusBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val sharedItemAdapter: SharedItemAdapter by lazy { SharedItemAdapter() }
     private val assignedItemAdapter: AssignedItemAdapter by lazy { AssignedItemAdapter() }
-    private var currentStatus: TeamMemberStatusUiModel? = null
+    private var memberStatus: TeamMemberStatusUiModel? = null
 
     init {
         itemView.setOnClickListener {
-            binding.groupItems.apply { isVisible = !isVisible }
-            currentStatus?.let { status ->
-                handleHurryUp(status.isAllChecked, status.isMe)
+            memberStatus?.member?.id?.let { id -> memberStatusClickListener.onClickMember(id) }
+            memberStatus?.let { memberStatus ->
+                handleHurryUp(
+                    memberStatus.isAllChecked,
+                    memberStatus.isMe,
+                )
             }
         }
         binding.btnHurryUpAlert.setOnClickListener {
-            currentStatus?.member?.let(onSendRemindClickListener::onClickSendRemind)
+            memberStatus?.member?.let(memberStatusClickListener::onClickSendRemind)
         }
         setupSharedItems()
         setupAssignedItems()
     }
 
     fun bind(status: TeamMemberStatusUiModel) {
-        currentStatus = status
+        memberStatus = status
         itemView.isClickable = status.isItemsEmpty.not()
         binding.tvMemberNickname.text = status.member.nickname
         binding.ivTeamHost.isVisible = status.member.isHost
+        binding.groupItems.isVisible = status.isExpanded
         handleItemsCountStatus(status)
         sharedItemAdapter.submitList(status.sharedItems)
         assignedItemAdapter.submitList(status.assignedItems)
@@ -90,15 +94,17 @@ class TeamMemberStatusViewHolder private constructor(
     companion object {
         fun from(
             parent: ViewGroup,
-            onSendRemindClickListener: OnSendRemindClickListener,
+            memberStatusClickListener: MemberStatusClickListener,
         ): TeamMemberStatusViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemTeamMemberStatusBinding.inflate(inflater, parent, false)
-            return TeamMemberStatusViewHolder(onSendRemindClickListener, binding)
+            return TeamMemberStatusViewHolder(memberStatusClickListener, binding)
         }
     }
 
-    fun interface OnSendRemindClickListener {
+    interface MemberStatusClickListener {
+        fun onClickMember(id: Long)
+
         fun onClickSendRemind(member: TeamMemberUiModel)
     }
 }

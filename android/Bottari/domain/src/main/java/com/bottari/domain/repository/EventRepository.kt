@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface EventRepository {
     suspend fun connectEvent(teamBottariId: Long): Flow<EventState>
+
+    suspend fun disconnectEvent()
 }
