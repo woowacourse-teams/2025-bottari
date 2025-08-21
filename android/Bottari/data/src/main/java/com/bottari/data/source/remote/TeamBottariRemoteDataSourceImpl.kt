@@ -148,6 +148,9 @@ class TeamBottariRemoteDataSourceImpl(
             teamBottariService.saveTeamAssignedItem(teamBottariId, assignedItemId, request)
         }
 
+    override suspend fun exitTeamBottari(teamBottariId: Long): Result<Unit> =
+        safeApiCall { teamBottariService.exitTeamBottari(teamBottariId) }
+
     companion object {
         private const val HEADER_TEAM_BOTTARI_ID_PREFIX = "/team-bottaries/"
     }

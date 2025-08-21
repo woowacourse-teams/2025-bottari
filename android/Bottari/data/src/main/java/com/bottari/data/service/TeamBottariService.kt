@@ -20,6 +20,7 @@ import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
 import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HTTP
 import retrofit2.http.PATCH
@@ -139,5 +140,10 @@ interface TeamBottariService {
         @Path("teamBottariId") teamBottariId: Long,
         @Path("assignedItemId") assignedItemId: Long,
         @Body request: SaveTeamBottariAssignedItemRequest,
+    ): Response<Unit>
+
+    @DELETE("/team-bottaries/{id}")
+    suspend fun exitTeamBottari(
+        @Path("id") teamBottariId: Long,
     ): Response<Unit>
 }
