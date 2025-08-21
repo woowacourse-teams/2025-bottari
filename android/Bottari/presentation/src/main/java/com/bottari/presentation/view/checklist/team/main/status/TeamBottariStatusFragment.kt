@@ -78,7 +78,7 @@ class TeamBottariStatusFragment :
 
     private fun setupListener() {
         binding.btnTeamBottariItemSendHurryUp.setOnClickListener {
-            viewModel.debouncedSendRemindByItem()
+            viewModel.debouncedSendRemindByItem(Unit)
         }
     }
 
