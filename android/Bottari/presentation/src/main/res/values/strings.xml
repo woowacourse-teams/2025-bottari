@@ -135,6 +135,7 @@
     <string name="bottari_home_delete_failure_text">보따리를 삭제하지 못했어요</string>
     <string name="bottari_home_empty_view_title_text">보따리가 없습니다</string>
     <string name="bottari_home_empty_view_description_text">오른쪽 아래 버튼을 눌러 새 보따리를 만들거나,\n‘모두의 보따리’에서 원하는 보따리를 가져와보세요!</string>
+    <string name="bottari_home_exit_confirm_text">한 번 더 누르면 앱이 종료돼요</string>
 
     <!-- Bottari Item -->
     <string name="bottari_item_alarm_repeat_everyday_text">매일 알람</string>

@@ -15,9 +15,13 @@ enum class SnackBarDuration(
 fun View.showSnackbar(
     @StringRes messageRes: Int,
     duration: SnackBarDuration = SnackBarDuration.SHORT_DELAY,
+    anchor: View? = null,
     onDismiss: (() -> Unit)? = null,
 ) {
     Snackbar.make(this, messageRes, Snackbar.LENGTH_INDEFINITE).apply {
+        anchor?.let { anchorView ->
+            this.anchorView = anchorView
+        }
         onDismiss?.let { addDismissCallback(it) }
         show()
         this.view.postDelayed({ dismiss() }, duration.value)
@@ -27,9 +31,13 @@ fun View.showSnackbar(
 fun View.showSnackbar(
     message: String,
     duration: SnackBarDuration = SnackBarDuration.SHORT_DELAY,
+    anchor: View? = null,
     onDismiss: (() -> Unit)? = null,
 ) {
     Snackbar.make(this, message, Snackbar.LENGTH_INDEFINITE).apply {
+        anchor?.let { anchorView ->
+            this.anchorView = anchorView
+        }
         onDismiss?.let { addDismissCallback(it) }
         show()
         this.view.postDelayed({ dismiss() }, duration.value)
