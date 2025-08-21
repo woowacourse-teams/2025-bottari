@@ -59,9 +59,10 @@ public interface TeamBottariApiDocs {
 
     @Operation(summary = "팀 보따리 나가기")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "팀 보따리 생성 성공"),
+            @ApiResponse(responseCode = "204", description = "팀 보따리 생성 성공"),
     })
     @ApiErrorCodes({
+            ErrorCode.MEMBER_NOT_FOUND,
             ErrorCode.TEAM_BOTTARI_NOT_FOUND,
             ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI
     })
