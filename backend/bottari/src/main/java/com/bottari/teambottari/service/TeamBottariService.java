@@ -105,18 +105,21 @@ public class TeamBottariService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_NOT_FOUND));
         final List<TeamMember> allTeamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId());
         final TeamMember exitTeamMember = findExitTeamMember(ssaid, allTeamMembers);
-        teamPersonalItemRepository.deleteByTeamMemberId(exitTeamMember.getId());
-        teamSharedItemRepository.deleteByTeamMemberId(exitTeamMember.getId());
-        final List<TeamAssignedItem> teamAssignedItems = teamAssignedItemRepository.findAllByTeamMemberId(
-                exitTeamMember.getId());
-        teamAssignedItemRepository.deleteByTeamMemberId(exitTeamMember.getId());
-        removeOrphanAssignedItemInfos(teamAssignedItems);
+        final List<TeamAssignedItem> teamAssignedItems = teamAssignedItemRepository.findAllByTeamMemberId(exitTeamMember.getId());
+        deleteItemsByTeamMember(exitTeamMember);
+        deleteOrphanAssignedItemInfos(teamAssignedItems);
         final List<TeamMember> remainMembers = allTeamMembers.stream()
                 .filter(teamMember -> !teamMember.getMember().isSameBySsaid(ssaid))
                 .collect(Collectors.toList());
         transferOwnershipIfNeeded(remainMembers, teamBottari, exitTeamMember);
         teamMemberRepository.deleteById(exitTeamMember.getId());
         deleteTeamBottariIfEmpty(remainMembers, teamBottari);
+    }
+
+    private void deleteItemsByTeamMember(final TeamMember exitTeamMember) {
+        teamPersonalItemRepository.deleteByTeamMemberId(exitTeamMember.getId());
+        teamSharedItemRepository.deleteByTeamMemberId(exitTeamMember.getId());
+        teamAssignedItemRepository.deleteByTeamMemberId(exitTeamMember.getId());
     }
 
     private void deleteTeamBottariIfEmpty(
@@ -141,7 +144,7 @@ public class TeamBottariService {
         }
     }
 
-    private void removeOrphanAssignedItemInfos(final List<TeamAssignedItem> teamAssignedItems) {
+    private void deleteOrphanAssignedItemInfos(final List<TeamAssignedItem> teamAssignedItems) {
         final List<Long> toDelete = new ArrayList<>();
         for (final TeamAssignedItem teamAssignedItem : teamAssignedItems) {
             final TeamAssignedItemInfo info = teamAssignedItem.getInfo();
