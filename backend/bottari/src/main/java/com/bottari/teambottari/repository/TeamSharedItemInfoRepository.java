@@ -3,6 +3,7 @@ package com.bottari.teambottari.repository;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface TeamSharedItemInfoRepository extends JpaRepository<TeamSharedItemInfo, Long> {
@@ -24,4 +25,13 @@ public interface TeamSharedItemInfoRepository extends JpaRepository<TeamSharedIt
             final Long teamBottariId,
             final String name
     );
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("""
+            UPDATE TeamSharedItemInfo tsi
+            SET tsi.deletedAt = CURRENT_TIMESTAMP
+            WHERE tsi.teamBottari.id = :teamBottariId
+            AND tsi.deletedAt IS NULL
+            """)
+    void deleteByTeamBottariId(final Long teamBottariId);
 }
