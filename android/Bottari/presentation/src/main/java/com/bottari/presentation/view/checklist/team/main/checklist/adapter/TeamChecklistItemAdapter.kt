@@ -27,6 +27,24 @@ class TeamChecklistItemAdapter(
             else -> throw IllegalArgumentException(ERROR_VIEW_TYPE)
         }
 
+    // 🔥 [수정됨] 페이로드를 처리하는 onBindViewHolder 추가
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+        payloads: MutableList<Any>,
+    ) {
+        if (payloads.isNotEmpty() && holder is TeamChecklistTypeViewHolder) {
+            // 페이로드가 있으면 부분 업데이트를 수행합니다.
+            // 여기서는 isExpanded 상태(Boolean)를 페이로드로 전달받았다고 가정합니다.
+            val isExpanded = payloads[0] as? Boolean ?: return
+            holder.animateToggle(isExpanded)
+        } else {
+            // 페이로드가 없으면 전체 업데이트를 수행합니다. (기본 동작)
+            super.onBindViewHolder(holder, position, payloads)
+        }
+    }
+
+    // 이 함수는 전체 업데이트 시에만 호출됩니다.
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int,

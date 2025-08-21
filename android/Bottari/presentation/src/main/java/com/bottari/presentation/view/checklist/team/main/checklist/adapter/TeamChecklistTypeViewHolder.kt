@@ -32,6 +32,15 @@ class TeamChecklistTypeViewHolder(
         binding.tvEmptyViewMessage.isVisible = type.isExpanded && type.teamChecklistItems.isEmpty()
     }
 
+    fun animateToggle(isExpanded: Boolean) {
+        val targetRotation = if (isExpanded) TOGGLE_SHAPE_OPENED else TOGGLE_SHAPE_UNOPENED
+        binding.ivTeamChecklistOption
+            .animate()
+            .rotation(targetRotation)
+            .setDuration(300L)
+            .start()
+    }
+
     @StringRes
     private fun BottariItemTypeUiModel.getStringResId(): Int =
         when (this) {

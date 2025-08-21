@@ -91,6 +91,7 @@ class TeamSwipeChecklistFragment :
             when (uiEvent) {
                 TeamChecklistUiEvent.CheckItemFailure -> requireView().showSnackbar(R.string.checklist_check_failure_text)
                 TeamChecklistUiEvent.FetchChecklistFailure -> requireView().showSnackbar(R.string.checklist_fetch_failure_text)
+                is TeamChecklistUiEvent.UpdateChecklistHeader -> {}
             }
         }
     }
