@@ -1,5 +1,6 @@
 package com.bottari.presentation.view.checklist.team.main.checklist.adapter
 
+import TeamChecklistTypeViewHolder
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter

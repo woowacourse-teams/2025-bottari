@@ -1,8 +1,7 @@
-package com.bottari.presentation.view.checklist.team.main.checklist.adapter
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamChecklistOptionBinding
@@ -28,6 +27,7 @@ class TeamChecklistTypeViewHolder(
         binding.tvTeamChecklistItemTitle.setText(type.type.getStringResId())
         binding.ivTeamChecklistOption.rotation =
             if (type.isExpanded) TOGGLE_SHAPE_OPENED else TOGGLE_SHAPE_UNOPENED
+        binding.tvEmptyViewMessage.isVisible = type.isExpanded && type.teamChecklistItems.isEmpty()
     }
 
     @StringRes

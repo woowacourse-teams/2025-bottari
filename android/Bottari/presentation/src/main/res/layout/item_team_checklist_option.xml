@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/space_large"
-    android:layout_marginTop="@dimen/space_2x_small"
+    android:layout_marginTop="@dimen/space_large"
     android:layout_marginBottom="@dimen/space_x_small">
 
     <ImageView
@@ -14,7 +14,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_team_checklist_toggle"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,13 +22,26 @@
         style="@style/Pretendard_Medium_20"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_small"
         android:gravity="center_vertical"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_team_checklist_option"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_team_checklist_option"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="@dimen/space_small"
         tools:text="공통" />
+
+    <TextView
+        android:id="@+id/tv_empty_view_message"
+        style="@style/Pretendard_Regular_16"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:text="@string/team_checklsit_empty_view_title_text"
+        android:textColor="@color/gray_787878"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_team_checklist_item_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

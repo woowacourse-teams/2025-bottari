@@ -209,6 +209,7 @@
     <string name="team_checklist_tap_checklist_text">체크리스트</string>
     <string name="team_checklist_tap_team_current_text">물건 현황</string>
     <string name="team_checklist_tap_member_checklist_text">멤버 현황</string>
+    <string name="team_checklsit_empty_view_title_text">이곳은 아직 비어있어요.</string>
 
     <!-- Bottari Item Type -->
     <string name="bottari_item_type_shared_text">공통</string>
