@@ -11,47 +11,50 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class ReminderMessagingService(
     private val saveFcmTokenUseCase: SaveFcmTokenUseCase = UseCaseProvider.saveFcmTokenUseCase,
 ) : FirebaseMessagingService() {
     private val notificationHelper: NotificationHelper by lazy { NotificationHelper() }
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        saveToken(token)
+        saveFcmToken(token)
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        val data = message.data
-        if (data.isEmpty()) return
-        handleMessageData(data)
+        if (message.data.isEmpty()) return
+        handleMessageData(message.data)
     }
 
     override fun handleIntent(intent: Intent?) {
-        val newIntent =
+        val sanitizedIntent =
             intent?.apply {
-                val tmp =
-                    extras?.apply {
+                extras
+                    ?.apply {
                         remove(Constants.MessageNotificationKeys.ENABLE_NOTIFICATION)
                         remove(NOTIFICATION_PREFIX_OLD)
-                    }
-                replaceExtras(tmp)
+                    }?.also { replaceExtras(it) }
             }
-        super.handleIntent(newIntent)
+        super.handleIntent(sanitizedIntent)
     }
 
-    private fun saveToken(token: String) {
-        CoroutineScope(Dispatchers.IO).launch {
+    private fun saveFcmToken(token: String) {
+        serviceScope.launch {
             saveFcmTokenUseCase(token)
-                .onFailure { error -> BottariLogger.error(LOG_FORMAT.format(error.message), error) }
+                .onFailure { error ->
+                    BottariLogger.error(LOG_FORMAT.format(error.message), error)
+                }
         }
     }
 
     private fun handleMessageData(data: Map<String, String>) {
-        val teamBottariId = parseToLong(data[KEY_TEAM_BOTTARI_ID]) ?: return
+        val teamBottariId = data[KEY_TEAM_BOTTARI_ID].toLongOrNullWithLog() ?: return
         val teamBottariTitle = data[KEY_TEAM_BOTTARI_TITLE].orNullIfBlank() ?: return
         val type = data[KEY_MESSAGE_TYPE].orNullIfBlank() ?: return
 
@@ -63,23 +66,17 @@ class ReminderMessagingService(
                 handleRemindByMemberMessage(teamBottariId, teamBottariTitle)
 
             TYPE_REMIND_BY_ITEM -> {
-                val item = data[KEY_TEAM_ITEM_NAME].orNullIfBlank() ?: return
+                val item = data[KEY_TEAM_ITEM_NAME].orEmpty()
                 handleRemindByItemMessage(teamBottariId, teamBottariTitle, item)
-            }
-
-            else -> {
-                BottariLogger.error(ERROR_INVALID_MESSAGE_TYPE.format(type))
-                return
             }
         }
     }
 
-    private fun parseToLong(stringId: String?): Long? =
-        runCatching {
-            stringId?.toLong()
-        }.onFailure { error ->
-            BottariLogger.error(LOG_FORMAT.format(error.message), error)
-        }.getOrNull()
+    private fun String?.toLongOrNullWithLog(): Long? =
+        runCatching { this?.toLong() }
+            .onFailure { error ->
+                BottariLogger.error(LOG_FORMAT.format(error.message), error)
+            }.getOrNull()
 
     private fun String?.orNullIfBlank(): String? = this?.takeIf { it.isNotBlank() }
 
@@ -113,8 +110,13 @@ class ReminderMessagingService(
         notificationHelper.sendTeamNotification(id, title, message)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceScope.coroutineContext.cancel()
+    }
+
     companion object {
-        private const val LOG_FORMAT = "[Reminder Messaging Service] %s"
+        private const val LOG_FORMAT = "[FCM] %s"
         private const val NOTIFICATION_PREFIX_OLD = "gcm.notification"
 
         private const val KEY_TEAM_BOTTARI_ID = "teamBottariId"
@@ -125,7 +127,5 @@ class ReminderMessagingService(
         private const val TYPE_TEAM_ITEM_CHANGED = "TEAM_ITEM_CHANGED"
         private const val TYPE_REMIND_BY_TEAM_MEMBER = "REMIND_BY_TEAM_MEMBER"
         private const val TYPE_REMIND_BY_ITEM = "REMIND_BY_ITEM"
-
-        private const val ERROR_INVALID_MESSAGE_TYPE = "[ERROR] Invalid Message Type (%s)"
     }
 }
