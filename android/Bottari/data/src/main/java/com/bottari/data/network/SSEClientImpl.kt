@@ -22,7 +22,6 @@ import okhttp3.sse.EventSources
 
 class SSEClientImpl(
     private val client: OkHttpClient,
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
 ) : EventSourceListener(),
     SSEClient {
     private var eventSource: EventSource? = null
@@ -81,12 +80,10 @@ class SSEClientImpl(
         eventFlow.value = EventStateResponse.OnClosed
     }
 
-    override suspend fun connect(teamBottariId: Long): Flow<EventStateResponse> {
+    override fun connect(teamBottariId: Long): Flow<EventStateResponse> {
         disconnect()
-        coroutineScope.launch {
-            val request = createRequest(teamBottariId)
-            eventSource = createEventSource(request)
-        }
+        val request = createRequest(teamBottariId)
+        eventSource = createEventSource(request)
         return eventFlow
     }
 
