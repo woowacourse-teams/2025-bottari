@@ -54,7 +54,11 @@ class TeamMembersStatusViewModel(
     }
 
     private fun sendRemindMessage(member: TeamMemberUiModel) {
-        val memberId = member.id ?: return
+        val memberId =
+            member.id ?: run {
+                emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure)
+                return
+            }
         launch {
             sendRemindByMemberMessageUseCase(teamBottariId, memberId)
                 .onSuccess {
