@@ -32,17 +32,20 @@ class MemberRepositoryImpl(
         }
 
     override suspend fun saveMemberNickname(nickname: Nickname): Result<Unit> =
-        memberRemoteDataSource.saveMemberNickname(nickname.toRequest())
+        withContext(coroutineDispatcher) {
+            memberRemoteDataSource.saveMemberNickname(nickname.toRequest())
+        }
 
     override suspend fun checkRegisteredMember(): Result<RegisteredMember> =
         withContext(coroutineDispatcher) {
             memberRemoteDataSource
                 .checkRegisteredMember()
                 .mapCatching { it.toDomain() }
-                .onSuccess { registeredMember ->
+                .mapCatching { registeredMember ->
                     if (registeredMember.isRegistered) {
                         registeredMember.id?.let { memberIdentifierLocalDataSource.saveMemberId(it) }
                     }
+                    registeredMember
                 }
         }
 
