@@ -24,6 +24,7 @@ class MoreViewModel(
 
     fun saveNickname() {
         if (currentState.isNicknameChanged.not()) return
+        if (currentState.isLoading) return
         val editingNickname = currentState.editingNickname
         updateState { copy(isLoading = true) }
         launch {
