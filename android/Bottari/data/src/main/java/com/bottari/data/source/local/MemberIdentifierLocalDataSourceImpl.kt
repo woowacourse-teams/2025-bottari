@@ -15,16 +15,9 @@ class MemberIdentifierLocalDataSourceImpl(
             cachedInstallationId ?: initialize().also { cachedInstallationId = it }
         }
 
-    override suspend fun saveMemberId(id: Long): Result<Unit> = runCatching { memberInfoDataStore.saveMemberId(id) }
+    override suspend fun saveMemberId(id: Long): Result<Unit> = memberInfoDataStore.saveMemberId(id)
 
-    override suspend fun getMemberId(): Result<Long> =
-        runCatching {
-            requireNotNull(memberInfoDataStore.getMemberId()) { ERROR_MEMBER_ID_NULL }
-        }
+    override suspend fun getMemberId(): Result<Long> = memberInfoDataStore.getMemberId()
 
     private fun initialize(): String = Tasks.await(FirebaseInstallations.getInstance().id, 10, TimeUnit.SECONDS)
-
-    companion object {
-        private const val ERROR_MEMBER_ID_NULL = "[ERROR] 회원 ID가 null 입니다"
-    }
 }

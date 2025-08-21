@@ -12,16 +12,19 @@ class MemberInfoDataStore(
     private val Context.dataStore by preferencesDataStore(name = DATASTORE_NAME)
     private val keyMemberId = longPreferencesKey(KEY_MEMBER_ID)
 
-    suspend fun saveMemberId(memberId: Long) {
-        context.dataStore.edit { prefs ->
-            prefs[keyMemberId] = memberId
+    suspend fun saveMemberId(memberId: Long): Result<Unit> =
+        runCatching {
+            context.dataStore.edit { prefs ->
+                prefs[keyMemberId] = memberId
+            }
         }
-    }
 
-    suspend fun getMemberId(): Long {
-        val prefs = context.dataStore.data.first()
-        return requireNotNull(prefs[keyMemberId]) { ERROR_MEMBER_ID_NULL }
-    }
+    suspend fun getMemberId(): Result<Long> =
+        runCatching {
+            val prefs = context.dataStore.data.first()
+            val memberId = prefs[keyMemberId]
+            requireNotNull(memberId) { ERROR_MEMBER_ID_NULL }
+        }
 
     companion object {
         private const val DATASTORE_NAME = "user_info"
