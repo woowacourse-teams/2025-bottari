@@ -29,7 +29,7 @@ class TeamBottariStatusViewModel(
     private val teamBottariId: Long =
         stateHandle[KEY_ITEM_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
-    val debouncedSendRemindByItem: () -> Unit =
+    val debouncedSendRemindByItem: (Unit) -> Unit =
         debounce(
             timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
