@@ -3,7 +3,6 @@ package com.bottari.presentation.view.checklist.team.main.status.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.StringRes
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamBottariTypeBinding
@@ -15,7 +14,6 @@ class TeamBottariProductTypeViewHolder private constructor(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: TeamChecklistTypeUiModel) {
         binding.tvTypeName.setText(item.type.getStringResId())
-        binding.tvTypeName.isVisible = item.hasItems
     }
 
     @StringRes
