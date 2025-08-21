@@ -10,11 +10,11 @@ public interface TeamBottariRepository extends JpaRepository<TeamBottari, Long> 
 
     Optional<TeamBottari> findByInviteCode(final String inviteCode);
 
-    @Modifying
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
-        UPDATE TeamBottari tb
-        SET tb.deletedAt = CURRENT_TIMESTAMP
-        WHERE tb.id = :id
-    """)
+            UPDATE TeamBottari tb
+            SET tb.deletedAt = CURRENT_TIMESTAMP
+            WHERE tb.id = :id
+            """)
     void deleteById(final Long id);
 }

@@ -43,7 +43,7 @@ public interface TeamAssignedItemRepository extends JpaRepository<TeamAssignedIt
 
     void deleteAllByInfo(final TeamAssignedItemInfo teamAssignedItemInfo);
 
-    @Modifying
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
         UPDATE TeamAssignedItem tai
         SET tai.deletedAt = CURRENT_TIMESTAMP

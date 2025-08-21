@@ -56,11 +56,11 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
             final List<Long> memberIds
     );
 
-    @Modifying
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
-        UPDATE TeamMember tm
-        SET tm.deletedAt = CURRENT_TIMESTAMP
-        WHERE tm.id = :id
-    """)
+            UPDATE TeamMember tm
+            SET tm.deletedAt = CURRENT_TIMESTAMP
+            WHERE tm.id = :id
+            """)
     void deleteById(final Long id);
 }

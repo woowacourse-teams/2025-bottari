@@ -26,12 +26,11 @@ public interface TeamAssignedItemInfoRepository extends JpaRepository<TeamAssign
             final String name
     );
 
-    @Modifying
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
-        UPDATE TeamAssignedItemInfo tai
-        SET tai.deletedAt = CURRENT_TIMESTAMP 
-        WHERE tai.id in :ids
-        """
-    )
+            UPDATE TeamAssignedItemInfo tai
+            SET tai.deletedAt = CURRENT_TIMESTAMP 
+            WHERE tai.id in :ids
+            """)
     void deleteByInfoIds(final List<Long> ids);
 }
