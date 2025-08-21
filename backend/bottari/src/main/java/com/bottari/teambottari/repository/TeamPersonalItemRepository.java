@@ -40,6 +40,7 @@ public interface TeamPersonalItemRepository extends JpaRepository<TeamPersonalIt
             UPDATE TeamPersonalItem tpi
             SET tpi.deletedAt = CURRENT_TIMESTAMP
             WHERE tpi.teamMember.id = :teamMemberId
+            AND tpi.deletedAt IS NULL
             """)
     void deleteByTeamMemberId(final Long teamMemberId);
 }

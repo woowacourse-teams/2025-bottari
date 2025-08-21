@@ -15,6 +15,7 @@ public interface TeamBottariRepository extends JpaRepository<TeamBottari, Long> 
             UPDATE TeamBottari tb
             SET tb.deletedAt = CURRENT_TIMESTAMP
             WHERE tb.id = :id
+            AND tb.deletedAt IS NULL
             """)
     void deleteById(final Long id);
 }

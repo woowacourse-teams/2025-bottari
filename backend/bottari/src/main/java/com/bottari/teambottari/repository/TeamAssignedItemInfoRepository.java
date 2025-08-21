@@ -31,6 +31,7 @@ public interface TeamAssignedItemInfoRepository extends JpaRepository<TeamAssign
             UPDATE TeamAssignedItemInfo tai
             SET tai.deletedAt = CURRENT_TIMESTAMP 
             WHERE tai.id in :ids
+            AND tai.deletedAt IS NULL
             """)
     void deleteByInfoIds(final List<Long> ids);
 }

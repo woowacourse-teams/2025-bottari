@@ -46,6 +46,7 @@ public interface TeamSharedItemRepository extends JpaRepository<TeamSharedItem, 
             UPDATE TeamSharedItem tsi
             SET tsi.deletedAt = CURRENT_TIMESTAMP
             WHERE tsi.teamMember.id = :teamMemberId
+            AND tsi.deletedAt IS NULL
             """)
     void deleteByTeamMemberId(final Long teamMemberId);
 

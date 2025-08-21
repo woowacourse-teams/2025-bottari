@@ -61,6 +61,7 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
             UPDATE TeamMember tm
             SET tm.deletedAt = CURRENT_TIMESTAMP
             WHERE tm.id = :id
+            AND tm.deletedAt IS NULL
             """)
     void deleteById(final Long id);
 }
