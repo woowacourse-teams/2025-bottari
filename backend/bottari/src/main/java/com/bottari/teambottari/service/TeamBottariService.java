@@ -2,6 +2,8 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.fcm.FcmMessageConverter;
+import com.bottari.fcm.FcmMessageSender;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.InviteCodeGenerator;
@@ -15,6 +17,7 @@ import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamBottariPreviewResponse;
 import com.bottari.teambottari.dto.ReadTeamBottariResponse;
+import com.bottari.teambottari.event.ExitTeamMemberEvent;
 import com.bottari.teambottari.repository.TeamAssignedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamAssignedItemRepository;
 import com.bottari.teambottari.repository.TeamBottariRepository;
@@ -30,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +50,8 @@ public class TeamBottariService {
     private final TeamPersonalItemRepository teamPersonalItemRepository;
     private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
     private final TeamAssignedItemInfoRepository teamAssignedItemInfoRepository;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional(readOnly = true)
     public List<ReadTeamBottariPreviewResponse> getAllBySsaid(final String ssaid) {
@@ -111,6 +117,7 @@ public class TeamBottariService {
         transferOwnerIfNeeded(remainMembers, teamBottari, exitTeamMember);
         teamMemberRepository.deleteById(exitTeamMember.getId());
         deleteTeamBottariIfEmpty(remainMembers, teamBottari);
+        applicationEventPublisher.publishEvent(new ExitTeamMemberEvent(teamBottari.getId(),exitTeamMember.getMember().getId()));
     }
 
     private List<TeamMember> findRemainMembers(
