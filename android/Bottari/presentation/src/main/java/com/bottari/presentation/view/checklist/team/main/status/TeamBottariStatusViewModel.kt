@@ -3,6 +3,7 @@ package com.bottari.presentation.view.checklist.team.main.status
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
@@ -19,6 +20,7 @@ import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.TeamBottariProductStatusUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
 import com.bottari.presentation.model.TeamProductStatusItem
+import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -41,6 +43,12 @@ class TeamBottariStatusViewModel(
     private val teamBottariId: Long =
         stateHandle[KEY_ITEM_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
+    val debouncedSendRemindByItem: (Unit) -> Unit =
+        debounce(
+            timeMillis = DEBOUNCE_DELAY,
+            coroutineScope = viewModelScope,
+        ) { sendRemindByItem() }
+
     init {
         fetchTeamStatus()
         handleEvent()
@@ -55,7 +63,7 @@ class TeamBottariStatusViewModel(
         updateState { copy(selectedProduct = item) }
     }
 
-    fun sendRemindByItem() {
+    private fun sendRemindByItem() {
         val selectedProduct =
             currentState.selectedProduct ?: return emitEvent(
                 TeamBottariStatusUiEvent.SendRemindFailure,
