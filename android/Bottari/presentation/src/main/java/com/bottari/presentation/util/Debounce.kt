@@ -20,3 +20,19 @@ fun <T> debounce(
             }
     }
 }
+
+fun debounce(
+    timeMillis: Long,
+    coroutineScope: CoroutineScope,
+    action: () -> Unit,
+): () -> Unit {
+    var debounceJob: Job? = null
+    return {
+        debounceJob?.cancel()
+        debounceJob =
+            coroutineScope.launch {
+                delay(timeMillis)
+                action()
+            }
+    }
+}

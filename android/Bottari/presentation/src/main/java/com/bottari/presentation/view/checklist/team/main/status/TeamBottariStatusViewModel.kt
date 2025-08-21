@@ -3,6 +3,7 @@ package com.bottari.presentation.view.checklist.team.main.status
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
@@ -16,6 +17,7 @@ import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.TeamBottariProductStatusUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
 import com.bottari.presentation.model.TeamProductStatusItem
+import com.bottari.presentation.util.debounce
 
 class TeamBottariStatusViewModel(
     stateHandle: SavedStateHandle,
@@ -27,6 +29,12 @@ class TeamBottariStatusViewModel(
     private val teamBottariId: Long =
         stateHandle[KEY_ITEM_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
+    val debouncedSendRemindByItem: () -> Unit =
+        debounce(
+            timeMillis = DEBOUNCE_DELAY,
+            coroutineScope = viewModelScope,
+        ) { sendRemindByItem() }
+
     init {
         fetchTeamStatus()
     }
@@ -35,7 +43,7 @@ class TeamBottariStatusViewModel(
         updateState { copy(selectedProduct = item) }
     }
 
-    fun sendRemindByItem() {
+    private fun sendRemindByItem() {
         val selectedProduct =
             currentState.selectedProduct ?: return emitEvent(
                 TeamBottariStatusUiEvent.SendRemindFailure,
@@ -92,6 +100,8 @@ class TeamBottariStatusViewModel(
     companion object {
         private const val KEY_ITEM_BOTTARI_ID = "KEY_ITEM_BOTTARI_ID"
         private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
+
+        private const val DEBOUNCE_DELAY = 300L
 
         fun Factory(bottariId: Long): ViewModelProvider.Factory =
             viewModelFactory {
