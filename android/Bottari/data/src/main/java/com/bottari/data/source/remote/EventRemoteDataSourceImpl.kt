@@ -8,4 +8,6 @@ class EventRemoteDataSourceImpl(
     private val client: SSEClient,
 ) : EventRemoteDataSource {
     override suspend fun connectEvent(teamBottariId: Long): Flow<EventStateResponse> = client.connect(teamBottariId)
+
+    override suspend fun disconnectEvent() = client.disconnect()
 }

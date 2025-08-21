@@ -7,6 +7,7 @@ data class TeamMemberStatusUiModel(
     val sharedItems: List<ChecklistItemUiModel>,
     val assignedItems: List<ChecklistItemUiModel>,
     val isMe: Boolean,
+    val isExpanded: Boolean = false,
 ) {
     val isItemsEmpty: Boolean
         get() = sharedItems.isEmpty() && assignedItems.isEmpty()

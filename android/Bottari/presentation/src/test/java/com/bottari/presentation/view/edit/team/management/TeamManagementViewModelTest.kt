@@ -1,6 +1,8 @@
 package com.bottari.presentation.view.edit.team.management
 
 import androidx.lifecycle.SavedStateHandle
+import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
+import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
 import com.bottari.presentation.CoroutinesTestExtension
 import com.bottari.presentation.InstantTaskExecutorExtension
@@ -20,14 +22,24 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(InstantTaskExecutorExtension::class, CoroutinesTestExtension::class)
 class TeamManagementViewModelTest {
     private lateinit var fetchTeamMembersUseCase: FetchTeamMembersUseCase
+    private lateinit var connectTeamEventUseCase: ConnectTeamEventUseCase
+    private lateinit var disconnectTeamEventUseCase: DisconnectTeamEventUseCase
     private lateinit var stateHandle: SavedStateHandle
     private lateinit var viewModel: TeamManagementViewModel
 
     @BeforeEach
     fun setUp() {
         fetchTeamMembersUseCase = mockk<FetchTeamMembersUseCase>()
+        connectTeamEventUseCase = mockk<ConnectTeamEventUseCase>()
+        disconnectTeamEventUseCase = mockk<DisconnectTeamEventUseCase>()
         stateHandle = SavedStateHandle(mapOf("KEY_TEAM_BOTTARI_ID" to 1L))
-        viewModel = TeamManagementViewModel(stateHandle, fetchTeamMembersUseCase)
+        viewModel =
+            TeamManagementViewModel(
+                stateHandle,
+                fetchTeamMembersUseCase,
+                connectTeamEventUseCase,
+                disconnectTeamEventUseCase,
+            )
     }
 
     @DisplayName("팀원 정보를 조회한다")

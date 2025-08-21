@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface EventRemoteDataSource {
     suspend fun connectEvent(teamBottariId: Long): Flow<EventStateResponse>
+
+    suspend fun disconnectEvent()
 }
