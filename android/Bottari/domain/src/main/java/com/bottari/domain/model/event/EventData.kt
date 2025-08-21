@@ -12,6 +12,12 @@ sealed interface EventData {
         val isOwner: Boolean,
     ) : EventData
 
+    data class TeamMemberDelete(
+        override val publishedAt: LocalDateTime,
+        val exitMemberId: Long,
+        val bottariId: String,
+    ) : EventData
+
     data class SharedItemInfoCreate(
         override val publishedAt: LocalDateTime,
         val infoId: Long,
