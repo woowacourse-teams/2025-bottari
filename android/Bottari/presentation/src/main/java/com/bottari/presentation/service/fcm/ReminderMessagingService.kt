@@ -17,27 +17,29 @@ import kotlinx.coroutines.launch
 class ReminderMessagingService(
     private val saveFcmTokenUseCase: SaveFcmTokenUseCase = UseCaseProvider.saveFcmTokenUseCase,
 ) : FirebaseMessagingService() {
-    private val notificationHelper: NotificationHelper by lazy { NotificationHelper() }
+    private val notificationHelper by lazy { NotificationHelper() }
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+        logData("New FCM token received: $token")
+
         serviceScope.launch {
-            saveFcmTokenUseCase(token)
-                .onFailure { error ->
-                    BottariLogger.error(LOG_FORMAT.format(error.message), error)
-                }
+            saveFcmTokenUseCase(token).onFailure { logError("Failed to save FCM token", it) }
         }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        BottariLogger.data(LOG_FORMAT.format(message.data))
-        if (message.data.isEmpty()) return
+        val data = message.data
+        val from = message.from.orEmpty()
+        val title = message.notification?.title.orEmpty()
 
-        FcmMessage
-            .fromData(message.data)
-            .sendNotification(notificationHelper)
+        logData("Message received from: $from, title: $title, data: $data")
+
+        if (data.isEmpty()) return
+
+        sendFcmNotification(data, from)
     }
 
     override fun handleIntent(intent: Intent?) {
@@ -46,7 +48,7 @@ class ReminderMessagingService(
                 extras
                     ?.apply {
                         remove(Constants.MessageNotificationKeys.ENABLE_NOTIFICATION)
-                        remove(NOTIFICATION_PREFIX_OLD)
+                        remove(OLD_NOTIFICATION_PREFIX)
                     }?.also { replaceExtras(it) }
             }
         super.handleIntent(sanitizedIntent)
@@ -57,8 +59,38 @@ class ReminderMessagingService(
         serviceScope.coroutineContext.cancel()
     }
 
+    private fun sendFcmNotification(
+        data: Map<String, String>,
+        from: String,
+    ) {
+        FcmMessage.fromData(data).sendNotification(notificationHelper)
+        logUi("Notification sent for message from: $from with data: $data")
+    }
+
+    private fun logData(message: String) {
+        BottariLogger.data(message = formatLog(message))
+    }
+
+    private fun logUi(message: String) {
+        BottariLogger.ui(
+            eventName = formatLog("Send Notification"),
+            params = mapOf("message" to message),
+        )
+    }
+
+    private fun logError(
+        message: String,
+        error: Throwable,
+    ) {
+        BottariLogger.error(
+            message = formatLog("$message: ${error.message}"),
+            throwable = error,
+        )
+    }
+
+    private fun formatLog(message: String) = "[FCM] $message"
+
     companion object {
-        private const val LOG_FORMAT = "[FCM] %s"
-        private const val NOTIFICATION_PREFIX_OLD = "gcm.notification"
+        private const val OLD_NOTIFICATION_PREFIX = "gcm.notification"
     }
 }
