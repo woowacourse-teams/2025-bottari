@@ -735,7 +735,10 @@ class TeamBottariRepositoryImplTest {
             val teamBottariId = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
 
-            coEvery { dataSource.fetchTeamPersonalItems(teamBottariId) } returns Result.failure(exception)
+            coEvery { dataSource.fetchTeamPersonalItems(teamBottariId) } returns
+                Result.failure(
+                    exception,
+                )
 
             // when
             val result = repository.fetchTeamPersonalItems(teamBottariId)
@@ -754,7 +757,10 @@ class TeamBottariRepositoryImplTest {
             // given
             val teamBottariId = 1L
             val sharedItems = listOf(BOTTARI_SHARED_ITEM_RESPONSE_FIXTURE)
-            coEvery { dataSource.fetchTeamSharedItems(teamBottariId) } returns Result.success(sharedItems)
+            coEvery { dataSource.fetchTeamSharedItems(teamBottariId) } returns
+                Result.success(
+                    sharedItems,
+                )
 
             // when
             val result = repository.fetchTeamSharedItems(teamBottariId)
@@ -776,7 +782,10 @@ class TeamBottariRepositoryImplTest {
             // given
             val teamBottariId = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
-            coEvery { dataSource.fetchTeamSharedItems(teamBottariId) } returns Result.failure(exception)
+            coEvery { dataSource.fetchTeamSharedItems(teamBottariId) } returns
+                Result.failure(
+                    exception,
+                )
 
             // when
             val result = repository.fetchTeamSharedItems(teamBottariId)
@@ -854,7 +863,12 @@ class TeamBottariRepositoryImplTest {
 
             // when
             val result =
-                repository.saveTeamBottariAssignedItem(teamBottariId, itemId, newName, listOf(1L, 2L))
+                repository.saveTeamBottariAssignedItem(
+                    teamBottariId,
+                    itemId,
+                    newName,
+                    listOf(1L, 2L),
+                )
 
             // then
             result.shouldBeSuccess()
@@ -890,7 +904,12 @@ class TeamBottariRepositoryImplTest {
 
             // when
             val result =
-                repository.saveTeamBottariAssignedItem(teamBottariId, itemId, newName, listOf(1L, 2L))
+                repository.saveTeamBottariAssignedItem(
+                    teamBottariId,
+                    itemId,
+                    newName,
+                    listOf(1L, 2L),
+                )
 
             // then
             result.shouldBeFailure { error -> error shouldBe exception }
@@ -912,7 +931,12 @@ class TeamBottariRepositoryImplTest {
             // given
             val teamBottariId = 1L
             val type = "PERSONAL"
-            coEvery { dataSource.checkBottariItem(teamBottariId, ItemTypeRequest(type)) } returns Result.success(Unit)
+            coEvery {
+                dataSource.checkBottariItem(
+                    teamBottariId,
+                    ItemTypeRequest(type),
+                )
+            } returns Result.success(Unit)
 
             // when
             val result = repository.checkBottariItem(teamBottariId, type)
@@ -940,7 +964,12 @@ class TeamBottariRepositoryImplTest {
             val teamBottariId = 1L
             val type = "ERROR"
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
-            coEvery { dataSource.checkBottariItem(teamBottariId, ItemTypeRequest(type)) } returns Result.failure(exception)
+            coEvery {
+                dataSource.checkBottariItem(
+                    teamBottariId,
+                    ItemTypeRequest(type),
+                )
+            } returns Result.failure(exception)
 
             // when
             val result = repository.checkBottariItem(teamBottariId, type)
@@ -957,5 +986,41 @@ class TeamBottariRepositoryImplTest {
                     ItemTypeRequest(type),
                 )
             }
+        }
+
+    @DisplayName("팀 보따리 나가기에 성공하면 Success를 반환한다")
+    @Test
+    fun exitTeamBottariReturnsSuccessTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            coEvery { dataSource.exitTeamBottari(teamBottariId) } returns Result.success(Unit)
+            // when
+            val result = repository.exitTeamBottari(teamBottariId)
+
+            // then
+            result.shouldBeSuccess()
+
+            // verify
+            coVerify(exactly = 1) { dataSource.exitTeamBottari(teamBottariId) }
+        }
+
+    @DisplayName("팀 보따리 나가기에 실패하면 Failure를 반환한다")
+    @Test
+    fun exitTeamBottariReturnsFailureTest() =
+        runTest {
+            // given
+            val teamBottariId = 1L
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery { dataSource.exitTeamBottari(teamBottariId) } returns Result.failure(exception)
+
+            // when
+            val result = repository.exitTeamBottari(teamBottariId)
+
+            // then
+            result.shouldBeFailure { error -> error shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) { dataSource.exitTeamBottari(teamBottariId) }
         }
 }
