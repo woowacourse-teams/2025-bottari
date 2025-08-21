@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.event.EventState
+import com.bottari.domain.model.team.TeamMemberStatus
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.member.GetMemberIdUseCase
@@ -14,6 +15,7 @@ import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
+import com.bottari.presentation.model.TeamMemberStatusUiModel
 import com.bottari.presentation.model.TeamMemberUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -62,6 +64,15 @@ class TeamMembersStatusViewModel(
         }
     }
 
+    fun updateExpandState(id: Long) {
+        val newMembersStatus =
+            currentState.membersStatus.map { memberStatus ->
+                if (memberStatus.member.id == id) return@map memberStatus.copy(isExpanded = !memberStatus.isExpanded)
+                memberStatus
+            }
+        updateState { copy(membersStatus = newMembersStatus) }
+    }
+
     private fun fetchMemberId() {
         launch {
             getMemberIdUseCase()
@@ -72,6 +83,23 @@ class TeamMembersStatusViewModel(
         }
     }
 
+    private fun fetchTeamMembersStatus() {
+        val myId = currentState.myId
+        updateState { copy(isLoading = true) }
+        launch {
+            fetchTeamMembersStatusUseCase(teamBottariId)
+                .onSuccess { membersStatus ->
+                    val updated = mergeWithPreviousState(membersStatus, myId)
+                    updateState {
+                        copy(
+                            membersStatus = updated,
+                        )
+                    }
+                }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure) }
+            updateState { copy(isLoading = false) }
+        }
+    }
+
     @OptIn(FlowPreview::class)
     private fun handleEvent() {
         launch {
@@ -79,27 +107,26 @@ class TeamMembersStatusViewModel(
                 .filterIsInstance<EventState.OnEvent>()
                 .map { event -> event.data }
                 .debounce(DEBOUNCE_DELAY)
-                .onEach { fetchTeamMembersStatus() }
+                .onEach { fetchMemberId() }
                 .launchIn(this)
         }
     }
 
-    private fun fetchTeamMembersStatus() {
-        val myId = currentState.myId
-        updateState { copy(isLoading = true) }
-        launch {
-            fetchTeamMembersStatusUseCase(teamBottariId)
-                .onSuccess { membersStatus ->
-                    val memberStatusUiModel = membersStatus.map { status -> status.toUiModel(myId) }
-                    updateState {
-                        copy(
-                            membersStatus = memberStatusUiModel,
-                        )
-                    }
-                }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure) }
-            updateState { copy(isLoading = false) }
+    private fun mergeWithPreviousState(
+        teamMembersStatus: List<TeamMemberStatus>,
+        id: Long,
+    ): List<TeamMemberStatusUiModel> =
+        teamMembersStatus.map { memberStatus ->
+            val uiModel = memberStatus.toUiModel(id)
+            val previousState =
+                currentState.membersStatus.find { it.member.id == uiModel.member.id }
+            if (previousState != null && uiModel.isItemsEmpty.not()) {
+                return@map uiModel.copy(
+                    isExpanded = previousState.isExpanded,
+                )
+            }
+            uiModel
         }
-    }
 
     companion object {
         private const val KEY_TEAM_BOTTARI_ID = "KEY_TEAM_BOTTARI_ID"
