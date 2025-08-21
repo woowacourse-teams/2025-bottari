@@ -56,14 +56,21 @@ class ReminderMessagingService(
         val type = data[KEY_MESSAGE_TYPE].orNullIfBlank() ?: return
 
         when (type) {
-            TYPE_TEAM_ITEM_CHANGED -> handleItemChangedMessage(teamBottariId, teamBottariTitle)
-            TYPE_REMIND_BY_MEMBER -> handleRemindByMemberMessage(teamBottariId, teamBottariTitle)
+            TYPE_TEAM_ITEM_CHANGED ->
+                handleItemChangedMessage(teamBottariId, teamBottariTitle)
+
+            TYPE_REMIND_BY_TEAM_MEMBER ->
+                handleRemindByMemberMessage(teamBottariId, teamBottariTitle)
+
             TYPE_REMIND_BY_ITEM -> {
                 val item = data[KEY_TEAM_ITEM_NAME].orNullIfBlank() ?: return
                 handleRemindByItemMessage(teamBottariId, teamBottariTitle, item)
             }
 
-            else -> return
+            else -> {
+                BottariLogger.error(ERROR_INVALID_MESSAGE_TYPE.format(type))
+                return
+            }
         }
     }
 
@@ -109,12 +116,16 @@ class ReminderMessagingService(
     companion object {
         private const val LOG_FORMAT = "[Reminder Messaging Service] %s"
         private const val NOTIFICATION_PREFIX_OLD = "gcm.notification"
+
         private const val KEY_TEAM_BOTTARI_ID = "teamBottariId"
         private const val KEY_TEAM_BOTTARI_TITLE = "teamBottariTitle"
         private const val KEY_TEAM_ITEM_NAME = "teamItemName"
-        private const val TYPE_TEAM_ITEM_CHANGED = "TEAM_ITEM_CHANGED"
-        private const val TYPE_REMIND_BY_MEMBER = "REMIND_BY_MEMBER"
-        private const val TYPE_REMIND_BY_ITEM = "REMIND_BY_ITEM"
         private const val KEY_MESSAGE_TYPE = "type"
+
+        private const val TYPE_TEAM_ITEM_CHANGED = "TEAM_ITEM_CHANGED"
+        private const val TYPE_REMIND_BY_TEAM_MEMBER = "REMIND_BY_TEAM_MEMBER"
+        private const val TYPE_REMIND_BY_ITEM = "REMIND_BY_ITEM"
+
+        private const val ERROR_INVALID_MESSAGE_TYPE = "[ERROR] Invalid Message Type (%s)"
     }
 }
