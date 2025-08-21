@@ -6,5 +6,5 @@ import com.bottari.domain.repository.RemoteConfigRepository
 class RemoteConfigRepositoryImpl(
     private val remoteConfigRemoteDataSource: RemoteConfigRemoteDataSource,
 ) : RemoteConfigRepository {
-    override suspend fun getMinVersionCode(): Result<Int> = remoteConfigRemoteDataSource.getMinUpdateVersionCode()
+    override suspend fun getMinUpdateVersionCode(): Result<Int> = remoteConfigRemoteDataSource.getMinUpdateVersionCode()
 }

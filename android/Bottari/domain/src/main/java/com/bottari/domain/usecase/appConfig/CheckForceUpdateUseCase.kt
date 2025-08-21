@@ -7,6 +7,6 @@ class CheckForceUpdateUseCase(
 ) {
     suspend operator fun invoke(currentVersionCode: Int): Result<Boolean> =
         remoteConfigRepository
-            .getMinVersionCode()
+            .getMinUpdateVersionCode()
             .map { minVersionCode -> minVersionCode > currentVersionCode }
 }
