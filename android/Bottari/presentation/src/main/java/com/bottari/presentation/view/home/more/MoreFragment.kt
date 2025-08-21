@@ -3,12 +3,11 @@ package com.bottari.presentation.view.home.more
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.net.toUri
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.BuildConfig
 import com.bottari.presentation.R
@@ -16,9 +15,7 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentMoreBinding
 
-class MoreFragment :
-    BaseFragment<FragmentMoreBinding>(FragmentMoreBinding::inflate),
-    TextWatcher {
+class MoreFragment : BaseFragment<FragmentMoreBinding>(FragmentMoreBinding::inflate) {
     private val viewModel: MoreViewModel by viewModels { MoreViewModel.Factory() }
     private val inputManager: InputMethodManager by lazy {
         requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -31,26 +28,6 @@ class MoreFragment :
         super.onViewCreated(view, savedInstanceState)
         setupObserver()
         setupListener()
-    }
-
-    override fun beforeTextChanged(
-        p0: CharSequence?,
-        p1: Int,
-        p2: Int,
-        p3: Int,
-    ) {
-    }
-
-    override fun onTextChanged(
-        p0: CharSequence?,
-        p1: Int,
-        p2: Int,
-        p3: Int,
-    ) {
-    }
-
-    override fun afterTextChanged(p0: Editable?) {
-        viewModel.updateNickname(p0?.toString()?.trim().orEmpty())
     }
 
     private fun setupObserver() {
@@ -76,10 +53,12 @@ class MoreFragment :
         setupNicknameEditButtonClickListener()
         binding.btnPrivacyPolicy.setOnClickListener { launchInBrowser(BuildConfig.PRIVACY_POLICY_URL) }
         binding.btnUserFeedback.setOnClickListener { launchInBrowser(BuildConfig.USER_FEEDBACK_URL) }
+        binding.etNicknameEdit.doAfterTextChanged {
+            viewModel.updateNickname(it.toString().trim())
+        }
     }
 
     private fun setupNicknameEditListener() {
-        binding.etNicknameEdit.addTextChangedListener(this)
         binding.etNicknameEdit.setOnEditorActionListener { _, actionId, _ ->
             handleEditorAction(actionId)
         }
