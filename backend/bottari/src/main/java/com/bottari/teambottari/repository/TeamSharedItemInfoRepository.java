@@ -29,7 +29,7 @@ public interface TeamSharedItemInfoRepository extends JpaRepository<TeamSharedIt
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
             UPDATE TeamSharedItemInfo tsi
-            SET tsi.deletedAt = CURRENT_TIMESTAMP 
+            SET tsi.deletedAt = CURRENT_TIMESTAMP
             WHERE tsi.teamBottari.id = :teamBottariId
             AND tsi.deletedAt IS NULL
             """)

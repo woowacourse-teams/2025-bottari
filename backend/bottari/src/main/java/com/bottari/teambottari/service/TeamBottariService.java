@@ -105,15 +105,21 @@ public class TeamBottariService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_NOT_FOUND));
         final List<TeamMember> allTeamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId());
         final TeamMember exitTeamMember = findExitTeamMember(ssaid, allTeamMembers);
-        final List<TeamAssignedItem> teamAssignedItems = teamAssignedItemRepository.findAllByTeamMemberId(exitTeamMember.getId());
         deleteItemsByTeamMember(exitTeamMember);
-        deleteOrphanAssignedItemInfos(teamAssignedItems);
-        final List<TeamMember> remainMembers = allTeamMembers.stream()
-                .filter(teamMember -> !teamMember.getMember().isSameBySsaid(ssaid))
-                .collect(Collectors.toList());
-        transferOwnershipIfNeeded(remainMembers, teamBottari, exitTeamMember);
+        teamAssignedItemInfoRepository.deleteOrphanAssignedItemInfosByTeamBottariId(teamBottari.getId());
+        final List<TeamMember> remainMembers = findRemainMembers(ssaid, allTeamMembers);
+        transferOwnerIfNeeded(remainMembers, teamBottari, exitTeamMember);
         teamMemberRepository.deleteById(exitTeamMember.getId());
         deleteTeamBottariIfEmpty(remainMembers, teamBottari);
+    }
+
+    private List<TeamMember> findRemainMembers(
+            final String ssaid,
+            final List<TeamMember> allTeamMembers)
+    {
+        return allTeamMembers.stream()
+                .filter(teamMember -> !teamMember.isSameBySsaid(ssaid))
+                .collect(Collectors.toList());
     }
 
     private void deleteItemsByTeamMember(final TeamMember exitTeamMember) {
@@ -132,29 +138,18 @@ public class TeamBottariService {
         }
     }
 
-    private void transferOwnershipIfNeeded(
+    private void transferOwnerIfNeeded(
             final List<TeamMember> remainMembers,
             final TeamBottari teamBottari,
             final TeamMember exitTeamMember
     ) {
-        if (!remainMembers.isEmpty() && teamBottari.isOwner(exitTeamMember.getMember())) {
-            remainMembers.sort(Comparator.comparing(TeamMember::getCreatedAt));
-            final TeamMember newOwner = remainMembers.getFirst();
-            teamBottari.changeOwner(newOwner.getMember());
+        if (!teamBottari.isOwner(exitTeamMember.getMember()) || remainMembers.isEmpty()) {
+            return;
         }
-    }
-
-    private void deleteOrphanAssignedItemInfos(final List<TeamAssignedItem> teamAssignedItems) {
-        final List<Long> toDelete = new ArrayList<>();
-        for (final TeamAssignedItem teamAssignedItem : teamAssignedItems) {
-            final TeamAssignedItemInfo info = teamAssignedItem.getInfo();
-            if (!teamAssignedItemRepository.existsByInfoId(info.getId())) {
-                toDelete.add(info.getId());
-            }
-        }
-        if (!toDelete.isEmpty()) {
-            teamAssignedItemInfoRepository.deleteByInfoIds(toDelete);
-        }
+        remainMembers.stream()
+                .min(Comparator.comparing(TeamMember::getCreatedAt))
+                .map(TeamMember::getMember)
+                .ifPresent(teamBottari::changeOwner);
     }
 
     private Member getMemberBySsaid(final String ssaid) {
