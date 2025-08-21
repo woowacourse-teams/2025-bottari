@@ -9,14 +9,11 @@ import com.bottari.member.domain.Member;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-@TestInstance(Lifecycle.PER_CLASS)
 class TeamBottariTest {
 
     @DisplayName("팀 보따리 제목이 공백인 경우, 예외를 던진다.")
