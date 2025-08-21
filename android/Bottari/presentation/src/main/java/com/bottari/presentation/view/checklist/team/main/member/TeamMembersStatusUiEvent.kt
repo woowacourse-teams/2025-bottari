@@ -8,4 +8,6 @@ interface TeamMembersStatusUiEvent {
     ) : TeamMembersStatusUiEvent
 
     data object SendRemindByMemberMessageFailure : TeamMembersStatusUiEvent
+
+    data object FetchMemberIdFailure : TeamMembersStatusUiEvent
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.presentation.common.base.BaseViewModel
@@ -16,18 +17,29 @@ class TeamMembersStatusViewModel(
     stateHandle: SavedStateHandle,
     private val fetchTeamMembersStatusUseCase: FetchTeamMembersStatusUseCase,
     private val sendRemindByMemberMessageUseCase: SendRemindByMemberMessageUseCase,
+    private val getMemberIdUseCase: GetMemberIdUseCase,
 ) : BaseViewModel<TeamMembersStatusUiState, TeamMembersStatusUiEvent>(
         TeamMembersStatusUiState(),
     ) {
     private val teamBottariId: Long =
         stateHandle[KEY_TEAM_BOTTARI_ID] ?: error(ERROR_REQUIRE_TEAM_BOTTARI_ID)
 
-    fun fetchTeamMembersStatus() {
+    init {
+        fetchMemberId()
+    }
+
+    private fun fetchTeamMembersStatus() {
+        val myId = currentState.myId
         updateState { copy(isLoading = true) }
         launch {
             fetchTeamMembersStatusUseCase(teamBottariId)
                 .onSuccess { membersStatus ->
-                    updateState { copy(membersStatus = membersStatus.map { memberStatus -> memberStatus.toUiModel() }) }
+                    val memberStatusUiModel = membersStatus.map { status -> status.toUiModel(myId) }
+                    updateState {
+                        copy(
+                            membersStatus = memberStatusUiModel,
+                        )
+                    }
                 }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure) }
             updateState { copy(isLoading = false) }
         }
@@ -47,6 +59,16 @@ class TeamMembersStatusViewModel(
         }
     }
 
+    private fun fetchMemberId() {
+        launch {
+            getMemberIdUseCase()
+                .onSuccess { id ->
+                    updateState { copy(myId = id) }
+                    fetchTeamMembersStatus()
+                }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMemberIdFailure) }
+        }
+    }
+
     companion object {
         private const val KEY_TEAM_BOTTARI_ID = "KEY_TEAM_BOTTARI_ID"
         private const val ERROR_REQUIRE_TEAM_BOTTARI_ID = "[ERROR] 팀 보따리 ID가 존재하지 않습니다."
@@ -60,6 +82,7 @@ class TeamMembersStatusViewModel(
                         stateHandle = stateHandle,
                         fetchTeamMembersStatusUseCase = UseCaseProvider.fetchTeamMembersStatusUseCase,
                         sendRemindByMemberMessageUseCase = UseCaseProvider.sendRemindByMemberMessageUseCase,
+                        getMemberIdUseCase = UseCaseProvider.getMemberIdUseCase,
                     )
                 }
             }

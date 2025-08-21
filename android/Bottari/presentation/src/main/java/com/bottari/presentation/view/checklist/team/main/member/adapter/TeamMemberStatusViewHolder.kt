@@ -19,27 +19,31 @@ class TeamMemberStatusViewHolder private constructor(
 ) : RecyclerView.ViewHolder(binding.root) {
     private val sharedItemAdapter: SharedItemAdapter by lazy { SharedItemAdapter() }
     private val assignedItemAdapter: AssignedItemAdapter by lazy { AssignedItemAdapter() }
-    private var member: TeamMemberUiModel? = null
+    private var currentStatus: TeamMemberStatusUiModel? = null
 
     init {
         itemView.setOnClickListener {
             binding.groupItems.apply { isVisible = !isVisible }
+            currentStatus?.let { status ->
+                handleHurryUp(status.isAllChecked, status.isMe)
+            }
         }
         binding.btnHurryUpAlert.setOnClickListener {
-            member?.let(onSendRemindClickListener::onClickSendRemind)
+            currentStatus?.member?.let(onSendRemindClickListener::onClickSendRemind)
         }
         setupSharedItems()
         setupAssignedItems()
     }
 
     fun bind(status: TeamMemberStatusUiModel) {
-        member = status.member
+        currentStatus = status
         itemView.isClickable = status.isItemsEmpty.not()
         binding.tvMemberNickname.text = status.member.nickname
         binding.ivTeamHost.isVisible = status.member.isHost
         handleItemsCountStatus(status)
         sharedItemAdapter.submitList(status.sharedItems)
         assignedItemAdapter.submitList(status.assignedItems)
+        handleHurryUp(status.isAllChecked, status.isMe)
     }
 
     private fun handleItemsCountStatus(status: TeamMemberStatusUiModel) {
@@ -54,6 +58,16 @@ class TeamMemberStatusViewHolder private constructor(
                 status.checkedItemsCount,
                 status.totalItemsCount,
             )
+    }
+
+    private fun handleHurryUp(
+        isAllChecked: Boolean,
+        isMe: Boolean,
+    ) {
+        binding.btnHurryUpAlert.isVisible =
+            binding.groupItems.isVisible &&
+            isAllChecked.not() &&
+            isMe.not()
     }
 
     private fun setupSharedItems() {

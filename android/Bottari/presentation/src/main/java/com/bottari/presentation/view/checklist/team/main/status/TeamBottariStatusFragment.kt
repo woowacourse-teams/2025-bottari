@@ -3,6 +3,7 @@ package com.bottari.presentation.view.checklist.team.main.status
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
@@ -45,6 +46,8 @@ class TeamBottariStatusFragment :
 
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            binding.btnTeamBottariItemSendHurryUp.isVisible =
+                state.selectedProduct?.isAllChecked?.not() ?: false
             teamBottariProductStatusDetailAdapter.submitList(state.selectedProduct?.memberCheckStatus)
             binding.tvTeamBottariItemStatusTitle.text = state.selectedProduct?.name ?: ""
             teamBottariProductStatusAdapter.submitList(state.teamChecklistItems)
@@ -53,7 +56,7 @@ class TeamBottariStatusFragment :
             when (event) {
                 TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure ->
                     requireView().showSnackbar(
-                        R.string.team_status_fetch_failure_text,
+                        R.string.team_product_status_fetch_failure_text,
                     )
                 TeamBottariStatusUiEvent.SendRemindSuccess -> requireView().showSnackbar(R.string.team_status_send_remind_success_text)
                 TeamBottariStatusUiEvent.SendRemindFailure -> requireView().showSnackbar(R.string.team_status_send_remind_failure_text)
@@ -74,7 +77,7 @@ class TeamBottariStatusFragment :
     }
 
     private fun setupListener() {
-        binding.btnTeamBottariItemSendRemind.setOnClickListener {
+        binding.btnTeamBottariItemSendHurryUp.setOnClickListener {
             viewModel.sendRemindByItem()
         }
     }

@@ -13,15 +13,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_x_large"
+        android:layout_marginTop="@dimen/space_x_large"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_team_bottari_item_send_remind"
-        app:layout_constraintEnd_toStartOf="@+id/btn_team_bottari_item_send_remind"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btn_team_bottari_item_send_remind"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="이것은물건글자가열다섯개입니다" />
 
     <TextView
-        android:id="@+id/btn_team_bottari_item_send_remind"
+        android:id="@+id/btn_team_bottari_item_send_hurry_up"
         style="@style/Pretendard_Medium_20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,7 +41,7 @@
         android:id="@+id/rv_team_bottari_item_status_detail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/space_x_large"
         android:layout_marginEnd="@dimen/space_x_large"
         android:background="@drawable/bg_white_radius_12dp"
         android:elevation="2dp"
@@ -49,7 +50,7 @@
         android:paddingVertical="@dimen/space_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_team_bottari_item_status_title"
-        app:layout_constraintTop_toBottomOf="@+id/btn_team_bottari_item_send_remind"
+        app:layout_constraintTop_toBottomOf="@+id/tv_team_bottari_item_status_title"
         tools:listitem="@layout/item_checklist_mini" />
 
     <androidx.recyclerview.widget.RecyclerView

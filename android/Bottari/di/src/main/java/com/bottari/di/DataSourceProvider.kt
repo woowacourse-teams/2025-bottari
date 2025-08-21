@@ -65,7 +65,7 @@ object DataSourceProvider {
         )
     }
     val memberIdentifierLocalDataSource: MemberIdentifierLocalDataSource by lazy {
-        MemberIdentifierLocalDataSourceImpl()
+        MemberIdentifierLocalDataSourceImpl(ApplicationContextProvider.applicationContext)
     }
     val teamBottariRemoteDataSource: TeamBottariRemoteDataSource by lazy {
         TeamBottariRemoteDataSourceImpl(

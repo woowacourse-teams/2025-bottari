@@ -19,23 +19,43 @@ class MemberRepositoryImpl(
 ) : MemberRepository {
     override suspend fun registerMember(fcmToken: String): Result<Long?> =
         withContext(coroutineDispatcher) {
-            memberIdentifierLocalDataSource.getMemberIdentifier()
-        }.mapCatching { memberId ->
-            RegisterMemberRequest(memberId, fcmToken)
-        }.mapCatching { registerMemberRequest ->
-            memberRemoteDataSource.registerMember(registerMemberRequest).getOrThrow()
+            memberIdentifierLocalDataSource
+                .getInstallationId()
+                .mapCatching { installationId ->
+                    RegisterMemberRequest(installationId, fcmToken)
+                }.mapCatching { request ->
+                    memberRemoteDataSource
+                        .registerMember(request)
+                        .getOrThrow()
+                        ?.also { memberIdentifierLocalDataSource.saveMemberId(it) }
+                }
         }
 
     override suspend fun saveMemberNickname(nickname: Nickname): Result<Unit> =
-        memberRemoteDataSource.saveMemberNickname(nickname.toRequest())
+        withContext(coroutineDispatcher) {
+            memberRemoteDataSource.saveMemberNickname(nickname.toRequest())
+        }
 
     override suspend fun checkRegisteredMember(): Result<RegisteredMember> =
-        memberRemoteDataSource
-            .checkRegisteredMember()
-            .mapCatching { it.toDomain() }
-
-    override suspend fun getMemberIdentifier(): Result<String> =
         withContext(coroutineDispatcher) {
-            memberIdentifierLocalDataSource.getMemberIdentifier()
+            memberRemoteDataSource
+                .checkRegisteredMember()
+                .mapCatching { it.toDomain() }
+                .mapCatching { registeredMember ->
+                    if (registeredMember.isRegistered) {
+                        registeredMember.id?.let { memberIdentifierLocalDataSource.saveMemberId(it) }
+                    }
+                    registeredMember
+                }
+        }
+
+    override suspend fun getInstallationId(): Result<String> =
+        withContext(coroutineDispatcher) {
+            memberIdentifierLocalDataSource.getInstallationId()
+        }
+
+    override suspend fun getMemberId(): Result<Long> =
+        withContext(coroutineDispatcher) {
+            memberIdentifierLocalDataSource.getMemberId()
         }
 }

@@ -13,6 +13,7 @@ import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import okhttp3.MediaType.Companion.toMediaType
@@ -44,7 +45,8 @@ class MemberRepositoryImplTest {
             // given
             val request = RegisterMemberRequest("ssaid", "token")
             coEvery { remoteDataSource.registerMember(request) } returns Result.success(1)
-            coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns Result.success("ssaid")
+            every { userInfoLocalDataSource.saveMemberId(1) } returns Unit
+            coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.success("ssaid")
 
             // when
             val result = repository.registerMember("token")
@@ -64,7 +66,7 @@ class MemberRepositoryImplTest {
             val request = RegisterMemberRequest("ssaid", "token")
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { remoteDataSource.registerMember(request) } returns Result.failure(exception)
-            coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns Result.success("ssaid")
+            coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.success("ssaid")
 
             // when
             val result = repository.registerMember("token")
@@ -129,6 +131,7 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val response = CheckRegisteredMemberResponse(true, 1, "test")
+            every { userInfoLocalDataSource.saveMemberId(1) } returns Unit
             coEvery { remoteDataSource.checkRegisteredMember() } returns
                 Result.success(
                     response,
@@ -177,17 +180,17 @@ class MemberRepositoryImplTest {
 
     @DisplayName("사용자 식별자 조회를 성공하면 Success를 반환한다")
     @Test
-    fun getMemberIdentifierReturnsSuccess() =
+    fun getInstallationIdReturnsSuccess() =
         runTest {
             // given
             val memberId = "test_member_id"
-            coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns
+            coEvery { userInfoLocalDataSource.getInstallationId() } returns
                 Result.success(
                     memberId,
                 )
 
             // when
-            val result = repository.getMemberIdentifier()
+            val result = repository.getInstallationId()
 
             // then
             assertSoftly(result) {
@@ -196,24 +199,24 @@ class MemberRepositoryImplTest {
             }
 
             // verify
-            coVerify(exactly = 1) { userInfoLocalDataSource.getMemberIdentifier() }
+            coVerify(exactly = 1) { userInfoLocalDataSource.getInstallationId() }
         }
 
     @DisplayName("사용자 식별자 조회를 실패하면 Failure를 반환한다")
     @Test
-    fun getMemberIdentifierReturnsFailure() =
+    fun getInstallationIdReturnsFailure() =
         runTest {
             // given
             val exception = Exception()
-            coEvery { userInfoLocalDataSource.getMemberIdentifier() } returns Result.failure(exception)
+            coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.failure(exception)
 
             // when
-            val result = repository.getMemberIdentifier()
+            val result = repository.getInstallationId()
 
             // then
             result.shouldBeFailure { error -> error shouldBe exception }
 
             // verify
-            coVerify(exactly = 1) { userInfoLocalDataSource.getMemberIdentifier() }
+            coVerify(exactly = 1) { userInfoLocalDataSource.getInstallationId() }
         }
 }

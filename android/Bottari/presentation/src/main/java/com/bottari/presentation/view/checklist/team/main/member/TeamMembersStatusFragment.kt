@@ -32,11 +32,6 @@ class TeamMembersStatusFragment :
         setupUI()
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.fetchTeamMembersStatus()
-    }
-
     override fun onClickSendRemind(member: TeamMemberUiModel) {
         viewModel.sendRemindMessage(member)
     }
@@ -61,6 +56,9 @@ class TeamMembersStatusFragment :
 
                 TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
                     requireView().showSnackbar(R.string.team_members_status_send_remind_message_failure_text)
+
+                TeamMembersStatusUiEvent.FetchMemberIdFailure ->
+                    requireView().showSnackbar(R.string.team_members_status_fetch_member_id_failure_text)
             }
         }
     }

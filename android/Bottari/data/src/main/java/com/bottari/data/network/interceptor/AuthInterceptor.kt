@@ -20,7 +20,7 @@ class AuthInterceptor(
         return chain.proceed(newRequest)
     }
 
-    private fun getMemberIdentifier(): String? = memberIdentifierLocalDataSource.getMemberIdentifier().getOrNull()
+    private fun getMemberIdentifier(): String? = memberIdentifierLocalDataSource.getInstallationId().getOrNull()
 
     companion object {
         private const val IDENTIFIER_HEADER = "ssaid"
