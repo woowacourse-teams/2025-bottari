@@ -2,6 +2,10 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.fcm.FcmMessageConverter;
+import com.bottari.fcm.FcmMessageSender;
+import com.bottari.fcm.dto.MessageType;
+import com.bottari.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.InviteCodeGenerator;
@@ -15,6 +19,7 @@ import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamBottariPreviewResponse;
 import com.bottari.teambottari.dto.ReadTeamBottariResponse;
+import com.bottari.teambottari.event.ExitTeamMemberEvent;
 import com.bottari.teambottari.repository.TeamAssignedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamAssignedItemRepository;
 import com.bottari.teambottari.repository.TeamBottariRepository;
@@ -23,13 +28,13 @@ import com.bottari.teambottari.repository.TeamPersonalItemRepository;
 import com.bottari.teambottari.repository.TeamSharedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamSharedItemRepository;
 import com.bottari.teambottari.repository.dto.TeamBottariMemberCountProjection;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +51,11 @@ public class TeamBottariService {
     private final TeamPersonalItemRepository teamPersonalItemRepository;
     private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
     private final TeamAssignedItemInfoRepository teamAssignedItemInfoRepository;
+
+    private final FcmMessageSender fcmMessageSender;
+    private final FcmMessageConverter fcmMessageConverter;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional(readOnly = true)
     public List<ReadTeamBottariPreviewResponse> getAllBySsaid(final String ssaid) {
@@ -111,12 +121,30 @@ public class TeamBottariService {
         transferOwnerIfNeeded(remainMembers, teamBottari, exitTeamMember);
         teamMemberRepository.deleteById(exitTeamMember.getId());
         deleteTeamBottariIfEmpty(remainMembers, teamBottari);
+        applicationEventPublisher.publishEvent(new ExitTeamMemberEvent(teamBottari.getId(), exitTeamMember.getMember().getId()));
+        notifyMemberExitToRemainMember(teamBottari, exitTeamMember, remainMembers);
+    }
+
+    private void notifyMemberExitToRemainMember(
+            final TeamBottari teamBottari,
+            final TeamMember exitTeamMember,
+            final List<TeamMember> remainMembers
+    ) {
+        if (remainMembers.isEmpty()) {
+            return;
+        }
+        final List<Long> remainMemberIds = remainMembers.stream()
+                .map(TeamMember::getMember)
+                .map(Member::getId)
+                .toList();
+        final SendMessageRequest request = fcmMessageConverter.convert(teamBottari, exitTeamMember, MessageType.EXIT_TEAM_BOTTARI);
+        fcmMessageSender.sendMessageToMembers(remainMemberIds, request);
     }
 
     private List<TeamMember> findRemainMembers(
             final String ssaid,
-            final List<TeamMember> allTeamMembers)
-    {
+            final List<TeamMember> allTeamMembers
+    ) {
         return allTeamMembers.stream()
                 .filter(teamMember -> !teamMember.isSameBySsaid(ssaid))
                 .collect(Collectors.toList());

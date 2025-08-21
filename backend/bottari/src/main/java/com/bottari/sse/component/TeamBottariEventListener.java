@@ -7,6 +7,7 @@ import com.bottari.sse.dto.CreateTeamMemberData;
 import com.bottari.sse.dto.CreateTeamSharedItemData;
 import com.bottari.sse.dto.DeleteAssignedItemData;
 import com.bottari.sse.dto.DeleteTeamSharedItemData;
+import com.bottari.sse.dto.ExitTeamMemberData;
 import com.bottari.sse.message.SseEventType;
 import com.bottari.sse.message.SseMessage;
 import com.bottari.sse.message.SseResourceType;
@@ -17,6 +18,7 @@ import com.bottari.teambottari.event.CreateAssignedItemEvent;
 import com.bottari.teambottari.event.CreateTeamSharedItemEvent;
 import com.bottari.teambottari.event.DeleteAssignedItemEvent;
 import com.bottari.teambottari.event.DeleteTeamSharedItemEvent;
+import com.bottari.teambottari.event.ExitTeamMemberEvent;
 import com.bottari.teambottari.service.CreateTeamMemberEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -114,6 +116,17 @@ public class TeamBottariEventListener {
                 SseResourceType.ASSIGNED_ITEM_INFO,
                 SseEventType.DELETE,
                 DeleteAssignedItemData.from(event)
+        );
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+    }
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void handleExitTeamMemberEvent(final ExitTeamMemberEvent event) {
+        final SseMessage message = new SseMessage(
+                SseResourceType.TEAM_MEMBER,
+                SseEventType.DELETE,
+                ExitTeamMemberData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
     }

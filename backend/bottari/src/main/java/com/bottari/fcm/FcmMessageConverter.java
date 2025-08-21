@@ -6,6 +6,7 @@ import com.bottari.fcm.dto.MessageType;
 import com.bottari.fcm.dto.SendMessageRequest;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
+import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +22,8 @@ public class FcmMessageConverter {
     private static final String TEAM_ITEM_NAME = "teamItemName";
     private static final String TEAM_SHARED_ITEM_NAMES = "teamSharedItemNames";
     private static final String TEAM_ASSIGNED_ITEM_NAMES = "teamAssignedItemNames";
+    private static final String EXIT_MEMBER_ID = "exitMemberId";
+    private static final String EXIT_MEMBER_NAME = "exitMemberName";
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -90,5 +93,26 @@ public class FcmMessageConverter {
         } catch (final JsonProcessingException e) {
             throw new BusinessException(ErrorCode.FCM_MESSAGE_CONVERT_FAIL);
         }
+    }
+
+    public SendMessageRequest convert(
+            final TeamBottari teamBottari,
+            final TeamMember exitTeamMember,
+            final MessageType messageType
+    ) {
+        final Long teamBottariId = teamBottari.getId();
+        final String teamBottariTitle = teamBottari.getTitle();
+        final Long exitMemberId = exitTeamMember.getMember().getId();
+        final String exitMemberName = exitTeamMember.getMember().getName();
+
+        return new SendMessageRequest(
+                Map.of(
+                        TEAM_BOTTARI_ID, String.valueOf(teamBottariId),
+                        TEAM_BOTTARI_TITLE, teamBottariTitle,
+                        EXIT_MEMBER_ID, String.valueOf(exitMemberId),
+                        EXIT_MEMBER_NAME, exitMemberName
+                ),
+                messageType
+        );
     }
 }
