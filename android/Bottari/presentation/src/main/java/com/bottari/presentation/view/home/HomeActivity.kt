@@ -3,11 +3,10 @@ package com.bottari.presentation.view.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.MenuItem
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.applyWindowInsetsWithBottomNavigation
@@ -17,11 +16,14 @@ import com.bottari.presentation.view.home.more.MoreFragment
 import com.bottari.presentation.view.home.personal.BottariFragment
 import com.bottari.presentation.view.home.team.TeamBottariFragment
 import com.bottari.presentation.view.home.template.TemplateFragment
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::inflate) {
     private val deeplinkFlag: Boolean by lazy { intent.getBooleanExtra(KEY_DEEPLINK, false) }
     private var isBackPressedOnce: Boolean = false
-    private val handler: Handler by lazy { Handler(Looper.getMainLooper()) }
+    private var backPressResetJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,15 +84,21 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
             return
         }
         isBackPressedOnce = true
-        binding.fcvHome.showSnackbar(R.string.bottari_home_exit_confirm_text, anchor = binding.bnvHome)
-        handler.postDelayed({
-            isBackPressedOnce = false
-        }, EXIT_DELAY_TIME)
+        binding.fcvHome.showSnackbar(
+            R.string.bottari_home_exit_confirm_text,
+            anchor = binding.bnvHome,
+        )
+        backPressResetJob?.cancel()
+        backPressResetJob =
+            lifecycleScope.launch {
+                delay(EXIT_DELAY_TIME)
+                isBackPressedOnce = false
+            }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacksAndMessages(null)
+        backPressResetJob?.cancel()
     }
 
     companion object {
