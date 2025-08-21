@@ -164,11 +164,11 @@ class TeamBottariServiceTest {
                     teamBottari.getTitle(),
                     List.of(
                             // 공통 물품이더라도 하나만 포함
-                            new TeamItem(sharedItem.getId(), sharedItem.getInfo().getName())
+                            new TeamItem(sharedItemInfo.getId(), sharedItem.getInfo().getName())
                     ),
                     List.of(
                             // 다른 사람에게 할당된 assigned item 포함
-                            new TeamItem(assignedItem.getId(), assignedItem.getInfo().getName())
+                            new TeamItem(assignedItemInfo.getId(), assignedItem.getInfo().getName())
                     ),
                     List.of(
                             // 본인에게 할당된 personal item 포함, 다른 사람의 personal item 제외
