@@ -29,7 +29,7 @@ public interface TeamAssignedItemInfoRepository extends JpaRepository<TeamAssign
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
             UPDATE TeamAssignedItemInfo taii
-            SET taii.deletedAt = CURRENT TIMESTAMP
+            SET taii.deletedAt = CURRENT_TIMESTAMP
             WHERE taii.teamBottari.id = :teamBottariId
             AND taii.deletedAt IS NULL
             AND NOT EXISTS (
