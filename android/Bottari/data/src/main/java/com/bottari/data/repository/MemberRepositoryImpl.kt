@@ -42,7 +42,11 @@ class MemberRepositoryImpl(
             .checkRegisteredMember()
             .mapCatching { checkInfo -> checkInfo.toDomain() }
             .flatMapCatching { registeredMember ->
-                if (registeredMember.isRegistered.not()) return@flatMapCatching Result.success(registeredMember)
+                if (registeredMember.isRegistered.not()) {
+                    return@flatMapCatching Result.success(
+                        registeredMember,
+                    )
+                }
                 saveMemberIdToLocal(registeredMember.id).map { registeredMember }
             }
 
@@ -66,8 +70,10 @@ class MemberRepositoryImpl(
     private fun saveMemberIdToLocal(memberId: Long?): Result<Long> =
         runCatching {
             requireNotNull(memberId) { ERROR_MEMBER_ID_NULL }
-            memberIdentifierLocalDataSource.saveMemberId(memberId)
-            memberId
+            memberIdentifierLocalDataSource
+                .saveMemberId(memberId)
+                .map { memberId }
+                .getOrThrow()
         }
 
     companion object {
