@@ -19,6 +19,11 @@ class NotificationHelper(
     private val manager: NotificationManager =
         context.getSystemService(NotificationManager::class.java)
 
+    fun getString(
+        resId: Int,
+        vararg formatArgs: Any,
+    ): String = context.getString(resId, *formatArgs)
+
     fun sendPersonalNotification(
         bottariId: Long,
         bottariTitle: String,
