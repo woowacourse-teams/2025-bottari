@@ -33,7 +33,7 @@ class TeamMembersStatusFragment :
     }
 
     override fun onClickSendRemind(member: TeamMemberUiModel) {
-        viewModel.sendRemindMessage(member)
+        viewModel.debouncedSendRemindMessage(member)
     }
 
     private fun setupObserver() {

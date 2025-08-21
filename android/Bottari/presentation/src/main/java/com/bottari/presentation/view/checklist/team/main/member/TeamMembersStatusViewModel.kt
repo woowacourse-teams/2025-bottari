@@ -3,6 +3,7 @@ package com.bottari.presentation.view.checklist.team.main.member
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
@@ -12,6 +13,7 @@ import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
 import com.bottari.presentation.model.TeamMemberUiModel
+import com.bottari.presentation.util.debounce
 
 class TeamMembersStatusViewModel(
     stateHandle: SavedStateHandle,
@@ -23,6 +25,12 @@ class TeamMembersStatusViewModel(
     ) {
     private val teamBottariId: Long =
         stateHandle[KEY_TEAM_BOTTARI_ID] ?: error(ERROR_REQUIRE_TEAM_BOTTARI_ID)
+
+    val debouncedSendRemindMessage: (member: TeamMemberUiModel) -> Unit =
+        debounce(
+            timeMillis = DEBOUNCE_DELAY,
+            coroutineScope = viewModelScope,
+        ) { items -> sendRemindMessage(items) }
 
     init {
         fetchMemberId()
@@ -45,7 +53,7 @@ class TeamMembersStatusViewModel(
         }
     }
 
-    fun sendRemindMessage(member: TeamMemberUiModel) {
+    private fun sendRemindMessage(member: TeamMemberUiModel) {
         val memberId = member.id ?: return
         launch {
             sendRemindByMemberMessageUseCase(teamBottariId, memberId)
@@ -72,6 +80,8 @@ class TeamMembersStatusViewModel(
     companion object {
         private const val KEY_TEAM_BOTTARI_ID = "KEY_TEAM_BOTTARI_ID"
         private const val ERROR_REQUIRE_TEAM_BOTTARI_ID = "[ERROR] 팀 보따리 ID가 존재하지 않습니다."
+
+        private const val DEBOUNCE_DELAY = 300L
 
         fun Factory(id: Long): ViewModelProvider.Factory =
             viewModelFactory {
