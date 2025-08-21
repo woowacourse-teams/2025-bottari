@@ -1,21 +1,26 @@
 package com.bottari.data.source.local
 
+import com.bottari.data.local.MemberInfoDataStore
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.installations.FirebaseInstallations
 import java.util.concurrent.TimeUnit
 
-class MemberIdentifierLocalDataSourceImpl : MemberIdentifierLocalDataSource {
+class MemberIdentifierLocalDataSourceImpl(
+    private val memberInfoDataStore: MemberInfoDataStore,
+) : MemberIdentifierLocalDataSource {
     private var cachedInstallationId: String? = null
-    private var cachedMemberId: Long? = null
 
     override fun getInstallationId(): Result<String> =
         runCatching {
             cachedInstallationId ?: initialize().also { cachedInstallationId = it }
         }
 
-    override fun saveMemberId(id: Long): Result<Unit> = runCatching { cachedMemberId = id }
+    override suspend fun saveMemberId(id: Long): Result<Unit> = runCatching { memberInfoDataStore.saveMemberId(id) }
 
-    override fun getMemberId(): Result<Long> = runCatching { requireNotNull(cachedMemberId) { ERROR_MEMBER_ID_NULL } }
+    override suspend fun getMemberId(): Result<Long> =
+        runCatching {
+            requireNotNull(memberInfoDataStore.getMemberId()) { ERROR_MEMBER_ID_NULL }
+        }
 
     private fun initialize(): String = Tasks.await(FirebaseInstallations.getInstance().id, 10, TimeUnit.SECONDS)
 

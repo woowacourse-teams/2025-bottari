@@ -67,7 +67,7 @@ class MemberRepositoryImpl(
             .checkRegisteredMember()
             .flatMapCatching { checkInfo -> saveMemberIdToLocal(checkInfo.id) }
 
-    private fun saveMemberIdToLocal(memberId: Long?): Result<Long> =
+    private suspend fun saveMemberIdToLocal(memberId: Long?): Result<Long> =
         runCatching {
             requireNotNull(memberId) { ERROR_MEMBER_ID_NULL }
             memberIdentifierLocalDataSource
