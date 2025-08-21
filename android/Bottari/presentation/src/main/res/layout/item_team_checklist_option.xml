@@ -37,7 +37,7 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:gravity="center"
-        android:text="@string/team_checklsit_empty_view_title_text"
+        android:text="@string/team_checklist_empty_view_title_text"
         android:textColor="@color/gray_787878"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
