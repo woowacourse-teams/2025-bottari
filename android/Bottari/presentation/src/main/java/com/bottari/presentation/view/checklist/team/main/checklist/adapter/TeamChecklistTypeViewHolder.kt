@@ -37,7 +37,7 @@ class TeamChecklistTypeViewHolder(
         binding.ivTeamChecklistOption
             .animate()
             .rotation(targetRotation)
-            .setDuration(300L)
+            .setDuration(ROTATION_DURATION)
             .start()
     }
 
@@ -56,6 +56,7 @@ class TeamChecklistTypeViewHolder(
     companion object {
         private const val TOGGLE_SHAPE_UNOPENED = 0f
         private const val TOGGLE_SHAPE_OPENED = 90f
+        private const val ROTATION_DURATION = 300L
 
         fun from(
             parent: ViewGroup,
