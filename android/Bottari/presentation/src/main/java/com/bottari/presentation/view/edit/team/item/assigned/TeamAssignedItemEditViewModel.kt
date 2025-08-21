@@ -45,7 +45,6 @@ class TeamAssignedItemEditViewModel(
     private val fetchTeamBottariMembersUseCase: FetchTeamBottariMembersUseCase,
     private val saveTeamBottariAssignedItemUseCase: SaveTeamBottariAssignedItemUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
-    private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
 ) : BaseViewModel<TeamAssignedItemEditUiState, TeamAssignedItemEditEvent>(
         TeamAssignedItemEditUiState(),
     ) {
@@ -54,11 +53,6 @@ class TeamAssignedItemEditViewModel(
     init {
         refreshAssignedItemsAndMembers()
         handleEvent()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        CoroutineScope(Dispatchers.IO).launch { disconnectTeamEventUseCase() }
     }
 
     fun updateInput(input: String) {
@@ -244,7 +238,6 @@ class TeamAssignedItemEditViewModel(
                         UseCaseProvider.fetchTeamBottariMembersUseCase,
                         UseCaseProvider.saveTeamBottariAssignedItemUseCase,
                         UseCaseProvider.connectTeamEventUseCase,
-                        UseCaseProvider.disconnectTeamEventUseCase,
                     )
                 }
             }

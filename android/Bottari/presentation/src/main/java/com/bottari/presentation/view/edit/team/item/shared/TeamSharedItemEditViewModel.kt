@@ -33,7 +33,6 @@ class TeamSharedItemEditViewModel(
     private val createTeamSharedItemUseCase: CreateTeamSharedItemUseCase,
     private val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
-    private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
 ) : BaseViewModel<TeamSharedItemEditUiState, TeamSharedItemEditEvent>(
         TeamSharedItemEditUiState(),
     ) {
@@ -42,11 +41,6 @@ class TeamSharedItemEditViewModel(
     init {
         fetchPersonalItems()
         handleEvent()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        CoroutineScope(Dispatchers.IO).launch { disconnectTeamEventUseCase() }
     }
 
     fun updateInput(input: String) {
@@ -133,7 +127,6 @@ class TeamSharedItemEditViewModel(
                         UseCaseProvider.createTeamSharedItemUseCase,
                         UseCaseProvider.deleteTeamBottariItemUseCase,
                         UseCaseProvider.connectTeamEventUseCase,
-                        UseCaseProvider.disconnectTeamEventUseCase,
                     )
                 }
             }

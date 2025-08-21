@@ -81,7 +81,7 @@ class SSEClientImpl(
     }
 
     override fun connect(teamBottariId: Long): Flow<EventStateResponse> {
-        disconnect()
+        if (eventSource != null) return eventFlow
         id = teamBottariId
         val request = createRequest(teamBottariId)
         eventSource = createEventSource(request)
