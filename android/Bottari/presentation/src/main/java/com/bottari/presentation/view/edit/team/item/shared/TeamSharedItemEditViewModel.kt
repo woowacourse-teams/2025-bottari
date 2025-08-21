@@ -10,14 +10,11 @@ import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
-import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.CreateTeamSharedItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamSharedItemsUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance
@@ -25,7 +22,6 @@ import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 class TeamSharedItemEditViewModel(
     stateHandle: SavedStateHandle,

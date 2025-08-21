@@ -12,7 +12,6 @@ import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.TeamMember
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
-import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.CreateTeamAssignedItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamAssignedItemsUseCase
@@ -24,12 +23,9 @@ import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.TeamMemberUiModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.launchIn

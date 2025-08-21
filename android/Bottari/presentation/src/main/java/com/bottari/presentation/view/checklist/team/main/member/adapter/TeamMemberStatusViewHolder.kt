@@ -27,7 +27,7 @@ class TeamMemberStatusViewHolder private constructor(
             memberStatus?.let { memberStatus ->
                 handleHurryUp(
                     memberStatus.isAllChecked,
-                    memberStatus.isMe
+                    memberStatus.isMe,
                 )
             }
         }
@@ -70,8 +70,8 @@ class TeamMemberStatusViewHolder private constructor(
     ) {
         binding.btnHurryUpAlert.isVisible =
             binding.groupItems.isVisible &&
-                    isAllChecked.not() &&
-                    isMe.not()
+            isAllChecked.not() &&
+            isMe.not()
     }
 
     private fun setupSharedItems() {
