@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
-import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
+import com.bottari.domain.usecase.team.ExitTeamBottariUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
@@ -13,7 +13,7 @@ import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
 
 class TeamBottariViewModel(
     private val fetchTeamBottariesUseCase: FetchTeamBottariesUseCase,
-    private val deleteBottariUseCase: DeleteBottariUseCase,
+    private val exitTeamBottariUseCase: ExitTeamBottariUseCase,
 ) : BaseViewModel<TeamBottariUiState, TeamBottariUiEvent>(TeamBottariUiState()) {
     fun fetchBottaries() {
         updateState { copy(isLoading = true) }
@@ -34,7 +34,7 @@ class TeamBottariViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            deleteBottariUseCase(bottariId)
+            exitTeamBottariUseCase(bottariId)
                 .onSuccess {
                     logPersonalBottariDelete(bottariId)
                     fetchBottaries()
@@ -48,7 +48,7 @@ class TeamBottariViewModel(
     private fun logPersonalBottariDelete(bottariId: Long) {
         val bottari = currentState.bottaries.find { it.id == bottariId }
         BottariLogger.ui(
-            UiEventType.PERSONAL_BOTTARI_DELETE,
+            UiEventType.TEAM_BOTTARI_EXIT,
             mapOf(
                 "bottari_id" to bottariId,
                 "bottari_title" to bottari?.title.orEmpty(),
@@ -62,7 +62,7 @@ class TeamBottariViewModel(
                 initializer {
                     TeamBottariViewModel(
                         UseCaseProvider.fetchTeamBottariesUseCase,
-                        UseCaseProvider.deleteBottariUseCase,
+                        UseCaseProvider.exitTeamBottariUseCase,
                     )
                 }
             }
