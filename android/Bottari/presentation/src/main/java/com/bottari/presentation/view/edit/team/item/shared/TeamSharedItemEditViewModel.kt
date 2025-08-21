@@ -7,17 +7,33 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.bottari.BottariItemType
+import com.bottari.domain.model.event.EventData
+import com.bottari.domain.model.event.EventState
+import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
+import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.CreateTeamSharedItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamSharedItemsUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.filterNot
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class TeamSharedItemEditViewModel(
     stateHandle: SavedStateHandle,
     private val fetchTeamSharedItemsUseCase: FetchTeamSharedItemsUseCase,
     private val createTeamSharedItemUseCase: CreateTeamSharedItemUseCase,
     private val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase,
+    private val connectTeamEventUseCase: ConnectTeamEventUseCase,
+    private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
 ) : BaseViewModel<TeamSharedItemEditUiState, TeamSharedItemEditEvent>(
         TeamSharedItemEditUiState(),
     ) {
@@ -25,6 +41,12 @@ class TeamSharedItemEditViewModel(
 
     init {
         fetchPersonalItems()
+        handleEvent()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        CoroutineScope(Dispatchers.IO).launch { disconnectTeamEventUseCase() }
     }
 
     fun updateInput(input: String) {
@@ -60,6 +82,19 @@ class TeamSharedItemEditViewModel(
         }
     }
 
+    @OptIn(FlowPreview::class)
+    private fun handleEvent() {
+        launch {
+            connectTeamEventUseCase(bottariId)
+                .filterIsInstance<EventState.OnEvent>()
+                .map { event -> event.data }
+                .filterNot { eventData -> eventData.shouldIgnore() }
+                .debounce(DEBOUNCE_DELAY)
+                .onEach { fetchPersonalItems() }
+                .launchIn(this)
+        }
+    }
+
     private fun fetchPersonalItems() {
         updateState { copy(isLoading = true) }
 
@@ -72,9 +107,20 @@ class TeamSharedItemEditViewModel(
         }
     }
 
+    private fun EventData.shouldIgnore(): Boolean =
+        when (this) {
+            is EventData.SharedItemChange,
+            is EventData.SharedItemInfoCreate,
+            is EventData.SharedItemInfoDelete,
+            -> false
+
+            else -> true
+        }
+
     companion object {
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
         private const val ERROR_BOTTARI_ID = "[ERROR] bottariId가 존재하지 않습니다"
+        private const val DEBOUNCE_DELAY = 300L
 
         fun Factory(bottariId: Long): ViewModelProvider.Factory =
             viewModelFactory {
@@ -86,6 +132,8 @@ class TeamSharedItemEditViewModel(
                         UseCaseProvider.fetchTeamSharedItemsUseCase,
                         UseCaseProvider.createTeamSharedItemUseCase,
                         UseCaseProvider.deleteTeamBottariItemUseCase,
+                        UseCaseProvider.connectTeamEventUseCase,
+                        UseCaseProvider.disconnectTeamEventUseCase,
                     )
                 }
             }
