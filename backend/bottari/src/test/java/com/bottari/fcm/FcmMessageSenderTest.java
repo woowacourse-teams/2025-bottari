@@ -11,6 +11,7 @@ import com.bottari.error.BusinessException;
 import com.bottari.fcm.domain.FcmToken;
 import com.bottari.fcm.dto.MessageType;
 import com.bottari.fcm.dto.SendMessageRequest;
+import com.bottari.fcm.service.FcmTokenService;
 import com.bottari.fixture.FcmTokenFixture;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.member.domain.Member;
@@ -37,11 +38,17 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @DataJpaTest
-@Import(FcmMessageSender.class)
+@Import({
+        FcmMessageSender.class,
+        FcmTokenService.class
+})
 class FcmMessageSenderTest {
 
     @Autowired
     private FcmMessageSender fcmMessageSender;
+
+    @Autowired
+    private FcmTokenService fcmTokenService;
 
     @MockitoBean
     private FirebaseMessaging firebaseMessaging;
