@@ -5,11 +5,8 @@ import com.bottari.data.model.sse.EventStateResponse
 import com.bottari.data.model.sse.OnEventRaw
 import com.bottari.data.model.sse.toEvent
 import com.bottari.logger.BottariLogger
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
