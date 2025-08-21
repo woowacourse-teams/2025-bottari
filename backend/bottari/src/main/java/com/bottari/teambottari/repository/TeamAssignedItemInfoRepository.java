@@ -28,15 +28,16 @@ public interface TeamAssignedItemInfoRepository extends JpaRepository<TeamAssign
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
-        UPDATE TeamAssignedItemInfo taii
-        SET taii.deletedAt = CURRENT_TIMESTAMP
-        WHERE taii IN (
-                SELECT taii_sub
-                FROM TeamAssignedItemInfo taii_sub
-                LEFT JOIN TeamAssignedItem tai ON tai.info = taii_sub
-                WHERE tai.id IS NULL
-                  AND taii_sub.teamBottari.id = :teamBottariId
-        )
-        """)
+            UPDATE TeamAssignedItemInfo taii
+            SET taii.deletedAt = CURRENT TIMESTAMP
+            WHERE taii.teamBottari.id = :teamBottariId
+            AND taii.deletedAt IS NULL
+            AND NOT EXISTS (
+                SELECT 1
+                FROM TeamAssignedItem tai
+                WHERE tai.info = taii
+                AND tai.deletedAt IS NULL
+            )
+            """)
     void deleteOrphanAssignedItemInfosByTeamBottariId(final Long teamBottariId);
 }
