@@ -12,6 +12,8 @@ import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
 import com.bottari.domain.usecase.bottari.SaveBottariTitleUseCase
 import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
+import com.bottari.domain.usecase.event.ConnectEventUseCase
+import com.bottari.domain.usecase.event.DisconnectEventUseCase
 import com.bottari.domain.usecase.fcm.SaveFcmTokenUseCase
 import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
@@ -264,5 +266,11 @@ object UseCaseProvider {
     }
     val checkForceUpdateUseCase: CheckForceUpdateUseCase by lazy {
         CheckForceUpdateUseCase(RepositoryProvider.remoteConfigRepository)
+    }
+    val connectEventUseCase: ConnectEventUseCase by lazy {
+        ConnectEventUseCase(RepositoryProvider.eventRepository)
+    }
+    val disconnectEventUseCase: DisconnectEventUseCase by lazy {
+        DisconnectEventUseCase(RepositoryProvider.eventRepository)
     }
 }
