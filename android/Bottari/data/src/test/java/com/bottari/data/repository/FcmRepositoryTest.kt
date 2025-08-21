@@ -9,7 +9,6 @@ import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import okhttp3.MediaType.Companion.toMediaType
@@ -32,7 +31,7 @@ class FcmRepositoryTest {
         dataSource = mockk<FcmRemoteDataSource>()
         localDataSource = mockk<MemberIdentifierLocalDataSource>()
         repository = FcmRepositoryImpl(dataSource, localDataSource)
-        every { localDataSource.getMemberId() } returns Result.success(1)
+        coEvery { localDataSource.getMemberId() } returns Result.success(1)
     }
 
     @DisplayName("FCM 토큰 저장에 성공하는 경우 Success를 반환한다")
