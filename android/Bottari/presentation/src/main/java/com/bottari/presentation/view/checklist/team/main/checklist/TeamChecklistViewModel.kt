@@ -43,16 +43,8 @@ class TeamChecklistViewModel(
     }
 
     fun toggleParentExpanded(type: BottariItemTypeUiModel) {
-        val currentItems = currentState.expandableItems
-        val position =
-            currentItems.indexOfFirst {
-                it is TeamChecklistExpandableTypeUiModel && it.type == type
-            }
-        if (position == -1) return
-        val itemToToggle = currentItems[position] as TeamChecklistExpandableTypeUiModel
-        val newExpandedState = !itemToToggle.isExpanded
-        val updatedParentItems =
-            currentItems.map { item ->
+        val updatedExpandableItems =
+            currentState.expandableItems.map { item ->
                 if (item is TeamChecklistExpandableTypeUiModel && item.type == type) {
                     val reverseExpandType = item.copy(isExpanded = !item.isExpanded)
                     return@map reverseExpandType
@@ -61,8 +53,7 @@ class TeamChecklistViewModel(
             }
 
         val newExpandableList =
-            generateExpandableTypeList(updatedParentItems, currentState.bottariItems)
-        emitEvent(TeamChecklistUiEvent.UpdateChecklistHeader(position, newExpandedState))
+            generateExpandableTypeList(updatedExpandableItems, currentState.bottariItems)
         updateState {
             copy(expandableItems = newExpandableList)
         }

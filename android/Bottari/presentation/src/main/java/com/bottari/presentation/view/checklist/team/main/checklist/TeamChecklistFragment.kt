@@ -51,9 +51,6 @@ class TeamChecklistFragment :
             when (uiEvent) {
                 TeamChecklistUiEvent.FetchChecklistFailure -> requireView().showSnackbar(R.string.checklist_fetch_failure_text)
                 TeamChecklistUiEvent.CheckItemFailure -> requireView().showSnackbar(R.string.checklist_check_failure_text)
-                is TeamChecklistUiEvent.UpdateChecklistHeader -> {
-                    checklistAdapter.notifyItemChanged(uiEvent.position, uiEvent.isExpanded)
-                }
             }
         }
     }
