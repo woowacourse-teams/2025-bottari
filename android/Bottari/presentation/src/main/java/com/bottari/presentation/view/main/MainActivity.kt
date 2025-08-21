@@ -56,12 +56,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             when (uiEvent) {
                 is MainUiEvent.LoginSuccess -> checkPermissionAndNavigate(uiEvent.permissionFlag)
                 MainUiEvent.IncompletePermissionFlow -> showPermissionDescriptionDialog()
-                MainUiEvent.RegisterFailure -> finishAffinity()
                 MainUiEvent.ForceUpdate -> showForceUpdateDialog()
+                MainUiEvent.RegisterFailure,
                 MainUiEvent.LoginFailure,
                 MainUiEvent.GetPermissionFlagFailure,
                 MainUiEvent.SavePermissionFlagFailure,
-                -> Unit
+                -> finishAffinity()
             }
         }
     }
@@ -91,13 +91,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private fun checkPermissionAndNavigate(permissionFlag: Boolean) {
         if (!hasRequiredPermission(permissionFlag)) {
             binding.root.showSnackbar(R.string.splash_screen_permission_denied_text) {
-                handleDeeplink()
-                navigateToHome()
+                if (!checkDeeplink()) navigateToHome()
             }
             return
         }
-        handleDeeplink()
-        navigateToHome()
+        if (!checkDeeplink()) navigateToHome()
     }
 
     private fun showExactAlarmSettingsDialog() {
@@ -118,11 +116,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private fun hasRequiredPermission(permissionFlag: Boolean) =
         permissionFlag || (hasAllRuntimePermissions(this) && hasExactAlarmPermission(this))
 
-    private fun handleDeeplink() {
+    private fun checkDeeplink(): Boolean {
         intent.data?.let { uri ->
-            if (validateUri(uri).not()) return
-            navigateToInvite(uri)
+            if (validateUri(uri)) {
+                navigateToInvite(uri)
+                return true
+            }
         }
+        return false
     }
 
     private fun navigateToHome() {
