@@ -1,22 +1,22 @@
-package com.bottari.presentation.view.home.profile
+package com.bottari.presentation.view.home.more
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.core.net.toUri
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import com.bottari.presentation.BuildConfig
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
-import com.bottari.presentation.databinding.FragmentProfileBinding
+import com.bottari.presentation.databinding.FragmentMoreBinding
 
-class ProfileFragment :
-    BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate),
-    TextWatcher {
-    private val viewModel: ProfileViewModel by viewModels { ProfileViewModel.Factory() }
+class MoreFragment : BaseFragment<FragmentMoreBinding>(FragmentMoreBinding::inflate) {
+    private val viewModel: MoreViewModel by viewModels { MoreViewModel.Factory() }
     private val inputManager: InputMethodManager by lazy {
         requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }
@@ -30,26 +30,6 @@ class ProfileFragment :
         setupListener()
     }
 
-    override fun beforeTextChanged(
-        p0: CharSequence?,
-        p1: Int,
-        p2: Int,
-        p3: Int,
-    ) {
-    }
-
-    override fun onTextChanged(
-        p0: CharSequence?,
-        p1: Int,
-        p2: Int,
-        p3: Int,
-    ) {
-    }
-
-    override fun afterTextChanged(p0: Editable?) {
-        viewModel.updateNickname(p0.toString().trim())
-    }
-
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
@@ -60,10 +40,10 @@ class ProfileFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                ProfileUiEvent.FetchMemberInfoFailure -> requireView().showSnackbar(R.string.profile_fetch_failure_text)
-                ProfileUiEvent.SaveMemberNicknameSuccess -> requireView().showSnackbar(R.string.profile_nickname_save_success_text)
-                ProfileUiEvent.SaveMemberNicknameFailure -> requireView().showSnackbar(R.string.profile_nickname_save_failure_text)
-                ProfileUiEvent.InvalidNicknameRule -> requireView().showSnackbar(R.string.profile_invalid_nickname_rule_text)
+                MoreUiEvent.FetchMemberInfoFailure -> requireView().showSnackbar(R.string.profile_fetch_failure_text)
+                MoreUiEvent.SaveMemberNicknameSuccess -> requireView().showSnackbar(R.string.profile_nickname_save_success_text)
+                MoreUiEvent.SaveMemberNicknameFailure -> requireView().showSnackbar(R.string.profile_nickname_save_failure_text)
+                MoreUiEvent.InvalidNicknameRule -> requireView().showSnackbar(R.string.profile_invalid_nickname_rule_text)
             }
         }
     }
@@ -71,10 +51,14 @@ class ProfileFragment :
     private fun setupListener() {
         setupNicknameEditListener()
         setupNicknameEditButtonClickListener()
+        binding.btnPrivacyPolicy.setOnClickListener { launchInBrowser(BuildConfig.PRIVACY_POLICY_URL) }
+        binding.btnUserFeedback.setOnClickListener { launchInBrowser(BuildConfig.USER_FEEDBACK_URL) }
+        binding.etNicknameEdit.doAfterTextChanged {
+            viewModel.updateNickname(it.toString().trim())
+        }
     }
 
     private fun setupNicknameEditListener() {
-        binding.etNicknameEdit.addTextChangedListener(this)
         binding.etNicknameEdit.setOnEditorActionListener { _, actionId, _ ->
             handleEditorAction(actionId)
         }
@@ -137,5 +121,10 @@ class ProfileFragment :
     private fun hideKeyboard(view: View) {
         inputManager.hideSoftInputFromWindow(view.windowToken, 0)
         view.clearFocus()
+    }
+
+    private fun launchInBrowser(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+        startActivity(intent)
     }
 }

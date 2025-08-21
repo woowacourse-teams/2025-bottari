@@ -6,23 +6,25 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".view.home.personal.BottariFragment">
+    tools:context=".view.home.more.MoreFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:id="@+id/cl_profile"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/space_large"
         android:layout_marginTop="@dimen/space_x_small"
         android:background="@drawable/bg_white_radius_12dp"
         android:elevation="2dp"
-        android:orientation="vertical"
         android:padding="@dimen/space_median"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tv_profile_nickname_title"
             style="@style/Pretendard_SemiBold_16"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/profile_nickname_title"
             android:textColor="@color/black"
@@ -66,4 +68,47 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/btn_privacy_policy"
+        style="@style/Pretendard_Medium_16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_large"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:clickable="true"
+        android:elevation="2dp"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:paddingHorizontal="@dimen/space_median"
+        android:paddingVertical="@dimen/space_small"
+        android:text="@string/setting_privacy_policy_title_text"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_profile" />
+
+    <TextView
+        android:id="@+id/btn_user_feedback"
+        style="@style/Pretendard_Medium_16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/space_large"
+        android:layout_marginTop="@dimen/space_x_small"
+        android:background="@drawable/bg_white_radius_12dp"
+        android:clickable="true"
+        android:elevation="2dp"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:paddingHorizontal="@dimen/space_median"
+        android:paddingVertical="@dimen/space_small"
+        android:text="@string/setting_user_feedback_title_text"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_privacy_policy" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
