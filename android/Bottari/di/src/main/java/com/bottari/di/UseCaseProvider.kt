@@ -270,6 +270,7 @@ object UseCaseProvider {
     }
     val exitTeamBottariUseCase: ExitTeamBottariUseCase by lazy {
         ExitTeamBottariUseCase(RepositoryProvider.teamBottariRepository)
+    }
     val connectTeamEventUseCase: ConnectTeamEventUseCase by lazy {
         ConnectTeamEventUseCase(RepositoryProvider.eventRepository)
     }
