@@ -34,6 +34,7 @@ import com.bottari.domain.usecase.team.CreateTeamBottariUseCase
 import com.bottari.domain.usecase.team.CreateTeamPersonalItemUseCase
 import com.bottari.domain.usecase.team.CreateTeamSharedItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
+import com.bottari.domain.usecase.team.ExitTeamBottariUseCase
 import com.bottari.domain.usecase.team.FetchTeamAssignedItemsUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariDetailUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariMembersUseCase
@@ -266,6 +267,9 @@ object UseCaseProvider {
     }
     val checkForceUpdateUseCase: CheckForceUpdateUseCase by lazy {
         CheckForceUpdateUseCase(RepositoryProvider.remoteConfigRepository)
+    }
+    val exitTeamBottariUseCase: ExitTeamBottariUseCase by lazy {
+        ExitTeamBottariUseCase(RepositoryProvider.teamBottariRepository)
     }
     val connectTeamEventUseCase: ConnectTeamEventUseCase by lazy {
         ConnectTeamEventUseCase(RepositoryProvider.eventRepository)

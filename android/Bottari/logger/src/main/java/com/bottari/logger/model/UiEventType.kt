@@ -89,6 +89,15 @@ enum class UiEventType {
     TEAM_BOTTARI_JOIN,
 
     /**
+     * 팀 보따리 나가기 이벤트
+     *
+     * 파라미터
+     * - bottari_id: 삭제된 보따리 고유 ID
+     * - bottari_title: 삭제된 보따리 제목
+     */
+    TEAM_BOTTARI_EXIT,
+
+    /**
      * 체크리스트 완료 이벤트
      *
      * 파라미터:

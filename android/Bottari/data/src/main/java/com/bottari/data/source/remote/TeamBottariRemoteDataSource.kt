@@ -89,4 +89,6 @@ interface TeamBottariRemoteDataSource {
         assignedItemId: Long,
         request: SaveTeamBottariAssignedItemRequest,
     ): Result<Unit>
+
+    suspend fun exitTeamBottari(teamBottariId: Long): Result<Unit>
 }

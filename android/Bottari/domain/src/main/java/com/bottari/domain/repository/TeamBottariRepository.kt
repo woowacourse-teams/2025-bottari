@@ -82,4 +82,6 @@ interface TeamBottariRepository {
         name: String,
         assigneeIds: List<Long>,
     ): Result<Unit>
+
+    suspend fun exitTeamBottari(teamBottariId: Long): Result<Unit>
 }

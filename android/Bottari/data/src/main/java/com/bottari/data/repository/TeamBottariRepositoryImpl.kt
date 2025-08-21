@@ -160,4 +160,6 @@ class TeamBottariRepositoryImpl(
             assignedItemId,
             SaveTeamBottariAssignedItemRequest(name, assigneeIds),
         )
+
+    override suspend fun exitTeamBottari(teamBottariId: Long): Result<Unit> = teamBottariRemoteDataSource.exitTeamBottari(teamBottariId)
 }
