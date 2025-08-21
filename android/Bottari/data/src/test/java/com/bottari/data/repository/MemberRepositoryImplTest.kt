@@ -13,6 +13,7 @@ import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import okhttp3.MediaType.Companion.toMediaType
@@ -44,7 +45,7 @@ class MemberRepositoryImplTest {
             // given
             val request = RegisterMemberRequest("ssaid", "token")
             coEvery { remoteDataSource.registerMember(request) } returns Result.success(1)
-            coEvery { userInfoLocalDataSource.saveMemberId(1) } returns Unit
+            every { userInfoLocalDataSource.saveMemberId(1) } returns Unit
             coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.success("ssaid")
 
             // when
@@ -130,7 +131,7 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val response = CheckRegisteredMemberResponse(true, 1, "test")
-            coEvery { userInfoLocalDataSource.saveMemberId(1) } returns Unit
+            every { userInfoLocalDataSource.saveMemberId(1) } returns Unit
             coEvery { remoteDataSource.checkRegisteredMember() } returns
                 Result.success(
                     response,
