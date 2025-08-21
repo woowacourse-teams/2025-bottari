@@ -1,6 +1,5 @@
 package com.bottari.teambottari.controller;
 
-import com.bottari.config.MemberIdentifier;
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
@@ -13,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(name = "Team Bottari", description = "팀 보따리 API")
 public interface TeamBottariApiDocs {
