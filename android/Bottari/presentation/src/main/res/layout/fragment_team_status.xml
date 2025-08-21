@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     tools:context=".view.checklist.team.main.status.TeamBottariStatusFragment">
 
     <include
@@ -66,7 +65,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_team_bottari_items"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/space_x_large"
         app:layout_constraintEnd_toEndOf="parent"
