@@ -67,8 +67,9 @@ class TeamManagementViewModel(
             connectTeamEventUseCase(teamBottariId)
                 .filterIsInstance<EventState.OnEvent>()
                 .map { event -> event.data }
-                .filter { eventData -> eventData is EventData.TeamMemberCreate }
-                .debounce(DEBOUNCE_DELAY)
+                .filter { eventData ->
+                    eventData is EventData.TeamMemberCreate || eventData is EventData.TeamMemberDelete
+                }.debounce(DEBOUNCE_DELAY)
                 .onEach { fetchTeamMembers() }
                 .launchIn(this)
         }
