@@ -14,10 +14,9 @@ class SharedItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: ChecklistItemUiModel) {
         binding.tvChecklistItemMiniTitle.text = item.name
-        if (item.isChecked.not()) {
-            val bgColor = ContextCompat.getColor(itemView.context, R.color.gray_a6a6a6)
-            binding.clChecklistItem.backgroundTintList = ColorStateList.valueOf(bgColor)
-        }
+        val bgColorRes = if (item.isChecked) R.color.primary else R.color.gray_a6a6a6
+        val bgColor = ContextCompat.getColor(itemView.context, bgColorRes)
+        binding.clChecklistItem.backgroundTintList = ColorStateList.valueOf(bgColor)
     }
 
     companion object {

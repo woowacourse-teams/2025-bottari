@@ -58,6 +58,15 @@ class TeamMembersStatusViewModel(
         CoroutineScope(Dispatchers.IO).launch { disconnectTeamEventUseCase() }
     }
 
+    fun updateExpandState(id: Long) {
+        val newMembersStatus =
+            currentState.membersStatus.map { memberStatus ->
+                if (memberStatus.member.id == id) return@map memberStatus.copy(isExpanded = !memberStatus.isExpanded)
+                memberStatus
+            }
+        updateState { copy(membersStatus = newMembersStatus) }
+    }
+
     private fun sendRemindMessage(member: TeamMemberUiModel) {
         val memberId =
             member.id ?: run {
@@ -74,15 +83,6 @@ class TeamMembersStatusViewModel(
                     )
                 }.onFailure { emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure) }
         }
-    }
-
-    fun updateExpandState(id: Long) {
-        val newMembersStatus =
-            currentState.membersStatus.map { memberStatus ->
-                if (memberStatus.member.id == id) return@map memberStatus.copy(isExpanded = !memberStatus.isExpanded)
-                memberStatus
-            }
-        updateState { copy(membersStatus = newMembersStatus) }
     }
 
     private fun fetchMemberId() {

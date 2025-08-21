@@ -12,4 +12,7 @@ data class TeamMemberStatusUiModel(
     val isItemsEmpty: Boolean
         get() = sharedItems.isEmpty() && assignedItems.isEmpty()
     val isAllChecked: Boolean = checkedItemsCount == totalItemsCount
+
+    val shouldHurryUp: Boolean
+        get() = (isAllChecked || isMe || isItemsEmpty).not()
 }
