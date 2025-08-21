@@ -19,7 +19,7 @@ class TeamChecklistTypeViewHolder(
     init {
         binding.root.setOnClickListener {
             currentType?.let { item ->
-                onTeamChecklistTypeClickListener.onTypeClick(item.type)
+                onTeamChecklistTypeClickListener.onItemTypeHeaderClick(item.type)
             }
         }
     }
@@ -41,7 +41,7 @@ class TeamChecklistTypeViewHolder(
         }
 
     interface OnTeamChecklistTypeClickListener {
-        fun onTypeClick(type: BottariItemTypeUiModel)
+        fun onItemTypeHeaderClick(type: BottariItemTypeUiModel)
     }
 
     companion object {

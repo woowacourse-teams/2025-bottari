@@ -19,7 +19,7 @@ class TeamChecklistViewHolder private constructor(
     init {
         binding.root.setOnClickListener {
             currentItem?.let { item ->
-                clickListener.onItemClick(item.id, item.type)
+                clickListener.onTeamChecklistItemClick(item.id, item.type)
             }
         }
     }
@@ -43,7 +43,7 @@ class TeamChecklistViewHolder private constructor(
     }
 
     interface OnTeamChecklistItemClickListener {
-        fun onItemClick(
+        fun onTeamChecklistItemClick(
             id: Long,
             type: BottariItemTypeUiModel,
         )
