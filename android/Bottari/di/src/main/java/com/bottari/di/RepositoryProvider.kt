@@ -65,7 +65,10 @@ object RepositoryProvider {
         )
     }
     val fcmRepository: FcmRepository by lazy {
-        FcmRepositoryImpl(DataSourceProvider.fcmRemoteDataSource)
+        FcmRepositoryImpl(
+            DataSourceProvider.fcmRemoteDataSource,
+            DataSourceProvider.memberIdentifierLocalDataSource,
+        )
     }
     val remoteConfigRepository: RemoteConfigRepository by lazy {
         RemoteConfigRepositoryImpl(DataSourceProvider.firebaseRemoteConfigDataSource)
