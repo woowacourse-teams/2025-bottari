@@ -68,8 +68,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_team_bottari_items"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginVertical="@dimen/space_x_large"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/space_x_large"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rv_team_bottari_item_status_detail"
