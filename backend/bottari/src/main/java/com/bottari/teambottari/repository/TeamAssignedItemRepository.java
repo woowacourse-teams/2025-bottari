@@ -39,17 +39,15 @@ public interface TeamAssignedItemRepository extends JpaRepository<TeamAssignedIt
             """)
     List<TeamAssignedItem> findAllByTeamMemberId(final Long teamMemberId);
 
-    boolean existsByInfoId(final Long infoId);
-
     void deleteAllByInfo(final TeamAssignedItemInfo teamAssignedItemInfo);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
-        UPDATE TeamAssignedItem tai
-        SET tai.deletedAt = CURRENT_TIMESTAMP
-        WHERE tai.teamMember.id = :teamMemberId
-        AND tai.deletedAt IS NULL
-        """
+            UPDATE TeamAssignedItem tai
+            SET tai.deletedAt = CURRENT_TIMESTAMP
+            WHERE tai.teamMember.id = :teamMemberId
+            AND tai.deletedAt IS NULL
+            """
     )
     void deleteByTeamMemberId(final Long teamMemberId);
 
