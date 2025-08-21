@@ -24,7 +24,7 @@
         <TextView
             android:id="@+id/tv_profile_nickname_title"
             style="@style/Pretendard_SemiBold_16"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/profile_nickname_title"
             android:textColor="@color/black"
