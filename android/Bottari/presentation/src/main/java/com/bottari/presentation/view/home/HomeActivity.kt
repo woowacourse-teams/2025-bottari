@@ -82,7 +82,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
             return
         }
         isBackPressedOnce = true
-        binding.fcvHome.showSnackbar(R.string.bottari_home_exit_confirm_text)
+        binding.fcvHome.showSnackbar(R.string.bottari_home_exit_confirm_text, anchor = binding.bnvHome)
         handler.postDelayed({
             isBackPressedOnce = false
         }, EXIT_DELAY_TIME)
