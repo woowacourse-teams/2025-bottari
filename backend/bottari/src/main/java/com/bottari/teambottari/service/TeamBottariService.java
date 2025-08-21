@@ -149,7 +149,9 @@ public class TeamBottariService {
                 toDelete.add(info.getId());
             }
         }
-        teamAssignedItemInfoRepository.deleteByInfoIds(toDelete);
+        if (!toDelete.isEmpty()) {
+            teamAssignedItemInfoRepository.deleteByInfoIds(toDelete);
+        }
     }
 
     private Member getMemberBySsaid(final String ssaid) {
