@@ -5,5 +5,5 @@ import com.bottari.domain.repository.FcmRepository
 class SaveFcmTokenUseCase(
     private val fcmRepository: FcmRepository,
 ) {
-    suspend operator fun invoke(fcmToken: String): Result<Unit> = runCatching { fcmRepository.saveFcmToken(fcmToken) }
+    suspend operator fun invoke(fcmToken: String): Result<Unit> = fcmRepository.saveFcmToken(fcmToken)
 }
