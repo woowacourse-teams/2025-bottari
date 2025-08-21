@@ -88,7 +88,6 @@ class TeamBottariStatusFragment :
         binding.rvTeamBottariItems.isVisible = isEmpty.not()
         binding.rvTeamBottariItemStatusDetail.isVisible = isEmpty.not()
         binding.tvTeamBottariItemStatusTitle.isVisible = isEmpty.not()
-        binding.btnTeamBottariItemSendHurryUp.isVisible = isEmpty.not()
     }
 
     companion object {
