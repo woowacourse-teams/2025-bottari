@@ -23,13 +23,7 @@ class TeamMemberStatusViewHolder private constructor(
 
     init {
         itemView.setOnClickListener {
-            memberStatus?.member?.id?.let { id -> memberStatusClickListener.onClickMember(id) }
-            memberStatus?.let { memberStatus ->
-                handleHurryUp(
-                    memberStatus.isAllChecked,
-                    memberStatus.isMe,
-                )
-            }
+            memberStatus?.member?.id?.let(memberStatusClickListener::onClickMember)
         }
         binding.btnHurryUpAlert.setOnClickListener {
             memberStatus?.member?.let(memberStatusClickListener::onClickSendRemind)
@@ -43,11 +37,11 @@ class TeamMemberStatusViewHolder private constructor(
         itemView.isClickable = status.isItemsEmpty.not()
         binding.tvMemberNickname.text = status.member.nickname
         binding.ivTeamHost.isVisible = status.member.isHost
-        binding.groupItems.isVisible = status.isExpanded
+        handleItemsStatus(status)
         handleItemsCountStatus(status)
+        binding.btnHurryUpAlert.isVisible = status.shouldHurryUp && status.isExpanded
         sharedItemAdapter.submitList(status.sharedItems)
         assignedItemAdapter.submitList(status.assignedItems)
-        handleHurryUp(status.isAllChecked, status.isMe)
     }
 
     private fun handleItemsCountStatus(status: TeamMemberStatusUiModel) {
@@ -64,14 +58,13 @@ class TeamMemberStatusViewHolder private constructor(
             )
     }
 
-    private fun handleHurryUp(
-        isAllChecked: Boolean,
-        isMe: Boolean,
-    ) {
-        binding.btnHurryUpAlert.isVisible =
-            binding.groupItems.isVisible &&
-            isAllChecked.not() &&
-            isMe.not()
+    private fun handleItemsStatus(status: TeamMemberStatusUiModel) {
+        binding.apply {
+            rvSharedItems.isVisible = status.isExpanded
+            rvAssignedItems.isVisible = status.isExpanded
+            mdItems.isVisible = status.isExpanded
+            btnHurryUpAlert.isVisible = status.isExpanded
+        }
     }
 
     private fun setupSharedItems() {
