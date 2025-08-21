@@ -67,10 +67,14 @@ class TeamBottariStatusViewModel(
         assignedItems: List<TeamBottariProductStatusUiModel>,
     ): List<TeamProductStatusItem> =
         buildList {
-            add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.SHARED))
-            addAll(sharedItems)
-            add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.ASSIGNED()))
-            addAll(assignedItems)
+            if (sharedItems.isNotEmpty()) {
+                add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.SHARED))
+                addAll(sharedItems)
+            }
+            if (assignedItems.isNotEmpty()) {
+                add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.ASSIGNED()))
+                addAll(assignedItems)
+            }
         }
 
     private fun handleFetchTeamStatusSuccess(teamBottariStatus: TeamBottariStatus) {
@@ -78,7 +82,9 @@ class TeamBottariStatusViewModel(
         val assignedItems = teamBottariStatus.assignedItems.map { it.toAssignedUiModel() }
         val teamStatusListItems = generateTeamItemsList(sharedItems, assignedItems)
         val selectedProduct =
-            teamStatusListItems.filterIsInstance<TeamBottariProductStatusUiModel>().firstOrNull()
+            teamStatusListItems
+                .filterIsInstance<TeamBottariProductStatusUiModel>()
+                .firstOrNull()
         updateState {
             copy(
                 sharedItems = sharedItems,
