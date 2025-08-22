@@ -27,6 +27,19 @@ sealed interface EventDataResponse {
     }
 
     @Serializable
+    data class TeamMemberDeleteResponse(
+        @SerialName("publishedAt")
+        @Serializable(with = LocalDateTimeSerializer::class)
+        override val publishedAt: LocalDateTime,
+        @SerialName("exitMemberId")
+        val exitMemberId: Long,
+        @SerialName("bottariId")
+        val bottariId: String,
+    ) : EventDataResponse {
+        override fun toDomain(): EventData = EventData.TeamMemberDelete(publishedAt, exitMemberId, bottariId)
+    }
+
+    @Serializable
     data class SharedItemInfoCreateResponse(
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)

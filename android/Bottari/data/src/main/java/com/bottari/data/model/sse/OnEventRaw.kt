@@ -29,6 +29,12 @@ fun OnEventRaw.toEvent(json: Json): EventStateResponse.OnEventResponse {
                     data,
                 )
 
+            ResourceResponse.TEAM_MEMBER to EventResponse.DELETE ->
+                json.decodeFromJsonElement(
+                    EventDataResponse.TeamMemberDeleteResponse.serializer(),
+                    data,
+                )
+
             ResourceResponse.SHARED_ITEM to EventResponse.CHANGE ->
                 json.decodeFromJsonElement(
                     EventDataResponse.SharedItemChangeResponse.serializer(),

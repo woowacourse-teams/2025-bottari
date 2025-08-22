@@ -16,7 +16,7 @@ android {
 
     val localProperties = gradleLocalProperties(rootDir, providers)
 
-    fun getPropertyOrThrow(key: String) = localProperties.getProperty(key) ?: error("$key is missing in local.properties")
+    fun getPropertyOrThrow(key: String): String = localProperties.getProperty(key)?.trim() ?: error("$key is missing in local.properties")
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
