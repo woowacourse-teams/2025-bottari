@@ -31,7 +31,6 @@ import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 class TeamAssignedItemEditViewModel(
     stateHandle: SavedStateHandle,
@@ -120,6 +119,12 @@ class TeamAssignedItemEditViewModel(
                 currentState.inputText,
                 currentState.selectedMemberIds,
             ).onSuccess {
+                updateState {
+                    copy(
+                        members = members.map { it.copy(isHost = false) },
+                        assignedItems = assignedItems.map { it.copy(isSelected = false) },
+                    )
+                }
                 refreshAssignedItemsAndMembers()
                 emitEvent(TeamAssignedItemEditEvent.SaveItemSuccess)
             }.onFailure {
@@ -142,14 +147,33 @@ class TeamAssignedItemEditViewModel(
 
             updateState {
                 copy(
-                    assignedItems = assignedItems.map { it.toUiModel() },
-                    members = members.map { it.toUiModel() },
+                    assignedItems = syncAssignedItems(assignedItems.map { it.toUiModel() }),
+                    members = syncMembers(members.map { it.toUiModel() }),
                     isFetched = true,
                 )
             }
 
             updateState { copy(isLoading = false, isFetched = true) }
         }
+    }
+
+    private fun syncAssignedItems(items: List<BottariItemUiModel>): List<BottariItemUiModel> {
+        val currentState =
+            items.map { item ->
+                val found = currentState.selectedAssignedItem ?: return@map item
+                if (found.id == item.id) item.copy(isSelected = true) else item
+            }
+
+        return currentState
+    }
+
+    private fun syncMembers(members: List<TeamMemberUiModel>): List<TeamMemberUiModel> {
+        val currentState =
+            members.map { member ->
+                val found = currentState.members.find { it.id == member.id } ?: return@map member
+                member.copy(isHost = found.isHost)
+            }
+        return currentState
     }
 
     @OptIn(FlowPreview::class)
