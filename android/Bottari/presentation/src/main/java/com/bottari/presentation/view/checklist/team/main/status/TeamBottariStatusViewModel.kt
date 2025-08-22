@@ -121,10 +121,9 @@ class TeamBottariStatusViewModel(
         val sharedItems = teamBottariStatus.sharedItems.map { it.toSharedUiModel() }
         val assignedItems = teamBottariStatus.assignedItems.map { it.toAssignedUiModel() }
         val teamStatusListItems = generateTeamItemsList(sharedItems, assignedItems)
+        val allProductItems = teamStatusListItems.filterIsInstance<TeamBottariProductStatusUiModel>()
         val selectedProduct =
-            teamStatusListItems
-                .filterIsInstance<TeamBottariProductStatusUiModel>()
-                .firstOrNull()
+            allProductItems.find { it.id == currentState.selectedProduct?.id } ?: allProductItems.firstOrNull()
         updateState {
             copy(
                 sharedItems = sharedItems,
