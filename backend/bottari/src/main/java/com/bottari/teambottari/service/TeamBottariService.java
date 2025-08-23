@@ -2,6 +2,10 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.fcm.FcmMessageConverter;
+import com.bottari.fcm.FcmMessageSender;
+import com.bottari.fcm.dto.MessageType;
+import com.bottari.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.InviteCodeGenerator;
@@ -15,6 +19,7 @@ import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import com.bottari.teambottari.dto.CreateTeamBottariRequest;
 import com.bottari.teambottari.dto.ReadTeamBottariPreviewResponse;
 import com.bottari.teambottari.dto.ReadTeamBottariResponse;
+import com.bottari.teambottari.event.ExitTeamMemberEvent;
 import com.bottari.teambottari.repository.TeamAssignedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamAssignedItemRepository;
 import com.bottari.teambottari.repository.TeamBottariRepository;
@@ -24,10 +29,12 @@ import com.bottari.teambottari.repository.TeamSharedItemInfoRepository;
 import com.bottari.teambottari.repository.TeamSharedItemRepository;
 import com.bottari.teambottari.repository.dto.TeamBottariMemberCountProjection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +51,11 @@ public class TeamBottariService {
     private final TeamPersonalItemRepository teamPersonalItemRepository;
     private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
     private final TeamAssignedItemInfoRepository teamAssignedItemInfoRepository;
+
+    private final FcmMessageSender fcmMessageSender;
+    private final FcmMessageConverter fcmMessageConverter;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional(readOnly = true)
     public List<ReadTeamBottariPreviewResponse> getAllBySsaid(final String ssaid) {
@@ -94,12 +106,87 @@ public class TeamBottariService {
         }
     }
 
+    @Transactional
+    public void exit(
+            final Long id,
+            final String ssaid
+    ) {
+        final TeamBottari teamBottari = teamBottariRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_NOT_FOUND));
+        final List<TeamMember> allTeamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId());
+        final TeamMember exitTeamMember = findExitTeamMember(ssaid, allTeamMembers);
+        deleteItemsByTeamMember(exitTeamMember);
+        teamAssignedItemInfoRepository.deleteOrphanAssignedItemInfosByTeamBottariId(teamBottari.getId());
+        final List<TeamMember> remainMembers = findRemainMembers(ssaid, allTeamMembers);
+        transferOwnerIfNeeded(remainMembers, teamBottari, exitTeamMember);
+        teamMemberRepository.deleteById(exitTeamMember.getId());
+        deleteTeamBottariIfEmpty(remainMembers, teamBottari);
+        applicationEventPublisher.publishEvent(new ExitTeamMemberEvent(teamBottari.getId(), exitTeamMember.getMember().getId()));
+        notifyMemberExitToRemainMember(teamBottari, exitTeamMember, remainMembers);
+    }
+
+    private void notifyMemberExitToRemainMember(
+            final TeamBottari teamBottari,
+            final TeamMember exitTeamMember,
+            final List<TeamMember> remainMembers
+    ) {
+        if (remainMembers.isEmpty()) {
+            return;
+        }
+        final List<Long> remainMemberIds = remainMembers.stream()
+                .map(TeamMember::getMember)
+                .map(Member::getId)
+                .toList();
+        final SendMessageRequest request = fcmMessageConverter.convert(teamBottari, exitTeamMember, MessageType.EXIT_TEAM_BOTTARI);
+        fcmMessageSender.sendMessageToMembers(remainMemberIds, request);
+    }
+
+    private List<TeamMember> findRemainMembers(
+            final String ssaid,
+            final List<TeamMember> allTeamMembers
+    ) {
+        return allTeamMembers.stream()
+                .filter(teamMember -> !teamMember.isSameBySsaid(ssaid))
+                .collect(Collectors.toList());
+    }
+
+    private void deleteItemsByTeamMember(final TeamMember exitTeamMember) {
+        teamPersonalItemRepository.deleteByTeamMemberId(exitTeamMember.getId());
+        teamSharedItemRepository.deleteByTeamMemberId(exitTeamMember.getId());
+        teamAssignedItemRepository.deleteByTeamMemberId(exitTeamMember.getId());
+    }
+
+    private void deleteTeamBottariIfEmpty(
+            final List<TeamMember> remainMembers,
+            final TeamBottari teamBottari
+    ) {
+        if (remainMembers.isEmpty()) {
+            teamSharedItemInfoRepository.deleteByTeamBottariId(teamBottari.getId());
+            teamBottariRepository.deleteById(teamBottari.getId());
+        }
+    }
+
+    private void transferOwnerIfNeeded(
+            final List<TeamMember> remainMembers,
+            final TeamBottari teamBottari,
+            final TeamMember exitTeamMember
+    ) {
+        if (!teamBottari.isOwner(exitTeamMember.getMember()) || remainMembers.isEmpty()) {
+            return;
+        }
+        remainMembers.stream()
+                .min(Comparator.comparing(TeamMember::getCreatedAt))
+                .map(TeamMember::getMember)
+                .ifPresent(teamBottari::changeOwner);
+    }
+
     private Member getMemberBySsaid(final String ssaid) {
         return memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
     }
 
-    private List<ReadTeamBottariPreviewResponse> buildReadTeamBottariPreviewResponses(final List<TeamMember> teamMembers) {
+    private List<ReadTeamBottariPreviewResponse> buildReadTeamBottariPreviewResponses(
+            final List<TeamMember> teamMembers) {
         final Map<TeamMember, List<TeamSharedItem>> teamSharedItemsGroup = groupingTeamSharedItem(teamMembers);
         final Map<TeamMember, List<TeamAssignedItem>> teamAssignedItemsGroup = groupingTeamAssignedItem(teamMembers);
         final Map<TeamMember, List<TeamPersonalItem>> teamPersonalItemsGroup = groupingTeamPersonalItem(teamMembers);
@@ -203,5 +290,15 @@ public class TeamBottariService {
 
     private List<TeamPersonalItem> findPersonalItemsByMember(final Long teamMemberId) {
         return teamPersonalItemRepository.findAllByTeamMemberId(teamMemberId);
+    }
+
+    private TeamMember findExitTeamMember(
+            final String ssaid,
+            final List<TeamMember> teamMembers
+    ) {
+        return teamMembers.stream()
+                .filter(teamMember -> teamMember.getMember().isSameBySsaid(ssaid))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI));
     }
 }

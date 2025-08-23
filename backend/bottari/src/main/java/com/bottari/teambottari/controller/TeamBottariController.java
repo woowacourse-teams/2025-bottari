@@ -9,6 +9,7 @@ import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,5 +54,16 @@ public class TeamBottariController implements TeamBottariApiDocs {
         final Long id = teamBottariService.create(ssaid, request);
 
         return ResponseEntity.created(URI.create("/team-bottaries/" + id)).build();
+    }
+
+    @DeleteMapping("/{id}")
+    @Override
+    public ResponseEntity<Void> exit(
+            @PathVariable final Long id,
+            @MemberIdentifier final String ssaid
+    ) {
+        teamBottariService.exit(id,ssaid);
+
+        return ResponseEntity.noContent().build();
     }
 }

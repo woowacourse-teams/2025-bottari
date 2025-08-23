@@ -54,4 +54,18 @@ public interface TeamBottariApiDocs {
             final CreateTeamBottariRequest request,
             @Parameter(hidden = true) final String ssaid
     );
+
+    @Operation(summary = "팀 보따리 나가기")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "팀 보따리 나가기 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.MEMBER_NOT_FOUND,
+            ErrorCode.TEAM_BOTTARI_NOT_FOUND,
+            ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI
+    })
+    ResponseEntity<Void> exit(
+            final Long id,
+            @Parameter(hidden = true) final String ssaid
+    );
 }

@@ -15,11 +15,15 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "UPDATE team_bottari SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class TeamBottari {
@@ -40,6 +44,9 @@ public class TeamBottari {
     @CreatedDate
     private LocalDateTime createdAt;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     public TeamBottari(
             final String title,
             final Member owner,
@@ -48,6 +55,14 @@ public class TeamBottari {
         this.title = new BottariTitle(title);
         this.owner = owner;
         this.inviteCode = inviteCode;
+    }
+
+    public boolean isOwner(final Member member) {
+        return owner.equals(member);
+    }
+
+    public void changeOwner(final Member member) {
+        owner = member;
     }
 
     public String getTitle() {

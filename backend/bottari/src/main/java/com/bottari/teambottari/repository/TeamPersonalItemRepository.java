@@ -4,6 +4,7 @@ import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamPersonalItem;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface TeamPersonalItemRepository extends JpaRepository<TeamPersonalItem, Long> {
@@ -33,4 +34,13 @@ public interface TeamPersonalItemRepository extends JpaRepository<TeamPersonalIt
             final Long teamBottariId,
             final Long memberId
     );
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("""
+            UPDATE TeamPersonalItem tpi
+            SET tpi.deletedAt = CURRENT_TIMESTAMP
+            WHERE tpi.teamMember.id = :teamMemberId
+            AND tpi.deletedAt IS NULL
+            """)
+    void deleteByTeamMemberId(final Long teamMemberId);
 }

@@ -6,6 +6,7 @@ import com.bottari.teambottari.domain.TeamSharedItemInfo;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface TeamSharedItemRepository extends JpaRepository<TeamSharedItem, Long> {
@@ -39,6 +40,15 @@ public interface TeamSharedItemRepository extends JpaRepository<TeamSharedItem, 
     List<TeamSharedItem> findAllByTeamMemberId(final Long teamMemberId);
 
     void deleteAllByInfo(final TeamSharedItemInfo teamSharedItemInfo);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("""
+            UPDATE TeamSharedItem tsi
+            SET tsi.deletedAt = CURRENT_TIMESTAMP
+            WHERE tsi.teamMember.id = :teamMemberId
+            AND tsi.deletedAt IS NULL
+            """)
+    void deleteByTeamMemberId(final Long teamMemberId);
 
     @Query("""
             SELECT tsi

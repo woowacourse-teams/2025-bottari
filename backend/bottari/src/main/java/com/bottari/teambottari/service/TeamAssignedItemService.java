@@ -169,7 +169,7 @@ public class TeamAssignedItemService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
         validateMemberInTeam(info.getTeamBottari(), member);
         final List<TeamAssignedItem> items = teamAssignedItemRepository.findAllByInfoIdWithMember(infoId);
-        final List<Long> uncheckedMemberIds = collectUncheckedMemberIds(items);
+        final List<Long> uncheckedMemberIds = collectUncheckedMemberIds(member, items);
         sendRemindMessageToMembers(info, uncheckedMemberIds);
     }
 
@@ -396,9 +396,13 @@ public class TeamAssignedItemService {
         return Math.toIntExact(count);
     }
 
-    private List<Long> collectUncheckedMemberIds(final List<TeamAssignedItem> items) {
+    private List<Long> collectUncheckedMemberIds(
+            final Member member,
+            final List<TeamAssignedItem> items
+    ) {
         return items.stream()
                 .filter(item -> !item.isChecked())
+                .filter(item -> !item.isOwner(member.getSsaid()))
                 .map(this::memberIdByItem)
                 .toList();
     }
