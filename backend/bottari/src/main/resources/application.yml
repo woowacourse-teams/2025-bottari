@@ -9,7 +9,6 @@ spring:
   sql:
     init:
       mode: always
-
 firebase:
   service:
-     key-path: ${FIREBASE_SERVICE_ACCOUNT_JSON}
+    key-path: ${FIREBASE_SERVICE_ACCOUNT_JSON}
