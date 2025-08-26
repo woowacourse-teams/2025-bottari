@@ -32,7 +32,7 @@ public class OpenApiController {
             // 마지막으로 가져간 아이템의 ID
             @RequestParam(required = false) final Long lastId,
             // 마지막 아이템의 순위
-            @RequestParam(required = false) final int lastRank,
+            @RequestParam(defaultValue = "0") final int lastRank,
             // 마지막 아이템의 포함된 횟수
             @RequestParam(required = false) final int lastCount
     ) {
