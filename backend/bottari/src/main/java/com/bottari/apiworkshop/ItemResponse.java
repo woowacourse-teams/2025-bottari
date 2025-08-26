@@ -9,7 +9,7 @@ record ItemResponse(
     public static ItemResponse of(int rank, ItemProjection projection) {
         return new ItemResponse(
                 rank,
-                projection.getName().name(),
+                projection.getName(),
                 projection.getIncludedCount()
         );
     }

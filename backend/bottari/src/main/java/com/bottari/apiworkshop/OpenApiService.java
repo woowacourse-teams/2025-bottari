@@ -1,11 +1,14 @@
 package com.bottari.apiworkshop;
 
+import com.bottari.apiworkshop.MostIncludedResponse.Cursor;
 import com.bottari.bottaritemplate.domain.BottariTemplate;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,9 +23,9 @@ public class OpenApiService {
             final LocalDate start,
             final LocalDate end,
             final int limit,
-            final Long lastId,
+            final String lastName,
             final int lastRank,
-            final int lastCount
+            final Long lastCount
     ) {
         // 1. 기간 내에 생성된 템플릿 조회
         final List<BottariTemplate> templates = templateRepository.findAllByTitleContainingAndCreatedAtBetween(
@@ -35,11 +38,16 @@ public class OpenApiService {
                 .toList();
 
         // 2. 기간 내에 생성된 템플릿에 포함된 아이템 조회 / 아이템별 포함된 횟수 집계 및 정렬
-        final List<ItemProjection> itemProjections = itemRepository.findAllWithIncludedCountByTemplateIdIn(templateIds);
+        final Slice<ItemProjection> itemProjections = itemRepository.findAllWithIncludedCountByTemplateIdInCursor(
+                templateIds,
+                lastName,
+                lastCount,
+                PageRequest.ofSize(limit)
+        );
 
         // 3. 아이템 응답 생성
         List<ItemResponse> itemResponses = new ArrayList<>();
-        int currentRank = lastRank + 1;
+        int currentRank = 1;
         Long prevCount = null;
         for (ItemProjection projection : itemProjections) {
             Long count = projection.getIncludedCount();
@@ -50,13 +58,20 @@ public class OpenApiService {
             prevCount = count;
         }
 
-        // TODO: 페이징 처리
+        final Cursor cursor = new Cursor(
+                limit,
+                itemProjections.getContent().getLast().getName(),
+                itemProjections.hasNext(),
+                itemResponses.getLast().rank(),
+                itemResponses.getLast().includedCount()
+        );
+
         return new MostIncludedResponse(
                 query,
                 start,
                 end,
-                null,
-                itemResponses.stream().limit(limit).toList()
+                cursor,
+                itemResponses
         );
     }
 }

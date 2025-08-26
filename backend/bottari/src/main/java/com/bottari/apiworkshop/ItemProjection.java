@@ -1,10 +1,8 @@
 package com.bottari.apiworkshop;
 
-import com.bottari.vo.ItemName;
-
 public interface ItemProjection {
 
-    ItemName getName();
+    String getName();
 
     Long getIncludedCount();
 }

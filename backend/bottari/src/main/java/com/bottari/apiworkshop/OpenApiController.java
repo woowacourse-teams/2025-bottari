@@ -29,19 +29,19 @@ public class OpenApiController {
             @DateTimeFormat(iso = ISO.DATE) final LocalDate end,
             // 갯수
             @RequestParam(defaultValue = "10") final int limit,
-            // 마지막으로 가져간 아이템의 ID
-            @RequestParam(required = false) final Long lastId,
+            // 마지막으로 가져간 아이템의 물품명
+            @RequestParam(required = false) final String lastName,
             // 마지막 아이템의 순위
             @RequestParam(defaultValue = "0") final int lastRank,
             // 마지막 아이템의 포함된 횟수
-            @RequestParam(required = false) final int lastCount
+            @RequestParam(required = false) final Long lastCount
     ) {
         MostIncludedResponse response = openApiService.mostIncluded(
                 query,
                 start,
                 end,
                 limit,
-                lastId,
+                lastName,
                 lastRank,
                 lastCount
         );

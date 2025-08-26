@@ -67,13 +67,13 @@ class OpenApiServiceTest {
 
             final String query = "체크리스트";
             final int limit = 10;
-            final Long lastId = null;
+            final String lastName = null;
             final int lastRank = 0;
-            final int lastCount = 0;
+            final Long lastCount = null;
 
             // when
             final MostIncludedResponse response = openApiService.mostIncluded(
-                    query, start, end, limit, lastId, lastRank, lastCount
+                    query, start, end, limit, lastName, lastRank, lastCount
             );
 
             // then
@@ -113,7 +113,7 @@ class OpenApiServiceTest {
 
             // when
             final MostIncludedResponse response = openApiService.mostIncluded(
-                    emptyQuery, start, end, limit, null, 0, 0
+                    emptyQuery, start, end, limit, null, 0, null
             );
 
             // then
@@ -144,7 +144,7 @@ class OpenApiServiceTest {
 
             // when
             final MostIncludedResponse response = openApiService.mostIncluded(
-                    query, start, end, limit, null, 0, 0
+                    query, start, end, limit, null, 0, null
             );
 
             // then
@@ -178,7 +178,7 @@ class OpenApiServiceTest {
 
             // when
             final MostIncludedResponse response = openApiService.mostIncluded(
-                    query, start, end, limit, null, 0, 0
+                    query, start, end, limit, null, 0, null
             );
 
             // then
@@ -213,7 +213,7 @@ class OpenApiServiceTest {
 
             // when
             final MostIncludedResponse response = openApiService.mostIncluded(
-                    query, start, end, limit, null, 0, 0
+                    query, start, end, limit, null, 0, null
             );
 
             // then
@@ -239,7 +239,7 @@ class OpenApiServiceTest {
 
             // when
             final MostIncludedResponse response = openApiService.mostIncluded(
-                    query, null, null, limit, null, 0, 0
+                    query, null, null, limit, null, 0, null
             );
 
             // then
