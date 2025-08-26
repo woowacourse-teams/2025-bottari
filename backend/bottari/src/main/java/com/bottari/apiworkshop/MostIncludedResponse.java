@@ -15,18 +15,10 @@ public record MostIncludedResponse(
     // TODO: nextCursor로 변경 후, 이를 인코딩
     record Cursor(
         int limit,
-        SortBy sortBy,
         Long lastId,         // DB 식별자를 주게 된다면, 보안상 문제가 될 여지가 있어보임
         boolean hasNext,
         int lastRank,
         int lastCount
-    ) {
-    }
-
-    record ItemResponse(
-        int rank,
-        String name,
-        int includedCount
     ) {
     }
 }
