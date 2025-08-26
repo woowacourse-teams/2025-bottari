@@ -219,6 +219,32 @@ class OpenApiServiceTest {
             // then
             assertThat(response.items()).hasSize(5);
         }
+
+        @DisplayName("start / end가 null이라면, 모든 범위의 아이템을 반환한다.")
+        @Test
+        void mostIncluded_StartEndNull() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+            final LocalDate date = LocalDate.of(2024, 1, 1);
+
+            final BottariTemplate template = createTemplate(member, "체크리스트", date.plusDays(1).atStartOfDay());
+
+            for (int i = 1; i <= 10; i++) {
+                createItem(template, "아이템" + i);
+            }
+
+            final String query = "체크리스트";
+            final int limit = 10;
+
+            // when
+            final MostIncludedResponse response = openApiService.mostIncluded(
+                    query, null, null, limit, null, 0, 0
+            );
+
+            // then
+            assertThat(response.items()).hasSize(10);
+        }
     }
 
     private BottariTemplate createTemplate(

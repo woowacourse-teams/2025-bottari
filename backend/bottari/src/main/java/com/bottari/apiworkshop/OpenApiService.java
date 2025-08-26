@@ -29,18 +29,17 @@ public class OpenApiService {
             final int lastCount
     ) {
         // 1. 기간 내에 생성된 템플릿 조회
-        // TODO: query가 null일 때 처리 & findByTitleContaining 성능 문제
-        final List<BottariTemplate> templates = templateRepository.findByTitleContaining(query);
-        final List<BottariTemplate> inDurationTemplates = templates.stream()
-                .filter(template -> template.getCreatedAt().isAfter(start.atStartOfDay()) &&
-                                    template.getCreatedAt().isBefore(end.atTime(23, 59, 59)))
-                .toList();
-        final List<Long> inDurationTemplateIds = inDurationTemplates.stream()
+        final List<BottariTemplate> templates = templateRepository.findAllByTitleContainingAndCreatedAtBetween(
+                query,
+                start == null ? null : start.atStartOfDay(),
+                end == null ? null : end.atTime(23, 59, 59)
+        );
+        final List<Long> templateIds = templates.stream()
                 .map(BottariTemplate::getId)
                 .toList();
 
         // 2. 기간 내에 생성된 템플릿에 포함된 아이템 조회
-        final List<BottariTemplateItem> items = itemRepository.findAllByBottariTemplateIdIn(inDurationTemplateIds);
+        final List<BottariTemplateItem> items = itemRepository.findAllByBottariTemplateIdIn(templateIds);
 
         // 3. 아이템별 포함된 횟수 집계 및 정렬
         final Map<String, Long> collectByCount = items.stream()
@@ -56,7 +55,7 @@ public class OpenApiService {
                 .toList();
 
         // 4. 아이템 응답 생성
-        List<com.bottari.apiworkshop.ItemResponse> itemResponses = new ArrayList<>();
+        List<ItemResponse> itemResponses = new ArrayList<>();
         int currentRank = 1;
         Long prevCount = null;
         for (Entry<String, Long> entry : sortedByCount) {
