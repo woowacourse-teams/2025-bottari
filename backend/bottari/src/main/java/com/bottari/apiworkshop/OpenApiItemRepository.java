@@ -20,7 +20,7 @@ public interface OpenApiItemRepository extends JpaRepository<BottariTemplateItem
                 OR (COUNT(i) = :lastCount AND i.name.name > :lastName)
             ORDER BY COUNT(i) DESC, i.name.name ASC
             """)
-    Slice<ItemProjection> findAllWithIncludedCountByTemplateIdInCursor(
+    Slice<ItemProjection> findAllWithIncludedCountByTemplateIdAndCursor(
             final List<Long> templateIds,
             final String lastName,
             final Long lastCount,
