@@ -10,4 +10,18 @@ public record MostIncludedResponse(
     Cursor cursor,
     List<ItemResponse> items
 ) {
+
+    public static MostIncludedResponse empty(
+            final String query,
+            final LocalDate start,
+            final LocalDate end
+    ) {
+        return new MostIncludedResponse(
+            query,
+            start,
+            end,
+            new Cursor(0, null, false, 0, null),
+            List.of()
+        );
+    }
 }

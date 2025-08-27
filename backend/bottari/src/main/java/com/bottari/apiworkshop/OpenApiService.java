@@ -28,6 +28,9 @@ public class OpenApiService {
             final Long lastCount
     ) {
         final List<Long> templateIds = collectTemplateIdsByQueryAndDate(query, start, end);
+        if (templateIds.isEmpty()) {
+            return MostIncludedResponse.empty(query, start, end);
+        }
         final Slice<ItemProjection> itemProjections = getItemsWithIncludedCountByTemplatesAndCursor(
                 templateIds, lastName, lastCount, limit);
         List<ItemResponse> itemResponses = createItemResponsesWithDenseRank(itemProjections.getContent(), lastRank, lastCount);
