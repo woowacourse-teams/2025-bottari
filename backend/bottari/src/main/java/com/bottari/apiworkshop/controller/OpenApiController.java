@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class OpenApiController {
+public class OpenApiController implements OpenApiDocs {
 
     private final OpenApiService openApiService;
 
