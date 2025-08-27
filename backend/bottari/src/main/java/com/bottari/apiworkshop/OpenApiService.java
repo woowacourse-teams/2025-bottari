@@ -1,6 +1,5 @@
 package com.bottari.apiworkshop;
 
-import com.bottari.apiworkshop.MostIncludedResponse.Cursor;
 import com.bottari.bottaritemplate.domain.BottariTemplate;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -47,12 +46,15 @@ public class OpenApiService {
 
         // 3. 아이템 응답 생성
         List<ItemResponse> itemResponses = new ArrayList<>();
-        int currentRank = 1;
+        int currentRank = lastRank + 1;
         Long prevCount = null;
         for (ItemProjection projection : itemProjections) {
             Long count = projection.getIncludedCount();
             if (prevCount != null && !Objects.equals(count, prevCount)) {
-                currentRank = itemResponses.size() + 1;
+                currentRank++;
+            }
+            if (Objects.equals(count, lastCount)) {
+                currentRank--;
             }
             itemResponses.add(ItemResponse.of(currentRank, projection));
             prevCount = count;

@@ -81,7 +81,7 @@ class OpenApiServiceTest {
                     new ItemResponse(1, "충전기", 3L),
                     new ItemResponse(2, "노트북", 2L),
                     new ItemResponse(2, "텐트", 2L),
-                    new ItemResponse(4, "여권", 1L)
+                    new ItemResponse(3, "여권", 1L)
             );
 
             assertAll(
