@@ -16,7 +16,7 @@ public class OpenApiController implements OpenApiDocs {
 
     private final OpenApiService openApiService;
 
-    @GetMapping("/templates/most-included")
+    @GetMapping("/items/most-included")
     public ResponseEntity<MostIncludedResponse> mostIncluded(
             @ModelAttribute final MostIncludedQuery query,
             @ModelAttribute final CursorRequest cursor
