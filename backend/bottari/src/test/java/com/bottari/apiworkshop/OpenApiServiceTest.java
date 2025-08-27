@@ -66,28 +66,30 @@ class OpenApiServiceTest {
             createItem(outOfRangeTemplate, "제외될아이템");
 
             final String query = "체크리스트";
-            final int limit = 10;
+            final Long limit = 10L;
             final String lastName = null;
-            final int lastRank = 0;
+            final Long lastRank = 0L;
             final Long lastCount = null;
 
             // when
+            final MostIncludedQuery mostIncludedQuery = new MostIncludedQuery(query, start, end);
+            final CursorRequest cursorRequest = new CursorRequest(limit, lastName, lastRank, lastCount);
             final MostIncludedResponse response = openApiService.mostIncluded(
-                    query, start, end, limit, lastName, lastRank, lastCount
+                    mostIncludedQuery, cursorRequest
             );
 
             // then
             final List<ItemResponse> expectedItems = List.of(
-                    new ItemResponse(1, "충전기", 3L),
-                    new ItemResponse(2, "노트북", 2L),
-                    new ItemResponse(2, "텐트", 2L),
-                    new ItemResponse(3, "여권", 1L)
+                    new ItemResponse(1L, "충전기", 3L),
+                    new ItemResponse(2L, "노트북", 2L),
+                    new ItemResponse(2L, "텐트", 2L),
+                    new ItemResponse(3L, "여권", 1L)
             );
 
             assertAll(
-                    () -> assertThat(response.query()).isEqualTo(query),
-                    () -> assertThat(response.start()).isEqualTo(start.toString()),
-                    () -> assertThat(response.end()).isEqualTo(end.toString()),
+                    () -> assertThat(response.query().query()).isEqualTo(query),
+                    () -> assertThat(response.query().start()).isEqualTo(start),
+                    () -> assertThat(response.query().end()).isEqualTo(end),
                     () -> assertThat(response.items()).isEqualTo(expectedItems)
             );
         }
@@ -109,11 +111,13 @@ class OpenApiServiceTest {
             createItem(template2, "아이템2");
 
             final String emptyQuery = "";
-            final int limit = 10;
+            final Long limit = 10L;
 
             // when
+            final MostIncludedQuery mostIncludedQuery = new MostIncludedQuery(emptyQuery, start, end);
+            final CursorRequest cursorRequest = new CursorRequest(limit, null, 0L, null);
             final MostIncludedResponse response = openApiService.mostIncluded(
-                    emptyQuery, start, end, limit, null, 0, null
+                    mostIncludedQuery, cursorRequest
             );
 
             // then
@@ -140,16 +144,18 @@ class OpenApiServiceTest {
             createItem(afterRangeTemplate, "제외될아이템2");
 
             final String query = "체크리스트";
-            final int limit = 10;
+            final Long limit = 10L;
 
             // when
+            final MostIncludedQuery mostIncludedQuery = new MostIncludedQuery(query, start, end);
+            final CursorRequest cursorRequest = new CursorRequest(limit, null, 0L, null);
             final MostIncludedResponse response = openApiService.mostIncluded(
-                    query, start, end, limit, null, 0, null
+                    mostIncludedQuery, cursorRequest
             );
 
             // then
             List<ItemResponse> expectedItems = List.of(
-                    new ItemResponse(1, "포함될아이템", 1L)
+                    new ItemResponse(1L, "포함될아이템", 1L)
             );
 
             assertThat(response.items()).isEqualTo(expectedItems);
@@ -174,19 +180,21 @@ class OpenApiServiceTest {
             createItem(template2, "아이템D");
 
             final String query = "체크리스트";
-            final int limit = 10;
+            final Long limit = 10L;
 
             // when
+            final MostIncludedQuery mostIncludedQuery = new MostIncludedQuery(query, start, end);
+            final CursorRequest cursorRequest = new CursorRequest(limit, null, 0L, null);
             final MostIncludedResponse response = openApiService.mostIncluded(
-                    query, start, end, limit, null, 0, null
+                    mostIncludedQuery, cursorRequest
             );
 
             // then
             List<ItemResponse> expectedItems = List.of(
-                    new ItemResponse(1, "아이템A", 1L),
-                    new ItemResponse(1, "아이템B", 1L),
-                    new ItemResponse(1, "아이템C", 1L),
-                    new ItemResponse(1, "아이템D", 1L)
+                    new ItemResponse(1L, "아이템A", 1L),
+                    new ItemResponse(1L, "아이템B", 1L),
+                    new ItemResponse(1L, "아이템C", 1L),
+                    new ItemResponse(1L, "아이템D", 1L)
             );
 
             assertThat(response.items()).isEqualTo(expectedItems);
@@ -209,11 +217,13 @@ class OpenApiServiceTest {
             }
 
             final String query = "체크리스트";
-            final int limit = 5;
+            final Long limit = 5L;
 
             // when
+            final MostIncludedQuery mostIncludedQuery = new MostIncludedQuery(query, start, end);
+            final CursorRequest cursorRequest = new CursorRequest(limit, null, 0L, null);
             final MostIncludedResponse response = openApiService.mostIncluded(
-                    query, start, end, limit, null, 0, null
+                    mostIncludedQuery, cursorRequest
             );
 
             // then
@@ -235,11 +245,13 @@ class OpenApiServiceTest {
             }
 
             final String query = "체크리스트";
-            final int limit = 10;
+            final Long limit = 10L;
 
             // when
+            final MostIncludedQuery mostIncludedQuery = new MostIncludedQuery(query, null, null);
+            final CursorRequest cursorRequest = new CursorRequest(limit, null, 0L, null);
             final MostIncludedResponse response = openApiService.mostIncluded(
-                    query, null, null, limit, null, 0, null
+                    mostIncludedQuery, cursorRequest
             );
 
             // then

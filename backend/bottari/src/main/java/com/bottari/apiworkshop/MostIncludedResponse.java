@@ -1,27 +1,32 @@
 package com.bottari.apiworkshop;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public record MostIncludedResponse(
-    String query,
-    LocalDate start,
-    LocalDate end,
+    MostIncludedQuery query,
     Cursor cursor,
     List<ItemResponse> items
 ) {
 
     public static MostIncludedResponse empty(
-            final String query,
-            final LocalDate start,
-            final LocalDate end
+            final MostIncludedQuery query
     ) {
         return new MostIncludedResponse(
-            query,
-            start,
-            end,
-            new Cursor(0, null, false, 0, null),
-            List.of()
+                query,
+                new Cursor(0L, null, false, 0L, null),
+                List.of()
+        );
+    }
+
+    public static MostIncludedResponse of(
+            final MostIncludedQuery query,
+            final Cursor cursor,
+            final List<ItemResponse> itemResponses
+    ) {
+        return new MostIncludedResponse(
+                query,
+                cursor,
+                itemResponses
         );
     }
 }

@@ -1,10 +1,10 @@
 package com.bottari.apiworkshop;
 
-record Cursor(
-        int limit,
+public record Cursor(
+        Long limit,
         String lastName,
         boolean hasNext,
-        int lastRank,
+        Long lastRank,
         Long lastCount
 ) {
 }

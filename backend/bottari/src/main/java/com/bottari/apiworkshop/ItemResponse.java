@@ -1,12 +1,15 @@
 package com.bottari.apiworkshop;
 
-record ItemResponse(
-        int rank,
+public record ItemResponse(
+        Long rank,
         String name,
         Long includedCount
 ) {
 
-    public static ItemResponse of(int rank, ItemProjection projection) {
+    public static ItemResponse of(
+            final Long rank,
+            final ItemProjection projection
+    ) {
         return new ItemResponse(
                 rank,
                 projection.getName(),

@@ -1,7 +1,6 @@
 package com.bottari.apiworkshop;
 
 import com.bottari.bottaritemplate.domain.BottariTemplate;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,40 +18,31 @@ public class OpenApiService {
     private final OpenApiItemRepository itemRepository;
 
     public MostIncludedResponse mostIncluded(
-            final String query,
-            final LocalDate start,
-            final LocalDate end,
-            final int limit,
-            final String lastName,
-            final int lastRank,
-            final Long lastCount
+            final MostIncludedQuery query,
+            final CursorRequest cursor
     ) {
-        final List<Long> templateIds = collectTemplateIdsByQueryAndDate(query, start, end);
+        final List<Long> templateIds = collectTemplateIdsByQueryAndDate(query);
         if (templateIds.isEmpty()) {
-            return MostIncludedResponse.empty(query, start, end);
+            return MostIncludedResponse.empty(query);
         }
         final Slice<ItemProjection> itemProjections = getItemsWithIncludedCountByTemplatesAndCursor(
-                templateIds, lastName, lastCount, limit);
-        List<ItemResponse> itemResponses = createItemResponsesWithDenseRank(itemProjections.getContent(), lastRank, lastCount);
+                templateIds, cursor);
+        List<ItemResponse> itemResponses = createItemResponsesWithDenseRank(itemProjections.getContent(), cursor.lastRank(), cursor.lastCount());
 
-        return new MostIncludedResponse(
+        return MostIncludedResponse.of(
                 query,
-                start,
-                end,
-                createCursor(limit, itemProjections, itemResponses),
+                createCursor(cursor.limit(), itemProjections, itemResponses),
                 itemResponses
         );
     }
 
     private List<Long> collectTemplateIdsByQueryAndDate(
-            final String query,
-            final LocalDate start,
-            final LocalDate end
+            final MostIncludedQuery query
     ) {
-        final LocalDateTime startDateTime = start == null ? null : start.atStartOfDay();
-        final LocalDateTime endDateTime = end == null ? null : end.atTime(23, 59, 59);
+        final LocalDateTime startDateTime = query.start() == null ? null : query.start().atStartOfDay();
+        final LocalDateTime endDateTime = query.end() == null ? null : query.end().atTime(23, 59, 59);
         final List<BottariTemplate> templates = templateRepository.findAllByTitleContainingAndCreatedAtBetween(
-                query,
+                query.query(),
                 startDateTime,
                 endDateTime
         );
@@ -64,27 +54,25 @@ public class OpenApiService {
 
     private Slice<ItemProjection> getItemsWithIncludedCountByTemplatesAndCursor(
             final List<Long> templateIds,
-            final String lastName,
-            final Long lastCount,
-            final int limit
+            final CursorRequest cursor
     ) {
-        final PageRequest pageable = PageRequest.ofSize(limit);
+        final PageRequest pageable = PageRequest.ofSize(Math.toIntExact(cursor.limit()));
 
         return itemRepository.findAllWithIncludedCountByTemplateIdAndCursor(
                 templateIds,
-                lastName,
-                lastCount,
+                cursor.lastName(),
+                cursor.lastCount(),
                 pageable
         );
     }
 
     private List<ItemResponse> createItemResponsesWithDenseRank(
             final List<ItemProjection> itemProjections,
-            final int lastRank,
+            final Long lastRank,
             final Long lastCount
     ) {
         final List<ItemResponse> itemResponses = new ArrayList<>();
-        int currentRank = lastRank;
+        Long currentRank = lastRank;
         Long prevCount = lastCount;
         for (ItemProjection projection : itemProjections) {
             Long count = projection.getIncludedCount();
@@ -96,10 +84,10 @@ public class OpenApiService {
         return itemResponses;
     }
 
-    private int calculateCurrentRank(
+    private Long calculateCurrentRank(
             final Long prevCount,
             final Long count,
-            int currentRank
+            final Long currentRank
     ) {
         if (Objects.equals(count, prevCount)) {
             return currentRank;
@@ -108,7 +96,7 @@ public class OpenApiService {
     }
 
     private Cursor createCursor(
-            final int limit,
+            final Long limit,
             final Slice<ItemProjection> itemProjections,
             final List<ItemResponse> itemResponses
     ) {
