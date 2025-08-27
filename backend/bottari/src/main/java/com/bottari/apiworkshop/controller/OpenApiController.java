@@ -1,5 +1,9 @@
-package com.bottari.apiworkshop;
+package com.bottari.apiworkshop.controller;
 
+import com.bottari.apiworkshop.dto.CursorRequest;
+import com.bottari.apiworkshop.dto.MostIncludedQuery;
+import com.bottari.apiworkshop.dto.MostIncludedResponse;
+import com.bottari.apiworkshop.service.OpenApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

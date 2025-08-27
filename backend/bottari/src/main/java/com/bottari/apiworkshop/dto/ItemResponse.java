@@ -1,4 +1,6 @@
-package com.bottari.apiworkshop;
+package com.bottari.apiworkshop.dto;
+
+import com.bottari.apiworkshop.repository.ItemProjection;
 
 public record ItemResponse(
         Long rank,

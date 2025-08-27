@@ -1,4 +1,4 @@
-package com.bottari.apiworkshop;
+package com.bottari.apiworkshop.repository;
 
 public interface ItemProjection {
 

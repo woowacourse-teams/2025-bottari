@@ -1,4 +1,4 @@
-package com.bottari.apiworkshop;
+package com.bottari.apiworkshop.dto;
 
 public record CursorRequest(
         Long limit,

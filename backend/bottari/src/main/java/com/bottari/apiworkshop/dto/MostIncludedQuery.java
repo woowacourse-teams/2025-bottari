@@ -1,4 +1,4 @@
-package com.bottari.apiworkshop;
+package com.bottari.apiworkshop.dto;
 
 import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;

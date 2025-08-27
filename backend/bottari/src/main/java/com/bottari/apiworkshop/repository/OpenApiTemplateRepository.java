@@ -1,4 +1,4 @@
-package com.bottari.apiworkshop;
+package com.bottari.apiworkshop.repository;
 
 import com.bottari.bottaritemplate.domain.BottariTemplate;
 import java.time.LocalDateTime;
