@@ -1,9 +1,7 @@
 package com.bottari.data.service
 
+import com.bottari.data.model.bottari.BottariRequest
 import com.bottari.data.model.bottari.BottariResponse
-import com.bottari.data.model.bottari.CreateBottariRequest
-import com.bottari.data.model.bottari.FetchBottariesResponse
-import com.bottari.data.model.bottari.UpdateBottariTitleRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -14,16 +12,16 @@ import retrofit2.http.Path
 
 interface BottariService {
     @GET("/bottaries")
-    suspend fun fetchBottaries(): Response<List<FetchBottariesResponse>>
+    suspend fun fetchBottaries(): Response<List<BottariResponse.FetchBottariesResponse>>
 
     @GET("/bottaries/{id}")
     suspend fun findBottari(
         @Path("id") id: Long,
-    ): Response<BottariResponse>
+    ): Response<BottariResponse.FetchBottariResponse>
 
     @POST("/bottaries")
     suspend fun createBottari(
-        @Body request: CreateBottariRequest,
+        @Body request: BottariRequest.CreateBottariRequest,
     ): Response<Unit>
 
     @DELETE("/bottaries/{id}")
@@ -34,6 +32,6 @@ interface BottariService {
     @PATCH("/bottaries/{id}")
     suspend fun saveBottariTitle(
         @Path("id") id: Long,
-        @Body request: UpdateBottariTitleRequest,
+        @Body request: BottariRequest.UpdateBottariTitleRequest,
     ): Response<Unit>
 }
