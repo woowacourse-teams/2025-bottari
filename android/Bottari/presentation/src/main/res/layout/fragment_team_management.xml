@@ -115,4 +115,3 @@
             tools:listitem="@layout/item_team_member" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
-

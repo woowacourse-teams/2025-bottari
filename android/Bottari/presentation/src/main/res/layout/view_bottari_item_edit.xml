@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/transparent"
-        android:translationZ="1dp"/>
+        android:translationZ="1dp" />
 
     <TextView
         android:id="@+id/tv_item_edit_title"
