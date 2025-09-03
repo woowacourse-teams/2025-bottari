@@ -2,6 +2,7 @@ package com.bottari.di.usecase
 
 import com.bottari.di.RepositoryProvider
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
+import com.bottari.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
 
@@ -20,5 +21,8 @@ object MemberUseCaseProvider {
         SaveMemberNicknameUseCase(
             RepositoryProvider.memberRepository,
         )
+    }
+    val getMemberIdUseCase: GetMemberIdUseCase by lazy {
+        GetMemberIdUseCase(RepositoryProvider.memberRepository)
     }
 }

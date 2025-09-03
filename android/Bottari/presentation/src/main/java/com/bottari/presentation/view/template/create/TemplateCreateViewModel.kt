@@ -3,8 +3,8 @@ package com.bottari.presentation.view.template.create
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
 import com.bottari.di.usecase.BottariTemplateUseCaseProvider
+import com.bottari.di.usecase.BottariUseCaseProvider
 import com.bottari.domain.model.bottari.BottariDetail
 import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
@@ -88,7 +88,7 @@ class TemplateCreateViewModel(
             viewModelFactory {
                 initializer {
                     TemplateCreateViewModel(
-                        UseCaseProvider.fetchBottariDetailsUseCase,
+                        BottariUseCaseProvider.fetchBottariDetailsUseCase,
                         BottariTemplateUseCaseProvider.createBottariTemplateUseCase,
                     )
                 }

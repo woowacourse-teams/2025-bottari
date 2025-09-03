@@ -3,12 +3,6 @@ package com.bottari.di
 import com.bottari.domain.usecase.appConfig.CheckForceUpdateUseCase
 import com.bottari.domain.usecase.appConfig.GetPermissionFlagUseCase
 import com.bottari.domain.usecase.appConfig.SavePermissionFlagUseCase
-import com.bottari.domain.usecase.bottari.CreateBottariUseCase
-import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
-import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
-import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
-import com.bottari.domain.usecase.bottari.SaveBottariTitleUseCase
-import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.fcm.SaveFcmTokenUseCase
@@ -17,7 +11,6 @@ import com.bottari.domain.usecase.item.FetchChecklistUseCase
 import com.bottari.domain.usecase.item.ResetBottariItemCheckStateUseCase
 import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
-import com.bottari.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.domain.usecase.notification.DeleteNotificationUseCase
 import com.bottari.domain.usecase.notification.GetNotificationsUseCase
 import com.bottari.domain.usecase.report.ReportTemplateUseCase
@@ -45,14 +38,6 @@ import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
 
 object UseCaseProvider {
-    val fetchBottariesUseCase: FetchBottariesUseCase by lazy {
-        FetchBottariesUseCase(
-            RepositoryProvider.bottariRepository,
-        )
-    }
-    val fetchBottariDetailUseCase: FetchBottariDetailUseCase by lazy {
-        FetchBottariDetailUseCase(RepositoryProvider.bottariRepository)
-    }
     val fetchChecklistUseCase: FetchChecklistUseCase by lazy {
         FetchChecklistUseCase(
             RepositoryProvider.bottariItemRepository,
@@ -68,29 +53,9 @@ object UseCaseProvider {
             RepositoryProvider.bottariItemRepository,
         )
     }
-    val createBottariUseCase: CreateBottariUseCase by lazy {
-        CreateBottariUseCase(
-            RepositoryProvider.bottariRepository,
-        )
-    }
     val saveBottariItemsUseCase: SaveBottariItemsUseCase by lazy {
         SaveBottariItemsUseCase(
             RepositoryProvider.bottariItemRepository,
-        )
-    }
-    val deleteBottariUseCase: DeleteBottariUseCase by lazy {
-        DeleteBottariUseCase(
-            RepositoryProvider.bottariRepository,
-        )
-    }
-    val SaveBottariTitleUseCase: SaveBottariTitleUseCase by lazy {
-        SaveBottariTitleUseCase(
-            RepositoryProvider.bottariRepository,
-        )
-    }
-    val fetchBottariDetailsUseCase by lazy {
-        FetchBottariDetailsUseCase(
-            RepositoryProvider.bottariRepository,
         )
     }
     val savePermissionFlagUseCase: SavePermissionFlagUseCase by lazy {
@@ -164,9 +129,6 @@ object UseCaseProvider {
     }
     val sendRemindByMemberMessageUseCase: SendRemindByMemberMessageUseCase by lazy {
         SendRemindByMemberMessageUseCase(RepositoryProvider.teamBottariRepository)
-    }
-    val getMemberIdUseCase: GetMemberIdUseCase by lazy {
-        GetMemberIdUseCase(RepositoryProvider.memberRepository)
     }
     val joinTeamBottariUseCase: JoinTeamBottariUseCase by lazy {
         JoinTeamBottariUseCase(RepositoryProvider.teamBottariRepository)
