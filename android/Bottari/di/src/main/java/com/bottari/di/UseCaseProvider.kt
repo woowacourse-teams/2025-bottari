@@ -20,11 +20,7 @@ import com.bottari.domain.usecase.item.FetchChecklistUseCase
 import com.bottari.domain.usecase.item.ResetBottariItemCheckStateUseCase
 import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
-import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
-import com.bottari.domain.usecase.member.GetInstallationIdUseCase
 import com.bottari.domain.usecase.member.GetMemberIdUseCase
-import com.bottari.domain.usecase.member.RegisterMemberUseCase
-import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
 import com.bottari.domain.usecase.notification.DeleteNotificationUseCase
 import com.bottari.domain.usecase.notification.GetNotificationsUseCase
 import com.bottari.domain.usecase.report.ReportTemplateUseCase
@@ -59,21 +55,6 @@ import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
 
 object UseCaseProvider {
-    val registerMemberUseCase: RegisterMemberUseCase by lazy {
-        RegisterMemberUseCase(
-            RepositoryProvider.memberRepository,
-        )
-    }
-    val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase by lazy {
-        CheckRegisteredMemberUseCase(
-            RepositoryProvider.memberRepository,
-        )
-    }
-    val saveMemberNicknameUseCase: SaveMemberNicknameUseCase by lazy {
-        SaveMemberNicknameUseCase(
-            RepositoryProvider.memberRepository,
-        )
-    }
     val fetchBottariesUseCase: FetchBottariesUseCase by lazy {
         FetchBottariesUseCase(
             RepositoryProvider.bottariRepository,
@@ -246,9 +227,6 @@ object UseCaseProvider {
     }
     val sendRemindByMemberMessageUseCase: SendRemindByMemberMessageUseCase by lazy {
         SendRemindByMemberMessageUseCase(RepositoryProvider.teamBottariRepository)
-    }
-    val getInstallationIdUseCase: GetInstallationIdUseCase by lazy {
-        GetInstallationIdUseCase(RepositoryProvider.memberRepository)
     }
     val getMemberIdUseCase: GetMemberIdUseCase by lazy {
         GetMemberIdUseCase(RepositoryProvider.memberRepository)

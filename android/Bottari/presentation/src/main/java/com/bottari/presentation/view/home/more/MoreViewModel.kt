@@ -3,7 +3,7 @@ package com.bottari.presentation.view.home.more
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.MemberUseCaseProvider
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
 import com.bottari.logger.BottariLogger
@@ -75,8 +75,8 @@ class MoreViewModel(
             viewModelFactory {
                 initializer {
                     MoreViewModel(
-                        UseCaseProvider.checkRegisteredMemberUseCase,
-                        UseCaseProvider.saveMemberNicknameUseCase,
+                        MemberUseCaseProvider.checkRegisteredMemberUseCase,
+                        MemberUseCaseProvider.saveMemberNicknameUseCase,
                     )
                 }
             }
