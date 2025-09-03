@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
+import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.TeamBottariStatus
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
@@ -121,9 +123,11 @@ class TeamBottariStatusViewModel(
         val sharedItems = teamBottariStatus.sharedItems.map { it.toSharedUiModel() }
         val assignedItems = teamBottariStatus.assignedItems.map { it.toAssignedUiModel() }
         val teamStatusListItems = generateTeamItemsList(sharedItems, assignedItems)
-        val allProductItems = teamStatusListItems.filterIsInstance<TeamBottariProductStatusUiModel>()
+        val allProductItems =
+            teamStatusListItems.filterIsInstance<TeamBottariProductStatusUiModel>()
         val selectedProduct =
-            allProductItems.find { it.id == currentState.selectedProduct?.id } ?: allProductItems.firstOrNull()
+            allProductItems.find { it.id == currentState.selectedProduct?.id }
+                ?: allProductItems.firstOrNull()
         updateState {
             copy(
                 sharedItems = sharedItems,
@@ -146,8 +150,8 @@ class TeamBottariStatusViewModel(
                     stateHandle[KEY_ITEM_BOTTARI_ID] = bottariId
                     TeamBottariStatusViewModel(
                         stateHandle,
-                        UseCaseProvider.fetchTeamStatusUseCase,
-                        UseCaseProvider.sendRemindByItemUseCase,
+                        TeamMemberUseCaseProvider.fetchTeamStatusUseCase,
+                        TeamBottariItemUseCaseProvider.sendRemindByItemUseCase,
                         UseCaseProvider.connectTeamEventUseCase,
                         UseCaseProvider.disconnectTeamEventUseCase,
                     )

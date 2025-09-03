@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
 import com.bottari.domain.model.bottari.ChecklistItem
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
@@ -15,7 +16,7 @@ import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
-import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
+import com.bottari.domain.usecase.team.UncheckTeamBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.TeamChecklistExpandableTypeUiModel
@@ -39,7 +40,7 @@ class TeamChecklistViewModel(
     stateHandle: SavedStateHandle,
     private val fetchTeamBottariChecklistUseCase: FetchTeamChecklistUseCase,
     private val checkTeamBottariItemUseCase: CheckTeamBottariItemUseCase,
-    private val unCheckTeamBottariItemUseCase: UnCheckTeamBottariItemUseCase,
+    private val unCheckTeamBottariItemUseCase: UncheckTeamBottariItemUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
 ) : BaseViewModel<TeamChecklistUiState, TeamChecklistUiEvent>(TeamChecklistUiState()) {
@@ -312,9 +313,9 @@ class TeamChecklistViewModel(
                     stateHandle[KEY_BOTTARI_ID] = bottariId
                     TeamChecklistViewModel(
                         stateHandle,
-                        UseCaseProvider.fetchTeamChecklistUseCase,
-                        UseCaseProvider.checkTeamBottariItemUseCase,
-                        UseCaseProvider.unCheckTeamBottariItemUseCase,
+                        TeamBottariItemUseCaseProvider.fetchTeamChecklistUseCase,
+                        TeamBottariItemUseCaseProvider.checkTeamBottariItemUseCase,
+                        TeamBottariItemUseCaseProvider.uncheckTeamBottariItemUseCase,
                         UseCaseProvider.connectTeamEventUseCase,
                         UseCaseProvider.disconnectTeamEventUseCase,
                     )

@@ -3,7 +3,7 @@ package com.bottari.presentation.view.home.team
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.TeamBottariUseCaseProvider
 import com.bottari.domain.usecase.team.ExitTeamBottariUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.logger.BottariLogger
@@ -61,8 +61,8 @@ class TeamBottariViewModel(
             viewModelFactory {
                 initializer {
                     TeamBottariViewModel(
-                        UseCaseProvider.fetchTeamBottariesUseCase,
-                        UseCaseProvider.exitTeamBottariUseCase,
+                        TeamBottariUseCaseProvider.fetchTeamBottariesUseCase,
+                        TeamBottariUseCaseProvider.exitTeamBottariUseCase,
                     )
                 }
             }

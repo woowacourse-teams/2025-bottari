@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
 import com.bottari.di.usecase.MemberUseCaseProvider
+import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.TeamMemberStatus
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
@@ -154,8 +155,8 @@ class TeamMembersStatusViewModel(
                     stateHandle[KEY_TEAM_BOTTARI_ID] = id
                     TeamMembersStatusViewModel(
                         stateHandle = stateHandle,
-                        fetchTeamMembersStatusUseCase = UseCaseProvider.fetchTeamMembersStatusUseCase,
-                        sendRemindByMemberMessageUseCase = UseCaseProvider.sendRemindByMemberMessageUseCase,
+                        fetchTeamMembersStatusUseCase = TeamMemberUseCaseProvider.fetchTeamMembersStatusUseCase,
+                        sendRemindByMemberMessageUseCase = TeamMemberUseCaseProvider.sendRemindByMemberMessageUseCase,
                         getMemberIdUseCase = MemberUseCaseProvider.getMemberIdUseCase,
                         connectTeamEventUseCase = UseCaseProvider.connectTeamEventUseCase,
                         disconnectTeamEventUseCase = UseCaseProvider.disconnectTeamEventUseCase,

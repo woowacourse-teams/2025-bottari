@@ -6,6 +6,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
@@ -109,7 +110,7 @@ class TeamSharedItemEditViewModel(
 
     companion object {
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
-        private const val ERROR_BOTTARI_ID = "[ERROR] bottariId가 존재하지 않습니다"
+        private const val ERROR_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다"
         private const val DEBOUNCE_DELAY = 300L
 
         fun Factory(bottariId: Long): ViewModelProvider.Factory =
@@ -119,9 +120,9 @@ class TeamSharedItemEditViewModel(
                     stateHandle[KEY_BOTTARI_ID] = bottariId
                     TeamSharedItemEditViewModel(
                         stateHandle,
-                        UseCaseProvider.fetchTeamSharedItemsUseCase,
-                        UseCaseProvider.createTeamSharedItemUseCase,
-                        UseCaseProvider.deleteTeamBottariItemUseCase,
+                        TeamBottariItemUseCaseProvider.fetchTeamSharedItemsUseCase,
+                        TeamBottariItemUseCaseProvider.createTeamSharedItemUseCase,
+                        TeamBottariItemUseCaseProvider.deleteTeamBottariItemUseCase,
                         UseCaseProvider.connectTeamEventUseCase,
                     )
                 }

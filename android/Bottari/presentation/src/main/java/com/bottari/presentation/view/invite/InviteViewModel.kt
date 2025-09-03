@@ -3,7 +3,7 @@ package com.bottari.presentation.view.invite
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.usecase.team.JoinTeamBottariUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 
@@ -24,7 +24,7 @@ class InviteViewModel(
         fun Factory(): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    InviteViewModel(UseCaseProvider.joinTeamBottariUseCase)
+                    InviteViewModel(TeamMemberUseCaseProvider.joinTeamBottariUseCase)
                 }
             }
     }
