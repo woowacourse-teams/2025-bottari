@@ -1,5 +1,6 @@
-package com.bottari.di
+package com.bottari.di.usecase
 
+import com.bottari.di.RepositoryProvider
 import com.bottari.domain.usecase.appConfig.CheckForceUpdateUseCase
 import com.bottari.domain.usecase.appConfig.GetPermissionFlagUseCase
 import com.bottari.domain.usecase.appConfig.SavePermissionFlagUseCase
@@ -10,7 +11,7 @@ import com.bottari.domain.usecase.notification.DeleteNotificationUseCase
 import com.bottari.domain.usecase.notification.GetNotificationsUseCase
 import com.bottari.domain.usecase.report.ReportTemplateUseCase
 
-object UseCaseProvider {
+object CommonUseCaseProvider {
     val savePermissionFlagUseCase: SavePermissionFlagUseCase by lazy {
         SavePermissionFlagUseCase(RepositoryProvider.appConfigRepository)
     }

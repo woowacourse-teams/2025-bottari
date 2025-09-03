@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
 import com.bottari.di.usecase.AlarmUseCaseProvider
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.usecase.alarm.CreateAlarmUseCase

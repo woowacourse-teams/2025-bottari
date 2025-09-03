@@ -6,7 +6,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
 import com.bottari.domain.model.bottari.ChecklistItem
 import com.bottari.domain.model.event.EventData
@@ -316,8 +316,8 @@ class TeamChecklistViewModel(
                         TeamBottariItemUseCaseProvider.fetchTeamChecklistUseCase,
                         TeamBottariItemUseCaseProvider.checkTeamBottariItemUseCase,
                         TeamBottariItemUseCaseProvider.uncheckTeamBottariItemUseCase,
-                        UseCaseProvider.connectTeamEventUseCase,
-                        UseCaseProvider.disconnectTeamEventUseCase,
+                        CommonUseCaseProvider.connectTeamEventUseCase,
+                        CommonUseCaseProvider.disconnectTeamEventUseCase,
                     )
                 }
             }

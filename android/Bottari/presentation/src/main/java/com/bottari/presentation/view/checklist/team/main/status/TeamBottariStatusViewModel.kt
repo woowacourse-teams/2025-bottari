@@ -6,7 +6,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
 import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.model.event.EventState
@@ -152,8 +152,8 @@ class TeamBottariStatusViewModel(
                         stateHandle,
                         TeamMemberUseCaseProvider.fetchTeamStatusUseCase,
                         TeamBottariItemUseCaseProvider.sendRemindByItemUseCase,
-                        UseCaseProvider.connectTeamEventUseCase,
-                        UseCaseProvider.disconnectTeamEventUseCase,
+                        CommonUseCaseProvider.connectTeamEventUseCase,
+                        CommonUseCaseProvider.disconnectTeamEventUseCase,
                     )
                 }
             }

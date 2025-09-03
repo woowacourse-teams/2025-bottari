@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
 import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.model.bottari.BottariItem
@@ -259,7 +259,7 @@ class TeamAssignedItemEditViewModel(
                         TeamBottariItemUseCaseProvider.deleteTeamBottariItemUseCase,
                         TeamMemberUseCaseProvider.fetchTeamBottariMembersUseCase,
                         TeamBottariItemUseCaseProvider.saveTeamBottariAssignedItemUseCase,
-                        UseCaseProvider.connectTeamEventUseCase,
+                        CommonUseCaseProvider.connectTeamEventUseCase,
                     )
                 }
             }
