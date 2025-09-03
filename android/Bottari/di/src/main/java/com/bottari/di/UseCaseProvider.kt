@@ -101,44 +101,9 @@ object UseCaseProvider {
             RepositoryProvider.bottariRepository,
         )
     }
-    val fetchBottariTemplatesUseCase: FetchBottariTemplatesUseCase by lazy {
-        FetchBottariTemplatesUseCase(
-            RepositoryProvider.bottariTemplateRepository,
-        )
-    }
-    val searchBottariTemplatesUseCase: SearchBottariTemplatesUseCase by lazy {
-        SearchBottariTemplatesUseCase(
-            RepositoryProvider.bottariTemplateRepository,
-        )
-    }
-    val createBottariTemplateUseCase: CreateBottariTemplateUseCase by lazy {
-        CreateBottariTemplateUseCase(
-            RepositoryProvider.bottariTemplateRepository,
-        )
-    }
-    val fetchBottariTemplateDetailUseCase: FetchBottariTemplateDetailUseCase by lazy {
-        FetchBottariTemplateDetailUseCase(
-            RepositoryProvider.bottariTemplateRepository,
-        )
-    }
-    val takeBottariTemplateDetailUseCase: TakeBottariTemplateDetailUseCase by lazy {
-        TakeBottariTemplateDetailUseCase(
-            RepositoryProvider.bottariTemplateRepository,
-        )
-    }
     val saveBottariItemsUseCase: SaveBottariItemsUseCase by lazy {
         SaveBottariItemsUseCase(
             RepositoryProvider.bottariItemRepository,
-        )
-    }
-    val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase by lazy {
-        FetchMyBottariTemplatesUseCase(
-            RepositoryProvider.bottariTemplateRepository,
-        )
-    }
-    val deleteMyBottariTemplateUseCase: DeleteMyBottariTemplateUseCase by lazy {
-        DeleteMyBottariTemplateUseCase(
-            RepositoryProvider.bottariTemplateRepository,
         )
     }
     val deleteBottariUseCase: DeleteBottariUseCase by lazy {

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.domain.usecase.template.FetchBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
 import com.bottari.logger.BottariLogger
@@ -73,8 +74,8 @@ class TemplateViewModel(
             viewModelFactory {
                 initializer {
                     TemplateViewModel(
-                        UseCaseProvider.fetchBottariTemplatesUseCase,
-                        UseCaseProvider.searchBottariTemplatesUseCase,
+                        BottariTemplateUseCaseProvider.fetchBottariTemplatesUseCase,
+                        BottariTemplateUseCaseProvider.searchBottariTemplatesUseCase,
                     )
                 }
             }
