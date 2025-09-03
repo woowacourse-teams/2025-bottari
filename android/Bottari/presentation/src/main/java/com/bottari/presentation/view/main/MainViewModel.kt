@@ -3,7 +3,8 @@ package com.bottari.presentation.view.main
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.CommonUseCaseProvider
+import com.bottari.di.usecase.MemberUseCaseProvider
 import com.bottari.domain.model.member.RegisteredMember
 import com.bottari.domain.usecase.appConfig.CheckForceUpdateUseCase
 import com.bottari.domain.usecase.appConfig.GetPermissionFlagUseCase
@@ -112,12 +113,12 @@ class MainViewModel(
             viewModelFactory {
                 initializer {
                     MainViewModel(
-                        UseCaseProvider.registerMemberUseCase,
-                        UseCaseProvider.checkRegisteredMemberUseCase,
-                        UseCaseProvider.savePermissionFlagUseCase,
-                        UseCaseProvider.saveFcmTokenUseCase,
-                        UseCaseProvider.getPermissionFlagUseCase,
-                        UseCaseProvider.checkForceUpdateUseCase,
+                        MemberUseCaseProvider.registerMemberUseCase,
+                        MemberUseCaseProvider.checkRegisteredMemberUseCase,
+                        CommonUseCaseProvider.savePermissionFlagUseCase,
+                        CommonUseCaseProvider.saveFcmTokenUseCase,
+                        CommonUseCaseProvider.getPermissionFlagUseCase,
+                        CommonUseCaseProvider.checkForceUpdateUseCase,
                     )
                 }
             }

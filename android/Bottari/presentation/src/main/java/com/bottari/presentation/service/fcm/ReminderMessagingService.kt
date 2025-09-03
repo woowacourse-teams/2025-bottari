@@ -1,7 +1,7 @@
 package com.bottari.presentation.service.fcm
 
 import android.content.Intent
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.domain.usecase.fcm.SaveFcmTokenUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.util.NotificationHelper
@@ -15,7 +15,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class ReminderMessagingService(
-    private val saveFcmTokenUseCase: SaveFcmTokenUseCase = UseCaseProvider.saveFcmTokenUseCase,
+    private val saveFcmTokenUseCase: SaveFcmTokenUseCase = CommonUseCaseProvider.saveFcmTokenUseCase,
 ) : FirebaseMessagingService() {
     private val notificationHelper by lazy { NotificationHelper() }
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)

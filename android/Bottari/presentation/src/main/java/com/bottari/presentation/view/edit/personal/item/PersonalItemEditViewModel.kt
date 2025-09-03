@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.BottariItemUseCaseProvider
 import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
@@ -152,7 +152,7 @@ class PersonalItemEditViewModel(
 
                     PersonalItemEditViewModel(
                         stateHandle = stateHandle,
-                        saveBottariItemsUseCase = UseCaseProvider.saveBottariItemsUseCase,
+                        saveBottariItemsUseCase = BottariItemUseCaseProvider.saveBottariItemsUseCase,
                     )
                 }
             }

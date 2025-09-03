@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.BottariUseCaseProvider
+import com.bottari.di.usecase.TeamBottariUseCaseProvider
 import com.bottari.domain.model.bottari.BottariType
 import com.bottari.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.domain.usecase.team.CreateTeamBottariUseCase
@@ -90,8 +91,8 @@ class BottariCreateViewModel(
 
                     BottariCreateViewModel(
                         stateHandle,
-                        UseCaseProvider.createBottariUseCase,
-                        UseCaseProvider.createTeamBottariUseCase,
+                        BottariUseCaseProvider.createBottariUseCase,
+                        TeamBottariUseCaseProvider.createTeamBottariUseCase,
                     )
                 }
             }

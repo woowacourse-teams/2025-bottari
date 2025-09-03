@@ -5,12 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.domain.usecase.report.ReportTemplateUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import kotlinx.coroutines.launch
 
 class ReportViewModel(
     stateHandle: SavedStateHandle,
@@ -48,7 +47,7 @@ class ReportViewModel(
                 initializer {
                     val stateHandle = createSavedStateHandle()
                     stateHandle[KEY_TEMPLATE_ID] = templateId
-                    ReportViewModel(stateHandle, UseCaseProvider.reportTemplateUseCase)
+                    ReportViewModel(stateHandle, CommonUseCaseProvider.reportTemplateUseCase)
                 }
             }
     }

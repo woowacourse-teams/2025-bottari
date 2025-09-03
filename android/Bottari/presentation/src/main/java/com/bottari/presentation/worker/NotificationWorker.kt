@@ -3,7 +3,7 @@ package com.bottari.presentation.worker
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.usecase.notification.GetNotificationsUseCase
 import com.bottari.logger.BottariLogger
@@ -14,7 +14,7 @@ class NotificationWorker(
     context: Context,
     workerParams: WorkerParameters,
 ) : CoroutineWorker(context, workerParams) {
-    private val getNotificationsUseCase: GetNotificationsUseCase by lazy { UseCaseProvider.getNotificationsUseCase }
+    private val getNotificationsUseCase: GetNotificationsUseCase by lazy { CommonUseCaseProvider.getNotificationsUseCase }
     private val scheduler: AlarmScheduler by lazy { AlarmScheduler() }
 
     override suspend fun doWork(): Result =

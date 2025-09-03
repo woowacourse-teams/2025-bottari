@@ -2,7 +2,7 @@ package com.bottari.domain.usecase.team
 
 import com.bottari.domain.repository.TeamBottariRepository
 
-class UnCheckTeamBottariItemUseCase(
+class UncheckTeamBottariItemUseCase(
     private val teamBottariRepository: TeamBottariRepository,
 ) {
     suspend operator fun invoke(

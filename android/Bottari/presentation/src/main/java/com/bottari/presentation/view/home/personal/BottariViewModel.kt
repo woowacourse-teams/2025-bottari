@@ -3,7 +3,8 @@ package com.bottari.presentation.view.home.personal
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.BottariUseCaseProvider
+import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
 import com.bottari.domain.usecase.notification.DeleteNotificationUseCase
@@ -82,9 +83,9 @@ class BottariViewModel(
             viewModelFactory {
                 initializer {
                     BottariViewModel(
-                        UseCaseProvider.fetchBottariesUseCase,
-                        UseCaseProvider.deleteBottariUseCase,
-                        UseCaseProvider.deleteNotificationsUseCase,
+                        BottariUseCaseProvider.fetchBottariesUseCase,
+                        BottariUseCaseProvider.deleteBottariUseCase,
+                        CommonUseCaseProvider.deleteNotificationUseCase,
                     )
                 }
             }

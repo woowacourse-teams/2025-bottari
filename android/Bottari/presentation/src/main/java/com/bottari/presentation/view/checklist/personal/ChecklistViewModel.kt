@@ -6,7 +6,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.BottariItemUseCaseProvider
 import com.bottari.domain.model.bottari.ChecklistItem
 import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
@@ -171,10 +171,10 @@ class ChecklistViewModel(
                     stateHandle[KEY_BOTTARI_ID] = bottariId
                     ChecklistViewModel(
                         stateHandle,
-                        UseCaseProvider.fetchChecklistUseCase,
-                        UseCaseProvider.checkBottariItemUseCase,
-                        UseCaseProvider.unCheckBottariItemUseCase,
-                        UseCaseProvider.resetBottariItemCheckStateUseCase,
+                        BottariItemUseCaseProvider.fetchChecklistUseCase,
+                        BottariItemUseCaseProvider.checkBottariItemUseCase,
+                        BottariItemUseCaseProvider.unCheckBottariItemUseCase,
+                        BottariItemUseCaseProvider.resetBottariItemCheckStateUseCase,
                     )
                 }
             }
