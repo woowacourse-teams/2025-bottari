@@ -6,11 +6,6 @@ import com.bottari.domain.usecase.appConfig.SavePermissionFlagUseCase
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.fcm.SaveFcmTokenUseCase
-import com.bottari.domain.usecase.item.CheckBottariItemUseCase
-import com.bottari.domain.usecase.item.FetchChecklistUseCase
-import com.bottari.domain.usecase.item.ResetBottariItemCheckStateUseCase
-import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
-import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
 import com.bottari.domain.usecase.notification.DeleteNotificationUseCase
 import com.bottari.domain.usecase.notification.GetNotificationsUseCase
 import com.bottari.domain.usecase.report.ReportTemplateUseCase
@@ -38,26 +33,6 @@ import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
 
 object UseCaseProvider {
-    val fetchChecklistUseCase: FetchChecklistUseCase by lazy {
-        FetchChecklistUseCase(
-            RepositoryProvider.bottariItemRepository,
-        )
-    }
-    val unCheckBottariItemUseCase: UnCheckBottariItemUseCase by lazy {
-        UnCheckBottariItemUseCase(
-            RepositoryProvider.bottariItemRepository,
-        )
-    }
-    val checkBottariItemUseCase: CheckBottariItemUseCase by lazy {
-        CheckBottariItemUseCase(
-            RepositoryProvider.bottariItemRepository,
-        )
-    }
-    val saveBottariItemsUseCase: SaveBottariItemsUseCase by lazy {
-        SaveBottariItemsUseCase(
-            RepositoryProvider.bottariItemRepository,
-        )
-    }
     val savePermissionFlagUseCase: SavePermissionFlagUseCase by lazy {
         SavePermissionFlagUseCase(RepositoryProvider.appConfigRepository)
     }
@@ -138,9 +113,6 @@ object UseCaseProvider {
     }
     val saveTeamBottariAssignedItemUseCase: SaveTeamBottariAssignedItemUseCase by lazy {
         SaveTeamBottariAssignedItemUseCase(RepositoryProvider.teamBottariRepository)
-    }
-    val resetBottariItemCheckStateUseCase: ResetBottariItemCheckStateUseCase by lazy {
-        ResetBottariItemCheckStateUseCase(RepositoryProvider.bottariItemRepository)
     }
     val checkForceUpdateUseCase: CheckForceUpdateUseCase by lazy {
         CheckForceUpdateUseCase(RepositoryProvider.remoteConfigRepository)
