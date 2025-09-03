@@ -24,7 +24,6 @@
         style="@style/Pretendard_Medium_14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_x_small"
         android:text="@string/bottari_edit_alarm_description_text"
         android:textColor="@color/gray_a6a6a6"
         android:visibility="gone"
@@ -77,6 +76,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_alarm_time"
         tools:text="매주 반복 | 월, 화, 수, 목, 금" />
+
+    <View
+        android:id="@+id/btn_root"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:translationZ="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_alarm_edit_description" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_alarm_item"
