@@ -34,7 +34,7 @@
         android:contentDescription="@string/bottari_create_btn_description"
         android:elevation="2dp"
         android:padding="@dimen/space_large"
-        android:src="@drawable/btn_plus"
+        android:src="@drawable/ic_plus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

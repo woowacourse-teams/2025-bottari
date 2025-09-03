@@ -46,7 +46,7 @@
             android:contentDescription="@string/team_bottari_create_option_btn_description"
             android:elevation="2dp"
             android:padding="@dimen/space_large"
-            android:src="@drawable/btn_plus" />
+            android:src="@drawable/ic_plus" />
 
         <TextView
             android:id="@+id/btn_team_bottari_create"

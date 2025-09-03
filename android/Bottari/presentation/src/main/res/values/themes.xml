@@ -8,7 +8,7 @@
 
     <style name="Theme.Bottari.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/primary</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_bottari_logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/img_bottari_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.Bottari</item>
     </style>
 

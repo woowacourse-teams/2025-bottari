@@ -17,7 +17,7 @@
             android:layout_height="48dp"
             android:contentDescription="@string/common_previous_btn_description"
             android:padding="@dimen/space_small"
-            android:src="@drawable/btn_previous" />
+            android:src="@drawable/ic_previous" />
 
         <TextView
             android:id="@+id/tv_bottari_title"

@@ -60,7 +60,7 @@
         android:layout_height="48dp"
         android:contentDescription="@string/bottari_template_delete_btn_description"
         android:padding="@dimen/space_small"
-        android:src="@drawable/btn_delete"
+        android:src="@drawable/ic_delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

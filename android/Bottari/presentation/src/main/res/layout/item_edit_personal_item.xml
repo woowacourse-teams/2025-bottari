@@ -29,7 +29,7 @@
         android:layout_height="48dp"
         android:contentDescription="@string/item_delete_btn_description"
         android:padding="@dimen/space_small"
-        android:src="@drawable/btn_delete"
+        android:src="@drawable/ic_delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_personal_item_name"

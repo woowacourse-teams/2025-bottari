@@ -21,7 +21,7 @@
             android:layout_height="48dp"
             android:contentDescription="@string/common_previous_btn_description"
             android:padding="@dimen/space_small"
-            android:src="@drawable/btn_previous" />
+            android:src="@drawable/ic_previous" />
 
         <TextView
             android:id="@+id/tv_bottari_title"
@@ -39,7 +39,7 @@
             android:layout_gravity="end"
             android:contentDescription="@string/checklist_swipe_btn_description"
             android:padding="@dimen/space_small"
-            android:src="@drawable/btn_swipe" />
+            android:src="@drawable/ic_swipe" />
 
         <ImageView
             android:id="@+id/btn_reset"
@@ -48,7 +48,7 @@
             android:layout_gravity="end"
             android:contentDescription="@string/checklist_swipe_btn_description"
             android:padding="@dimen/space_small"
-            android:src="@drawable/btn_reset"
+            android:src="@drawable/ic_reset"
             android:visibility="invisible" />
     </Toolbar>
 

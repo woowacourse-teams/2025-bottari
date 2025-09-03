@@ -33,7 +33,7 @@
         android:layout_height="48dp"
         android:contentDescription="@string/bottari_personal_item_add_btn_description"
         android:padding="@dimen/space_small"
-        android:src="@drawable/btn_send"
+        android:src="@drawable/ic_send"
         app:layout_constraintBottom_toBottomOf="@id/et_item_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/et_item_input" />

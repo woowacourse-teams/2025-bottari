@@ -18,8 +18,8 @@
         app:mcv_calendarMode="month"
         app:mcv_dateTextAppearance="@style/CustomCalendarText"
         app:mcv_firstDayOfWeek="sunday"
-        app:mcv_leftArrow="@drawable/btn_previous"
-        app:mcv_rightArrow="@drawable/btn_next"
+        app:mcv_leftArrow="@drawable/ic_previous"
+        app:mcv_rightArrow="@drawable/ic_arrow"
         app:mcv_selectionMode="single"
         app:mcv_titleAnimationOrientation="horizontal"
         app:mcv_weekDayTextAppearance="@style/CustomCalendarText" />

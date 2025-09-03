@@ -18,7 +18,7 @@
             android:layout_height="48dp"
             android:contentDescription="@string/common_close_btn_description"
             android:padding="@dimen/space_small"
-            android:src="@drawable/btn_close" />
+            android:src="@drawable/ic_close" />
 
         <TextView
             android:id="@+id/tv_alarm_edit_title"
@@ -130,7 +130,7 @@
                     android:layout_marginEnd="@dimen/space_median"
                     android:contentDescription="@string/alarm_date_edit_btn_description"
                     android:padding="@dimen/space_small"
-                    android:src="@drawable/btn_calendar"
+                    android:src="@drawable/ic_calendar"
                     app:layout_constraintBottom_toBottomOf="@id/tv_non_repeat_alarm_date_title"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tv_non_repeat_alarm_date_title" />
@@ -229,7 +229,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/alarm_edit_location_btn_description"
-                    android:src="@drawable/btn_location"
+                    android:src="@drawable/ic_location"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -80,7 +80,7 @@ class NotificationHelper(
     ): Notification =
         NotificationCompat
             .Builder(context, BOTTARI_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_bottari_logo)
+            .setSmallIcon(R.drawable.img_bottari_logo)
             .setContentTitle(
                 context.getString(R.string.common_bottari_notification_title, bottariTitle),
             ).setContentText(context.getString(R.string.common_bottari_notification_message))
@@ -114,7 +114,7 @@ class NotificationHelper(
     ): Notification =
         NotificationCompat
             .Builder(context, TEAM_BOTTARI_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_bottari_logo)
+            .setSmallIcon(R.drawable.img_bottari_logo)
             .setContentTitle(
                 context.getString(
                     R.string.common_team_bottari_notification_title_text,

@@ -28,7 +28,7 @@
         android:layout_height="48dp"
         android:contentDescription="@string/team_bottari_edit_member_edit_btn_description"
         android:padding="@dimen/space_median"
-        android:src="@drawable/btn_plus"
+        android:src="@drawable/ic_plus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

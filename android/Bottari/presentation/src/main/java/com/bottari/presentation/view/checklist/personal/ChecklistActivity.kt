@@ -107,7 +107,7 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
 
     private fun updateToolbar(isVisible: Boolean) {
         binding.btnSwipe.isVisible = isVisible
-        val imageRes = if (isVisible) R.drawable.btn_previous else R.drawable.btn_close
+        val imageRes = if (isVisible) R.drawable.ic_previous else R.drawable.ic_close
         binding.btnPrevious.setImageResource(imageRes)
     }
 
