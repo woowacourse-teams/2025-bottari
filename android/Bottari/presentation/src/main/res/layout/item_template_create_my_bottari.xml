@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_x_small"
         android:maxLines="1"
-        android:textColor="@color/gray_a6a6a6"
+        android:textColor="@color/gray_500"
         app:layout_constraintTop_toBottomOf="@id/tv_template_create_my_bottari_title"
         tools:text="사원증, 노트북, 물통 등 13개의 물건" />
 

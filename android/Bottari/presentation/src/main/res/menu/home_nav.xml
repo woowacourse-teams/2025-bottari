@@ -3,12 +3,12 @@
     <item
         android:id="@+id/menu_personal_bottari"
         android:icon="@drawable/ic_personal"
-        android:iconTint="@color/gray_a6a6a6"
+        android:iconTint="@color/gray_500"
         android:title="@string/home_nav_personal_bottari_title_text" />
     <item
         android:id="@+id/menu_team_bottari"
         android:icon="@drawable/ic_team"
-        android:iconTint="@color/gray_a6a6a6"
+        android:iconTint="@color/gray_500"
         android:title="@string/home_nav_team_bottari_title_text" />
     <item
         android:id="@+id/menu_template"
@@ -17,6 +17,6 @@
     <item
         android:id="@+id/menu_more"
         android:icon="@drawable/ic_more_horizontal"
-        android:iconTint="@color/gray_a6a6a6"
+        android:iconTint="@color/gray_500"
         android:title="@string/home_nav_more_title_text" />
 </menu>

@@ -30,7 +30,7 @@ enum class DialogPresetType {
             )
             setNegativeButton(
                 textRes = R.string.common_no_btn_text,
-                textColorRes = R.color.gray_787878,
+                textColorRes = R.color.gray_700,
                 backgroundColorRes = R.color.white,
             )
             setCloseButton()
@@ -48,7 +48,7 @@ enum class DialogPresetType {
             )
             setNegativeButton(
                 textRes = R.string.common_permission_dialog_negative_btn_text,
-                textColorRes = R.color.gray_787878,
+                textColorRes = R.color.gray_700,
                 backgroundColorRes = R.color.white,
             )
             setCloseButton()
@@ -66,7 +66,7 @@ enum class DialogPresetType {
             )
             setNegativeButton(
                 textRes = R.string.common_permission_dialog_negative_btn_text,
-                textColorRes = R.color.gray_787878,
+                textColorRes = R.color.gray_700,
                 backgroundColorRes = R.color.white,
             )
             setCloseButton()
@@ -84,7 +84,7 @@ enum class DialogPresetType {
             )
             setNegativeButton(
                 textRes = R.string.common_no_btn_text,
-                textColorRes = R.color.gray_787878,
+                textColorRes = R.color.gray_700,
                 backgroundColorRes = R.color.white,
             )
         }
@@ -103,7 +103,7 @@ enum class DialogPresetType {
             )
             setNegativeButton(
                 textRes = R.string.force_update_dialog_close_btn_text,
-                textColorRes = R.color.gray_787878,
+                textColorRes = R.color.gray_700,
                 backgroundColorRes = R.color.white,
             )
         }

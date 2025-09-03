@@ -18,7 +18,7 @@ class TeamBottariProductStatusDetailViewHolder private constructor(
     }
 
     private fun setCheckedStatus(isChecked: Boolean) {
-        val bgColorRes = if (isChecked) R.color.primary else R.color.gray_787878
+        val bgColorRes = if (isChecked) R.color.primary else R.color.gray_700
         val bgColor = ContextCompat.getColor(itemView.context, bgColorRes)
         binding.root.backgroundTintList = ColorStateList.valueOf(bgColor)
     }

@@ -80,7 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/space_small"
-        app:dividerColor="@color/gray_c4c4c4"
+        app:dividerColor="@color/gray_400"
         app:dividerThickness="1dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rv_shared_items" />

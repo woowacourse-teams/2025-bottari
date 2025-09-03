@@ -78,7 +78,7 @@
         android:paddingHorizontal="@dimen/space_median"
         android:paddingVertical="@dimen/space_small"
         android:textColor="@color/black"
-        android:textColorHint="@color/gray_a6a6a6"
+        android:textColorHint="@color/gray_500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_personal_item_add"
         app:layout_constraintStart_toStartOf="parent" />

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_f8f8f8">
+    android:background="@color/gray_50">
 
     <Toolbar
         android:id="@+id/tb_template_create"

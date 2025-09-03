@@ -75,7 +75,7 @@ class TeamBottariViewHolder private constructor(
             .append(" ")
             .append(
                 count.toString(),
-                ForegroundColorSpan(ContextCompat.getColor(itemView.context, R.color.gray_999999)),
+                ForegroundColorSpan(ContextCompat.getColor(itemView.context, R.color.gray_600)),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
             ).apply {
                 setSpan(

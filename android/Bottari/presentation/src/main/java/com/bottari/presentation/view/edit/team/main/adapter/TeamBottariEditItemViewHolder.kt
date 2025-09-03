@@ -21,9 +21,9 @@ class TeamBottariEditItemViewHolder private constructor(
     private fun View.applyStyle() {
         val backgroundColor =
             when (bottariItemType) {
-                is BottariItemTypeUiModel.ASSIGNED -> R.color.secondary
-                BottariItemTypeUiModel.PERSONAL -> R.color.primary
-                BottariItemTypeUiModel.SHARED -> R.color.green
+                is BottariItemTypeUiModel.ASSIGNED -> R.color.product_type_assigned
+                BottariItemTypeUiModel.PERSONAL -> R.color.product_type_personal
+                BottariItemTypeUiModel.SHARED -> R.color.product_type_shared
             }
         backgroundTintList = context.getColorStateList(backgroundColor)
     }

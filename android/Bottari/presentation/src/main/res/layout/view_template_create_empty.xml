@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toTopOf="@+id/tv_empty_view_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:tint="@color/gray_a6a6a6" />
+        app:tint="@color/gray_500" />
 
     <TextView
         android:id="@+id/tv_empty_view_title"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/template_create_empty_view_title_text"
-        android:textColor="@color/gray_a6a6a6"
+        android:textColor="@color/gray_500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,7 @@
         android:layout_marginTop="@dimen/space_small"
         android:gravity="center"
         android:text="@string/template_create_empty_view_description_text"
-        android:textColor="@color/gray_a6a6a6"
+        android:textColor="@color/gray_500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_empty_view_title" />

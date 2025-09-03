@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_small"
         android:text="@string/common_notification_permission_description_text"
-        android:textColor="@color/gray_a6a6a6"
+        android:textColor="@color/gray_500"
         app:layout_constraintBottom_toBottomOf="@id/iv_notification"
         app:layout_constraintStart_toEndOf="@id/iv_notification"
         app:layout_constraintTop_toBottomOf="@id/tv_notification_permission" />
@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_small"
         android:text="@string/common_alarm_permission_description_text"
-        android:textColor="@color/gray_a6a6a6"
+        android:textColor="@color/gray_500"
         app:layout_constraintBottom_toBottomOf="@id/iv_alarm"
         app:layout_constraintStart_toEndOf="@id/iv_alarm"
         app:layout_constraintTop_toBottomOf="@id/tv_alarm_permission" />

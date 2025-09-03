@@ -41,7 +41,7 @@
         android:gravity="center"
         android:layout_marginVertical="@dimen/space_2x_large"
         android:text="@string/team_checklist_empty_view_title_text"
-        android:textColor="@color/gray_787878"
+        android:textColor="@color/gray_700"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -44,7 +44,7 @@
         android:elevation="1dp"
         android:gravity="center"
         android:paddingVertical="@dimen/space_small"
-        android:textColor="@color/gray_787878"
+        android:textColor="@color/gray_700"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_dialog_custom_positive"

@@ -32,7 +32,7 @@ class RepeatDayViewHolder private constructor(
     }
 
     private fun updateDayOfWeekState(isChecked: Boolean) {
-        val bgColorRes = if (isChecked) R.color.primary else R.color.gray_f2f2f5
+        val bgColorRes = if (isChecked) R.color.primary else R.color.gray_100
         val bgColor = ContextCompat.getColor(itemView.context, bgColorRes)
 
         val textColorRes = if (isChecked) R.color.white else R.color.black
