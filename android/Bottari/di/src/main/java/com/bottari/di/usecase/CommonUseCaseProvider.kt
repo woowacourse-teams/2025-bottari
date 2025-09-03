@@ -24,7 +24,7 @@ object CommonUseCaseProvider {
     val getNotificationsUseCase: GetNotificationsUseCase by lazy {
         GetNotificationsUseCase(RepositoryProvider.notificationRepository)
     }
-    val deleteNotificationsUseCase: DeleteNotificationUseCase by lazy {
+    val deleteNotificationUseCase: DeleteNotificationUseCase by lazy {
         DeleteNotificationUseCase(RepositoryProvider.notificationRepository)
     }
     val saveFcmTokenUseCase: SaveFcmTokenUseCase by lazy {

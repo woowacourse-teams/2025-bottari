@@ -85,7 +85,7 @@ class BottariViewModel(
                     BottariViewModel(
                         BottariUseCaseProvider.fetchBottariesUseCase,
                         BottariUseCaseProvider.deleteBottariUseCase,
-                        CommonUseCaseProvider.deleteNotificationsUseCase,
+                        CommonUseCaseProvider.deleteNotificationUseCase,
                     )
                 }
             }
