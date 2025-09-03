@@ -1,8 +1,5 @@
 package com.bottari.di
 
-import com.bottari.domain.usecase.alarm.CreateAlarmUseCase
-import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
-import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
 import com.bottari.domain.usecase.appConfig.CheckForceUpdateUseCase
 import com.bottari.domain.usecase.appConfig.GetPermissionFlagUseCase
 import com.bottari.domain.usecase.appConfig.SavePermissionFlagUseCase
@@ -46,13 +43,6 @@ import com.bottari.domain.usecase.team.SaveTeamBottariAssignedItemUseCase
 import com.bottari.domain.usecase.team.SendRemindByItemUseCase
 import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.domain.usecase.team.UnCheckTeamBottariItemUseCase
-import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
-import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
-import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
-import com.bottari.domain.usecase.template.FetchBottariTemplatesUseCase
-import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
-import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
-import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
 
 object UseCaseProvider {
     val fetchBottariesUseCase: FetchBottariesUseCase by lazy {
@@ -62,24 +52,6 @@ object UseCaseProvider {
     }
     val fetchBottariDetailUseCase: FetchBottariDetailUseCase by lazy {
         FetchBottariDetailUseCase(RepositoryProvider.bottariRepository)
-    }
-    val saveAlarmUseCase: SaveAlarmUseCase by lazy {
-        SaveAlarmUseCase(
-            RepositoryProvider.alarmRepository,
-            RepositoryProvider.notificationRepository,
-        )
-    }
-    val createAlarmUseCase: CreateAlarmUseCase by lazy {
-        CreateAlarmUseCase(
-            RepositoryProvider.alarmRepository,
-            RepositoryProvider.notificationRepository,
-        )
-    }
-    val toggleAlarmStateUseCase: ToggleAlarmStateUseCase by lazy {
-        ToggleAlarmStateUseCase(
-            RepositoryProvider.alarmRepository,
-            RepositoryProvider.notificationRepository,
-        )
     }
     val fetchChecklistUseCase: FetchChecklistUseCase by lazy {
         FetchChecklistUseCase(

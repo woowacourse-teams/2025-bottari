@@ -6,6 +6,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.AlarmUseCaseProvider
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.usecase.alarm.CreateAlarmUseCase
 import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
@@ -138,8 +139,8 @@ class AlarmEditViewModel(
                     stateHandle[KEY_ALARM] = alarm
                     AlarmEditViewModel(
                         stateHandle = stateHandle,
-                        createAlarmUseCase = UseCaseProvider.createAlarmUseCase,
-                        saveAlarmUseCase = UseCaseProvider.saveAlarmUseCase,
+                        createAlarmUseCase = AlarmUseCaseProvider.createAlarmUseCase,
+                        saveAlarmUseCase = AlarmUseCaseProvider.saveAlarmUseCase,
                     )
                 }
             }

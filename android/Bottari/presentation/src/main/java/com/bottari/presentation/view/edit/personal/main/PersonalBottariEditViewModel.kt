@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.AlarmUseCaseProvider
 import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
 import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
@@ -146,7 +147,7 @@ class PersonalBottariEditViewModel(
                     PersonalBottariEditViewModel(
                         stateHandle,
                         UseCaseProvider.fetchBottariDetailUseCase,
-                        UseCaseProvider.toggleAlarmStateUseCase,
+                        AlarmUseCaseProvider.toggleAlarmStateUseCase,
                         BottariTemplateUseCaseProvider.createBottariTemplateUseCase,
                     )
                 }
