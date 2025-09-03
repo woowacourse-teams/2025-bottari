@@ -3,11 +3,11 @@ package com.bottari.presentation.view.edit.personal.main.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bottari.presentation.databinding.ItemChecklistMiniBinding
+import com.bottari.presentation.databinding.ItemChipBinding
 import com.bottari.presentation.model.bottari.BottariItemUiModel
 
 class PersonalBottariEditItemViewHolder private constructor(
-    private val binding: ItemChecklistMiniBinding,
+    private val binding: ItemChipBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: BottariItemUiModel) {
         binding.tvChecklistItemMiniTitle.text = item.name
@@ -16,7 +16,7 @@ class PersonalBottariEditItemViewHolder private constructor(
     companion object {
         fun from(parent: ViewGroup): PersonalBottariEditItemViewHolder {
             val inflater = LayoutInflater.from(parent.context)
-            val binding = ItemChecklistMiniBinding.inflate(inflater, parent, false)
+            val binding = ItemChipBinding.inflate(inflater, parent, false)
             return PersonalBottariEditItemViewHolder(binding)
         }
     }
