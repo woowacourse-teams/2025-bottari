@@ -12,9 +12,9 @@ import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
-import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.JoinTeamBottariRequest
 import com.bottari.data.model.team.SaveTeamBottariAssignedItemRequest
+import com.bottari.data.model.team.TeamItemTypeRequest
 import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
 import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
 import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
@@ -42,19 +42,19 @@ interface TeamBottariService {
     @PATCH("/team-items/{itemId}/check")
     suspend fun checkTeamBottariItem(
         @Path("itemId") id: Long,
-        @Body request: ItemTypeRequest,
+        @Body request: TeamItemTypeRequest,
     ): Response<Unit>
 
     @PATCH("/team-items/{itemId}/uncheck")
     suspend fun uncheckTeamBottariItem(
         @Path("itemId") id: Long,
-        @Body request: ItemTypeRequest,
+        @Body request: TeamItemTypeRequest,
     ): Response<Unit>
 
     @POST("/team-items/{itemId}/remind")
     suspend fun sendRemindByItem(
         @Path("itemId") id: Long,
-        @Body request: ItemTypeRequest,
+        @Body request: TeamItemTypeRequest,
     ): Response<Unit>
 
     @GET("/team-bottaries")

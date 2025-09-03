@@ -7,8 +7,8 @@ import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
 import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
-import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.JoinTeamBottariRequest
+import com.bottari.data.model.team.TeamItemTypeRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.data.testFixture.BOTTARI_ASSIGNED_ITEM_FIXTURE
 import com.bottari.data.testFixture.BOTTARI_ASSIGNED_ITEM_RESPONSE_FIXTURE
@@ -934,7 +934,7 @@ class TeamBottariRepositoryImplTest {
             coEvery {
                 dataSource.checkBottariItem(
                     teamBottariId,
-                    ItemTypeRequest(type),
+                    TeamItemTypeRequest(type),
                 )
             } returns Result.success(Unit)
 
@@ -951,7 +951,7 @@ class TeamBottariRepositoryImplTest {
             coVerify(exactly = 1) {
                 dataSource.checkBottariItem(
                     teamBottariId,
-                    ItemTypeRequest(type),
+                    TeamItemTypeRequest(type),
                 )
             }
         }
@@ -967,7 +967,7 @@ class TeamBottariRepositoryImplTest {
             coEvery {
                 dataSource.checkBottariItem(
                     teamBottariId,
-                    ItemTypeRequest(type),
+                    TeamItemTypeRequest(type),
                 )
             } returns Result.failure(exception)
 
@@ -983,7 +983,7 @@ class TeamBottariRepositoryImplTest {
             coVerify(exactly = 1) {
                 dataSource.checkBottariItem(
                     teamBottariId,
-                    ItemTypeRequest(type),
+                    TeamItemTypeRequest(type),
                 )
             }
         }

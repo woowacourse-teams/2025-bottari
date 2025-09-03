@@ -8,9 +8,9 @@ import com.bottari.data.model.team.CreateTeamBottariPersonalItemRequest
 import com.bottari.data.model.team.CreateTeamBottariRequest
 import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
 import com.bottari.data.model.team.DeleteTeamBottariItemRequest
-import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.JoinTeamBottariRequest
 import com.bottari.data.model.team.SaveTeamBottariAssignedItemRequest
+import com.bottari.data.model.team.TeamItemTypeRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
@@ -37,12 +37,12 @@ class TeamBottariRepositoryImpl(
     override suspend fun uncheckBottariItem(
         bottariItemId: Long,
         type: String,
-    ): Result<Unit> = teamBottariRemoteDataSource.uncheckBottariItem(bottariItemId, ItemTypeRequest(type))
+    ): Result<Unit> = teamBottariRemoteDataSource.uncheckBottariItem(bottariItemId, TeamItemTypeRequest(type))
 
     override suspend fun checkBottariItem(
         bottariItemId: Long,
         type: String,
-    ): Result<Unit> = teamBottariRemoteDataSource.checkBottariItem(bottariItemId, ItemTypeRequest(type))
+    ): Result<Unit> = teamBottariRemoteDataSource.checkBottariItem(bottariItemId, TeamItemTypeRequest(type))
 
     override suspend fun fetchTeamBottaries(): Result<List<TeamBottari>> =
         teamBottariRemoteDataSource
@@ -69,7 +69,7 @@ class TeamBottariRepositoryImpl(
         type: String,
     ): Result<Unit> =
         teamBottariRemoteDataSource
-            .sendRemindByItem(id, ItemTypeRequest(type))
+            .sendRemindByItem(id, TeamItemTypeRequest(type))
 
     override suspend fun fetchTeamMembersStatus(id: Long): Result<List<TeamMemberStatus>> =
         teamBottariRemoteDataSource

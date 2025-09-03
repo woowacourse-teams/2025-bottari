@@ -12,9 +12,9 @@ import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
-import com.bottari.data.model.team.ItemTypeRequest
 import com.bottari.data.model.team.JoinTeamBottariRequest
 import com.bottari.data.model.team.SaveTeamBottariAssignedItemRequest
+import com.bottari.data.model.team.TeamItemTypeRequest
 import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
 import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
 import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
@@ -26,12 +26,12 @@ interface TeamBottariRemoteDataSource {
 
     suspend fun uncheckBottariItem(
         bottariItemId: Long,
-        request: ItemTypeRequest,
+        request: TeamItemTypeRequest,
     ): Result<Unit>
 
     suspend fun checkBottariItem(
         bottariItemId: Long,
-        request: ItemTypeRequest,
+        request: TeamItemTypeRequest,
     ): Result<Unit>
 
     suspend fun fetchTeamBottaries(): Result<List<FetchTeamBottariResponse>>
@@ -42,7 +42,7 @@ interface TeamBottariRemoteDataSource {
 
     suspend fun sendRemindByItem(
         id: Long,
-        type: ItemTypeRequest,
+        type: TeamItemTypeRequest,
     ): Result<Unit>
 
     suspend fun fetchTeamMembers(id: Long): Result<FetchTeamMembersResponse>

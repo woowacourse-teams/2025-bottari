@@ -8,3 +8,9 @@ data class CreateTeamBottariRequest(
     @SerialName("title")
     val title: String,
 )
+
+@Serializable
+data class JoinTeamBottariRequest(
+    @SerialName("inviteCode")
+    val inviteCode: String,
+)
