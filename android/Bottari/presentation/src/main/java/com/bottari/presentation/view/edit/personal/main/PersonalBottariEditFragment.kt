@@ -12,9 +12,11 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.formatWithPattern
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
-import com.bottari.presentation.model.bottari.BottariItemUiModel
+import com.bottari.presentation.model.alarm.AlarmTypeUiModel
+import com.bottari.presentation.model.alarm.AlarmUiModel
 import com.bottari.presentation.util.PermissionUtil
 import com.bottari.presentation.util.PermissionUtil.requiredPermissions
 import com.bottari.presentation.view.common.alert.CustomAlertDialog
@@ -28,32 +30,18 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import java.time.format.TextStyle
+import java.util.Locale
 
 class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
     private val viewModel: PersonalBottariEditViewModel by viewModels {
         val bottariId = requireArguments().getLong(ARG_BOTTARI_ID)
         PersonalBottariEditViewModel.Factory(bottariId)
     }
-    private lateinit var popupMenu: PopupMenu
-    private val itemAdapter: PersonalBottariEditItemAdapter by lazy { PersonalBottariEditItemAdapter() }
-    private val permissionLauncher = getPermissionLauncher()
-    private val alarmViewBinder: AlarmViewBinder by lazy { AlarmViewBinder(requireContext()) }
 
-    private fun getPermissionLauncher() =
-        registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions(),
-        ) { permissions ->
-            val allGranted = permissions.all { it.value }
-            if (allGranted) {
-                checkAndRequestSpecialPermission()
-            } else {
-                if (PermissionUtil.isPermanentlyDenied(this)) {
-                    showSettingsDialog()
-                } else {
-                    requireView().showSnackbar(R.string.common_permission_failure_text)
-                }
-            }
-        }
+    private lateinit var popupMenu: PopupMenu
+    private val itemAdapter by lazy { PersonalBottariEditItemAdapter() }
+    private val permissionLauncher = registerPermissionLauncher()
 
     override fun onViewCreated(
         view: View,
@@ -73,27 +61,24 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
-            setupTitle(uiState.title)
-            setupItems(uiState.items)
-            setupAlarm(uiState)
+            renderTitle(uiState.bottariTitle)
+            renderItems(uiState)
+            renderAlarm(uiState)
         }
+
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                PersonalBottariEditUiEvent.FetchBottariFailure -> requireView().showSnackbar(R.string.bottari_edit_fetch_failure_text)
+                PersonalBottariEditUiEvent.FetchBottariFailure ->
+                    showSnackbar(R.string.bottari_edit_fetch_failure_text)
+
                 PersonalBottariEditUiEvent.CreateTemplateFailure ->
-                    requireView().showSnackbar(
-                        R.string.bottari_edit_create_template_failure_text,
-                    )
+                    showSnackbar(R.string.bottari_edit_create_template_failure_text)
 
                 PersonalBottariEditUiEvent.CreateTemplateSuccess ->
-                    requireView().showSnackbar(
-                        R.string.bottari_edit_create_template_success_text,
-                    )
+                    showSnackbar(R.string.bottari_edit_create_template_success_text)
 
                 is PersonalBottariEditUiEvent.ToggleAlarmStateFailure ->
-                    requireView().showSnackbar(
-                        R.string.bottari_edit_toggle_alarm_state_failure_text,
-                    )
+                    showSnackbar(R.string.bottari_edit_toggle_alarm_state_failure_text)
             }
         }
     }
@@ -104,122 +89,88 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun setupListener() {
-        popupMenu.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.action_template -> {
-                    viewModel.createBottariTemplate()
-                    true
-                }
+        binding.btnOption.setOnClickListener { popupMenu.show() }
+        binding.btnPrevious.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
 
-                R.id.action_rename -> {
-                    showRenameDialog()
-                    true
-                }
-
-                else -> false
+        binding.viewPersonalItemEdit.btnRoot.setOnClickListener {
+            viewModel.uiState.value?.let { uiState ->
+                navigateToScreen(
+                    PersonalItemEditFragment::class.java,
+                    PersonalItemEditFragment.newBundle(
+                        uiState.bottariId,
+                        uiState.bottariTitle,
+                        uiState.items,
+                    ),
+                )
             }
         }
-        binding.btnOption.setOnClickListener {
-            popupMenu.show()
-        }
-        binding.btnPrevious.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
-        binding.clEditItem.setOnClickListener {
-            val uiState = viewModel.uiState.value ?: return@setOnClickListener
-            navigateToScreen(
-                PersonalItemEditFragment::class.java,
-                PersonalItemEditFragment.newBundle(uiState.id, uiState.title, uiState.items),
-            )
-        }
-        binding.viewClickEditAlarm.setOnClickListener {
+
+        binding.viewAlarmEdit.btnRoot.setOnClickListener {
             if (PermissionUtil.hasAllRuntimePermissions(requireContext())) {
-                checkAndRequestSpecialPermission()
-                return@setOnClickListener
+                return@setOnClickListener checkAndRequestSpecialPermission()
             }
             permissionLauncher.launch(requiredPermissions)
         }
-        binding.switchAlarm.setOnClickListener {
+
+        binding.viewAlarmEdit.switchAlarmEdit.setOnClickListener {
             viewModel.updateAlarmState()
-            toggleAlarmSelection(
-                binding.switchAlarm.isChecked,
-                viewModel.uiState.value?.alarm != null,
-            )
         }
-        binding.viewAlarmItem.clAlarmItem.setOnClickListener {
-            if (PermissionUtil.hasAllRuntimePermissions(requireContext())) {
-                checkAndRequestSpecialPermission()
-                return@setOnClickListener
-            }
-            permissionLauncher.launch(requiredPermissions)
-        }
+
         parentFragmentManager.setFragmentResultListener(
             BottariRenameDialog.SAVE_BOTTARI_TITLE_RESULT_KEY,
             viewLifecycleOwner,
-        ) { _, _ ->
-            viewModel.fetchBottari()
-        }
+        ) { _, _ -> viewModel.fetchBottari() }
     }
 
-    private fun setupPopupMenu() {
-        popupMenu = createPopupMenu()
-        popupMenu.menuInflater.inflate(R.menu.personal_bottari_edit_popup_menu, popupMenu.menu)
-    }
-
-    private fun createPopupMenu(): PopupMenu {
-        val contextWrapper = ContextThemeWrapper(requireContext(), R.style.CustomPopupMenuText)
-        return PopupMenu(
-            contextWrapper,
-            binding.btnOption,
-            Gravity.CENTER,
-            0,
-            R.style.CustomPopupMenu,
-        )
-    }
-
-    private fun setupTitle(title: String) {
+    private fun renderTitle(title: String) {
         binding.tvBottariTitle.text = title
     }
 
-    private fun setupItems(items: List<BottariItemUiModel>) {
-        itemAdapter.submitList(items)
-        toggleItemSection(items.isNotEmpty())
+    private fun renderItems(uiState: PersonalBottariEditUiState) {
+        itemAdapter.submitList(uiState.items)
+        binding.viewPersonalItemEdit.apply {
+            tvItemEditTitle.text = getString(R.string.bottari_edit_personal_items_title_text)
+            viewItemEditEmpty.root.isVisible = uiState.isEmpty
+            tvItemEditDescription.isVisible = uiState.isEmpty.not()
+        }
     }
 
-    private fun setupAlarm(uiState: PersonalBottariEditUiState) {
-        alarmViewBinder.bind(binding, uiState)
+    private fun renderAlarm(uiState: PersonalBottariEditUiState) {
+        binding.viewAlarmEdit.apply {
+            switchAlarmEdit.isChecked = uiState.isAlarmActive
+            viewAlarmEditEmpty.root.isVisible = uiState.isShowAlarmCreate
+            groupAlarmItem.isVisible = uiState.isShowAlarm
+            tvAlarmEditDescription.isVisible = uiState.isShowAlarm
+            tvAlarmTime.text =
+                uiState.alarm?.time?.formatWithPattern(getString(R.string.common_format_time_alarm))
+            tvAlarmType.text = uiState.alarm?.let { formatAlarmTypeText(it) }
+        }
     }
 
-    private fun toggleAlarmSelection(
-        isActive: Boolean,
-        hasAlarm: Boolean,
-    ) {
-        val showEmptyState = isActive && !hasAlarm
-        val showAlarm = isActive && hasAlarm
-
-        binding.tvClickEditAlarmTitle.isVisible = showEmptyState
-        binding.tvClickEditAlarmDescription.isVisible = showEmptyState
-        binding.viewClickEditAlarm.isVisible = showEmptyState
-        binding.tvClickEditAlarmDescriptionNotEmpty.isVisible = showAlarm
-        binding.viewAlarmItem.clAlarmItem.isVisible = showAlarm
-    }
-
-    private fun toggleItemSection(hasItems: Boolean) {
-        binding.tvClickEditItemTitle.isVisible = !hasItems
-        binding.tvClickEditItemDescription.isVisible = !hasItems
-        binding.viewClickEditItem.isVisible = !hasItems
-        binding.tvClickEditItemDescriptionNotEmpty.isVisible = hasItems
-        binding.rvEditItem.isVisible = hasItems
-    }
-
-    private fun setupItemRecyclerView() {
-        binding.rvEditItem.adapter = itemAdapter
-        binding.rvEditItem.layoutManager =
-            FlexboxLayoutManager(requireContext()).apply {
-                flexDirection = FlexDirection.ROW
-                flexWrap = FlexWrap.WRAP
-                justifyContent = JustifyContent.FLEX_START
+    private fun registerPermissionLauncher() =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val allGranted = permissions.all { it.value }
+            when {
+                allGranted -> checkAndRequestSpecialPermission()
+                PermissionUtil.isPermanentlyDenied(this) -> showSettingsDialog()
+                else -> showSnackbar(R.string.common_permission_failure_text)
             }
+        }
+
+    private fun checkAndRequestSpecialPermission() {
+        if (PermissionUtil.hasExactAlarmPermission(requireContext())) {
+            return navigateToAlarmEditScreen()
+        }
+        showExactAlarmSettingsDialog()
+    }
+
+    private fun navigateToAlarmEditScreen() {
+        viewModel.uiState.value?.let { uiState ->
+            navigateToScreen(
+                AlarmEditFragment::class.java,
+                AlarmEditFragment.newBundle(uiState.bottariId, uiState.bottariTitle, uiState.alarm),
+            )
+        }
     }
 
     private fun navigateToScreen(
@@ -232,24 +183,35 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         }
     }
 
-    private fun checkAndRequestSpecialPermission() {
-        if (PermissionUtil.hasExactAlarmPermission(requireContext())) {
-            navigateToAlarmEditScreen()
-            return
-        }
-        showExactAlarmSettingsDialog()
+    private fun setupPopupMenu() {
+        val contextWrapper = ContextThemeWrapper(requireContext(), R.style.CustomPopupMenuText)
+        popupMenu =
+            PopupMenu(
+                contextWrapper,
+                binding.btnOption,
+                Gravity.CENTER,
+                0,
+                R.style.CustomPopupMenu,
+            ).apply {
+                menuInflater.inflate(R.menu.personal_bottari_edit_popup_menu, menu)
+                setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.action_template -> viewModel.createBottariTemplate().let { true }
+                        R.id.action_rename -> showRenameDialog().let { true }
+                        else -> false
+                    }
+                }
+            }
     }
 
-    private fun navigateToAlarmEditScreen() {
-        val uiState = viewModel.uiState.value ?: return
-        navigateToScreen(
-            AlarmEditFragment::class.java,
-            AlarmEditFragment.newBundle(
-                bottariId = uiState.id,
-                bottariTitle = uiState.title,
-                alarm = uiState.alarm,
-            ),
-        )
+    private fun setupItemRecyclerView() {
+        binding.viewPersonalItemEdit.rvItemEdit.adapter = itemAdapter
+        binding.viewPersonalItemEdit.rvItemEdit.layoutManager =
+            FlexboxLayoutManager(requireContext()).apply {
+                flexDirection = FlexDirection.ROW
+                flexWrap = FlexWrap.WRAP
+                justifyContent = JustifyContent.FLEX_START
+            }
     }
 
     private fun showSettingsDialog() {
@@ -259,9 +221,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 object : DialogListener {
                     override fun onClickNegative() {}
 
-                    override fun onClickPositive() {
-                        PermissionUtil.openAppSettings(requireContext())
-                    }
+                    override fun onClickPositive() = PermissionUtil.openAppSettings(requireContext())
                 },
             ).show(parentFragmentManager, DialogPresetType.NAVIGATE_TO_NOTIFICATION_SETTINGS.name)
     }
@@ -273,19 +233,48 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
                 object : DialogListener {
                     override fun onClickNegative() {}
 
-                    override fun onClickPositive() {
-                        PermissionUtil.requestExactAlarmPermission(requireContext())
-                    }
+                    override fun onClickPositive() = PermissionUtil.requestExactAlarmPermission(requireContext())
                 },
             ).show(parentFragmentManager, DialogPresetType.NAVIGATE_TO_ALARM_SETTINGS.name)
     }
 
     private fun showRenameDialog() {
-        val uiState = viewModel.uiState.value ?: return
+        viewModel.uiState.value?.let { uiState ->
+            BottariRenameDialog
+                .newInstance(uiState.bottariId, uiState.bottariTitle)
+                .show(parentFragmentManager, BottariRenameDialog::class.java.name)
+        }
+    }
 
-        BottariRenameDialog
-            .newInstance(uiState.id, uiState.title)
-            .show(parentFragmentManager, BottariRenameDialog::class.java.name)
+    private fun formatAlarmTypeText(alarm: AlarmUiModel): String =
+        when (alarm.type) {
+            AlarmTypeUiModel.NON_REPEAT -> alarm.date.formatWithPattern(getString(R.string.common_format_date_alarm))
+            AlarmTypeUiModel.REPEAT ->
+                if (alarm.isRepeatEveryDay) {
+                    getString(R.string.bottari_item_alarm_repeat_everyday_text)
+                } else {
+                    formatEveryWeek(alarm)
+                }
+        }
+
+    private fun formatEveryWeek(alarm: AlarmUiModel): String {
+        val checkedDays = alarm.repeatDays.filter { it.isChecked }
+        return buildString {
+            append(getString(R.string.bottari_item_alarm_repeat_everyweek_text))
+            append(getString(R.string.common_separator_text))
+            append(
+                checkedDays.joinToString { checkedDay ->
+                    checkedDay.dayOfWeek.getDisplayName(
+                        TextStyle.SHORT,
+                        Locale.getDefault(),
+                    )
+                },
+            )
+        }
+    }
+
+    private fun showSnackbar(messageRes: Int) {
+        requireView().showSnackbar(messageRes)
     }
 
     companion object {
