@@ -4,6 +4,14 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class RegisterMemberRequest(
+    @SerialName("ssaid")
+    val ssaid: String,
+    @SerialName("fcmToken")
+    val fcmToken: String,
+)
+
+@Serializable
 data class SaveMemberNicknameRequest(
     @SerialName("name")
     val name: String,

@@ -2,7 +2,7 @@ package com.bottari.data.source.remote
 
 import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
-import com.bottari.data.model.member.CheckRegisteredMemberResponse
+import com.bottari.data.model.member.MemberResponse
 import com.bottari.data.model.member.RegisterMemberRequest
 import com.bottari.data.model.member.SaveMemberNicknameRequest
 import com.bottari.data.service.MemberService
@@ -19,7 +19,7 @@ class MemberRemoteDataSourceImpl(
     override suspend fun saveMemberNickname(request: SaveMemberNicknameRequest): Result<Unit> =
         safeApiCall { memberService.saveMemberNickname(request) }
 
-    override suspend fun checkRegisteredMember(): Result<CheckRegisteredMemberResponse> =
+    override suspend fun checkRegisteredMember(): Result<MemberResponse> =
         safeApiCall {
             memberService.checkRegisteredMember()
         }

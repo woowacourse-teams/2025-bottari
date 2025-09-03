@@ -20,3 +20,19 @@ data class FetchTeamAssignedItemResponse(
         val name: String,
     )
 }
+
+@Serializable
+data class FetchTeamPersonalItemResponse(
+    @SerialName("id")
+    val id: Long,
+    @SerialName("name")
+    val name: String,
+)
+
+@Serializable
+data class FetchTeamSharedItemResponse(
+    @SerialName("id")
+    val id: Long,
+    @SerialName("name")
+    val name: String,
+)

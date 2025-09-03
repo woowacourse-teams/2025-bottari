@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CheckRegisteredMemberResponse(
+data class MemberResponse(
     @SerialName("isRegistered")
     val isRegistered: Boolean,
     @SerialName("id")

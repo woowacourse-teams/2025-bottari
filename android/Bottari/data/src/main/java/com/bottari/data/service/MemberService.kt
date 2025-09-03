@@ -1,6 +1,6 @@
 package com.bottari.data.service
 
-import com.bottari.data.model.member.CheckRegisteredMemberResponse
+import com.bottari.data.model.member.MemberResponse
 import com.bottari.data.model.member.RegisterMemberRequest
 import com.bottari.data.model.member.SaveMemberNicknameRequest
 import retrofit2.Response
@@ -21,5 +21,5 @@ interface MemberService {
     ): Response<Unit>
 
     @GET("/members/check")
-    suspend fun checkRegisteredMember(): Response<CheckRegisteredMemberResponse>
+    suspend fun checkRegisteredMember(): Response<MemberResponse>
 }
