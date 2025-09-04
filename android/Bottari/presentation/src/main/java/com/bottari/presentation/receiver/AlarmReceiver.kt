@@ -7,12 +7,11 @@ import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.extension.getParcelableCompat
 import com.bottari.presentation.model.NotificationUiModel
-import com.bottari.presentation.util.AlarmScheduler
+import com.bottari.presentation.util.AlarmScheduler.scheduleNextAlarm
 import com.bottari.presentation.util.NotificationHelper
 import java.time.LocalDateTime
 
 class AlarmReceiver : BroadcastReceiver() {
-    private val scheduler: AlarmScheduler by lazy { AlarmScheduler() }
     private val notificationHelper: NotificationHelper by lazy { NotificationHelper() }
 
     override fun onReceive(
@@ -21,7 +20,7 @@ class AlarmReceiver : BroadcastReceiver() {
     ) {
         val notification = intent.getParcelableCompat<NotificationUiModel>(EXTRA_NOTIFICATION)
         notificationHelper.sendPersonalNotification(notification.id, notification.title)
-        scheduler.scheduleNextAlarm(notification)
+        scheduleNextAlarm(notification = notification)
         BottariLogger.ui(
             UiEventType.NOTIFICATION_CREATE,
             mapOf("notification_id" to notification.id, "time" to LocalDateTime.now().toString()),

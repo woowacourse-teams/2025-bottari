@@ -42,8 +42,6 @@ class PersonalBottariEditViewModel(
             coroutineScope = viewModelScope,
         ) { isActive -> toggleAlarmState(isActive) }
 
-    private val alarmScheduler: AlarmScheduler = AlarmScheduler()
-
     fun fetchBottari() {
         updateState { copy(isLoading = true) }
 
@@ -119,10 +117,10 @@ class PersonalBottariEditViewModel(
     ) {
         val notification = createNotification(alarm)
         if (isActive) {
-            alarmScheduler.scheduleAlarm(notification)
+            AlarmScheduler.scheduleAlarm(notification = notification)
             return
         }
-        alarmScheduler.cancelAlarm(notification)
+        AlarmScheduler.cancelAlarm(notification = notification)
     }
 
     private fun createNotification(alarm: AlarmUiModel): NotificationUiModel =

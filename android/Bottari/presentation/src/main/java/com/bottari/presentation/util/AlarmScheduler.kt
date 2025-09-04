@@ -16,42 +16,58 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 
-class AlarmScheduler(
-    private val context: Context = ApplicationContextProvider.applicationContext,
-) {
-    private val manager: AlarmManager = context.getSystemService(AlarmManager::class.java)
+object AlarmScheduler {
+    private val manager: AlarmManager =
+        ApplicationContextProvider.applicationContext.getSystemService(AlarmManager::class.java)
+    private const val DAYS_IN_WEEK = 7
 
-    fun scheduleAlarm(notification: NotificationUiModel) {
+    fun scheduleAlarm(
+        context: Context = ApplicationContextProvider.applicationContext,
+        notification: NotificationUiModel,
+    ) {
         if (notification.alarm.type == AlarmTypeUiModel.NON_REPEAT) {
-            scheduleNonRepeatAlarm(notification)
+            scheduleNonRepeatAlarm(context, notification)
             return
         }
-        scheduleRepeatAlarm(notification)
+        scheduleRepeatAlarm(context, notification)
     }
 
-    fun scheduleNextAlarm(notification: NotificationUiModel) {
+    fun scheduleNextAlarm(
+        context: Context = ApplicationContextProvider.applicationContext,
+        notification: NotificationUiModel,
+    ) {
         val alarm = notification.alarm
         if (alarm.type == AlarmTypeUiModel.NON_REPEAT) return
         val triggerTime = getNextTriggerTime(notification = notification)
-        scheduleAlarmInternal(notification, triggerTime)
+        scheduleAlarmInternal(context, notification, triggerTime)
     }
 
-    fun cancelAlarm(notification: NotificationUiModel) {
-        val pendingIntent = createPendingIntent(notification)
+    fun cancelAlarm(
+        context: Context = ApplicationContextProvider.applicationContext,
+        notification: NotificationUiModel,
+    ) {
+        val pendingIntent = createPendingIntent(context, notification)
         manager.cancel(pendingIntent)
     }
 
-    private fun scheduleRepeatAlarm(notification: NotificationUiModel) {
+    private fun scheduleRepeatAlarm(
+        context: Context,
+        notification: NotificationUiModel,
+    ) {
         val triggerTime = getNextTriggerTime(notification = notification)
-        scheduleAlarmInternal(notification, triggerTime)
+        scheduleAlarmInternal(context, notification, triggerTime)
     }
 
-    private fun scheduleNonRepeatAlarm(notification: NotificationUiModel) {
+    private fun scheduleNonRepeatAlarm(
+        context: Context,
+        notification: NotificationUiModel,
+    ) {
         val alarm = notification.alarm
-        if (alarm.time.isBefore(LocalTime.now())) return
+        val alarmDateTime = LocalDateTime.of(alarm.date, alarm.time)
+        if (alarmDateTime.isBefore(LocalDateTime.now())) return
         val triggerTime =
             LocalDateTime.of(notification.alarm.date, notification.alarm.time).toTimeMillis()
-        scheduleAlarmInternal(notification, triggerTime)
+        scheduleAlarmInternal(context, notification, triggerTime)
     }
 
     private fun getAvailableDays(repeatDays: List<RepeatDayUiModel>): List<DayOfWeek> =
@@ -81,16 +97,20 @@ class AlarmScheduler(
     }
 
     private fun scheduleAlarmInternal(
+        context: Context,
         notification: NotificationUiModel,
         triggerTime: Long,
     ) {
-        val editPendingIntent = createEditPendingIntent(notification)
-        val pendingIntent = createPendingIntent(notification)
+        val editPendingIntent = createEditPendingIntent(context, notification)
+        val pendingIntent = createPendingIntent(context, notification)
         val alarmClockInfo = AlarmClockInfo(triggerTime, editPendingIntent)
         manager.setAlarmClock(alarmClockInfo, pendingIntent)
     }
 
-    private fun createEditPendingIntent(notification: NotificationUiModel): PendingIntent {
+    private fun createEditPendingIntent(
+        context: Context,
+        notification: NotificationUiModel,
+    ): PendingIntent {
         val intent =
             PersonalBottariEditActivity.newIntent(
                 context,
@@ -105,7 +125,10 @@ class AlarmScheduler(
         )
     }
 
-    private fun createPendingIntent(notification: NotificationUiModel): PendingIntent =
+    private fun createPendingIntent(
+        context: Context,
+        notification: NotificationUiModel,
+    ): PendingIntent =
         PendingIntent.getBroadcast(
             context,
             notification.id.toInt(),
@@ -118,8 +141,4 @@ class AlarmScheduler(
             .atZone(ZoneId.systemDefault())
             .toInstant()
             .toEpochMilli()
-
-    companion object {
-        private const val DAYS_IN_WEEK = 7
-    }
 }
