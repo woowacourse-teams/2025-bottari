@@ -7,7 +7,6 @@ import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.extension.getParcelableCompat
 import com.bottari.presentation.model.NotificationUiModel
-import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.util.AlarmScheduler.scheduleNextAlarm
 import com.bottari.presentation.util.NotificationHelper
 import java.time.LocalDateTime
