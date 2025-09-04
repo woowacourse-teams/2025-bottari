@@ -63,7 +63,8 @@ object AlarmScheduler {
         notification: NotificationUiModel,
     ) {
         val alarm = notification.alarm
-        if (alarm.time.isBefore(LocalTime.now())) return
+        val alarmDateTime = LocalDateTime.of(alarm.date, alarm.time)
+        if (alarmDateTime.isBefore(LocalDateTime.now())) return
         val triggerTime =
             LocalDateTime.of(notification.alarm.date, notification.alarm.time).toTimeMillis()
         scheduleAlarmInternal(context, notification, triggerTime)
