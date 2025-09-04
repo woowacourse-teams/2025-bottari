@@ -15,7 +15,7 @@ class NotificationWorkerFactory(
         workerParameters: WorkerParameters,
     ): ListenableWorker? =
         when (workerClassName) {
-            NotificationWorker::class.simpleName ->
+            NotificationWorker::class.qualifiedName ->
                 NotificationWorker(
                     context = appContext,
                     workerParams = workerParameters,
