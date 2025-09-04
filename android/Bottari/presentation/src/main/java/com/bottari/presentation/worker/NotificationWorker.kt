@@ -3,20 +3,17 @@ package com.bottari.presentation.worker
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.usecase.notification.GetNotificationsUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.mapper.NotificationMapper.toUiModel
-import com.bottari.presentation.util.AlarmScheduler
+import com.bottari.presentation.util.AlarmScheduler.scheduleAlarm
 
 class NotificationWorker(
     context: Context,
     workerParams: WorkerParameters,
+    private val getNotificationsUseCase: GetNotificationsUseCase,
 ) : CoroutineWorker(context, workerParams) {
-    private val getNotificationsUseCase: GetNotificationsUseCase by lazy { CommonUseCaseProvider.getNotificationsUseCase }
-    private val scheduler: AlarmScheduler by lazy { AlarmScheduler() }
-
     override suspend fun doWork(): Result =
         getNotificationsUseCase()
             .mapCatching(::scheduleActiveAlarms)
@@ -31,9 +28,7 @@ class NotificationWorker(
     private fun scheduleActiveAlarms(notifications: List<Notification>) =
         notifications.forEach { notification ->
             if (notification.alarm.isActive) {
-                scheduler.scheduleAlarm(
-                    notification.toUiModel(),
-                )
+                scheduleAlarm(notification = notification.toUiModel())
             }
         }
 }

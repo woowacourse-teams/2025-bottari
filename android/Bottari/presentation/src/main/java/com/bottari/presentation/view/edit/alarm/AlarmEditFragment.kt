@@ -19,6 +19,7 @@ import com.bottari.presentation.databinding.FragmentAlarmEditBinding
 import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.AlarmUiModel
 import com.bottari.presentation.util.AlarmScheduler
+import com.bottari.presentation.util.AlarmScheduler.scheduleAlarm
 import com.bottari.presentation.view.common.decoration.ItemSpacingDecoration
 import com.bottari.presentation.view.edit.alarm.adapter.RepeatDayAdapter
 import com.bottari.presentation.view.edit.alarm.listener.OnDateClickListener
@@ -37,7 +38,6 @@ class AlarmEditFragment :
         )
     }
     private val adapter: RepeatDayAdapter by lazy { RepeatDayAdapter(viewModel::updateDaysOfWeek) }
-    private val scheduler: AlarmScheduler by lazy { AlarmScheduler() }
     private val hourPickers: List<NumberPicker> by lazy {
         listOf(
             binding.layoutNonRepeatAlarmTime.npAlarmTimeHour,
@@ -117,13 +117,13 @@ class AlarmEditFragment :
     private fun handleAlarmEvent(uiEvent: AlarmUiEvent) {
         when (uiEvent) {
             is AlarmUiEvent.AlarmCreateSuccess -> {
-                scheduler.scheduleAlarm(uiEvent.notification)
+                scheduleAlarm(notification = uiEvent.notification)
                 requireView().showSnackbar(R.string.alarm_edit_create_success_text)
                 parentFragmentManager.popBackStack()
             }
 
             is AlarmUiEvent.AlarmSaveSuccess -> {
-                scheduler.scheduleAlarm(uiEvent.notification)
+                scheduleAlarm(notification = uiEvent.notification)
                 requireView().showSnackbar(R.string.alarm_edit_save_success_text)
                 parentFragmentManager.popBackStack()
             }
