@@ -81,6 +81,7 @@ configurations.all {
 }
 
 dependencies {
+    implementation(project(":domain"))
     implementation(project(":di"))
     implementation(project(":presentation"))
     implementation(project(":logger"))
@@ -91,6 +92,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.work.runtime.ktx)
 
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)
