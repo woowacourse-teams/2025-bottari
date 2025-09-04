@@ -8,11 +8,12 @@ import com.bottari.domain.model.team.TeamMember
 
 val TEAM_BOTTARI_DETAIL_FIXTURE: TeamBottariDetail by lazy {
     TeamBottariDetail(
-        info = BottariInfo(
-            id = 1L,
-            title = "test",
-            alarm = null,
-        ),
+        info =
+            BottariInfo(
+                id = 1L,
+                title = "test",
+                alarm = null,
+            ),
         personalItems = List(3) { BOTTARI_PERSONAL_ITEM_FIXTURE.copy(id = it.toLong()) },
         assignedItems = List(3) { BOTTARI_ASSIGNED_ITEM_FIXTURE.copy(id = it.toLong()) },
         sharedItems = List(3) { BOTTARI_SHARED_ITEM_FIXTURE.copy(id = it.toLong()) },

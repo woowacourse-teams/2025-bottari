@@ -43,11 +43,12 @@ val TEAM_BOTTARI_DETAIL_RESPONSE =
     )
 val TEAM_BOTTARI_DETAIL =
     TeamBottariDetail(
-        info = BottariInfo(
-            id = 1L,
-            title = "test",
-            alarm = null,
-        ),
+        info =
+            BottariInfo(
+                id = 1L,
+                title = "test",
+                alarm = null,
+            ),
         personalItems = emptyList(),
         assignedItems = emptyList(),
         sharedItems = emptyList(),

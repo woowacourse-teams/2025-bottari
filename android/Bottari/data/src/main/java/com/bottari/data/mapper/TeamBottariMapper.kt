@@ -33,11 +33,12 @@ object TeamBottariMapper {
 
     fun FetchTeamBottariDetailResponse.toDomain(): TeamBottariDetail =
         TeamBottariDetail(
-            info = BottariInfo(
-                id = bottariId,
-                title = title,
-                alarm = alarm?.toDomain(),
-            ),
+            info =
+                BottariInfo(
+                    id = bottariId,
+                    title = title,
+                    alarm = alarm?.toDomain(),
+                ),
             personalItems = personalItems.map { it.toDomain(BottariItemType.PERSONAL) },
             assignedItems = assignedItems.map { it.toDomain(BottariItemType.ASSIGNED(emptyList())) },
             sharedItems = sharedItems.map { it.toDomain(BottariItemType.SHARED) },
