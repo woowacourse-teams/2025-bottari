@@ -11,13 +11,6 @@ import com.bottari.presentation.worker.NotificationWorkerFactory
 class BottariApplication :
     Application(),
     Configuration.Provider {
-    override fun onCreate() {
-        super.onCreate()
-        BottariLogger.init(this)
-        ApplicationContextProvider.init(this)
-        BottariLogger.global(APPLICATION_INIT_MESSAGE)
-    }
-
     override val workManagerConfiguration: Configuration
         get() {
             val workerFactory =
@@ -33,6 +26,13 @@ class BottariApplication :
                 .setWorkerFactory(workerFactory)
                 .build()
         }
+
+    override fun onCreate() {
+        super.onCreate()
+        BottariLogger.init(this)
+        ApplicationContextProvider.init(this)
+        BottariLogger.global(APPLICATION_INIT_MESSAGE)
+    }
 
     companion object {
         private const val APPLICATION_INIT_MESSAGE = "BOTTARI APPLICATION INIT"
