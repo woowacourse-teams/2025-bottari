@@ -10,6 +10,7 @@ import com.bottari.data.model.team.TeamProductStatusResponse
 import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
 import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
 import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
+import com.bottari.domain.model.bottari.BottariInfo
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.TeamBottari
@@ -32,9 +33,11 @@ object TeamBottariMapper {
 
     fun FetchTeamBottariDetailResponse.toDomain(): TeamBottariDetail =
         TeamBottariDetail(
-            id = bottariId,
-            title = title,
-            alarm = alarm?.toDomain(),
+            info = BottariInfo(
+                id = bottariId,
+                title = title,
+                alarm = alarm?.toDomain(),
+            ),
             personalItems = personalItems.map { it.toDomain(BottariItemType.PERSONAL) },
             assignedItems = assignedItems.map { it.toDomain(BottariItemType.ASSIGNED(emptyList())) },
             sharedItems = sharedItems.map { it.toDomain(BottariItemType.SHARED) },

@@ -4,6 +4,7 @@ import com.bottari.data.model.team.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.FetchTeamBottariMemberResponse
 import com.bottari.data.model.team.FetchTeamBottariResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
+import com.bottari.domain.model.bottari.BottariInfo
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.TeamBottariDetail
@@ -42,12 +43,14 @@ val TEAM_BOTTARI_DETAIL_RESPONSE =
     )
 val TEAM_BOTTARI_DETAIL =
     TeamBottariDetail(
-        1L,
-        "test",
-        null,
-        emptyList(),
-        emptyList(),
-        emptyList(),
+        info = BottariInfo(
+            id = 1L,
+            title = "test",
+            alarm = null,
+        ),
+        personalItems = emptyList(),
+        assignedItems = emptyList(),
+        sharedItems = emptyList(),
     )
 
 val TEAM_MEMBERS_STATUS =

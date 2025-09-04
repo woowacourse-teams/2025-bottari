@@ -71,12 +71,12 @@ class TeamBottariEditViewModel(
     private fun handleFetchTeamBottariDetail(teamBottariDetail: TeamBottariDetail) {
         updateState {
             copy(
-                bottariTitle = teamBottariDetail.title,
+                bottariTitle = teamBottariDetail.info.title,
                 personalItems = teamBottariDetail.personalItems.map { it.toUiModel() },
                 assignedItems = teamBottariDetail.assignedItems.map { it.toUiModel() },
                 sharedItems = teamBottariDetail.sharedItems.map { it.toUiModel() },
-                alarm = teamBottariDetail.alarm?.toUiModel(),
-                alarmSwitchState = teamBottariDetail.alarm?.isActive ?: false,
+                alarm = teamBottariDetail.info.alarm?.toUiModel(),
+                alarmSwitchState = teamBottariDetail.info.alarm?.isActive ?: false,
             )
         }
     }

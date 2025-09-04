@@ -26,9 +26,9 @@ object BottariMapper {
 
     fun BottariDetail.toUiModel(): BottariDetailUiModel =
         BottariDetailUiModel(
-            id = id,
-            title = title,
-            alarm = alarm?.toUiModel(),
+            id = info.id,
+            title = info.title,
+            alarm = info.alarm?.toUiModel(),
             items = items.map { item -> item.toUiModel() },
         )
 
@@ -48,8 +48,8 @@ object BottariMapper {
 
     fun BottariDetail.toMyBottariUiModel(): MyBottariUiModel =
         MyBottariUiModel(
-            id = id,
-            title = title,
+            id = info.id,
+            title = info.title,
             isSelected = false,
             items = items.map { item -> item.toUiModel() },
         )

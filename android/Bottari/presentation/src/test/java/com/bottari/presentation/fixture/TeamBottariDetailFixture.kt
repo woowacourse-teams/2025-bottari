@@ -1,5 +1,6 @@
 package com.bottari.presentation.fixture
 
+import com.bottari.domain.model.bottari.BottariInfo
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.team.TeamBottariDetail
@@ -7,12 +8,14 @@ import com.bottari.domain.model.team.TeamMember
 
 val TEAM_BOTTARI_DETAIL_FIXTURE: TeamBottariDetail by lazy {
     TeamBottariDetail(
-        id = 1L,
-        title = "test",
+        info = BottariInfo(
+            id = 1L,
+            title = "test",
+            alarm = null,
+        ),
         personalItems = List(3) { BOTTARI_PERSONAL_ITEM_FIXTURE.copy(id = it.toLong()) },
         assignedItems = List(3) { BOTTARI_ASSIGNED_ITEM_FIXTURE.copy(id = it.toLong()) },
         sharedItems = List(3) { BOTTARI_SHARED_ITEM_FIXTURE.copy(id = it.toLong()) },
-        alarm = null,
     )
 }
 

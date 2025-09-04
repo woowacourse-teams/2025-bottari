@@ -5,6 +5,7 @@ import com.bottari.data.model.bottari.BottariResponse
 import com.bottari.data.model.bottari.ItemResponse
 import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariDetail
+import com.bottari.domain.model.bottari.BottariInfo
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 
@@ -20,9 +21,12 @@ object BottariMapper {
 
     fun BottariResponse.FetchBottariResponse.toDomain(): BottariDetail =
         BottariDetail(
-            id = id,
-            title = title,
-            alarm = alarm?.toDomain(),
+            info =
+                BottariInfo(
+                    id = id,
+                    title = title,
+                    alarm = alarm?.toDomain(),
+                ),
             items = items.map { it.toDomain() },
         )
 
