@@ -4,15 +4,17 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 sealed interface BottariRequest {
+    val title: String
+
     @Serializable
     data class CreateBottariRequest(
         @SerialName("title")
-        val title: String,
-    )
+        override val title: String,
+    ) : BottariRequest
 
     @Serializable
     data class UpdateBottariTitleRequest(
         @SerialName("title")
-        val title: String,
-    )
+        override val title: String,
+    ) : BottariRequest
 }
