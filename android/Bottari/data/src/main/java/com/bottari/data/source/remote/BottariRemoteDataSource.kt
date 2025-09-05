@@ -6,7 +6,7 @@ import com.bottari.data.model.bottari.BottariResponse
 interface BottariRemoteDataSource {
     suspend fun fetchBottaries(): Result<List<BottariResponse.FetchBottariesResponse>>
 
-    suspend fun createBottari(createBottariRequest: BottariRequest.CreateBottariRequest): Result<Long?>
+    suspend fun createBottari(createBottariRequest: BottariRequest.CreateBottariRequest): Result<Long>
 
     suspend fun fetchBottariDetail(id: Long): Result<BottariResponse.FetchBottariResponse>
 

@@ -19,10 +19,11 @@ class BottariRemoteDataSourceImpl(
             bottariService.findBottari(id = id)
         }
 
-    override suspend fun createBottari(createBottariRequest: BottariRequest.CreateBottariRequest): Result<Long?> =
+    override suspend fun createBottari(createBottariRequest: BottariRequest.CreateBottariRequest): Result<Long> =
         runCatching {
             val response = bottariService.createBottari(createBottariRequest)
-            response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)
+            val id = response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)
+            checkNotNull(id)
         }
 
     override suspend fun deleteBottari(id: Long): Result<Unit> =
