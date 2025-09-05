@@ -4,7 +4,6 @@ import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.template.CreateBottariTemplateRequest
 import com.bottari.data.model.template.FetchBottariTemplateResponse
-import com.bottari.data.model.template.FetchMyBottariTemplatesResponse
 import com.bottari.data.service.BottariTemplateService
 
 class BottariTemplateRemoteDataSourceImpl(
@@ -29,7 +28,7 @@ class BottariTemplateRemoteDataSourceImpl(
             response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)
         }
 
-    override suspend fun fetchMyBottariTemplates(): Result<List<FetchMyBottariTemplatesResponse>> =
+    override suspend fun fetchMyBottariTemplates(): Result<List<FetchBottariTemplateResponse>> =
         safeApiCall {
             bottariTemplateService.fetchMyBottariTemplates()
         }

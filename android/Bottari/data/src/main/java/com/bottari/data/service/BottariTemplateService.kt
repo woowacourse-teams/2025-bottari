@@ -2,7 +2,6 @@ package com.bottari.data.service
 
 import com.bottari.data.model.template.CreateBottariTemplateRequest
 import com.bottari.data.model.template.FetchBottariTemplateResponse
-import com.bottari.data.model.template.FetchMyBottariTemplatesResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -33,7 +32,7 @@ interface BottariTemplateService {
     ): Response<Unit>
 
     @GET("/templates/me")
-    suspend fun fetchMyBottariTemplates(): Response<List<FetchMyBottariTemplatesResponse>>
+    suspend fun fetchMyBottariTemplates(): Response<List<FetchBottariTemplateResponse>>
 
     @DELETE("/templates/{id}")
     suspend fun deleteMyBottariTemplate(

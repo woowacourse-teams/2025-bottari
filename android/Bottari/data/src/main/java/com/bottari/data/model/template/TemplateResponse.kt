@@ -26,27 +26,3 @@ data class FetchBottariTemplateResponse(
     @SerialName("takenCount")
     val takenCount: Int,
 )
-
-@Serializable
-data class FetchMyBottariTemplateItemResponse(
-    @SerialName("id")
-    val id: Long,
-    @SerialName("name")
-    val name: String,
-)
-
-@Serializable
-data class FetchMyBottariTemplatesResponse(
-    @SerialName("author")
-    val author: String,
-    @SerialName("id")
-    val id: Long,
-    @SerialName("items")
-    val items: List<FetchMyBottariTemplateItemResponse>,
-    @SerialName("title")
-    val title: String,
-    @SerialName("createdAt")
-    val createdAt: String,
-    @SerialName("takenCount")
-    val takenCount: Int,
-)
