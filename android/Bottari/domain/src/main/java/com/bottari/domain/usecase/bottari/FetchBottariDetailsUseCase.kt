@@ -2,7 +2,6 @@ package com.bottari.domain.usecase.bottari
 
 import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariDetail
-import com.bottari.domain.model.bottari.BottariInfo
 import com.bottari.domain.repository.BottariRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.supervisorScope
@@ -28,12 +27,7 @@ class FetchBottariDetailsUseCase(
         if (result.items.isEmpty()) return null
 
         return BottariDetail(
-            info =
-                BottariInfo(
-                    id = result.info.id,
-                    title = result.info.title,
-                    alarm = null,
-                ),
+            info = result.info,
             items = result.items,
         )
     }
