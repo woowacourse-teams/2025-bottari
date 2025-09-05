@@ -12,7 +12,7 @@ import com.bottari.domain.model.bottari.BottariItemType
 object BottariMapper {
     fun BottariResponse.FetchBottariesResponse.toDomain(): Bottari =
         Bottari(
-            alarm = alarmResponse?.toDomain(),
+            alarm = alarm?.toDomain(),
             checkedQuantity = checkedItemsCount,
             id = id,
             title = title,

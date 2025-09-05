@@ -35,14 +35,14 @@ fun fetchBottariesResponseFixture(): List<BottariResponse.FetchBottariesResponse
         BottariResponse.FetchBottariesResponse(
             id = 2,
             title = "title1",
-            alarmResponse = null,
+            alarm = null,
             checkedItemsCount = 0,
             totalItemsCount = 0,
         ),
         BottariResponse.FetchBottariesResponse(
             id = 3,
             title = "title2",
-            alarmResponse = null,
+            alarm = null,
             checkedItemsCount = 1,
             totalItemsCount = 3,
         ),
