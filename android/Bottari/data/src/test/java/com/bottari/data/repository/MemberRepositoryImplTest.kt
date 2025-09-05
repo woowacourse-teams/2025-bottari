@@ -1,6 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.member.CheckRegisteredMemberResponse
+import com.bottari.data.model.member.MemberResponse
 import com.bottari.data.model.member.RegisterMemberRequest
 import com.bottari.data.model.member.SaveMemberNicknameRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
@@ -122,7 +122,7 @@ class MemberRepositoryImplTest {
     fun checkRegisteredMemberSuccess() =
         runTest {
             // given
-            val response = CheckRegisteredMemberResponse(true, 1, "test")
+            val response = MemberResponse(true, 1, "test")
             coEvery { remoteDataSource.checkRegisteredMember() } returns Result.success(response)
             coEvery { userInfoLocalDataSource.saveMemberId(1) } returns Result.success(Unit)
 
@@ -146,7 +146,7 @@ class MemberRepositoryImplTest {
     fun checkRegisteredMemberFailsReturnsFailure() =
         runTest {
             // given
-            val response = CheckRegisteredMemberResponse(false, 1, "test")
+            val response = MemberResponse(false, 1, "test")
             coEvery { remoteDataSource.checkRegisteredMember() } returns Result.success(response)
 
             // when
