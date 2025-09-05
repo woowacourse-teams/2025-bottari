@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
 import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
 import com.bottari.logger.BottariLogger
@@ -79,8 +79,8 @@ class TemplateDetailViewModel(
                     savedStateHandle[KEY_TEMPLATE_ID] = templateId
                     TemplateDetailViewModel(
                         stateHandle = savedStateHandle,
-                        fetchBottariTemplateDetailUseCase = UseCaseProvider.fetchBottariTemplateDetailUseCase,
-                        takeBottariTemplateDetailUseCase = UseCaseProvider.takeBottariTemplateDetailUseCase,
+                        fetchBottariTemplateDetailUseCase = BottariTemplateUseCaseProvider.fetchBottariTemplateDetailUseCase,
+                        takeBottariTemplateDetailUseCase = BottariTemplateUseCaseProvider.takeBottariTemplateDetailUseCase,
                     )
                 }
             }

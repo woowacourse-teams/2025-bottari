@@ -3,7 +3,7 @@ package com.bottari.presentation.view.join
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.usecase.team.JoinTeamBottariUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
@@ -41,7 +41,7 @@ class TeamBottariJoinViewModel(
             viewModelFactory {
                 initializer {
                     TeamBottariJoinViewModel(
-                        UseCaseProvider.joinTeamBottariUseCase,
+                        TeamMemberUseCaseProvider.joinTeamBottariUseCase,
                     )
                 }
             }

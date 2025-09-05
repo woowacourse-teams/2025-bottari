@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.CommonUseCaseProvider
+import com.bottari.di.usecase.TeamBottariUseCaseProvider
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.TeamBottariDetail
@@ -94,9 +95,9 @@ class TeamBottariEditViewModel(
                     stateHandle[KEY_BOTTARI_ID] = bottariId
                     TeamBottariEditViewModel(
                         stateHandle,
-                        UseCaseProvider.fetchTeamBottariDetailUseCase,
-                        UseCaseProvider.connectTeamEventUseCase,
-                        UseCaseProvider.disconnectTeamEventUseCase,
+                        TeamBottariUseCaseProvider.fetchTeamBottariDetailUseCase,
+                        CommonUseCaseProvider.connectTeamEventUseCase,
+                        CommonUseCaseProvider.disconnectTeamEventUseCase,
                     )
                 }
             }

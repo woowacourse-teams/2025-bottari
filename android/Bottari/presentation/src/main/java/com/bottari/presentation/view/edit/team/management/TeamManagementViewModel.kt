@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.CommonUseCaseProvider
+import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.TeamMembers
@@ -107,9 +108,9 @@ class TeamManagementViewModel(
                     stateHandle[KEY_TEAM_BOTTARI_ID] = teamBottariId
                     TeamManagementViewModel(
                         stateHandle = stateHandle,
-                        fetchTeamMembersUseCase = UseCaseProvider.fetchTeamMembersUseCase,
-                        connectTeamEventUseCase = UseCaseProvider.connectTeamEventUseCase,
-                        disconnectTeamEventUseCase = UseCaseProvider.disconnectTeamEventUseCase,
+                        fetchTeamMembersUseCase = TeamMemberUseCaseProvider.fetchTeamMembersUseCase,
+                        connectTeamEventUseCase = CommonUseCaseProvider.connectTeamEventUseCase,
+                        disconnectTeamEventUseCase = CommonUseCaseProvider.disconnectTeamEventUseCase,
                     )
                 }
             }

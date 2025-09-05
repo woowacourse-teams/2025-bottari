@@ -6,7 +6,9 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.UseCaseProvider
+import com.bottari.di.usecase.AlarmUseCaseProvider
+import com.bottari.di.usecase.BottariTemplateUseCaseProvider
+import com.bottari.di.usecase.BottariUseCaseProvider
 import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
 import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
@@ -39,8 +41,6 @@ class PersonalBottariEditViewModel(
             timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
         ) { isActive -> toggleAlarmState(isActive) }
-
-    private val alarmScheduler: AlarmScheduler = AlarmScheduler()
 
     fun fetchBottari() {
         updateState { copy(isLoading = true) }
@@ -117,10 +117,10 @@ class PersonalBottariEditViewModel(
     ) {
         val notification = createNotification(alarm)
         if (isActive) {
-            alarmScheduler.scheduleAlarm(notification)
+            AlarmScheduler.scheduleAlarm(notification = notification)
             return
         }
-        alarmScheduler.cancelAlarm(notification)
+        AlarmScheduler.cancelAlarm(notification = notification)
     }
 
     private fun createNotification(alarm: AlarmUiModel): NotificationUiModel =
@@ -144,9 +144,9 @@ class PersonalBottariEditViewModel(
 
                     PersonalBottariEditViewModel(
                         stateHandle,
-                        UseCaseProvider.fetchBottariDetailUseCase,
-                        UseCaseProvider.toggleAlarmStateUseCase,
-                        UseCaseProvider.createBottariTemplateUseCase,
+                        BottariUseCaseProvider.fetchBottariDetailUseCase,
+                        AlarmUseCaseProvider.toggleAlarmStateUseCase,
+                        BottariTemplateUseCaseProvider.createBottariTemplateUseCase,
                     )
                 }
             }
