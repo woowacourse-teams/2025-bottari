@@ -3,6 +3,11 @@ package com.bottari.data.model.teamItem
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+sealed interface TeamItemMinimal {
+    val id: Long
+    val name: String
+}
+
 @Serializable
 data class FetchTeamAssignedItemResponse(
     @SerialName("id")
@@ -24,15 +29,15 @@ data class FetchTeamAssignedItemResponse(
 @Serializable
 data class FetchTeamPersonalItemResponse(
     @SerialName("id")
-    val id: Long,
+    override val id: Long,
     @SerialName("name")
-    val name: String,
-)
+    override val name: String,
+) : TeamItemMinimal
 
 @Serializable
 data class FetchTeamSharedItemResponse(
     @SerialName("id")
-    val id: Long,
+    override val id: Long,
     @SerialName("name")
-    val name: String,
-)
+    override val name: String,
+) : TeamItemMinimal
