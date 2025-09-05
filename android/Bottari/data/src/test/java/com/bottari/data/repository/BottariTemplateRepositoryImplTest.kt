@@ -1,7 +1,7 @@
 package com.bottari.data.repository
 
 import com.bottari.data.model.template.CreateBottariTemplateRequest
-import com.bottari.data.model.template.FetchMyBottariTemplatesResponse
+import com.bottari.data.model.template.FetchBottariTemplateResponse
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
 import com.bottari.data.testFixture.fetchBottariTemplateResponseListFixture
 import com.bottari.domain.repository.BottariTemplateRepository
@@ -196,8 +196,22 @@ class BottariTemplateRepositoryImplTest {
             // given
             val successResponse =
                 listOf(
-                    FetchMyBottariTemplatesResponse("다이스", 1L, listOf(), "template1", "12:00", 3),
-                    FetchMyBottariTemplatesResponse("다이스", 2L, listOf(), "template2", "12:00", 4),
+                    FetchBottariTemplateResponse(
+                        author = "다이스",
+                        id = 1L,
+                        items = listOf(),
+                        title = "template1",
+                        createdAt = "12:00",
+                        takenCount = 3,
+                    ),
+                    FetchBottariTemplateResponse(
+                        author = "다이스",
+                        id = 2L,
+                        items = listOf(),
+                        title = "template2",
+                        createdAt = "10:00",
+                        takenCount = 4,
+                    ),
                 )
             coEvery { remoteDataSource.fetchMyBottariTemplates() } returns
                 Result.success(
