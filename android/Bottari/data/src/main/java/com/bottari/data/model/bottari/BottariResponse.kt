@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.LocalTime
 
+@Serializable
 sealed interface BottariResponse {
     val id: Long
     val title: String
