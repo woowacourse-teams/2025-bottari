@@ -1,8 +1,8 @@
 package com.bottari.data.source.remote
 
 import com.bottari.data.common.util.safeApiCall
-import com.bottari.data.model.common.CreateAlarmRequest
-import com.bottari.data.model.common.SaveAlarmRequest
+import com.bottari.data.model.alarm.CreateAlarmRequest
+import com.bottari.data.model.alarm.SaveAlarmRequest
 import com.bottari.data.service.AlarmService
 
 class AlarmRemoteDataSourceImpl(

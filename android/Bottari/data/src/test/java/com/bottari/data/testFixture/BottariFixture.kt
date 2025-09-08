@@ -1,9 +1,9 @@
 package com.bottari.data.testFixture
 
+import com.bottari.data.model.alarm.AlarmResponse
+import com.bottari.data.model.alarm.RoutineResponse
 import com.bottari.data.model.bottari.FetchBottariResponse
 import com.bottari.data.model.bottari.FetchBottariesResponse
-import com.bottari.data.model.common.AlarmResponse
-import com.bottari.data.model.common.RoutineResponse
 import com.bottari.data.model.team.SaveTeamAssignedItemRequest
 import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
 import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse

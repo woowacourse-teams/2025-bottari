@@ -1,12 +1,12 @@
 package com.bottari.data.mapper
 
-import com.bottari.data.model.common.AlarmResponse
-import com.bottari.data.model.common.CreateAlarmRequest
-import com.bottari.data.model.common.LocationRequest
-import com.bottari.data.model.common.LocationResponse
-import com.bottari.data.model.common.RoutineRequest
-import com.bottari.data.model.common.RoutineResponse
-import com.bottari.data.model.common.SaveAlarmRequest
+import com.bottari.data.model.alarm.AlarmResponse
+import com.bottari.data.model.alarm.CreateAlarmRequest
+import com.bottari.data.model.alarm.LocationRequest
+import com.bottari.data.model.alarm.LocationResponse
+import com.bottari.data.model.alarm.RoutineRequest
+import com.bottari.data.model.alarm.RoutineResponse
+import com.bottari.data.model.alarm.SaveAlarmRequest
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.alarm.AlarmType
 import com.bottari.domain.model.alarm.LocationAlarm
