@@ -3,7 +3,7 @@ package com.bottari.data.testFixture
 import com.bottari.data.model.bottari.AlarmResponse
 import com.bottari.data.model.bottari.BottariResponse
 import com.bottari.data.model.bottari.RoutineResponse
-import com.bottari.data.model.team.SaveTeamBottariAssignedItemRequest
+import com.bottari.data.model.team.SaveTeamAssignedItemRequest
 import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
 import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
 import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
@@ -109,7 +109,7 @@ val BOTTARI_ASSIGNED_ITEM_FIXTURE =
     )
 
 val SAVE_TEAM_BOTTARI_ASSIGNED_ITEM_REQUEST_FIXTURE =
-    SaveTeamBottariAssignedItemRequest(
+    SaveTeamAssignedItemRequest(
         name = "new name",
         assigneeIds = listOf(1L, 2L),
     )

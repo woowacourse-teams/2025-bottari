@@ -13,8 +13,9 @@ import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.JoinTeamBottariRequest
-import com.bottari.data.model.team.SaveTeamBottariAssignedItemRequest
-import com.bottari.data.model.team.TeamItemTypeRequest
+import com.bottari.data.model.team.SaveTeamAssignedItemRequest
+import com.bottari.data.model.team.SendRemindByItemRequest
+import com.bottari.data.model.team.UpdateTeamItemCheckRequest
 import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
 import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
 import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
@@ -42,19 +43,19 @@ interface TeamBottariService {
     @PATCH("/team-items/{itemId}/check")
     suspend fun checkTeamBottariItem(
         @Path("itemId") id: Long,
-        @Body request: TeamItemTypeRequest,
+        @Body request: UpdateTeamItemCheckRequest,
     ): Response<Unit>
 
     @PATCH("/team-items/{itemId}/uncheck")
     suspend fun uncheckTeamBottariItem(
         @Path("itemId") id: Long,
-        @Body request: TeamItemTypeRequest,
+        @Body request: UpdateTeamItemCheckRequest,
     ): Response<Unit>
 
     @POST("/team-items/{itemId}/remind")
     suspend fun sendRemindByItem(
         @Path("itemId") id: Long,
-        @Body request: TeamItemTypeRequest,
+        @Body request: SendRemindByItemRequest,
     ): Response<Unit>
 
     @GET("/team-bottaries")
@@ -139,7 +140,7 @@ interface TeamBottariService {
     suspend fun saveTeamAssignedItem(
         @Path("teamBottariId") teamBottariId: Long,
         @Path("assignedItemId") assignedItemId: Long,
-        @Body request: SaveTeamBottariAssignedItemRequest,
+        @Body request: SaveTeamAssignedItemRequest,
     ): Response<Unit>
 
     @DELETE("/team-bottaries/{id}")

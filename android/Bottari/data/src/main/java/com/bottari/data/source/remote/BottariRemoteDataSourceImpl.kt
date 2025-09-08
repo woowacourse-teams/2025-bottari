@@ -16,7 +16,7 @@ class BottariRemoteDataSourceImpl(
 
     override suspend fun fetchBottariDetail(id: Long): Result<BottariResponse.FetchBottariResponse> =
         safeApiCall {
-            bottariService.findBottari(id = id)
+            bottariService.fetchBottari(id = id)
         }
 
     override suspend fun createBottari(createBottariRequest: BottariRequest.CreateBottariRequest): Result<Long> =

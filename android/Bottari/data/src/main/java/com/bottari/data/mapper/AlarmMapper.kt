@@ -1,11 +1,12 @@
 package com.bottari.data.mapper
 
-import com.bottari.data.model.bottari.AlarmRequest
 import com.bottari.data.model.bottari.AlarmResponse
+import com.bottari.data.model.bottari.CreateAlarmRequest
 import com.bottari.data.model.bottari.LocationRequest
 import com.bottari.data.model.bottari.LocationResponse
 import com.bottari.data.model.bottari.RoutineRequest
 import com.bottari.data.model.bottari.RoutineResponse
+import com.bottari.data.model.bottari.SaveAlarmRequest
 import com.bottari.data.model.team.TeamAlarmLocationResponse
 import com.bottari.data.model.team.TeamAlarmResponse
 import com.bottari.domain.model.alarm.Alarm
@@ -21,8 +22,14 @@ object AlarmMapper {
     private const val EVERY_WEEK_REPEAT = "EVERY_WEEK_REPEAT"
     private const val DAYS_IN_WEEK = 7
 
-    fun Alarm.toRequest(): AlarmRequest =
-        AlarmRequest(
+    fun Alarm.toSaveRequest(): SaveAlarmRequest =
+        SaveAlarmRequest(
+            routineAlarm = toRoutineRequest(),
+            locationAlarm = location?.toRequest(),
+        )
+
+    fun Alarm.toCreateRequest(): CreateAlarmRequest =
+        CreateAlarmRequest(
             routineAlarm = toRoutineRequest(),
             locationAlarm = location?.toRequest(),
         )

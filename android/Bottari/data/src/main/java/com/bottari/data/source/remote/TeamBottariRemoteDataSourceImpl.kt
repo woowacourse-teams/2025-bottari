@@ -16,8 +16,9 @@ import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.JoinTeamBottariRequest
-import com.bottari.data.model.team.SaveTeamBottariAssignedItemRequest
-import com.bottari.data.model.team.TeamItemTypeRequest
+import com.bottari.data.model.team.SaveTeamAssignedItemRequest
+import com.bottari.data.model.team.SendRemindByItemRequest
+import com.bottari.data.model.team.UpdateTeamItemCheckRequest
 import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
 import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
 import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
@@ -44,7 +45,7 @@ class TeamBottariRemoteDataSourceImpl(
 
     override suspend fun uncheckBottariItem(
         bottariItemId: Long,
-        request: TeamItemTypeRequest,
+        request: UpdateTeamItemCheckRequest,
     ): Result<Unit> =
         safeApiCall {
             teamBottariService.uncheckTeamBottariItem(bottariItemId, request)
@@ -52,7 +53,7 @@ class TeamBottariRemoteDataSourceImpl(
 
     override suspend fun checkBottariItem(
         bottariItemId: Long,
-        request: TeamItemTypeRequest,
+        request: UpdateTeamItemCheckRequest,
     ): Result<Unit> =
         safeApiCall {
             teamBottariService.checkTeamBottariItem(bottariItemId, request)
@@ -75,7 +76,7 @@ class TeamBottariRemoteDataSourceImpl(
 
     override suspend fun sendRemindByItem(
         id: Long,
-        type: TeamItemTypeRequest,
+        type: SendRemindByItemRequest,
     ): Result<Unit> =
         safeApiCall {
             teamBottariService.sendRemindByItem(id, type)
@@ -142,7 +143,7 @@ class TeamBottariRemoteDataSourceImpl(
     override suspend fun saveTeamBottariAssignedItem(
         teamBottariId: Long,
         assignedItemId: Long,
-        request: SaveTeamBottariAssignedItemRequest,
+        request: SaveTeamAssignedItemRequest,
     ): Result<Unit> =
         safeApiCall {
             teamBottariService.saveTeamAssignedItem(teamBottariId, assignedItemId, request)

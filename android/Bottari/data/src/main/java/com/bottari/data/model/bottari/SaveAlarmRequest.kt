@@ -8,7 +8,15 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @Serializable
-data class AlarmRequest(
+data class SaveAlarmRequest(
+    @SerialName("routineAlarm")
+    val routineAlarm: RoutineRequest,
+    @SerialName("locationAlarm")
+    val locationAlarm: LocationRequest?,
+)
+
+@Serializable
+data class CreateAlarmRequest(
     @SerialName("routineAlarm")
     val routineAlarm: RoutineRequest,
     @SerialName("locationAlarm")

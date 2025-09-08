@@ -15,7 +15,7 @@ interface BottariService {
     suspend fun fetchBottaries(): Response<List<BottariResponse.FetchBottariesResponse>>
 
     @GET("/bottaries/{id}")
-    suspend fun findBottari(
+    suspend fun fetchBottari(
         @Path("id") id: Long,
     ): Response<BottariResponse.FetchBottariResponse>
 

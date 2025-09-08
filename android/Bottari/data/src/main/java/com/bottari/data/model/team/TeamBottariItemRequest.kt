@@ -30,7 +30,7 @@ data class DeleteTeamBottariItemRequest(
 )
 
 @Serializable
-data class SaveTeamBottariAssignedItemRequest(
+data class SaveTeamAssignedItemRequest(
     @SerialName("name")
     val name: String,
     @SerialName("assigneeIds")
@@ -38,7 +38,13 @@ data class SaveTeamBottariAssignedItemRequest(
 )
 
 @Serializable
-data class TeamItemTypeRequest(
+data class UpdateTeamItemCheckRequest(
+    @SerialName("type")
+    val type: String,
+)
+
+@Serializable
+data class SendRemindByItemRequest(
     @SerialName("type")
     val type: String,
 )
