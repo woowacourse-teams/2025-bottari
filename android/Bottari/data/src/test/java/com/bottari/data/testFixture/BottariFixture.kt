@@ -1,8 +1,9 @@
 package com.bottari.data.testFixture
 
-import com.bottari.data.model.bottari.AlarmResponse
-import com.bottari.data.model.bottari.BottariResponse
-import com.bottari.data.model.bottari.RoutineResponse
+import com.bottari.data.model.bottari.FetchBottariResponse
+import com.bottari.data.model.bottari.FetchBottariesResponse
+import com.bottari.data.model.common.AlarmResponse
+import com.bottari.data.model.common.RoutineResponse
 import com.bottari.data.model.team.SaveTeamAssignedItemRequest
 import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
 import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
@@ -30,16 +31,16 @@ fun alarmResponseFixture(
     }
 }
 
-fun fetchBottariesResponseFixture(): List<BottariResponse.FetchBottariesResponse> =
+fun fetchBottariesResponseFixture(): List<FetchBottariesResponse> =
     listOf(
-        BottariResponse.FetchBottariesResponse(
+        FetchBottariesResponse(
             id = 2,
             title = "title1",
             alarm = null,
             checkedItemsCount = 0,
             totalItemsCount = 0,
         ),
-        BottariResponse.FetchBottariesResponse(
+        FetchBottariesResponse(
             id = 3,
             title = "title2",
             alarm = null,
@@ -52,8 +53,8 @@ fun bottariResponseFixture(
     id: Long = 100L,
     title: String = "detail",
     alarm: AlarmResponse = alarmResponseFixture(),
-): BottariResponse.FetchBottariResponse =
-    BottariResponse.FetchBottariResponse(
+): FetchBottariResponse =
+    FetchBottariResponse(
         id = id,
         title = title,
         items = emptyList(),

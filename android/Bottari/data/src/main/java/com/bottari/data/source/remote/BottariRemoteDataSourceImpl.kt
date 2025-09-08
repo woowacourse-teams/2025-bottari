@@ -3,18 +3,19 @@ package com.bottari.data.source.remote
 import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.bottari.BottariRequest
-import com.bottari.data.model.bottari.BottariResponse
+import com.bottari.data.model.bottari.FetchBottariResponse
+import com.bottari.data.model.bottari.FetchBottariesResponse
 import com.bottari.data.service.BottariService
 
 class BottariRemoteDataSourceImpl(
     private val bottariService: BottariService,
 ) : BottariRemoteDataSource {
-    override suspend fun fetchBottaries(): Result<List<BottariResponse.FetchBottariesResponse>> =
+    override suspend fun fetchBottaries(): Result<List<FetchBottariesResponse>> =
         safeApiCall {
             bottariService.fetchBottaries()
         }
 
-    override suspend fun fetchBottariDetail(id: Long): Result<BottariResponse.FetchBottariResponse> =
+    override suspend fun fetchBottariDetail(id: Long): Result<FetchBottariResponse> =
         safeApiCall {
             bottariService.fetchBottari(id = id)
         }
