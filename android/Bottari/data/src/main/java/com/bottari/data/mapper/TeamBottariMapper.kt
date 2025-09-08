@@ -10,7 +10,7 @@ import com.bottari.data.model.team.TeamProductStatusResponse
 import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
 import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
 import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
-import com.bottari.domain.model.bottari.BottariInfo
+import com.bottari.domain.model.bottari.BottariBase
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.TeamBottari
@@ -34,7 +34,7 @@ object TeamBottariMapper {
     fun FetchTeamBottariDetailResponse.toDomain(): TeamBottariDetail =
         TeamBottariDetail(
             info =
-                BottariInfo(
+                BottariBase(
                     id = bottariId,
                     title = title,
                     alarm = alarm?.toDomain(),

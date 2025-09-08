@@ -1,6 +1,6 @@
 package com.bottari.data.model.team
 
-import com.bottari.data.model.bottari.AlarmResponse
+import com.bottari.data.model.common.AlarmResponse
 import com.bottari.data.model.item.FetchChecklistResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -22,7 +22,7 @@ data class FetchTeamBottariDetailResponse(
     @SerialName("title")
     val title: String,
     @SerialName("alarm")
-    val alarm: TeamAlarmResponse?,
+    val alarm: AlarmResponse?,
     @SerialName("sharedItems")
     val sharedItems: List<TeamBottariItemResponse>,
     @SerialName("assignedItems")
