@@ -1,4 +1,4 @@
-package com.bottari.data.model.bottari
+package com.bottari.data.model.common
 
 import com.bottari.data.common.util.LocalDateSerializer
 import com.bottari.data.common.util.LocalTimeSerializer

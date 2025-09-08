@@ -1,7 +1,7 @@
 package com.bottari.data.source.remote
 
-import com.bottari.data.model.bottari.CreateAlarmRequest
-import com.bottari.data.model.bottari.SaveAlarmRequest
+import com.bottari.data.model.common.CreateAlarmRequest
+import com.bottari.data.model.common.SaveAlarmRequest
 
 interface AlarmRemoteDataSource {
     suspend fun saveAlarm(
