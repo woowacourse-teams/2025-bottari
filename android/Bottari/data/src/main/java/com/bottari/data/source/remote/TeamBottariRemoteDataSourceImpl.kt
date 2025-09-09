@@ -3,11 +3,7 @@ package com.bottari.data.source.remote
 import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.common.ErrorResponse
-import com.bottari.data.model.team.CreateTeamBottariAssignedItemRequest
-import com.bottari.data.model.team.CreateTeamBottariPersonalItemRequest
 import com.bottari.data.model.team.CreateTeamBottariRequest
-import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
-import com.bottari.data.model.team.DeleteTeamBottariItemRequest
 import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.FetchTeamBottariMemberResponse
@@ -16,12 +12,16 @@ import com.bottari.data.model.team.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.FetchTeamMembersResponse
 import com.bottari.data.model.team.JoinTeamBottariRequest
-import com.bottari.data.model.team.SaveTeamAssignedItemRequest
-import com.bottari.data.model.team.SendRemindByItemRequest
-import com.bottari.data.model.team.UpdateTeamItemCheckRequest
+import com.bottari.data.model.teamItem.CreateTeamBottariAssignedItemRequest
+import com.bottari.data.model.teamItem.CreateTeamBottariPersonalItemRequest
+import com.bottari.data.model.teamItem.CreateTeamBottariSharedItemRequest
+import com.bottari.data.model.teamItem.DeleteTeamBottariItemRequest
 import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
 import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
 import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
+import com.bottari.data.model.teamItem.SaveTeamAssignedItemRequest
+import com.bottari.data.model.teamItem.SendRemindByItemRequest
+import com.bottari.data.model.teamItem.UpdateTeamItemCheckRequest
 import com.bottari.data.service.TeamBottariService
 
 class TeamBottariRemoteDataSourceImpl(
