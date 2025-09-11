@@ -23,17 +23,15 @@ import com.bottari.domain.model.team.TeamMember
 object TeamBottariMapper {
     fun FetchTeamBottariResponse.toDomain(): TeamBottari =
         TeamBottari(
-            alarm = alarmResponse?.toDomain(),
+            base = BottariBase(id = id, title = title, alarm = alarm?.toDomain()),
             checkedQuantity = checkedItemsCount,
-            id = id,
-            title = title,
             totalQuantity = totalItemsCount,
             memberCount = memberCount,
         )
 
     fun FetchTeamBottariDetailResponse.toDomain(): TeamBottariDetail =
         TeamBottariDetail(
-            info =
+            base =
                 BottariBase(
                     id = bottariId,
                     title = title,

@@ -70,10 +70,10 @@ class TeamBottariEditViewModel(
     }
 
     private fun handleFetchTeamBottariDetail(teamBottariDetail: TeamBottariDetail) {
-        val alarmUi = teamBottariDetail.info.alarm?.toUiModel()
+        val alarmUi = teamBottariDetail.base.alarm?.toUiModel()
         updateState {
             copy(
-                bottariTitle = teamBottariDetail.info.title,
+                bottariTitle = teamBottariDetail.base.title,
                 personalItems = teamBottariDetail.personalItems.map { it.toUiModel() },
                 assignedItems = teamBottariDetail.assignedItems.map { it.toUiModel() },
                 sharedItems = teamBottariDetail.sharedItems.map { it.toUiModel() },

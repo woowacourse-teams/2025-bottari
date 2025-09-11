@@ -40,8 +40,8 @@ class BottariRepositoryImplTest {
             // then
             result.shouldBeSuccess {
                 it shouldHaveSize 2
-                it[0].title shouldBe "title1"
-                it[1].title shouldBe "title2"
+                it[0].base.title shouldBe "title1"
+                it[1].base.title shouldBe "title2"
             }
 
             // verify
@@ -65,7 +65,7 @@ class BottariRepositoryImplTest {
 
             // then
             result.shouldBeSuccess {
-                it.info.title shouldBe "detail"
+                it.base.title shouldBe "detail"
             }
 
             // verify

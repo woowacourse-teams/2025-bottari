@@ -23,12 +23,10 @@ val TEAM_BOTTARI_RESPONSE: FetchTeamBottariResponse by lazy {
 }
 val TEAM_BOTTARI: TeamBottari by lazy {
     TeamBottari(
-        1L,
-        "test",
+        BottariBase(1L, "test", null),
         10,
         10,
         3,
-        null,
     )
 }
 
@@ -43,7 +41,7 @@ val TEAM_BOTTARI_DETAIL_RESPONSE =
     )
 val TEAM_BOTTARI_DETAIL =
     TeamBottariDetail(
-        info =
+        base =
             BottariBase(
                 id = 1L,
                 title = "test",

@@ -18,7 +18,7 @@ class FetchBottariDetailsUseCase(
     private suspend fun fetchBottariDetailsWithItems(bottaries: List<Bottari>): List<BottariDetail> =
         supervisorScope {
             bottaries
-                .map { bottari -> async { runCatching { fetchBottariItem(bottari.id) }.getOrNull() } }
+                .map { bottari -> async { runCatching { fetchBottariItem(bottari.base.id) }.getOrNull() } }
                 .mapNotNull { it.await() }
         }
 
@@ -27,7 +27,7 @@ class FetchBottariDetailsUseCase(
         if (result.items.isEmpty()) return null
 
         return BottariDetail(
-            info = result.info,
+            base = result.base,
             items = result.items,
         )
     }

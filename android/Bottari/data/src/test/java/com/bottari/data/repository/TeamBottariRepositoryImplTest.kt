@@ -162,7 +162,7 @@ class TeamBottariRepositoryImplTest {
             val result = repository.fetchTeamBottaries()
 
             // then
-            val expected = listOf(TEAM_BOTTARI, TEAM_BOTTARI.copy(2L))
+            val expected = listOf(TEAM_BOTTARI, TEAM_BOTTARI.copy(base = TEAM_BOTTARI.base.copy(id = 2L)))
             assertSoftly(result) {
                 shouldBeSuccess()
                 getOrThrow().shouldBe(expected)

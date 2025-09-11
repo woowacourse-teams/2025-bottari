@@ -8,7 +8,7 @@ import com.bottari.domain.model.team.TeamMember
 
 val TEAM_BOTTARI_DETAIL_FIXTURE: TeamBottariDetail by lazy {
     TeamBottariDetail(
-        info =
+        base =
             BottariBase(
                 id = 1L,
                 title = "test",

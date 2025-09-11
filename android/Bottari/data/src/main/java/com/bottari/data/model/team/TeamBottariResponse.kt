@@ -38,7 +38,7 @@ data class FetchTeamBottariResponse(
     @SerialName("title")
     val title: String,
     @SerialName("alarm")
-    val alarmResponse: AlarmResponse?,
+    val alarm: AlarmResponse?,
     @SerialName("checkedItemsCount")
     val checkedItemsCount: Int,
     @SerialName("totalItemsCount")

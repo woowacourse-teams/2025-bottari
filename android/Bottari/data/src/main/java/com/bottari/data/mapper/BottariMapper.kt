@@ -13,16 +13,19 @@ import com.bottari.domain.model.bottari.BottariItemType
 object BottariMapper {
     fun FetchBottariesResponse.toDomain(): Bottari =
         Bottari(
-            alarm = alarm?.toDomain(),
+            base =
+                BottariBase(
+                    id = id,
+                    title = title,
+                    alarm = alarm?.toDomain(),
+                ),
             checkedQuantity = checkedItemsCount,
-            id = id,
-            title = title,
             totalQuantity = totalItemsCount,
         )
 
     fun FetchBottariResponse.toDomain(): BottariDetail =
         BottariDetail(
-            info =
+            base =
                 BottariBase(
                     id = id,
                     title = title,

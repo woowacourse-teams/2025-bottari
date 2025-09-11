@@ -15,12 +15,12 @@ import com.bottari.presentation.model.TeamBottariUiModel
 object TeamBottariMapper {
     fun TeamBottari.toUiModel(): TeamBottariUiModel =
         TeamBottariUiModel(
-            id = id,
-            title = title,
+            id = base.id,
+            title = base.title,
             totalQuantity = totalQuantity,
             checkedQuantity = checkedQuantity,
             memberCount = memberCount,
-            alarm = alarm?.toUiModel(),
+            alarm = base.alarm?.toUiModel(),
         )
 
     fun BottariItem.toUiModel(): BottariItemUiModel =

@@ -17,18 +17,18 @@ import com.bottari.presentation.model.MyBottariUiModel
 object BottariMapper {
     fun Bottari.toUiModel(): BottariUiModel =
         BottariUiModel(
-            id = id,
-            title = title,
+            id = base.id,
+            title = base.title,
             totalQuantity = totalQuantity,
             checkedQuantity = checkedQuantity,
-            alarm = alarm?.toUiModel(),
+            alarm = base.alarm?.toUiModel(),
         )
 
     fun BottariDetail.toUiModel(): BottariDetailUiModel =
         BottariDetailUiModel(
-            id = info.id,
-            title = info.title,
-            alarm = info.alarm?.toUiModel(),
+            id = base.id,
+            title = base.title,
+            alarm = base.alarm?.toUiModel(),
             items = items.map { item -> item.toUiModel() },
         )
 
@@ -48,8 +48,8 @@ object BottariMapper {
 
     fun BottariDetail.toMyBottariUiModel(): MyBottariUiModel =
         MyBottariUiModel(
-            id = info.id,
-            title = info.title,
+            id = base.id,
+            title = base.title,
             isSelected = false,
             items = items.map { item -> item.toUiModel() },
         )
