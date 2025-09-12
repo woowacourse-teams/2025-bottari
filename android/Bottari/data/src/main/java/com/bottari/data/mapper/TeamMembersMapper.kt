@@ -1,9 +1,9 @@
 package com.bottari.data.mapper
 
 import com.bottari.data.mapper.BottariItemMapper.toDomain
-import com.bottari.data.model.team.member.FetchTeamBottariMemberResponse
-import com.bottari.data.model.team.member.FetchTeamMemberStatusResponse
-import com.bottari.data.model.team.member.FetchTeamMembersResponse
+import com.bottari.data.model.team.member.TeamMemberFetchResponse
+import com.bottari.data.model.team.member.TeamMemberNameFetchResponse
+import com.bottari.data.model.team.member.TeamMemberStatusFetchResponse
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.HeadCount
 import com.bottari.domain.model.team.TeamMember
@@ -11,7 +11,7 @@ import com.bottari.domain.model.team.TeamMemberStatus
 import com.bottari.domain.model.team.TeamMembers
 
 object TeamMembersMapper {
-    fun FetchTeamMembersResponse.toDomain(): TeamMembers =
+    fun TeamMemberFetchResponse.toDomain(): TeamMembers =
         TeamMembers(
             inviteCode = inviteCode,
             teamMemberHeadCount = HeadCount(teamMemberCount),
@@ -19,7 +19,7 @@ object TeamMembersMapper {
             memberNicknames = teamMemberNames.map { name -> Nickname(name) },
         )
 
-    fun FetchTeamMemberStatusResponse.toDomain(): TeamMemberStatus =
+    fun TeamMemberStatusFetchResponse.toDomain(): TeamMemberStatus =
         TeamMemberStatus(
             id = id,
             nickname = Nickname(nickname),
@@ -30,7 +30,7 @@ object TeamMembersMapper {
             assignedItems = assignedItems.map { assignedItem -> assignedItem.toDomain() },
         )
 
-    fun FetchTeamBottariMemberResponse.toDomain(): TeamMember =
+    fun TeamMemberNameFetchResponse.toDomain(): TeamMember =
         TeamMember(
             memberId = id,
             nickname = name,

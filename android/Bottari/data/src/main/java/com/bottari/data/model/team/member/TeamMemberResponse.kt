@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FetchTeamBottariMemberResponse(
+data class TeamMemberNameFetchResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("name")
@@ -13,7 +13,7 @@ data class FetchTeamBottariMemberResponse(
 )
 
 @Serializable
-data class FetchTeamMembersResponse(
+data class TeamMemberFetchResponse(
     @SerialName("inviteCode")
     val inviteCode: String,
     @SerialName("teamMemberCount")
@@ -25,7 +25,7 @@ data class FetchTeamMembersResponse(
 )
 
 @Serializable
-data class FetchTeamMemberStatusResponse(
+data class TeamMemberStatusFetchResponse(
     @SerialName("memberId")
     val id: Long,
     @SerialName("teamMemberName")
@@ -43,7 +43,7 @@ data class FetchTeamMemberStatusResponse(
 )
 
 @Serializable
-data class MemberCheckStatusResponse(
+data class TeamMemberStatusCheckedFetchResponse(
     @SerialName("name")
     val name: String,
     @SerialName("checked")

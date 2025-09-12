@@ -2,14 +2,14 @@ package com.bottari.data.mapper
 
 import com.bottari.data.mapper.AlarmMapper.toDomain
 import com.bottari.data.mapper.BottariItemMapper.toDomain
-import com.bottari.data.model.team.bottari.FetchTeamBottariDetailResponse
-import com.bottari.data.model.team.bottari.FetchTeamBottariResponse
+import com.bottari.data.model.team.bottari.FetchTeamBottariStatusItemResponse
 import com.bottari.data.model.team.bottari.FetchTeamBottariStatusResponse
-import com.bottari.data.model.team.bottari.TeamProductStatusResponse
-import com.bottari.data.model.team.bottari.item.AssignedItemsResponse
-import com.bottari.data.model.team.bottari.item.PersonalItemsResponse
-import com.bottari.data.model.team.bottari.item.SharedItemsResponse
-import com.bottari.data.model.team.member.MemberCheckStatusResponse
+import com.bottari.data.model.team.bottari.TeamBottariFetchDetailResponse
+import com.bottari.data.model.team.bottari.TeamBottariFetchResponse
+import com.bottari.data.model.team.bottari.item.AssignedItemsFetchResponse
+import com.bottari.data.model.team.bottari.item.PersonalItemsFetchResponse
+import com.bottari.data.model.team.bottari.item.SharedItemsFetchResponse
+import com.bottari.data.model.team.member.TeamMemberStatusCheckedFetchResponse
 import com.bottari.domain.model.bottari.BottariBase
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
@@ -21,7 +21,7 @@ import com.bottari.domain.model.team.TeamBottariStatus
 import com.bottari.domain.model.team.TeamMember
 
 object TeamBottariMapper {
-    fun FetchTeamBottariResponse.toDomain(): TeamBottari =
+    fun TeamBottariFetchResponse.toDomain(): TeamBottari =
         TeamBottari(
             base = BottariBase(id = id, title = title, alarm = alarm?.toDomain()),
             checkedQuantity = checkedItemsCount,
@@ -29,7 +29,7 @@ object TeamBottariMapper {
             memberCount = memberCount,
         )
 
-    fun FetchTeamBottariDetailResponse.toDomain(): TeamBottariDetail =
+    fun TeamBottariFetchDetailResponse.toDomain(): TeamBottariDetail =
         TeamBottariDetail(
             base =
                 BottariBase(
@@ -48,34 +48,34 @@ object TeamBottariMapper {
             assignedItems = assignedItems.map { it.toDomain() },
         )
 
-    fun AssignedItemsResponse.toDomain(): BottariItem =
+    fun AssignedItemsFetchResponse.toDomain(): BottariItem =
         BottariItem(
             id = id,
             name = name,
             type = BottariItemType.ASSIGNED(assignees.map { it.toDomain() }),
         )
 
-    fun SharedItemsResponse.toDomain(): BottariItem =
+    fun SharedItemsFetchResponse.toDomain(): BottariItem =
         BottariItem(
             id = id,
             name = name,
             type = BottariItemType.SHARED,
         )
 
-    fun PersonalItemsResponse.toDomain(): BottariItem =
+    fun PersonalItemsFetchResponse.toDomain(): BottariItem =
         BottariItem(
             id = id,
             name = name,
             type = BottariItemType.PERSONAL,
         )
 
-    private fun AssignedItemsResponse.Assignee.toDomain() =
+    private fun AssignedItemsFetchResponse.Assignee.toDomain() =
         TeamMember(
             memberId = memberId,
             nickname = name,
         )
 
-    private fun TeamProductStatusResponse.toDomain(): TeamBottariProductStatus =
+    private fun FetchTeamBottariStatusItemResponse.toDomain(): TeamBottariProductStatus =
         TeamBottariProductStatus(
             id = id,
             name = name,
@@ -84,7 +84,7 @@ object TeamBottariMapper {
             totalItemsCount = totalItemsCount,
         )
 
-    private fun MemberCheckStatusResponse.toDomain(): MemberCheckStatus =
+    private fun TeamMemberStatusCheckedFetchResponse.toDomain(): MemberCheckStatus =
         MemberCheckStatus(
             name = name,
             checked = checked,

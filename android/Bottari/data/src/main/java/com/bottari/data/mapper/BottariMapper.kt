@@ -1,9 +1,9 @@
 package com.bottari.data.mapper
 
 import com.bottari.data.mapper.AlarmMapper.toDomain
-import com.bottari.data.model.bottari.FetchBottariResponse
-import com.bottari.data.model.bottari.FetchBottariesResponse
-import com.bottari.data.model.bottari.ItemResponse
+import com.bottari.data.model.bottari.BottariFetchResponse
+import com.bottari.data.model.bottari.BottariItemFetchResponse
+import com.bottari.data.model.bottari.BottariesFetchResponse
 import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariBase
 import com.bottari.domain.model.bottari.BottariDetail
@@ -11,7 +11,7 @@ import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 
 object BottariMapper {
-    fun FetchBottariesResponse.toDomain(): Bottari =
+    fun BottariesFetchResponse.toDomain(): Bottari =
         Bottari(
             base =
                 BottariBase(
@@ -23,7 +23,7 @@ object BottariMapper {
             totalQuantity = totalItemsCount,
         )
 
-    fun FetchBottariResponse.toDomain(): BottariDetail =
+    fun BottariFetchResponse.toDomain(): BottariDetail =
         BottariDetail(
             base =
                 BottariBase(
@@ -34,7 +34,7 @@ object BottariMapper {
             items = items.map { it.toDomain() },
         )
 
-    private fun ItemResponse.toDomain(): BottariItem =
+    private fun BottariItemFetchResponse.toDomain(): BottariItem =
         BottariItem(
             id = id,
             name = name,

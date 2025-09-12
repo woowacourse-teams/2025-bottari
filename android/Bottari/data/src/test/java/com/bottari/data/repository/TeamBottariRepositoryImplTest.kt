@@ -1,14 +1,14 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.team.bottari.CreateTeamBottariRequest
-import com.bottari.data.model.team.bottari.FetchTeamBottariChecklistResponse
-import com.bottari.data.model.team.bottari.JoinTeamBottariRequest
+import com.bottari.data.model.team.bottari.TeamBottariCreateRequest
+import com.bottari.data.model.team.bottari.TeamBottariJoinRequest
 import com.bottari.data.model.team.bottari.item.AssignedItemsCreateRequest
 import com.bottari.data.model.team.bottari.item.PersonalItemsCreateRequest
 import com.bottari.data.model.team.bottari.item.SharedItemsCreateRequest
 import com.bottari.data.model.team.bottari.item.TeamBottariItemCheckUpdateRequest
+import com.bottari.data.model.team.bottari.item.TeamBottariItemChecklistFetchResponse
 import com.bottari.data.model.team.bottari.item.TeamBottariItemDeleteRequest
-import com.bottari.data.model.team.member.FetchTeamMembersResponse
+import com.bottari.data.model.team.member.TeamMemberFetchResponse
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.data.testFixture.BOTTARI_ASSIGNED_ITEM_FIXTURE
 import com.bottari.data.testFixture.BOTTARI_ASSIGNED_ITEM_RESPONSE_FIXTURE
@@ -66,7 +66,7 @@ class TeamBottariRepositoryImplTest {
             // given
             val title = "test"
             val id = 1L
-            val request = CreateTeamBottariRequest(title)
+            val request = TeamBottariCreateRequest(title)
             coEvery { dataSource.createBottari(request) } returns Result.success(id)
 
             // when
@@ -88,7 +88,7 @@ class TeamBottariRepositoryImplTest {
         runTest {
             // given
             val title = "testtesttesttesttesttest"
-            val request = CreateTeamBottariRequest(title)
+            val request = TeamBottariCreateRequest(title)
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { dataSource.createBottari(request) } returns Result.failure(exception)
 
@@ -108,7 +108,7 @@ class TeamBottariRepositoryImplTest {
         runTest {
             // given
             val id = 1L
-            val response = FetchTeamMembersResponse("", 1, "test", listOf("test"))
+            val response = TeamMemberFetchResponse("", 1, "test", listOf("test"))
             coEvery { dataSource.fetchTeamMembers(id) } returns Result.success(response)
 
             // when
@@ -240,7 +240,7 @@ class TeamBottariRepositoryImplTest {
         runTest {
             // given
             val id = 1L
-            val response = FetchTeamBottariChecklistResponse(listOf(), listOf(), listOf())
+            val response = TeamBottariItemChecklistFetchResponse(listOf(), listOf(), listOf())
             coEvery { dataSource.fetchTeamBottari(id) } returns Result.success(response)
 
             // when
@@ -435,7 +435,7 @@ class TeamBottariRepositoryImplTest {
         runTest {
             // given
             val inviteCode = "TEST123"
-            val request = JoinTeamBottariRequest(inviteCode)
+            val request = TeamBottariJoinRequest(inviteCode)
             coEvery { dataSource.joinTeamBottari(request) } returns Result.success(Unit)
 
             // when
@@ -454,7 +454,7 @@ class TeamBottariRepositoryImplTest {
         runTest {
             // given
             val inviteCode = "TEST123"
-            val request = JoinTeamBottariRequest(inviteCode)
+            val request = TeamBottariJoinRequest(inviteCode)
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { dataSource.joinTeamBottari(request) } returns Result.failure(exception)
 

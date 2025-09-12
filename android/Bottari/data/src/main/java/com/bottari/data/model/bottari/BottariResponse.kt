@@ -1,17 +1,17 @@
 package com.bottari.data.model.bottari
 
-import com.bottari.data.model.alarm.AlarmResponse
+import com.bottari.data.model.alarm.AlarmFetchResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FetchBottariesResponse(
+data class BottariesFetchResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("title")
     val title: String,
     @SerialName("alarm")
-    val alarm: AlarmResponse?,
+    val alarm: AlarmFetchResponse?,
     @SerialName("checkedItemsCount")
     val checkedItemsCount: Int,
     @SerialName("totalItemsCount")
@@ -19,19 +19,19 @@ data class FetchBottariesResponse(
 )
 
 @Serializable
-data class FetchBottariResponse(
+data class BottariFetchResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("alarm")
-    val alarm: AlarmResponse?,
+    val alarm: AlarmFetchResponse?,
     @SerialName("items")
-    val items: List<ItemResponse>,
+    val items: List<BottariItemFetchResponse>,
     @SerialName("title")
     val title: String,
 )
 
 @Serializable
-data class ItemResponse(
+data class BottariItemFetchResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("name")

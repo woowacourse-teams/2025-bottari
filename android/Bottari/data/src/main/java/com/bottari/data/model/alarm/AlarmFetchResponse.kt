@@ -8,19 +8,19 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @Serializable
-data class AlarmResponse(
+data class AlarmFetchResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("isActive")
     val isActive: Boolean,
     @SerialName("location")
-    val location: LocationResponse?,
+    val location: AlarmLocationResponse?,
     @SerialName("routine")
-    val routine: RoutineResponse,
+    val routine: AlarmRoutineResponse,
 )
 
 @Serializable
-data class LocationResponse(
+data class AlarmLocationResponse(
     @SerialName("isActive")
     val isActive: Boolean,
     @SerialName("latitude")
@@ -32,7 +32,7 @@ data class LocationResponse(
 )
 
 @Serializable
-data class RoutineResponse(
+data class AlarmRoutineResponse(
     @SerialName("date")
     @Serializable(with = LocalDateSerializer::class)
     val date: LocalDate?,

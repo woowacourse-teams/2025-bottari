@@ -1,8 +1,8 @@
 package com.bottari.data.service
 
+import com.bottari.data.model.bottari.BottariFetchResponse
 import com.bottari.data.model.bottari.BottariRequest
-import com.bottari.data.model.bottari.FetchBottariResponse
-import com.bottari.data.model.bottari.FetchBottariesResponse
+import com.bottari.data.model.bottari.BottariesFetchResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -13,12 +13,12 @@ import retrofit2.http.Path
 
 interface BottariService {
     @GET("/bottaries")
-    suspend fun fetchBottaries(): Response<List<FetchBottariesResponse>>
+    suspend fun fetchBottaries(): Response<List<BottariesFetchResponse>>
 
     @GET("/bottaries/{id}")
     suspend fun fetchBottari(
         @Path("id") id: Long,
-    ): Response<FetchBottariResponse>
+    ): Response<BottariFetchResponse>
 
     @POST("/bottaries")
     suspend fun createBottari(

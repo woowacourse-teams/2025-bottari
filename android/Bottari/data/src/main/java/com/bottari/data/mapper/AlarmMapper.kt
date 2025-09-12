@@ -1,12 +1,12 @@
 package com.bottari.data.mapper
 
-import com.bottari.data.model.alarm.AlarmResponse
-import com.bottari.data.model.alarm.CreateAlarmRequest
-import com.bottari.data.model.alarm.LocationRequest
-import com.bottari.data.model.alarm.LocationResponse
-import com.bottari.data.model.alarm.RoutineRequest
-import com.bottari.data.model.alarm.RoutineResponse
-import com.bottari.data.model.alarm.SaveAlarmRequest
+import com.bottari.data.model.alarm.AlarmCreateRequest
+import com.bottari.data.model.alarm.AlarmFetchResponse
+import com.bottari.data.model.alarm.AlarmLocationRequest
+import com.bottari.data.model.alarm.AlarmLocationResponse
+import com.bottari.data.model.alarm.AlarmRoutineRequest
+import com.bottari.data.model.alarm.AlarmRoutineResponse
+import com.bottari.data.model.alarm.AlarmSaveRequest
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.alarm.AlarmType
 import com.bottari.domain.model.alarm.LocationAlarm
@@ -20,19 +20,19 @@ object AlarmMapper {
     private const val EVERY_WEEK_REPEAT = "EVERY_WEEK_REPEAT"
     private const val DAYS_IN_WEEK = 7
 
-    fun Alarm.toSaveRequest(): SaveAlarmRequest =
-        SaveAlarmRequest(
+    fun Alarm.toSaveRequest(): AlarmSaveRequest =
+        AlarmSaveRequest(
             routineAlarm = toRoutineRequest(),
             locationAlarm = location?.toRequest(),
         )
 
-    fun Alarm.toCreateRequest(): CreateAlarmRequest =
-        CreateAlarmRequest(
+    fun Alarm.toCreateRequest(): AlarmCreateRequest =
+        AlarmCreateRequest(
             routineAlarm = toRoutineRequest(),
             locationAlarm = location?.toRequest(),
         )
 
-    fun AlarmResponse.toDomain(): Alarm =
+    fun AlarmFetchResponse.toDomain(): Alarm =
         Alarm(
             id = id,
             isActive = isActive,
@@ -41,8 +41,8 @@ object AlarmMapper {
             location = location?.toDomain(),
         )
 
-    private fun Alarm.toRoutineRequest(): RoutineRequest =
-        RoutineRequest(
+    private fun Alarm.toRoutineRequest(): AlarmRoutineRequest =
+        AlarmRoutineRequest(
             time = time,
             type = alarmType.toTypeString(),
             date = alarmType.getDate(),
@@ -65,15 +65,15 @@ object AlarmMapper {
         return repeatDays
     }
 
-    private fun LocationAlarm.toRequest(): LocationRequest =
-        LocationRequest(
+    private fun LocationAlarm.toRequest(): AlarmLocationRequest =
+        AlarmLocationRequest(
             isLocationAlarmActive = isActive,
             latitude = latitude,
             longitude = longitude,
             radius = radius,
         )
 
-    private fun RoutineResponse.toAlarmType(): AlarmType =
+    private fun AlarmRoutineResponse.toAlarmType(): AlarmType =
         when (type.uppercase()) {
             NON_REPEAT ->
                 AlarmType.NonRepeat(
@@ -87,7 +87,7 @@ object AlarmMapper {
             else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
         }
 
-    private fun LocationResponse.toDomain(): LocationAlarm =
+    private fun AlarmLocationResponse.toDomain(): LocationAlarm =
         LocationAlarm(
             latitude = latitude,
             longitude = longitude,

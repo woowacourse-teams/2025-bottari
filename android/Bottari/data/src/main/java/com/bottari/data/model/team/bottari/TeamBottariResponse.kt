@@ -1,45 +1,34 @@
 package com.bottari.data.model.team.bottari
 
-import com.bottari.data.model.alarm.AlarmResponse
-import com.bottari.data.model.bottari.item.FetchChecklistResponse
-import com.bottari.data.model.team.member.MemberCheckStatusResponse
+import com.bottari.data.model.alarm.AlarmFetchResponse
+import com.bottari.data.model.team.member.TeamMemberStatusCheckedFetchResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FetchTeamBottariChecklistResponse(
-    @SerialName("sharedItems")
-    val sharedItems: List<FetchChecklistResponse>,
-    @SerialName("assignedItems")
-    val assignedItems: List<FetchChecklistResponse>,
-    @SerialName("personalItems")
-    val personalItems: List<FetchChecklistResponse>,
-)
-
-@Serializable
-data class FetchTeamBottariDetailResponse(
+data class TeamBottariFetchDetailResponse(
     @SerialName("id")
     val bottariId: Long,
     @SerialName("title")
     val title: String,
     @SerialName("alarm")
-    val alarm: AlarmResponse?,
+    val alarm: AlarmFetchResponse?,
     @SerialName("sharedItems")
-    val sharedItems: List<TeamBottariItemResponse>,
+    val sharedItems: List<TeamBottariFetchDetailItemResponse>,
     @SerialName("assignedItems")
-    val assignedItems: List<TeamBottariItemResponse>,
+    val assignedItems: List<TeamBottariFetchDetailItemResponse>,
     @SerialName("personalItems")
-    val personalItems: List<TeamBottariItemResponse>,
+    val personalItems: List<TeamBottariFetchDetailItemResponse>,
 )
 
 @Serializable
-data class FetchTeamBottariResponse(
+data class TeamBottariFetchResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("title")
     val title: String,
     @SerialName("alarm")
-    val alarm: AlarmResponse?,
+    val alarm: AlarmFetchResponse?,
     @SerialName("checkedItemsCount")
     val checkedItemsCount: Int,
     @SerialName("totalItemsCount")
@@ -51,13 +40,13 @@ data class FetchTeamBottariResponse(
 @Serializable
 data class FetchTeamBottariStatusResponse(
     @SerialName("sharedItems")
-    val sharedItems: List<TeamProductStatusResponse>,
+    val sharedItems: List<FetchTeamBottariStatusItemResponse>,
     @SerialName("assignedItems")
-    val assignedItems: List<TeamProductStatusResponse>,
+    val assignedItems: List<FetchTeamBottariStatusItemResponse>,
 )
 
 @Serializable
-data class TeamBottariItemResponse(
+data class TeamBottariFetchDetailItemResponse(
     @SerialName("id")
     val itemId: Long,
     @SerialName("name")
@@ -65,13 +54,13 @@ data class TeamBottariItemResponse(
 )
 
 @Serializable
-data class TeamProductStatusResponse(
+data class FetchTeamBottariStatusItemResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("name")
     val name: String,
     @SerialName("memberCheckStatus")
-    val memberCheckStatus: List<MemberCheckStatusResponse>,
+    val memberCheckStatus: List<TeamMemberStatusCheckedFetchResponse>,
     @SerialName("checkItemsCount")
     val checkItemsCount: Int,
     @SerialName("totalItemsCount")

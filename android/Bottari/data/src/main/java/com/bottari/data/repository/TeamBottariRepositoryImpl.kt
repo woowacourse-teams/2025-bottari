@@ -3,8 +3,8 @@ package com.bottari.data.repository
 import com.bottari.data.mapper.TeamBottariMapper.toDomain
 import com.bottari.data.mapper.TeamMapper.toDomain
 import com.bottari.data.mapper.TeamMembersMapper.toDomain
-import com.bottari.data.model.team.bottari.CreateTeamBottariRequest
-import com.bottari.data.model.team.bottari.JoinTeamBottariRequest
+import com.bottari.data.model.team.bottari.TeamBottariCreateRequest
+import com.bottari.data.model.team.bottari.TeamBottariJoinRequest
 import com.bottari.data.model.team.bottari.item.AssignedItemsCreateRequest
 import com.bottari.data.model.team.bottari.item.AssignedItemsUpdateRequest
 import com.bottari.data.model.team.bottari.item.PersonalItemsCreateRequest
@@ -30,7 +30,7 @@ class TeamBottariRepositoryImpl(
 ) : TeamBottariRepository {
     override suspend fun createTeamBottari(title: String): Result<Long?> =
         teamBottariRemoteDataSource.createBottari(
-            CreateTeamBottariRequest(title),
+            TeamBottariCreateRequest(title),
         )
 
     override suspend fun fetchTeamBottari(teamBottariId: Long): Result<TeamBottariCheckList> =
@@ -131,7 +131,7 @@ class TeamBottariRepositoryImpl(
         )
 
     override suspend fun joinTeamBottari(inviteCode: String): Result<Unit> =
-        teamBottariRemoteDataSource.joinTeamBottari(JoinTeamBottariRequest(inviteCode))
+        teamBottariRemoteDataSource.joinTeamBottari(TeamBottariJoinRequest(inviteCode))
 
     override suspend fun fetchTeamBottariMembers(teamBottariId: Long): Result<List<TeamMember>> =
         teamBottariRemoteDataSource

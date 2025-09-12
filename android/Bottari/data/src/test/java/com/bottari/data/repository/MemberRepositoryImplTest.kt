@@ -1,8 +1,8 @@
 package com.bottari.data.repository
 
+import com.bottari.data.model.member.MemberRegisterRequest
 import com.bottari.data.model.member.MemberResponse
-import com.bottari.data.model.member.RegisterMemberRequest
-import com.bottari.data.model.member.SaveMemberNicknameRequest
+import com.bottari.data.model.member.MemberSaveNicknameRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.domain.model.member.Nickname
@@ -42,7 +42,7 @@ class MemberRepositoryImplTest {
     fun registerMemberSuccessReturnsSuccess() =
         runTest {
             // given
-            val request = RegisterMemberRequest("ssaid", "token")
+            val request = MemberRegisterRequest("ssaid", "token")
             coEvery { remoteDataSource.registerMember(request) } returns Result.success(1)
             coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.success("ssaid")
             coEvery { userInfoLocalDataSource.saveMemberId(1) } returns Result.success(Unit)
@@ -62,7 +62,7 @@ class MemberRepositoryImplTest {
     fun registerMemberFailsReturnsFailure() =
         runTest {
             // given
-            val request = RegisterMemberRequest("ssaid", "token")
+            val request = MemberRegisterRequest("ssaid", "token")
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { remoteDataSource.registerMember(request) } returns Result.failure(exception)
             coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.success("ssaid")
@@ -83,7 +83,7 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val newNickname = Nickname("nickname")
-            val request = SaveMemberNicknameRequest("nickname")
+            val request = MemberSaveNicknameRequest("nickname")
             coEvery { remoteDataSource.saveMemberNickname(request) } returns Result.success(Unit)
 
             // when
@@ -102,7 +102,7 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val newNickname = Nickname("nickname")
-            val request = SaveMemberNicknameRequest("nickname")
+            val request = MemberSaveNicknameRequest("nickname")
             val httpException = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { remoteDataSource.saveMemberNickname(request) } returns
                 Result.failure(httpException)

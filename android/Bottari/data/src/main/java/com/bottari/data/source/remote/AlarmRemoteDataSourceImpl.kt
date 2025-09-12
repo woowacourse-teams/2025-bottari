@@ -1,8 +1,8 @@
 package com.bottari.data.source.remote
 
 import com.bottari.data.common.util.safeApiCall
-import com.bottari.data.model.alarm.CreateAlarmRequest
-import com.bottari.data.model.alarm.SaveAlarmRequest
+import com.bottari.data.model.alarm.AlarmCreateRequest
+import com.bottari.data.model.alarm.AlarmSaveRequest
 import com.bottari.data.service.AlarmService
 
 class AlarmRemoteDataSourceImpl(
@@ -10,18 +10,18 @@ class AlarmRemoteDataSourceImpl(
 ) : AlarmRemoteDataSource {
     override suspend fun saveAlarm(
         id: Long,
-        alarmRequest: SaveAlarmRequest,
+        alarmRequest: AlarmSaveRequest,
     ): Result<Unit> =
         safeApiCall {
-            alarmService.saveAlarm(id = id, saveAlarmRequest = alarmRequest)
+            alarmService.saveAlarm(id = id, alarmSaveRequest = alarmRequest)
         }
 
     override suspend fun createAlarm(
         bottariId: Long,
-        alarmRequest: CreateAlarmRequest,
+        alarmRequest: AlarmCreateRequest,
     ): Result<Unit> =
         safeApiCall {
-            alarmService.createAlarm(bottariId = bottariId, createAlarmRequest = alarmRequest)
+            alarmService.createAlarm(bottariId = bottariId, alarmCreateRequest = alarmRequest)
         }
 
     override suspend fun activeAlarmState(id: Long): Result<Unit> =

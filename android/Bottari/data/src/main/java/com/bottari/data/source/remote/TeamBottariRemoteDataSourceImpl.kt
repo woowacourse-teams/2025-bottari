@@ -3,32 +3,32 @@ package com.bottari.data.source.remote
 import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.common.ErrorResponse
-import com.bottari.data.model.team.bottari.CreateTeamBottariRequest
-import com.bottari.data.model.team.bottari.FetchTeamBottariChecklistResponse
-import com.bottari.data.model.team.bottari.FetchTeamBottariDetailResponse
-import com.bottari.data.model.team.bottari.FetchTeamBottariResponse
 import com.bottari.data.model.team.bottari.FetchTeamBottariStatusResponse
-import com.bottari.data.model.team.bottari.JoinTeamBottariRequest
+import com.bottari.data.model.team.bottari.TeamBottariCreateRequest
+import com.bottari.data.model.team.bottari.TeamBottariFetchDetailResponse
+import com.bottari.data.model.team.bottari.TeamBottariFetchResponse
+import com.bottari.data.model.team.bottari.TeamBottariJoinRequest
 import com.bottari.data.model.team.bottari.item.AssignedItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.AssignedItemsResponse
+import com.bottari.data.model.team.bottari.item.AssignedItemsFetchResponse
 import com.bottari.data.model.team.bottari.item.AssignedItemsUpdateRequest
 import com.bottari.data.model.team.bottari.item.PersonalItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.PersonalItemsResponse
+import com.bottari.data.model.team.bottari.item.PersonalItemsFetchResponse
 import com.bottari.data.model.team.bottari.item.SharedItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.SharedItemsResponse
+import com.bottari.data.model.team.bottari.item.SharedItemsFetchResponse
 import com.bottari.data.model.team.bottari.item.TeamBottariItemCheckUpdateRequest
+import com.bottari.data.model.team.bottari.item.TeamBottariItemChecklistFetchResponse
 import com.bottari.data.model.team.bottari.item.TeamBottariItemDeleteRequest
 import com.bottari.data.model.team.bottari.item.TeamBottariItemRemindRequest
 import com.bottari.data.model.team.bottari.item.TeamBottariItemUnCheckUpdateRequest
-import com.bottari.data.model.team.member.FetchTeamBottariMemberResponse
-import com.bottari.data.model.team.member.FetchTeamMemberStatusResponse
-import com.bottari.data.model.team.member.FetchTeamMembersResponse
+import com.bottari.data.model.team.member.TeamMemberFetchResponse
+import com.bottari.data.model.team.member.TeamMemberNameFetchResponse
+import com.bottari.data.model.team.member.TeamMemberStatusFetchResponse
 import com.bottari.data.service.TeamBottariService
 
 class TeamBottariRemoteDataSourceImpl(
     private val teamBottariService: TeamBottariService,
 ) : TeamBottariRemoteDataSource {
-    override suspend fun createBottari(request: CreateTeamBottariRequest): Result<Long?> =
+    override suspend fun createBottari(request: TeamBottariCreateRequest): Result<Long?> =
         runCatching {
             val response = teamBottariService.createTeamBottari(request)
             if (response.isSuccessful) {
@@ -39,7 +39,7 @@ class TeamBottariRemoteDataSourceImpl(
             return Result.failure(Exception(errorResponse?.title))
         }
 
-    override suspend fun fetchTeamBottari(teamBottariId: Long): Result<FetchTeamBottariChecklistResponse> =
+    override suspend fun fetchTeamBottari(teamBottariId: Long): Result<TeamBottariItemChecklistFetchResponse> =
         safeApiCall {
             teamBottariService.fetchTeamBottari(teamBottariId)
         }
@@ -60,12 +60,12 @@ class TeamBottariRemoteDataSourceImpl(
             teamBottariService.checkTeamBottariItem(bottariItemId, request)
         }
 
-    override suspend fun fetchTeamBottaries(): Result<List<FetchTeamBottariResponse>> =
+    override suspend fun fetchTeamBottaries(): Result<List<TeamBottariFetchResponse>> =
         safeApiCall {
             teamBottariService.fetchTeamBottaries()
         }
 
-    override suspend fun fetchTeamBottariDetail(teamBottariId: Long): Result<FetchTeamBottariDetailResponse> =
+    override suspend fun fetchTeamBottariDetail(teamBottariId: Long): Result<TeamBottariFetchDetailResponse> =
         safeApiCall {
             teamBottariService.fetchTeamBottariDetail(teamBottariId)
         }
@@ -83,10 +83,10 @@ class TeamBottariRemoteDataSourceImpl(
             teamBottariService.sendRemindByItem(id, type)
         }
 
-    override suspend fun fetchTeamMembers(id: Long): Result<FetchTeamMembersResponse> =
+    override suspend fun fetchTeamMembers(id: Long): Result<TeamMemberFetchResponse> =
         safeApiCall { teamBottariService.fetchTeamMembers(id) }
 
-    override suspend fun fetchTeamMembersStatus(id: Long): Result<List<FetchTeamMemberStatusResponse>> =
+    override suspend fun fetchTeamMembersStatus(id: Long): Result<List<TeamMemberStatusFetchResponse>> =
         safeApiCall { teamBottariService.fetchTeamMembersStatus(id) }
 
     override suspend fun createTeamBottariSharedItem(
@@ -126,19 +126,19 @@ class TeamBottariRemoteDataSourceImpl(
         memberId: Long,
     ): Result<Unit> = safeApiCall { teamBottariService.sendRemindByMemberMessage(teamBottariId, memberId) }
 
-    override suspend fun joinTeamBottari(request: JoinTeamBottariRequest): Result<Unit> =
+    override suspend fun joinTeamBottari(request: TeamBottariJoinRequest): Result<Unit> =
         safeApiCall { teamBottariService.joinTeamBottari(request) }
 
-    override suspend fun fetchTeamBottariMembers(teamBottariId: Long): Result<List<FetchTeamBottariMemberResponse>> =
+    override suspend fun fetchTeamBottariMembers(teamBottariId: Long): Result<List<TeamMemberNameFetchResponse>> =
         safeApiCall { teamBottariService.fetchTeamBottariMembers(teamBottariId) }
 
-    override suspend fun fetchTeamAssignedItems(teamBottariId: Long): Result<List<AssignedItemsResponse>> =
+    override suspend fun fetchTeamAssignedItems(teamBottariId: Long): Result<List<AssignedItemsFetchResponse>> =
         safeApiCall { teamBottariService.fetchTeamAssignedItems(teamBottariId) }
 
-    override suspend fun fetchTeamSharedItems(teamBottariId: Long): Result<List<SharedItemsResponse>> =
+    override suspend fun fetchTeamSharedItems(teamBottariId: Long): Result<List<SharedItemsFetchResponse>> =
         safeApiCall { teamBottariService.fetchTeamSharedItems(teamBottariId) }
 
-    override suspend fun fetchTeamPersonalItems(teamBottariId: Long): Result<List<PersonalItemsResponse>> =
+    override suspend fun fetchTeamPersonalItems(teamBottariId: Long): Result<List<PersonalItemsFetchResponse>> =
         safeApiCall { teamBottariService.fetchTeamPersonalItems(teamBottariId) }
 
     override suspend fun saveTeamBottariAssignedItem(

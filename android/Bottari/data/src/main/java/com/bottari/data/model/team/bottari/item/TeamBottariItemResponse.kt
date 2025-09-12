@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AssignedItemsResponse(
+data class AssignedItemsFetchResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("name")
@@ -22,7 +22,7 @@ data class AssignedItemsResponse(
 }
 
 @Serializable
-data class PersonalItemsResponse(
+data class PersonalItemsFetchResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("name")
@@ -30,7 +30,7 @@ data class PersonalItemsResponse(
 )
 
 @Serializable
-data class SharedItemsResponse(
+data class SharedItemsFetchResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("name")

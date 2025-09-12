@@ -1,7 +1,7 @@
 package com.bottari.data.mapper
 
 import com.bottari.data.model.bottari.item.FetchChecklistResponse
-import com.bottari.data.model.team.bottari.TeamBottariItemResponse
+import com.bottari.data.model.team.bottari.TeamBottariFetchDetailItemResponse
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.ChecklistItem
@@ -14,7 +14,7 @@ object BottariItemMapper {
             isChecked = isChecked,
         )
 
-    fun TeamBottariItemResponse.toDomain(type: BottariItemType): BottariItem =
+    fun TeamBottariFetchDetailItemResponse.toDomain(type: BottariItemType): BottariItem =
         BottariItem(
             id = itemId,
             name = name,

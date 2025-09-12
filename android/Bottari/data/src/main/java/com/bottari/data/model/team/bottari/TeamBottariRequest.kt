@@ -4,13 +4,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateTeamBottariRequest(
+data class TeamBottariCreateRequest(
     @SerialName("title")
     val title: String,
 )
 
 @Serializable
-data class JoinTeamBottariRequest(
+data class TeamBottariJoinRequest(
     @SerialName("inviteCode")
     val inviteCode: String,
 )

@@ -54,3 +54,23 @@ data class TeamBottariItemRemindRequest(
     @SerialName("type")
     val type: String,
 )
+
+@Serializable
+data class TeamBottariItemChecklistFetchResponse(
+    @SerialName("sharedItems")
+    val sharedItems: List<TeamChecklistItemResponse>,
+    @SerialName("assignedItems")
+    val assignedItems: List<TeamChecklistItemResponse>,
+    @SerialName("personalItems")
+    val personalItems: List<TeamChecklistItemResponse>,
+)
+
+@Serializable
+data class TeamChecklistItemResponse(
+    @SerialName("id")
+    val id: Long,
+    @SerialName("name")
+    val name: String,
+    @SerialName("isChecked")
+    val isChecked: Boolean,
+)
