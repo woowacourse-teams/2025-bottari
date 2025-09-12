@@ -6,16 +6,17 @@ import com.bottari.data.model.team.bottari.FetchTeamBottariDetailResponse
 import com.bottari.data.model.team.bottari.FetchTeamBottariResponse
 import com.bottari.data.model.team.bottari.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.bottari.JoinTeamBottariRequest
-import com.bottari.data.model.team.item.CreateTeamBottariAssignedItemRequest
-import com.bottari.data.model.team.item.CreateTeamBottariPersonalItemRequest
-import com.bottari.data.model.team.item.CreateTeamBottariSharedItemRequest
-import com.bottari.data.model.team.item.DeleteTeamBottariItemRequest
-import com.bottari.data.model.team.item.FetchTeamAssignedItemResponse
-import com.bottari.data.model.team.item.FetchTeamPersonalItemResponse
-import com.bottari.data.model.team.item.FetchTeamSharedItemResponse
-import com.bottari.data.model.team.item.SaveTeamAssignedItemRequest
-import com.bottari.data.model.team.item.SendRemindByItemRequest
-import com.bottari.data.model.team.item.UpdateTeamItemCheckRequest
+import com.bottari.data.model.team.bottari.item.AssignedItemsCreateRequest
+import com.bottari.data.model.team.bottari.item.AssignedItemsResponse
+import com.bottari.data.model.team.bottari.item.AssignedItemsUpdateRequest
+import com.bottari.data.model.team.bottari.item.PersonalItemsCreateRequest
+import com.bottari.data.model.team.bottari.item.PersonalItemsResponse
+import com.bottari.data.model.team.bottari.item.SharedItemsCreateRequest
+import com.bottari.data.model.team.bottari.item.SharedItemsResponse
+import com.bottari.data.model.team.bottari.item.TeamBottariItemCheckUpdateRequest
+import com.bottari.data.model.team.bottari.item.TeamBottariItemDeleteRequest
+import com.bottari.data.model.team.bottari.item.TeamBottariItemRemindRequest
+import com.bottari.data.model.team.bottari.item.TeamBottariItemUnCheckUpdateRequest
 import com.bottari.data.model.team.member.FetchTeamBottariMemberResponse
 import com.bottari.data.model.team.member.FetchTeamMemberStatusResponse
 import com.bottari.data.model.team.member.FetchTeamMembersResponse
@@ -27,12 +28,12 @@ interface TeamBottariRemoteDataSource {
 
     suspend fun uncheckBottariItem(
         bottariItemId: Long,
-        request: UpdateTeamItemCheckRequest,
+        request: TeamBottariItemUnCheckUpdateRequest,
     ): Result<Unit>
 
     suspend fun checkBottariItem(
         bottariItemId: Long,
-        request: UpdateTeamItemCheckRequest,
+        request: TeamBottariItemCheckUpdateRequest,
     ): Result<Unit>
 
     suspend fun fetchTeamBottaries(): Result<List<FetchTeamBottariResponse>>
@@ -43,7 +44,7 @@ interface TeamBottariRemoteDataSource {
 
     suspend fun sendRemindByItem(
         id: Long,
-        type: SendRemindByItemRequest,
+        type: TeamBottariItemRemindRequest,
     ): Result<Unit>
 
     suspend fun fetchTeamMembers(id: Long): Result<FetchTeamMembersResponse>
@@ -52,22 +53,22 @@ interface TeamBottariRemoteDataSource {
 
     suspend fun createTeamBottariSharedItem(
         id: Long,
-        request: CreateTeamBottariSharedItemRequest,
+        request: SharedItemsCreateRequest,
     ): Result<Unit>
 
     suspend fun createTeamBottariPersonalItem(
         id: Long,
-        request: CreateTeamBottariPersonalItemRequest,
+        request: PersonalItemsCreateRequest,
     ): Result<Unit>
 
     suspend fun createTeamBottariAssignedItem(
         id: Long,
-        request: CreateTeamBottariAssignedItemRequest,
+        request: AssignedItemsCreateRequest,
     ): Result<Unit>
 
     suspend fun deleteTeamBottariItem(
         id: Long,
-        type: DeleteTeamBottariItemRequest,
+        type: TeamBottariItemDeleteRequest,
     ): Result<Unit>
 
     suspend fun sendRemindByMemberMessage(
@@ -79,16 +80,16 @@ interface TeamBottariRemoteDataSource {
 
     suspend fun fetchTeamBottariMembers(teamBottariId: Long): Result<List<FetchTeamBottariMemberResponse>>
 
-    suspend fun fetchTeamAssignedItems(teamBottariId: Long): Result<List<FetchTeamAssignedItemResponse>>
+    suspend fun fetchTeamAssignedItems(teamBottariId: Long): Result<List<AssignedItemsResponse>>
 
-    suspend fun fetchTeamSharedItems(teamBottariId: Long): Result<List<FetchTeamSharedItemResponse>>
+    suspend fun fetchTeamSharedItems(teamBottariId: Long): Result<List<SharedItemsResponse>>
 
-    suspend fun fetchTeamPersonalItems(teamBottariId: Long): Result<List<FetchTeamPersonalItemResponse>>
+    suspend fun fetchTeamPersonalItems(teamBottariId: Long): Result<List<PersonalItemsResponse>>
 
     suspend fun saveTeamBottariAssignedItem(
         teamBottariId: Long,
         assignedItemId: Long,
-        request: SaveTeamAssignedItemRequest,
+        request: AssignedItemsUpdateRequest,
     ): Result<Unit>
 
     suspend fun exitTeamBottari(teamBottariId: Long): Result<Unit>

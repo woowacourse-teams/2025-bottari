@@ -4,10 +4,10 @@ import com.bottari.data.model.alarm.AlarmResponse
 import com.bottari.data.model.alarm.RoutineResponse
 import com.bottari.data.model.bottari.FetchBottariResponse
 import com.bottari.data.model.bottari.FetchBottariesResponse
-import com.bottari.data.model.team.item.FetchTeamAssignedItemResponse
-import com.bottari.data.model.team.item.FetchTeamPersonalItemResponse
-import com.bottari.data.model.team.item.FetchTeamSharedItemResponse
-import com.bottari.data.model.team.item.SaveTeamAssignedItemRequest
+import com.bottari.data.model.team.bottari.item.AssignedItemsResponse
+import com.bottari.data.model.team.bottari.item.AssignedItemsUpdateRequest
+import com.bottari.data.model.team.bottari.item.PersonalItemsResponse
+import com.bottari.data.model.team.bottari.item.SharedItemsResponse
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.team.TeamMember
@@ -62,24 +62,24 @@ fun bottariResponseFixture(
     )
 
 val BOTTARI_PERSONAL_ITEM_RESPONSE_FIXTURE =
-    FetchTeamPersonalItemResponse(
+    PersonalItemsResponse(
         1L,
         "item 1",
     )
 
 val BOTTARI_SHARED_ITEM_RESPONSE_FIXTURE =
-    FetchTeamSharedItemResponse(
+    SharedItemsResponse(
         1L,
         "item 1",
     )
 
 val BOTTARI_ASSIGNED_ITEM_RESPONSE_FIXTURE =
-    FetchTeamAssignedItemResponse(
+    AssignedItemsResponse(
         1L,
         "item 1",
         listOf(
-            FetchTeamAssignedItemResponse.Assignee(1L, "member 1"),
-            FetchTeamAssignedItemResponse.Assignee(2L, "member 2"),
+            AssignedItemsResponse.Assignee(1L, "member 1"),
+            AssignedItemsResponse.Assignee(2L, "member 2"),
         ),
     )
 
@@ -110,7 +110,7 @@ val BOTTARI_ASSIGNED_ITEM_FIXTURE =
     )
 
 val SAVE_TEAM_BOTTARI_ASSIGNED_ITEM_REQUEST_FIXTURE =
-    SaveTeamAssignedItemRequest(
+    AssignedItemsUpdateRequest(
         name = "new name",
         assigneeIds = listOf(1L, 2L),
     )

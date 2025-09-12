@@ -3,11 +3,11 @@ package com.bottari.data.repository
 import com.bottari.data.model.team.bottari.CreateTeamBottariRequest
 import com.bottari.data.model.team.bottari.FetchTeamBottariChecklistResponse
 import com.bottari.data.model.team.bottari.JoinTeamBottariRequest
-import com.bottari.data.model.team.item.CreateTeamBottariAssignedItemRequest
-import com.bottari.data.model.team.item.CreateTeamBottariPersonalItemRequest
-import com.bottari.data.model.team.item.CreateTeamBottariSharedItemRequest
-import com.bottari.data.model.team.item.DeleteTeamBottariItemRequest
-import com.bottari.data.model.team.item.UpdateTeamItemCheckRequest
+import com.bottari.data.model.team.bottari.item.AssignedItemsCreateRequest
+import com.bottari.data.model.team.bottari.item.PersonalItemsCreateRequest
+import com.bottari.data.model.team.bottari.item.SharedItemsCreateRequest
+import com.bottari.data.model.team.bottari.item.TeamBottariItemCheckUpdateRequest
+import com.bottari.data.model.team.bottari.item.TeamBottariItemDeleteRequest
 import com.bottari.data.model.team.member.FetchTeamMembersResponse
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.data.testFixture.BOTTARI_ASSIGNED_ITEM_FIXTURE
@@ -385,7 +385,7 @@ class TeamBottariRepositoryImplTest {
             // given
             val id = 1L
             val bottariItemType = BottariItemType.PERSONAL
-            val request = DeleteTeamBottariItemRequest(bottariItemType.toString())
+            val request = TeamBottariItemDeleteRequest(bottariItemType.toString())
             coEvery {
                 dataSource.deleteTeamBottariItem(
                     id,
@@ -410,7 +410,7 @@ class TeamBottariRepositoryImplTest {
             // given
             val id = 1L
             val bottariItemType = BottariItemType.PERSONAL
-            val request = DeleteTeamBottariItemRequest(bottariItemType.toString())
+            val request = TeamBottariItemDeleteRequest(bottariItemType.toString())
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery {
                 dataSource.deleteTeamBottariItem(
@@ -527,7 +527,7 @@ class TeamBottariRepositoryImplTest {
             coEvery {
                 dataSource.createTeamBottariPersonalItem(
                     teamBottariId,
-                    CreateTeamBottariPersonalItemRequest(itemName),
+                    PersonalItemsCreateRequest(itemName),
                 )
             } returns Result.success(Unit)
 
@@ -541,7 +541,7 @@ class TeamBottariRepositoryImplTest {
             coVerify(exactly = 1) {
                 dataSource.createTeamBottariPersonalItem(
                     teamBottariId,
-                    CreateTeamBottariPersonalItemRequest(itemName),
+                    PersonalItemsCreateRequest(itemName),
                 )
             }
         }
@@ -558,7 +558,7 @@ class TeamBottariRepositoryImplTest {
             coEvery {
                 dataSource.createTeamBottariPersonalItem(
                     teamBottariId,
-                    CreateTeamBottariPersonalItemRequest(itemName),
+                    PersonalItemsCreateRequest(itemName),
                 )
             } returns Result.failure(exception)
 
@@ -572,7 +572,7 @@ class TeamBottariRepositoryImplTest {
             coVerify(exactly = 1) {
                 dataSource.createTeamBottariPersonalItem(
                     teamBottariId,
-                    CreateTeamBottariPersonalItemRequest(itemName),
+                    PersonalItemsCreateRequest(itemName),
                 )
             }
         }
@@ -588,7 +588,7 @@ class TeamBottariRepositoryImplTest {
             coEvery {
                 dataSource.createTeamBottariSharedItem(
                     teamBottariId,
-                    CreateTeamBottariSharedItemRequest(itemName),
+                    SharedItemsCreateRequest(itemName),
                 )
             } returns Result.success(Unit)
 
@@ -602,7 +602,7 @@ class TeamBottariRepositoryImplTest {
             coVerify(exactly = 1) {
                 dataSource.createTeamBottariSharedItem(
                     teamBottariId,
-                    CreateTeamBottariSharedItemRequest(itemName),
+                    SharedItemsCreateRequest(itemName),
                 )
             }
         }
@@ -619,7 +619,7 @@ class TeamBottariRepositoryImplTest {
             coEvery {
                 dataSource.createTeamBottariSharedItem(
                     teamBottariId,
-                    CreateTeamBottariSharedItemRequest(itemName),
+                    SharedItemsCreateRequest(itemName),
                 )
             } returns Result.failure(exception)
 
@@ -633,7 +633,7 @@ class TeamBottariRepositoryImplTest {
             coVerify(exactly = 1) {
                 dataSource.createTeamBottariSharedItem(
                     teamBottariId,
-                    CreateTeamBottariSharedItemRequest(itemName),
+                    SharedItemsCreateRequest(itemName),
                 )
             }
         }
@@ -649,7 +649,7 @@ class TeamBottariRepositoryImplTest {
             coEvery {
                 dataSource.createTeamBottariAssignedItem(
                     teamBottariId,
-                    CreateTeamBottariAssignedItemRequest(itemName, listOf(1L)),
+                    AssignedItemsCreateRequest(itemName, listOf(1L)),
                 )
             } returns Result.success(Unit)
 
@@ -664,7 +664,7 @@ class TeamBottariRepositoryImplTest {
             coVerify(exactly = 1) {
                 dataSource.createTeamBottariAssignedItem(
                     teamBottariId,
-                    CreateTeamBottariAssignedItemRequest(itemName, listOf(1L)),
+                    AssignedItemsCreateRequest(itemName, listOf(1L)),
                 )
             }
         }
@@ -681,7 +681,7 @@ class TeamBottariRepositoryImplTest {
             coEvery {
                 dataSource.createTeamBottariAssignedItem(
                     teamBottariId,
-                    CreateTeamBottariAssignedItemRequest(itemName, listOf(1L)),
+                    AssignedItemsCreateRequest(itemName, listOf(1L)),
                 )
             } returns Result.failure(exception)
 
@@ -696,7 +696,7 @@ class TeamBottariRepositoryImplTest {
             coVerify(exactly = 1) {
                 dataSource.createTeamBottariAssignedItem(
                     teamBottariId,
-                    CreateTeamBottariAssignedItemRequest(itemName, listOf(1L)),
+                    AssignedItemsCreateRequest(itemName, listOf(1L)),
                 )
             }
         }
@@ -934,7 +934,7 @@ class TeamBottariRepositoryImplTest {
             coEvery {
                 dataSource.checkBottariItem(
                     teamBottariId,
-                    UpdateTeamItemCheckRequest(type),
+                    TeamBottariItemCheckUpdateRequest(type),
                 )
             } returns Result.success(Unit)
 
@@ -951,7 +951,7 @@ class TeamBottariRepositoryImplTest {
             coVerify(exactly = 1) {
                 dataSource.checkBottariItem(
                     teamBottariId,
-                    UpdateTeamItemCheckRequest(type),
+                    TeamBottariItemCheckUpdateRequest(type),
                 )
             }
         }
@@ -967,7 +967,7 @@ class TeamBottariRepositoryImplTest {
             coEvery {
                 dataSource.checkBottariItem(
                     teamBottariId,
-                    UpdateTeamItemCheckRequest(type),
+                    TeamBottariItemCheckUpdateRequest(type),
                 )
             } returns Result.failure(exception)
 
@@ -983,7 +983,7 @@ class TeamBottariRepositoryImplTest {
             coVerify(exactly = 1) {
                 dataSource.checkBottariItem(
                     teamBottariId,
-                    UpdateTeamItemCheckRequest(type),
+                    TeamBottariItemCheckUpdateRequest(type),
                 )
             }
         }

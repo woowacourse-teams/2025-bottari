@@ -1,6 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.fcm.SaveFcmTokenRequest
+import com.bottari.data.model.fcm.FcmTokenSaveRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.FcmRemoteDataSource
 import com.bottari.domain.repository.FcmRepository
@@ -40,7 +40,7 @@ class FcmRepositoryTest {
         runTest {
             // given
             val token = "token"
-            val request = SaveFcmTokenRequest(token)
+            val request = FcmTokenSaveRequest(token)
             coEvery { dataSource.saveFcmToken(request) } returns Result.success(Unit)
 
             // when
@@ -59,7 +59,7 @@ class FcmRepositoryTest {
         runTest {
             // given
             val token = "token"
-            val request = SaveFcmTokenRequest(token)
+            val request = FcmTokenSaveRequest(token)
             val exception = HttpException(Response.error<Unit>(404, errorResponseBody))
             coEvery { dataSource.saveFcmToken(request) } returns Result.failure(exception)
 

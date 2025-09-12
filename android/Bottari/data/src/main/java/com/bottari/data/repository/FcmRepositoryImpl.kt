@@ -1,6 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.fcm.SaveFcmTokenRequest
+import com.bottari.data.model.fcm.FcmTokenSaveRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.FcmRemoteDataSource
 import com.bottari.domain.extension.flatMapCatching
@@ -13,5 +13,5 @@ class FcmRepositoryImpl(
     override suspend fun saveFcmToken(fcmToken: String): Result<Unit> =
         memberIdentifierLocalDataSource
             .getMemberId()
-            .flatMapCatching { fcmRemoteDataSource.saveFcmToken(SaveFcmTokenRequest(fcmToken)) }
+            .flatMapCatching { fcmRemoteDataSource.saveFcmToken(FcmTokenSaveRequest(fcmToken)) }
 }

@@ -1,10 +1,10 @@
-package com.bottari.data.model.team.item
+package com.bottari.data.model.team.bottari.item
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FetchTeamAssignedItemResponse(
+data class AssignedItemsResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("name")
@@ -22,7 +22,7 @@ data class FetchTeamAssignedItemResponse(
 }
 
 @Serializable
-data class FetchTeamPersonalItemResponse(
+data class PersonalItemsResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("name")
@@ -30,7 +30,7 @@ data class FetchTeamPersonalItemResponse(
 )
 
 @Serializable
-data class FetchTeamSharedItemResponse(
+data class SharedItemsResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("name")
