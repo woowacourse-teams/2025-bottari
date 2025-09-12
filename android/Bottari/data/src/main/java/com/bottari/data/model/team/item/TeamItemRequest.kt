@@ -1,4 +1,4 @@
-package com.bottari.data.model.teamItem
+package com.bottari.data.model.team.item
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

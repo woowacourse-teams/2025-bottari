@@ -1,7 +1,8 @@
-package com.bottari.data.model.team
+package com.bottari.data.model.team.bottari
 
 import com.bottari.data.model.alarm.AlarmResponse
-import com.bottari.data.model.item.FetchChecklistResponse
+import com.bottari.data.model.bottari.item.FetchChecklistResponse
+import com.bottari.data.model.team.member.MemberCheckStatusResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

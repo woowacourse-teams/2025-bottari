@@ -1,9 +1,9 @@
 package com.bottari.data.mapper
 
 import com.bottari.data.mapper.BottariItemMapper.toDomain
-import com.bottari.data.model.team.FetchTeamBottariMemberResponse
-import com.bottari.data.model.team.FetchTeamMemberStatusResponse
-import com.bottari.data.model.team.FetchTeamMembersResponse
+import com.bottari.data.model.team.member.FetchTeamBottariMemberResponse
+import com.bottari.data.model.team.member.FetchTeamMemberStatusResponse
+import com.bottari.data.model.team.member.FetchTeamMembersResponse
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.HeadCount
 import com.bottari.domain.model.team.TeamMember

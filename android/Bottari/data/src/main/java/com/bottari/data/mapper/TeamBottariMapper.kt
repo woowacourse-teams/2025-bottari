@@ -2,14 +2,14 @@ package com.bottari.data.mapper
 
 import com.bottari.data.mapper.AlarmMapper.toDomain
 import com.bottari.data.mapper.BottariItemMapper.toDomain
-import com.bottari.data.model.team.FetchTeamBottariDetailResponse
-import com.bottari.data.model.team.FetchTeamBottariResponse
-import com.bottari.data.model.team.FetchTeamBottariStatusResponse
-import com.bottari.data.model.team.MemberCheckStatusResponse
-import com.bottari.data.model.team.TeamProductStatusResponse
-import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
-import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
-import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
+import com.bottari.data.model.team.bottari.FetchTeamBottariDetailResponse
+import com.bottari.data.model.team.bottari.FetchTeamBottariResponse
+import com.bottari.data.model.team.bottari.FetchTeamBottariStatusResponse
+import com.bottari.data.model.team.bottari.TeamProductStatusResponse
+import com.bottari.data.model.team.item.FetchTeamAssignedItemResponse
+import com.bottari.data.model.team.item.FetchTeamPersonalItemResponse
+import com.bottari.data.model.team.item.FetchTeamSharedItemResponse
+import com.bottari.data.model.team.member.MemberCheckStatusResponse
 import com.bottari.domain.model.bottari.BottariBase
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType

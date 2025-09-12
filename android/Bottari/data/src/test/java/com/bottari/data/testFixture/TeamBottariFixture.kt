@@ -1,9 +1,9 @@
 package com.bottari.data.testFixture
 
-import com.bottari.data.model.team.FetchTeamBottariDetailResponse
-import com.bottari.data.model.team.FetchTeamBottariMemberResponse
-import com.bottari.data.model.team.FetchTeamBottariResponse
-import com.bottari.data.model.team.FetchTeamMemberStatusResponse
+import com.bottari.data.model.team.bottari.FetchTeamBottariDetailResponse
+import com.bottari.data.model.team.bottari.FetchTeamBottariResponse
+import com.bottari.data.model.team.member.FetchTeamBottariMemberResponse
+import com.bottari.data.model.team.member.FetchTeamMemberStatusResponse
 import com.bottari.domain.model.bottari.BottariBase
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.member.Nickname

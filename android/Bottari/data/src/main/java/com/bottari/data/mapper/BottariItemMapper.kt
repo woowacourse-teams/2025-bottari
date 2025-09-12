@@ -1,7 +1,7 @@
 package com.bottari.data.mapper
 
-import com.bottari.data.model.item.FetchChecklistResponse
-import com.bottari.data.model.team.TeamBottariItemResponse
+import com.bottari.data.model.bottari.item.FetchChecklistResponse
+import com.bottari.data.model.team.bottari.TeamBottariItemResponse
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.ChecklistItem

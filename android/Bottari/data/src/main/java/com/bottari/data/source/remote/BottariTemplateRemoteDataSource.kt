@@ -1,7 +1,7 @@
 package com.bottari.data.source.remote
 
-import com.bottari.data.model.template.CreateBottariTemplateRequest
-import com.bottari.data.model.template.FetchBottariTemplateResponse
+import com.bottari.data.model.bottari.template.CreateBottariTemplateRequest
+import com.bottari.data.model.bottari.template.FetchBottariTemplateResponse
 
 interface BottariTemplateRemoteDataSource {
     suspend fun fetchBottariTemplates(searchWord: String?): Result<List<FetchBottariTemplateResponse>>

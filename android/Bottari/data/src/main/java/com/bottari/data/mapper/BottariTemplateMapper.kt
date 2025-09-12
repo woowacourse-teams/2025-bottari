@@ -1,7 +1,7 @@
 package com.bottari.data.mapper
 
-import com.bottari.data.model.template.BottariTemplateItemResponse
-import com.bottari.data.model.template.FetchBottariTemplateResponse
+import com.bottari.data.model.bottari.template.BottariTemplateItemResponse
+import com.bottari.data.model.bottari.template.FetchBottariTemplateResponse
 import com.bottari.domain.model.template.BottariTemplate
 import com.bottari.domain.model.template.BottariTemplateItem
 

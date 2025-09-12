@@ -1,4 +1,4 @@
-package com.bottari.data.model.template
+package com.bottari.data.model.bottari.template
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

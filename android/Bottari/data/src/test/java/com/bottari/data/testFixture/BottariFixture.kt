@@ -4,10 +4,10 @@ import com.bottari.data.model.alarm.AlarmResponse
 import com.bottari.data.model.alarm.RoutineResponse
 import com.bottari.data.model.bottari.FetchBottariResponse
 import com.bottari.data.model.bottari.FetchBottariesResponse
-import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
-import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
-import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
-import com.bottari.data.model.teamItem.SaveTeamAssignedItemRequest
+import com.bottari.data.model.team.item.FetchTeamAssignedItemResponse
+import com.bottari.data.model.team.item.FetchTeamPersonalItemResponse
+import com.bottari.data.model.team.item.FetchTeamSharedItemResponse
+import com.bottari.data.model.team.item.SaveTeamAssignedItemRequest
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.team.TeamMember

@@ -1,7 +1,7 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.template.CreateBottariTemplateRequest
-import com.bottari.data.model.template.FetchBottariTemplateResponse
+import com.bottari.data.model.bottari.template.CreateBottariTemplateRequest
+import com.bottari.data.model.bottari.template.FetchBottariTemplateResponse
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
 import com.bottari.data.testFixture.fetchBottariTemplateResponseListFixture
 import com.bottari.domain.repository.BottariTemplateRepository
