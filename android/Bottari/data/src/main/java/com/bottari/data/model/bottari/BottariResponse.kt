@@ -1,6 +1,6 @@
 package com.bottari.data.model.bottari
 
-import com.bottari.data.model.alarm.AlarmFetchResponse
+import com.bottari.data.model.alarm.response.AlarmFetchResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

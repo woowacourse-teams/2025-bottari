@@ -1,7 +1,7 @@
 package com.bottari.data.testFixture
 
-import com.bottari.data.model.alarm.AlarmFetchResponse
-import com.bottari.data.model.alarm.AlarmRoutineResponse
+import com.bottari.data.model.alarm.response.AlarmFetchResponse
+import com.bottari.data.model.alarm.response.AlarmRoutineResponse
 import com.bottari.data.model.bottari.BottariFetchResponse
 import com.bottari.data.model.bottari.BottariesFetchResponse
 import com.bottari.data.model.team.bottari.item.AssignedItemsFetchResponse

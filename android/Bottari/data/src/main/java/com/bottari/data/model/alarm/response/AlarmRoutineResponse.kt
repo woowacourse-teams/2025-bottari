@@ -1,4 +1,4 @@
-package com.bottari.data.model.alarm
+package com.bottari.data.model.alarm.response
 
 import com.bottari.data.common.util.LocalDateSerializer
 import com.bottari.data.common.util.LocalTimeSerializer
@@ -6,30 +6,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.LocalTime
-
-@Serializable
-data class AlarmFetchResponse(
-    @SerialName("id")
-    val id: Long,
-    @SerialName("isActive")
-    val isActive: Boolean,
-    @SerialName("location")
-    val location: AlarmLocationResponse?,
-    @SerialName("routine")
-    val routine: AlarmRoutineResponse,
-)
-
-@Serializable
-data class AlarmLocationResponse(
-    @SerialName("isActive")
-    val isActive: Boolean,
-    @SerialName("latitude")
-    val latitude: Double,
-    @SerialName("longitude")
-    val longitude: Double,
-    @SerialName("radius")
-    val radius: Int,
-)
 
 @Serializable
 data class AlarmRoutineResponse(

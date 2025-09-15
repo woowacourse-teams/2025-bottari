@@ -1,4 +1,4 @@
-package com.bottari.data.model.alarm
+package com.bottari.data.model.alarm.request
 
 import com.bottari.data.common.util.LocalDateSerializer
 import com.bottari.data.common.util.LocalTimeSerializer
@@ -8,23 +8,15 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @Serializable
-data class AlarmSaveRequest(
-    @SerialName("routineAlarm")
-    val routineAlarm: AlarmRoutineRequest,
-    @SerialName("locationAlarm")
-    val locationAlarm: AlarmLocationRequest?,
-)
-
-@Serializable
 data class AlarmCreateRequest(
     @SerialName("routineAlarm")
-    val routineAlarm: AlarmRoutineRequest,
+    val routineAlarm: AlarmCreateRoutineRequest,
     @SerialName("locationAlarm")
-    val locationAlarm: AlarmLocationRequest?,
+    val locationAlarm: AlarmCreateLocationRequest?,
 )
 
 @Serializable
-data class AlarmLocationRequest(
+data class AlarmCreateLocationRequest(
     @SerialName("isLocationAlarmActive")
     val isLocationAlarmActive: Boolean,
     @SerialName("latitude")
@@ -36,7 +28,7 @@ data class AlarmLocationRequest(
 )
 
 @Serializable
-data class AlarmRoutineRequest(
+data class AlarmCreateRoutineRequest(
     @SerialName("time")
     @Serializable(with = LocalTimeSerializer::class)
     val time: LocalTime,
