@@ -9,7 +9,7 @@ import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamBottariUseCaseProvider
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
-import com.bottari.domain.model.team.TeamBottariDetail
+import com.bottari.domain.model.team.bottari.TeamBottariDetail
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariDetailUseCase

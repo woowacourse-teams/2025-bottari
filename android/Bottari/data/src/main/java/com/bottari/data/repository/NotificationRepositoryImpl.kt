@@ -1,7 +1,7 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.NotificationMapper.toDomain
-import com.bottari.data.mapper.NotificationMapper.toEntity
+import com.bottari.data.mapper.notification.NotificationMapper.toDomain
+import com.bottari.data.mapper.notification.NotificationMapper.toEntity
 import com.bottari.data.source.remote.NotificationLocalDataSource
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.NotificationRepository

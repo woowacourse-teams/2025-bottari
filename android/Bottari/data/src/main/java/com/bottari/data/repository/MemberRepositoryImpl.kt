@@ -1,7 +1,7 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.MemberMapper.toDomain
-import com.bottari.data.mapper.NicknameMapper.toRequest
+import com.bottari.data.mapper.member.MemberMapper.toDomain
+import com.bottari.data.mapper.member.MemberMapper.toRequest
 import com.bottari.data.model.member.MemberRegisterRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource

@@ -1,8 +1,8 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.TeamBottariMapper.toDomain
-import com.bottari.data.mapper.TeamMapper.toDomain
-import com.bottari.data.mapper.TeamMembersMapper.toDomain
+import com.bottari.data.mapper.team.bottari.TeamBottariMapper.toDomain
+import com.bottari.data.mapper.team.bottari.item.TeamItemMapper.toDomain
+import com.bottari.data.mapper.team.member.TeamMembersMapper.toDomain
 import com.bottari.data.model.team.bottari.TeamBottariCreateRequest
 import com.bottari.data.model.team.bottari.TeamBottariJoinRequest
 import com.bottari.data.model.team.bottari.item.request.AssignedItemsCreateRequest
@@ -14,15 +14,15 @@ import com.bottari.data.model.team.bottari.item.request.TeamBottariItemDeleteReq
 import com.bottari.data.model.team.bottari.item.request.TeamBottariItemRemindRequest
 import com.bottari.data.model.team.bottari.item.request.TeamBottariItemUnCheckUpdateRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
-import com.bottari.domain.model.bottari.BottariItem
-import com.bottari.domain.model.bottari.BottariItemType
-import com.bottari.domain.model.team.TeamBottari
-import com.bottari.domain.model.team.TeamBottariCheckList
-import com.bottari.domain.model.team.TeamBottariDetail
-import com.bottari.domain.model.team.TeamBottariStatus
-import com.bottari.domain.model.team.TeamMember
-import com.bottari.domain.model.team.TeamMemberStatus
-import com.bottari.domain.model.team.TeamMembers
+import com.bottari.domain.model.bottari.item.BottariItem
+import com.bottari.domain.model.team.bottari.TeamBottari
+import com.bottari.domain.model.team.bottari.TeamBottariCheckList
+import com.bottari.domain.model.team.bottari.TeamBottariDetail
+import com.bottari.domain.model.team.bottari.TeamBottariStatus
+import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
+import com.bottari.domain.model.team.member.TeamMember
+import com.bottari.domain.model.team.member.TeamMemberStatus
+import com.bottari.domain.model.team.member.TeamMembers
 import com.bottari.domain.repository.TeamBottariRepository
 
 class TeamBottariRepositoryImpl(
@@ -112,7 +112,7 @@ class TeamBottariRepositoryImpl(
 
     override suspend fun deleteTeamBottariItem(
         id: Long,
-        type: BottariItemType,
+        type: TeamBottariItemType,
     ): Result<Unit> {
         val bottariItemType = type.javaClass.simpleName
         return teamBottariRemoteDataSource.deleteTeamBottariItem(

@@ -1,9 +1,9 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.BottariTemplateMapper.toDomain
+import com.bottari.data.mapper.bottari.template.BottariTemplateMapper.toDomain
 import com.bottari.data.model.bottari.template.CreateBottariTemplateRequest
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
-import com.bottari.domain.model.template.BottariTemplate
+import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.repository.BottariTemplateRepository
 
 class BottariTemplateRepositoryImpl(

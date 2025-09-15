@@ -8,10 +8,10 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
-import com.bottari.domain.model.bottari.ChecklistItem
+import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
-import com.bottari.domain.model.team.TeamBottariCheckList
+import com.bottari.domain.model.team.bottari.TeamBottariCheckList
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase

@@ -1,6 +1,6 @@
 package com.bottari.domain.usecase.team
 
-import com.bottari.domain.model.bottari.BottariItemType
+import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 import com.bottari.domain.repository.TeamBottariRepository
 
 class DeleteTeamBottariItemUseCase(
@@ -8,6 +8,6 @@ class DeleteTeamBottariItemUseCase(
 ) {
     suspend operator fun invoke(
         itemId: Long,
-        type: BottariItemType,
+        type: TeamBottariItemType,
     ) = teamBottariRepository.deleteTeamBottariItem(itemId, type)
 }

@@ -1,8 +1,8 @@
 package com.bottari.presentation.mapper
 
-import com.bottari.domain.model.team.TeamMember
-import com.bottari.domain.model.team.TeamMemberStatus
-import com.bottari.domain.model.team.TeamMembers
+import com.bottari.domain.model.team.member.TeamMember
+import com.bottari.domain.model.team.member.TeamMemberStatus
+import com.bottari.domain.model.team.member.TeamMembers
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.model.TeamMemberStatusUiModel
 import com.bottari.presentation.model.TeamMemberUiModel

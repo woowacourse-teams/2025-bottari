@@ -8,11 +8,11 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
 import com.bottari.di.usecase.TeamMemberUseCaseProvider
-import com.bottari.domain.model.bottari.BottariItem
-import com.bottari.domain.model.bottari.BottariItemType
+import com.bottari.domain.model.bottari.item.BottariItem
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
-import com.bottari.domain.model.team.TeamMember
+import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
+import com.bottari.domain.model.team.member.TeamMember
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.team.CreateTeamAssignedItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
@@ -79,7 +79,7 @@ class TeamAssignedItemEditViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            deleteTeamBottariItemUseCase(itemId, BottariItemType.ASSIGNED())
+            deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.ASSIGNED())
                 .onSuccess { refreshAssignedItemsAndMembers() }
                 .onFailure { emitEvent(TeamAssignedItemEditEvent.DeleteItemFailure) }
 

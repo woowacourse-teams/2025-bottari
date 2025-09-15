@@ -1,6 +1,6 @@
 package com.bottari.domain.repository
 
-import com.bottari.domain.model.template.BottariTemplate
+import com.bottari.domain.model.bottari.template.BottariTemplate
 
 interface BottariTemplateRepository {
     suspend fun fetchBottariTemplates(searchWord: String?): Result<List<BottariTemplate>>

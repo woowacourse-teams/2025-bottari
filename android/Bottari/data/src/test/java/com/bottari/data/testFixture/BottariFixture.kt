@@ -8,9 +8,9 @@ import com.bottari.data.model.team.bottari.item.request.AssignedItemsUpdateReque
 import com.bottari.data.model.team.bottari.item.response.AssignedItemsFetchResponse
 import com.bottari.data.model.team.bottari.item.response.PersonalItemsFetchResponse
 import com.bottari.data.model.team.bottari.item.response.SharedItemsFetchResponse
-import com.bottari.domain.model.bottari.BottariItem
-import com.bottari.domain.model.bottari.BottariItemType
-import com.bottari.domain.model.team.TeamMember
+import com.bottari.domain.model.bottari.item.BottariItem
+import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
+import com.bottari.domain.model.team.member.TeamMember
 import io.mockk.every
 import io.mockk.mockk
 
@@ -87,21 +87,21 @@ val BOTTARI_PERSONAL_ITEM_FIXTURE =
     BottariItem(
         1L,
         "item 1",
-        BottariItemType.PERSONAL,
+        TeamBottariItemType.PERSONAL,
     )
 
 val BOTTARI_SHARED_ITEM_FIXTURE =
     BottariItem(
         1L,
         "item 1",
-        BottariItemType.SHARED,
+        TeamBottariItemType.SHARED,
     )
 
 val BOTTARI_ASSIGNED_ITEM_FIXTURE =
     BottariItem(
         1L,
         "item 1",
-        BottariItemType.ASSIGNED(
+        TeamBottariItemType.ASSIGNED(
             listOf(
                 TeamMember(1L, "member 1"),
                 TeamMember(2L, "member 2"),

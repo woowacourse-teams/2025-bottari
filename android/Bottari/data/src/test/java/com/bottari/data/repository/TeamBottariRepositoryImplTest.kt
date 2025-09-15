@@ -25,11 +25,11 @@ import com.bottari.data.testFixture.TEAM_MEMBER
 import com.bottari.data.testFixture.TEAM_MEMBERS_STATUS
 import com.bottari.data.testFixture.TEAM_MEMBERS_STATUS_RESPONSE
 import com.bottari.data.testFixture.TEAM_MEMBER_RESPONSE
-import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.member.Nickname
-import com.bottari.domain.model.team.HeadCount
-import com.bottari.domain.model.team.TeamBottariCheckList
-import com.bottari.domain.model.team.TeamMembers
+import com.bottari.domain.model.team.bottari.TeamBottariCheckList
+import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
+import com.bottari.domain.model.team.member.HeadCount
+import com.bottari.domain.model.team.member.TeamMembers
 import com.bottari.domain.repository.TeamBottariRepository
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.result.shouldBeFailure
@@ -384,8 +384,8 @@ class TeamBottariRepositoryImplTest {
         runTest {
             // given
             val id = 1L
-            val bottariItemType = BottariItemType.PERSONAL
-            val request = TeamBottariItemDeleteRequest(bottariItemType.toString())
+            val teamBottariItemType = TeamBottariItemType.PERSONAL
+            val request = TeamBottariItemDeleteRequest(teamBottariItemType.toString())
             coEvery {
                 dataSource.deleteTeamBottariItem(
                     id,
@@ -394,7 +394,7 @@ class TeamBottariRepositoryImplTest {
             } returns Result.success(Unit)
 
             // when
-            val result = repository.deleteTeamBottariItem(id, bottariItemType)
+            val result = repository.deleteTeamBottariItem(id, teamBottariItemType)
 
             // then
             result.shouldBeSuccess()
@@ -409,8 +409,8 @@ class TeamBottariRepositoryImplTest {
         runTest {
             // given
             val id = 1L
-            val bottariItemType = BottariItemType.PERSONAL
-            val request = TeamBottariItemDeleteRequest(bottariItemType.toString())
+            val teamBottariItemType = TeamBottariItemType.PERSONAL
+            val request = TeamBottariItemDeleteRequest(teamBottariItemType.toString())
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery {
                 dataSource.deleteTeamBottariItem(
@@ -420,7 +420,7 @@ class TeamBottariRepositoryImplTest {
             } returns Result.failure(exception)
 
             // when
-            val result = repository.deleteTeamBottariItem(id, bottariItemType)
+            val result = repository.deleteTeamBottariItem(id, teamBottariItemType)
 
             // then
             result.shouldBeFailure { error -> error shouldBe exception }

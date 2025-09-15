@@ -10,7 +10,7 @@ import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.MemberUseCaseProvider
 import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.model.event.EventState
-import com.bottari.domain.model.team.TeamMemberStatus
+import com.bottari.domain.model.team.member.TeamMemberStatus
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.member.GetMemberIdUseCase

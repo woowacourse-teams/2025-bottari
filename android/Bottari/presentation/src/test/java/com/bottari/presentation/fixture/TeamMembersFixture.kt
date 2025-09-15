@@ -1,8 +1,8 @@
 package com.bottari.presentation.fixture
 
 import com.bottari.domain.model.member.Nickname
-import com.bottari.domain.model.team.HeadCount
-import com.bottari.domain.model.team.TeamMembers
+import com.bottari.domain.model.team.member.HeadCount
+import com.bottari.domain.model.team.member.TeamMembers
 
 val TEAM_MEMBERS_FIXTURE =
     TeamMembers(

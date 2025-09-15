@@ -1,7 +1,7 @@
 package com.bottari.presentation.mapper
 
-import com.bottari.domain.model.template.BottariTemplate
-import com.bottari.domain.model.template.BottariTemplateItem
+import com.bottari.domain.model.bottari.template.BottariTemplate
+import com.bottari.domain.model.bottari.template.BottariTemplateItem
 import com.bottari.presentation.model.BottariTemplateItemUiModel
 import com.bottari.presentation.model.BottariTemplateUiModel
 

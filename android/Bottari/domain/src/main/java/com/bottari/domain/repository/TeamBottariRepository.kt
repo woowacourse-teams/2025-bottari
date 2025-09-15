@@ -1,14 +1,14 @@
 package com.bottari.domain.repository
 
-import com.bottari.domain.model.bottari.BottariItem
-import com.bottari.domain.model.bottari.BottariItemType
-import com.bottari.domain.model.team.TeamBottari
-import com.bottari.domain.model.team.TeamBottariCheckList
-import com.bottari.domain.model.team.TeamBottariDetail
-import com.bottari.domain.model.team.TeamBottariStatus
-import com.bottari.domain.model.team.TeamMember
-import com.bottari.domain.model.team.TeamMemberStatus
-import com.bottari.domain.model.team.TeamMembers
+import com.bottari.domain.model.bottari.item.BottariItem
+import com.bottari.domain.model.team.bottari.TeamBottari
+import com.bottari.domain.model.team.bottari.TeamBottariCheckList
+import com.bottari.domain.model.team.bottari.TeamBottariDetail
+import com.bottari.domain.model.team.bottari.TeamBottariStatus
+import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
+import com.bottari.domain.model.team.member.TeamMember
+import com.bottari.domain.model.team.member.TeamMemberStatus
+import com.bottari.domain.model.team.member.TeamMembers
 
 interface TeamBottariRepository {
     suspend fun createTeamBottari(title: String): Result<Long?>
@@ -58,7 +58,7 @@ interface TeamBottariRepository {
 
     suspend fun deleteTeamBottariItem(
         id: Long,
-        type: BottariItemType,
+        type: TeamBottariItemType,
     ): Result<Unit>
 
     suspend fun sendRemindByMemberMessage(

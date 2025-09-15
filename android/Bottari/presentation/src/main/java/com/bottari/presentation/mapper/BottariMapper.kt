@@ -1,10 +1,10 @@
 package com.bottari.presentation.mapper
 
 import com.bottari.domain.model.bottari.Bottari
-import com.bottari.domain.model.bottari.BottariItem
-import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.BottariState
-import com.bottari.domain.model.bottari.ChecklistItem
+import com.bottari.domain.model.bottari.item.BottariItem
+import com.bottari.domain.model.bottari.item.ChecklistItem
+import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 import com.bottari.presentation.mapper.AlarmMapper.toUiModel
 import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
 import com.bottari.presentation.model.BottariDetailUiModel
@@ -54,10 +54,10 @@ object BottariMapper {
             items = items.map { item -> item.toUiModel() },
         )
 
-    fun BottariItemType.toUiModel(): BottariItemTypeUiModel =
+    fun TeamBottariItemType.toUiModel(): BottariItemTypeUiModel =
         when (this) {
-            BottariItemType.PERSONAL -> BottariItemTypeUiModel.PERSONAL
-            BottariItemType.SHARED -> BottariItemTypeUiModel.SHARED
-            is BottariItemType.ASSIGNED -> BottariItemTypeUiModel.ASSIGNED(members.map { member -> member.toUiModel() })
+            TeamBottariItemType.PERSONAL -> BottariItemTypeUiModel.PERSONAL
+            TeamBottariItemType.SHARED -> BottariItemTypeUiModel.SHARED
+            is TeamBottariItemType.ASSIGNED -> BottariItemTypeUiModel.ASSIGNED(members.map { member -> member.toUiModel() })
         }
 }

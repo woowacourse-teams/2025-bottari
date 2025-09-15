@@ -6,7 +6,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
-import com.bottari.domain.model.bottari.BottariItemType
+import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 import com.bottari.domain.usecase.team.CreateTeamPersonalItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamPersonalItemsUseCase
@@ -52,7 +52,7 @@ class TeamPersonalItemEditViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            deleteTeamBottariItemUseCase(itemId, BottariItemType.PERSONAL)
+            deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.PERSONAL)
                 .onSuccess { fetchPersonalItems() }
                 .onFailure { emitEvent(TeamPersonalItemEditEvent.DeleteItemFailure) }
 

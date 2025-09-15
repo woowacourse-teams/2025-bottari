@@ -5,13 +5,13 @@ import com.bottari.data.model.team.bottari.TeamBottariFetchResponse
 import com.bottari.data.model.team.member.TeamMemberNameFetchResponse
 import com.bottari.data.model.team.member.TeamMemberStatusFetchResponse
 import com.bottari.domain.model.bottari.Bottari
-import com.bottari.domain.model.bottari.BottariItemCount
+import com.bottari.domain.model.bottari.item.BottariItemCount
 import com.bottari.domain.model.member.Nickname
-import com.bottari.domain.model.team.HeadCount
-import com.bottari.domain.model.team.TeamBottari
-import com.bottari.domain.model.team.TeamBottariDetail
-import com.bottari.domain.model.team.TeamMember
-import com.bottari.domain.model.team.TeamMemberStatus
+import com.bottari.domain.model.team.bottari.TeamBottari
+import com.bottari.domain.model.team.bottari.TeamBottariDetail
+import com.bottari.domain.model.team.member.HeadCount
+import com.bottari.domain.model.team.member.TeamMember
+import com.bottari.domain.model.team.member.TeamMemberStatus
 
 val TEAM_BOTTARI_RESPONSE: TeamBottariFetchResponse by lazy {
     TeamBottariFetchResponse(

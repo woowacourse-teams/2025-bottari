@@ -1,6 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.EventMapper.toDomain
+import com.bottari.data.mapper.sse.EventMapper.toDomain
 import com.bottari.data.source.remote.EventRemoteDataSource
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.repository.EventRepository

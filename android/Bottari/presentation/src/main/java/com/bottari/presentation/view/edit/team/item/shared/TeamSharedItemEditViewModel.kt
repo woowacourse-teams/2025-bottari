@@ -7,9 +7,9 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
-import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
+import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.team.CreateTeamSharedItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
@@ -65,7 +65,7 @@ class TeamSharedItemEditViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            deleteTeamBottariItemUseCase(itemId, BottariItemType.SHARED)
+            deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.SHARED)
                 .onSuccess { fetchPersonalItems() }
                 .onFailure { emitEvent(TeamSharedItemEditEvent.DeleteItemFailure) }
 

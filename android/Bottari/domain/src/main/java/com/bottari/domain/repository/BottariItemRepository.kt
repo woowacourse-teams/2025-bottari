@@ -1,6 +1,6 @@
 package com.bottari.domain.repository
 
-import com.bottari.domain.model.bottari.ChecklistItem
+import com.bottari.domain.model.bottari.item.ChecklistItem
 
 interface BottariItemRepository {
     suspend fun fetchChecklist(bottariId: Long): Result<List<ChecklistItem>>

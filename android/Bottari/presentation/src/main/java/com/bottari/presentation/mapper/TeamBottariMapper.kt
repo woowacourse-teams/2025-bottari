@@ -1,9 +1,9 @@
 package com.bottari.presentation.mapper
 
-import com.bottari.domain.model.bottari.BottariItem
-import com.bottari.domain.model.team.MemberCheckStatus
-import com.bottari.domain.model.team.TeamBottari
-import com.bottari.domain.model.team.TeamBottariProductStatus
+import com.bottari.domain.model.bottari.item.BottariItem
+import com.bottari.domain.model.team.bottari.TeamBottari
+import com.bottari.domain.model.team.bottari.TeamBottariProductStatus
+import com.bottari.domain.model.team.member.MemberCheckStatus
 import com.bottari.presentation.mapper.AlarmMapper.toUiModel
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
