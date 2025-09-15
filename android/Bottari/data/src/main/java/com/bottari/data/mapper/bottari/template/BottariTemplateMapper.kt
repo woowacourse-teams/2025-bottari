@@ -1,12 +1,12 @@
 package com.bottari.data.mapper.bottari.template
 
-import com.bottari.data.model.bottari.template.BottariTemplateItemResponse
-import com.bottari.data.model.bottari.template.FetchBottariTemplateResponse
+import com.bottari.data.model.bottari.template.BottariTemplateFetchResponse
+import com.bottari.data.model.bottari.template.BottariTemplateItemFetchResponse
 import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.model.bottari.template.BottariTemplateItem
 
 object BottariTemplateMapper {
-    fun FetchBottariTemplateResponse.toBottariTemplate(): BottariTemplate =
+    fun BottariTemplateFetchResponse.toBottariTemplate(): BottariTemplate =
         BottariTemplate(
             id = id,
             title = title,
@@ -15,7 +15,7 @@ object BottariTemplateMapper {
             takenCount = takenCount,
         )
 
-    private fun BottariTemplateItemResponse.toBottariTemplateItem(): BottariTemplateItem =
+    private fun BottariTemplateItemFetchResponse.toBottariTemplateItem(): BottariTemplateItem =
         BottariTemplateItem(
             id = id,
             name = name,

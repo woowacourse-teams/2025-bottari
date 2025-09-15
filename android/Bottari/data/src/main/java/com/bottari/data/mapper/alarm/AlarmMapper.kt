@@ -1,20 +1,20 @@
 package com.bottari.data.mapper.alarm
 
-import com.bottari.data.model.alarm.AlarmCreateLocationRequest
 import com.bottari.data.model.alarm.AlarmCreateRequest
-import com.bottari.data.model.alarm.AlarmCreateRoutineRequest
 import com.bottari.data.model.alarm.AlarmFetchResponse
-import com.bottari.data.model.alarm.AlarmLocationResponse
-import com.bottari.data.model.alarm.AlarmRoutineResponse
-import com.bottari.data.model.alarm.AlarmSaveLocationRequest
+import com.bottari.data.model.alarm.AlarmLocationCreateRequest
+import com.bottari.data.model.alarm.AlarmLocationFetchResponse
+import com.bottari.data.model.alarm.AlarmLocationSaveRequest
+import com.bottari.data.model.alarm.AlarmRoutineCreateRequest
+import com.bottari.data.model.alarm.AlarmRoutineFetchResponse
+import com.bottari.data.model.alarm.AlarmRoutineSaveRequest
 import com.bottari.data.model.alarm.AlarmSaveRequest
-import com.bottari.data.model.alarm.AlarmSaveRoutineRequest
 import com.bottari.data.model.bottari.BottariAlarmFetchResponse
-import com.bottari.data.model.bottari.BottariAlarmLocationResponse
-import com.bottari.data.model.bottari.BottariAlarmRoutineResponse
+import com.bottari.data.model.bottari.BottariAlarmLocationFetchResponse
+import com.bottari.data.model.bottari.BottariAlarmRoutineFetchResponse
 import com.bottari.data.model.bottari.BottariesAlarmFetchResponse
-import com.bottari.data.model.bottari.BottariesAlarmLocationResponse
-import com.bottari.data.model.bottari.BottariesAlarmRoutineResponse
+import com.bottari.data.model.bottari.BottariesAlarmLocationFetchResponse
+import com.bottari.data.model.bottari.BottariesAlarmRoutineFetchResponse
 import com.bottari.data.model.notification.NotificationEntity
 import com.bottari.data.model.team.bottari.TeamBottariAlarmFetchResponse
 import com.bottari.data.model.team.bottari.TeamBottariAlarmLocationResponse
@@ -102,16 +102,16 @@ object AlarmMapper {
             location = null,
         )
 
-    private fun Alarm.toAlarmCreateRoutineRequest(): AlarmCreateRoutineRequest =
-        AlarmCreateRoutineRequest(
+    private fun Alarm.toAlarmCreateRoutineRequest(): AlarmRoutineCreateRequest =
+        AlarmRoutineCreateRequest(
             time = time,
             type = alarmType.toTypeString(),
             date = alarmType.getDate(),
             daysOfWeek = alarmType.getDaysOfWeek(),
         )
 
-    private fun Alarm.toSaveRoutineRequest(): AlarmSaveRoutineRequest =
-        AlarmSaveRoutineRequest(
+    private fun Alarm.toSaveRoutineRequest(): AlarmRoutineSaveRequest =
+        AlarmRoutineSaveRequest(
             time = time,
             type = alarmType.toTypeString(),
             date = alarmType.getDate(),
@@ -134,23 +134,23 @@ object AlarmMapper {
         return repeatDays
     }
 
-    private fun LocationAlarm.toAlarmCreateRequest(): AlarmCreateLocationRequest =
-        AlarmCreateLocationRequest(
+    private fun LocationAlarm.toAlarmCreateRequest(): AlarmLocationCreateRequest =
+        AlarmLocationCreateRequest(
             isLocationAlarmActive = isActive,
             latitude = latitude,
             longitude = longitude,
             radius = radius,
         )
 
-    private fun LocationAlarm.toAlarmSaveRequest(): AlarmSaveLocationRequest =
-        AlarmSaveLocationRequest(
+    private fun LocationAlarm.toAlarmSaveRequest(): AlarmLocationSaveRequest =
+        AlarmLocationSaveRequest(
             isLocationAlarmActive = isActive,
             latitude = latitude,
             longitude = longitude,
             radius = radius,
         )
 
-    private fun AlarmRoutineResponse.toAlarmType(): AlarmType =
+    private fun AlarmRoutineFetchResponse.toAlarmType(): AlarmType =
         when (type.uppercase()) {
             NON_REPEAT ->
                 AlarmType.NonRepeat(
@@ -164,7 +164,7 @@ object AlarmMapper {
             else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
         }
 
-    private fun BottariesAlarmRoutineResponse.toAlarmType(): AlarmType =
+    private fun BottariesAlarmRoutineFetchResponse.toAlarmType(): AlarmType =
         when (type.uppercase()) {
             NON_REPEAT ->
                 AlarmType.NonRepeat(
@@ -178,7 +178,7 @@ object AlarmMapper {
             else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
         }
 
-    private fun BottariAlarmRoutineResponse.toAlarmType(): AlarmType =
+    private fun BottariAlarmRoutineFetchResponse.toAlarmType(): AlarmType =
         when (type.uppercase()) {
             NON_REPEAT ->
                 AlarmType.NonRepeat(
@@ -220,7 +220,7 @@ object AlarmMapper {
             else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
         }
 
-    private fun AlarmLocationResponse.toLocationAlarm(): LocationAlarm =
+    private fun AlarmLocationFetchResponse.toLocationAlarm(): LocationAlarm =
         LocationAlarm(
             latitude = latitude,
             longitude = longitude,
@@ -228,7 +228,7 @@ object AlarmMapper {
             isActive = isActive,
         )
 
-    private fun BottariesAlarmLocationResponse.toLocationAlarm(): LocationAlarm =
+    private fun BottariesAlarmLocationFetchResponse.toLocationAlarm(): LocationAlarm =
         LocationAlarm(
             latitude = latitude,
             longitude = longitude,
@@ -236,7 +236,7 @@ object AlarmMapper {
             isActive = isActive,
         )
 
-    private fun BottariAlarmLocationResponse.toLocationAlarm(): LocationAlarm =
+    private fun BottariAlarmLocationFetchResponse.toLocationAlarm(): LocationAlarm =
         LocationAlarm(
             latitude = latitude,
             longitude = longitude,

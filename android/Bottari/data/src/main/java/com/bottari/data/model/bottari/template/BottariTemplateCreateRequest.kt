@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateBottariTemplateRequest(
+data class BottariTemplateCreateRequest(
     @SerialName("bottariTemplateItems")
     val bottariTemplateItems: List<String>,
     @SerialName("title")

@@ -1,7 +1,7 @@
 package com.bottari.data.service
 
-import com.bottari.data.model.bottari.template.CreateBottariTemplateRequest
-import com.bottari.data.model.bottari.template.FetchBottariTemplateResponse
+import com.bottari.data.model.bottari.template.BottariTemplateCreateRequest
+import com.bottari.data.model.bottari.template.BottariTemplateFetchResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -14,17 +14,17 @@ interface BottariTemplateService {
     @GET("/templates")
     suspend fun fetchBottariTemplates(
         @Query("query") searchWord: String?,
-    ): Response<List<FetchBottariTemplateResponse>>
+    ): Response<List<BottariTemplateFetchResponse>>
 
     @POST("/templates")
     suspend fun createBottariTemplate(
-        @Body request: CreateBottariTemplateRequest,
+        @Body request: BottariTemplateCreateRequest,
     ): Response<Unit>
 
     @GET("/templates/{bottariId}")
     suspend fun fetchBottariTemplateDetail(
         @Path("bottariId") bottariId: Long,
-    ): Response<FetchBottariTemplateResponse>
+    ): Response<BottariTemplateFetchResponse>
 
     @POST("/templates/{bottariId}/create-bottari")
     suspend fun takeBottariTemplate(
@@ -32,7 +32,7 @@ interface BottariTemplateService {
     ): Response<Unit>
 
     @GET("/templates/me")
-    suspend fun fetchMyBottariTemplates(): Response<List<FetchBottariTemplateResponse>>
+    suspend fun fetchMyBottariTemplates(): Response<List<BottariTemplateFetchResponse>>
 
     @DELETE("/templates/{id}")
     suspend fun deleteMyBottariTemplate(

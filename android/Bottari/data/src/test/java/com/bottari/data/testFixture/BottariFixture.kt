@@ -1,7 +1,7 @@
 package com.bottari.data.testFixture
 
 import com.bottari.data.model.bottari.BottariAlarmFetchResponse
-import com.bottari.data.model.bottari.BottariAlarmRoutineResponse
+import com.bottari.data.model.bottari.BottariAlarmRoutineFetchResponse
 import com.bottari.data.model.bottari.BottariFetchResponse
 import com.bottari.data.model.bottari.BottariesFetchResponse
 import com.bottari.data.model.team.bottari.item.request.AssignedItemsUpdateRequest
@@ -20,7 +20,7 @@ fun bottariAlarmResponseFixture(
     routineType: String = "NON_REPEAT",
 ): BottariAlarmFetchResponse {
     val routine =
-        mockk<BottariAlarmRoutineResponse>(relaxed = true).apply {
+        mockk<BottariAlarmRoutineFetchResponse>(relaxed = true).apply {
             every { type } returns routineType
         }
 

@@ -1,10 +1,10 @@
 package com.bottari.data.source.remote
 
-import com.bottari.data.model.bottari.item.FetchChecklistResponse
-import com.bottari.data.model.bottari.item.SaveBottariItemsRequest
+import com.bottari.data.model.bottari.item.ItemFetchResponse
+import com.bottari.data.model.bottari.item.ItemsSaveRequest
 
 interface BottariItemRemoteDataSource {
-    suspend fun fetchChecklist(bottariId: Long): Result<List<FetchChecklistResponse>>
+    suspend fun fetchChecklist(bottariId: Long): Result<List<ItemFetchResponse>>
 
     suspend fun uncheckBottariItem(bottariItemId: Long): Result<Unit>
 
@@ -12,7 +12,7 @@ interface BottariItemRemoteDataSource {
 
     suspend fun saveBottariItems(
         bottariId: Long,
-        request: SaveBottariItemsRequest,
+        request: ItemsSaveRequest,
     ): Result<Unit>
 
     suspend fun resetBottariItemCheckState(bottariId: Long): Result<Unit>

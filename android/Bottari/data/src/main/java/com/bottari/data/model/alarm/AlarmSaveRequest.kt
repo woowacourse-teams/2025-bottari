@@ -10,13 +10,13 @@ import java.time.LocalTime
 @Serializable
 data class AlarmSaveRequest(
     @SerialName("routineAlarm")
-    val routineAlarm: AlarmSaveRoutineRequest,
+    val routineAlarm: AlarmRoutineSaveRequest,
     @SerialName("locationAlarm")
-    val locationAlarm: AlarmSaveLocationRequest?,
+    val locationAlarm: AlarmLocationSaveRequest?,
 )
 
 @Serializable
-data class AlarmSaveLocationRequest(
+data class AlarmLocationSaveRequest(
     @SerialName("isLocationAlarmActive")
     val isLocationAlarmActive: Boolean,
     @SerialName("latitude")
@@ -28,7 +28,7 @@ data class AlarmSaveLocationRequest(
 )
 
 @Serializable
-data class AlarmSaveRoutineRequest(
+data class AlarmRoutineSaveRequest(
     @SerialName("time")
     @Serializable(with = LocalTimeSerializer::class)
     val time: LocalTime,

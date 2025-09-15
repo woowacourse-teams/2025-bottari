@@ -2,10 +2,10 @@ package com.bottari.data.source.remote
 
 import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
+import com.bottari.data.model.bottari.BottariCreateRequest
 import com.bottari.data.model.bottari.BottariFetchResponse
+import com.bottari.data.model.bottari.BottariTitleUpdateRequest
 import com.bottari.data.model.bottari.BottariesFetchResponse
-import com.bottari.data.model.bottari.CreateBottariRequest
-import com.bottari.data.model.bottari.UpdateBottariTitleRequest
 import com.bottari.data.service.BottariService
 
 class BottariRemoteDataSourceImpl(
@@ -21,9 +21,9 @@ class BottariRemoteDataSourceImpl(
             bottariService.fetchBottari(id = id)
         }
 
-    override suspend fun createBottari(createBottariRequest: CreateBottariRequest): Result<Long> =
+    override suspend fun createBottari(bottariCreateRequest: BottariCreateRequest): Result<Long> =
         runCatching {
-            val response = bottariService.createBottari(createBottariRequest)
+            val response = bottariService.createBottari(bottariCreateRequest)
             val id = response.extractIdFromHeader(HEADER_BOTTARI_ID_PREFIX)
             checkNotNull(id)
         }
@@ -35,7 +35,7 @@ class BottariRemoteDataSourceImpl(
 
     override suspend fun saveBottariTitle(
         id: Long,
-        request: UpdateBottariTitleRequest,
+        request: BottariTitleUpdateRequest,
     ): Result<Unit> =
         safeApiCall {
             bottariService.saveBottariTitle(id = id, request = request)

@@ -1,7 +1,7 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.bottari.template.CreateBottariTemplateRequest
-import com.bottari.data.model.bottari.template.FetchBottariTemplateResponse
+import com.bottari.data.model.bottari.template.BottariTemplateCreateRequest
+import com.bottari.data.model.bottari.template.BottariTemplateFetchResponse
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
 import com.bottari.data.testFixture.fetchBottariTemplateResponseListFixture
 import com.bottari.domain.repository.BottariTemplateRepository
@@ -30,7 +30,7 @@ class BottariTemplateRepositoryImplTest {
     private val title = "title"
     private val items = listOf("item1", "item2")
 
-    private fun createRequestMatcher(): (CreateBottariTemplateRequest) -> Boolean =
+    private fun createRequestMatcher(): (BottariTemplateCreateRequest) -> Boolean =
         { it.title == title && it.bottariTemplateItems == items }
 
     private fun successResponse() = fetchBottariTemplateResponseListFixture()
@@ -196,7 +196,7 @@ class BottariTemplateRepositoryImplTest {
             // given
             val successResponse =
                 listOf(
-                    FetchBottariTemplateResponse(
+                    BottariTemplateFetchResponse(
                         author = "다이스",
                         id = 1L,
                         items = listOf(),
@@ -204,7 +204,7 @@ class BottariTemplateRepositoryImplTest {
                         createdAt = "12:00",
                         takenCount = 3,
                     ),
-                    FetchBottariTemplateResponse(
+                    BottariTemplateFetchResponse(
                         author = "다이스",
                         id = 2L,
                         items = listOf(),

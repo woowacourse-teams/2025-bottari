@@ -1,8 +1,8 @@
 package com.bottari.data.repository
 
+import com.bottari.data.model.member.MemberNicknameSaveRequest
+import com.bottari.data.model.member.MemberRegisterCheckResponse
 import com.bottari.data.model.member.MemberRegisterRequest
-import com.bottari.data.model.member.MemberResponse
-import com.bottari.data.model.member.MemberSaveNicknameRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.domain.model.member.Nickname
@@ -83,7 +83,7 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val newNickname = Nickname("nickname")
-            val request = MemberSaveNicknameRequest("nickname")
+            val request = MemberNicknameSaveRequest("nickname")
             coEvery { remoteDataSource.saveMemberNickname(request) } returns Result.success(Unit)
 
             // when
@@ -102,7 +102,7 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val newNickname = Nickname("nickname")
-            val request = MemberSaveNicknameRequest("nickname")
+            val request = MemberNicknameSaveRequest("nickname")
             val httpException = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { remoteDataSource.saveMemberNickname(request) } returns
                 Result.failure(httpException)
@@ -122,7 +122,7 @@ class MemberRepositoryImplTest {
     fun checkRegisteredMemberSuccess() =
         runTest {
             // given
-            val response = MemberResponse(true, 1, "test")
+            val response = MemberRegisterCheckResponse(true, 1, "test")
             coEvery { remoteDataSource.checkRegisteredMember() } returns Result.success(response)
             coEvery { userInfoLocalDataSource.saveMemberId(1) } returns Result.success(Unit)
 
@@ -146,7 +146,7 @@ class MemberRepositoryImplTest {
     fun checkRegisteredMemberFailsReturnsFailure() =
         runTest {
             // given
-            val response = MemberResponse(false, 1, "test")
+            val response = MemberRegisterCheckResponse(false, 1, "test")
             coEvery { remoteDataSource.checkRegisteredMember() } returns Result.success(response)
 
             // when

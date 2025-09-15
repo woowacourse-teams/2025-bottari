@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SaveBottariItemsRequest(
+data class ItemsSaveRequest(
     @SerialName("createItemNames")
     val createItemNames: List<String>,
     @SerialName("deleteItemIds")

@@ -14,13 +14,13 @@ data class AlarmFetchResponse(
     @SerialName("isActive")
     val isActive: Boolean,
     @SerialName("location")
-    val location: AlarmLocationResponse?,
+    val location: AlarmLocationFetchResponse?,
     @SerialName("routine")
-    val routine: AlarmRoutineResponse,
+    val routine: AlarmRoutineFetchResponse,
 )
 
 @Serializable
-data class AlarmLocationResponse(
+data class AlarmLocationFetchResponse(
     @SerialName("isActive")
     val isActive: Boolean,
     @SerialName("latitude")
@@ -32,7 +32,7 @@ data class AlarmLocationResponse(
 )
 
 @Serializable
-data class AlarmRoutineResponse(
+data class AlarmRoutineFetchResponse(
     @SerialName("date")
     @Serializable(with = LocalDateSerializer::class)
     val date: LocalDate?,

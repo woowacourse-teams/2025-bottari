@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateBottariRequest(
+data class BottariTitleUpdateRequest(
     @SerialName("title")
     val title: String,
 )

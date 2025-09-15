@@ -4,13 +4,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FetchBottariTemplateResponse(
+data class BottariTemplateFetchResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("title")
     val title: String,
     @SerialName("items")
-    val items: List<BottariTemplateItemResponse>,
+    val items: List<BottariTemplateItemFetchResponse>,
     @SerialName("author")
     val author: String,
     @SerialName("createdAt")
@@ -20,7 +20,7 @@ data class FetchBottariTemplateResponse(
 )
 
 @Serializable
-data class BottariTemplateItemResponse(
+data class BottariTemplateItemFetchResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("name")

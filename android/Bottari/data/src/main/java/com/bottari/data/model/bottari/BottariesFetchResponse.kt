@@ -28,13 +28,13 @@ data class BottariesAlarmFetchResponse(
     @SerialName("isActive")
     val isActive: Boolean,
     @SerialName("location")
-    val location: BottariesAlarmLocationResponse?,
+    val location: BottariesAlarmLocationFetchResponse?,
     @SerialName("routine")
-    val routine: BottariesAlarmRoutineResponse,
+    val routine: BottariesAlarmRoutineFetchResponse,
 )
 
 @Serializable
-data class BottariesAlarmLocationResponse(
+data class BottariesAlarmLocationFetchResponse(
     @SerialName("isActive")
     val isActive: Boolean,
     @SerialName("latitude")
@@ -46,7 +46,7 @@ data class BottariesAlarmLocationResponse(
 )
 
 @Serializable
-data class BottariesAlarmRoutineResponse(
+data class BottariesAlarmRoutineFetchResponse(
     @SerialName("date")
     @Serializable(with = LocalDateSerializer::class)
     val date: LocalDate?,
