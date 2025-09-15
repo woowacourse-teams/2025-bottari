@@ -59,7 +59,7 @@ class TeamBottariEditViewModelTest {
             // then
             viewModel.uiState.awaitFetchedState { uiState ->
                 assertSoftly(uiState) {
-                    bottariTitle shouldBe TEAM_BOTTARI_DETAIL_FIXTURE.base.title
+                    bottariTitle shouldBe TEAM_BOTTARI_DETAIL_FIXTURE.bottari.title
                     personalItems.size shouldBe TEAM_BOTTARI_DETAIL_FIXTURE.personalItems.size
                     sharedItems.size shouldBe TEAM_BOTTARI_DETAIL_FIXTURE.sharedItems.size
                     assignedItems.size shouldBe TEAM_BOTTARI_DETAIL_FIXTURE.assignedItems.size
