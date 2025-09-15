@@ -1,6 +1,7 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.bottari.BottariRequest
+import com.bottari.data.model.bottari.CreateBottariRequest
+import com.bottari.data.model.bottari.UpdateBottariTitleRequest
 import com.bottari.data.source.remote.BottariRemoteDataSource
 import com.bottari.data.testFixture.bottariResponseFixture
 import com.bottari.data.testFixture.fetchBottariesResponseFixture
@@ -80,7 +81,7 @@ class BottariRepositoryImplTest {
             val title = "new bottari"
             val expectedId = 42L
             coEvery {
-                remoteDataSource.createBottari(BottariRequest.CreateBottariRequest(title))
+                remoteDataSource.createBottari(CreateBottariRequest(title))
             } returns Result.success(expectedId)
 
             // when
@@ -92,7 +93,7 @@ class BottariRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.createBottari(BottariRequest.CreateBottariRequest(title)) }
+            coVerify { remoteDataSource.createBottari(CreateBottariRequest(title)) }
         }
 
     @DisplayName("보따리 생성 성공 시 Unit을 반환한다")
@@ -145,7 +146,7 @@ class BottariRepositoryImplTest {
             coEvery {
                 remoteDataSource.saveBottariTitle(
                     id,
-                    BottariRequest.UpdateBottariTitleRequest(title),
+                    UpdateBottariTitleRequest(title),
                 )
             } returns Result.success(Unit)
 
@@ -161,7 +162,7 @@ class BottariRepositoryImplTest {
             coVerify {
                 remoteDataSource.saveBottariTitle(
                     id,
-                    BottariRequest.UpdateBottariTitleRequest(title),
+                    UpdateBottariTitleRequest(title),
                 )
             }
         }
@@ -195,7 +196,7 @@ class BottariRepositoryImplTest {
             val title = "error title"
             val exception = RuntimeException("생성 실패")
             coEvery {
-                remoteDataSource.createBottari(BottariRequest.CreateBottariRequest(title))
+                remoteDataSource.createBottari(CreateBottariRequest(title))
             } returns Result.failure(exception)
 
             // when
@@ -207,7 +208,7 @@ class BottariRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.createBottari(BottariRequest.CreateBottariRequest(title)) }
+            coVerify { remoteDataSource.createBottari(CreateBottariRequest(title)) }
         }
 
     @DisplayName("보따리 이름 변경 실패 시 예외를 반환한다")
@@ -221,7 +222,7 @@ class BottariRepositoryImplTest {
             coEvery {
                 remoteDataSource.saveBottariTitle(
                     id,
-                    BottariRequest.UpdateBottariTitleRequest(title),
+                    UpdateBottariTitleRequest(title),
                 )
             } returns Result.failure(exception)
 
@@ -237,7 +238,7 @@ class BottariRepositoryImplTest {
             coVerify {
                 remoteDataSource.saveBottariTitle(
                     id,
-                    BottariRequest.UpdateBottariTitleRequest(title),
+                    UpdateBottariTitleRequest(title),
                 )
             }
         }
