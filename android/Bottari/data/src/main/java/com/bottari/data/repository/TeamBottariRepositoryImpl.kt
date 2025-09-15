@@ -16,7 +16,7 @@ import com.bottari.data.model.team.bottari.item.request.TeamBottariItemUnCheckUp
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
-import com.bottari.domain.model.bottari.TeamBottari
+import com.bottari.domain.model.team.TeamBottari
 import com.bottari.domain.model.team.TeamBottariCheckList
 import com.bottari.domain.model.team.TeamBottariDetail
 import com.bottari.domain.model.team.TeamBottariStatus

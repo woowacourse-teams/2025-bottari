@@ -14,8 +14,9 @@ import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemCount
 import com.bottari.domain.model.bottari.BottariItemType
-import com.bottari.domain.model.bottari.TeamBottari
+import com.bottari.domain.model.team.HeadCount
 import com.bottari.domain.model.team.MemberCheckStatus
+import com.bottari.domain.model.team.TeamBottari
 import com.bottari.domain.model.team.TeamBottariDetail
 import com.bottari.domain.model.team.TeamBottariProductStatus
 import com.bottari.domain.model.team.TeamBottariStatus
@@ -33,7 +34,7 @@ object TeamBottariMapper {
                 ),
             checkedQuantity = checkedItemsCount,
             totalQuantity = totalItemsCount,
-            memberCount = memberCount,
+            memberCount = HeadCount(memberCount),
         )
 
     fun TeamBottariDetailFetchResponse.toDomain(): TeamBottariDetail =

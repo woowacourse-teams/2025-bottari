@@ -1,8 +1,8 @@
 package com.bottari.presentation.mapper
 
 import com.bottari.domain.model.bottari.BottariItem
-import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.MemberCheckStatus
+import com.bottari.domain.model.team.TeamBottari
 import com.bottari.domain.model.team.TeamBottariProductStatus
 import com.bottari.presentation.mapper.AlarmMapper.toUiModel
 import com.bottari.presentation.mapper.BottariMapper.toUiModel
@@ -19,7 +19,7 @@ object TeamBottariMapper {
             title = bottari.title,
             totalQuantity = totalQuantity,
             checkedQuantity = checkedQuantity,
-            memberCount = memberCount,
+            memberCount = memberCount.value,
             alarm = bottari.alarm?.toUiModel(),
         )
 

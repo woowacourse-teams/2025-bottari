@@ -6,8 +6,9 @@ import com.bottari.data.model.team.member.TeamMemberNameFetchResponse
 import com.bottari.data.model.team.member.TeamMemberStatusFetchResponse
 import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariItemCount
-import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.member.Nickname
+import com.bottari.domain.model.team.HeadCount
+import com.bottari.domain.model.team.TeamBottari
 import com.bottari.domain.model.team.TeamBottariDetail
 import com.bottari.domain.model.team.TeamMember
 import com.bottari.domain.model.team.TeamMemberStatus
@@ -27,7 +28,7 @@ val TEAM_BOTTARI: TeamBottari by lazy {
         Bottari(1L, "test", null, items = emptyList()),
         10,
         10,
-        3,
+        HeadCount(3),
     )
 }
 
