@@ -10,9 +10,3 @@ data class MemberRegisterRequest(
     @SerialName("fcmToken")
     val fcmToken: String,
 )
-
-@Serializable
-data class MemberSaveNicknameRequest(
-    @SerialName("name")
-    val name: String,
-)

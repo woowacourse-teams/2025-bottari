@@ -2,12 +2,12 @@ package com.bottari.data.repository
 
 import com.bottari.data.model.team.bottari.TeamBottariCreateRequest
 import com.bottari.data.model.team.bottari.TeamBottariJoinRequest
-import com.bottari.data.model.team.bottari.item.AssignedItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.PersonalItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.SharedItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.TeamBottariItemCheckUpdateRequest
-import com.bottari.data.model.team.bottari.item.TeamBottariItemChecklistFetchResponse
-import com.bottari.data.model.team.bottari.item.TeamBottariItemDeleteRequest
+import com.bottari.data.model.team.bottari.item.request.AssignedItemsCreateRequest
+import com.bottari.data.model.team.bottari.item.request.PersonalItemsCreateRequest
+import com.bottari.data.model.team.bottari.item.request.SharedItemsCreateRequest
+import com.bottari.data.model.team.bottari.item.request.TeamBottariItemCheckUpdateRequest
+import com.bottari.data.model.team.bottari.item.request.TeamBottariItemDeleteRequest
+import com.bottari.data.model.team.bottari.item.response.TeamBottariItemChecklistFetchResponse
 import com.bottari.data.model.team.member.TeamMemberFetchResponse
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.data.testFixture.BOTTARI_ASSIGNED_ITEM_FIXTURE

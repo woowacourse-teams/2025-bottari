@@ -1,7 +1,7 @@
 package com.bottari.data.service
 
-import com.bottari.data.model.alarm.request.AlarmCreateRequest
-import com.bottari.data.model.alarm.request.AlarmSaveRequest
+import com.bottari.data.model.alarm.AlarmCreateRequest
+import com.bottari.data.model.alarm.AlarmSaveRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.PATCH

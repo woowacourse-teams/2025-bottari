@@ -1,6 +1,6 @@
 package com.bottari.data.testFixture
 
-import com.bottari.data.model.team.bottari.TeamBottariFetchDetailResponse
+import com.bottari.data.model.team.bottari.TeamBottariDetailFetchResponse
 import com.bottari.data.model.team.bottari.TeamBottariFetchResponse
 import com.bottari.data.model.team.member.TeamMemberNameFetchResponse
 import com.bottari.data.model.team.member.TeamMemberStatusFetchResponse
@@ -31,7 +31,7 @@ val TEAM_BOTTARI: TeamBottari by lazy {
 }
 
 val TEAM_BOTTARI_DETAIL_RESPONSE =
-    TeamBottariFetchDetailResponse(
+    TeamBottariDetailFetchResponse(
         1L,
         "test",
         null,

@@ -1,14 +1,26 @@
 package com.bottari.data.mapper
 
-import com.bottari.data.model.alarm.request.AlarmCreateLocationRequest
-import com.bottari.data.model.alarm.request.AlarmCreateRequest
-import com.bottari.data.model.alarm.request.AlarmCreateRoutineRequest
-import com.bottari.data.model.alarm.request.AlarmSaveLocationRequest
-import com.bottari.data.model.alarm.request.AlarmSaveRequest
-import com.bottari.data.model.alarm.request.AlarmSaveRoutineRequest
-import com.bottari.data.model.alarm.response.AlarmFetchResponse
-import com.bottari.data.model.alarm.response.AlarmLocationResponse
-import com.bottari.data.model.alarm.response.AlarmRoutineResponse
+import com.bottari.data.model.alarm.AlarmCreateLocationRequest
+import com.bottari.data.model.alarm.AlarmCreateRequest
+import com.bottari.data.model.alarm.AlarmCreateRoutineRequest
+import com.bottari.data.model.alarm.AlarmFetchResponse
+import com.bottari.data.model.alarm.AlarmLocationResponse
+import com.bottari.data.model.alarm.AlarmRoutineResponse
+import com.bottari.data.model.alarm.AlarmSaveLocationRequest
+import com.bottari.data.model.alarm.AlarmSaveRequest
+import com.bottari.data.model.alarm.AlarmSaveRoutineRequest
+import com.bottari.data.model.bottari.BottariAlarmFetchResponse
+import com.bottari.data.model.bottari.BottariAlarmLocationResponse
+import com.bottari.data.model.bottari.BottariAlarmRoutineResponse
+import com.bottari.data.model.bottari.BottariesAlarmFetchResponse
+import com.bottari.data.model.bottari.BottariesAlarmLocationResponse
+import com.bottari.data.model.bottari.BottariesAlarmRoutineResponse
+import com.bottari.data.model.team.bottari.TeamBottariAlarmFetchResponse
+import com.bottari.data.model.team.bottari.TeamBottariAlarmLocationResponse
+import com.bottari.data.model.team.bottari.TeamBottariAlarmRoutineResponse
+import com.bottari.data.model.team.bottari.TeamBottariDetailAlarmFetchResponse
+import com.bottari.data.model.team.bottari.TeamBottariDetailAlarmLocationResponse
+import com.bottari.data.model.team.bottari.TeamBottariDetailAlarmRoutineResponse
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.alarm.AlarmType
 import com.bottari.domain.model.alarm.LocationAlarm
@@ -35,6 +47,42 @@ object AlarmMapper {
         )
 
     fun AlarmFetchResponse.toDomain(): Alarm =
+        Alarm(
+            id = id,
+            isActive = isActive,
+            time = routine.time,
+            alarmType = routine.toAlarmType(),
+            location = location?.toDomain(),
+        )
+
+    fun BottariesAlarmFetchResponse.toDomain(): Alarm =
+        Alarm(
+            id = id,
+            isActive = isActive,
+            time = routine.time,
+            alarmType = routine.toAlarmType(),
+            location = location?.toDomain(),
+        )
+
+    fun BottariAlarmFetchResponse.toDomain(): Alarm =
+        Alarm(
+            id = id,
+            isActive = isActive,
+            time = routine.time,
+            alarmType = routine.toAlarmType(),
+            location = location?.toDomain(),
+        )
+
+    fun TeamBottariAlarmFetchResponse.toDomain(): Alarm =
+        Alarm(
+            id = id,
+            isActive = isActive,
+            time = routine.time,
+            alarmType = routine.toAlarmType(),
+            location = location?.toDomain(),
+        )
+
+    fun TeamBottariDetailAlarmFetchResponse.toDomain(): Alarm =
         Alarm(
             id = id,
             isActive = isActive,
@@ -105,7 +153,95 @@ object AlarmMapper {
             else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
         }
 
+    private fun BottariesAlarmRoutineResponse.toAlarmType(): AlarmType =
+        when (type.uppercase()) {
+            NON_REPEAT ->
+                AlarmType.NonRepeat(
+                    date = date ?: throw IllegalArgumentException(ERROR_MISSING_DATE),
+                )
+
+            EVERY_DAY_REPEAT,
+            EVERY_WEEK_REPEAT,
+            -> AlarmType.Repeat(dayOfWeeks)
+
+            else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
+        }
+
+    private fun BottariAlarmRoutineResponse.toAlarmType(): AlarmType =
+        when (type.uppercase()) {
+            NON_REPEAT ->
+                AlarmType.NonRepeat(
+                    date = date ?: throw IllegalArgumentException(ERROR_MISSING_DATE),
+                )
+
+            EVERY_DAY_REPEAT,
+            EVERY_WEEK_REPEAT,
+            -> AlarmType.Repeat(dayOfWeeks)
+
+            else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
+        }
+
+    private fun TeamBottariAlarmRoutineResponse.toAlarmType(): AlarmType =
+        when (type.uppercase()) {
+            NON_REPEAT ->
+                AlarmType.NonRepeat(
+                    date = date ?: throw IllegalArgumentException(ERROR_MISSING_DATE),
+                )
+
+            EVERY_DAY_REPEAT,
+            EVERY_WEEK_REPEAT,
+            -> AlarmType.Repeat(dayOfWeeks)
+
+            else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
+        }
+
+    private fun TeamBottariDetailAlarmRoutineResponse.toAlarmType(): AlarmType =
+        when (type.uppercase()) {
+            NON_REPEAT ->
+                AlarmType.NonRepeat(
+                    date = date ?: throw IllegalArgumentException(ERROR_MISSING_DATE),
+                )
+
+            EVERY_DAY_REPEAT,
+            EVERY_WEEK_REPEAT,
+            -> AlarmType.Repeat(dayOfWeeks)
+
+            else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
+        }
+
     private fun AlarmLocationResponse.toDomain(): LocationAlarm =
+        LocationAlarm(
+            latitude = latitude,
+            longitude = longitude,
+            radius = radius,
+            isActive = isActive,
+        )
+
+    private fun BottariesAlarmLocationResponse.toDomain(): LocationAlarm =
+        LocationAlarm(
+            latitude = latitude,
+            longitude = longitude,
+            radius = radius,
+            isActive = isActive,
+        )
+
+    private fun BottariAlarmLocationResponse.toDomain(): LocationAlarm =
+        LocationAlarm(
+            latitude = latitude,
+            longitude = longitude,
+            radius = radius,
+            isActive = isActive,
+        )
+
+    private fun TeamBottariAlarmLocationResponse.toDomain(): LocationAlarm =
+        LocationAlarm(
+            latitude = latitude,
+            longitude = longitude,
+            radius = radius,
+            isActive = isActive,
+        )
+
+    private fun TeamBottariDetailAlarmLocationResponse.toDomain(): LocationAlarm =
         LocationAlarm(
             latitude = latitude,
             longitude = longitude,

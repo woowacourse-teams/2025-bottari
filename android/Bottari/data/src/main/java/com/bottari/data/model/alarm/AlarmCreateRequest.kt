@@ -1,4 +1,4 @@
-package com.bottari.data.model.alarm.request
+package com.bottari.data.model.alarm
 
 import com.bottari.data.common.util.LocalDateSerializer
 import com.bottari.data.common.util.LocalTimeSerializer

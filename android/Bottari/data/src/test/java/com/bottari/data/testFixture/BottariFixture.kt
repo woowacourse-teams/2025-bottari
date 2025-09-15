@@ -1,26 +1,26 @@
 package com.bottari.data.testFixture
 
-import com.bottari.data.model.alarm.response.AlarmFetchResponse
-import com.bottari.data.model.alarm.response.AlarmRoutineResponse
+import com.bottari.data.model.bottari.BottariAlarmFetchResponse
+import com.bottari.data.model.bottari.BottariAlarmRoutineResponse
 import com.bottari.data.model.bottari.BottariFetchResponse
 import com.bottari.data.model.bottari.BottariesFetchResponse
-import com.bottari.data.model.team.bottari.item.AssignedItemsFetchResponse
-import com.bottari.data.model.team.bottari.item.AssignedItemsUpdateRequest
-import com.bottari.data.model.team.bottari.item.PersonalItemsFetchResponse
-import com.bottari.data.model.team.bottari.item.SharedItemsFetchResponse
+import com.bottari.data.model.team.bottari.item.request.AssignedItemsUpdateRequest
+import com.bottari.data.model.team.bottari.item.response.AssignedItemsFetchResponse
+import com.bottari.data.model.team.bottari.item.response.PersonalItemsFetchResponse
+import com.bottari.data.model.team.bottari.item.response.SharedItemsFetchResponse
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.team.TeamMember
 import io.mockk.every
 import io.mockk.mockk
 
-fun alarmResponseFixture(
+fun bottariAlarmResponseFixture(
     id: Long = 1,
     isActive: Boolean = true,
     routineType: String = "NON_REPEAT",
-): AlarmFetchResponse {
+): BottariAlarmFetchResponse {
     val routine =
-        mockk<AlarmRoutineResponse>(relaxed = true).apply {
+        mockk<BottariAlarmRoutineResponse>(relaxed = true).apply {
             every { type } returns routineType
         }
 
@@ -52,7 +52,7 @@ fun fetchBottariesResponseFixture(): List<BottariesFetchResponse> =
 fun bottariResponseFixture(
     id: Long = 100L,
     title: String = "detail",
-    alarm: AlarmFetchResponse = alarmResponseFixture(),
+    alarm: BottariAlarmFetchResponse = bottariAlarmResponseFixture(),
 ): BottariFetchResponse =
     BottariFetchResponse(
         id = id,

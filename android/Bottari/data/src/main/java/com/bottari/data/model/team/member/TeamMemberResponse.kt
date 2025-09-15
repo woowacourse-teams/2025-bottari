@@ -41,11 +41,3 @@ data class TeamMemberStatusFetchResponse(
     @SerialName("assignedItems")
     val assignedItems: List<FetchChecklistResponse>,
 )
-
-@Serializable
-data class TeamMemberStatusCheckedFetchResponse(
-    @SerialName("name")
-    val name: String,
-    @SerialName("checked")
-    val checked: Boolean,
-)

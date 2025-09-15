@@ -2,21 +2,21 @@ package com.bottari.data.service
 
 import com.bottari.data.model.team.bottari.FetchTeamBottariStatusResponse
 import com.bottari.data.model.team.bottari.TeamBottariCreateRequest
-import com.bottari.data.model.team.bottari.TeamBottariFetchDetailResponse
+import com.bottari.data.model.team.bottari.TeamBottariDetailFetchResponse
 import com.bottari.data.model.team.bottari.TeamBottariFetchResponse
 import com.bottari.data.model.team.bottari.TeamBottariJoinRequest
-import com.bottari.data.model.team.bottari.item.AssignedItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.AssignedItemsFetchResponse
-import com.bottari.data.model.team.bottari.item.AssignedItemsUpdateRequest
-import com.bottari.data.model.team.bottari.item.PersonalItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.PersonalItemsFetchResponse
-import com.bottari.data.model.team.bottari.item.SharedItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.SharedItemsFetchResponse
-import com.bottari.data.model.team.bottari.item.TeamBottariItemCheckUpdateRequest
-import com.bottari.data.model.team.bottari.item.TeamBottariItemChecklistFetchResponse
-import com.bottari.data.model.team.bottari.item.TeamBottariItemDeleteRequest
-import com.bottari.data.model.team.bottari.item.TeamBottariItemRemindRequest
-import com.bottari.data.model.team.bottari.item.TeamBottariItemUnCheckUpdateRequest
+import com.bottari.data.model.team.bottari.item.request.AssignedItemsCreateRequest
+import com.bottari.data.model.team.bottari.item.request.AssignedItemsUpdateRequest
+import com.bottari.data.model.team.bottari.item.request.PersonalItemsCreateRequest
+import com.bottari.data.model.team.bottari.item.request.SharedItemsCreateRequest
+import com.bottari.data.model.team.bottari.item.request.TeamBottariItemCheckUpdateRequest
+import com.bottari.data.model.team.bottari.item.request.TeamBottariItemDeleteRequest
+import com.bottari.data.model.team.bottari.item.request.TeamBottariItemRemindRequest
+import com.bottari.data.model.team.bottari.item.request.TeamBottariItemUnCheckUpdateRequest
+import com.bottari.data.model.team.bottari.item.response.AssignedItemsFetchResponse
+import com.bottari.data.model.team.bottari.item.response.PersonalItemsFetchResponse
+import com.bottari.data.model.team.bottari.item.response.SharedItemsFetchResponse
+import com.bottari.data.model.team.bottari.item.response.TeamBottariItemChecklistFetchResponse
 import com.bottari.data.model.team.member.TeamMemberFetchResponse
 import com.bottari.data.model.team.member.TeamMemberNameFetchResponse
 import com.bottari.data.model.team.member.TeamMemberStatusFetchResponse
@@ -70,7 +70,7 @@ interface TeamBottariService {
     @GET("/team-bottaries/{teamBottariId}")
     suspend fun fetchTeamBottariDetail(
         @Path("teamBottariId") teamBottariId: Long,
-    ): Response<TeamBottariFetchDetailResponse>
+    ): Response<TeamBottariDetailFetchResponse>
 
     @GET("/team-bottaries/{teamBottariId}/items/status")
     suspend fun fetchTeamBottariStatus(

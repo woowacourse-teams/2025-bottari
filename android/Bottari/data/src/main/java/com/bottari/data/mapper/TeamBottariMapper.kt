@@ -4,12 +4,12 @@ import com.bottari.data.mapper.AlarmMapper.toDomain
 import com.bottari.data.mapper.BottariItemMapper.toDomain
 import com.bottari.data.model.team.bottari.FetchTeamBottariStatusItemResponse
 import com.bottari.data.model.team.bottari.FetchTeamBottariStatusResponse
-import com.bottari.data.model.team.bottari.TeamBottariFetchDetailResponse
+import com.bottari.data.model.team.bottari.TeamBottariDetailFetchResponse
 import com.bottari.data.model.team.bottari.TeamBottariFetchResponse
-import com.bottari.data.model.team.bottari.item.AssignedItemsFetchResponse
-import com.bottari.data.model.team.bottari.item.PersonalItemsFetchResponse
-import com.bottari.data.model.team.bottari.item.SharedItemsFetchResponse
-import com.bottari.data.model.team.member.TeamMemberStatusCheckedFetchResponse
+import com.bottari.data.model.team.bottari.TeamMemberStatusCheckedFetchResponse
+import com.bottari.data.model.team.bottari.item.response.AssignedItemsFetchResponse
+import com.bottari.data.model.team.bottari.item.response.PersonalItemsFetchResponse
+import com.bottari.data.model.team.bottari.item.response.SharedItemsFetchResponse
 import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
@@ -35,7 +35,7 @@ object TeamBottariMapper {
             memberCount = memberCount,
         )
 
-    fun TeamBottariFetchDetailResponse.toDomain(): TeamBottariDetail =
+    fun TeamBottariDetailFetchResponse.toDomain(): TeamBottariDetail =
         TeamBottariDetail(
             bottari =
                 Bottari(
