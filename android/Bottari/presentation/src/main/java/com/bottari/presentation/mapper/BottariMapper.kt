@@ -19,8 +19,8 @@ object BottariMapper {
         BottariUiModel(
             id = bottari.id,
             title = bottari.title,
-            totalQuantity = totalQuantity,
-            checkedQuantity = checkedQuantity,
+            totalQuantity = itemCount.totalQuantity,
+            checkedQuantity = itemCount.checkedQuantity,
             alarm = bottari.alarm?.toUiModel(),
         )
 

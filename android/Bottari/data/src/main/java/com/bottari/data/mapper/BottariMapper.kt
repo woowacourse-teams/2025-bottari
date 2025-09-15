@@ -6,6 +6,7 @@ import com.bottari.data.model.bottari.BottariItemFetchResponse
 import com.bottari.data.model.bottari.BottariesFetchResponse
 import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariItem
+import com.bottari.domain.model.bottari.BottariItemCount
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.BottariState
 
@@ -19,8 +20,11 @@ object BottariMapper {
                     alarm = alarm?.toDomain(),
                     items = emptyList(),
                 ),
-            checkedQuantity = checkedItemsCount,
-            totalQuantity = totalItemsCount,
+            itemCount =
+                BottariItemCount(
+                    checkedQuantity = checkedItemsCount,
+                    totalQuantity = totalItemsCount,
+                ),
         )
 
     fun BottariFetchResponse.toDomain(): Bottari =

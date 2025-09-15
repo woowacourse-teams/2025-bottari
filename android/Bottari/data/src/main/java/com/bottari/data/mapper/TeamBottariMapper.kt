@@ -12,6 +12,7 @@ import com.bottari.data.model.team.bottari.item.response.PersonalItemsFetchRespo
 import com.bottari.data.model.team.bottari.item.response.SharedItemsFetchResponse
 import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariItem
+import com.bottari.domain.model.bottari.BottariItemCount
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.team.MemberCheckStatus
@@ -87,8 +88,11 @@ object TeamBottariMapper {
             id = id,
             name = name,
             memberCheckStatus = memberCheckStatus.map { it.toDomain() },
-            checkItemsCount = checkItemsCount,
-            totalItemsCount = totalItemsCount,
+            itemCount =
+                BottariItemCount(
+                    checkedQuantity = checkItemsCount,
+                    totalQuantity = totalItemsCount,
+                ),
         )
 
     private fun TeamMemberStatusCheckedFetchResponse.toDomain(): MemberCheckStatus =

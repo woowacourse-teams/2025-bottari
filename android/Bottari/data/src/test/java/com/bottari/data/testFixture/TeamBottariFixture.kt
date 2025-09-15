@@ -5,6 +5,7 @@ import com.bottari.data.model.team.bottari.TeamBottariFetchResponse
 import com.bottari.data.model.team.member.TeamMemberNameFetchResponse
 import com.bottari.data.model.team.member.TeamMemberStatusFetchResponse
 import com.bottari.domain.model.bottari.Bottari
+import com.bottari.domain.model.bottari.BottariItemCount
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.TeamBottariDetail
@@ -59,8 +60,7 @@ val TEAM_MEMBERS_STATUS =
             1L,
             Nickname("Test"),
             true,
-            0,
-            0,
+            BottariItemCount(0, 0),
             emptyList(),
             emptyList(),
         ),

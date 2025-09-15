@@ -4,6 +4,7 @@ import com.bottari.data.mapper.BottariItemMapper.toDomain
 import com.bottari.data.model.team.member.TeamMemberFetchResponse
 import com.bottari.data.model.team.member.TeamMemberNameFetchResponse
 import com.bottari.data.model.team.member.TeamMemberStatusFetchResponse
+import com.bottari.domain.model.bottari.BottariItemCount
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.HeadCount
 import com.bottari.domain.model.team.TeamMember
@@ -24,8 +25,11 @@ object TeamMembersMapper {
             id = id,
             nickname = Nickname(nickname),
             isHost = isOwner,
-            totalItemsCount = totalItemsCount,
-            checkedItemsCount = checkedItemsCount,
+            itemCount =
+                BottariItemCount(
+                    totalQuantity = totalItemsCount,
+                    checkedQuantity = checkedItemsCount,
+                ),
             sharedItems = sharedItems.map { sharedItem -> sharedItem.toDomain() },
             assignedItems = assignedItems.map { assignedItem -> assignedItem.toDomain() },
         )

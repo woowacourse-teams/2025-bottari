@@ -35,8 +35,8 @@ object TeamBottariMapper {
             id = id,
             name = name,
             memberCheckStatus = memberCheckStatus.map { item -> item.toUiModel() },
-            checkItemsCount = checkItemsCount,
-            totalItemsCount = totalItemsCount,
+            checkItemsCount = itemCount.checkedQuantity,
+            totalItemsCount = itemCount.totalQuantity,
             type = BottariItemTypeUiModel.SHARED,
         )
 
@@ -45,8 +45,8 @@ object TeamBottariMapper {
             id = id,
             name = name,
             memberCheckStatus = memberCheckStatus.map { item -> item.toUiModel() },
-            checkItemsCount = checkItemsCount,
-            totalItemsCount = totalItemsCount,
+            checkItemsCount = itemCount.checkedQuantity,
+            totalItemsCount = itemCount.totalQuantity,
             type = BottariItemTypeUiModel.ASSIGNED(),
         )
 
