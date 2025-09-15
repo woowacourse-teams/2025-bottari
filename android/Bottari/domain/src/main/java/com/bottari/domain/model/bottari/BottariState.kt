@@ -1,8 +1,7 @@
 package com.bottari.domain.model.bottari
 
-data class TeamBottari(
+data class BottariState(
     val bottari: Bottari,
     val totalQuantity: Int,
     val checkedQuantity: Int,
-    val memberCount: Int,
 )

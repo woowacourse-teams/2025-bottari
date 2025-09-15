@@ -1,9 +1,9 @@
 package com.bottari.presentation.mapper
 
 import com.bottari.domain.model.bottari.Bottari
-import com.bottari.domain.model.bottari.BottariDetail
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
+import com.bottari.domain.model.bottari.BottariState
 import com.bottari.domain.model.bottari.ChecklistItem
 import com.bottari.presentation.mapper.AlarmMapper.toUiModel
 import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
@@ -15,20 +15,20 @@ import com.bottari.presentation.model.ChecklistItemUiModel
 import com.bottari.presentation.model.MyBottariUiModel
 
 object BottariMapper {
-    fun Bottari.toUiModel(): BottariUiModel =
+    fun BottariState.toUiModel(): BottariUiModel =
         BottariUiModel(
-            id = base.id,
-            title = base.title,
+            id = bottari.id,
+            title = bottari.title,
             totalQuantity = totalQuantity,
             checkedQuantity = checkedQuantity,
-            alarm = base.alarm?.toUiModel(),
+            alarm = bottari.alarm?.toUiModel(),
         )
 
-    fun BottariDetail.toUiModel(): BottariDetailUiModel =
+    fun Bottari.toUiModel(): BottariDetailUiModel =
         BottariDetailUiModel(
-            id = base.id,
-            title = base.title,
-            alarm = base.alarm?.toUiModel(),
+            id = id,
+            title = title,
+            alarm = alarm?.toUiModel(),
             items = items.map { item -> item.toUiModel() },
         )
 
@@ -46,10 +46,10 @@ object BottariMapper {
             type = type.toUiModel(),
         )
 
-    fun BottariDetail.toMyBottariUiModel(): MyBottariUiModel =
+    fun Bottari.toMyBottariUiModel(): MyBottariUiModel =
         MyBottariUiModel(
-            id = base.id,
-            title = base.title,
+            id = id,
+            title = title,
             isSelected = false,
             items = items.map { item -> item.toUiModel() },
         )

@@ -4,7 +4,7 @@ import com.bottari.data.model.team.bottari.TeamBottariFetchDetailResponse
 import com.bottari.data.model.team.bottari.TeamBottariFetchResponse
 import com.bottari.data.model.team.member.TeamMemberNameFetchResponse
 import com.bottari.data.model.team.member.TeamMemberStatusFetchResponse
-import com.bottari.domain.model.bottari.BottariBase
+import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.TeamBottari
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.TeamBottariDetail
@@ -23,7 +23,7 @@ val TEAM_BOTTARI_RESPONSE: TeamBottariFetchResponse by lazy {
 }
 val TEAM_BOTTARI: TeamBottari by lazy {
     TeamBottari(
-        BottariBase(1L, "test", null),
+        Bottari(1L, "test", null, items = emptyList()),
         10,
         10,
         3,
@@ -41,11 +41,12 @@ val TEAM_BOTTARI_DETAIL_RESPONSE =
     )
 val TEAM_BOTTARI_DETAIL =
     TeamBottariDetail(
-        base =
-            BottariBase(
+        bottari =
+            Bottari(
                 id = 1L,
                 title = "test",
                 alarm = null,
+                items = emptyList(),
             ),
         personalItems = emptyList(),
         assignedItems = emptyList(),

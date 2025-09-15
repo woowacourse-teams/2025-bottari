@@ -10,7 +10,7 @@ import com.bottari.data.model.team.bottari.item.AssignedItemsFetchResponse
 import com.bottari.data.model.team.bottari.item.PersonalItemsFetchResponse
 import com.bottari.data.model.team.bottari.item.SharedItemsFetchResponse
 import com.bottari.data.model.team.member.TeamMemberStatusCheckedFetchResponse
-import com.bottari.domain.model.bottari.BottariBase
+import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariItem
 import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.bottari.TeamBottari
@@ -23,7 +23,13 @@ import com.bottari.domain.model.team.TeamMember
 object TeamBottariMapper {
     fun TeamBottariFetchResponse.toDomain(): TeamBottari =
         TeamBottari(
-            base = BottariBase(id = id, title = title, alarm = alarm?.toDomain()),
+            bottari =
+                Bottari(
+                    id = id,
+                    title = title,
+                    alarm = alarm?.toDomain(),
+                    items = emptyList(),
+                ),
             checkedQuantity = checkedItemsCount,
             totalQuantity = totalItemsCount,
             memberCount = memberCount,
@@ -31,11 +37,12 @@ object TeamBottariMapper {
 
     fun TeamBottariFetchDetailResponse.toDomain(): TeamBottariDetail =
         TeamBottariDetail(
-            base =
-                BottariBase(
+            bottari =
+                Bottari(
                     id = bottariId,
                     title = title,
                     alarm = alarm?.toDomain(),
+                    items = emptyList(),
                 ),
             personalItems = personalItems.map { it.toDomain(BottariItemType.PERSONAL) },
             assignedItems = assignedItems.map { it.toDomain(BottariItemType.ASSIGNED(emptyList())) },

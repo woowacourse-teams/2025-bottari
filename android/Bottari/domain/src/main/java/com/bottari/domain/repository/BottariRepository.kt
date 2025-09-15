@@ -1,12 +1,12 @@
 package com.bottari.domain.repository
 
 import com.bottari.domain.model.bottari.Bottari
-import com.bottari.domain.model.bottari.BottariDetail
+import com.bottari.domain.model.bottari.BottariState
 
 interface BottariRepository {
-    suspend fun fetchBottaries(): Result<List<Bottari>>
+    suspend fun fetchBottaries(): Result<List<BottariState>>
 
-    suspend fun fetchBottariDetail(id: Long): Result<BottariDetail>
+    suspend fun fetchBottariDetail(id: Long): Result<Bottari>
 
     suspend fun createBottari(title: String): Result<Long?>
 
