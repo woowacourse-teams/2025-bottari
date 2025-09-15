@@ -4,7 +4,7 @@ import com.bottari.data.model.sse.EventStateResponse
 import com.bottari.domain.model.event.EventState
 
 object EventMapper {
-    fun EventStateResponse.toDomain(): EventState =
+    fun EventStateResponse.toEventState(): EventState =
         when (this) {
             EventStateResponse.Empty -> EventState.Empty
             EventStateResponse.OnClosed -> EventState.OnClosed

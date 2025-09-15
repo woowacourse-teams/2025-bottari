@@ -1,7 +1,7 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.alarm.AlarmMapper.toCreateRequest
-import com.bottari.data.mapper.alarm.AlarmMapper.toSaveRequest
+import com.bottari.data.mapper.alarm.AlarmMapper.toAlarmCreateRequest
+import com.bottari.data.mapper.alarm.AlarmMapper.toAlarmSaveRequest
 import com.bottari.data.source.remote.AlarmRemoteDataSource
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.repository.AlarmRepository
@@ -12,12 +12,12 @@ class AlarmRepositoryImpl(
     override suspend fun saveAlarm(
         id: Long,
         alarm: Alarm,
-    ): Result<Unit> = alarmRemoteDataSource.saveAlarm(id, alarm.toSaveRequest())
+    ): Result<Unit> = alarmRemoteDataSource.saveAlarm(id, alarm.toAlarmSaveRequest())
 
     override suspend fun createAlarm(
         bottariId: Long,
         alarm: Alarm,
-    ): Result<Unit> = alarmRemoteDataSource.createAlarm(bottariId, alarm.toCreateRequest())
+    ): Result<Unit> = alarmRemoteDataSource.createAlarm(bottariId, alarm.toAlarmCreateRequest())
 
     override suspend fun activeAlarm(alarmId: Long): Result<Unit> = alarmRemoteDataSource.activeAlarmState(id = alarmId)
 

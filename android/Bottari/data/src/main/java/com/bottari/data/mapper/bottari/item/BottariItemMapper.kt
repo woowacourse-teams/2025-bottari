@@ -7,14 +7,14 @@ import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 
 object BottariItemMapper {
-    fun FetchChecklistResponse.toDomain(): ChecklistItem =
+    fun FetchChecklistResponse.toChecklistItem(): ChecklistItem =
         ChecklistItem(
             id = id,
             name = name,
             isChecked = isChecked,
         )
 
-    fun BottariItemFetchResponse.toDomain(): BottariItem =
+    fun BottariItemFetchResponse.toBottariItem(): BottariItem =
         BottariItem(
             id = id,
             name = name,

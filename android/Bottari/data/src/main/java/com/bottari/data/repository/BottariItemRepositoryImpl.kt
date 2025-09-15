@@ -1,6 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.bottari.item.BottariItemMapper.toDomain
+import com.bottari.data.mapper.bottari.item.BottariItemMapper.toChecklistItem
 import com.bottari.data.model.bottari.item.SaveBottariItemsRequest
 import com.bottari.data.source.remote.BottariItemRemoteDataSource
 import com.bottari.domain.model.bottari.item.ChecklistItem
@@ -12,7 +12,7 @@ class BottariItemRepositoryImpl(
     override suspend fun fetchChecklist(bottariId: Long): Result<List<ChecklistItem>> =
         bottariItemRemoteDataSource
             .fetchChecklist(bottariId)
-            .mapCatching { checklist -> checklist.map { bottariItem -> bottariItem.toDomain() } }
+            .mapCatching { checklist -> checklist.map { bottariItem -> bottariItem.toChecklistItem() } }
 
     override suspend fun uncheckBottariItem(bottariItemId: Long): Result<Unit> =
         bottariItemRemoteDataSource.uncheckBottariItem(bottariItemId)

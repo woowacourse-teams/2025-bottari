@@ -6,16 +6,16 @@ import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.model.bottari.template.BottariTemplateItem
 
 object BottariTemplateMapper {
-    fun FetchBottariTemplateResponse.toDomain(): BottariTemplate =
+    fun FetchBottariTemplateResponse.toBottariTemplate(): BottariTemplate =
         BottariTemplate(
             id = id,
             title = title,
-            items = items.map { it.toDomain() },
+            items = items.map { it.toBottariTemplateItem() },
             author = author,
             takenCount = takenCount,
         )
 
-    private fun BottariTemplateItemResponse.toDomain(): BottariTemplateItem =
+    private fun BottariTemplateItemResponse.toBottariTemplateItem(): BottariTemplateItem =
         BottariTemplateItem(
             id = id,
             name = name,

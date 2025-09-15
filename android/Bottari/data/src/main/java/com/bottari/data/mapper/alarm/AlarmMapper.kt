@@ -36,73 +36,73 @@ object AlarmMapper {
     private const val EVERY_WEEK_REPEAT = "EVERY_WEEK_REPEAT"
     private const val DAYS_IN_WEEK = 7
 
-    fun Alarm.toSaveRequest(): AlarmSaveRequest =
+    fun Alarm.toAlarmSaveRequest(): AlarmSaveRequest =
         AlarmSaveRequest(
             routineAlarm = toSaveRoutineRequest(),
-            locationAlarm = location?.toSaveRequest(),
+            locationAlarm = location?.toAlarmSaveRequest(),
         )
 
-    fun Alarm.toCreateRequest(): AlarmCreateRequest =
+    fun Alarm.toAlarmCreateRequest(): AlarmCreateRequest =
         AlarmCreateRequest(
-            routineAlarm = toCreateRoutineRequest(),
-            locationAlarm = location?.toCreateRequest(),
+            routineAlarm = toAlarmCreateRoutineRequest(),
+            locationAlarm = location?.toAlarmCreateRequest(),
         )
 
-    fun AlarmFetchResponse.toDomain(): Alarm =
+    fun AlarmFetchResponse.toAlarm(): Alarm =
         Alarm(
             id = id,
             isActive = isActive,
             time = routine.time,
             alarmType = routine.toAlarmType(),
-            location = location?.toDomain(),
+            location = location?.toLocationAlarm(),
         )
 
-    fun BottariesAlarmFetchResponse.toDomain(): Alarm =
+    fun BottariesAlarmFetchResponse.toAlarm(): Alarm =
         Alarm(
             id = id,
             isActive = isActive,
             time = routine.time,
             alarmType = routine.toAlarmType(),
-            location = location?.toDomain(),
+            location = location?.toLocationAlarm(),
         )
 
-    fun BottariAlarmFetchResponse.toDomain(): Alarm =
+    fun BottariAlarmFetchResponse.toAlarm(): Alarm =
         Alarm(
             id = id,
             isActive = isActive,
             time = routine.time,
             alarmType = routine.toAlarmType(),
-            location = location?.toDomain(),
+            location = location?.toLocationAlarm(),
         )
 
-    fun TeamBottariAlarmFetchResponse.toDomain(): Alarm =
+    fun TeamBottariAlarmFetchResponse.toAlarm(): Alarm =
         Alarm(
             id = id,
             isActive = isActive,
             time = routine.time,
             alarmType = routine.toAlarmType(),
-            location = location?.toDomain(),
+            location = location?.toLocationAlarm(),
         )
 
-    fun TeamBottariDetailAlarmFetchResponse.toDomain(): Alarm =
+    fun TeamBottariDetailAlarmFetchResponse.toAlarm(): Alarm =
         Alarm(
             id = id,
             isActive = isActive,
             time = routine.time,
             alarmType = routine.toAlarmType(),
-            location = location?.toDomain(),
+            location = location?.toLocationAlarm(),
         )
 
-    fun NotificationEntity.toAlarmDomain(): Alarm =
+    fun NotificationEntity.toAlarm(): Alarm =
         Alarm(
             id = alarmId,
             isActive = isActive,
             time = time,
-            alarmType = this.toTypeDomain(),
+            alarmType = this.toAlarmType(),
             location = null,
         )
 
-    private fun Alarm.toCreateRoutineRequest(): AlarmCreateRoutineRequest =
+    private fun Alarm.toAlarmCreateRoutineRequest(): AlarmCreateRoutineRequest =
         AlarmCreateRoutineRequest(
             time = time,
             type = alarmType.toTypeString(),
@@ -134,7 +134,7 @@ object AlarmMapper {
         return repeatDays
     }
 
-    private fun LocationAlarm.toCreateRequest(): AlarmCreateLocationRequest =
+    private fun LocationAlarm.toAlarmCreateRequest(): AlarmCreateLocationRequest =
         AlarmCreateLocationRequest(
             isLocationAlarmActive = isActive,
             latitude = latitude,
@@ -142,7 +142,7 @@ object AlarmMapper {
             radius = radius,
         )
 
-    private fun LocationAlarm.toSaveRequest(): AlarmSaveLocationRequest =
+    private fun LocationAlarm.toAlarmSaveRequest(): AlarmSaveLocationRequest =
         AlarmSaveLocationRequest(
             isLocationAlarmActive = isActive,
             latitude = latitude,
@@ -220,7 +220,7 @@ object AlarmMapper {
             else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
         }
 
-    private fun AlarmLocationResponse.toDomain(): LocationAlarm =
+    private fun AlarmLocationResponse.toLocationAlarm(): LocationAlarm =
         LocationAlarm(
             latitude = latitude,
             longitude = longitude,
@@ -228,7 +228,7 @@ object AlarmMapper {
             isActive = isActive,
         )
 
-    private fun BottariesAlarmLocationResponse.toDomain(): LocationAlarm =
+    private fun BottariesAlarmLocationResponse.toLocationAlarm(): LocationAlarm =
         LocationAlarm(
             latitude = latitude,
             longitude = longitude,
@@ -236,7 +236,7 @@ object AlarmMapper {
             isActive = isActive,
         )
 
-    private fun BottariAlarmLocationResponse.toDomain(): LocationAlarm =
+    private fun BottariAlarmLocationResponse.toLocationAlarm(): LocationAlarm =
         LocationAlarm(
             latitude = latitude,
             longitude = longitude,
@@ -244,7 +244,7 @@ object AlarmMapper {
             isActive = isActive,
         )
 
-    private fun TeamBottariAlarmLocationResponse.toDomain(): LocationAlarm =
+    private fun TeamBottariAlarmLocationResponse.toLocationAlarm(): LocationAlarm =
         LocationAlarm(
             latitude = latitude,
             longitude = longitude,
@@ -252,7 +252,7 @@ object AlarmMapper {
             isActive = isActive,
         )
 
-    private fun TeamBottariDetailAlarmLocationResponse.toDomain(): LocationAlarm =
+    private fun TeamBottariDetailAlarmLocationResponse.toLocationAlarm(): LocationAlarm =
         LocationAlarm(
             latitude = latitude,
             longitude = longitude,
@@ -260,7 +260,7 @@ object AlarmMapper {
             isActive = isActive,
         )
 
-    fun NotificationEntity.toTypeDomain(): AlarmType =
+    fun NotificationEntity.toAlarmType(): AlarmType =
         when (this.alarmType) {
             NON_REPEAT -> AlarmType.NonRepeat(date!!)
             REPEAT -> AlarmType.Repeat(repeatDays)

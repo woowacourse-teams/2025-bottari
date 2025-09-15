@@ -1,6 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.sse.EventMapper.toDomain
+import com.bottari.data.mapper.sse.EventMapper.toEventState
 import com.bottari.data.source.remote.EventRemoteDataSource
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.repository.EventRepository
@@ -12,7 +12,7 @@ class EventRepositoryImpl(
 ) : EventRepository {
     override suspend fun connectEvent(teamBottariId: Long): Flow<EventState> =
         eventRemoteDataSource.connectEvent(teamBottariId).map { eventStateResponse ->
-            eventStateResponse.toDomain()
+            eventStateResponse.toEventState()
         }
 
     override suspend fun disconnectEvent() = eventRemoteDataSource.disconnectEvent()

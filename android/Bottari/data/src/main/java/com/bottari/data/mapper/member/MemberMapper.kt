@@ -6,7 +6,7 @@ import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.member.RegisteredMember
 
 object MemberMapper {
-    fun MemberResponse.toDomain(): RegisteredMember = RegisteredMember(name = name, id = id, isRegistered = isRegistered)
+    fun MemberResponse.toRegisteredMember(): RegisteredMember = RegisteredMember(name = name, id = id, isRegistered = isRegistered)
 
-    fun Nickname.toRequest(): MemberSaveNicknameRequest = MemberSaveNicknameRequest(value)
+    fun Nickname.toMemberSaveNicknameRequest(): MemberSaveNicknameRequest = MemberSaveNicknameRequest(value)
 }

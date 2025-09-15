@@ -1,6 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.bottari.template.BottariTemplateMapper.toDomain
+import com.bottari.data.mapper.bottari.template.BottariTemplateMapper.toBottariTemplate
 import com.bottari.data.model.bottari.template.CreateBottariTemplateRequest
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
 import com.bottari.domain.model.bottari.template.BottariTemplate
@@ -12,7 +12,7 @@ class BottariTemplateRepositoryImpl(
     override suspend fun fetchBottariTemplates(searchWord: String?): Result<List<BottariTemplate>> =
         bottariTemplateRemoteDataSource
             .fetchBottariTemplates(searchWord)
-            .mapCatching { response -> response.map { it.toDomain() } }
+            .mapCatching { response -> response.map { it.toBottariTemplate() } }
 
     override suspend fun createBottariTemplate(
         title: String,
@@ -24,7 +24,7 @@ class BottariTemplateRepositoryImpl(
     override suspend fun fetchBottariTemplate(bottariId: Long): Result<BottariTemplate> =
         bottariTemplateRemoteDataSource
             .fetchBottariTemplateDetail(bottariId)
-            .mapCatching { it.toDomain() }
+            .mapCatching { it.toBottariTemplate() }
 
     override suspend fun takeBottariTemplate(bottariId: Long): Result<Long?> =
         bottariTemplateRemoteDataSource.takeBottariTemplate(bottariId)
@@ -32,7 +32,7 @@ class BottariTemplateRepositoryImpl(
     override suspend fun fetchMyBottariTemplates(): Result<List<BottariTemplate>> =
         bottariTemplateRemoteDataSource
             .fetchMyBottariTemplates()
-            .mapCatching { response -> response.map { it.toDomain() } }
+            .mapCatching { response -> response.map { it.toBottariTemplate() } }
 
     override suspend fun deleteMyBottariTemplate(bottariTemplateId: Long): Result<Unit> =
         bottariTemplateRemoteDataSource.deleteMyBottariTemplate(bottariTemplateId)

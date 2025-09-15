@@ -1,6 +1,6 @@
 package com.bottari.data.mapper.team.member
 
-import com.bottari.data.mapper.bottari.item.BottariItemMapper.toDomain
+import com.bottari.data.mapper.bottari.item.BottariItemMapper.toChecklistItem
 import com.bottari.data.model.team.bottari.TeamMemberStatusCheckedFetchResponse
 import com.bottari.data.model.team.bottari.item.response.AssignedItemsFetchResponse
 import com.bottari.data.model.team.member.TeamMemberFetchResponse
@@ -15,7 +15,7 @@ import com.bottari.domain.model.team.member.TeamMemberStatus
 import com.bottari.domain.model.team.member.TeamMembers
 
 object TeamMembersMapper {
-    fun TeamMemberFetchResponse.toDomain(): TeamMembers =
+    fun TeamMemberFetchResponse.toTeamMembers(): TeamMembers =
         TeamMembers(
             inviteCode = inviteCode,
             teamMemberHeadCount = HeadCount(teamMemberCount),
@@ -23,7 +23,7 @@ object TeamMembersMapper {
             memberNicknames = teamMemberNames.map { name -> Nickname(name) },
         )
 
-    fun TeamMemberStatusFetchResponse.toDomain(): TeamMemberStatus =
+    fun TeamMemberStatusFetchResponse.toTeamMemberStatus(): TeamMemberStatus =
         TeamMemberStatus(
             id = id,
             nickname = Nickname(nickname),
@@ -33,23 +33,23 @@ object TeamMembersMapper {
                     totalQuantity = totalItemsCount,
                     checkedQuantity = checkedItemsCount,
                 ),
-            sharedItems = sharedItems.map { sharedItem -> sharedItem.toDomain() },
-            assignedItems = assignedItems.map { assignedItem -> assignedItem.toDomain() },
+            sharedItems = sharedItems.map { sharedItem -> sharedItem.toChecklistItem() },
+            assignedItems = assignedItems.map { assignedItem -> assignedItem.toChecklistItem() },
         )
 
-    fun TeamMemberNameFetchResponse.toDomain(): TeamMember =
+    fun TeamMemberNameFetchResponse.toTeamMember(): TeamMember =
         TeamMember(
             memberId = id,
             nickname = name,
         )
 
-    fun AssignedItemsFetchResponse.Assignee.toDomain() =
+    fun AssignedItemsFetchResponse.Assignee.toTeamMember() =
         TeamMember(
             memberId = memberId,
             nickname = name,
         )
 
-    fun TeamMemberStatusCheckedFetchResponse.toDomain(): MemberCheckStatus =
+    fun TeamMemberStatusCheckedFetchResponse.toMemberCheckStatus(): MemberCheckStatus =
         MemberCheckStatus(
             name = name,
             checked = checked,

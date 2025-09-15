@@ -1,6 +1,6 @@
 package com.bottari.data.mapper.team.bottari.item
 
-import com.bottari.data.mapper.team.member.TeamMembersMapper.toDomain
+import com.bottari.data.mapper.team.member.TeamMembersMapper.toTeamMember
 import com.bottari.data.model.team.bottari.TeamBottariDetailFetchItemResponse
 import com.bottari.data.model.team.bottari.item.response.AssignedItemsFetchResponse
 import com.bottari.data.model.team.bottari.item.response.PersonalItemsFetchResponse
@@ -13,42 +13,42 @@ import com.bottari.domain.model.team.bottari.TeamBottariCheckList
 import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 
 object TeamItemMapper {
-    fun TeamBottariItemChecklistFetchResponse.toDomain(): TeamBottariCheckList =
+    fun TeamBottariItemChecklistFetchResponse.toTeamBottariCheckList(): TeamBottariCheckList =
         TeamBottariCheckList(
-            sharedItems = sharedItems.map { it.toDomain() },
-            assignedItems = assignedItems.map { it.toDomain() },
-            personalItems = personalItems.map { it.toDomain() },
+            sharedItems = sharedItems.map { it.toChecklistItem() },
+            assignedItems = assignedItems.map { it.toChecklistItem() },
+            personalItems = personalItems.map { it.toChecklistItem() },
         )
 
-    fun TeamChecklistItemResponse.toDomain(): ChecklistItem =
+    fun TeamChecklistItemResponse.toChecklistItem(): ChecklistItem =
         ChecklistItem(
             id = id,
             name = name,
             isChecked = isChecked,
         )
 
-    fun AssignedItemsFetchResponse.toDomain(): BottariItem =
+    fun AssignedItemsFetchResponse.toBottariItem(): BottariItem =
         BottariItem(
             id = id,
             name = name,
-            type = TeamBottariItemType.ASSIGNED(assignees.map { it.toDomain() }),
+            type = TeamBottariItemType.ASSIGNED(assignees.map { it.toTeamMember() }),
         )
 
-    fun SharedItemsFetchResponse.toDomain(): BottariItem =
+    fun SharedItemsFetchResponse.toBottariItem(): BottariItem =
         BottariItem(
             id = id,
             name = name,
             type = TeamBottariItemType.SHARED,
         )
 
-    fun PersonalItemsFetchResponse.toDomain(): BottariItem =
+    fun PersonalItemsFetchResponse.toBottariItem(): BottariItem =
         BottariItem(
             id = id,
             name = name,
             type = TeamBottariItemType.PERSONAL,
         )
 
-    fun TeamBottariDetailFetchItemResponse.toDomain(type: TeamBottariItemType): BottariItem =
+    fun TeamBottariDetailFetchItemResponse.toBottariItem(type: TeamBottariItemType): BottariItem =
         BottariItem(
             id = itemId,
             name = name,

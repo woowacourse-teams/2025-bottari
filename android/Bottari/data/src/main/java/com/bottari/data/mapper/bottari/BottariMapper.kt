@@ -1,7 +1,7 @@
 package com.bottari.data.mapper.bottari
 
-import com.bottari.data.mapper.alarm.AlarmMapper.toDomain
-import com.bottari.data.mapper.bottari.item.BottariItemMapper.toDomain
+import com.bottari.data.mapper.alarm.AlarmMapper.toAlarm
+import com.bottari.data.mapper.bottari.item.BottariItemMapper.toBottariItem
 import com.bottari.data.model.bottari.BottariFetchResponse
 import com.bottari.data.model.bottari.BottariesFetchResponse
 import com.bottari.domain.model.bottari.Bottari
@@ -9,13 +9,13 @@ import com.bottari.domain.model.bottari.BottariState
 import com.bottari.domain.model.bottari.item.BottariItemCount
 
 object BottariMapper {
-    fun BottariesFetchResponse.toDomain(): BottariState =
+    fun BottariesFetchResponse.toBottariState(): BottariState =
         BottariState(
             bottari =
                 Bottari(
                     id = id,
                     title = title,
-                    alarm = alarm?.toDomain(),
+                    alarm = alarm?.toAlarm(),
                     items = emptyList(),
                 ),
             itemCount =
@@ -25,11 +25,11 @@ object BottariMapper {
                 ),
         )
 
-    fun BottariFetchResponse.toDomain(): Bottari =
+    fun BottariFetchResponse.toBottari(): Bottari =
         Bottari(
             id = id,
             title = title,
-            alarm = alarm?.toDomain(),
-            items = items.map { it.toDomain() },
+            alarm = alarm?.toAlarm(),
+            items = items.map { it.toBottariItem() },
         )
 }
