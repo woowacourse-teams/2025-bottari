@@ -8,6 +8,17 @@ VALUES ('test_ssaid_1', '다이스'),
        ('test_ssaid_6', '민호떡'),
        ('test_ssaid_7', '김훌라');
 
+-- FCM 토큰 데이터
+INSERT INTO fcm_token (member_id, token)
+VALUES
+    (1, 'fcm_token_1'),
+    (2, 'fcm_token_2'),
+    (3, 'fcm_token_3'),
+    (4, 'fcm_token_4'),
+    (5, 'fcm_token_5'),
+    (6, 'fcm_token_6'),
+    (7, 'fcm_token_7');
+
 -- 보따리 데이터
 INSERT INTO bottari (title, member_id, created_at)
 VALUES
