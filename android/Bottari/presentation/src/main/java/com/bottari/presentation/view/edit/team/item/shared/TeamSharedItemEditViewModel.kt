@@ -15,7 +15,7 @@ import com.bottari.domain.usecase.team.CreateTeamSharedItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamSharedItemsUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
+import com.bottari.presentation.model.BottariItemUiModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance
@@ -91,7 +91,7 @@ class TeamSharedItemEditViewModel(
 
         launch {
             fetchTeamSharedItemsUseCase(bottariId)
-                .onSuccess { items -> updateState { copy(sharedItems = items.map { it.toUiModel() }) } }
+                .onSuccess { items -> updateState { copy(sharedItems = items.map { BottariItemUiModel.fromDomain(it) }) } }
                 .onFailure { emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure) }
 
             updateState { copy(isLoading = false, isFetched = true) }

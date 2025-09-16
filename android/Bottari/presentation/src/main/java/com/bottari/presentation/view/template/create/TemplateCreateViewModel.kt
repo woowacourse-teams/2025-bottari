@@ -11,7 +11,6 @@ import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.BottariMapper.toMyBottariUiModel
 import com.bottari.presentation.model.MyBottariUiModel
 
 class TemplateCreateViewModel(
@@ -70,7 +69,7 @@ class TemplateCreateViewModel(
     }
 
     private fun handleFetchBottariDetails(bottaries: List<Bottari>) {
-        val myBottaries = bottaries.map { it.toMyBottariUiModel() }
+        val myBottaries = bottaries.map { MyBottariUiModel.fromDomain(it) }
         val selectedBottariId = myBottaries.firstOrNull()?.id
         updateState {
             copy(

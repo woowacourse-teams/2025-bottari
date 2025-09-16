@@ -1,6 +1,7 @@
 package com.bottari.presentation.model
 
 import android.os.Parcelable
+import com.bottari.domain.model.bottari.Bottari
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -9,4 +10,14 @@ data class BottariDetailUiModel(
     val title: String,
     val alarm: AlarmUiModel?,
     val items: List<BottariItemUiModel> = emptyList(),
-) : Parcelable
+) : Parcelable {
+    companion object {
+        fun fromDomain(bottari: Bottari): BottariDetailUiModel =
+            BottariDetailUiModel(
+                id = bottari.id,
+                title = bottari.title,
+                alarm = bottari.alarm?.let { AlarmUiModel.fromDomain(it) },
+                items = bottari.items.map { item -> BottariItemUiModel.fromDomain(item) },
+            )
+    }
+}

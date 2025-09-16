@@ -9,7 +9,7 @@ import com.bottari.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
+import com.bottari.presentation.model.TeamBottariUiModel
 
 class TeamBottariViewModel(
     private val fetchTeamBottariesUseCase: FetchTeamBottariesUseCase,
@@ -22,7 +22,7 @@ class TeamBottariViewModel(
             fetchTeamBottariesUseCase()
                 .onSuccess { bottaries ->
                     updateState {
-                        copy(bottaries = bottaries.map { bottari -> bottari.toUiModel() })
+                        copy(bottaries = bottaries.map { bottari -> TeamBottariUiModel.fromDomain(bottari) })
                     }
                 }.onFailure { emitEvent(TeamBottariUiEvent.FetchBottariesFailure) }
 

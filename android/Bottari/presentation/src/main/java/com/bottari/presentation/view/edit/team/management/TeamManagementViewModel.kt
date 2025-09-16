@@ -16,7 +16,7 @@ import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
+import com.bottari.presentation.model.TeamMemberUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -81,7 +81,7 @@ class TeamManagementViewModel(
             inviteCode = teamMembers.inviteCode,
             teamMemberHeadCount = teamMembers.teamMemberHeadCount.value,
             maxHeadCount = teamMembers.teamMemberHeadCount.maxValue,
-            members = teamMembers.toUiModel(),
+            members = TeamMemberUiModel.fromDomain(teamMembers),
         )
 
     private fun logTeamMembersFetch(teamMembers: TeamMembers) {

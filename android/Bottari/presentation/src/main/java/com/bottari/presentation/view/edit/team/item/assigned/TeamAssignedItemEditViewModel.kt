@@ -20,8 +20,6 @@ import com.bottari.domain.usecase.team.FetchTeamAssignedItemsUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariMembersUseCase
 import com.bottari.domain.usecase.team.SaveTeamBottariAssignedItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
-import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.TeamMemberUiModel
@@ -149,8 +147,8 @@ class TeamAssignedItemEditViewModel(
 
             updateState {
                 copy(
-                    assignedItems = syncAssignedItems(assignedItems.map { it.toUiModel() }),
-                    members = syncMembers(members.map { it.toUiModel() }),
+                    assignedItems = syncAssignedItems(assignedItems.map { BottariItemUiModel.fromDomain(it) }),
+                    members = syncMembers(members.map { TeamMemberUiModel.fromDomain(it) }),
                     isFetched = true,
                 )
             }

@@ -11,7 +11,7 @@ import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
+import com.bottari.presentation.model.BottariTemplateItemUiModel
 
 class TemplateDetailViewModel(
     stateHandle: SavedStateHandle,
@@ -58,7 +58,7 @@ class TemplateDetailViewModel(
         launch {
             fetchBottariTemplateDetailUseCase(currentState.templateId)
                 .onSuccess { template ->
-                    val itemUiModels = template.items.map { it.toUiModel() }
+                    val itemUiModels = template.items.map { BottariTemplateItemUiModel.fromDomain(it) }
                     updateState { copy(title = template.title, items = itemUiModels) }
                 }.onFailure {
                     emitEvent(TemplateDetailUiEvent.FetchBottariDetailFailure)

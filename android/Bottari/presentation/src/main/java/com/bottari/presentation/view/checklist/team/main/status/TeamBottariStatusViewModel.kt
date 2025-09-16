@@ -16,8 +16,6 @@ import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.FetchTeamStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.TeamBottariMapper.toAssignedUiModel
-import com.bottari.presentation.mapper.TeamBottariMapper.toSharedUiModel
 import com.bottari.presentation.model.BottariItemTypeUiModel
 import com.bottari.presentation.model.TeamBottariProductStatusUiModel
 import com.bottari.presentation.model.TeamChecklistTypeUiModel
@@ -120,14 +118,27 @@ class TeamBottariStatusViewModel(
         }
 
     private fun handleFetchTeamStatusSuccess(teamBottariStatus: TeamBottariStatus) {
-        val sharedItems = teamBottariStatus.sharedItems.map { it.toSharedUiModel() }
-        val assignedItems = teamBottariStatus.assignedItems.map { it.toAssignedUiModel() }
+        val sharedItems =
+            teamBottariStatus.sharedItems.map {
+                TeamBottariProductStatusUiModel.fromDomain(
+                    it,
+                    BottariItemTypeUiModel.SHARED,
+                )
+            }
+        val assignedItems =
+            teamBottariStatus.assignedItems.map {
+                TeamBottariProductStatusUiModel.fromDomain(
+                    it,
+                    BottariItemTypeUiModel.ASSIGNED(),
+                )
+            }
         val teamStatusListItems = generateTeamItemsList(sharedItems, assignedItems)
         val allProductItems =
             teamStatusListItems.filterIsInstance<TeamBottariProductStatusUiModel>()
         val selectedProduct =
             allProductItems.find { it.id == currentState.selectedProduct?.id }
                 ?: allProductItems.firstOrNull()
+
         updateState {
             copy(
                 sharedItems = sharedItems,

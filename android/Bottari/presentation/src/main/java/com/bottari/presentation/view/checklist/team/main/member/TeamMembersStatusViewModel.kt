@@ -17,7 +17,6 @@ import com.bottari.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
 import com.bottari.presentation.model.TeamMemberStatusUiModel
 import com.bottari.presentation.model.TeamMemberUiModel
 import com.bottari.presentation.util.debounce
@@ -131,7 +130,7 @@ class TeamMembersStatusViewModel(
         id: Long,
     ): List<TeamMemberStatusUiModel> =
         teamMembersStatus.map { memberStatus ->
-            val uiModel = memberStatus.toUiModel(id)
+            val uiModel = TeamMemberStatusUiModel.fromDomain(memberStatus, id)
             val previousState =
                 currentState.membersStatus.find { it.member.id == uiModel.member.id }
             if (previousState != null && uiModel.isItemsEmpty.not()) {

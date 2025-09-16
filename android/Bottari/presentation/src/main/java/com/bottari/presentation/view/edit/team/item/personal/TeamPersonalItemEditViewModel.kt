@@ -11,7 +11,7 @@ import com.bottari.domain.usecase.team.CreateTeamPersonalItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamPersonalItemsUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
+import com.bottari.presentation.model.BottariItemUiModel
 
 class TeamPersonalItemEditViewModel(
     stateHandle: SavedStateHandle,
@@ -65,7 +65,7 @@ class TeamPersonalItemEditViewModel(
 
         launch {
             fetchTeamPersonalItemsUseCase(bottariId)
-                .onSuccess { items -> updateState { copy(personalItems = items.map { it.toUiModel() }) } }
+                .onSuccess { items -> updateState { copy(personalItems = items.map { BottariItemUiModel.fromDomain(it) }) } }
                 .onFailure { emitEvent(TeamPersonalItemEditEvent.FetchTeamPersonalItemsFailure) }
 
             updateState { copy(isLoading = false, isFetched = true) }
