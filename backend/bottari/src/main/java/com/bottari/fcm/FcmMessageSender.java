@@ -64,6 +64,7 @@ public class FcmMessageSender {
             fcmTokenService.deleteByIds(invalidTokenIds);
             log.info("만료된 FCM 토큰 {}개를 삭제했습니다.", invalidTokenIds.size());
         }
+        throwIfAllSendsFailed(memberIds, invalidTokenIds);
     }
 
     private boolean isInvalidFcmToken(final FirebaseMessagingException exception) {
@@ -82,5 +83,14 @@ public class FcmMessageSender {
                 .putData("type", request.messageType().name())
                 .putAllData(request.data())
                 .build();
+    }
+
+    private void throwIfAllSendsFailed(
+            final List<Long> memberIds,
+            final List<Long> invalidTokenIds
+    ) {
+        if (memberIds.size() == invalidTokenIds.size()) {
+            throw new BusinessException(FCM_MESSAGE_SEND_FAIL);
+        }
     }
 }
