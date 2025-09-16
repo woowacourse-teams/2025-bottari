@@ -14,8 +14,10 @@ import com.google.firebase.messaging.MessagingErrorCode;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class FcmMessageSender {
@@ -60,7 +62,7 @@ public class FcmMessageSender {
         }
         if (!invalidTokenIds.isEmpty()) {
             fcmTokenService.deleteByIds(invalidTokenIds);
-            throw new BusinessException(FCM_INVALID_TOKEN);
+            log.info("만료된 FCM 토큰 {}개를 삭제했습니다.", invalidTokenIds.size());
         }
     }
 
@@ -68,7 +70,7 @@ public class FcmMessageSender {
         final MessagingErrorCode messagingErrorCode = exception.getMessagingErrorCode();
 
         return messagingErrorCode == MessagingErrorCode.UNREGISTERED
-               || messagingErrorCode == MessagingErrorCode.INVALID_ARGUMENT;
+                || messagingErrorCode == MessagingErrorCode.INVALID_ARGUMENT;
     }
 
     private Message createMessage(
