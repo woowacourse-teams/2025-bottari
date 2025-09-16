@@ -1,7 +1,5 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.bottari.BottariMapper.toBottari
-import com.bottari.data.mapper.bottari.BottariMapper.toBottariState
 import com.bottari.data.model.bottari.BottariCreateRequest
 import com.bottari.data.model.bottari.BottariTitleUpdateRequest
 import com.bottari.data.source.remote.BottariRemoteDataSource
@@ -15,10 +13,10 @@ class BottariRepositoryImpl(
     override suspend fun fetchBottaries(): Result<List<BottariState>> =
         bottariRemoteDataSource
             .fetchBottaries()
-            .mapCatching { bottaries -> bottaries.map { it.toBottariState() } }
+            .mapCatching { bottaries -> bottaries.map { it.toDomain() } }
 
     override suspend fun fetchBottariDetail(id: Long): Result<Bottari> =
-        bottariRemoteDataSource.fetchBottariDetail(id).mapCatching { it.toBottari() }
+        bottariRemoteDataSource.fetchBottariDetail(id).mapCatching { it.toDomain() }
 
     override suspend fun createBottari(title: String): Result<Long?> =
         bottariRemoteDataSource.createBottari(

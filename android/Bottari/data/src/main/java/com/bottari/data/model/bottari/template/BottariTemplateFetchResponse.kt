@@ -1,5 +1,7 @@
 package com.bottari.data.model.bottari.template
 
+import com.bottari.domain.model.bottari.template.BottariTemplate
+import com.bottari.domain.model.bottari.template.BottariTemplateItem
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -17,7 +19,16 @@ data class BottariTemplateFetchResponse(
     val createdAt: String,
     @SerialName("takenCount")
     val takenCount: Int,
-)
+) {
+    fun toDomain(): BottariTemplate =
+        BottariTemplate(
+            id = id,
+            title = title,
+            items = items.map { it.toDomain() },
+            author = author,
+            takenCount = takenCount,
+        )
+}
 
 @Serializable
 data class BottariTemplateItemFetchResponse(
@@ -25,4 +36,10 @@ data class BottariTemplateItemFetchResponse(
     val id: Long,
     @SerialName("name")
     val name: String,
-)
+) {
+    fun toDomain(): BottariTemplateItem =
+        BottariTemplateItem(
+            id = id,
+            name = name,
+        )
+}

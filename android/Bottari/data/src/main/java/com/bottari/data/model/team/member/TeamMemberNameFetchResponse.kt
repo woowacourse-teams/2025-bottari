@@ -1,5 +1,6 @@
 package com.bottari.data.model.team.member
 
+import com.bottari.domain.model.team.member.TeamMember
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,4 +10,10 @@ data class TeamMemberNameFetchResponse(
     val id: Long,
     @SerialName("name")
     val name: String,
-)
+) {
+    fun toDomain(): TeamMember =
+        TeamMember(
+            memberId = id,
+            nickname = name,
+        )
+}

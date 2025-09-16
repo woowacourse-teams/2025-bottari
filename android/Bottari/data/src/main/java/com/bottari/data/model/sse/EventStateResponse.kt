@@ -1,22 +1,39 @@
 package com.bottari.data.model.sse
 
+import com.bottari.domain.model.event.EventState
 import java.time.LocalDateTime
 
 sealed interface EventStateResponse {
-    data object Empty : EventStateResponse
+    fun toDomain(): EventState
 
-    data object OnClosed : EventStateResponse
+    data object Empty : EventStateResponse {
+        override fun toDomain(): EventState = EventState.Empty
+    }
 
-    data object OnOpen : EventStateResponse
+    data object OnClosed : EventStateResponse {
+        override fun toDomain(): EventState = EventState.OnClosed
+    }
+
+    data object OnOpen : EventStateResponse {
+        override fun toDomain(): EventState = EventState.OnOpen
+    }
 
     data class OnEventResponse(
         val resource: ResourceResponse,
         val event: EventResponse,
         val data: EventDataResponse,
         val publishedAt: LocalDateTime,
-    ) : EventStateResponse
+    ) : EventStateResponse {
+        override fun toDomain(): EventState =
+            EventState.OnEvent(
+                data.toDomain(),
+                publishedAt,
+            )
+    }
 
     data class OnFailure(
         val exception: Throwable?,
-    ) : EventStateResponse
+    ) : EventStateResponse {
+        override fun toDomain(): EventState = EventState.OnFailure(exception)
+    }
 }

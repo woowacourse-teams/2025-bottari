@@ -1,7 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.member.MemberMapper.toMemberSaveNicknameRequest
-import com.bottari.data.mapper.member.MemberMapper.toRegisteredMember
+import com.bottari.data.model.member.MemberNicknameSaveRequest
 import com.bottari.data.model.member.MemberRegisterRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
@@ -34,13 +33,13 @@ class MemberRepositoryImpl(
 
     override suspend fun saveMemberNickname(nickname: Nickname): Result<Unit> =
         withContext(coroutineDispatcher) {
-            memberRemoteDataSource.saveMemberNickname(nickname.toMemberSaveNicknameRequest())
+            memberRemoteDataSource.saveMemberNickname(MemberNicknameSaveRequest.fromDomain(nickname))
         }
 
     override suspend fun checkRegisteredMember(): Result<RegisteredMember> =
         memberRemoteDataSource
             .checkRegisteredMember()
-            .mapCatching { checkInfo -> checkInfo.toRegisteredMember() }
+            .mapCatching { checkInfo -> checkInfo.toDomain() }
             .flatMapCatching { registeredMember ->
                 if (registeredMember.isRegistered.not()) {
                     return@flatMapCatching Result.success(

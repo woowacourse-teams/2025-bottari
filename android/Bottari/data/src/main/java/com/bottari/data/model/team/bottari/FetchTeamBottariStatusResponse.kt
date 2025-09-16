@@ -1,5 +1,9 @@
 package com.bottari.data.model.team.bottari
 
+import com.bottari.domain.model.bottari.item.BottariItemCount
+import com.bottari.domain.model.team.bottari.TeamBottariProductStatus
+import com.bottari.domain.model.team.bottari.TeamBottariStatus
+import com.bottari.domain.model.team.member.MemberCheckStatus
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,7 +13,13 @@ data class FetchTeamBottariStatusResponse(
     val sharedItems: List<FetchTeamBottariStatusItemResponse>,
     @SerialName("assignedItems")
     val assignedItems: List<FetchTeamBottariStatusItemResponse>,
-)
+) {
+    fun toDomain(): TeamBottariStatus =
+        TeamBottariStatus(
+            sharedItems = sharedItems.map { it.toDomain() },
+            assignedItems = assignedItems.map { it.toDomain() },
+        )
+}
 
 @Serializable
 data class FetchTeamBottariStatusItemResponse(
@@ -23,7 +33,19 @@ data class FetchTeamBottariStatusItemResponse(
     val checkItemsCount: Int,
     @SerialName("totalItemsCount")
     val totalItemsCount: Int,
-)
+) {
+    fun toDomain(): TeamBottariProductStatus =
+        TeamBottariProductStatus(
+            id = id,
+            name = name,
+            memberCheckStatus = memberCheckStatus.map { it.toDomain() },
+            itemCount =
+                BottariItemCount(
+                    checkedQuantity = checkItemsCount,
+                    totalQuantity = totalItemsCount,
+                ),
+        )
+}
 
 @Serializable
 data class TeamMemberStatusCheckedFetchResponse(
@@ -31,4 +53,10 @@ data class TeamMemberStatusCheckedFetchResponse(
     val name: String,
     @SerialName("checked")
     val checked: Boolean,
-)
+) {
+    fun toDomain(): MemberCheckStatus =
+        MemberCheckStatus(
+            name = name,
+            checked = checked,
+        )
+}

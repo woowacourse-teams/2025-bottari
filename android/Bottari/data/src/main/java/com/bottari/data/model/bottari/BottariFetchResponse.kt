@@ -2,10 +2,22 @@ package com.bottari.data.model.bottari
 
 import com.bottari.data.common.util.LocalDateSerializer
 import com.bottari.data.common.util.LocalTimeSerializer
+import com.bottari.domain.model.alarm.Alarm
+import com.bottari.domain.model.alarm.AlarmType
+import com.bottari.domain.model.alarm.LocationAlarm
+import com.bottari.domain.model.bottari.Bottari
+import com.bottari.domain.model.bottari.item.BottariItem
+import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.LocalTime
+
+private const val ERROR_MISSING_DATE = "NON_REPEAT 유형의 알람에는 날짜 정보가 필요합니다."
+private const val ERROR_UNKNOWN_ALARM_TYPE = "지원하지 않는 알람 유형입니다: %s"
+private const val NON_REPEAT = "NON_REPEAT"
+private const val EVERY_DAY_REPEAT = "EVERY_DAY_REPEAT"
+private const val EVERY_WEEK_REPEAT = "EVERY_WEEK_REPEAT"
 
 @Serializable
 data class BottariFetchResponse(
@@ -17,7 +29,15 @@ data class BottariFetchResponse(
     val items: List<BottariItemFetchResponse>,
     @SerialName("title")
     val title: String,
-)
+) {
+    fun toDomain(): Bottari =
+        Bottari(
+            id = id,
+            title = title,
+            alarm = alarm?.toDomain(),
+            items = items.map { it.toDomain() },
+        )
+}
 
 @Serializable
 data class BottariAlarmFetchResponse(
@@ -29,7 +49,16 @@ data class BottariAlarmFetchResponse(
     val location: BottariAlarmLocationFetchResponse?,
     @SerialName("routine")
     val routine: BottariAlarmRoutineFetchResponse,
-)
+) {
+    fun toDomain(): Alarm =
+        Alarm(
+            id = id,
+            isActive = isActive,
+            time = routine.time,
+            alarmType = routine.toDomain(),
+            location = location?.toDomain(),
+        )
+}
 
 @Serializable
 data class BottariAlarmLocationFetchResponse(
@@ -41,7 +70,15 @@ data class BottariAlarmLocationFetchResponse(
     val longitude: Double,
     @SerialName("radius")
     val radius: Int,
-)
+) {
+    fun toDomain(): LocationAlarm =
+        LocationAlarm(
+            latitude = latitude,
+            longitude = longitude,
+            radius = radius,
+            isActive = isActive,
+        )
+}
 
 @Serializable
 data class BottariAlarmRoutineFetchResponse(
@@ -55,7 +92,21 @@ data class BottariAlarmRoutineFetchResponse(
     val dayOfWeeks: List<Int>,
     @SerialName("type")
     val type: String,
-)
+) {
+    fun toDomain(): AlarmType =
+        when (type.uppercase()) {
+            NON_REPEAT ->
+                AlarmType.NonRepeat(
+                    date = date ?: throw IllegalArgumentException(ERROR_MISSING_DATE),
+                )
+
+            EVERY_DAY_REPEAT,
+            EVERY_WEEK_REPEAT,
+            -> AlarmType.Repeat(dayOfWeeks)
+
+            else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
+        }
+}
 
 @Serializable
 data class BottariItemFetchResponse(
@@ -63,4 +114,11 @@ data class BottariItemFetchResponse(
     val id: Long,
     @SerialName("name")
     val name: String,
-)
+) {
+    fun toDomain(): BottariItem =
+        BottariItem(
+            id = id,
+            name = name,
+            type = TeamBottariItemType.PERSONAL,
+        )
+}
