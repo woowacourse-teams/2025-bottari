@@ -17,7 +17,7 @@ sealed interface BottariItemTypeUiModel : Parcelable {
         val members: List<TeamMemberUiModel> = emptyList(),
     ) : BottariItemTypeUiModel
 
-    fun toTypeString() = 
+    fun toTypeString() =
         when (this) {
             is PERSONAL -> "PERSONAL"
             is SHARED -> "SHARED"

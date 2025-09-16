@@ -14,11 +14,12 @@ data class BottariTemplateUiModel(
             BottariTemplateUiModel(
                 id = bottariTemplate.id,
                 title = bottariTemplate.title,
-                items = bottariTemplate.items.map { item ->
-                    BottariTemplateItemUiModel.fromDomain(
-                        item,
-                    )
-                },
+                items =
+                    bottariTemplate.items.map { item ->
+                        BottariTemplateItemUiModel.fromDomain(
+                            item,
+                        )
+                    },
                 author = bottariTemplate.author,
                 takenCount = bottariTemplate.takenCount,
             )

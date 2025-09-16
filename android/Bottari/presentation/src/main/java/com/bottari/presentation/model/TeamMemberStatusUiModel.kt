@@ -19,7 +19,10 @@ data class TeamMemberStatusUiModel(
         get() = (isAllChecked || isMe || isItemsEmpty).not()
 
     companion object {
-        fun fromDomain(teamMemberStatus: TeamMemberStatus, myId: Long): TeamMemberStatusUiModel =
+        fun fromDomain(
+            teamMemberStatus: TeamMemberStatus,
+            myId: Long,
+        ): TeamMemberStatusUiModel =
             TeamMemberStatusUiModel(
                 member = TeamMemberUiModel(teamMemberStatus.id, teamMemberStatus.nickname.value, teamMemberStatus.isHost),
                 totalItemsCount = teamMemberStatus.itemCount.totalQuantity,

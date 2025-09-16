@@ -16,7 +16,10 @@ data class TeamBottariProductStatusUiModel(
         memberCheckStatus.isNotEmpty() && memberCheckStatus.all { it.checked }
 
     companion object {
-        fun fromDomain(teamBottariProductStatus: TeamBottariProductStatus, type: BottariItemTypeUiModel): TeamBottariProductStatusUiModel =
+        fun fromDomain(
+            teamBottariProductStatus: TeamBottariProductStatus,
+            type: BottariItemTypeUiModel,
+        ): TeamBottariProductStatusUiModel =
             TeamBottariProductStatusUiModel(
                 id = teamBottariProductStatus.id,
                 name = teamBottariProductStatus.name,
