@@ -1,4 +1,4 @@
-package com.bottari.data.service
+package com.bottari.data.service.bottari.item
 
 import com.bottari.data.model.remote.bottari.item.ItemFetchResponse
 import com.bottari.data.model.remote.bottari.item.ItemsSaveRequest

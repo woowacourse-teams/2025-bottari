@@ -1,4 +1,4 @@
-package com.bottari.data.service
+package com.bottari.data.service.alarm
 
 import com.bottari.data.model.remote.alarm.AlarmCreateRequest
 import com.bottari.data.model.remote.alarm.AlarmSaveRequest

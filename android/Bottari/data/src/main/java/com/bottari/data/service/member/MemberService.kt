@@ -1,4 +1,4 @@
-package com.bottari.data.service
+package com.bottari.data.service.member
 
 import com.bottari.data.model.remote.member.MemberNicknameSaveRequest
 import com.bottari.data.model.remote.member.MemberRegisterCheckResponse

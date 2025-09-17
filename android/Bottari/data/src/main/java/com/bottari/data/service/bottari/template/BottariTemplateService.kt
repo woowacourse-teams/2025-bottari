@@ -1,4 +1,4 @@
-package com.bottari.data.service
+package com.bottari.data.service.bottari.template
 
 import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
 import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse

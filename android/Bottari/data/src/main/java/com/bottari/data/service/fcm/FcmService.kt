@@ -1,4 +1,4 @@
-package com.bottari.data.service
+package com.bottari.data.service.fcm
 
 import com.bottari.data.model.remote.fcm.FcmTokenSaveRequest
 import retrofit2.Response

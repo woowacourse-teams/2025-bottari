@@ -73,6 +73,8 @@ object DataSourceProvider {
     val teamBottariRemoteDataSource: TeamBottariRemoteDataSource by lazy {
         TeamBottariRemoteDataSourceImpl(
             NetworkProvider.teamBottariService,
+            NetworkProvider.teamMemberService,
+            NetworkProvider.teamBottariItemsService,
         )
     }
     val fcmRemoteDataSource: FcmRemoteDataSource by lazy {

@@ -5,14 +5,16 @@ import com.bottari.data.network.RetrofitClient
 import com.bottari.data.network.SSEClient
 import com.bottari.data.network.SSEClientImpl
 import com.bottari.data.network.interceptor.AuthInterceptor
-import com.bottari.data.service.AlarmService
-import com.bottari.data.service.BottariItemService
-import com.bottari.data.service.BottariService
-import com.bottari.data.service.BottariTemplateService
-import com.bottari.data.service.FcmService
-import com.bottari.data.service.MemberService
-import com.bottari.data.service.ReportService
-import com.bottari.data.service.TeamBottariService
+import com.bottari.data.service.alarm.AlarmService
+import com.bottari.data.service.bottari.BottariService
+import com.bottari.data.service.bottari.item.BottariItemService
+import com.bottari.data.service.bottari.template.BottariTemplateService
+import com.bottari.data.service.fcm.FcmService
+import com.bottari.data.service.member.MemberService
+import com.bottari.data.service.report.ReportService
+import com.bottari.data.service.team.bottari.TeamBottariService
+import com.bottari.data.service.team.bottari.item.TeamBottariItemsService
+import com.bottari.data.service.team.member.TeamMemberService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
@@ -55,5 +57,8 @@ object NetworkProvider {
     val bottariTemplateService: BottariTemplateService by lazy { retrofitClient.create() }
     val reportService: ReportService by lazy { retrofitClient.create() }
     val teamBottariService: TeamBottariService by lazy { retrofitClient.create() }
+
+    val teamMemberService: TeamMemberService by lazy { retrofitClient.create() }
+    val teamBottariItemsService: TeamBottariItemsService by lazy { retrofitClient.create() }
     val fcmService: FcmService by lazy { retrofitClient.create() }
 }
