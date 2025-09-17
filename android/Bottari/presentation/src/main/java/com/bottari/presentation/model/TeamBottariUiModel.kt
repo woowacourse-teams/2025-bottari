@@ -1,6 +1,7 @@
 package com.bottari.presentation.model
 
 import com.bottari.domain.model.team.bottari.TeamBottari
+import com.bottari.presentation.model.alarm.AlarmUiModel
 
 data class TeamBottariUiModel(
     val id: Long,

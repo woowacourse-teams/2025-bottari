@@ -1,8 +1,9 @@
-package com.bottari.presentation.model
+package com.bottari.presentation.model.alarm
 
 import android.os.Parcelable
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.alarm.AlarmType
+import com.bottari.presentation.model.RepeatDayUiModel
 import kotlinx.parcelize.Parcelize
 import java.time.DayOfWeek
 import java.time.LocalDate

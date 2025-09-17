@@ -2,6 +2,7 @@ package com.bottari.presentation.model
 
 import android.os.Parcelable
 import com.bottari.domain.model.bottari.Bottari
+import com.bottari.presentation.model.alarm.AlarmUiModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

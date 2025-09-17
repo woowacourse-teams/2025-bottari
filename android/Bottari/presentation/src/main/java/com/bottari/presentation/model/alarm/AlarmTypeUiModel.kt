@@ -1,4 +1,4 @@
-package com.bottari.presentation.model
+package com.bottari.presentation.model.alarm
 
 enum class AlarmTypeUiModel {
     NON_REPEAT,

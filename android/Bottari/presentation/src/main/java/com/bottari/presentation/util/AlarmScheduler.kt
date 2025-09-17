@@ -5,9 +5,9 @@ import android.app.AlarmManager.AlarmClockInfo
 import android.app.PendingIntent
 import android.content.Context
 import com.bottari.di.ApplicationContextProvider
-import com.bottari.presentation.model.AlarmTypeUiModel
 import com.bottari.presentation.model.NotificationUiModel
 import com.bottari.presentation.model.RepeatDayUiModel
+import com.bottari.presentation.model.alarm.AlarmTypeUiModel
 import com.bottari.presentation.receiver.AlarmReceiver
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import java.time.DayOfWeek
