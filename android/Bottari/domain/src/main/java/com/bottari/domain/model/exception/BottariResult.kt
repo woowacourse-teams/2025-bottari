@@ -5,6 +5,10 @@ sealed interface BottariResult<T> {
         val data: T,
     ) : BottariResult<T>
 
+    data class Created<T>(
+        val createdId: Long,
+    ) : BottariResult<T>
+
     data class ApiError<T>(
         val exception: BottariException,
     ) : BottariResult<T>
