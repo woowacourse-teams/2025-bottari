@@ -15,8 +15,8 @@ import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.alarm.NotificationUiModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
+import com.bottari.presentation.model.alarm.NotificationUiModel
 import com.bottari.presentation.model.bottari.personal.BottariDetailUiModel
 import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.util.debounce

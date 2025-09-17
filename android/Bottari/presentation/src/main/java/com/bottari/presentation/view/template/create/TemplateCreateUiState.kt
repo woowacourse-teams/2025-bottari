@@ -1,7 +1,7 @@
 package com.bottari.presentation.view.template.create
 
-import com.bottari.presentation.model.template.SelectableBottariUiModel
 import com.bottari.presentation.model.bottari.BottariItemUiModel
+import com.bottari.presentation.model.template.SelectableBottariUiModel
 
 data class TemplateCreateUiState(
     val isLoading: Boolean = false,
