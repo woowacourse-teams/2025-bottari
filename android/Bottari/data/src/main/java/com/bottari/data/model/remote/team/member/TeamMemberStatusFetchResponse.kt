@@ -20,9 +20,9 @@ data class TeamMemberStatusFetchResponse(
     @SerialName("checkedItemsCount")
     val checkedItemsCount: Int,
     @SerialName("sharedItems")
-    val sharedItems: List<com.bottari.data.model.remote.team.member.TeamMemberStatusBottariItemFetchResponse>,
+    val sharedItems: List<TeamChecklistItem>,
     @SerialName("assignedItems")
-    val assignedItems: List<com.bottari.data.model.remote.team.member.TeamMemberStatusBottariItemFetchResponse>,
+    val assignedItems: List<TeamChecklistItem>,
 ) {
     fun toDomain(): TeamMemberStatus =
         TeamMemberStatus(
@@ -37,21 +37,21 @@ data class TeamMemberStatusFetchResponse(
             sharedItems = sharedItems.map { it.toDomain() },
             assignedItems = assignedItems.map { it.toDomain() },
         )
-}
 
-@Serializable
-data class TeamMemberStatusBottariItemFetchResponse(
-    @SerialName("id")
-    val id: Long,
-    @SerialName("name")
-    val name: String,
-    @SerialName("isChecked")
-    val isChecked: Boolean,
-) {
-    fun toDomain(): ChecklistItem =
-        ChecklistItem(
-            id = id,
-            name = name,
-            isChecked = isChecked,
-        )
+    @Serializable
+    data class TeamChecklistItem(
+        @SerialName("id")
+        val id: Long,
+        @SerialName("name")
+        val name: String,
+        @SerialName("isChecked")
+        val isChecked: Boolean,
+    ) {
+        fun toDomain(): ChecklistItem =
+            ChecklistItem(
+                id = id,
+                name = name,
+                isChecked = isChecked,
+            )
+    }
 }

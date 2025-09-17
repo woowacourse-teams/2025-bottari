@@ -27,13 +27,13 @@ data class TeamBottariDetailFetchResponse(
     @SerialName("title")
     val title: String,
     @SerialName("alarm")
-    val alarm: TeamBottariDetailAlarmFetchResponse?,
+    val alarm: TeamBottariAlarm?,
     @SerialName("sharedItems")
-    val sharedItems: List<TeamBottariDetailFetchItemResponse>,
+    val sharedItems: List<TeamBottariItem>,
     @SerialName("assignedItems")
-    val assignedItems: List<TeamBottariDetailFetchItemResponse>,
+    val assignedItems: List<TeamBottariItem>,
     @SerialName("personalItems")
-    val personalItems: List<TeamBottariDetailFetchItemResponse>,
+    val personalItems: List<TeamBottariItem>,
 ) {
     fun toDomain(): TeamBottariDetail =
         TeamBottariDetail(
@@ -48,88 +48,88 @@ data class TeamBottariDetailFetchResponse(
             assignedItems = assignedItems.map { it.toDomain(TeamBottariItemType.ASSIGNED(emptyList())) },
             sharedItems = sharedItems.map { it.toDomain(TeamBottariItemType.SHARED) },
         )
-}
 
-@Serializable
-data class TeamBottariDetailAlarmFetchResponse(
-    @SerialName("id")
-    val id: Long,
-    @SerialName("isActive")
-    val isActive: Boolean,
-    @SerialName("location")
-    val location: TeamBottariDetailAlarmLocationResponse?,
-    @SerialName("routine")
-    val routine: TeamBottariDetailAlarmRoutineResponse,
-) {
-    fun toDomain(): Alarm =
-        Alarm(
-            id = id,
-            isActive = isActive,
-            time = routine.time,
-            alarmType = routine.toDomain(),
-            location = location?.toDomain(),
-        )
-}
+    @Serializable
+    data class TeamBottariAlarm(
+        @SerialName("id")
+        val id: Long,
+        @SerialName("isActive")
+        val isActive: Boolean,
+        @SerialName("location")
+        val location: TeamBottariAlarmLocation?,
+        @SerialName("routine")
+        val routine: TeamBottariAlarmRoutine,
+    ) {
+        fun toDomain(): Alarm =
+            Alarm(
+                id = id,
+                isActive = isActive,
+                time = routine.time,
+                alarmType = routine.toDomain(),
+                location = location?.toDomain(),
+            )
+    }
 
-@Serializable
-data class TeamBottariDetailAlarmLocationResponse(
-    @SerialName("isActive")
-    val isActive: Boolean,
-    @SerialName("latitude")
-    val latitude: Double,
-    @SerialName("longitude")
-    val longitude: Double,
-    @SerialName("radius")
-    val radius: Int,
-) {
-    fun toDomain(): LocationAlarm =
-        LocationAlarm(
-            latitude = latitude,
-            longitude = longitude,
-            radius = radius,
-            isActive = isActive,
-        )
-}
+    @Serializable
+    data class TeamBottariAlarmLocation(
+        @SerialName("isActive")
+        val isActive: Boolean,
+        @SerialName("latitude")
+        val latitude: Double,
+        @SerialName("longitude")
+        val longitude: Double,
+        @SerialName("radius")
+        val radius: Int,
+    ) {
+        fun toDomain(): LocationAlarm =
+            LocationAlarm(
+                latitude = latitude,
+                longitude = longitude,
+                radius = radius,
+                isActive = isActive,
+            )
+    }
 
-@Serializable
-data class TeamBottariDetailAlarmRoutineResponse(
-    @SerialName("date")
-    @Serializable(with = LocalDateSerializer::class)
-    val date: LocalDate?,
-    @SerialName("time")
-    @Serializable(with = LocalTimeSerializer::class)
-    val time: LocalTime,
-    @SerialName("dayOfWeeks")
-    val dayOfWeeks: List<Int>,
-    @SerialName("type")
-    val type: String,
-) {
-    fun toDomain(): AlarmType =
-        when (type.uppercase()) {
-            NON_REPEAT ->
-                AlarmType.NonRepeat(
-                    date = date ?: throw IllegalArgumentException(ERROR_MISSING_DATE),
-                )
+    @Serializable
+    data class TeamBottariAlarmRoutine(
+        @SerialName("date")
+        @Serializable(with = LocalDateSerializer::class)
+        val date: LocalDate?,
+        @SerialName("time")
+        @Serializable(with = LocalTimeSerializer::class)
+        val time: LocalTime,
+        @SerialName("dayOfWeeks")
+        val dayOfWeeks: List<Int>,
+        @SerialName("type")
+        val type: String,
+    ) {
+        fun toDomain(): AlarmType =
+            when (type.uppercase()) {
+                NON_REPEAT ->
+                    AlarmType.NonRepeat(
+                        date = date ?: throw IllegalArgumentException(ERROR_MISSING_DATE),
+                    )
 
-            EVERY_DAY_REPEAT,
-            EVERY_WEEK_REPEAT,
-            -> AlarmType.Repeat(dayOfWeeks)
+                EVERY_DAY_REPEAT,
+                EVERY_WEEK_REPEAT,
+                -> AlarmType.Repeat(dayOfWeeks)
 
-            else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
-        }
-}
+                else -> throw IllegalArgumentException(ERROR_UNKNOWN_ALARM_TYPE.format(type))
+            }
+    }
 
-@Serializable
-data class TeamBottariDetailFetchItemResponse(
-    @SerialName("id")
-    val itemId: Long,
-    @SerialName("name")
-    val name: String,
-) {
-    fun toDomain(type: TeamBottariItemType): BottariItem =
-        BottariItem(
-            id = itemId,
-            name = name,
-            type = type,
-        )
+    @Serializable
+    data class TeamBottariItem(
+        @SerialName("id")
+        val itemId: Long,
+        @SerialName("name")
+        val name: String,
+    ) {
+        fun toDomain(type: TeamBottariItemType): BottariItem =
+            BottariItem(
+                id = itemId,
+                name = name,
+                type = type,
+            )
+    }
 }

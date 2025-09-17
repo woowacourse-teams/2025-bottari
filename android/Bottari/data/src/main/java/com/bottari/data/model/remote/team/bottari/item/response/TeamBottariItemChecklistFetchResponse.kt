@@ -8,11 +8,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TeamBottariItemChecklistFetchResponse(
     @SerialName("sharedItems")
-    val sharedItems: List<TeamChecklistItemResponse>,
+    val sharedItems: List<TeamChecklistItem>,
     @SerialName("assignedItems")
-    val assignedItems: List<TeamChecklistItemResponse>,
+    val assignedItems: List<TeamChecklistItem>,
     @SerialName("personalItems")
-    val personalItems: List<TeamChecklistItemResponse>,
+    val personalItems: List<TeamChecklistItem>,
 ) {
     fun toDomain(): TeamBottariCheckList =
         TeamBottariCheckList(
@@ -20,21 +20,21 @@ data class TeamBottariItemChecklistFetchResponse(
             assignedItems = assignedItems.map { it.toDomain() },
             personalItems = personalItems.map { it.toDomain() },
         )
-}
 
-@Serializable
-data class TeamChecklistItemResponse(
-    @SerialName("id")
-    val id: Long,
-    @SerialName("name")
-    val name: String,
-    @SerialName("isChecked")
-    val isChecked: Boolean,
-) {
-    fun toDomain(): ChecklistItem =
-        ChecklistItem(
-            id = id,
-            name = name,
-            isChecked = isChecked,
-        )
+    @Serializable
+    data class TeamChecklistItem(
+        @SerialName("id")
+        val id: Long,
+        @SerialName("name")
+        val name: String,
+        @SerialName("isChecked")
+        val isChecked: Boolean,
+    ) {
+        fun toDomain(): ChecklistItem =
+            ChecklistItem(
+                id = id,
+                name = name,
+                isChecked = isChecked,
+            )
+    }
 }
