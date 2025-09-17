@@ -58,10 +58,12 @@ class BottariCall<R>(
         if (body != null) return BottariResult.Success(body)
 
         return when (code()) {
-            201 ->
-                extractIdFromHeader()
-                    ?.let { BottariResult.Created(it) }
-                    ?: BottariResult.ApiError(BottariException.NotFoundCreatedIdException)
+            201 -> {
+                val createdId =
+                    extractIdFromHeader()
+                        ?: return BottariResult.ApiError(BottariException.NotFoundCreatedIdException)
+                BottariResult.Success(createdId as R)
+            }
 
             204 -> BottariResult.Success(Unit as R)
 
@@ -84,6 +86,13 @@ class BottariCall<R>(
 
     private fun Response<*>.extractIdFromHeader(): Long? {
         val headerValue = this.headers()["Location"] ?: return null
-        return headerValue.takeWhile { it.isDigit() }.toLongOrNull()
+        return regex
+            .find(headerValue)
+            ?.value
+            ?.toLongOrNull()
+    }
+
+    companion object {
+        private val regex = Regex("(\\d+)(?!.*\\d)")
     }
 }

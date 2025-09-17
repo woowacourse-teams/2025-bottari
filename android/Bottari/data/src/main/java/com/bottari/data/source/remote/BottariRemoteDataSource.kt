@@ -4,18 +4,19 @@ import com.bottari.data.model.remote.bottari.BottariCreateRequest
 import com.bottari.data.model.remote.bottari.BottariFetchResponse
 import com.bottari.data.model.remote.bottari.BottariTitleUpdateRequest
 import com.bottari.data.model.remote.bottari.BottariesFetchResponse
+import com.bottari.domain.model.exception.BottariResult
 
 interface BottariRemoteDataSource {
-    suspend fun fetchBottaries(): Result<List<BottariesFetchResponse>>
+    suspend fun fetchBottaries(): BottariResult<List<BottariesFetchResponse>>
 
-    suspend fun createBottari(bottariCreateRequest: BottariCreateRequest): Result<Long>
+    suspend fun createBottari(bottariCreateRequest: BottariCreateRequest): BottariResult<Long>
 
-    suspend fun fetchBottariDetail(id: Long): Result<BottariFetchResponse>
+    suspend fun fetchBottariDetail(id: Long): BottariResult<BottariFetchResponse>
 
-    suspend fun deleteBottari(id: Long): Result<Unit>
+    suspend fun deleteBottari(id: Long): BottariResult<Unit>
 
     suspend fun saveBottariTitle(
         id: Long,
         request: BottariTitleUpdateRequest,
-    ): Result<Unit>
+    ): BottariResult<Unit>
 }

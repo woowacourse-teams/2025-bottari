@@ -14,13 +14,13 @@ interface AlarmService {
     suspend fun saveAlarm(
         @Path("id") id: Long,
         @Body alarmSaveRequest: AlarmSaveRequest,
-    ): BottariResult<AlarmSaveRequest>
+    ): BottariResult<Unit>
 
     @POST("/bottaries/{bottariId}/alarms")
     suspend fun createAlarm(
         @Path("bottariId") bottariId: Long,
         @Body alarmCreateRequest: AlarmCreateRequest,
-    ): BottariResult<Unit>
+    ): BottariResult<Long>
 
     @PATCH("/alarms/{id}/active")
     suspend fun activeAlarm(

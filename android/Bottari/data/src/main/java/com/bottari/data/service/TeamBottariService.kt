@@ -33,7 +33,7 @@ interface TeamBottariService {
     @POST("/team-bottaries")
     suspend fun createTeamBottari(
         @Body request: com.bottari.data.model.remote.team.bottari.TeamBottariCreateRequest,
-    ): BottariResult<Unit>
+    ): BottariResult<Long>
 
     @GET("/team-bottaries/{teamBottariId}/checklist")
     suspend fun fetchTeamBottari(
@@ -85,19 +85,19 @@ interface TeamBottariService {
     suspend fun createTeamBottariSharedItem(
         @Path("teamBottariId") id: Long,
         @Body request: SharedItemsCreateRequest,
-    ): BottariResult<Unit>
+    ): BottariResult<Long>
 
     @POST("/team-bottaries/{teamBottariId}/personal-items")
     suspend fun createTeamBottariPersonalItem(
         @Path("teamBottariId") id: Long,
         @Body request: PersonalItemsCreateRequest,
-    ): BottariResult<Unit>
+    ): BottariResult<Long>
 
     @POST("/team-bottaries/{teamBottariId}/assigned-items")
     suspend fun createTeamBottariAssignedItem(
         @Path("teamBottariId") id: Long,
         @Body request: AssignedItemsCreateRequest,
-    ): BottariResult<Unit>
+    ): BottariResult<Long>
 
     @HTTP(method = "DELETE", path = "team-items/{id}", hasBody = true)
     suspend fun deleteTeamBottariItem(

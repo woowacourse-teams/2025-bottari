@@ -13,7 +13,7 @@ interface MemberService {
     @POST("/members")
     suspend fun registerMember(
         @Body request: MemberRegisterRequest,
-    ): BottariResult<Unit>
+    ): BottariResult<Long>
 
     @PATCH("/members/me")
     suspend fun saveMemberNickname(

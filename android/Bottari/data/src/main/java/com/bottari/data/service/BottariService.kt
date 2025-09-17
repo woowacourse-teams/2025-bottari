@@ -24,7 +24,7 @@ interface BottariService {
     @POST("/bottaries")
     suspend fun createBottari(
         @Body request: BottariCreateRequest,
-    ): BottariResult<Unit>
+    ): BottariResult<Long>
 
     @DELETE("/bottaries/{id}")
     suspend fun deleteBottari(

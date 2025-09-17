@@ -19,7 +19,7 @@ interface BottariTemplateService {
     @POST("/templates")
     suspend fun createBottariTemplate(
         @Body request: BottariTemplateCreateRequest,
-    ): BottariResult<Unit>
+    ): BottariResult<Long>
 
     @GET("/templates/{bottariId}")
     suspend fun fetchBottariTemplateDetail(
@@ -29,7 +29,7 @@ interface BottariTemplateService {
     @POST("/templates/{bottariId}/create-bottari")
     suspend fun takeBottariTemplate(
         @Path("bottariId") bottariId: Long,
-    ): BottariResult<Unit>
+    ): BottariResult<Long>
 
     @GET("/templates/me")
     suspend fun fetchMyBottariTemplates(): BottariResult<List<BottariTemplateFetchResponse>>
