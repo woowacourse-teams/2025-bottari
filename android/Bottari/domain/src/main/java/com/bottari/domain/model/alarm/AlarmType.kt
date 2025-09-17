@@ -2,11 +2,6 @@ package com.bottari.domain.model.alarm
 
 import java.time.LocalDate
 
-private const val NON_REPEAT = "NON_REPEAT"
-private const val EVERY_DAY_REPEAT = "EVERY_DAY_REPEAT"
-private const val EVERY_WEEK_REPEAT = "EVERY_WEEK_REPEAT"
-private const val DAYS_IN_WEEK = 7
-
 sealed class AlarmType {
     data class NonRepeat(
         val date: LocalDate,
@@ -37,4 +32,11 @@ sealed class AlarmType {
             is NonRepeat -> emptyList()
             is Repeat -> repeatDays
         }
+
+    companion object {
+        private const val NON_REPEAT = "NON_REPEAT"
+        private const val EVERY_DAY_REPEAT = "EVERY_DAY_REPEAT"
+        private const val EVERY_WEEK_REPEAT = "EVERY_WEEK_REPEAT"
+        private const val DAYS_IN_WEEK = 7
+    }
 }
