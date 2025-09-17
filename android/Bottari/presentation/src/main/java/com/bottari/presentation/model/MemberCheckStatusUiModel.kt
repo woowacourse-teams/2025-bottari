@@ -9,7 +9,7 @@ data class MemberCheckStatusUiModel(
     companion object {
         fun fromDomain(memberCheckStatus: MemberCheckStatus): MemberCheckStatusUiModel =
             MemberCheckStatusUiModel(
-                name = memberCheckStatus.name,
+                name = memberCheckStatus.itemName,
                 checked = memberCheckStatus.checked,
             )
     }

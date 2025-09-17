@@ -29,7 +29,7 @@ import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.bottari.TeamBottariCheckList
 import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 import com.bottari.domain.model.team.member.HeadCount
-import com.bottari.domain.model.team.member.TeamMembers
+import com.bottari.domain.model.team.member.TeamStatus
 import com.bottari.domain.repository.TeamBottariRepository
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.result.shouldBeFailure
@@ -116,7 +116,7 @@ class TeamBottariRepositoryImplTest {
 
             // then
             val expected =
-                TeamMembers(
+                TeamStatus(
                     "",
                     HeadCount(1),
                     Nickname("test"),

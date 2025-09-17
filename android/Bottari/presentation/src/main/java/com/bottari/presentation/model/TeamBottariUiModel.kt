@@ -13,12 +13,12 @@ data class TeamBottariUiModel(
     companion object {
         fun fromDomain(teamBottari: TeamBottari): TeamBottariUiModel =
             TeamBottariUiModel(
-                id = teamBottari.bottari.id,
-                title = teamBottari.bottari.title,
-                totalQuantity = teamBottari.totalQuantity,
-                checkedQuantity = teamBottari.checkedQuantity,
+                id = teamBottari.id,
+                title = teamBottari.title,
+                totalQuantity = teamBottari.itemCount.totalQuantity,
+                checkedQuantity = teamBottari.itemCount.checkedQuantity,
                 memberCount = teamBottari.memberCount.value,
-                alarm = teamBottari.bottari.alarm?.let { AlarmUiModel.fromDomain(it) },
+                alarm = teamBottari.alarm?.let { AlarmUiModel.fromDomain(it) },
             )
     }
 }

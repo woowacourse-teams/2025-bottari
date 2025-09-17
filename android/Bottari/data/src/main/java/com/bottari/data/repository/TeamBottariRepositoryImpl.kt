@@ -18,7 +18,7 @@ import com.bottari.domain.model.team.bottari.TeamBottariStatus
 import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 import com.bottari.domain.model.team.member.TeamMember
 import com.bottari.domain.model.team.member.TeamMemberStatus
-import com.bottari.domain.model.team.member.TeamMembers
+import com.bottari.domain.model.team.member.TeamStatus
 import com.bottari.domain.repository.TeamBottariRepository
 
 class TeamBottariRepositoryImpl(
@@ -56,7 +56,7 @@ class TeamBottariRepositoryImpl(
             .fetchTeamBottaries()
             .mapCatching { teamBottaries -> teamBottaries.map { it.toDomain() } }
 
-    override suspend fun fetchTeamMembers(id: Long): Result<TeamMembers> =
+    override suspend fun fetchTeamMembers(id: Long): Result<TeamStatus> =
         teamBottariRemoteDataSource
             .fetchTeamMembers(id)
             .mapCatching { response -> response.toDomain() }

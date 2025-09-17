@@ -10,13 +10,6 @@ data class NotificationUiModel(
     val title: String,
     val alarm: AlarmUiModel,
 ) : Parcelable {
-    fun toDomain(): Notification =
-        Notification(
-            bottariId = id,
-            bottariTitle = title,
-            alarm = alarm.toDomain(),
-        )
-
     companion object {
         fun fromDomain(notification: Notification): NotificationUiModel =
             NotificationUiModel(

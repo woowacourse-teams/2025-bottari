@@ -55,7 +55,7 @@ data class FetchTeamBottariStatusResponse(
     ) {
         fun toDomain(): MemberCheckStatus =
             MemberCheckStatus(
-                name = name,
+                itemName = name,
                 checked = checked,
             )
     }

@@ -8,7 +8,7 @@ import com.bottari.domain.model.team.bottari.TeamBottariStatus
 import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 import com.bottari.domain.model.team.member.TeamMember
 import com.bottari.domain.model.team.member.TeamMemberStatus
-import com.bottari.domain.model.team.member.TeamMembers
+import com.bottari.domain.model.team.member.TeamStatus
 
 interface TeamBottariRepository {
     suspend fun createTeamBottari(title: String): Result<Long?>
@@ -27,7 +27,7 @@ interface TeamBottariRepository {
 
     suspend fun fetchTeamBottaries(): Result<List<TeamBottari>>
 
-    suspend fun fetchTeamMembers(id: Long): Result<TeamMembers>
+    suspend fun fetchTeamMembers(id: Long): Result<TeamStatus>
 
     suspend fun fetchTeamBottariDetail(teamBottariId: Long): Result<TeamBottariDetail>
 

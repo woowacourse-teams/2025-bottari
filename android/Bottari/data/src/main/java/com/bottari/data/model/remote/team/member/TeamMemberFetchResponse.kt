@@ -2,7 +2,7 @@ package com.bottari.data.model.remote.team.member
 
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.team.member.HeadCount
-import com.bottari.domain.model.team.member.TeamMembers
+import com.bottari.domain.model.team.member.TeamStatus
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -17,11 +17,11 @@ data class TeamMemberFetchResponse(
     @SerialName("teamMemberNames")
     val teamMemberNames: List<String>,
 ) {
-    fun toDomain(): TeamMembers =
-        TeamMembers(
+    fun toDomain(): TeamStatus =
+        TeamStatus(
             inviteCode = inviteCode,
-            teamMemberHeadCount = HeadCount(teamMemberCount),
+            memberCount = HeadCount(teamMemberCount),
             hostName = Nickname(ownerName),
-            memberNicknames = teamMemberNames.map { name -> Nickname(name) },
+            nicknames = teamMemberNames.map { name -> Nickname(name) },
         )
 }

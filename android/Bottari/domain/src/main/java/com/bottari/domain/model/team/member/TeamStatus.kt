@@ -2,9 +2,9 @@ package com.bottari.domain.model.team.member
 
 import com.bottari.domain.model.member.Nickname
 
-data class TeamMembers(
+data class TeamStatus(
     val inviteCode: String,
-    val teamMemberHeadCount: HeadCount,
+    val memberCount: HeadCount,
     val hostName: Nickname,
-    val memberNicknames: List<Nickname>,
+    val nicknames: List<Nickname>,
 )
