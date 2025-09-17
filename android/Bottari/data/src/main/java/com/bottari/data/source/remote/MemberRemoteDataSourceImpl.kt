@@ -2,9 +2,9 @@ package com.bottari.data.source.remote
 
 import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
-import com.bottari.data.model.member.MemberNicknameSaveRequest
-import com.bottari.data.model.member.MemberRegisterCheckResponse
-import com.bottari.data.model.member.MemberRegisterRequest
+import com.bottari.data.model.remote.member.MemberNicknameSaveRequest
+import com.bottari.data.model.remote.member.MemberRegisterCheckResponse
+import com.bottari.data.model.remote.member.MemberRegisterRequest
 import com.bottari.data.service.MemberService
 
 class MemberRemoteDataSourceImpl(

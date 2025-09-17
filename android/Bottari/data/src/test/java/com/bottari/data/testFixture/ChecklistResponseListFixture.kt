@@ -1,6 +1,6 @@
 package com.bottari.data.testFixture
 
-import com.bottari.data.model.bottari.item.ItemFetchResponse
+import com.bottari.data.model.remote.bottari.item.ItemFetchResponse
 
 fun fetchChecklistResponseListFixture(): List<ItemFetchResponse> =
     listOf(

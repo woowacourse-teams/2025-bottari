@@ -1,6 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.notification.NotificationEntity
+import com.bottari.data.model.local.notification.NotificationEntity
 import com.bottari.data.source.remote.NotificationLocalDataSource
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.NotificationRepository

@@ -1,7 +1,7 @@
 package com.bottari.data.service
 
-import com.bottari.data.model.bottari.template.BottariTemplateCreateRequest
-import com.bottari.data.model.bottari.template.BottariTemplateFetchResponse
+import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
+import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE

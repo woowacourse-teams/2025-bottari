@@ -80,9 +80,7 @@ class NotificationRepositoryImplTest {
         runTest {
             // given
             coEvery { dataSource.saveNotification(NOTIFICATION_ENTITY_FIXTURE) } returns
-                Result.success(
-                    Unit,
-                )
+                Result.success(Unit)
 
             // when
             val result = repository.saveNotification(NOTIFICATION_FIXTURE)
@@ -101,9 +99,7 @@ class NotificationRepositoryImplTest {
             // given
             val exception = IllegalArgumentException("[ERROR] 알람 저장에 실패했습니다.")
             coEvery { dataSource.saveNotification(NOTIFICATION_ENTITY_FIXTURE) } returns
-                Result.failure(
-                    exception,
-                )
+                Result.failure(exception)
 
             // when
             val result = repository.saveNotification(NOTIFICATION_FIXTURE)

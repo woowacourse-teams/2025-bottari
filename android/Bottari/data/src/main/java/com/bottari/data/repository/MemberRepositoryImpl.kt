@@ -1,7 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.member.MemberNicknameSaveRequest
-import com.bottari.data.model.member.MemberRegisterRequest
+import com.bottari.data.model.remote.member.MemberNicknameSaveRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.domain.extension.flatMapCatching
@@ -23,7 +22,10 @@ class MemberRepositoryImpl(
             memberIdentifierLocalDataSource
                 .getInstallationId()
                 .mapCatching { installationId ->
-                    MemberRegisterRequest(installationId, fcmToken)
+                    com.bottari.data.model.remote.member.MemberRegisterRequest(
+                        installationId,
+                        fcmToken,
+                    )
                 }.flatMapCatching { request ->
                     memberRemoteDataSource.registerMember(request)
                 }.flatMapCatching { memberId ->

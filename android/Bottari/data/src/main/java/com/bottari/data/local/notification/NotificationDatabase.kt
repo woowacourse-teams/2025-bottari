@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.bottari.data.common.util.LocalDateConverter
 import com.bottari.data.common.util.LocalTimeConverter
 import com.bottari.data.common.util.RepeatDaysConverter
-import com.bottari.data.model.notification.NotificationEntity
+import com.bottari.data.model.local.notification.NotificationEntity
 
 @Database(entities = [NotificationEntity::class], version = 1)
 @TypeConverters(LocalTimeConverter::class, LocalDateConverter::class, RepeatDaysConverter::class)

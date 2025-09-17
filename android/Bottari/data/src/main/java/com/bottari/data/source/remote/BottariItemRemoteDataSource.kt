@@ -1,7 +1,7 @@
 package com.bottari.data.source.remote
 
-import com.bottari.data.model.bottari.item.ItemFetchResponse
-import com.bottari.data.model.bottari.item.ItemsSaveRequest
+import com.bottari.data.model.remote.bottari.item.ItemFetchResponse
+import com.bottari.data.model.remote.bottari.item.ItemsSaveRequest
 
 interface BottariItemRemoteDataSource {
     suspend fun fetchChecklist(bottariId: Long): Result<List<ItemFetchResponse>>

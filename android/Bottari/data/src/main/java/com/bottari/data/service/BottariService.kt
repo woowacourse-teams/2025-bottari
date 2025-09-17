@@ -1,9 +1,9 @@
 package com.bottari.data.service
 
-import com.bottari.data.model.bottari.BottariCreateRequest
-import com.bottari.data.model.bottari.BottariFetchResponse
-import com.bottari.data.model.bottari.BottariTitleUpdateRequest
-import com.bottari.data.model.bottari.BottariesFetchResponse
+import com.bottari.data.model.remote.bottari.BottariCreateRequest
+import com.bottari.data.model.remote.bottari.BottariFetchResponse
+import com.bottari.data.model.remote.bottari.BottariTitleUpdateRequest
+import com.bottari.data.model.remote.bottari.BottariesFetchResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE

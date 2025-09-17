@@ -1,7 +1,7 @@
 package com.bottari.data.source.remote
 
 import com.bottari.data.common.util.safeApiCall
-import com.bottari.data.model.fcm.FcmTokenSaveRequest
+import com.bottari.data.model.remote.fcm.FcmTokenSaveRequest
 import com.bottari.data.service.FcmService
 
 class FcmRemoteDataSourceImpl(

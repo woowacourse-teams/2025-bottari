@@ -1,14 +1,14 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.team.bottari.TeamBottariCreateRequest
-import com.bottari.data.model.team.bottari.TeamBottariJoinRequest
-import com.bottari.data.model.team.bottari.item.request.AssignedItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.request.PersonalItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.request.SharedItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.request.TeamBottariItemCheckUpdateRequest
-import com.bottari.data.model.team.bottari.item.request.TeamBottariItemDeleteRequest
-import com.bottari.data.model.team.bottari.item.response.TeamBottariItemChecklistFetchResponse
-import com.bottari.data.model.team.member.TeamMemberFetchResponse
+import com.bottari.data.model.remote.team.bottari.TeamBottariCreateRequest
+import com.bottari.data.model.remote.team.bottari.TeamBottariJoinRequest
+import com.bottari.data.model.remote.team.bottari.item.request.AssignedItemsCreateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.PersonalItemsCreateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.SharedItemsCreateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.TeamBottariItemCheckUpdateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.TeamBottariItemDeleteRequest
+import com.bottari.data.model.remote.team.bottari.item.response.TeamBottariItemChecklistFetchResponse
+import com.bottari.data.model.remote.team.member.TeamMemberFetchResponse
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.data.testFixture.BOTTARI_ASSIGNED_ITEM_FIXTURE
 import com.bottari.data.testFixture.BOTTARI_ASSIGNED_ITEM_RESPONSE_FIXTURE
@@ -162,7 +162,11 @@ class TeamBottariRepositoryImplTest {
             val result = repository.fetchTeamBottaries()
 
             // then
-            val expected = listOf(TEAM_BOTTARI, TEAM_BOTTARI.copy(bottari = TEAM_BOTTARI.bottari.copy(id = 2L)))
+            val expected =
+                listOf(
+                    TEAM_BOTTARI,
+                    TEAM_BOTTARI.copy(bottari = TEAM_BOTTARI.bottari.copy(id = 2L)),
+                )
             assertSoftly(result) {
                 shouldBeSuccess()
                 getOrThrow().shouldBe(expected)
@@ -220,9 +224,7 @@ class TeamBottariRepositoryImplTest {
             val teamBottariId = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { dataSource.fetchTeamBottariDetail(teamBottariId) } returns
-                Result.failure(
-                    exception,
-                )
+                Result.failure(exception)
 
             // when
             val result = repository.fetchTeamBottariDetail(teamBottariId)

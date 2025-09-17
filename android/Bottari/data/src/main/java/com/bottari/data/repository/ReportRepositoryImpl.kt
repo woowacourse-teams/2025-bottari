@@ -1,6 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.report.TemplateReportRequest
+import com.bottari.data.model.remote.report.TemplateReportRequest
 import com.bottari.data.source.remote.ReportRemoteDataSource
 import com.bottari.domain.repository.ReportRepository
 

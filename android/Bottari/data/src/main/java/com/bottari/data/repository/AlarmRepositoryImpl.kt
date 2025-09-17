@@ -1,7 +1,7 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.alarm.AlarmCreateRequest
-import com.bottari.data.model.alarm.AlarmSaveRequest
+import com.bottari.data.model.remote.alarm.AlarmCreateRequest
+import com.bottari.data.model.remote.alarm.AlarmSaveRequest
 import com.bottari.data.source.remote.AlarmRemoteDataSource
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.repository.AlarmRepository

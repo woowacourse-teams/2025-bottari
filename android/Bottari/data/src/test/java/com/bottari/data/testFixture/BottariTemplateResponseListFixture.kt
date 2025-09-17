@@ -1,6 +1,6 @@
 package com.bottari.data.testFixture
 
-import com.bottari.data.model.bottari.template.BottariTemplateFetchResponse
+import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse
 
 fun fetchBottariTemplateResponseListFixture(): List<BottariTemplateFetchResponse> =
     listOf(

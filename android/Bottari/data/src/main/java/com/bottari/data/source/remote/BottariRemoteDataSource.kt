@@ -1,9 +1,9 @@
 package com.bottari.data.source.remote
 
-import com.bottari.data.model.bottari.BottariCreateRequest
-import com.bottari.data.model.bottari.BottariFetchResponse
-import com.bottari.data.model.bottari.BottariTitleUpdateRequest
-import com.bottari.data.model.bottari.BottariesFetchResponse
+import com.bottari.data.model.remote.bottari.BottariCreateRequest
+import com.bottari.data.model.remote.bottari.BottariFetchResponse
+import com.bottari.data.model.remote.bottari.BottariTitleUpdateRequest
+import com.bottari.data.model.remote.bottari.BottariesFetchResponse
 
 interface BottariRemoteDataSource {
     suspend fun fetchBottaries(): Result<List<BottariesFetchResponse>>

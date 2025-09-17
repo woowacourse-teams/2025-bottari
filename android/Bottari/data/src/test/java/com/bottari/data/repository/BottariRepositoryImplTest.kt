@@ -1,7 +1,7 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.bottari.BottariCreateRequest
-import com.bottari.data.model.bottari.BottariTitleUpdateRequest
+import com.bottari.data.model.remote.bottari.BottariCreateRequest
+import com.bottari.data.model.remote.bottari.BottariTitleUpdateRequest
 import com.bottari.data.source.remote.BottariRemoteDataSource
 import com.bottari.data.testFixture.bottariResponseFixture
 import com.bottari.data.testFixture.fetchBottariesResponseFixture
@@ -146,7 +146,8 @@ class BottariRepositoryImplTest {
             coEvery {
                 remoteDataSource.saveBottariTitle(
                     id,
-                    BottariTitleUpdateRequest(title),
+                    com.bottari.data.model.remote.bottari
+                        .BottariTitleUpdateRequest(title),
                 )
             } returns Result.success(Unit)
 

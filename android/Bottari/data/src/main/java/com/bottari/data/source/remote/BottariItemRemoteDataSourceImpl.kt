@@ -1,8 +1,8 @@
 package com.bottari.data.source.remote
 
 import com.bottari.data.common.util.safeApiCall
-import com.bottari.data.model.bottari.item.ItemFetchResponse
-import com.bottari.data.model.bottari.item.ItemsSaveRequest
+import com.bottari.data.model.remote.bottari.item.ItemFetchResponse
+import com.bottari.data.model.remote.bottari.item.ItemsSaveRequest
 import com.bottari.data.service.BottariItemService
 
 class BottariItemRemoteDataSourceImpl(

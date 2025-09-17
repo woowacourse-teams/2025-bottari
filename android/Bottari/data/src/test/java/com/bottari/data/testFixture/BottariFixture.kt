@@ -1,13 +1,13 @@
 package com.bottari.data.testFixture
 
-import com.bottari.data.model.bottari.BottariAlarmFetchResponse
-import com.bottari.data.model.bottari.BottariAlarmRoutineFetchResponse
-import com.bottari.data.model.bottari.BottariFetchResponse
-import com.bottari.data.model.bottari.BottariesFetchResponse
-import com.bottari.data.model.team.bottari.item.request.AssignedItemsUpdateRequest
-import com.bottari.data.model.team.bottari.item.response.AssignedItemsFetchResponse
-import com.bottari.data.model.team.bottari.item.response.PersonalItemsFetchResponse
-import com.bottari.data.model.team.bottari.item.response.SharedItemsFetchResponse
+import com.bottari.data.model.remote.bottari.BottariAlarmFetchResponse
+import com.bottari.data.model.remote.bottari.BottariAlarmRoutineFetchResponse
+import com.bottari.data.model.remote.bottari.BottariFetchResponse
+import com.bottari.data.model.remote.bottari.BottariesFetchResponse
+import com.bottari.data.model.remote.team.bottari.item.request.AssignedItemsUpdateRequest
+import com.bottari.data.model.remote.team.bottari.item.response.AssignedItemsFetchResponse
+import com.bottari.data.model.remote.team.bottari.item.response.PersonalItemsFetchResponse
+import com.bottari.data.model.remote.team.bottari.item.response.SharedItemsFetchResponse
 import com.bottari.domain.model.bottari.item.BottariItem
 import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 import com.bottari.domain.model.team.member.TeamMember

@@ -1,8 +1,8 @@
 package com.bottari.data.service
 
-import com.bottari.data.model.member.MemberNicknameSaveRequest
-import com.bottari.data.model.member.MemberRegisterCheckResponse
-import com.bottari.data.model.member.MemberRegisterRequest
+import com.bottari.data.model.remote.member.MemberNicknameSaveRequest
+import com.bottari.data.model.remote.member.MemberRegisterCheckResponse
+import com.bottari.data.model.remote.member.MemberRegisterRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

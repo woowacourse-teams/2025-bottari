@@ -1,6 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.fcm.FcmTokenSaveRequest
+import com.bottari.data.model.remote.fcm.FcmTokenSaveRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.FcmRemoteDataSource
 import com.bottari.domain.repository.FcmRepository

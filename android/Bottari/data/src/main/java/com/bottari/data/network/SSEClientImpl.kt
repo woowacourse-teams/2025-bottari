@@ -1,9 +1,9 @@
 package com.bottari.data.network
 
 import com.bottari.data.BuildConfig
-import com.bottari.data.model.sse.EventStateResponse
-import com.bottari.data.model.sse.OnEventRaw
-import com.bottari.data.model.sse.toEvent
+import com.bottari.data.model.remote.sse.EventStateResponse
+import com.bottari.data.model.remote.sse.OnEventRaw
+import com.bottari.data.model.remote.sse.toEvent
 import com.bottari.logger.BottariLogger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

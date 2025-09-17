@@ -1,6 +1,6 @@
 package com.bottari.data.testFixture
 
-import com.bottari.data.model.notification.NotificationEntity
+import com.bottari.data.model.local.notification.NotificationEntity
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.alarm.AlarmType
 import com.bottari.domain.model.notification.Notification

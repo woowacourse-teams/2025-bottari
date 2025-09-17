@@ -1,15 +1,14 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.team.bottari.TeamBottariCreateRequest
-import com.bottari.data.model.team.bottari.TeamBottariJoinRequest
-import com.bottari.data.model.team.bottari.item.request.AssignedItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.request.AssignedItemsUpdateRequest
-import com.bottari.data.model.team.bottari.item.request.PersonalItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.request.SharedItemsCreateRequest
-import com.bottari.data.model.team.bottari.item.request.TeamBottariItemCheckUpdateRequest
-import com.bottari.data.model.team.bottari.item.request.TeamBottariItemDeleteRequest
-import com.bottari.data.model.team.bottari.item.request.TeamBottariItemRemindRequest
-import com.bottari.data.model.team.bottari.item.request.TeamBottariItemUnCheckUpdateRequest
+import com.bottari.data.model.remote.team.bottari.TeamBottariJoinRequest
+import com.bottari.data.model.remote.team.bottari.item.request.AssignedItemsCreateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.AssignedItemsUpdateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.PersonalItemsCreateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.SharedItemsCreateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.TeamBottariItemCheckUpdateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.TeamBottariItemDeleteRequest
+import com.bottari.data.model.remote.team.bottari.item.request.TeamBottariItemRemindRequest
+import com.bottari.data.model.remote.team.bottari.item.request.TeamBottariItemUnCheckUpdateRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.domain.model.bottari.item.BottariItem
 import com.bottari.domain.model.team.bottari.TeamBottari
@@ -27,7 +26,8 @@ class TeamBottariRepositoryImpl(
 ) : TeamBottariRepository {
     override suspend fun createTeamBottari(title: String): Result<Long?> =
         teamBottariRemoteDataSource.createBottari(
-            TeamBottariCreateRequest(title),
+            com.bottari.data.model.remote.team.bottari
+                .TeamBottariCreateRequest(title),
         )
 
     override suspend fun fetchTeamBottari(teamBottariId: Long): Result<TeamBottariCheckList> =
@@ -45,7 +45,11 @@ class TeamBottariRepositoryImpl(
     override suspend fun checkBottariItem(
         bottariItemId: Long,
         type: String,
-    ): Result<Unit> = teamBottariRemoteDataSource.checkBottariItem(bottariItemId, TeamBottariItemCheckUpdateRequest(type))
+    ): Result<Unit> =
+        teamBottariRemoteDataSource.checkBottariItem(
+            bottariItemId,
+            TeamBottariItemCheckUpdateRequest(type),
+        )
 
     override suspend fun fetchTeamBottaries(): Result<List<TeamBottari>> =
         teamBottariRemoteDataSource

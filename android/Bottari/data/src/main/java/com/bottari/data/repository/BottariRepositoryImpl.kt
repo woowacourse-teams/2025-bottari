@@ -1,7 +1,7 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.bottari.BottariCreateRequest
-import com.bottari.data.model.bottari.BottariTitleUpdateRequest
+import com.bottari.data.model.remote.bottari.BottariCreateRequest
+import com.bottari.data.model.remote.bottari.BottariTitleUpdateRequest
 import com.bottari.data.source.remote.BottariRemoteDataSource
 import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariState

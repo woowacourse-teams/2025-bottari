@@ -2,8 +2,8 @@ package com.bottari.data.source.remote
 
 import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
-import com.bottari.data.model.bottari.template.BottariTemplateCreateRequest
-import com.bottari.data.model.bottari.template.BottariTemplateFetchResponse
+import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
+import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse
 import com.bottari.data.service.BottariTemplateService
 
 class BottariTemplateRemoteDataSourceImpl(

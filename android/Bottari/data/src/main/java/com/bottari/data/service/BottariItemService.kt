@@ -1,7 +1,7 @@
 package com.bottari.data.service
 
-import com.bottari.data.model.bottari.item.ItemFetchResponse
-import com.bottari.data.model.bottari.item.ItemsSaveRequest
+import com.bottari.data.model.remote.bottari.item.ItemFetchResponse
+import com.bottari.data.model.remote.bottari.item.ItemsSaveRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

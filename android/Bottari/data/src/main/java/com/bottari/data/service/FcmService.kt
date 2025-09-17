@@ -1,6 +1,6 @@
 package com.bottari.data.service
 
-import com.bottari.data.model.fcm.FcmTokenSaveRequest
+import com.bottari.data.model.remote.fcm.FcmTokenSaveRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.PATCH
