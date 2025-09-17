@@ -4,7 +4,7 @@ import com.bottari.data.model.remote.bottari.BottariCreateRequest
 import com.bottari.data.model.remote.bottari.BottariFetchResponse
 import com.bottari.data.model.remote.bottari.BottariTitleUpdateRequest
 import com.bottari.data.model.remote.bottari.BottariesFetchResponse
-import retrofit2.Response
+import com.bottari.domain.model.exception.BottariResult
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -14,26 +14,26 @@ import retrofit2.http.Path
 
 interface BottariService {
     @GET("/bottaries")
-    suspend fun fetchBottaries(): Response<List<BottariesFetchResponse>>
+    suspend fun fetchBottaries(): BottariResult<List<BottariesFetchResponse>>
 
     @GET("/bottaries/{id}")
     suspend fun fetchBottari(
         @Path("id") id: Long,
-    ): Response<BottariFetchResponse>
+    ): BottariResult<BottariFetchResponse>
 
     @POST("/bottaries")
     suspend fun createBottari(
         @Body request: BottariCreateRequest,
-    ): Response<Unit>
+    ): BottariResult<Unit>
 
     @DELETE("/bottaries/{id}")
     suspend fun deleteBottari(
         @Path("id") id: Long,
-    ): Response<Unit>
+    ): BottariResult<Unit>
 
     @PATCH("/bottaries/{id}")
     suspend fun saveBottariTitle(
         @Path("id") id: Long,
         @Body request: BottariTitleUpdateRequest,
-    ): Response<Unit>
+    ): BottariResult<Unit>
 }

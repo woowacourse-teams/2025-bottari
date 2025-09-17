@@ -2,7 +2,7 @@ package com.bottari.data.service
 
 import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
 import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse
-import retrofit2.Response
+import com.bottari.domain.model.exception.BottariResult
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -14,28 +14,28 @@ interface BottariTemplateService {
     @GET("/templates")
     suspend fun fetchBottariTemplates(
         @Query("query") searchWord: String?,
-    ): Response<List<BottariTemplateFetchResponse>>
+    ): BottariResult<List<BottariTemplateFetchResponse>>
 
     @POST("/templates")
     suspend fun createBottariTemplate(
         @Body request: BottariTemplateCreateRequest,
-    ): Response<Unit>
+    ): BottariResult<Unit>
 
     @GET("/templates/{bottariId}")
     suspend fun fetchBottariTemplateDetail(
         @Path("bottariId") bottariId: Long,
-    ): Response<BottariTemplateFetchResponse>
+    ): BottariResult<BottariTemplateFetchResponse>
 
     @POST("/templates/{bottariId}/create-bottari")
     suspend fun takeBottariTemplate(
         @Path("bottariId") bottariId: Long,
-    ): Response<Unit>
+    ): BottariResult<Unit>
 
     @GET("/templates/me")
-    suspend fun fetchMyBottariTemplates(): Response<List<BottariTemplateFetchResponse>>
+    suspend fun fetchMyBottariTemplates(): BottariResult<List<BottariTemplateFetchResponse>>
 
     @DELETE("/templates/{id}")
     suspend fun deleteMyBottariTemplate(
         @Path("id") bottariTemplateId: Long,
-    ): Response<Unit>
+    ): BottariResult<Unit>
 }

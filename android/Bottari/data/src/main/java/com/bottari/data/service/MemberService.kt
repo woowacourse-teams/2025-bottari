@@ -3,7 +3,7 @@ package com.bottari.data.service
 import com.bottari.data.model.remote.member.MemberNicknameSaveRequest
 import com.bottari.data.model.remote.member.MemberRegisterCheckResponse
 import com.bottari.data.model.remote.member.MemberRegisterRequest
-import retrofit2.Response
+import com.bottari.domain.model.exception.BottariResult
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -13,13 +13,13 @@ interface MemberService {
     @POST("/members")
     suspend fun registerMember(
         @Body request: MemberRegisterRequest,
-    ): Response<Unit>
+    ): BottariResult<Unit>
 
     @PATCH("/members/me")
     suspend fun saveMemberNickname(
         @Body request: MemberNicknameSaveRequest,
-    ): Response<Unit>
+    ): BottariResult<Unit>
 
     @GET("/members/check")
-    suspend fun checkRegisteredMember(): Response<MemberRegisterCheckResponse>
+    suspend fun checkRegisteredMember(): BottariResult<MemberRegisterCheckResponse>
 }
