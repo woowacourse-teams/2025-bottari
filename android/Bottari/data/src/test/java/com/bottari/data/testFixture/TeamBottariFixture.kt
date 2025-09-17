@@ -25,9 +25,10 @@ val TEAM_BOTTARI_RESPONSE: TeamBottariFetchResponse by lazy {
 }
 val TEAM_BOTTARI: TeamBottari by lazy {
     TeamBottari(
-        Bottari(1L, "test", null, items = emptyList()),
-        10,
-        10,
+        1L,
+        "test",
+        null,
+        BottariItemCount(10, 10),
         HeadCount(3),
     )
 }

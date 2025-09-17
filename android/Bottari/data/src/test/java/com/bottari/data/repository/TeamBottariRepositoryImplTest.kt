@@ -165,7 +165,7 @@ class TeamBottariRepositoryImplTest {
             val expected =
                 listOf(
                     TEAM_BOTTARI,
-                    TEAM_BOTTARI.copy(bottari = TEAM_BOTTARI.bottari.copy(id = 2L)),
+                    TEAM_BOTTARI.copy(id = 2),
                 )
             assertSoftly(result) {
                 shouldBeSuccess()
