@@ -1,6 +1,7 @@
 package com.bottari.data.network
 
 import com.bottari.data.BuildConfig
+import com.bottari.data.network.adapter.BottariCallAdapterFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -22,6 +23,7 @@ class RetrofitClient(
             .Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(json.asConverterFactory(contentType))
+            .addCallAdapterFactory(BottariCallAdapterFactory())
             .client(okHttpClient)
             .build()
     }
