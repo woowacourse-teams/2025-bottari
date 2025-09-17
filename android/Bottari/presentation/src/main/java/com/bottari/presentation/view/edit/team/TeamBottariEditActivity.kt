@@ -9,7 +9,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.ActivityTeamBottariEditBinding
-import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditFragment
 import com.bottari.presentation.view.edit.team.main.TeamBottariEditFragment
 import com.bottari.presentation.view.edit.team.management.TeamManagementFragment

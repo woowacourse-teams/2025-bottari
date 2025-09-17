@@ -8,7 +8,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 
 class TeamItemEditViewModel(
     stateHandle: SavedStateHandle,

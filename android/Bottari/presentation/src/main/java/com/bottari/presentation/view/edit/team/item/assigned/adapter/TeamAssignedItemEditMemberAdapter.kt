@@ -3,7 +3,7 @@ package com.bottari.presentation.view.edit.team.item.assigned.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.TeamMemberUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 
 class TeamAssignedItemEditMemberAdapter(
     private val eventListener: TeamAssignedItemEditMemberEventListener,

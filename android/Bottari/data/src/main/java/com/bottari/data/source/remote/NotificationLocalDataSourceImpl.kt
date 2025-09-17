@@ -1,7 +1,7 @@
 package com.bottari.data.source.remote
 
 import com.bottari.data.local.notification.NotificationDao
-import com.bottari.data.model.notification.NotificationEntity
+import com.bottari.data.model.local.notification.NotificationEntity
 
 class NotificationLocalDataSourceImpl(
     private val dao: NotificationDao,

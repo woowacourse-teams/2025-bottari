@@ -1,21 +1,21 @@
 package com.bottari.data.source.remote
 
-import com.bottari.data.model.bottari.BottariResponse
-import com.bottari.data.model.bottari.CreateBottariRequest
-import com.bottari.data.model.bottari.FetchBottariesResponse
-import com.bottari.data.model.bottari.UpdateBottariTitleRequest
+import com.bottari.data.model.remote.bottari.BottariCreateRequest
+import com.bottari.data.model.remote.bottari.BottariFetchResponse
+import com.bottari.data.model.remote.bottari.BottariTitleUpdateRequest
+import com.bottari.data.model.remote.bottari.BottariesFetchResponse
 
 interface BottariRemoteDataSource {
-    suspend fun fetchBottaries(): Result<List<FetchBottariesResponse>>
+    suspend fun fetchBottaries(): Result<List<BottariesFetchResponse>>
 
-    suspend fun createBottari(createBottariRequest: CreateBottariRequest): Result<Long?>
+    suspend fun createBottari(bottariCreateRequest: BottariCreateRequest): Result<Long>
 
-    suspend fun fetchBottariDetail(id: Long): Result<BottariResponse>
+    suspend fun fetchBottariDetail(id: Long): Result<BottariFetchResponse>
 
     suspend fun deleteBottari(id: Long): Result<Unit>
 
     suspend fun saveBottariTitle(
         id: Long,
-        request: UpdateBottariTitleRequest,
+        request: BottariTitleUpdateRequest,
     ): Result<Unit>
 }

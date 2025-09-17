@@ -3,7 +3,7 @@ package com.bottari.presentation.view.checklist.team.swipe.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.TeamChecklistProductUiModel
+import com.bottari.presentation.model.bottari.team.TeamChecklistProductUiModel
 
 class TeamSwipeChecklistAdapter :
     ListAdapter<TeamChecklistProductUiModel, TeamSwipeChecklistViewHolder>(

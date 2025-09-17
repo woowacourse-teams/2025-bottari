@@ -3,7 +3,7 @@ package com.bottari.presentation.view.edit.alarm.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.RepeatDayUiModel
+import com.bottari.presentation.model.alarm.RepeatDayUiModel
 import com.bottari.presentation.view.edit.alarm.listener.OnRepeatDayClickListener
 
 class RepeatDayAdapter(

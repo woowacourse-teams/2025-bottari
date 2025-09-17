@@ -10,7 +10,7 @@ import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
+import com.bottari.presentation.model.template.BottariTemplateUiModel
 import com.bottari.presentation.util.debounce
 
 class TemplateViewModel(
@@ -37,7 +37,7 @@ class TemplateViewModel(
         launch {
             fetchBottariTemplatesUseCase()
                 .onSuccess { templates ->
-                    val templateUiModels = templates.map { it.toUiModel() }
+                    val templateUiModels = templates.map { it -> BottariTemplateUiModel.fromDomain(it) }
                     updateState { copy(templates = templateUiModels) }
                 }.onFailure {
                     emitEvent(TemplateUiEvent.FetchBottariTemplatesFailure)
@@ -58,7 +58,8 @@ class TemplateViewModel(
                         UiEventType.TEMPLATE_SEARCH,
                         mapOf("query" to searchWord, "result_count" to templates.size),
                     )
-                    val templateUiModels = templates.map { it.toUiModel() }
+                    val templateUiModels =
+                        templates.map { BottariTemplateUiModel.fromDomain(it) }
                     updateState { copy(templates = templateUiModels) }
                 }.onFailure {
                     emitEvent(TemplateUiEvent.FetchBottariTemplatesFailure)

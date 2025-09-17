@@ -10,16 +10,15 @@ import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.MemberUseCaseProvider
 import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.model.event.EventState
-import com.bottari.domain.model.team.TeamMemberStatus
+import com.bottari.domain.model.team.member.TeamMemberStatus
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
-import com.bottari.presentation.model.TeamMemberStatusUiModel
-import com.bottari.presentation.model.TeamMemberUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberStatusUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -131,7 +130,7 @@ class TeamMembersStatusViewModel(
         id: Long,
     ): List<TeamMemberStatusUiModel> =
         teamMembersStatus.map { memberStatus ->
-            val uiModel = memberStatus.toUiModel(id)
+            val uiModel = TeamMemberStatusUiModel.fromDomain(memberStatus, id)
             val previousState =
                 currentState.membersStatus.find { it.member.id == uiModel.member.id }
             if (previousState != null && uiModel.isItemsEmpty.not()) {

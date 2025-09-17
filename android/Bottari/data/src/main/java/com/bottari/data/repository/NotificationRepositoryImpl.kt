@@ -1,7 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.NotificationMapper.toDomain
-import com.bottari.data.mapper.NotificationMapper.toEntity
+import com.bottari.data.model.local.notification.NotificationEntity
 import com.bottari.data.source.remote.NotificationLocalDataSource
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.NotificationRepository
@@ -17,7 +16,7 @@ class NotificationRepositoryImpl(
     override suspend fun saveNotification(vararg notification: Notification): Result<Unit> =
         runCatching {
             val entities =
-                notification.map { notification -> notification.toEntity() }.toTypedArray()
+                notification.map { notification -> NotificationEntity.fromDomain(notification) }.toTypedArray()
             dataSource.saveNotification(*entities).getOrThrow()
         }
 

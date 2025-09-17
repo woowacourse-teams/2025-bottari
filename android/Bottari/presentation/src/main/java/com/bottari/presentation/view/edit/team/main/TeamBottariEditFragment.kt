@@ -11,9 +11,9 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.formatWithPattern
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamBottariEditBinding
-import com.bottari.presentation.model.AlarmTypeUiModel
-import com.bottari.presentation.model.AlarmUiModel
-import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.model.alarm.AlarmTypeUiModel
+import com.bottari.presentation.model.alarm.AlarmUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.view.edit.team.TeamBottariEditNavigator
 import com.bottari.presentation.view.edit.team.main.adapter.TeamBottariEditItemAdapter
 import com.google.android.flexbox.FlexDirection

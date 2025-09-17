@@ -17,7 +17,7 @@ import com.bottari.presentation.common.extension.getParcelableCompat
 import com.bottari.presentation.common.extension.setTextIfDifferent
 import com.bottari.presentation.common.extension.showKeyboard
 import com.bottari.presentation.databinding.FragmentTeamBottariItemEditBinding
-import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.view.edit.team.TeamBottariEditNavigator
 import com.bottari.presentation.view.edit.team.item.main.adapter.TeamItemEditFragmentAdapter
 import com.google.android.material.tabs.TabLayout

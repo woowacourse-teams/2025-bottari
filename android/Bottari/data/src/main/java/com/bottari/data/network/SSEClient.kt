@@ -1,6 +1,6 @@
 package com.bottari.data.network
 
-import com.bottari.data.model.sse.EventStateResponse
+import com.bottari.data.model.remote.sse.EventStateResponse
 import kotlinx.coroutines.flow.Flow
 
 interface SSEClient {

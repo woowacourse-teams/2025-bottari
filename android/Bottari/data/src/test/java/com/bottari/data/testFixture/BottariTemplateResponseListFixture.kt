@@ -1,10 +1,10 @@
 package com.bottari.data.testFixture
 
-import com.bottari.data.model.template.FetchBottariTemplateResponse
+import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse
 
-fun fetchBottariTemplateResponseListFixture(): List<FetchBottariTemplateResponse> =
+fun fetchBottariTemplateResponseListFixture(): List<BottariTemplateFetchResponse> =
     listOf(
-        FetchBottariTemplateResponse(
+        BottariTemplateFetchResponse(
             id = 1,
             title = "template1",
             items = emptyList(),
@@ -12,7 +12,7 @@ fun fetchBottariTemplateResponseListFixture(): List<FetchBottariTemplateResponse
             createdAt = "12:00",
             takenCount = 3,
         ),
-        FetchBottariTemplateResponse(
+        BottariTemplateFetchResponse(
             id = 2,
             title = "template2",
             items = emptyList(),

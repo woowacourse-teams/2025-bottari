@@ -1,9 +1,8 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.BottariItemMapper.toDomain
-import com.bottari.data.model.item.SaveBottariItemsRequest
+import com.bottari.data.model.remote.bottari.item.ItemsSaveRequest
 import com.bottari.data.source.remote.BottariItemRemoteDataSource
-import com.bottari.domain.model.bottari.ChecklistItem
+import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.repository.BottariItemRepository
 
 class BottariItemRepositoryImpl(
@@ -26,7 +25,7 @@ class BottariItemRepositoryImpl(
     ): Result<Unit> =
         bottariItemRemoteDataSource.saveBottariItems(
             bottariId,
-            SaveBottariItemsRequest(
+            ItemsSaveRequest(
                 deleteItemIds = deleteItemIds,
                 createItemNames = createItemNames,
             ),

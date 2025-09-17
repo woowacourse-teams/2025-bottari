@@ -7,14 +7,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariItemUseCaseProvider
-import com.bottari.domain.model.bottari.ChecklistItem
+import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.usecase.item.CheckBottariItemUseCase
 import com.bottari.domain.usecase.item.FetchChecklistUseCase
 import com.bottari.domain.usecase.item.ResetBottariItemCheckStateUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.BottariMapper.toUiModel
-import com.bottari.presentation.model.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -89,7 +88,7 @@ class ChecklistViewModel(
     }
 
     private fun setChecklist(items: List<ChecklistItem>) {
-        val itemUiModels = items.map { it.toUiModel() }
+        val itemUiModels = items.map { ChecklistItemUiModel.fromDomain(it) }
         updateState {
             copy(
                 bottariItems = itemUiModels,

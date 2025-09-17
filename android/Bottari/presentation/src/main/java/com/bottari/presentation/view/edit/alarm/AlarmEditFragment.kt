@@ -16,8 +16,8 @@ import com.bottari.presentation.common.extension.getParcelableCompat
 import com.bottari.presentation.common.extension.safeArgument
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentAlarmEditBinding
-import com.bottari.presentation.model.AlarmTypeUiModel
-import com.bottari.presentation.model.AlarmUiModel
+import com.bottari.presentation.model.alarm.AlarmTypeUiModel
+import com.bottari.presentation.model.alarm.AlarmUiModel
 import com.bottari.presentation.util.AlarmScheduler.scheduleAlarm
 import com.bottari.presentation.view.common.decoration.ItemSpacingDecoration
 import com.bottari.presentation.view.edit.alarm.adapter.RepeatDayAdapter

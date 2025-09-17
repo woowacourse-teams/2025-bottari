@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.databinding.ItemSwipeChecklistBinding
-import com.bottari.presentation.model.TeamChecklistProductUiModel
+import com.bottari.presentation.model.bottari.team.TeamChecklistProductUiModel
 
 class TeamSwipeChecklistViewHolder private constructor(
     private val binding: ItemSwipeChecklistBinding,

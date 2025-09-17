@@ -1,6 +1,6 @@
 package com.bottari.domain.usecase.team
 
-import com.bottari.domain.model.team.TeamMember
+import com.bottari.domain.model.team.member.TeamMember
 import com.bottari.domain.repository.TeamBottariRepository
 
 class FetchTeamBottariMembersUseCase(

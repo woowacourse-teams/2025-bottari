@@ -1,23 +1,24 @@
 package com.bottari.data.service
 
-import com.bottari.data.model.team.CreateTeamBottariAssignedItemRequest
-import com.bottari.data.model.team.CreateTeamBottariPersonalItemRequest
-import com.bottari.data.model.team.CreateTeamBottariRequest
-import com.bottari.data.model.team.CreateTeamBottariSharedItemRequest
-import com.bottari.data.model.team.DeleteTeamBottariItemRequest
-import com.bottari.data.model.team.FetchTeamBottariChecklistResponse
-import com.bottari.data.model.team.FetchTeamBottariDetailResponse
-import com.bottari.data.model.team.FetchTeamBottariMemberResponse
-import com.bottari.data.model.team.FetchTeamBottariResponse
-import com.bottari.data.model.team.FetchTeamBottariStatusResponse
-import com.bottari.data.model.team.FetchTeamMemberStatusResponse
-import com.bottari.data.model.team.FetchTeamMembersResponse
-import com.bottari.data.model.team.ItemTypeRequest
-import com.bottari.data.model.team.JoinTeamBottariRequest
-import com.bottari.data.model.team.SaveTeamBottariAssignedItemRequest
-import com.bottari.data.model.teamItem.FetchTeamAssignedItemResponse
-import com.bottari.data.model.teamItem.FetchTeamPersonalItemResponse
-import com.bottari.data.model.teamItem.FetchTeamSharedItemResponse
+import com.bottari.data.model.remote.team.bottari.FetchTeamBottariStatusResponse
+import com.bottari.data.model.remote.team.bottari.TeamBottariDetailFetchResponse
+import com.bottari.data.model.remote.team.bottari.TeamBottariFetchResponse
+import com.bottari.data.model.remote.team.bottari.TeamBottariJoinRequest
+import com.bottari.data.model.remote.team.bottari.item.request.AssignedItemsCreateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.AssignedItemsUpdateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.PersonalItemsCreateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.SharedItemsCreateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.TeamBottariItemCheckUpdateRequest
+import com.bottari.data.model.remote.team.bottari.item.request.TeamBottariItemDeleteRequest
+import com.bottari.data.model.remote.team.bottari.item.request.TeamBottariItemRemindRequest
+import com.bottari.data.model.remote.team.bottari.item.request.TeamBottariItemUnCheckUpdateRequest
+import com.bottari.data.model.remote.team.bottari.item.response.AssignedItemsFetchResponse
+import com.bottari.data.model.remote.team.bottari.item.response.PersonalItemsFetchResponse
+import com.bottari.data.model.remote.team.bottari.item.response.SharedItemsFetchResponse
+import com.bottari.data.model.remote.team.bottari.item.response.TeamBottariItemChecklistFetchResponse
+import com.bottari.data.model.remote.team.member.TeamMemberFetchResponse
+import com.bottari.data.model.remote.team.member.TeamMemberNameFetchResponse
+import com.bottari.data.model.remote.team.member.TeamMemberStatusFetchResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -31,44 +32,44 @@ import retrofit2.http.Path
 interface TeamBottariService {
     @POST("/team-bottaries")
     suspend fun createTeamBottari(
-        @Body request: CreateTeamBottariRequest,
+        @Body request: com.bottari.data.model.remote.team.bottari.TeamBottariCreateRequest,
     ): Response<Unit>
 
     @GET("/team-bottaries/{teamBottariId}/checklist")
     suspend fun fetchTeamBottari(
         @Path("teamBottariId") teamBottariId: Long,
-    ): Response<FetchTeamBottariChecklistResponse>
+    ): Response<TeamBottariItemChecklistFetchResponse>
 
     @PATCH("/team-items/{itemId}/check")
     suspend fun checkTeamBottariItem(
         @Path("itemId") id: Long,
-        @Body request: ItemTypeRequest,
+        @Body request: TeamBottariItemCheckUpdateRequest,
     ): Response<Unit>
 
     @PATCH("/team-items/{itemId}/uncheck")
     suspend fun uncheckTeamBottariItem(
         @Path("itemId") id: Long,
-        @Body request: ItemTypeRequest,
+        @Body request: TeamBottariItemUnCheckUpdateRequest,
     ): Response<Unit>
 
     @POST("/team-items/{itemId}/remind")
     suspend fun sendRemindByItem(
         @Path("itemId") id: Long,
-        @Body request: ItemTypeRequest,
+        @Body request: TeamBottariItemRemindRequest,
     ): Response<Unit>
 
     @GET("/team-bottaries")
-    suspend fun fetchTeamBottaries(): Response<List<FetchTeamBottariResponse>>
+    suspend fun fetchTeamBottaries(): Response<List<TeamBottariFetchResponse>>
 
     @GET("/team-bottaries/{teamBottariId}/members")
     suspend fun fetchTeamMembers(
         @Path("teamBottariId") id: Long,
-    ): Response<FetchTeamMembersResponse>
+    ): Response<TeamMemberFetchResponse>
 
     @GET("/team-bottaries/{teamBottariId}")
     suspend fun fetchTeamBottariDetail(
         @Path("teamBottariId") teamBottariId: Long,
-    ): Response<FetchTeamBottariDetailResponse>
+    ): Response<TeamBottariDetailFetchResponse>
 
     @GET("/team-bottaries/{teamBottariId}/items/status")
     suspend fun fetchTeamBottariStatus(
@@ -78,30 +79,30 @@ interface TeamBottariService {
     @GET("/team-bottaries/{teamBottariId}/members/status")
     suspend fun fetchTeamMembersStatus(
         @Path("teamBottariId") id: Long,
-    ): Response<List<FetchTeamMemberStatusResponse>>
+    ): Response<List<TeamMemberStatusFetchResponse>>
 
     @POST("/team-bottaries/{teamBottariId}/shared-items")
     suspend fun createTeamBottariSharedItem(
         @Path("teamBottariId") id: Long,
-        @Body request: CreateTeamBottariSharedItemRequest,
+        @Body request: SharedItemsCreateRequest,
     ): Response<Unit>
 
     @POST("/team-bottaries/{teamBottariId}/personal-items")
     suspend fun createTeamBottariPersonalItem(
         @Path("teamBottariId") id: Long,
-        @Body request: CreateTeamBottariPersonalItemRequest,
+        @Body request: PersonalItemsCreateRequest,
     ): Response<Unit>
 
     @POST("/team-bottaries/{teamBottariId}/assigned-items")
     suspend fun createTeamBottariAssignedItem(
         @Path("teamBottariId") id: Long,
-        @Body request: CreateTeamBottariAssignedItemRequest,
+        @Body request: AssignedItemsCreateRequest,
     ): Response<Unit>
 
     @HTTP(method = "DELETE", path = "team-items/{id}", hasBody = true)
     suspend fun deleteTeamBottariItem(
         @Path("id") id: Long,
-        @Body request: DeleteTeamBottariItemRequest,
+        @Body request: TeamBottariItemDeleteRequest,
     ): Response<Unit>
 
     @POST("/team-bottaries/{teamBottariId}/members/{memberId}/remind")
@@ -112,34 +113,34 @@ interface TeamBottariService {
 
     @POST("/team-bottaries/join")
     suspend fun joinTeamBottari(
-        @Body request: JoinTeamBottariRequest,
+        @Body request: TeamBottariJoinRequest,
     ): Response<Unit>
 
     @GET("/team-bottaries/{teamBottariId}/members/name")
     suspend fun fetchTeamBottariMembers(
         @Path("teamBottariId") teamBottariId: Long,
-    ): Response<List<FetchTeamBottariMemberResponse>>
+    ): Response<List<TeamMemberNameFetchResponse>>
 
     @GET("/team-bottaries/{teamBottariId}/assigned-items")
     suspend fun fetchTeamAssignedItems(
         @Path("teamBottariId") teamBottariId: Long,
-    ): Response<List<FetchTeamAssignedItemResponse>>
+    ): Response<List<AssignedItemsFetchResponse>>
 
     @GET("/team-bottaries/{teamBottariId}/shared-items")
     suspend fun fetchTeamSharedItems(
         @Path("teamBottariId") teamBottariId: Long,
-    ): Response<List<FetchTeamSharedItemResponse>>
+    ): Response<List<SharedItemsFetchResponse>>
 
     @GET("/team-bottaries/{teamBottariId}/personal-items")
     suspend fun fetchTeamPersonalItems(
         @Path("teamBottariId") teamBottariId: Long,
-    ): Response<List<FetchTeamPersonalItemResponse>>
+    ): Response<List<PersonalItemsFetchResponse>>
 
     @PUT("/team-bottaries/{teamBottariId}/assigned-items/{assignedItemId}")
     suspend fun saveTeamAssignedItem(
         @Path("teamBottariId") teamBottariId: Long,
         @Path("assignedItemId") assignedItemId: Long,
-        @Body request: SaveTeamBottariAssignedItemRequest,
+        @Body request: AssignedItemsUpdateRequest,
     ): Response<Unit>
 
     @DELETE("/team-bottaries/{id}")

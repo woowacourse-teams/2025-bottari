@@ -3,7 +3,7 @@ package com.bottari.presentation.view.checklist.team.main.status.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.MemberCheckStatusUiModel
+import com.bottari.presentation.model.bottari.team.member.MemberCheckStatusUiModel
 
 class TeamBottariProductStatusDetailAdapter :
     ListAdapter<MemberCheckStatusUiModel, TeamBottariProductStatusDetailViewHolder>(

@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.edit.team.item.personal
 
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 
 data class TeamPersonalItemEditUiState(
     val isLoading: Boolean = false,

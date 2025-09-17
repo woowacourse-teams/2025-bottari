@@ -4,9 +4,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bottari.presentation.model.TeamBottariProductStatusUiModel
-import com.bottari.presentation.model.TeamChecklistTypeUiModel
-import com.bottari.presentation.model.TeamProductStatusItem
+import com.bottari.presentation.model.bottari.team.TeamBottariProductStatusUiModel
+import com.bottari.presentation.model.bottari.team.TeamChecklistTypeUiModel
+import com.bottari.presentation.model.bottari.team.TeamProductStatusItem
 
 class TeamBottariProductStatusAdapter(
     private val listener: TeamBottariProductStatusViewHolder.OnTeamProductStatusItemClickListener,

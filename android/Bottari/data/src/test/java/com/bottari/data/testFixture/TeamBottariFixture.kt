@@ -1,17 +1,20 @@
 package com.bottari.data.testFixture
 
-import com.bottari.data.model.team.FetchTeamBottariDetailResponse
-import com.bottari.data.model.team.FetchTeamBottariMemberResponse
-import com.bottari.data.model.team.FetchTeamBottariResponse
-import com.bottari.data.model.team.FetchTeamMemberStatusResponse
-import com.bottari.domain.model.bottari.TeamBottari
+import com.bottari.data.model.remote.team.bottari.TeamBottariDetailFetchResponse
+import com.bottari.data.model.remote.team.bottari.TeamBottariFetchResponse
+import com.bottari.data.model.remote.team.member.TeamMemberNameFetchResponse
+import com.bottari.data.model.remote.team.member.TeamMemberStatusFetchResponse
+import com.bottari.domain.model.bottari.Bottari
+import com.bottari.domain.model.bottari.item.BottariItemCount
 import com.bottari.domain.model.member.Nickname
-import com.bottari.domain.model.team.TeamBottariDetail
-import com.bottari.domain.model.team.TeamMember
-import com.bottari.domain.model.team.TeamMemberStatus
+import com.bottari.domain.model.team.bottari.TeamBottari
+import com.bottari.domain.model.team.bottari.TeamBottariDetail
+import com.bottari.domain.model.team.member.HeadCount
+import com.bottari.domain.model.team.member.TeamMember
+import com.bottari.domain.model.team.member.TeamMemberStatus
 
-val TEAM_BOTTARI_RESPONSE: FetchTeamBottariResponse by lazy {
-    FetchTeamBottariResponse(
+val TEAM_BOTTARI_RESPONSE: TeamBottariFetchResponse by lazy {
+    TeamBottariFetchResponse(
         1L,
         "test",
         null,
@@ -24,15 +27,14 @@ val TEAM_BOTTARI: TeamBottari by lazy {
     TeamBottari(
         1L,
         "test",
-        10,
-        10,
-        3,
         null,
+        BottariItemCount(10, 10),
+        HeadCount(3),
     )
 }
 
 val TEAM_BOTTARI_DETAIL_RESPONSE =
-    FetchTeamBottariDetailResponse(
+    TeamBottariDetailFetchResponse(
         1L,
         "test",
         null,
@@ -42,12 +44,16 @@ val TEAM_BOTTARI_DETAIL_RESPONSE =
     )
 val TEAM_BOTTARI_DETAIL =
     TeamBottariDetail(
-        1L,
-        "test",
-        null,
-        emptyList(),
-        emptyList(),
-        emptyList(),
+        bottari =
+            Bottari(
+                id = 1L,
+                title = "test",
+                alarm = null,
+                items = emptyList(),
+            ),
+        personalItems = emptyList(),
+        assignedItems = emptyList(),
+        sharedItems = emptyList(),
     )
 
 val TEAM_MEMBERS_STATUS =
@@ -56,8 +62,7 @@ val TEAM_MEMBERS_STATUS =
             1L,
             Nickname("Test"),
             true,
-            0,
-            0,
+            BottariItemCount(0, 0),
             emptyList(),
             emptyList(),
         ),
@@ -65,7 +70,7 @@ val TEAM_MEMBERS_STATUS =
 
 val TEAM_MEMBERS_STATUS_RESPONSE =
     listOf(
-        FetchTeamMemberStatusResponse(
+        TeamMemberStatusFetchResponse(
             1L,
             "Test",
             true,
@@ -77,7 +82,7 @@ val TEAM_MEMBERS_STATUS_RESPONSE =
     )
 
 val TEAM_MEMBER_RESPONSE =
-    FetchTeamBottariMemberResponse(
+    TeamMemberNameFetchResponse(
         1L,
         "member1",
     )

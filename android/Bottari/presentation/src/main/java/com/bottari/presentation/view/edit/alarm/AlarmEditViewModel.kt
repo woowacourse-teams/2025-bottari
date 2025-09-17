@@ -12,11 +12,10 @@ import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.AlarmMapper.toDomain
-import com.bottari.presentation.model.AlarmTypeUiModel
-import com.bottari.presentation.model.AlarmUiModel
-import com.bottari.presentation.model.NotificationUiModel
-import com.bottari.presentation.model.RepeatDayUiModel
+import com.bottari.presentation.model.alarm.AlarmTypeUiModel
+import com.bottari.presentation.model.alarm.AlarmUiModel
+import com.bottari.presentation.model.alarm.NotificationUiModel
+import com.bottari.presentation.model.alarm.RepeatDayUiModel
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -113,8 +112,8 @@ class AlarmEditViewModel(
 
     private fun createNotification(): NotificationUiModel =
         NotificationUiModel(
-            id = bottariId,
-            title = bottariTitle,
+            bottariId = bottariId,
+            bottariTitle = bottariTitle,
             alarm = currentState.alarm,
         )
 

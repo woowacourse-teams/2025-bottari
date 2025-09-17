@@ -1,7 +1,7 @@
 package com.bottari.data.source.remote
 
 import com.bottari.data.common.util.safeApiCall
-import com.bottari.data.model.report.ReportTemplateRequest
+import com.bottari.data.model.remote.report.TemplateReportRequest
 import com.bottari.data.service.ReportService
 
 class ReportRemoteDataSourceImpl(
@@ -9,6 +9,6 @@ class ReportRemoteDataSourceImpl(
 ) : ReportRemoteDataSource {
     override suspend fun reportTemplate(
         bottariTemplateId: Long,
-        request: ReportTemplateRequest,
+        request: TemplateReportRequest,
     ): Result<Unit> = safeApiCall { reportService.reportTemplate(bottariTemplateId, request) }
 }

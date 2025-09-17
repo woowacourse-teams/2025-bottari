@@ -3,7 +3,7 @@ package com.bottari.presentation.view.home.template.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.BottariTemplateUiModel
+import com.bottari.presentation.model.template.BottariTemplateUiModel
 import com.bottari.presentation.view.home.template.listener.OnTemplateClickListener
 
 class TemplateAdapter(

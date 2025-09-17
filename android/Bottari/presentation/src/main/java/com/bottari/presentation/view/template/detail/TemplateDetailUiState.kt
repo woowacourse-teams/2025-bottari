@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.template.detail
 
-import com.bottari.presentation.model.BottariTemplateItemUiModel
+import com.bottari.presentation.model.template.BottariTemplateItemUiModel
 
 data class TemplateDetailUiState(
     val isLoading: Boolean = false,

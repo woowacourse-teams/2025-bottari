@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.home.team
 
-import com.bottari.presentation.model.TeamBottariUiModel
+import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
 
 data class TeamBottariUiState(
     val isLoading: Boolean = false,

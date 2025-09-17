@@ -10,7 +10,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamSharedItemEditBinding
-import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiEvent
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiState
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditViewModel

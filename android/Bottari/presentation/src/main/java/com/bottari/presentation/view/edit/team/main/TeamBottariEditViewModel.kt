@@ -9,13 +9,13 @@ import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamBottariUseCaseProvider
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
-import com.bottari.domain.model.team.TeamBottariDetail
+import com.bottari.domain.model.team.bottari.TeamBottariDetail
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariDetailUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.AlarmMapper.toUiModel
-import com.bottari.presentation.mapper.BottariMapper.toUiModel
+import com.bottari.presentation.model.alarm.AlarmUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -70,14 +70,15 @@ class TeamBottariEditViewModel(
     }
 
     private fun handleFetchTeamBottariDetail(teamBottariDetail: TeamBottariDetail) {
+        val alarmUi = teamBottariDetail.bottari.alarm?.let { AlarmUiModel.fromDomain(it) }
         updateState {
             copy(
-                bottariTitle = teamBottariDetail.title,
-                personalItems = teamBottariDetail.personalItems.map { it.toUiModel() },
-                assignedItems = teamBottariDetail.assignedItems.map { it.toUiModel() },
-                sharedItems = teamBottariDetail.sharedItems.map { it.toUiModel() },
-                alarm = teamBottariDetail.alarm?.toUiModel(),
-                alarmSwitchState = teamBottariDetail.alarm?.isActive ?: false,
+                bottariTitle = teamBottariDetail.bottari.title,
+                personalItems = teamBottariDetail.personalItems.map { BottariItemUiModel.fromDomain(it) },
+                assignedItems = teamBottariDetail.assignedItems.map { BottariItemUiModel.fromDomain(it) },
+                sharedItems = teamBottariDetail.sharedItems.map { BottariItemUiModel.fromDomain(it) },
+                alarm = alarmUi,
+                alarmSwitchState = alarmUi?.isActive ?: false,
             )
         }
     }

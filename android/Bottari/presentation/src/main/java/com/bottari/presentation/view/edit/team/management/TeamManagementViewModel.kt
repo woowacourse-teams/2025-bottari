@@ -9,14 +9,14 @@ import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
-import com.bottari.domain.model.team.TeamMembers
+import com.bottari.domain.model.team.member.TeamStatus
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -76,22 +76,22 @@ class TeamManagementViewModel(
         }
     }
 
-    private fun TeamManagementUiState.copyFromTeamMembers(teamMembers: TeamMembers): TeamManagementUiState =
+    private fun TeamManagementUiState.copyFromTeamMembers(teamStatus: TeamStatus): TeamManagementUiState =
         copy(
-            inviteCode = teamMembers.inviteCode,
-            teamMemberHeadCount = teamMembers.teamMemberHeadCount.value,
-            maxHeadCount = teamMembers.teamMemberHeadCount.maxValue,
-            members = teamMembers.toUiModel(),
+            inviteCode = teamStatus.inviteCode,
+            teamMemberHeadCount = teamStatus.memberCount.value,
+            maxHeadCount = teamStatus.memberCount.maxValue,
+            members = TeamMemberUiModel.fromDomain(teamStatus),
         )
 
-    private fun logTeamMembersFetch(teamMembers: TeamMembers) {
+    private fun logTeamMembersFetch(teamStatus: TeamStatus) {
         BottariLogger.ui(
             UiEventType.TEAM_BOTTARI_MEMBERS_FETCH,
             mapOf(
-                "invite_code" to teamMembers.inviteCode,
-                "member_head_count" to teamMembers.teamMemberHeadCount.value,
-                "host_name" to teamMembers.hostName.value,
-                "members" to teamMembers.memberNicknames.map { nickname -> nickname.value },
+                "invite_code" to teamStatus.inviteCode,
+                "member_head_count" to teamStatus.memberCount.value,
+                "host_name" to teamStatus.hostName.value,
+                "members" to teamStatus.nicknames.map { nickname -> nickname.value },
             ),
         )
     }

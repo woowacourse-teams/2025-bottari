@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.edit.team.management
 
-import com.bottari.presentation.model.TeamMemberUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 
 data class TeamManagementUiState(
     val isLoading: Boolean = false,

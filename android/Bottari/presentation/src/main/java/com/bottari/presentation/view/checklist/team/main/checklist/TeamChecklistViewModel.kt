@@ -8,20 +8,20 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
-import com.bottari.domain.model.bottari.ChecklistItem
+import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
-import com.bottari.domain.model.team.TeamBottariCheckList
+import com.bottari.domain.model.team.bottari.TeamBottariCheckList
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.UncheckTeamBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.BottariItemTypeUiModel
-import com.bottari.presentation.model.TeamChecklistExpandableTypeUiModel
-import com.bottari.presentation.model.TeamChecklistItem
-import com.bottari.presentation.model.TeamChecklistProductUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
+import com.bottari.presentation.model.bottari.team.TeamChecklistExpandableTypeUiModel
+import com.bottari.presentation.model.bottari.team.TeamChecklistItem
+import com.bottari.presentation.model.bottari.team.TeamChecklistProductUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -220,11 +220,7 @@ class TeamChecklistViewModel(
 
             newExpandableList.add(newParent)
             if (newParent.isExpanded) {
-                newExpandableList.addAll(
-                    newParent.teamChecklistItems.map { item ->
-                        item
-                    },
-                )
+                newExpandableList.addAll(newParent.teamChecklistItems)
             }
         }
         return newExpandableList

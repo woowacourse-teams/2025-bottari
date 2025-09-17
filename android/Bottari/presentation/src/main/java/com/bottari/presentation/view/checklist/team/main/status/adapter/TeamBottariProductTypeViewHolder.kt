@@ -6,8 +6,8 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamBottariTypeBinding
-import com.bottari.presentation.model.BottariItemTypeUiModel
-import com.bottari.presentation.model.TeamChecklistTypeUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
+import com.bottari.presentation.model.bottari.team.TeamChecklistTypeUiModel
 
 class TeamBottariProductTypeViewHolder private constructor(
     private val binding: ItemTeamBottariTypeBinding,

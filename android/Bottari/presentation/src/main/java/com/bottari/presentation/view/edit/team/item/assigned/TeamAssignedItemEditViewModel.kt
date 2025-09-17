@@ -8,11 +8,11 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
 import com.bottari.di.usecase.TeamMemberUseCaseProvider
-import com.bottari.domain.model.bottari.BottariItem
-import com.bottari.domain.model.bottari.BottariItemType
+import com.bottari.domain.model.bottari.item.BottariItem
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
-import com.bottari.domain.model.team.TeamMember
+import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
+import com.bottari.domain.model.team.member.TeamMember
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.team.CreateTeamAssignedItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
@@ -20,11 +20,9 @@ import com.bottari.domain.usecase.team.FetchTeamAssignedItemsUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariMembersUseCase
 import com.bottari.domain.usecase.team.SaveTeamBottariAssignedItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
-import com.bottari.presentation.mapper.TeamMembersMapper.toUiModel
-import com.bottari.presentation.model.BottariItemTypeUiModel
-import com.bottari.presentation.model.BottariItemUiModel
-import com.bottari.presentation.model.TeamMemberUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
+import com.bottari.presentation.model.bottari.personal.SelectableItemUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.debounce
@@ -79,7 +77,7 @@ class TeamAssignedItemEditViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            deleteTeamBottariItemUseCase(itemId, BottariItemType.ASSIGNED())
+            deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.ASSIGNED())
                 .onSuccess { refreshAssignedItemsAndMembers() }
                 .onFailure { emitEvent(TeamAssignedItemEditEvent.DeleteItemFailure) }
 
@@ -149,8 +147,15 @@ class TeamAssignedItemEditViewModel(
 
             updateState {
                 copy(
-                    assignedItems = syncAssignedItems(assignedItems.map { it.toUiModel() }),
-                    members = syncMembers(members.map { it.toUiModel() }),
+                    assignedItems =
+                        syncAssignedItems(
+                            assignedItems.map {
+                                SelectableItemUiModel.fromDomain(
+                                    it,
+                                )
+                            },
+                        ),
+                    members = syncMembers(members.map { TeamMemberUiModel.fromDomain(it) }),
                     isFetched = true,
                 )
             }
@@ -159,7 +164,7 @@ class TeamAssignedItemEditViewModel(
         }
     }
 
-    private fun syncAssignedItems(items: List<BottariItemUiModel>): List<BottariItemUiModel> {
+    private fun syncAssignedItems(items: List<SelectableItemUiModel>): List<SelectableItemUiModel> {
         val currentState =
             items.map { item ->
                 val found = currentState.selectedAssignedItem ?: return@map item
@@ -221,13 +226,14 @@ class TeamAssignedItemEditViewModel(
         updateState { copy(members = cleared) }
     }
 
-    private fun BottariItemUiModel?.assignedMemberIds(): List<Long> =
+    private fun SelectableItemUiModel?.assignedMemberIds(): List<Long> =
         (this?.type as? BottariItemTypeUiModel.ASSIGNED)
             ?.members
             ?.mapNotNull { it.id }
             ?: emptyList()
 
-    private fun BottariItemUiModel.toggleSelection(targetId: Long): BottariItemUiModel = copy(isSelected = (id == targetId && !isSelected))
+    private fun SelectableItemUiModel.toggleSelection(targetId: Long): SelectableItemUiModel =
+        copy(isSelected = (id == targetId && !isSelected))
 
     private fun mapMembersWithAssignedIds(ids: List<Long>): List<TeamMemberUiModel> =
         currentState.members.map { it.copy(isHost = it.id in ids) }

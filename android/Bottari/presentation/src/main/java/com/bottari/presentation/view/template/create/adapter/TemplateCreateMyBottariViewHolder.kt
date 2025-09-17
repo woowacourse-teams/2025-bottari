@@ -9,7 +9,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.listener.OnItemClickListener
 import com.bottari.presentation.databinding.ItemTemplateCreateMyBottariBinding
-import com.bottari.presentation.model.MyBottariUiModel
+import com.bottari.presentation.model.template.SelectableBottariUiModel
 import com.bottari.presentation.util.ItemSummaryUtil.setSummaryItems
 
 class TemplateCreateMyBottariViewHolder(
@@ -22,7 +22,7 @@ class TemplateCreateMyBottariViewHolder(
         }
     }
 
-    fun bind(bottari: MyBottariUiModel) {
+    fun bind(bottari: SelectableBottariUiModel) {
         updateSelectedStateUI(bottari.isSelected)
         binding.tvTemplateCreateMyBottariTitle.text = bottari.title
 

@@ -5,8 +5,8 @@ import androidx.core.view.isVisible
 import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.formatWithPattern
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding
-import com.bottari.presentation.model.AlarmTypeUiModel
-import com.bottari.presentation.model.AlarmUiModel
+import com.bottari.presentation.model.alarm.AlarmTypeUiModel
+import com.bottari.presentation.model.alarm.AlarmUiModel
 import java.time.format.TextStyle
 import java.util.Locale
 

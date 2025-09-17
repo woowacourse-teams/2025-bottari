@@ -5,9 +5,9 @@ import android.app.AlarmManager.AlarmClockInfo
 import android.app.PendingIntent
 import android.content.Context
 import com.bottari.di.ApplicationContextProvider
-import com.bottari.presentation.model.AlarmTypeUiModel
-import com.bottari.presentation.model.NotificationUiModel
-import com.bottari.presentation.model.RepeatDayUiModel
+import com.bottari.presentation.model.alarm.AlarmTypeUiModel
+import com.bottari.presentation.model.alarm.NotificationUiModel
+import com.bottari.presentation.model.alarm.RepeatDayUiModel
 import com.bottari.presentation.receiver.AlarmReceiver
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import java.time.DayOfWeek
@@ -114,12 +114,12 @@ object AlarmScheduler {
         val intent =
             PersonalBottariEditActivity.newIntent(
                 context,
-                notification.id,
+                notification.bottariId,
                 false,
             )
         return PendingIntent.getActivity(
             context,
-            notification.id.toInt(),
+            notification.bottariId.toInt(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
@@ -131,7 +131,7 @@ object AlarmScheduler {
     ): PendingIntent =
         PendingIntent.getBroadcast(
             context,
-            notification.id.toInt(),
+            notification.bottariId.toInt(),
             AlarmReceiver.newIntent(context, notification),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )

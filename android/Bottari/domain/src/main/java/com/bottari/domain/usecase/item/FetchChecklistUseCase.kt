@@ -1,6 +1,6 @@
 package com.bottari.domain.usecase.item
 
-import com.bottari.domain.model.bottari.ChecklistItem
+import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.repository.BottariItemRepository
 
 class FetchChecklistUseCase(

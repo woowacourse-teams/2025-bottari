@@ -1,7 +1,7 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.template.CreateBottariTemplateRequest
-import com.bottari.data.model.template.FetchMyBottariTemplatesResponse
+import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
+import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
 import com.bottari.data.testFixture.fetchBottariTemplateResponseListFixture
 import com.bottari.domain.repository.BottariTemplateRepository
@@ -30,7 +30,7 @@ class BottariTemplateRepositoryImplTest {
     private val title = "title"
     private val items = listOf("item1", "item2")
 
-    private fun createRequestMatcher(): (CreateBottariTemplateRequest) -> Boolean =
+    private fun createRequestMatcher(): (BottariTemplateCreateRequest) -> Boolean =
         { it.title == title && it.bottariTemplateItems == items }
 
     private fun successResponse() = fetchBottariTemplateResponseListFixture()
@@ -196,8 +196,22 @@ class BottariTemplateRepositoryImplTest {
             // given
             val successResponse =
                 listOf(
-                    FetchMyBottariTemplatesResponse("다이스", 1L, listOf(), "template1", "12:00", 3),
-                    FetchMyBottariTemplatesResponse("다이스", 2L, listOf(), "template2", "12:00", 4),
+                    BottariTemplateFetchResponse(
+                        author = "다이스",
+                        id = 1L,
+                        items = listOf(),
+                        title = "template1",
+                        createdAt = "12:00",
+                        takenCount = 3,
+                    ),
+                    BottariTemplateFetchResponse(
+                        author = "다이스",
+                        id = 2L,
+                        items = listOf(),
+                        title = "template2",
+                        createdAt = "10:00",
+                        takenCount = 4,
+                    ),
                 )
             coEvery { remoteDataSource.fetchMyBottariTemplates() } returns
                 Result.success(

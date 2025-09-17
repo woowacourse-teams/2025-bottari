@@ -3,8 +3,8 @@ package com.bottari.presentation.view.edit.team.main.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.BottariItemTypeUiModel
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 
 class TeamBottariEditItemAdapter(
     private val bottariItemType: BottariItemTypeUiModel,

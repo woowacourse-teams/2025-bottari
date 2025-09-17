@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bottari.presentation.R
-import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.view.edit.team.item.assigned.TeamAssignedItemEditFragment
 import com.bottari.presentation.view.edit.team.item.personal.TeamPersonalItemEditFragment
 import com.bottari.presentation.view.edit.team.item.shared.TeamSharedItemEditFragment

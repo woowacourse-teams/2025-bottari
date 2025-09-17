@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.bottari.data.model.notification.NotificationEntity
+import com.bottari.data.model.local.notification.NotificationEntity
 
 @Dao
 interface NotificationDao {

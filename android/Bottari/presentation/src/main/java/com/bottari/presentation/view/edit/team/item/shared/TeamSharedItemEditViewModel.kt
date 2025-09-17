@@ -7,15 +7,15 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
-import com.bottari.domain.model.bottari.BottariItemType
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
+import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.team.CreateTeamSharedItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamSharedItemsUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.TeamBottariMapper.toUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance
@@ -65,7 +65,7 @@ class TeamSharedItemEditViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            deleteTeamBottariItemUseCase(itemId, BottariItemType.SHARED)
+            deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.SHARED)
                 .onSuccess { fetchPersonalItems() }
                 .onFailure { emitEvent(TeamSharedItemEditEvent.DeleteItemFailure) }
 
@@ -91,7 +91,7 @@ class TeamSharedItemEditViewModel(
 
         launch {
             fetchTeamSharedItemsUseCase(bottariId)
-                .onSuccess { items -> updateState { copy(sharedItems = items.map { it.toUiModel() }) } }
+                .onSuccess { items -> updateState { copy(sharedItems = items.map { BottariItemUiModel.fromDomain(it) }) } }
                 .onFailure { emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure) }
 
             updateState { copy(isLoading = false, isFetched = true) }

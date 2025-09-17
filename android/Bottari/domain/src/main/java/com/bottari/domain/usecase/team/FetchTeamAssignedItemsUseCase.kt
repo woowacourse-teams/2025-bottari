@@ -1,6 +1,6 @@
 package com.bottari.domain.usecase.team
 
-import com.bottari.domain.model.bottari.BottariItem
+import com.bottari.domain.model.bottari.item.BottariItem
 import com.bottari.domain.repository.TeamBottariRepository
 
 class FetchTeamAssignedItemsUseCase(

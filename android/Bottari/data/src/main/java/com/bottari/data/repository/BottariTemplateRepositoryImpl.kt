@@ -1,9 +1,8 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.BottariTemplateMapper.toDomain
-import com.bottari.data.model.template.CreateBottariTemplateRequest
+import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
-import com.bottari.domain.model.template.BottariTemplate
+import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.repository.BottariTemplateRepository
 
 class BottariTemplateRepositoryImpl(
@@ -19,7 +18,12 @@ class BottariTemplateRepositoryImpl(
         items: List<String>,
     ): Result<Long?> =
         bottariTemplateRemoteDataSource
-            .createBottariTemplate(CreateBottariTemplateRequest(items, title))
+            .createBottariTemplate(
+                BottariTemplateCreateRequest(
+                    items,
+                    title,
+                ),
+            )
 
     override suspend fun fetchBottariTemplate(bottariId: Long): Result<BottariTemplate> =
         bottariTemplateRemoteDataSource

@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.databinding.ItemEditAssignedItemBinding
-import com.bottari.presentation.model.BottariItemTypeUiModel
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
+import com.bottari.presentation.model.bottari.personal.SelectableItemUiModel
 
 class TeamAssignedItemEditViewHolder(
     private val binding: ItemEditAssignedItemBinding,
@@ -26,7 +26,7 @@ class TeamAssignedItemEditViewHolder(
         }
     }
 
-    fun bind(item: BottariItemUiModel) {
+    fun bind(item: SelectableItemUiModel) {
         currentItemId = item.id
         binding.tvAssignedItemName.text = item.name
         handleSelectedState(item.isSelected)

@@ -1,7 +1,7 @@
 package com.bottari.presentation.view.edit.team.main
 
-import com.bottari.presentation.model.AlarmUiModel
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.alarm.AlarmUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 
 data class TeamBottariEditUiState(
     val isLoading: Boolean = false,

@@ -1,14 +1,14 @@
 package com.bottari.data.source.remote
 
 import com.bottari.data.common.util.safeApiCall
-import com.bottari.data.model.item.FetchChecklistResponse
-import com.bottari.data.model.item.SaveBottariItemsRequest
+import com.bottari.data.model.remote.bottari.item.ItemFetchResponse
+import com.bottari.data.model.remote.bottari.item.ItemsSaveRequest
 import com.bottari.data.service.BottariItemService
 
 class BottariItemRemoteDataSourceImpl(
     private val bottariItemService: BottariItemService,
 ) : BottariItemRemoteDataSource {
-    override suspend fun fetchChecklist(bottariId: Long): Result<List<FetchChecklistResponse>> =
+    override suspend fun fetchChecklist(bottariId: Long): Result<List<ItemFetchResponse>> =
         safeApiCall {
             bottariItemService.fetchChecklist(bottariId)
         }
@@ -25,7 +25,7 @@ class BottariItemRemoteDataSourceImpl(
 
     override suspend fun saveBottariItems(
         bottariId: Long,
-        request: SaveBottariItemsRequest,
+        request: ItemsSaveRequest,
     ): Result<Unit> =
         safeApiCall {
             bottariItemService.saveBottariItems(bottariId, request)

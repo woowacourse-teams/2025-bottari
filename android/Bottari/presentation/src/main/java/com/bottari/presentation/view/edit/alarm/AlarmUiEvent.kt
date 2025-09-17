@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.edit.alarm
 
-import com.bottari.presentation.model.NotificationUiModel
+import com.bottari.presentation.model.alarm.NotificationUiModel
 
 sealed interface AlarmUiEvent {
     data class AlarmCreateSuccess(

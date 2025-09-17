@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemDayOfWeekBinding
-import com.bottari.presentation.model.RepeatDayUiModel
+import com.bottari.presentation.model.alarm.RepeatDayUiModel
 import com.bottari.presentation.view.edit.alarm.listener.OnRepeatDayClickListener
 import java.time.format.TextStyle
 import java.util.Locale

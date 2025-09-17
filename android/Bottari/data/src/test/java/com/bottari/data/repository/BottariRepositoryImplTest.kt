@@ -1,7 +1,7 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.bottari.CreateBottariRequest
-import com.bottari.data.model.bottari.UpdateBottariTitleRequest
+import com.bottari.data.model.remote.bottari.BottariCreateRequest
+import com.bottari.data.model.remote.bottari.BottariTitleUpdateRequest
 import com.bottari.data.source.remote.BottariRemoteDataSource
 import com.bottari.data.testFixture.bottariResponseFixture
 import com.bottari.data.testFixture.fetchBottariesResponseFixture
@@ -41,8 +41,8 @@ class BottariRepositoryImplTest {
             // then
             result.shouldBeSuccess {
                 it shouldHaveSize 2
-                it[0].title shouldBe "title1"
-                it[1].title shouldBe "title2"
+                it[0].bottari.title shouldBe "title1"
+                it[1].bottari.title shouldBe "title2"
             }
 
             // verify
@@ -81,7 +81,7 @@ class BottariRepositoryImplTest {
             val title = "new bottari"
             val expectedId = 42L
             coEvery {
-                remoteDataSource.createBottari(CreateBottariRequest(title))
+                remoteDataSource.createBottari(BottariCreateRequest(title))
             } returns Result.success(expectedId)
 
             // when
@@ -93,7 +93,7 @@ class BottariRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.createBottari(CreateBottariRequest(title)) }
+            coVerify { remoteDataSource.createBottari(BottariCreateRequest(title)) }
         }
 
     @DisplayName("보따리 생성 성공 시 Unit을 반환한다")
@@ -144,7 +144,11 @@ class BottariRepositoryImplTest {
             val id = 1L
             val title = "renamed title"
             coEvery {
-                remoteDataSource.saveBottariTitle(id, UpdateBottariTitleRequest(title))
+                remoteDataSource.saveBottariTitle(
+                    id,
+                    com.bottari.data.model.remote.bottari
+                        .BottariTitleUpdateRequest(title),
+                )
             } returns Result.success(Unit)
 
             // when
@@ -156,7 +160,12 @@ class BottariRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.saveBottariTitle(id, UpdateBottariTitleRequest(title)) }
+            coVerify {
+                remoteDataSource.saveBottariTitle(
+                    id,
+                    BottariTitleUpdateRequest(title),
+                )
+            }
         }
 
     @DisplayName("보따리 단건 조회 실패 시 예외를 반환한다")
@@ -188,7 +197,7 @@ class BottariRepositoryImplTest {
             val title = "error title"
             val exception = RuntimeException("생성 실패")
             coEvery {
-                remoteDataSource.createBottari(CreateBottariRequest(title))
+                remoteDataSource.createBottari(BottariCreateRequest(title))
             } returns Result.failure(exception)
 
             // when
@@ -200,7 +209,7 @@ class BottariRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.createBottari(CreateBottariRequest(title)) }
+            coVerify { remoteDataSource.createBottari(BottariCreateRequest(title)) }
         }
 
     @DisplayName("보따리 이름 변경 실패 시 예외를 반환한다")
@@ -212,7 +221,10 @@ class BottariRepositoryImplTest {
             val title = "error title"
             val exception = RuntimeException("제목 변경 실패")
             coEvery {
-                remoteDataSource.saveBottariTitle(id, UpdateBottariTitleRequest(title))
+                remoteDataSource.saveBottariTitle(
+                    id,
+                    BottariTitleUpdateRequest(title),
+                )
             } returns Result.failure(exception)
 
             // when
@@ -224,7 +236,12 @@ class BottariRepositoryImplTest {
             }
 
             // verify
-            coVerify { remoteDataSource.saveBottariTitle(id, UpdateBottariTitleRequest(title)) }
+            coVerify {
+                remoteDataSource.saveBottariTitle(
+                    id,
+                    BottariTitleUpdateRequest(title),
+                )
+            }
         }
 
     @DisplayName("보따리 삭제 실패 시 예외를 반환한다")

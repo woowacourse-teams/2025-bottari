@@ -3,7 +3,7 @@ package com.bottari.presentation.view.template.create.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 
 class TemplateCreateMyBottariItemAdapter : ListAdapter<BottariItemUiModel, TemplateCreateMyBottariItemViewHolder>(DiffUtil) {
     override fun onCreateViewHolder(

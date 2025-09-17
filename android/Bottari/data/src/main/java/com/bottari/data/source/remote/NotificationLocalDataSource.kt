@@ -1,6 +1,6 @@
 package com.bottari.data.source.remote
 
-import com.bottari.data.model.notification.NotificationEntity
+import com.bottari.data.model.local.notification.NotificationEntity
 
 interface NotificationLocalDataSource {
     suspend fun getNotifications(): Result<List<NotificationEntity>>

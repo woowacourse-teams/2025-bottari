@@ -9,7 +9,7 @@ import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.mapper.BottariTemplateMapper.toUiModel
+import com.bottari.presentation.model.template.BottariTemplateUiModel
 
 class MyTemplateViewModel(
     private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
@@ -49,7 +49,7 @@ class MyTemplateViewModel(
 
         launch {
             fetchMyBottariTemplatesUseCase()
-                .onSuccess { updateState { copy(bottariTemplates = it.map { it.toUiModel() }) } }
+                .onSuccess { updateState { copy(bottariTemplates = it.map { BottariTemplateUiModel.fromDomain(it) }) } }
                 .onFailure { emitEvent(MyTemplateUiEvent.FetchMyTemplateFailure) }
 
             updateState { copy(isLoading = false, isFetched = true) }

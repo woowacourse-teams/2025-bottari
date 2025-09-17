@@ -3,7 +3,7 @@ package com.bottari.presentation.view.edit.team.management.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.TeamMemberUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 
 class TeamMemberAdapter : ListAdapter<TeamMemberUiModel, TeamMemberViewHolder>(DiffUtil) {
     override fun onBindViewHolder(
