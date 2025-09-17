@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.edit.team.item.main
 
-import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 
 data class TeamItemEditUiState(
     val itemInputText: String = "",

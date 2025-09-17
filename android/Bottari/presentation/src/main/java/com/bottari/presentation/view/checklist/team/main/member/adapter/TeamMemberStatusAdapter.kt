@@ -3,7 +3,7 @@ package com.bottari.presentation.view.checklist.team.main.member.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.TeamMemberStatusUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberStatusUiModel
 
 class TeamMemberStatusAdapter(
     private val memberStatusClickListener: TeamMemberStatusViewHolder.MemberStatusClickListener,

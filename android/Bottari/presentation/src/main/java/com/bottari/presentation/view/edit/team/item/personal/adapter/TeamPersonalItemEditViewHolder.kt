@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.databinding.ItemEditPersonalItemBinding
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 
 class TeamPersonalItemEditViewHolder(
     private val binding: ItemEditPersonalItemBinding,

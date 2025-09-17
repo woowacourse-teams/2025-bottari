@@ -1,4 +1,4 @@
-package com.bottari.presentation.model
+package com.bottari.presentation.model.bottari.team.member
 
 import com.bottari.domain.model.team.member.MemberCheckStatus
 

@@ -10,8 +10,8 @@ import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.BottariItemTypeUiModel
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 
 class PersonalItemEditViewModel(
     stateHandle: SavedStateHandle,

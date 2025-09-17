@@ -11,7 +11,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentSwipeChecklistBinding
-import com.bottari.presentation.model.TeamChecklistProductUiModel
+import com.bottari.presentation.model.bottari.team.TeamChecklistProductUiModel
 import com.bottari.presentation.view.checklist.team.main.checklist.TeamChecklistUiEvent
 import com.bottari.presentation.view.checklist.team.main.checklist.TeamChecklistUiState
 import com.bottari.presentation.view.checklist.team.main.checklist.TeamChecklistViewModel

@@ -15,9 +15,9 @@ import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.BottariDetailUiModel
-import com.bottari.presentation.model.NotificationUiModel
+import com.bottari.presentation.model.alarm.NotificationUiModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
+import com.bottari.presentation.model.bottari.personal.BottariDetailUiModel
 import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.util.debounce
 
@@ -124,8 +124,8 @@ class PersonalBottariEditViewModel(
 
     private fun createNotification(alarm: AlarmUiModel): NotificationUiModel =
         NotificationUiModel(
-            id = currentState.id,
-            title = currentState.title,
+            bottariId = currentState.id,
+            bottariTitle = currentState.title,
             alarm = alarm,
         )
 

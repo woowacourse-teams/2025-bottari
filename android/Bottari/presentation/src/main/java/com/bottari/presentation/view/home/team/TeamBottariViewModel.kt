@@ -9,7 +9,7 @@ import com.bottari.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.TeamBottariUiModel
+import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
 
 class TeamBottariViewModel(
     private val fetchTeamBottariesUseCase: FetchTeamBottariesUseCase,

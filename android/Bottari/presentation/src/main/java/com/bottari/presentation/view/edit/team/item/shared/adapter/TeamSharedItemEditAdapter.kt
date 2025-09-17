@@ -3,7 +3,7 @@ package com.bottari.presentation.view.edit.team.item.shared.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 
 class TeamSharedItemEditAdapter(
     private val eventListener: TeamSharedItemEditEventListener,

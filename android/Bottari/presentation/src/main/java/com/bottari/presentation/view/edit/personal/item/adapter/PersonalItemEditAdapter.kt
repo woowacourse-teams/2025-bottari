@@ -3,7 +3,7 @@ package com.bottari.presentation.view.edit.personal.item.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 import com.bottari.presentation.view.edit.personal.item.listener.OnEditItemClickListener
 
 class PersonalItemEditAdapter(

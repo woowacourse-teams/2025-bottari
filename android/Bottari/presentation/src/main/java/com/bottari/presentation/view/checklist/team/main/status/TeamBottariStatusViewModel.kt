@@ -16,10 +16,10 @@ import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.FetchTeamStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.BottariItemTypeUiModel
-import com.bottari.presentation.model.TeamBottariProductStatusUiModel
-import com.bottari.presentation.model.TeamChecklistTypeUiModel
-import com.bottari.presentation.model.TeamProductStatusItem
+import com.bottari.presentation.model.bottari.team.TeamBottariProductStatusUiModel
+import com.bottari.presentation.model.bottari.team.TeamChecklistTypeUiModel
+import com.bottari.presentation.model.bottari.team.TeamProductStatusItem
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

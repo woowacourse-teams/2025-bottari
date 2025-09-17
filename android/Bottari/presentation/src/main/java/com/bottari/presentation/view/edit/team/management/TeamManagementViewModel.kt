@@ -16,7 +16,7 @@ import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.TeamMemberUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview

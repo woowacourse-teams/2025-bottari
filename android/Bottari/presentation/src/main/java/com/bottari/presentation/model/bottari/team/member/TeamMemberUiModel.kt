@@ -1,7 +1,8 @@
-package com.bottari.presentation.model
+package com.bottari.presentation.model.bottari.team.member
 
 import android.os.Parcelable
 import com.bottari.domain.model.team.member.TeamMember
+import com.bottari.domain.model.team.member.TeamMemberStatus
 import com.bottari.domain.model.team.member.TeamStatus
 import kotlinx.parcelize.Parcelize
 
@@ -14,12 +15,21 @@ data class TeamMemberUiModel(
     companion object {
         fun fromDomain(teamMember: TeamMember): TeamMemberUiModel = TeamMemberUiModel(teamMember.memberId, teamMember.nickname, false)
 
+        fun fromDomain(teamMemberStatus: TeamMemberStatus): TeamMemberUiModel =
+            TeamMemberUiModel(
+                teamMemberStatus.id,
+                teamMemberStatus.nickname.value,
+                teamMemberStatus.isHost,
+            )
+
         fun fromDomain(teamStatus: TeamStatus): List<TeamMemberUiModel> =
             buildList {
                 add(TeamMemberUiModel(null, teamStatus.hostName.value, true))
                 teamStatus.nicknames
                     .forEach { nickname ->
-                        if (nickname != teamStatus.hostName) add(TeamMemberUiModel(null, nickname.value, false))
+                        if (nickname != teamStatus.hostName) {
+                            add(TeamMemberUiModel(null, nickname.value, false))
+                        }
                     }
             }
     }

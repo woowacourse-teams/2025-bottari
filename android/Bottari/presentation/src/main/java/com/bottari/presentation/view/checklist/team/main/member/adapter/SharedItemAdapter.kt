@@ -3,7 +3,7 @@ package com.bottari.presentation.view.checklist.team.main.member.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 
 class SharedItemAdapter : ListAdapter<ChecklistItemUiModel, SharedItemViewHolder>(DiffUtil) {
     override fun onBindViewHolder(

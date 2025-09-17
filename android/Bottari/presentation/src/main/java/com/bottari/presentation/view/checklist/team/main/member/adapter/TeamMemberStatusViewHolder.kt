@@ -6,8 +6,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamMemberStatusBinding
-import com.bottari.presentation.model.TeamMemberStatusUiModel
-import com.bottari.presentation.model.TeamMemberUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberStatusUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager

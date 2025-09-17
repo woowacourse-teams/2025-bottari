@@ -1,21 +1,20 @@
-package com.bottari.presentation.model
+package com.bottari.presentation.model.alarm
 
 import android.os.Parcelable
 import com.bottari.domain.model.notification.Notification
-import com.bottari.presentation.model.alarm.AlarmUiModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class NotificationUiModel(
-    val id: Long,
-    val title: String,
+    val bottariId: Long,
+    val bottariTitle: String,
     val alarm: AlarmUiModel,
 ) : Parcelable {
     companion object {
         fun fromDomain(notification: Notification): NotificationUiModel =
             NotificationUiModel(
-                id = notification.bottariId,
-                title = notification.bottariTitle,
+                bottariId = notification.bottariId,
+                bottariTitle = notification.bottariTitle,
                 alarm = AlarmUiModel.fromDomain(notification.alarm),
             )
     }

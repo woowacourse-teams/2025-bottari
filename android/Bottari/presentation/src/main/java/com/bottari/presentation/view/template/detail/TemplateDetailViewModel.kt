@@ -11,7 +11,7 @@ import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.BottariTemplateItemUiModel
+import com.bottari.presentation.model.template.BottariTemplateItemUiModel
 
 class TemplateDetailViewModel(
     stateHandle: SavedStateHandle,

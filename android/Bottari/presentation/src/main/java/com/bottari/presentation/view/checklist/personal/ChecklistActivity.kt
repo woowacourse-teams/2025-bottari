@@ -14,7 +14,7 @@ import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityChecklistBinding
-import com.bottari.presentation.model.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 import com.bottari.presentation.view.checklist.personal.main.MainChecklistFragment
 import com.bottari.presentation.view.checklist.personal.swipe.SwipeChecklistFragment
 import com.bottari.presentation.view.common.alert.CustomAlertDialog

@@ -1,4 +1,4 @@
-package com.bottari.presentation.model
+package com.bottari.presentation.model.template
 
 import com.bottari.domain.model.bottari.template.BottariTemplateItem
 

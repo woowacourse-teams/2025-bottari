@@ -11,7 +11,7 @@ import com.bottari.domain.usecase.notification.DeleteNotificationUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.BottariUiModel
+import com.bottari.presentation.model.bottari.personal.BottariUiModel
 
 class BottariViewModel(
     private val fetchBottariesUseCase: FetchBottariesUseCase,

@@ -3,11 +3,11 @@ package com.bottari.presentation.view.edit.team.item.assigned.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.bottari.personal.SelectableItemUiModel
 
 class TeamAssignedItemEditAdapter(
     private val eventListener: TeamAssignedItemEditEventListener,
-) : ListAdapter<BottariItemUiModel, TeamAssignedItemEditViewHolder>(DiffUtil) {
+) : ListAdapter<SelectableItemUiModel, TeamAssignedItemEditViewHolder>(DiffUtil) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -22,15 +22,15 @@ class TeamAssignedItemEditAdapter(
 
     companion object {
         private val DiffUtil =
-            object : DiffUtil.ItemCallback<BottariItemUiModel>() {
+            object : DiffUtil.ItemCallback<SelectableItemUiModel>() {
                 override fun areContentsTheSame(
-                    oldItem: BottariItemUiModel,
-                    newItem: BottariItemUiModel,
+                    oldItem: SelectableItemUiModel,
+                    newItem: SelectableItemUiModel,
                 ): Boolean = oldItem == newItem
 
                 override fun areItemsTheSame(
-                    oldItem: BottariItemUiModel,
-                    newItem: BottariItemUiModel,
+                    oldItem: SelectableItemUiModel,
+                    newItem: SelectableItemUiModel,
                 ): Boolean = oldItem.id == newItem.id && oldItem.isSelected == newItem.isSelected
             }
     }

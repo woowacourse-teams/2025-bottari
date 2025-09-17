@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.databinding.ItemTeamMemberBinding
-import com.bottari.presentation.model.TeamMemberUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 
 class TeamMemberViewHolder private constructor(
     private val binding: ItemTeamMemberBinding,

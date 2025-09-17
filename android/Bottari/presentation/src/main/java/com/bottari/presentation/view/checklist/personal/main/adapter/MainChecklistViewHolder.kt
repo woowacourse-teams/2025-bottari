@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemChecklistBinding
-import com.bottari.presentation.model.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 import com.bottari.presentation.view.checklist.personal.main.listener.OnChecklistItemClickListener
 
 class MainChecklistViewHolder private constructor(

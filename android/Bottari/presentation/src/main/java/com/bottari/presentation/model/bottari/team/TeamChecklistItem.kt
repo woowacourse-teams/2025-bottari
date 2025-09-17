@@ -1,18 +1,15 @@
-package com.bottari.presentation.model
+package com.bottari.presentation.model.bottari.team
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 
 sealed interface TeamChecklistItem
 
-@Parcelize
 data class TeamChecklistProductUiModel(
     val id: Long,
     val name: String,
     val isChecked: Boolean,
     val type: BottariItemTypeUiModel,
-) : Parcelable,
-    TeamChecklistItem
+) : TeamChecklistItem
 
 data class TeamChecklistExpandableTypeUiModel(
     val type: BottariItemTypeUiModel,

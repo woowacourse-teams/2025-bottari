@@ -11,7 +11,7 @@ import com.bottari.domain.usecase.team.CreateTeamPersonalItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamPersonalItemsUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 
 class TeamPersonalItemEditViewModel(
     stateHandle: SavedStateHandle,

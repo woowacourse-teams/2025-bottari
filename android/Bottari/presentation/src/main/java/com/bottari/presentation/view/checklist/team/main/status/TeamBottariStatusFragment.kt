@@ -10,7 +10,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamStatusBinding
-import com.bottari.presentation.model.TeamBottariProductStatusUiModel
+import com.bottari.presentation.model.bottari.team.TeamBottariProductStatusUiModel
 import com.bottari.presentation.view.checklist.team.main.status.adapter.TeamBottariProductStatusAdapter
 import com.bottari.presentation.view.checklist.team.main.status.adapter.TeamBottariProductStatusDetailAdapter
 import com.bottari.presentation.view.checklist.team.main.status.adapter.TeamBottariProductStatusViewHolder

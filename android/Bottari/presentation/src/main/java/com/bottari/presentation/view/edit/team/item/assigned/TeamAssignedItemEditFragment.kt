@@ -11,7 +11,7 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamAssignedItemEditBinding
-import com.bottari.presentation.model.BottariItemTypeUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.view.common.decoration.ItemSpacingDecoration
 import com.bottari.presentation.view.edit.team.item.assigned.adapter.TeamAssignedItemEditAdapter
 import com.bottari.presentation.view.edit.team.item.assigned.adapter.TeamAssignedItemEditMemberAdapter

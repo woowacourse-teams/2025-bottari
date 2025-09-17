@@ -3,7 +3,7 @@ package com.bottari.presentation.view.checklist.personal.main.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 import com.bottari.presentation.view.checklist.personal.main.listener.OnChecklistItemClickListener
 
 class MainChecklistAdapter(

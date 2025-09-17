@@ -10,7 +10,7 @@ import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.BottariTemplateUiModel
+import com.bottari.presentation.model.template.BottariTemplateUiModel
 import com.bottari.presentation.util.debounce
 
 class TemplateViewModel(

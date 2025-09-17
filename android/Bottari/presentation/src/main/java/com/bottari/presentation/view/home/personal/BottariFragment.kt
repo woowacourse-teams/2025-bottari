@@ -14,8 +14,8 @@ import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentBottariBinding
-import com.bottari.presentation.model.BottariUiModel
-import com.bottari.presentation.model.NotificationUiModel
+import com.bottari.presentation.model.alarm.NotificationUiModel
+import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.util.AlarmScheduler.cancelAlarm
 import com.bottari.presentation.view.checklist.personal.ChecklistActivity
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration

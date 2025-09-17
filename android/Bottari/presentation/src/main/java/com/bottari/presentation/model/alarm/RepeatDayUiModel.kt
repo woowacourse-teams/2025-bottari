@@ -1,4 +1,4 @@
-package com.bottari.presentation.model
+package com.bottari.presentation.model.alarm
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

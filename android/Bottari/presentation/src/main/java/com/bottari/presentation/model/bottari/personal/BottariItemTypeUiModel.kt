@@ -1,18 +1,16 @@
-package com.bottari.presentation.model
+package com.bottari.presentation.model.bottari.personal
 
 import android.os.Parcelable
 import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 sealed interface BottariItemTypeUiModel : Parcelable {
-    @Parcelize
     data object PERSONAL : BottariItemTypeUiModel
 
-    @Parcelize
     data object SHARED : BottariItemTypeUiModel
 
-    @Parcelize
     data class ASSIGNED(
         val members: List<TeamMemberUiModel> = emptyList(),
     ) : BottariItemTypeUiModel
@@ -29,7 +27,8 @@ sealed interface BottariItemTypeUiModel : Parcelable {
             when (teamBottariItemType) {
                 TeamBottariItemType.PERSONAL -> PERSONAL
                 TeamBottariItemType.SHARED -> SHARED
-                is TeamBottariItemType.ASSIGNED -> ASSIGNED(teamBottariItemType.members.map { TeamMemberUiModel.fromDomain(it) })
+                is TeamBottariItemType.ASSIGNED ->
+                    ASSIGNED(teamBottariItemType.members.map { TeamMemberUiModel.fromDomain(it) })
             }
     }
 }

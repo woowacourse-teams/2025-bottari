@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.home.personal
 
-import com.bottari.presentation.model.BottariUiModel
+import com.bottari.presentation.model.bottari.personal.BottariUiModel
 
 data class BottariUiState(
     val isLoading: Boolean = false,

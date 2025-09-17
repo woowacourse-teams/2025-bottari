@@ -18,10 +18,10 @@ import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.formatWithPattern
 import com.bottari.presentation.databinding.ItemBottariBinding
 import com.bottari.presentation.databinding.PopupBottariOptionsBinding
-import com.bottari.presentation.model.BottariUiModel
-import com.bottari.presentation.model.RepeatDayUiModel
+import com.bottari.presentation.model.alarm.RepeatDayUiModel
 import com.bottari.presentation.model.alarm.AlarmTypeUiModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
+import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.TextStyle

@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.checklist.personal
 
-import com.bottari.presentation.model.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 
 data class ChecklistUiState(
     val isLoading: Boolean = false,

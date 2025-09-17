@@ -1,7 +1,7 @@
 package com.bottari.presentation.view.checklist.team.main.status
 
-import com.bottari.presentation.model.TeamBottariProductStatusUiModel
-import com.bottari.presentation.model.TeamProductStatusItem
+import com.bottari.presentation.model.bottari.team.TeamBottariProductStatusUiModel
+import com.bottari.presentation.model.bottari.team.TeamProductStatusItem
 
 data class TeamBottariStatusUiState(
     val isLoading: Boolean = false,

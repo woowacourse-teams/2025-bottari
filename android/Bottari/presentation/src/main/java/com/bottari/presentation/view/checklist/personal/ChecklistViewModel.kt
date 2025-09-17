@@ -13,7 +13,7 @@ import com.bottari.domain.usecase.item.FetchChecklistUseCase
 import com.bottari.domain.usecase.item.ResetBottariItemCheckStateUseCase
 import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

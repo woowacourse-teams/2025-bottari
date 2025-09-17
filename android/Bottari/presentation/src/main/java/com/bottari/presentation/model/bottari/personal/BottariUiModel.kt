@@ -1,4 +1,4 @@
-package com.bottari.presentation.model
+package com.bottari.presentation.model.bottari.personal
 
 import com.bottari.domain.model.bottari.BottariState
 import com.bottari.presentation.model.alarm.AlarmUiModel

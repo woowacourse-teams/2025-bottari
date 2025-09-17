@@ -11,7 +11,7 @@ import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.MyBottariUiModel
+import com.bottari.presentation.model.template.SelectableBottariUiModel
 
 class TemplateCreateViewModel(
     private val fetchBottariDetailsUseCase: FetchBottariDetailsUseCase,
@@ -69,7 +69,7 @@ class TemplateCreateViewModel(
     }
 
     private fun handleFetchBottariDetails(bottaries: List<Bottari>) {
-        val myBottaries = bottaries.map { MyBottariUiModel.fromDomain(it) }
+        val myBottaries = bottaries.map { SelectableBottariUiModel.fromDomain(it) }
         val selectedBottariId = myBottaries.firstOrNull()?.id
         updateState {
             copy(
@@ -79,7 +79,7 @@ class TemplateCreateViewModel(
         }
     }
 
-    private fun List<MyBottariUiModel>.updateBottariSelectedState(bottariId: Long?): List<MyBottariUiModel> =
+    private fun List<SelectableBottariUiModel>.updateBottariSelectedState(bottariId: Long?): List<SelectableBottariUiModel> =
         this.map { if (it.id == bottariId) it.copy(isSelected = true) else it.copy(isSelected = false) }
 
     companion object {

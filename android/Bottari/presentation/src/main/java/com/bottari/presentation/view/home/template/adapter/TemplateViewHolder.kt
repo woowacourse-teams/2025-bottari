@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTemplateBinding
-import com.bottari.presentation.model.BottariTemplateUiModel
+import com.bottari.presentation.model.template.BottariTemplateUiModel
 import com.bottari.presentation.util.ItemSummaryUtil.setSummaryItems
 import com.bottari.presentation.view.home.template.listener.OnTemplateClickListener
 

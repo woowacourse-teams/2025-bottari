@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.edit.team.item.shared
 
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 
 data class TeamSharedItemEditUiState(
     val isLoading: Boolean = false,

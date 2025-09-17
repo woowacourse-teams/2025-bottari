@@ -1,16 +1,17 @@
-package com.bottari.presentation.model
+package com.bottari.presentation.model.template
 
 import com.bottari.domain.model.bottari.Bottari
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 
-data class MyBottariUiModel(
+data class SelectableBottariUiModel(
     val id: Long,
     val title: String,
-    val isSelected: Boolean,
     val items: List<BottariItemUiModel>,
+    val isSelected: Boolean,
 ) {
     companion object {
-        fun fromDomain(bottari: Bottari): MyBottariUiModel =
-            MyBottariUiModel(
+        fun fromDomain(bottari: Bottari): SelectableBottariUiModel =
+            SelectableBottariUiModel(
                 id = bottari.id,
                 title = bottari.title,
                 isSelected = false,

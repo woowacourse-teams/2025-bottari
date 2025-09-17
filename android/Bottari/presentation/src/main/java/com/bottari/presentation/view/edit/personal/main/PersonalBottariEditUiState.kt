@@ -1,8 +1,8 @@
 package com.bottari.presentation.view.edit.personal.main
 
-import com.bottari.presentation.model.BottariDetailUiModel
-import com.bottari.presentation.model.BottariItemUiModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
+import com.bottari.presentation.model.bottari.personal.BottariDetailUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 
 data class PersonalBottariEditUiState(
     val isLoading: Boolean = false,

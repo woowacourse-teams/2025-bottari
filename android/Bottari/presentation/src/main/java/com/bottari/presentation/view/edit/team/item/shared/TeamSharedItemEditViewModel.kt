@@ -15,7 +15,7 @@ import com.bottari.domain.usecase.team.CreateTeamSharedItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamSharedItemsUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance

@@ -3,7 +3,7 @@ package com.bottari.presentation.view.home.personal.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.bottari.presentation.model.BottariUiModel
+import com.bottari.presentation.model.bottari.personal.BottariUiModel
 
 class BottariAdapter(
     private val bottariEventListener: BottariViewHolder.BottariEventListener,

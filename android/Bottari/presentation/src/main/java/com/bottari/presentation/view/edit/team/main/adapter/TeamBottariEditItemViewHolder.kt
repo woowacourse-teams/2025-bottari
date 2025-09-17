@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemChecklistMiniBinding
-import com.bottari.presentation.model.BottariItemTypeUiModel
-import com.bottari.presentation.model.BottariItemUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
+import com.bottari.presentation.model.bottari.BottariItemUiModel
 
 class TeamBottariEditItemViewHolder private constructor(
     private val binding: ItemChecklistMiniBinding,

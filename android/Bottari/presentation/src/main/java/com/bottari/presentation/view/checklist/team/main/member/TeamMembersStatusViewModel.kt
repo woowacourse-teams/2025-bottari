@@ -17,8 +17,8 @@ import com.bottari.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.TeamMemberStatusUiModel
-import com.bottari.presentation.model.TeamMemberUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberStatusUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

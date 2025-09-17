@@ -7,8 +7,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemTeamChecklistBinding
-import com.bottari.presentation.model.BottariItemTypeUiModel
-import com.bottari.presentation.model.TeamChecklistProductUiModel
+import com.bottari.presentation.model.bottari.team.TeamChecklistProductUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 
 class TeamChecklistViewHolder private constructor(
     private val binding: ItemTeamChecklistBinding,
