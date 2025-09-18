@@ -1,7 +1,9 @@
 package com.bottari.domain.repository
 
-interface AppConfigRepository {
-    suspend fun savePermissionFlag(flag: Boolean): Result<Unit>
+import com.bottari.domain.model.exception.BottariResult
 
-    suspend fun getPermissionFlag(): Result<Boolean>
+interface AppConfigRepository {
+    suspend fun savePermissionFlag(flag: Boolean): BottariResult<Unit>
+
+    suspend fun getPermissionFlag(): BottariResult<Boolean>
 }
