@@ -57,11 +57,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 is MainUiEvent.LoginSuccess -> checkPermissionAndNavigate(uiEvent.permissionFlag)
                 MainUiEvent.IncompletePermissionFlow -> showPermissionDescriptionDialog()
                 MainUiEvent.ForceUpdate -> showForceUpdateDialog()
-                MainUiEvent.RegisterFailure,
-                MainUiEvent.LoginFailure,
-                MainUiEvent.GetPermissionFlagFailure,
-                MainUiEvent.SavePermissionFlagFailure,
-                -> finishAffinity()
+                MainUiEvent.AuthorizeFailure -> finishAffinity()
+                MainUiEvent.RegisterFailure.DuplicatedException,
+                MainUiEvent.RegisterFailure.InvalidException,
+                MainUiEvent.RegisterFailure.UnexpectedException,
+                -> binding.root.showSnackbar("회원가입에 실패했어요") { finishAffinity() }
             }
         }
     }

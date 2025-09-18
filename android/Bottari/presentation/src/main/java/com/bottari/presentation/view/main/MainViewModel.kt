@@ -5,6 +5,10 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.MemberUseCaseProvider
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.model.member.RegisteredMember
 import com.bottari.domain.usecase.appConfig.CheckForceUpdateUseCase
 import com.bottari.domain.usecase.appConfig.GetPermissionFlagUseCase
@@ -36,22 +40,19 @@ class MainViewModel(
         launch {
             checkRegisteredMemberUseCase()
                 .onSuccess { result -> handleCheckRegistrationResult(result) }
-                .onFailure { emitEvent(MainUiEvent.LoginFailure) }
+                .onApiError { emitEvent(MainUiEvent.AuthorizeFailure) }
         }
     }
 
     fun savePermissionFlag() {
-        launch {
-            savePermissionFlagUseCase(true)
-                .onFailure { emitEvent(MainUiEvent.SavePermissionFlagFailure) }
-        }
+        launch { savePermissionFlagUseCase(true) }
     }
 
     private fun checkPermissionFlag() {
         launch {
             getPermissionFlagUseCase()
                 .onSuccess { permissionFlag -> handlePermissionFlag(permissionFlag) }
-                .onFailure { emitEvent(MainUiEvent.GetPermissionFlagFailure) }
+                .onApiError { handlePermissionFlag(false) }
         }
     }
 
@@ -74,11 +75,16 @@ class MainViewModel(
         launch {
             val fcmToken = FirebaseMessaging.getInstance().token.await()
             registerMemberUseCase(fcmToken)
-                .onFailure { emitEvent(MainUiEvent.RegisterFailure) }
                 .onSuccess {
                     updateState { copy(isLoading = false, isReady = true) }
                     emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))
-                }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        is BottariException.InvalidException -> emitEvent(MainUiEvent.RegisterFailure.InvalidException)
+                        is BottariException.DuplicatedException -> emitEvent(MainUiEvent.RegisterFailure.DuplicatedException)
+                        else -> emitEvent(MainUiEvent.RegisterFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(MainUiEvent.RegisterFailure.UnexpectedException) }
         }
     }
 
@@ -86,7 +92,8 @@ class MainViewModel(
         launch {
             val fcmToken = FirebaseMessaging.getInstance().token.await()
             saveFcmTokenUseCase(fcmToken)
-                .onFailure { exception -> BottariLogger.error(exception.message, exception) }
+                .onApiError { throwable -> BottariLogger.error(throwable.message, throwable) }
+                .onApiException { exception -> BottariLogger.error(exception.message, exception) }
 
             updateState { copy(isLoading = false, isReady = true) }
             emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))
@@ -102,7 +109,7 @@ class MainViewModel(
                 .onSuccess { isForceUpdate ->
                     if (isForceUpdate) return@onSuccess emitEvent(MainUiEvent.ForceUpdate)
                     checkPermissionFlag()
-                }.onFailure { exception -> BottariLogger.error(exception.message, exception) }
+                }.onApiError { throwable -> BottariLogger.error(throwable.message, throwable) }
 
             updateState { copy(isLoading = false) }
         }
