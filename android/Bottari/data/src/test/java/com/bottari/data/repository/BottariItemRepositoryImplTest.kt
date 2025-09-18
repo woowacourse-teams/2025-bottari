@@ -2,10 +2,11 @@ package com.bottari.data.repository
 
 import com.bottari.data.source.remote.BottariItemRemoteDataSource
 import com.bottari.data.testFixture.fetchChecklistResponseListFixture
+import com.bottari.domain.model.bottari.item.ChecklistItem
+import com.bottari.domain.model.exception.BottariResult
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.result.shouldBeFailure
-import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -32,17 +33,15 @@ class BottariItemRepositoryImplTest {
             val bottariId = 1L
             val responseList = fetchChecklistResponseListFixture()
             coEvery { remoteDataSource.fetchChecklist(bottariId) } returns
-                Result.success(
-                    responseList,
-                )
+                BottariResult.Success(responseList)
 
             // when
             val result = repository.fetchChecklist(bottariId)
 
             // then
-            result.shouldBeSuccess {
-                it shouldHaveSize 2
-                it[0].name shouldBe "item1"
+            result.shouldBeInstanceOf<BottariResult.Success<List<ChecklistItem>>> { success ->
+                success.data shouldHaveSize 2
+                success.data[0].name shouldBe "item1"
             }
 
             // verify
@@ -57,7 +56,7 @@ class BottariItemRepositoryImplTest {
             val bottariId = 999L
             val expectedException = RuntimeException("서버 오류")
             coEvery { remoteDataSource.fetchChecklist(bottariId) } returns
-                Result.failure(
+                BottariResult.NetworkError(
                     expectedException,
                 )
 
@@ -65,8 +64,8 @@ class BottariItemRepositoryImplTest {
             val result = repository.fetchChecklist(bottariId)
 
             // then
-            result.shouldBeFailure {
-                it shouldBe expectedException
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> {
+                it.throwable shouldBe expectedException
             }
 
             // verify
@@ -79,13 +78,13 @@ class BottariItemRepositoryImplTest {
         runTest {
             // given
             val itemId = 10L
-            coEvery { remoteDataSource.checkBottariItem(itemId) } returns Result.success(Unit)
+            coEvery { remoteDataSource.checkBottariItem(itemId) } returns BottariResult.Success(Unit)
 
             // when
             val result = repository.checkBottariItem(itemId)
 
             // then
-            result.shouldBeSuccess()
+            result.shouldBeInstanceOf<BottariResult.Success<Unit>>()
 
             // verify
             coVerify { remoteDataSource.checkBottariItem(itemId) }
@@ -96,11 +95,10 @@ class BottariItemRepositoryImplTest {
     fun returnFailureIfCheckItemFails() =
         runTest {
             // given
-
             val itemId = 10L
             val expectedException = RuntimeException("체크 실패")
             coEvery { remoteDataSource.checkBottariItem(itemId) } returns
-                Result.failure(
+                BottariResult.NetworkError(
                     expectedException,
                 )
 
@@ -108,8 +106,8 @@ class BottariItemRepositoryImplTest {
             val result = repository.checkBottariItem(itemId)
 
             // then
-            result.shouldBeFailure {
-                it shouldBe expectedException
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> {
+                it.throwable shouldBe expectedException
             }
 
             // verify
@@ -121,15 +119,17 @@ class BottariItemRepositoryImplTest {
     fun uncheckItemSuccessReturnsSuccess() =
         runTest {
             // given
-
             val itemId = 11L
-            coEvery { remoteDataSource.uncheckBottariItem(itemId) } returns Result.success(Unit)
+            coEvery { remoteDataSource.uncheckBottariItem(itemId) } returns
+                BottariResult.Success(
+                    Unit,
+                )
 
             // when
             val result = repository.uncheckBottariItem(itemId)
 
             // then
-            result.shouldBeSuccess()
+            result.shouldBeInstanceOf<BottariResult.Success<Unit>>()
 
             // verify
             coVerify { remoteDataSource.uncheckBottariItem(itemId) }
@@ -140,11 +140,10 @@ class BottariItemRepositoryImplTest {
     fun returnFailureIfUncheckItemFails() =
         runTest {
             // given
-
             val itemId = 11L
             val expectedException = RuntimeException("체크 해제 실패")
             coEvery { remoteDataSource.uncheckBottariItem(itemId) } returns
-                Result.failure(
+                BottariResult.NetworkError(
                     expectedException,
                 )
 
@@ -152,8 +151,8 @@ class BottariItemRepositoryImplTest {
             val result = repository.uncheckBottariItem(itemId)
 
             // then
-            result.shouldBeFailure {
-                it shouldBe expectedException
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> {
+                it.throwable shouldBe expectedException
             }
 
             // verify
@@ -167,13 +166,15 @@ class BottariItemRepositoryImplTest {
             // given
             val bottariId = 1L
             coEvery { remoteDataSource.resetBottariItemCheckState(bottariId) } returns
-                Result.success(Unit)
+                BottariResult.Success(
+                    Unit,
+                )
 
             // when
             val result = repository.resetBottariItemCheckState(bottariId)
 
             // then
-            result.shouldBeSuccess()
+            result.shouldBeInstanceOf<BottariResult.Success<Unit>>()
 
             // verify
             coVerify { remoteDataSource.resetBottariItemCheckState(bottariId) }
@@ -187,13 +188,17 @@ class BottariItemRepositoryImplTest {
             val bottariId = 1L
             val expectedException = Exception()
             coEvery { remoteDataSource.resetBottariItemCheckState(bottariId) } returns
-                Result.failure(expectedException)
+                BottariResult.NetworkError(
+                    expectedException,
+                )
 
             // when
             val result = repository.resetBottariItemCheckState(bottariId)
 
             // then
-            result.shouldBeFailure { error -> error shouldBe expectedException }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> {
+                it.throwable shouldBe expectedException
+            }
 
             // verify
             coVerify { remoteDataSource.resetBottariItemCheckState(bottariId) }

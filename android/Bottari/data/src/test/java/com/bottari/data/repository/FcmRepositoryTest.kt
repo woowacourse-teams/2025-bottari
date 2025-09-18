@@ -3,10 +3,10 @@ package com.bottari.data.repository
 import com.bottari.data.model.remote.fcm.FcmTokenSaveRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.FcmRemoteDataSource
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.FcmRepository
-import io.kotest.matchers.result.shouldBeFailure
-import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -41,13 +41,13 @@ class FcmRepositoryTest {
             // given
             val token = "token"
             val request = FcmTokenSaveRequest(token)
-            coEvery { dataSource.saveFcmToken(request) } returns Result.success(Unit)
+            coEvery { dataSource.saveFcmToken(request) } returns BottariResult.Success(Unit)
 
             // when
             val result = repository.saveFcmToken(token)
 
             // then
-            result.shouldBeSuccess()
+            result.shouldBeInstanceOf<BottariResult.Success<Unit>>()
 
             // verify
             coVerify(exactly = 1) { dataSource.saveFcmToken(request) }
@@ -61,12 +61,15 @@ class FcmRepositoryTest {
             val token = "token"
             val request = FcmTokenSaveRequest(token)
             val exception = HttpException(Response.error<Unit>(404, errorResponseBody))
-            coEvery { dataSource.saveFcmToken(request) } returns Result.failure(exception)
+            coEvery { dataSource.saveFcmToken(request) } returns
+                BottariResult.NetworkError(
+                    exception,
+                )
 
             // when
             val result = repository.saveFcmToken(token)
 
             // then
-            result.shouldBeFailure { error -> error shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
         }
 }

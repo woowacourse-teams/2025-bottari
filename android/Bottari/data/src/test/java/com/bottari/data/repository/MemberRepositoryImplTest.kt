@@ -5,12 +5,14 @@ import com.bottari.data.model.remote.member.MemberRegisterCheckResponse
 import com.bottari.data.model.remote.member.MemberRegisterRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.model.member.Nickname
+import com.bottari.domain.model.member.RegisteredMember
 import com.bottari.domain.repository.MemberRepository
-import io.kotest.assertions.assertSoftly
-import io.kotest.matchers.result.shouldBeFailure
-import io.kotest.matchers.result.shouldBeSuccess
+import io.kotest.assertions.fail
+import io.kotest.assertions.failure
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -43,7 +45,7 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val request = MemberRegisterRequest("ssaid", "token")
-            coEvery { remoteDataSource.registerMember(request) } returns Result.success(1)
+            coEvery { remoteDataSource.registerMember(request) } returns BottariResult.Success(1)
             coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.success("ssaid")
             coEvery { userInfoLocalDataSource.saveMemberId(1) } returns Result.success(Unit)
 
@@ -51,7 +53,7 @@ class MemberRepositoryImplTest {
             val result = repository.registerMember("token")
 
             // then
-            result.shouldBeSuccess()
+            result.shouldBeInstanceOf<BottariResult.Success<Long>> { success -> success.data shouldBe 1 }
 
             // verify
             coVerify(exactly = 1) { remoteDataSource.registerMember(request) }
@@ -64,14 +66,17 @@ class MemberRepositoryImplTest {
             // given
             val request = MemberRegisterRequest("ssaid", "token")
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
-            coEvery { remoteDataSource.registerMember(request) } returns Result.failure(exception)
+            coEvery { remoteDataSource.registerMember(request) } returns
+                BottariResult.NetworkError(
+                    exception,
+                )
             coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.success("ssaid")
 
             // when
             val result = repository.registerMember("token")
 
             // then
-            result.shouldBeFailure { it shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { remoteDataSource.registerMember(request) }
@@ -84,13 +89,16 @@ class MemberRepositoryImplTest {
             // given
             val newNickname = Nickname("nickname")
             val request = MemberNicknameSaveRequest("nickname")
-            coEvery { remoteDataSource.saveMemberNickname(request) } returns Result.success(Unit)
+            coEvery { remoteDataSource.saveMemberNickname(request) } returns
+                BottariResult.Success(
+                    Unit,
+                )
 
             // when
             val result = repository.saveMemberNickname(newNickname)
 
             // then
-            result.shouldBeSuccess()
+            result.shouldBeInstanceOf<BottariResult.Success<Unit>>()
 
             // verify
             coVerify(exactly = 1) { remoteDataSource.saveMemberNickname(request) }
@@ -105,13 +113,13 @@ class MemberRepositoryImplTest {
             val request = MemberNicknameSaveRequest("nickname")
             val httpException = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { remoteDataSource.saveMemberNickname(request) } returns
-                Result.failure(httpException)
+                BottariResult.NetworkError(httpException)
 
             // when
             val result = repository.saveMemberNickname(newNickname)
 
             // then
-            result.shouldBeFailure { it shouldBe httpException }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe httpException }
 
             // verify
             coVerify(exactly = 1) { remoteDataSource.saveMemberNickname(request) }
@@ -123,18 +131,20 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val response = MemberRegisterCheckResponse(true, 1, "test")
-            coEvery { remoteDataSource.checkRegisteredMember() } returns Result.success(response)
+            coEvery { remoteDataSource.checkRegisteredMember() } returns
+                BottariResult.Success(
+                    response,
+                )
             coEvery { userInfoLocalDataSource.saveMemberId(1) } returns Result.success(Unit)
 
             // when
             val result = repository.checkRegisteredMember()
 
             // then
-            assertSoftly(result) {
-                shouldBeSuccess()
-                getOrThrow().isRegistered shouldBe true
-                getOrThrow().id shouldBe 1
-                getOrThrow().name shouldBe "test"
+            result.shouldBeInstanceOf<BottariResult.Success<RegisteredMember>> { success ->
+                success.data.isRegistered shouldBe true
+                success.data.id shouldBe 1
+                success.data.name shouldBe "test"
             }
 
             // verify
@@ -147,17 +157,19 @@ class MemberRepositoryImplTest {
         runTest {
             // given
             val response = MemberRegisterCheckResponse(false, 1, "test")
-            coEvery { remoteDataSource.checkRegisteredMember() } returns Result.success(response)
+            coEvery { remoteDataSource.checkRegisteredMember() } returns
+                BottariResult.Success(
+                    response,
+                )
 
             // when
             val result = repository.checkRegisteredMember()
 
             // then
-            assertSoftly(result) {
-                shouldBeSuccess()
-                getOrThrow().isRegistered shouldBe false
-                getOrThrow().id shouldBe 1
-                getOrThrow().name shouldBe "test"
+            result.shouldBeInstanceOf<BottariResult.Success<RegisteredMember>> { success ->
+                success.data.isRegistered shouldBe false
+                success.data.id shouldBe 1
+                success.data.name shouldBe "test"
             }
 
             // verify
@@ -176,10 +188,7 @@ class MemberRepositoryImplTest {
             val result = repository.getInstallationId()
 
             // then
-            assertSoftly(result) {
-                shouldBeSuccess()
-                getOrThrow() shouldBe memberId
-            }
+            result.shouldBeInstanceOf<BottariResult.Success<String>> { success -> success.data shouldBe memberId }
 
             // verify
             coVerify(exactly = 1) { userInfoLocalDataSource.getInstallationId() }
@@ -197,7 +206,7 @@ class MemberRepositoryImplTest {
             val result = repository.getInstallationId()
 
             // then
-            result.shouldBeFailure { error -> error shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { userInfoLocalDataSource.getInstallationId() }

@@ -4,12 +4,15 @@ import com.bottari.data.source.remote.NotificationLocalDataSource
 import com.bottari.data.testFixture.NOTIFICATION_ENTITIES_FIXTURE
 import com.bottari.data.testFixture.NOTIFICATION_ENTITY_FIXTURE
 import com.bottari.data.testFixture.NOTIFICATION_FIXTURE
+import com.bottari.domain.model.exception.BottariResult
+import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.NotificationRepository
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -42,9 +45,8 @@ class NotificationRepositoryImplTest {
             val result = repository.getNotifications()
 
             // then
-            assertSoftly(result) {
-                shouldBeSuccess()
-                getOrThrow().shouldContain(NOTIFICATION_FIXTURE)
+            result.shouldBeInstanceOf<BottariResult.Success<List<Notification>>> { success ->
+                success.data.shouldContain(NOTIFICATION_FIXTURE)
             }
 
             // verify
@@ -63,12 +65,7 @@ class NotificationRepositoryImplTest {
             val result = repository.getNotifications()
 
             // then
-            result.shouldBeFailure { error ->
-                assertSoftly(error) {
-                    shouldBe(exception)
-                    message shouldBe "[ERROR] 알람 조회에 실패했습니다."
-                }
-            }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.getNotifications() }
@@ -86,7 +83,7 @@ class NotificationRepositoryImplTest {
             val result = repository.saveNotification(NOTIFICATION_FIXTURE)
 
             // then
-            result.shouldBeSuccess()
+            result.shouldBeInstanceOf<BottariResult.Success<Unit>>()
 
             // verify
             coVerify(exactly = 1) { dataSource.saveNotification(NOTIFICATION_ENTITY_FIXTURE) }
@@ -105,12 +102,7 @@ class NotificationRepositoryImplTest {
             val result = repository.saveNotification(NOTIFICATION_FIXTURE)
 
             // then
-            result.shouldBeFailure { error ->
-                assertSoftly(error) {
-                    shouldBe(exception)
-                    message shouldBe "[ERROR] 알람 저장에 실패했습니다."
-                }
-            }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
         }
 
     @DisplayName("알람 삭제에 성공하면 Success를 반환한다")
@@ -124,7 +116,7 @@ class NotificationRepositoryImplTest {
             val result = repository.deleteNotification(1L)
 
             // then
-            result.shouldBeSuccess()
+            result.shouldBeInstanceOf<BottariResult.Success<Unit>>()
 
             // verify
             coVerify(exactly = 1) { dataSource.deleteNotification(1L) }
@@ -142,9 +134,7 @@ class NotificationRepositoryImplTest {
             val result = repository.deleteNotification(1L)
 
             // then
-            result.shouldBeFailure { error ->
-                error shouldBe exception
-            }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.deleteNotification(1L) }

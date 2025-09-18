@@ -2,10 +2,10 @@ package com.bottari.data.repository
 
 import androidx.datastore.core.IOException
 import com.bottari.data.source.local.AppConfigDataSource
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.AppConfigRepository
-import io.kotest.matchers.result.shouldBeFailure
-import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -36,7 +36,7 @@ class AppConfigRepositoryImplTest {
             val result = repository.savePermissionFlag(flag)
 
             // then
-            result.shouldBeSuccess()
+            result.shouldBeInstanceOf<BottariResult.Success<Unit>>()
 
             // verify
             coVerify(exactly = 1) { dataSource.savePermissionFlag(flag) }
@@ -55,7 +55,7 @@ class AppConfigRepositoryImplTest {
             val result = repository.savePermissionFlag(flag)
 
             // then
-            result.shouldBeFailure { it shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { it.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.savePermissionFlag(flag) }
@@ -73,9 +73,7 @@ class AppConfigRepositoryImplTest {
             val result = repository.getPermissionFlag()
 
             // then
-            result.shouldBeSuccess {
-                it shouldBe flag
-            }
+            result.shouldBeInstanceOf<BottariResult.Success<Boolean>>()
 
             // verify
             coVerify(exactly = 1) { dataSource.getPermissionFlag() }
@@ -93,9 +91,7 @@ class AppConfigRepositoryImplTest {
             val result = repository.getPermissionFlag()
 
             // then
-            result.shouldBeFailure {
-                it shouldBe exception
-            }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { it.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.getPermissionFlag() }

@@ -2,9 +2,10 @@ package com.bottari.data.repository
 
 import com.bottari.data.model.remote.report.TemplateReportRequest
 import com.bottari.data.source.remote.ReportRemoteDataSource
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.ReportRepository
-import io.kotest.matchers.result.shouldBeFailure
-import io.kotest.matchers.result.shouldBeSuccess
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -38,13 +39,13 @@ class ReportRepositoryImplTest {
 
             coEvery {
                 remoteDataSource.reportTemplate(templateId, request)
-            } returns Result.success(Unit)
+            } returns BottariResult.Success(Unit)
 
             // when
             val result = repository.reportTemplate(templateId, reason)
 
             // then
-            result.shouldBeSuccess()
+            result.shouldBeInstanceOf<BottariResult.Success<Unit>>()
 
             // verify
             coVerify(exactly = 1) { remoteDataSource.reportTemplate(templateId, request) }
@@ -68,13 +69,13 @@ class ReportRepositoryImplTest {
 
             coEvery {
                 remoteDataSource.reportTemplate(templateId, request)
-            } returns Result.failure(httpException)
+            } returns BottariResult.NetworkError(httpException)
 
             // when
             val result = repository.reportTemplate(templateId, reason)
 
             // then
-            result.shouldBeFailure<HttpException>()
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe httpException }
 
             // verify
             coVerify(exactly = 1) { remoteDataSource.reportTemplate(templateId, request) }

@@ -4,11 +4,12 @@ import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateReque
 import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
 import com.bottari.data.testFixture.fetchBottariTemplateResponseListFixture
+import com.bottari.domain.model.bottari.template.BottariTemplate
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.BottariTemplateRepository
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.result.shouldBeFailure
-import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -41,7 +42,7 @@ class BottariTemplateRepositoryImplTest {
         runTest {
             // given
             coEvery { remoteDataSource.fetchBottariTemplates(null) } returns
-                Result.success(
+                BottariResult.Success(
                     successResponse(),
                 )
 
@@ -49,10 +50,10 @@ class BottariTemplateRepositoryImplTest {
             val result = repository.fetchBottariTemplates(null)
 
             // then
-            result.shouldBeSuccess {
-                it shouldHaveSize 2
-                it[0].title shouldBe "template1"
-                it[1].title shouldBe "template2"
+            result.shouldBeInstanceOf<BottariResult.Success<List<BottariTemplate>>> { success ->
+                success.data shouldHaveSize 2
+                success.data[0].title shouldBe "template1"
+                success.data[1].title shouldBe "template2"
             }
 
             // verify
@@ -66,7 +67,7 @@ class BottariTemplateRepositoryImplTest {
             // given
             val exception = RuntimeException("Network error")
             coEvery { remoteDataSource.fetchBottariTemplates("검색어") } returns
-                Result.failure(
+                BottariResult.NetworkError(
                     exception,
                 )
 
@@ -74,7 +75,7 @@ class BottariTemplateRepositoryImplTest {
             val result = repository.fetchBottariTemplates("검색어")
 
             // then
-            result.shouldBeFailure { it shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { it.throwable shouldBe exception }
 
             // verify
             coVerify { remoteDataSource.fetchBottariTemplates("검색어") }
@@ -88,13 +89,15 @@ class BottariTemplateRepositoryImplTest {
             val expectedId = 123L
             coEvery {
                 remoteDataSource.createBottariTemplate(match(createRequestMatcher()))
-            } returns Result.success(expectedId)
+            } returns BottariResult.Success(expectedId)
 
             // when
             val result = repository.createBottariTemplate(title, items)
 
             // then
-            result.shouldBeSuccess { it shouldBe expectedId }
+            result.shouldBeInstanceOf<BottariResult.Success<Long>> { success ->
+                success.data shouldBe expectedId
+            }
 
             // verify
             coVerify {
@@ -110,13 +113,13 @@ class BottariTemplateRepositoryImplTest {
             val exception = IllegalStateException("Creation failed")
             coEvery {
                 remoteDataSource.createBottariTemplate(match(createRequestMatcher()))
-            } returns Result.failure(exception)
+            } returns BottariResult.NetworkError(exception)
 
             // when
             val result = repository.createBottariTemplate(title, items)
 
             // then
-            result.shouldBeFailure { it shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify {
@@ -132,15 +135,15 @@ class BottariTemplateRepositoryImplTest {
             val bottariId = 100L
             val response = fetchBottariTemplateResponseListFixture().first()
             coEvery { remoteDataSource.fetchBottariTemplateDetail(bottariId) } returns
-                Result.success(
-                    response,
-                )
+                BottariResult.Success(response)
 
             // when
             val result = repository.fetchBottariTemplate(bottariId)
 
             // then
-            result.shouldBeSuccess { it.title shouldBe "template1" }
+            result.shouldBeInstanceOf<BottariResult.Success<BottariTemplate>> { success ->
+                success.data.title shouldBe "template1"
+            }
 
             // verify
             coVerify { remoteDataSource.fetchBottariTemplateDetail(bottariId) }
@@ -154,15 +157,13 @@ class BottariTemplateRepositoryImplTest {
             val bottariId = 100L
             val exception = IllegalArgumentException("Template not found")
             coEvery { remoteDataSource.fetchBottariTemplateDetail(bottariId) } returns
-                Result.failure(
-                    exception,
-                )
+                BottariResult.NetworkError(exception)
 
             // when
             val result = repository.fetchBottariTemplate(bottariId)
 
             // then
-            result.shouldBeFailure { it shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify { remoteDataSource.fetchBottariTemplateDetail(bottariId) }
@@ -175,15 +176,15 @@ class BottariTemplateRepositoryImplTest {
             // given
             val bottariTemplateId = 1L
             coEvery { remoteDataSource.takeBottariTemplate(bottariTemplateId) } returns
-                Result.success(
-                    bottariTemplateId,
-                )
+                BottariResult.Success(bottariTemplateId)
 
             // when
             val result = repository.takeBottariTemplate(bottariTemplateId)
 
             // then
-            result.shouldBeSuccess { it shouldBe bottariTemplateId }
+            result.shouldBeInstanceOf<BottariResult.Success<Long>> { success ->
+                success.data shouldBe bottariTemplateId
+            }
 
             // verify
             coVerify { remoteDataSource.takeBottariTemplate(bottariTemplateId) }
@@ -214,18 +215,16 @@ class BottariTemplateRepositoryImplTest {
                     ),
                 )
             coEvery { remoteDataSource.fetchMyBottariTemplates() } returns
-                Result.success(
-                    successResponse,
-                )
+                BottariResult.Success(successResponse)
 
             // when
             val result = repository.fetchMyBottariTemplates()
 
             // then
-            result.shouldBeSuccess {
-                it shouldHaveSize 2
-                it[0].title shouldBe "template1"
-                it[1].title shouldBe "template2"
+            result.shouldBeInstanceOf<BottariResult.Success<List<BottariTemplate>>> { success ->
+                success.data shouldHaveSize 2
+                success.data[0].title shouldBe "template1"
+                success.data[1].title shouldBe "template2"
             }
 
             // verify
@@ -238,13 +237,16 @@ class BottariTemplateRepositoryImplTest {
         runTest {
             // given
             val exception = Exception("Unknown error")
-            coEvery { remoteDataSource.fetchMyBottariTemplates() } returns Result.failure(exception)
+            coEvery { remoteDataSource.fetchMyBottariTemplates() } returns
+                BottariResult.NetworkError(
+                    exception,
+                )
 
             // when
             val result = repository.fetchMyBottariTemplates()
 
             // then
-            result.shouldBeFailure { it shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify { remoteDataSource.fetchMyBottariTemplates() }
@@ -257,15 +259,13 @@ class BottariTemplateRepositoryImplTest {
             // given
             val templateId = 99L
             coEvery { remoteDataSource.deleteMyBottariTemplate(templateId) } returns
-                Result.success(
-                    Unit,
-                )
+                BottariResult.Success(Unit)
 
             // when
             val result = repository.deleteMyBottariTemplate(templateId)
 
             // then
-            result.shouldBeSuccess { it shouldBe Unit }
+            result.shouldBeInstanceOf<BottariResult.Success<Unit>>()
 
             // verify
             coVerify { remoteDataSource.deleteMyBottariTemplate(templateId) }
@@ -279,15 +279,13 @@ class BottariTemplateRepositoryImplTest {
             val templateId = 99L
             val exception = RuntimeException("Delete failed")
             coEvery { remoteDataSource.deleteMyBottariTemplate(templateId) } returns
-                Result.failure(
-                    exception,
-                )
+                BottariResult.NetworkError(exception)
 
             // when
             val result = repository.deleteMyBottariTemplate(templateId)
 
             // then
-            result.shouldBeFailure { it shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify { remoteDataSource.deleteMyBottariTemplate(templateId) }
