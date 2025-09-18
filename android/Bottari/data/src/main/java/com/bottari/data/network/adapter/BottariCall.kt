@@ -31,7 +31,7 @@ class BottariCall<R>(
                     t: Throwable,
                 ) = callback.onResponse(
                     this@BottariCall,
-                    Response.success(BottariResult.NetworkError(t)),
+                    Response.success(BottariResult.ApiError(t)),
                 )
             },
         )
@@ -61,26 +61,26 @@ class BottariCall<R>(
             201 -> {
                 val createdId =
                     extractIdFromHeader()
-                        ?: return BottariResult.ApiError(BottariException.NotFoundCreatedIdException)
+                        ?: return BottariResult.ApiException(BottariException.NotFoundCreatedIdException)
                 BottariResult.Success(createdId as R)
             }
 
             204 -> BottariResult.Success(Unit as R)
 
-            else -> BottariResult.ApiError(BottariException.UnknownException)
+            else -> BottariResult.ApiError()
         }
     }
 
     private fun Response<R>.toApiErrorResult(): BottariResult<R> {
         val errorResponse =
             ErrorResponse.parseErrorResponse(errorBody())
-                ?: return BottariResult.ApiError(BottariException.UnknownException)
+                ?: return BottariResult.ApiError()
 
         return runCatching {
             val errorCode = ApiErrorCode.valueOf(errorResponse.title)
-            BottariResult.ApiError<R>(errorCode.toException())
+            BottariResult.ApiException<R>(errorCode.toException())
         }.getOrElse {
-            BottariResult.ApiError(BottariException.UnknownException)
+            BottariResult.ApiError()
         }
     }
 

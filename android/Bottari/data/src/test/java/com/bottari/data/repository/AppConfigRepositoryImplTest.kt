@@ -55,7 +55,7 @@ class AppConfigRepositoryImplTest {
             val result = repository.savePermissionFlag(flag)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { it.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { it.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.savePermissionFlag(flag) }
@@ -91,7 +91,7 @@ class AppConfigRepositoryImplTest {
             val result = repository.getPermissionFlag()
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { it.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { it.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.getPermissionFlag() }

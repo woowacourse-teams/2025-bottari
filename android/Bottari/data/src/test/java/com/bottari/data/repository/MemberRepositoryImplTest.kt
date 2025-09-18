@@ -9,8 +9,6 @@ import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.member.RegisteredMember
 import com.bottari.domain.repository.MemberRepository
-import io.kotest.assertions.fail
-import io.kotest.assertions.failure
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
@@ -67,7 +65,7 @@ class MemberRepositoryImplTest {
             val request = MemberRegisterRequest("ssaid", "token")
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { remoteDataSource.registerMember(request) } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
             coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.success("ssaid")
@@ -76,7 +74,7 @@ class MemberRepositoryImplTest {
             val result = repository.registerMember("token")
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { remoteDataSource.registerMember(request) }
@@ -113,13 +111,13 @@ class MemberRepositoryImplTest {
             val request = MemberNicknameSaveRequest("nickname")
             val httpException = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { remoteDataSource.saveMemberNickname(request) } returns
-                BottariResult.NetworkError(httpException)
+                BottariResult.ApiError(httpException)
 
             // when
             val result = repository.saveMemberNickname(newNickname)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe httpException }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe httpException }
 
             // verify
             coVerify(exactly = 1) { remoteDataSource.saveMemberNickname(request) }
@@ -206,7 +204,7 @@ class MemberRepositoryImplTest {
             val result = repository.getInstallationId()
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { userInfoLocalDataSource.getInstallationId() }

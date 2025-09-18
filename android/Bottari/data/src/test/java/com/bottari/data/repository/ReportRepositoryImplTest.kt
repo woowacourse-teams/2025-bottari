@@ -69,13 +69,13 @@ class ReportRepositoryImplTest {
 
             coEvery {
                 remoteDataSource.reportTemplate(templateId, request)
-            } returns BottariResult.NetworkError(httpException)
+            } returns BottariResult.ApiError(httpException)
 
             // when
             val result = repository.reportTemplate(templateId, reason)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe httpException }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe httpException }
 
             // verify
             coVerify(exactly = 1) { remoteDataSource.reportTemplate(templateId, request) }

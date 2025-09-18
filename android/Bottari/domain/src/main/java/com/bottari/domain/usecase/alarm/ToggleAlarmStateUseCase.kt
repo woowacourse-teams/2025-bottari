@@ -20,7 +20,7 @@ class ToggleAlarmStateUseCase(
     ): BottariResult<Unit> {
         val alarmId =
             alarm.id
-                ?: return BottariResult.ApiError(BottariException.AlarmException.NotFoundException)
+                ?: return BottariResult.ApiException(BottariException.AlarmException.NotFoundException)
         val toggleAlarmResult = toggleAlarmState(isActive, alarmId)
         return toggleAlarmResult.mapCatching {
             notificationRepository.saveNotification(

@@ -4,8 +4,6 @@ import com.bottari.data.model.remote.member.MemberNicknameSaveRequest
 import com.bottari.data.model.remote.member.MemberRegisterRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
-import com.bottari.domain.extension.map
-import com.bottari.domain.extension.mapCatching
 import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.model.exception.getOrConvert
 import com.bottari.domain.model.exception.getOrThrow

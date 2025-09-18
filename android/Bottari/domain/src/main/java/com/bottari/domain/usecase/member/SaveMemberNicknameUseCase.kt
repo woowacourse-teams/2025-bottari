@@ -1,6 +1,5 @@
 package com.bottari.domain.usecase.member
 
-import com.bottari.domain.extension.mapCatching
 import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.model.exception.getOrThrow
 import com.bottari.domain.model.exception.toBottariResult

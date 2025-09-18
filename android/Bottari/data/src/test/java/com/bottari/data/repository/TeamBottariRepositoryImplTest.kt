@@ -37,8 +37,6 @@ import com.bottari.domain.model.team.member.TeamMember
 import com.bottari.domain.model.team.member.TeamMemberStatus
 import com.bottari.domain.model.team.member.TeamStatus
 import com.bottari.domain.repository.TeamBottariRepository
-import io.kotest.matchers.result.shouldBeFailure
-import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
@@ -94,7 +92,7 @@ class TeamBottariRepositoryImplTest {
             val request = TeamBottariCreateRequest(title)
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { dataSource.createBottari(request) } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
 
@@ -102,7 +100,7 @@ class TeamBottariRepositoryImplTest {
             val result = repository.createTeamBottari(title)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.createBottari(request) }
@@ -141,13 +139,13 @@ class TeamBottariRepositoryImplTest {
             // given
             val id = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
-            coEvery { dataSource.fetchTeamMembers(id) } returns BottariResult.NetworkError(exception)
+            coEvery { dataSource.fetchTeamMembers(id) } returns BottariResult.ApiError(exception)
 
             // when
             val result = repository.fetchTeamMembers(id)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamMembers(id) }
@@ -182,13 +180,13 @@ class TeamBottariRepositoryImplTest {
         runTest {
             // given
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
-            coEvery { dataSource.fetchTeamBottaries() } returns BottariResult.NetworkError(exception)
+            coEvery { dataSource.fetchTeamBottaries() } returns BottariResult.ApiError(exception)
 
             // when
             val result = repository.fetchTeamBottaries()
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamBottaries() }
@@ -221,13 +219,13 @@ class TeamBottariRepositoryImplTest {
             val teamBottariId = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { dataSource.fetchTeamBottariDetail(teamBottariId) } returns
-                BottariResult.NetworkError(exception)
+                BottariResult.ApiError(exception)
 
             // when
             val result = repository.fetchTeamBottariDetail(teamBottariId)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamBottariDetail(teamBottariId) }
@@ -265,13 +263,13 @@ class TeamBottariRepositoryImplTest {
             // given
             val id = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
-            coEvery { dataSource.fetchTeamBottari(id) } returns BottariResult.NetworkError(exception)
+            coEvery { dataSource.fetchTeamBottari(id) } returns BottariResult.ApiError(exception)
 
             // when
             val result = repository.fetchTeamBottari(id)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamBottari(id) }
@@ -308,7 +306,7 @@ class TeamBottariRepositoryImplTest {
             val id = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { dataSource.fetchTeamMembersStatus(id) } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
 
@@ -316,7 +314,7 @@ class TeamBottariRepositoryImplTest {
             val result = repository.fetchTeamMembersStatus(id)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamMembersStatus(id) }
@@ -361,13 +359,13 @@ class TeamBottariRepositoryImplTest {
                     teamBottariId,
                     memberId,
                 )
-            } returns BottariResult.NetworkError(exception)
+            } returns BottariResult.ApiError(exception)
 
             // when
             val result = repository.sendRemindByMemberMessage(teamBottariId, memberId)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) {
@@ -414,13 +412,13 @@ class TeamBottariRepositoryImplTest {
                     id,
                     request,
                 )
-            } returns BottariResult.NetworkError(exception)
+            } returns BottariResult.ApiError(exception)
 
             // when
             val result = repository.deleteTeamBottariItem(id, teamBottariItemType)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.deleteTeamBottariItem(id, request) }
@@ -454,7 +452,7 @@ class TeamBottariRepositoryImplTest {
             val request = TeamBottariJoinRequest(inviteCode)
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { dataSource.joinTeamBottari(request) } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
 
@@ -462,7 +460,7 @@ class TeamBottariRepositoryImplTest {
             val result = repository.joinTeamBottari(inviteCode)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.joinTeamBottari(request) }
@@ -500,7 +498,7 @@ class TeamBottariRepositoryImplTest {
             val teamBottariId = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { dataSource.fetchTeamBottariMembers(teamBottariId) } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
 
@@ -508,7 +506,7 @@ class TeamBottariRepositoryImplTest {
             val result = repository.fetchTeamBottariMembers(teamBottariId)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamBottariMembers(teamBottariId) }
@@ -557,13 +555,13 @@ class TeamBottariRepositoryImplTest {
                     teamBottariId,
                     PersonalItemsCreateRequest(itemName),
                 )
-            } returns BottariResult.NetworkError(exception)
+            } returns BottariResult.ApiError(exception)
 
             // when
             val result = repository.createTeamBottariPersonalItem(teamBottariId, itemName)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) {
@@ -618,13 +616,13 @@ class TeamBottariRepositoryImplTest {
                     teamBottariId,
                     SharedItemsCreateRequest(itemName),
                 )
-            } returns BottariResult.NetworkError(exception)
+            } returns BottariResult.ApiError(exception)
 
             // when
             val result = repository.createTeamBottariSharedItem(teamBottariId, itemName)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) {
@@ -680,14 +678,14 @@ class TeamBottariRepositoryImplTest {
                     teamBottariId,
                     AssignedItemsCreateRequest(itemName, listOf(1L)),
                 )
-            } returns BottariResult.NetworkError(exception)
+            } returns BottariResult.ApiError(exception)
 
             // when
             val result =
                 repository.createTeamBottariAssignedItem(teamBottariId, itemName, listOf(1L))
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) {
@@ -735,7 +733,7 @@ class TeamBottariRepositoryImplTest {
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
 
             coEvery { dataSource.fetchTeamPersonalItems(teamBottariId) } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
 
@@ -743,7 +741,7 @@ class TeamBottariRepositoryImplTest {
             val result = repository.fetchTeamPersonalItems(teamBottariId)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamPersonalItems(teamBottariId) }
@@ -784,7 +782,7 @@ class TeamBottariRepositoryImplTest {
             val teamBottariId = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { dataSource.fetchTeamSharedItems(teamBottariId) } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
 
@@ -792,7 +790,7 @@ class TeamBottariRepositoryImplTest {
             val result = repository.fetchTeamSharedItems(teamBottariId)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamSharedItems(teamBottariId) }
@@ -833,7 +831,7 @@ class TeamBottariRepositoryImplTest {
             val teamBottariId = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { dataSource.fetchTeamAssignedItems(teamBottariId) } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
 
@@ -841,7 +839,7 @@ class TeamBottariRepositoryImplTest {
             val result = repository.fetchTeamAssignedItems(teamBottariId)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.fetchTeamAssignedItems(teamBottariId) }
@@ -903,7 +901,7 @@ class TeamBottariRepositoryImplTest {
                     itemId,
                     SAVE_TEAM_BOTTARI_ASSIGNED_ITEM_REQUEST_FIXTURE,
                 )
-            } returns BottariResult.NetworkError(exception)
+            } returns BottariResult.ApiError(exception)
 
             // when
             val result =
@@ -915,7 +913,7 @@ class TeamBottariRepositoryImplTest {
                 )
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) {
@@ -969,13 +967,13 @@ class TeamBottariRepositoryImplTest {
                     teamBottariId,
                     TeamBottariItemCheckUpdateRequest(type),
                 )
-            } returns BottariResult.NetworkError(exception)
+            } returns BottariResult.ApiError(exception)
 
             // when
             val result = repository.checkBottariItem(teamBottariId, type)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) {
@@ -1011,7 +1009,7 @@ class TeamBottariRepositoryImplTest {
             val teamBottariId = 1L
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
             coEvery { dataSource.exitTeamBottari(teamBottariId) } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
 
@@ -1019,7 +1017,7 @@ class TeamBottariRepositoryImplTest {
             val result = repository.exitTeamBottari(teamBottariId)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.exitTeamBottari(teamBottariId) }

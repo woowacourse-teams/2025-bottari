@@ -125,7 +125,7 @@ class BottariRepositoryImplTest {
             // given
             val exception = RuntimeException("불러오기 실패")
             coEvery { remoteDataSource.fetchBottaries() } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
 
@@ -133,7 +133,7 @@ class BottariRepositoryImplTest {
             val result = repository.fetchBottaries()
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { it.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { it.throwable shouldBe exception }
 
             // verify
             coVerify { remoteDataSource.fetchBottaries() }
@@ -176,7 +176,7 @@ class BottariRepositoryImplTest {
             val id = 1L
             val exception = RuntimeException("단건 조회 실패")
             coEvery { remoteDataSource.fetchBottariDetail(id) } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
 
@@ -184,7 +184,7 @@ class BottariRepositoryImplTest {
             val result = repository.fetchBottariDetail(id)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { it.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { it.throwable shouldBe exception }
 
             // verify
             coVerify { remoteDataSource.fetchBottariDetail(id) }
@@ -199,13 +199,13 @@ class BottariRepositoryImplTest {
             val exception = RuntimeException("생성 실패")
             coEvery {
                 remoteDataSource.createBottari(BottariCreateRequest(title))
-            } returns BottariResult.NetworkError(exception)
+            } returns BottariResult.ApiError(exception)
 
             // when
             val result = repository.createBottari(title)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { it.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { it.throwable shouldBe exception }
 
             // verify
             coVerify { remoteDataSource.createBottari(BottariCreateRequest(title)) }
@@ -224,13 +224,13 @@ class BottariRepositoryImplTest {
                     id,
                     BottariTitleUpdateRequest(title),
                 )
-            } returns BottariResult.NetworkError(exception)
+            } returns BottariResult.ApiError(exception)
 
             // when
             val result = repository.saveBottariTitle(id, title)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { it.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { it.throwable shouldBe exception }
 
             // verify
             coVerify {
@@ -250,13 +250,13 @@ class BottariRepositoryImplTest {
             val exception = RuntimeException("삭제 실패")
             coEvery {
                 remoteDataSource.deleteBottari(id)
-            } returns BottariResult.NetworkError(exception)
+            } returns BottariResult.ApiError(exception)
 
             // when
             val result = repository.deleteBottari(id)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { it.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { it.throwable shouldBe exception }
 
             // verify
             coVerify { remoteDataSource.deleteBottari(id) }

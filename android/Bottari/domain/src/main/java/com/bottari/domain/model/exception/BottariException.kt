@@ -408,9 +408,4 @@ sealed class BottariException(
     data object NotFoundCreatedIdException : BottariException("생성된 ID를 찾을 수 없습니다.") {
         private fun readResolve(): Any = NotFoundCreatedIdException
     }
-
-    /** 정의되지 않은 알 수 없는 예외가 발생했을 때 사용됩니다. */
-    data object UnknownException : BottariException("알 수 없는 오류가 발생했습니다.") {
-        private fun readResolve(): Any = UnknownException
-    }
 }

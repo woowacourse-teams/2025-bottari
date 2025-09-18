@@ -7,10 +7,7 @@ import com.bottari.data.testFixture.NOTIFICATION_FIXTURE
 import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.NotificationRepository
-import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.result.shouldBeFailure
-import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
@@ -65,7 +62,7 @@ class NotificationRepositoryImplTest {
             val result = repository.getNotifications()
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.getNotifications() }
@@ -102,7 +99,7 @@ class NotificationRepositoryImplTest {
             val result = repository.saveNotification(NOTIFICATION_FIXTURE)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
         }
 
     @DisplayName("알람 삭제에 성공하면 Success를 반환한다")
@@ -134,7 +131,7 @@ class NotificationRepositoryImplTest {
             val result = repository.deleteNotification(1L)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify(exactly = 1) { dataSource.deleteNotification(1L) }

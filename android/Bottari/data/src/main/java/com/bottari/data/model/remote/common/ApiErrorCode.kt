@@ -3,8 +3,6 @@ package com.bottari.data.model.remote.common
 import com.bottari.domain.model.exception.BottariException
 
 enum class ApiErrorCode {
-    UNKNOWN,
-
     // ===== MEMBER 관련 =====
     MEMBER_NOT_FOUND,
     MEMBER_NAME_ALREADY_EXISTS,
@@ -162,7 +160,5 @@ enum class ApiErrorCode {
 
             FCM_TOKEN_NOT_FOUND -> BottariException.FcmException.NotFoundException
             FCM_INVALID_TOKEN -> BottariException.FcmException.InvalidTokenException
-
-            UNKNOWN -> BottariException.UnknownException
         }
 }

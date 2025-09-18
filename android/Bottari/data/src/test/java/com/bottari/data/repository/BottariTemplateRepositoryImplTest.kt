@@ -67,7 +67,7 @@ class BottariTemplateRepositoryImplTest {
             // given
             val exception = RuntimeException("Network error")
             coEvery { remoteDataSource.fetchBottariTemplates("검색어") } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
 
@@ -75,7 +75,7 @@ class BottariTemplateRepositoryImplTest {
             val result = repository.fetchBottariTemplates("검색어")
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { it.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { it.throwable shouldBe exception }
 
             // verify
             coVerify { remoteDataSource.fetchBottariTemplates("검색어") }
@@ -113,13 +113,13 @@ class BottariTemplateRepositoryImplTest {
             val exception = IllegalStateException("Creation failed")
             coEvery {
                 remoteDataSource.createBottariTemplate(match(createRequestMatcher()))
-            } returns BottariResult.NetworkError(exception)
+            } returns BottariResult.ApiError(exception)
 
             // when
             val result = repository.createBottariTemplate(title, items)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify {
@@ -157,13 +157,13 @@ class BottariTemplateRepositoryImplTest {
             val bottariId = 100L
             val exception = IllegalArgumentException("Template not found")
             coEvery { remoteDataSource.fetchBottariTemplateDetail(bottariId) } returns
-                BottariResult.NetworkError(exception)
+                BottariResult.ApiError(exception)
 
             // when
             val result = repository.fetchBottariTemplate(bottariId)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify { remoteDataSource.fetchBottariTemplateDetail(bottariId) }
@@ -238,7 +238,7 @@ class BottariTemplateRepositoryImplTest {
             // given
             val exception = Exception("Unknown error")
             coEvery { remoteDataSource.fetchMyBottariTemplates() } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
 
@@ -246,7 +246,7 @@ class BottariTemplateRepositoryImplTest {
             val result = repository.fetchMyBottariTemplates()
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify { remoteDataSource.fetchMyBottariTemplates() }
@@ -279,13 +279,13 @@ class BottariTemplateRepositoryImplTest {
             val templateId = 99L
             val exception = RuntimeException("Delete failed")
             coEvery { remoteDataSource.deleteMyBottariTemplate(templateId) } returns
-                BottariResult.NetworkError(exception)
+                BottariResult.ApiError(exception)
 
             // when
             val result = repository.deleteMyBottariTemplate(templateId)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
 
             // verify
             coVerify { remoteDataSource.deleteMyBottariTemplate(templateId) }

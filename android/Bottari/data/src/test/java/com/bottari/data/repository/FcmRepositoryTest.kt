@@ -62,7 +62,7 @@ class FcmRepositoryTest {
             val request = FcmTokenSaveRequest(token)
             val exception = HttpException(Response.error<Unit>(404, errorResponseBody))
             coEvery { dataSource.saveFcmToken(request) } returns
-                BottariResult.NetworkError(
+                BottariResult.ApiError(
                     exception,
                 )
 
@@ -70,6 +70,6 @@ class FcmRepositoryTest {
             val result = repository.saveFcmToken(token)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { failure -> failure.throwable shouldBe exception }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { failure -> failure.throwable shouldBe exception }
         }
 }

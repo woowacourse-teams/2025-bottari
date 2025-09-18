@@ -63,13 +63,13 @@ class AlarmRepositoryImplTest {
             // given
             val expectedException = RuntimeException("알람 활성화 실패")
             coEvery { remoteDataSource.activeAlarmState(1L) } returns
-                BottariResult.NetworkError(expectedException)
+                BottariResult.ApiError(expectedException)
 
             // when
             val result = repository.activeAlarm(1L)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { it.throwable shouldBe expectedException }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { it.throwable shouldBe expectedException }
 
             // verify
             coVerify { remoteDataSource.activeAlarmState(1L) }
@@ -82,13 +82,13 @@ class AlarmRepositoryImplTest {
             // given
             val expectedException = RuntimeException("알람 비활성화 실패")
             coEvery { remoteDataSource.inactiveAlarmState(1L) } returns
-                BottariResult.NetworkError(expectedException)
+                BottariResult.ApiError(expectedException)
 
             // when
             val result = repository.inactiveAlarm(1L)
 
             // then
-            result.shouldBeInstanceOf<BottariResult.NetworkError<Throwable>> { it.throwable shouldBe expectedException }
+            result.shouldBeInstanceOf<BottariResult.ApiError<Throwable>> { it.throwable shouldBe expectedException }
 
             // verify
             coVerify { remoteDataSource.inactiveAlarmState(1L) }
