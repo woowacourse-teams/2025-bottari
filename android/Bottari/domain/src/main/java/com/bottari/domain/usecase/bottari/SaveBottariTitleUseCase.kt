@@ -1,5 +1,6 @@
 package com.bottari.domain.usecase.bottari
 
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.BottariRepository
 
 class SaveBottariTitleUseCase(
@@ -8,5 +9,5 @@ class SaveBottariTitleUseCase(
     suspend operator fun invoke(
         id: Long,
         title: String,
-    ): Result<Unit> = bottariRepository.saveBottariTitle(id, title)
+    ): BottariResult<Unit> = bottariRepository.saveBottariTitle(id, title)
 }

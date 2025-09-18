@@ -2,6 +2,10 @@ package com.bottari.domain.usecase.bottari
 
 import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.BottariState
+import com.bottari.domain.model.exception.BottariResult
+import com.bottari.domain.model.exception.getOrNull
+import com.bottari.domain.model.exception.getOrThrow
+import com.bottari.domain.model.exception.mapCatching
 import com.bottari.domain.repository.BottariRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.supervisorScope
@@ -9,11 +13,10 @@ import kotlinx.coroutines.supervisorScope
 class FetchBottariDetailsUseCase(
     private val bottariRepository: BottariRepository,
 ) {
-    suspend operator fun invoke(): Result<List<Bottari>> =
-        runCatching {
-            val bottaries = bottariRepository.fetchBottaries().getOrThrow()
-            fetchBottariDetailsWithItems(bottaries)
-        }
+    suspend operator fun invoke(): BottariResult<List<Bottari>> =
+        bottariRepository
+            .fetchBottaries()
+            .mapCatching { bottaries -> fetchBottariDetailsWithItems(bottaries) }
 
     private suspend fun fetchBottariDetailsWithItems(bottaries: List<BottariState>): List<Bottari> =
         supervisorScope {
