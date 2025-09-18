@@ -1,11 +1,12 @@
 package com.bottari.domain.usecase.alarm
 
-import com.bottari.domain.extension.flatMap
 import com.bottari.domain.model.alarm.Alarm
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.BottariResult
+import com.bottari.domain.model.exception.mapCatching
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.AlarmRepository
 import com.bottari.domain.repository.NotificationRepository
-import java.lang.IllegalArgumentException
 
 class SaveAlarmUseCase(
     private val alarmRepository: AlarmRepository,
@@ -15,24 +16,17 @@ class SaveAlarmUseCase(
         bottariId: Long,
         bottariTitle: String,
         alarm: Alarm,
-    ): Result<Unit> {
+    ): BottariResult<Unit> {
         val alarmId =
-            alarm.id ?: return Result.failure(IllegalArgumentException(ERROR_REQUIRE_ALARM_ID))
+            alarm.id
+                ?: return BottariResult.ApiError(BottariException.AlarmException.NotFoundException)
 
         return alarmRepository
             .saveAlarm(alarmId, alarm)
-            .flatMap {
+            .mapCatching {
                 notificationRepository.saveNotification(
-                    Notification(
-                        bottariId,
-                        bottariTitle,
-                        alarm,
-                    ),
+                    Notification(bottariId, bottariTitle, alarm),
                 )
             }
-    }
-
-    companion object {
-        private const val ERROR_REQUIRE_ALARM_ID = "[ERROR] 알람 ID가 존재하지 않습니다."
     }
 }

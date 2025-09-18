@@ -1,11 +1,12 @@
 package com.bottari.domain.usecase.alarm
 
-import com.bottari.domain.extension.flatMap
 import com.bottari.domain.model.alarm.Alarm
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.BottariResult
+import com.bottari.domain.model.exception.mapCatching
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.AlarmRepository
 import com.bottari.domain.repository.NotificationRepository
-import java.lang.Exception
 
 class ToggleAlarmStateUseCase(
     private val alarmRepository: AlarmRepository,
@@ -16,15 +17,12 @@ class ToggleAlarmStateUseCase(
         bottariTitle: String,
         alarm: Alarm,
         isActive: Boolean,
-    ): Result<Unit> {
-        val alarmId = alarm.id ?: return Result.failure(Exception(ERROR_REQUIRE_ALARM_ID))
-        val toggleAlarmResult =
-            if (isActive) {
-                alarmRepository.activeAlarm(alarmId)
-            } else {
-                alarmRepository.inactiveAlarm(alarmId)
-            }
-        return toggleAlarmResult.flatMap {
+    ): BottariResult<Unit> {
+        val alarmId =
+            alarm.id
+                ?: return BottariResult.ApiError(BottariException.AlarmException.NotFoundException)
+        val toggleAlarmResult = toggleAlarmState(isActive, alarmId)
+        return toggleAlarmResult.mapCatching {
             notificationRepository.saveNotification(
                 Notification(
                     bottariId,
@@ -35,7 +33,13 @@ class ToggleAlarmStateUseCase(
         }
     }
 
-    companion object {
-        private const val ERROR_REQUIRE_ALARM_ID = "[ERROR] 알람 ID가 존재하지 않습니다."
-    }
+    private suspend fun toggleAlarmState(
+        isActive: Boolean,
+        alarmId: Long,
+    ): BottariResult<Unit> =
+        if (isActive) {
+            alarmRepository.activeAlarm(alarmId)
+        } else {
+            alarmRepository.inactiveAlarm(alarmId)
+        }
 }
