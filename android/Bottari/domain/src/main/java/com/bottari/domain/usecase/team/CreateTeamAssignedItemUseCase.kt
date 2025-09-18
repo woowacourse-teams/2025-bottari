@@ -9,5 +9,5 @@ class CreateTeamAssignedItemUseCase(
         bottariId: Long,
         name: String,
         teamMemberIds: List<Long>,
-    ): Result<Unit> = teamBottariRepository.createTeamBottariAssignedItem(bottariId, name, teamMemberIds)
+    ) = teamBottariRepository.createTeamBottariAssignedItem(bottariId, name, teamMemberIds)
 }

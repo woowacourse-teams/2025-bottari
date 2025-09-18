@@ -1,5 +1,6 @@
 package com.bottari.domain.usecase.report
 
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.ReportRepository
 
 class ReportTemplateUseCase(
@@ -8,5 +9,5 @@ class ReportTemplateUseCase(
     suspend operator fun invoke(
         bottariTemplateId: Long,
         reason: String,
-    ): Result<Unit> = reportRepository.reportTemplate(bottariTemplateId, reason)
+    ): BottariResult<Unit> = reportRepository.reportTemplate(bottariTemplateId, reason)
 }

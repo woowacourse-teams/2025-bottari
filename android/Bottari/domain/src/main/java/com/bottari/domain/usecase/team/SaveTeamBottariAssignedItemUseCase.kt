@@ -1,5 +1,6 @@
 package com.bottari.domain.usecase.team
 
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.TeamBottariRepository
 
 class SaveTeamBottariAssignedItemUseCase(
@@ -10,7 +11,7 @@ class SaveTeamBottariAssignedItemUseCase(
         assignedItemId: Long,
         name: String,
         assigneeIds: List<Long>,
-    ): Result<Unit> =
+    ): BottariResult<Unit> =
         teamBottariRepository.saveTeamBottariAssignedItem(
             teamBottariId,
             assignedItemId,

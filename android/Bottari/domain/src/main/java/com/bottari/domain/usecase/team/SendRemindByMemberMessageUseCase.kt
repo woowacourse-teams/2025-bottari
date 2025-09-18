@@ -1,5 +1,6 @@
 package com.bottari.domain.usecase.team
 
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.TeamBottariRepository
 
 class SendRemindByMemberMessageUseCase(
@@ -8,5 +9,5 @@ class SendRemindByMemberMessageUseCase(
     suspend operator fun invoke(
         teamBottariId: Long,
         memberId: Long,
-    ): Result<Unit> = teamBottariRepository.sendRemindByMemberMessage(teamBottariId, memberId)
+    ): BottariResult<Unit> = teamBottariRepository.sendRemindByMemberMessage(teamBottariId, memberId)
 }

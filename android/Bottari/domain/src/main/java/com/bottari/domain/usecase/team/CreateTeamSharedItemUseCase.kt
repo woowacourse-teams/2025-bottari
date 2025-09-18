@@ -8,5 +8,5 @@ class CreateTeamSharedItemUseCase(
     suspend operator fun invoke(
         bottariId: Long,
         name: String,
-    ): Result<Unit> = teamBottariRepository.createTeamBottariSharedItem(bottariId, name)
+    ) = teamBottariRepository.createTeamBottariSharedItem(bottariId, name)
 }

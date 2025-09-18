@@ -1,5 +1,6 @@
 package com.bottari.domain.usecase.team
 
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.TeamBottariRepository
 
 class SendRemindByItemUseCase(
@@ -8,5 +9,5 @@ class SendRemindByItemUseCase(
     suspend operator fun invoke(
         id: Long,
         type: String,
-    ): Result<Unit> = teamBottariRepository.sendRemindByItem(id, type)
+    ): BottariResult<Unit> = teamBottariRepository.sendRemindByItem(id, type)
 }

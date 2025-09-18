@@ -1,5 +1,6 @@
 package com.bottari.domain.usecase.template
 
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.BottariTemplateRepository
 
 class CreateBottariTemplateUseCase(
@@ -8,5 +9,5 @@ class CreateBottariTemplateUseCase(
     suspend operator fun invoke(
         title: String,
         items: List<String>,
-    ): Result<Long?> = bottariTemplateRepository.createBottariTemplate(title, items)
+    ): BottariResult<Long> = bottariTemplateRepository.createBottariTemplate(title, items)
 }

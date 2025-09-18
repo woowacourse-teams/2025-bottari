@@ -1,10 +1,11 @@
 package com.bottari.domain.usecase.template
 
 import com.bottari.domain.model.bottari.template.BottariTemplate
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.BottariTemplateRepository
 
 class FetchBottariTemplateDetailUseCase(
     private val bottariTemplateRepository: BottariTemplateRepository,
 ) {
-    suspend operator fun invoke(bottariId: Long): Result<BottariTemplate> = bottariTemplateRepository.fetchBottariTemplate(bottariId)
+    suspend operator fun invoke(bottariId: Long): BottariResult<BottariTemplate> = bottariTemplateRepository.fetchBottariTemplate(bottariId)
 }

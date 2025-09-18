@@ -1,9 +1,10 @@
 package com.bottari.domain.usecase.member
 
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.MemberRepository
 
 class GetInstallationIdUseCase(
     private val memberRepository: MemberRepository,
 ) {
-    suspend operator fun invoke(): Result<String> = memberRepository.getInstallationId()
+    suspend operator fun invoke(): BottariResult<String> = memberRepository.getInstallationId()
 }

@@ -1,10 +1,11 @@
 package com.bottari.domain.usecase.template
 
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.BottariTemplateRepository
 
 class DeleteMyBottariTemplateUseCase(
     private val bottariTemplateRepository: BottariTemplateRepository,
 ) {
-    suspend operator fun invoke(bottariTemplateId: Long): Result<Unit> =
+    suspend operator fun invoke(bottariTemplateId: Long): BottariResult<Unit> =
         bottariTemplateRepository.deleteMyBottariTemplate(bottariTemplateId)
 }
