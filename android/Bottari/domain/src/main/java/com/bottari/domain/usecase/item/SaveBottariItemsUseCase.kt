@@ -1,5 +1,6 @@
 package com.bottari.domain.usecase.item
 
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.repository.BottariItemRepository
 
 class SaveBottariItemsUseCase(
@@ -9,5 +10,5 @@ class SaveBottariItemsUseCase(
         bottariId: Long,
         deleteItemIds: List<Long>,
         createItemNames: List<String>,
-    ): Result<Unit> = bottariItemRepository.saveBottariItems(bottariId, deleteItemIds, createItemNames)
+    ): BottariResult<Unit> = bottariItemRepository.saveBottariItems(bottariId, deleteItemIds, createItemNames)
 }
