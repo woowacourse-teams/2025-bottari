@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+import androidx.annotation.StringRes
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -14,6 +15,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.bottari.logger.LogEventHelper
+import com.bottari.presentation.R
 import com.bottari.presentation.databinding.DialogTeamBottariJoinBinding
 import com.bottari.presentation.util.DeeplinkHelper
 import com.bottari.presentation.view.home.team.TeamBottariFragment.Companion.REQUEST_KEY_REQUIRE_REFRESH
@@ -67,8 +69,15 @@ class TeamBottariJoinDialog : DialogFragment() {
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                TeamBottariJoinUiEvent.JoinTeamBottariFailure -> handleJoinTeamBottariFailure()
                 TeamBottariJoinUiEvent.JoinTeamBottariSuccess -> handleJoinTeamBottariSuccess()
+                TeamBottariJoinUiEvent.JoinTeamBottariFailure.NotFoundException,
+                -> handleJoinTeamBottariFailure(R.string.join_team_bottari_not_found_exception_text)
+
+                TeamBottariJoinUiEvent.JoinTeamBottariFailure.DuplicatedException,
+                -> handleJoinTeamBottariFailure(R.string.join_team_bottari_duplicated_exception_text)
+
+                TeamBottariJoinUiEvent.UnexpectedException,
+                -> handleJoinTeamBottariFailure(R.string.common_unexpected_exception_text)
             }
         }
     }
@@ -90,7 +99,7 @@ class TeamBottariJoinDialog : DialogFragment() {
     private fun setupListener() {
         binding.etTeamBottariJoinInviteCode.doAfterTextChanged {
             viewModel.updateInviteCode(it?.toString().orEmpty())
-            handleDescriptionTextVisibility(false)
+            handleDescriptionTextVisibility("")
         }
         binding.etTeamBottariJoinInviteCode.setOnEditorActionListener { _, actionId, _ ->
             if (actionId != IME_ACTION_DONE) return@setOnEditorActionListener false
@@ -115,8 +124,9 @@ class TeamBottariJoinDialog : DialogFragment() {
         viewModel.updateInviteCode(code)
     }
 
-    private fun handleDescriptionTextVisibility(isVisible: Boolean) {
-        binding.teamBottariJoinDialogDescriptionText.isVisible = isVisible
+    private fun handleDescriptionTextVisibility(message: String) {
+        binding.teamBottariJoinDialogDescriptionText.isVisible = message.isNotBlank()
+        binding.teamBottariJoinDialogDescriptionText.text = message
     }
 
     private fun handleEditTextState(inviteCode: String) {
@@ -136,9 +146,11 @@ class TeamBottariJoinDialog : DialogFragment() {
         dismiss()
     }
 
-    private fun handleJoinTeamBottariFailure() {
+    private fun handleJoinTeamBottariFailure(
+        @StringRes messageResId: Int,
+    ) {
         binding.etTeamBottariJoinInviteCode.text.clear()
-        handleDescriptionTextVisibility(true)
+        handleDescriptionTextVisibility(getString(messageResId))
     }
 
     companion object {

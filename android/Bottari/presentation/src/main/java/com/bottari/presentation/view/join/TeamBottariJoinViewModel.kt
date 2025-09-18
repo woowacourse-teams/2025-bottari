@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.TeamMemberUseCaseProvider
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.usecase.team.JoinTeamBottariUseCase
-import com.bottari.logger.BottariLogger
-import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 
 class TeamBottariJoinViewModel(
@@ -23,20 +25,22 @@ class TeamBottariJoinViewModel(
         launch {
             joinTeamBottariUseCase(currentState.inviteCode)
                 .onSuccess { emitEvent(TeamBottariJoinUiEvent.JoinTeamBottariSuccess) }
-                .onFailure { emitEvent(TeamBottariJoinUiEvent.JoinTeamBottariFailure) }
+                .onApiError { emitEvent(TeamBottariJoinUiEvent.UnexpectedException) }
+                .onApiException { bottariException ->
+                    when (bottariException) {
+                        is BottariException.NotFoundException ->
+                            emitEvent(TeamBottariJoinUiEvent.JoinTeamBottariFailure.NotFoundException)
+
+                        is BottariException.DuplicatedException ->
+                            emitEvent(TeamBottariJoinUiEvent.JoinTeamBottariFailure.DuplicatedException)
+
+                        else -> emitEvent(TeamBottariJoinUiEvent.UnexpectedException)
+                    }
+                }
         }
     }
 
-    private fun logJoinTeamBottariEvent(joinedTeamBottariId: Long?) {
-        BottariLogger.ui(
-            UiEventType.TEAM_BOTTARI_JOIN,
-            mapOf("bottari_id" to (joinedTeamBottariId ?: NOT_FOUND_JOINED_TEAM_BOTTARI_ID)),
-        )
-    }
-
     companion object {
-        private const val NOT_FOUND_JOINED_TEAM_BOTTARI_ID = -1
-
         fun Factory(): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {

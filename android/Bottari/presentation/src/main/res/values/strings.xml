@@ -49,6 +49,7 @@
     <string name="common_save_success_text">저장했어요!</string>
     <string name="common_fetch_failure_text">정보를 불러오지 못했어요</string>
     <string name="common_permission_failure_text">권한 요청에 실패했어요</string>
+    <string name="common_unexpected_exception_text">예상치 못한 오류가 발생했어요</string>"
 
     <!-- Common: 포맷 -->
     <string name="common_format_quantity_status">%d개 중 %d개</string>
@@ -125,8 +126,9 @@
     <string name="home_nav_more_title_text">더보기</string>
 
     <!--  Join Team Bottari  -->
-    <string name="join_team_bottari_success_text">팀 보따리에 참가했어요</string>
-    <string name="join_team_bottari_failure_text">팀 보따리에 참가하지 못했어요</string>
+    <string name="join_team_bottari_success_text">우리 보따리에 참가했어요</string>
+    <string name="join_team_bottari_not_found_exception_text">코드에 맞는 우리 보따리를 찾지 못했어요</string>
+    <string name="join_team_bottari_duplicated_exception_text">이미 참가중인 우리 보따리예요</string>
 
     <!-- Bottari Home -->
     <string name="bottari_home_fetch_failure_text">보따리 목록을 불러오지 못했어요</string>
