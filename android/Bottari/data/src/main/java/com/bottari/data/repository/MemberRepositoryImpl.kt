@@ -1,10 +1,17 @@
 package com.bottari.data.repository
 
 import com.bottari.data.model.remote.member.MemberNicknameSaveRequest
+import com.bottari.data.model.remote.member.MemberRegisterRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
-import com.bottari.domain.extension.flatMapCatching
 import com.bottari.domain.extension.map
+import com.bottari.domain.extension.mapCatching
+import com.bottari.domain.model.exception.BottariResult
+import com.bottari.domain.model.exception.getOrConvert
+import com.bottari.domain.model.exception.getOrThrow
+import com.bottari.domain.model.exception.mapCatching
+import com.bottari.domain.model.exception.onSuccess
+import com.bottari.domain.model.exception.toBottariResult
 import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.member.RegisteredMember
 import com.bottari.domain.repository.MemberRepository
@@ -17,65 +24,62 @@ class MemberRepositoryImpl(
     private val memberIdentifierLocalDataSource: MemberIdentifierLocalDataSource,
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : MemberRepository {
-    override suspend fun registerMember(fcmToken: String): Result<Long> =
+    override suspend fun registerMember(fcmToken: String): BottariResult<Long> =
         withContext(coroutineDispatcher) {
             memberIdentifierLocalDataSource
                 .getInstallationId()
-                .mapCatching { installationId ->
-                    com.bottari.data.model.remote.member.MemberRegisterRequest(
-                        installationId,
-                        fcmToken,
-                    )
-                }.flatMapCatching { request ->
+                .mapCatching {
+                    MemberRegisterRequest(it, fcmToken)
+                }.mapCatching { request ->
                     memberRemoteDataSource.registerMember(request)
-                }.flatMapCatching { memberId ->
-                    saveMemberIdToLocal(memberId)
-                }
+                }.getOrConvert()
+                .onSuccess { saveMemberIdToLocal(it) }
         }
 
-    override suspend fun saveMemberNickname(nickname: Nickname): Result<Unit> =
+    override suspend fun saveMemberNickname(nickname: Nickname): BottariResult<Unit> =
         withContext(coroutineDispatcher) {
             memberRemoteDataSource.saveMemberNickname(MemberNicknameSaveRequest.fromDomain(nickname))
         }
 
-    override suspend fun checkRegisteredMember(): Result<RegisteredMember> =
+    override suspend fun checkRegisteredMember(): BottariResult<RegisteredMember> =
         memberRemoteDataSource
             .checkRegisteredMember()
             .mapCatching { checkInfo -> checkInfo.toDomain() }
-            .flatMapCatching { registeredMember ->
+            .mapCatching { registeredMember ->
                 if (registeredMember.isRegistered.not()) {
-                    return@flatMapCatching Result.success(
-                        registeredMember,
-                    )
+                    return@mapCatching registeredMember
                 }
-                saveMemberIdToLocal(registeredMember.id).map { registeredMember }
+                saveMemberIdToLocal(registeredMember.id).getOrThrow()
+                registeredMember
             }
 
-    override suspend fun getInstallationId(): Result<String> =
+    override suspend fun getInstallationId(): BottariResult<String> =
         withContext(coroutineDispatcher) {
-            memberIdentifierLocalDataSource.getInstallationId()
+            memberIdentifierLocalDataSource.getInstallationId().toBottariResult()
         }
 
-    override suspend fun getMemberId(): Result<Long> =
+    override suspend fun getMemberId(): BottariResult<Long> =
         memberIdentifierLocalDataSource
             .getMemberId()
             .recoverCatching {
                 syncMemberIdFromRemote().getOrThrow()
-            }
+            }.toBottariResult()
 
-    private suspend fun syncMemberIdFromRemote(): Result<Long> =
+    private suspend fun syncMemberIdFromRemote(): BottariResult<Long> =
         memberRemoteDataSource
             .checkRegisteredMember()
-            .flatMapCatching { checkInfo -> saveMemberIdToLocal(checkInfo.id) }
+            .mapCatching { checkInfo ->
+                saveMemberIdToLocal(checkInfo.id).getOrThrow()
+            }
 
-    private suspend fun saveMemberIdToLocal(memberId: Long?): Result<Long> =
+    private suspend fun saveMemberIdToLocal(memberId: Long?): BottariResult<Long> =
         runCatching {
             requireNotNull(memberId) { ERROR_MEMBER_ID_NULL }
             memberIdentifierLocalDataSource
                 .saveMemberId(memberId)
                 .map { memberId }
                 .getOrThrow()
-        }
+        }.toBottariResult()
 
     companion object {
         private const val ERROR_MEMBER_ID_NULL = "[ERROR] 회원 ID가 null 입니다"

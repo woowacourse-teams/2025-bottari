@@ -1,5 +1,6 @@
 package com.bottari.data.repository
 
+import com.bottari.data.model.remote.team.bottari.TeamBottariCreateRequest
 import com.bottari.data.model.remote.team.bottari.TeamBottariJoinRequest
 import com.bottari.data.model.remote.team.bottari.item.request.AssignedItemsCreateRequest
 import com.bottari.data.model.remote.team.bottari.item.request.AssignedItemsUpdateRequest
@@ -11,6 +12,8 @@ import com.bottari.data.model.remote.team.bottari.item.request.TeamBottariItemRe
 import com.bottari.data.model.remote.team.bottari.item.request.TeamBottariItemUnCheckUpdateRequest
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.domain.model.bottari.item.BottariItem
+import com.bottari.domain.model.exception.BottariResult
+import com.bottari.domain.model.exception.mapCatching
 import com.bottari.domain.model.team.bottari.TeamBottari
 import com.bottari.domain.model.team.bottari.TeamBottariCheckList
 import com.bottari.domain.model.team.bottari.TeamBottariDetail
@@ -24,19 +27,16 @@ import com.bottari.domain.repository.TeamBottariRepository
 class TeamBottariRepositoryImpl(
     private val teamBottariRemoteDataSource: TeamBottariRemoteDataSource,
 ) : TeamBottariRepository {
-    override suspend fun createTeamBottari(title: String): Result<Long?> =
-        teamBottariRemoteDataSource.createBottari(
-            com.bottari.data.model.remote.team.bottari
-                .TeamBottariCreateRequest(title),
-        )
+    override suspend fun createTeamBottari(title: String): BottariResult<Long> =
+        teamBottariRemoteDataSource.createBottari(TeamBottariCreateRequest(title))
 
-    override suspend fun fetchTeamBottari(teamBottariId: Long): Result<TeamBottariCheckList> =
+    override suspend fun fetchTeamBottari(teamBottariId: Long): BottariResult<TeamBottariCheckList> =
         teamBottariRemoteDataSource.fetchTeamBottari(teamBottariId).mapCatching { it.toDomain() }
 
     override suspend fun uncheckBottariItem(
         bottariItemId: Long,
         type: String,
-    ): Result<Unit> =
+    ): BottariResult<Unit> =
         teamBottariRemoteDataSource.uncheckBottariItem(
             bottariItemId,
             TeamBottariItemUnCheckUpdateRequest(type),
@@ -45,28 +45,28 @@ class TeamBottariRepositoryImpl(
     override suspend fun checkBottariItem(
         bottariItemId: Long,
         type: String,
-    ): Result<Unit> =
+    ): BottariResult<Unit> =
         teamBottariRemoteDataSource.checkBottariItem(
             bottariItemId,
             TeamBottariItemCheckUpdateRequest(type),
         )
 
-    override suspend fun fetchTeamBottaries(): Result<List<TeamBottari>> =
+    override suspend fun fetchTeamBottaries(): BottariResult<List<TeamBottari>> =
         teamBottariRemoteDataSource
             .fetchTeamBottaries()
             .mapCatching { teamBottaries -> teamBottaries.map { it.toDomain() } }
 
-    override suspend fun fetchTeamMembers(id: Long): Result<TeamStatus> =
+    override suspend fun fetchTeamMembers(id: Long): BottariResult<TeamStatus> =
         teamBottariRemoteDataSource
             .fetchTeamMembers(id)
             .mapCatching { response -> response.toDomain() }
 
-    override suspend fun fetchTeamBottariDetail(teamBottariId: Long): Result<TeamBottariDetail> =
+    override suspend fun fetchTeamBottariDetail(teamBottariId: Long): BottariResult<TeamBottariDetail> =
         teamBottariRemoteDataSource
             .fetchTeamBottariDetail(teamBottariId)
             .mapCatching { response -> response.toDomain() }
 
-    override suspend fun fetchTeamBottariStatus(id: Long): Result<TeamBottariStatus> =
+    override suspend fun fetchTeamBottariStatus(id: Long): BottariResult<TeamBottariStatus> =
         teamBottariRemoteDataSource
             .fetchTeamBottariStatus(id)
             .mapCatching { response -> response.toDomain() }
@@ -74,11 +74,11 @@ class TeamBottariRepositoryImpl(
     override suspend fun sendRemindByItem(
         id: Long,
         type: String,
-    ): Result<Unit> =
+    ): BottariResult<Unit> =
         teamBottariRemoteDataSource
             .sendRemindByItem(id, TeamBottariItemRemindRequest(type))
 
-    override suspend fun fetchTeamMembersStatus(id: Long): Result<List<TeamMemberStatus>> =
+    override suspend fun fetchTeamMembersStatus(id: Long): BottariResult<List<TeamMemberStatus>> =
         teamBottariRemoteDataSource
             .fetchTeamMembersStatus(id)
             .mapCatching { responses -> responses.map { response -> response.toDomain() } }
@@ -86,16 +86,12 @@ class TeamBottariRepositoryImpl(
     override suspend fun createTeamBottariSharedItem(
         id: Long,
         name: String,
-    ): Result<Unit> =
-        teamBottariRemoteDataSource.createTeamBottariSharedItem(
-            id,
-            SharedItemsCreateRequest(name),
-        )
+    ): BottariResult<Long> = teamBottariRemoteDataSource.createTeamBottariSharedItem(id, SharedItemsCreateRequest(name))
 
     override suspend fun createTeamBottariPersonalItem(
         id: Long,
         name: String,
-    ): Result<Unit> =
+    ): BottariResult<Long> =
         teamBottariRemoteDataSource.createTeamBottariPersonalItem(
             id,
             PersonalItemsCreateRequest(name),
@@ -105,7 +101,7 @@ class TeamBottariRepositoryImpl(
         id: Long,
         name: String,
         teamMemberIds: List<Long>,
-    ): Result<Unit> =
+    ): BottariResult<Long> =
         teamBottariRemoteDataSource.createTeamBottariAssignedItem(
             id,
             AssignedItemsCreateRequest(name, teamMemberIds),
@@ -114,7 +110,7 @@ class TeamBottariRepositoryImpl(
     override suspend fun deleteTeamBottariItem(
         id: Long,
         type: TeamBottariItemType,
-    ): Result<Unit> {
+    ): BottariResult<Unit> {
         val bottariItemType = type.javaClass.simpleName
         return teamBottariRemoteDataSource.deleteTeamBottariItem(
             id,
@@ -125,33 +121,33 @@ class TeamBottariRepositoryImpl(
     override suspend fun sendRemindByMemberMessage(
         teamBottariId: Long,
         memberId: Long,
-    ): Result<Unit> =
+    ): BottariResult<Unit> =
         teamBottariRemoteDataSource.sendRemindByMemberMessage(
             teamBottariId,
             memberId,
         )
 
-    override suspend fun joinTeamBottari(inviteCode: String): Result<Unit> =
+    override suspend fun joinTeamBottari(inviteCode: String): BottariResult<Unit> =
         teamBottariRemoteDataSource.joinTeamBottari(TeamBottariJoinRequest(inviteCode))
 
-    override suspend fun fetchTeamBottariMembers(teamBottariId: Long): Result<List<TeamMember>> =
+    override suspend fun fetchTeamBottariMembers(teamBottariId: Long): BottariResult<List<TeamMember>> =
         teamBottariRemoteDataSource
             .fetchTeamBottariMembers(teamBottariId)
             .mapCatching { members ->
                 members.map { member -> member.toDomain() }
             }
 
-    override suspend fun fetchTeamAssignedItems(teamBottariId: Long): Result<List<BottariItem>> =
+    override suspend fun fetchTeamAssignedItems(teamBottariId: Long): BottariResult<List<BottariItem>> =
         teamBottariRemoteDataSource
             .fetchTeamAssignedItems(teamBottariId)
             .mapCatching { assignedItems -> assignedItems.map { assignedItem -> assignedItem.toDomain() } }
 
-    override suspend fun fetchTeamSharedItems(teamBottariId: Long): Result<List<BottariItem>> =
+    override suspend fun fetchTeamSharedItems(teamBottariId: Long): BottariResult<List<BottariItem>> =
         teamBottariRemoteDataSource
             .fetchTeamSharedItems(teamBottariId)
             .mapCatching { sharedItems -> sharedItems.map { sharedItem -> sharedItem.toDomain() } }
 
-    override suspend fun fetchTeamPersonalItems(teamBottariId: Long): Result<List<BottariItem>> =
+    override suspend fun fetchTeamPersonalItems(teamBottariId: Long): BottariResult<List<BottariItem>> =
         teamBottariRemoteDataSource
             .fetchTeamPersonalItems(teamBottariId)
             .mapCatching { personalItems -> personalItems.map { personalItem -> personalItem.toDomain() } }
@@ -161,12 +157,13 @@ class TeamBottariRepositoryImpl(
         assignedItemId: Long,
         name: String,
         assigneeIds: List<Long>,
-    ): Result<Unit> =
+    ): BottariResult<Unit> =
         teamBottariRemoteDataSource.saveTeamBottariAssignedItem(
             teamBottariId,
             assignedItemId,
             AssignedItemsUpdateRequest(name, assigneeIds),
         )
 
-    override suspend fun exitTeamBottari(teamBottariId: Long): Result<Unit> = teamBottariRemoteDataSource.exitTeamBottari(teamBottariId)
+    override suspend fun exitTeamBottari(teamBottariId: Long): BottariResult<Unit> =
+        teamBottariRemoteDataSource.exitTeamBottari(teamBottariId)
 }

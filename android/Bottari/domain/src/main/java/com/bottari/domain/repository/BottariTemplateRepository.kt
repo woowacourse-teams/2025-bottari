@@ -1,20 +1,21 @@
 package com.bottari.domain.repository
 
 import com.bottari.domain.model.bottari.template.BottariTemplate
+import com.bottari.domain.model.exception.BottariResult
 
 interface BottariTemplateRepository {
-    suspend fun fetchBottariTemplates(searchWord: String?): Result<List<BottariTemplate>>
+    suspend fun fetchBottariTemplates(searchWord: String?): BottariResult<List<BottariTemplate>>
 
     suspend fun createBottariTemplate(
         title: String,
         items: List<String>,
-    ): Result<Long?>
+    ): BottariResult<Long>
 
-    suspend fun fetchBottariTemplate(bottariId: Long): Result<BottariTemplate>
+    suspend fun fetchBottariTemplate(bottariId: Long): BottariResult<BottariTemplate>
 
-    suspend fun takeBottariTemplate(bottariId: Long): Result<Long?>
+    suspend fun takeBottariTemplate(bottariId: Long): BottariResult<Long>
 
-    suspend fun fetchMyBottariTemplates(): Result<List<BottariTemplate>>
+    suspend fun fetchMyBottariTemplates(): BottariResult<List<BottariTemplate>>
 
-    suspend fun deleteMyBottariTemplate(bottariTemplateId: Long): Result<Unit>
+    suspend fun deleteMyBottariTemplate(bottariTemplateId: Long): BottariResult<Unit>
 }

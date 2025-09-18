@@ -1,6 +1,7 @@
 package com.bottari.domain.repository
 
 import com.bottari.domain.model.bottari.item.BottariItem
+import com.bottari.domain.model.exception.BottariResult
 import com.bottari.domain.model.team.bottari.TeamBottari
 import com.bottari.domain.model.team.bottari.TeamBottariCheckList
 import com.bottari.domain.model.team.bottari.TeamBottariDetail
@@ -11,77 +12,77 @@ import com.bottari.domain.model.team.member.TeamMemberStatus
 import com.bottari.domain.model.team.member.TeamStatus
 
 interface TeamBottariRepository {
-    suspend fun createTeamBottari(title: String): Result<Long?>
+    suspend fun createTeamBottari(title: String): BottariResult<Long>
 
-    suspend fun fetchTeamBottari(teamBottariId: Long): Result<TeamBottariCheckList>
+    suspend fun fetchTeamBottari(teamBottariId: Long): BottariResult<TeamBottariCheckList>
 
     suspend fun uncheckBottariItem(
         bottariItemId: Long,
         type: String,
-    ): Result<Unit>
+    ): BottariResult<Unit>
 
     suspend fun checkBottariItem(
         bottariItemId: Long,
         type: String,
-    ): Result<Unit>
+    ): BottariResult<Unit>
 
-    suspend fun fetchTeamBottaries(): Result<List<TeamBottari>>
+    suspend fun fetchTeamBottaries(): BottariResult<List<TeamBottari>>
 
-    suspend fun fetchTeamMembers(id: Long): Result<TeamStatus>
+    suspend fun fetchTeamMembers(id: Long): BottariResult<TeamStatus>
 
-    suspend fun fetchTeamBottariDetail(teamBottariId: Long): Result<TeamBottariDetail>
+    suspend fun fetchTeamBottariDetail(teamBottariId: Long): BottariResult<TeamBottariDetail>
 
-    suspend fun fetchTeamBottariStatus(id: Long): Result<TeamBottariStatus>
+    suspend fun fetchTeamBottariStatus(id: Long): BottariResult<TeamBottariStatus>
 
     suspend fun sendRemindByItem(
         id: Long,
         type: String,
-    ): Result<Unit>
+    ): BottariResult<Unit>
 
-    suspend fun fetchTeamMembersStatus(id: Long): Result<List<TeamMemberStatus>>
+    suspend fun fetchTeamMembersStatus(id: Long): BottariResult<List<TeamMemberStatus>>
 
     suspend fun createTeamBottariSharedItem(
         id: Long,
         name: String,
-    ): Result<Unit>
+    ): BottariResult<Long>
 
     suspend fun createTeamBottariPersonalItem(
         id: Long,
         name: String,
-    ): Result<Unit>
+    ): BottariResult<Long>
 
     suspend fun createTeamBottariAssignedItem(
         id: Long,
         name: String,
         teamMemberIds: List<Long>,
-    ): Result<Unit>
+    ): BottariResult<Long>
 
     suspend fun deleteTeamBottariItem(
         id: Long,
         type: TeamBottariItemType,
-    ): Result<Unit>
+    ): BottariResult<Unit>
 
     suspend fun sendRemindByMemberMessage(
         teamBottariId: Long,
         memberId: Long,
-    ): Result<Unit>
+    ): BottariResult<Unit>
 
-    suspend fun joinTeamBottari(inviteCode: String): Result<Unit>
+    suspend fun joinTeamBottari(inviteCode: String): BottariResult<Unit>
 
-    suspend fun fetchTeamBottariMembers(teamBottariId: Long): Result<List<TeamMember>>
+    suspend fun fetchTeamBottariMembers(teamBottariId: Long): BottariResult<List<TeamMember>>
 
-    suspend fun fetchTeamAssignedItems(teamBottariId: Long): Result<List<BottariItem>>
+    suspend fun fetchTeamAssignedItems(teamBottariId: Long): BottariResult<List<BottariItem>>
 
-    suspend fun fetchTeamSharedItems(teamBottariId: Long): Result<List<BottariItem>>
+    suspend fun fetchTeamSharedItems(teamBottariId: Long): BottariResult<List<BottariItem>>
 
-    suspend fun fetchTeamPersonalItems(teamBottariId: Long): Result<List<BottariItem>>
+    suspend fun fetchTeamPersonalItems(teamBottariId: Long): BottariResult<List<BottariItem>>
 
     suspend fun saveTeamBottariAssignedItem(
         teamBottariId: Long,
         assignedItemId: Long,
         name: String,
         assigneeIds: List<Long>,
-    ): Result<Unit>
+    ): BottariResult<Unit>
 
-    suspend fun exitTeamBottari(teamBottariId: Long): Result<Unit>
+    suspend fun exitTeamBottari(teamBottariId: Long): BottariResult<Unit>
 }
