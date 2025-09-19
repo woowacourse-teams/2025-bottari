@@ -6,6 +6,10 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariItemUseCaseProvider
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
@@ -85,9 +89,23 @@ class PersonalItemEditViewModel(
             ).onSuccess {
                 logSaveChanges()
                 emitEvent(PersonalItemEditUiEvent.SaveBottariItemsSuccess)
-            }.onFailure {
-                emitEvent(PersonalItemEditUiEvent.SaveBottariItemsFailure)
-            }
+            }.onApiException { bottariException ->
+                when (bottariException) {
+                    BottariException.InvalidException ->
+                        emitEvent(PersonalItemEditUiEvent.SaveBottariItemsFailure.InvalidException)
+
+                    BottariException.NotFoundException ->
+                        emitEvent(PersonalItemEditUiEvent.SaveBottariItemsFailure.NotFoundException)
+
+                    BottariException.DuplicatedException ->
+                        emitEvent(PersonalItemEditUiEvent.SaveBottariItemsFailure.DuplicatedException)
+
+                    BottariException.MaximumExceededException ->
+                        emitEvent(PersonalItemEditUiEvent.SaveBottariItemsFailure.MaximumExceededException)
+
+                    else -> emitEvent(PersonalItemEditUiEvent.SaveBottariItemsFailure.UnexpectedException)
+                }
+            }.onApiError { emitEvent(PersonalItemEditUiEvent.SaveBottariItemsFailure.UnexpectedException) }
             updateState { copy(isLoading = false) }
         }
     }

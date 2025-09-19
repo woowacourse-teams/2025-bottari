@@ -87,11 +87,25 @@ class PersonalItemEditFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
-                PersonalItemEditUiEvent.SaveBottariItemsFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
                 PersonalItemEditUiEvent.SaveBottariItemsSuccess -> {
                     onBackPressedCallback.isEnabled = false
                     requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
+
+                PersonalItemEditUiEvent.SaveBottariItemsFailure.DuplicatedException ->
+                    requireView().showSnackbar("이미 담은 물건이예요")
+
+                PersonalItemEditUiEvent.SaveBottariItemsFailure.InvalidException ->
+                    requireView().showSnackbar("물건 이름이 올바르지 않아요")
+
+                PersonalItemEditUiEvent.SaveBottariItemsFailure.MaximumExceededException ->
+                    requireView().showSnackbar("보따리에 물건이 너무 많아요")
+
+                PersonalItemEditUiEvent.SaveBottariItemsFailure.NotFoundException ->
+                    requireView().showSnackbar("보따리를 찾을 수 없어요")
+
+                PersonalItemEditUiEvent.SaveBottariItemsFailure.UnexpectedException ->
+                    requireView().showSnackbar(R.string.common_unexpected_exception_text)
             }
         }
     }
@@ -108,13 +122,9 @@ class PersonalItemEditFragment :
 
     private fun setupListener() {
         binding.btnPrevious.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
-
         binding.btnPersonalItemAdd.setOnClickListener { addItemFromInput() }
-
         binding.etPersonalItem.addTextChangedListener(this)
-
         binding.btnConfirm.setOnClickListener { viewModel.saveChanges() }
-
         binding.etPersonalItem.setOnEditorActionListener { _, actionId, _ ->
             if (actionId != EditorInfo.IME_ACTION_SEND) return@setOnEditorActionListener false
             addItemFromInput()
