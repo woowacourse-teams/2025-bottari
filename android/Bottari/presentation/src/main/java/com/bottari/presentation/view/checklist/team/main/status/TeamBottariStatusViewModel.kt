@@ -10,6 +10,10 @@ import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
 import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.model.event.EventState
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.model.team.bottari.TeamBottariStatus
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
@@ -66,7 +70,7 @@ class TeamBottariStatusViewModel(
     private fun sendRemindByItem() {
         val selectedProduct =
             currentState.selectedProduct ?: return emitEvent(
-                TeamBottariStatusUiEvent.SendRemindFailure,
+                TeamBottariStatusUiEvent.SendRemindFailure.NotFoundException,
             )
         val itemId = selectedProduct.id
         val itemType = selectedProduct.type.toTypeString()
@@ -74,7 +78,20 @@ class TeamBottariStatusViewModel(
         launch {
             sendRemindByItemUseCase(itemId, itemType)
                 .onSuccess { emitEvent(TeamBottariStatusUiEvent.SendRemindSuccess) }
-                .onFailure { emitEvent(TeamBottariStatusUiEvent.SendRemindFailure) }
+                .onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.InvalidException ->
+                            emitEvent(TeamBottariStatusUiEvent.SendRemindFailure.InvalidException)
+
+                        BottariException.NotFoundException ->
+                            emitEvent(TeamBottariStatusUiEvent.SendRemindFailure.NotFoundException)
+
+                        BottariException.PermissionException ->
+                            emitEvent(TeamBottariStatusUiEvent.SendRemindFailure.PermissionException)
+
+                        else -> emitEvent(TeamBottariStatusUiEvent.SendRemindFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(TeamBottariStatusUiEvent.SendRemindFailure.UnexpectedException) }
         }
     }
 
@@ -84,8 +101,14 @@ class TeamBottariStatusViewModel(
         launch {
             fetchTeamStatusUseCase(teamBottariId)
                 .onSuccess { teamBottariStatus -> handleFetchTeamStatusSuccess(teamBottariStatus) }
-                .onFailure { emitEvent(TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure) }
+                .onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.NotFoundException ->
+                            emitEvent(TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure.PermissionException)
 
+                        else -> emitEvent(TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure.UnexpectedException) }
             updateState { copy(isLoading = false) }
         }
     }

@@ -55,12 +55,20 @@ class TeamBottariStatusFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
             when (event) {
-                TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure ->
-                    requireView().showSnackbar(
-                        R.string.team_product_status_fetch_failure_text,
-                    )
                 TeamBottariStatusUiEvent.SendRemindSuccess -> requireView().showSnackbar(R.string.team_status_send_remind_success_text)
-                TeamBottariStatusUiEvent.SendRemindFailure -> requireView().showSnackbar(R.string.team_status_send_remind_failure_text)
+                TeamBottariStatusUiEvent.SendRemindFailure.InvalidException ->
+                    requireView().showSnackbar("잘못된 물건 타입이에요")
+
+                TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure.PermissionException,
+                TeamBottariStatusUiEvent.SendRemindFailure.PermissionException,
+                -> requireView().showSnackbar("우리 보따리 접근 권한이 없어요")
+
+                TeamBottariStatusUiEvent.SendRemindFailure.NotFoundException ->
+                    requireView().showSnackbar("물건을 찾을 수 없어요")
+
+                TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure.UnexpectedException,
+                TeamBottariStatusUiEvent.SendRemindFailure.UnexpectedException,
+                -> requireView().showSnackbar(R.string.common_team_bottari_notification_channel_name)
             }
         }
     }
