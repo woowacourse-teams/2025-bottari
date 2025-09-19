@@ -33,7 +33,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-admin:9.5.0'
     implementation 'io.github.vaneproject:badwordfiltering:1.0.0'
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
