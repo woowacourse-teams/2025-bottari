@@ -6,11 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.error.BusinessException;
 import java.time.LocalDateTime;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.data.domain.Pageable;
 
@@ -20,15 +23,15 @@ class BottariTemplateCursorTest {
     class NormalizationTest {
 
         @DisplayName("query 정규화 테스트")
-        @Test
-        void normalizeQuery() {
-            // given
-            final String blankQuery = " ";
-            final String expected = "";
-
+        @ParameterizedTest
+        @MethodSource
+        void normalizeQuery(
+                final String query,
+                final String expected
+        ) {
             // when
             final BottariTemplateCursor actual = new BottariTemplateCursor(
-                    blankQuery,
+                    query,
                     1L,
                     "info",
                     0,
@@ -38,6 +41,17 @@ class BottariTemplateCursorTest {
 
             // then
             assertThat(actual.query()).isEqualTo(expected);
+        }
+
+        private static Stream<Arguments> normalizeQuery() {
+            return Stream.of(
+                    Arguments.of("자동차 경주", "+자동차 +경주"),
+                    Arguments.of(" 자동차 경주 ", "+자동차 +경주"),
+                    Arguments.of("자동차 경주 입니다", "+자동차 +경주 +입니다"),
+                    Arguments.of("", ""),
+                    Arguments.of(" ", ""),
+                    Arguments.of(null, "")
+            );
         }
 
         @DisplayName("page 정규화 테스트")
