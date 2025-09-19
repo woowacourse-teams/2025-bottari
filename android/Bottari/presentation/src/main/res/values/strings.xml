@@ -231,7 +231,7 @@
     <string name="team_management_fetch_failure_text">팀원 정보를 가져오는데 실패했어요</string>
     <string name="team_management_copy_invite_code_success_text">초대 코드가 클립보드에 복사되었어요</string>
     <string name="team_management_copy_invite_code_failure_text">초대 코드가 없어요</string>
-    <string name="team_management_share_template_text">[보따리] 잊는 물건 없이 체크! %s에 함께해요.\n우리의 준비물을 완벽하게 챙길 수 있도록 당신을 초대합니다.\n아래 링크를 누르거나 초대 암호를 입력해 주세요.\n\n%s</string>
+    <string name="team_management_share_template_text">[보따리] 잊는 물건 없이 체크! %s에 함께해요.\n우리의 준비물을 완벽하게 챙길 수 있도록 당신을 초대합니다.\n아래 링크를 누르거나 초대 암호[%s]를 입력해 주세요.\n\n%s</string>
     <!-- Team Bottari Edit -->
     <string name="team_bottari_member_edit_title">팀원 관리</string>
     <string name="team_bottari_item_edit_title_text">물건 목록</string>

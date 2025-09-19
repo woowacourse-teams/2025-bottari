@@ -83,7 +83,12 @@ class TeamManagementFragment :
             }
         val inviteLink = createDeeplink(inviteCode)
         val shareMessage =
-            getString(R.string.team_management_share_template_text, bottariName, inviteLink)
+            getString(
+                R.string.team_management_share_template_text,
+                bottariName,
+                inviteCode,
+                inviteLink,
+            )
         val sendIntent: Intent =
             Intent().apply {
                 action = Intent.ACTION_SEND
@@ -104,7 +109,8 @@ class TeamManagementFragment :
             id: Long,
             teamBottariName: String,
         ) = TeamManagementFragment().apply {
-            arguments = bundleOf(ARG_TEAM_BOTTARI_ID to id, ARG_TEAM_BOTTARI_NAME to teamBottariName)
+            arguments =
+                bundleOf(ARG_TEAM_BOTTARI_ID to id, ARG_TEAM_BOTTARI_NAME to teamBottariName)
         }
     }
 }
