@@ -5,6 +5,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariTemplateUseCaseProvider
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.usecase.template.FetchBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.SearchBottariTemplatesUseCase
 import com.bottari.logger.BottariLogger
@@ -37,11 +41,17 @@ class TemplateViewModel(
         launch {
             fetchBottariTemplatesUseCase()
                 .onSuccess { templates ->
-                    val templateUiModels = templates.map { it -> BottariTemplateUiModel.fromDomain(it) }
+                    val templateUiModels = templates.map { BottariTemplateUiModel.fromDomain(it) }
                     updateState { copy(templates = templateUiModels) }
-                }.onFailure {
-                    emitEvent(TemplateUiEvent.FetchBottariTemplatesFailure)
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.InvalidException -> emitEvent(TemplateUiEvent.FetchBottariTemplatesFailure.InvalidException)
+                        else -> emitEvent(TemplateUiEvent.FetchBottariTemplatesFailure.UnexpectedException)
+                    }
+                }.onApiError {
+                    emitEvent(TemplateUiEvent.FetchBottariTemplatesFailure.UnexpectedException)
                 }
+
             updateState { copy(isLoading = false, isFetched = true) }
         }
     }
@@ -54,17 +64,28 @@ class TemplateViewModel(
         launch {
             searchBottariTemplatesUseCase(searchWord)
                 .onSuccess { templates ->
-                    BottariLogger.ui(
-                        UiEventType.TEMPLATE_SEARCH,
-                        mapOf("query" to searchWord, "result_count" to templates.size),
-                    )
-                    val templateUiModels =
-                        templates.map { BottariTemplateUiModel.fromDomain(it) }
+                    logPerformSearch(searchWord, templates.size)
+                    val templateUiModels = templates.map { BottariTemplateUiModel.fromDomain(it) }
                     updateState { copy(templates = templateUiModels) }
-                }.onFailure {
-                    emitEvent(TemplateUiEvent.FetchBottariTemplatesFailure)
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.InvalidException -> emitEvent(TemplateUiEvent.SearchBottariTemplatesFailure.InvalidException)
+                        else -> emitEvent(TemplateUiEvent.SearchBottariTemplatesFailure.UnexpectedException)
+                    }
+                }.onApiError {
+                    emitEvent(TemplateUiEvent.SearchBottariTemplatesFailure.UnexpectedException)
                 }
         }
+    }
+
+    private fun logPerformSearch(
+        searchWord: String,
+        resultSize: Int,
+    ) {
+        BottariLogger.ui(
+            UiEventType.TEMPLATE_SEARCH,
+            mapOf("query" to searchWord, "result_count" to resultSize),
+        )
     }
 
     companion object {

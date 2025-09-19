@@ -71,10 +71,15 @@ class TemplateFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
-                TemplateUiEvent.FetchBottariTemplatesFailure ->
-                    requireView().showSnackbar(
-                        R.string.template_fetch_template_failure_text,
-                    )
+                TemplateUiEvent.FetchBottariTemplatesFailure.InvalidException ->
+                    requireView().showSnackbar(R.string.template_fetch_template_failure_text)
+
+                TemplateUiEvent.SearchBottariTemplatesFailure.InvalidException ->
+                    requireView().showSnackbar("검색에 실패했어요")
+
+                TemplateUiEvent.SearchBottariTemplatesFailure.UnexpectedException,
+                TemplateUiEvent.FetchBottariTemplatesFailure.UnexpectedException,
+                -> requireView().showSnackbar(R.string.common_unexpected_exception_text)
             }
         }
     }
