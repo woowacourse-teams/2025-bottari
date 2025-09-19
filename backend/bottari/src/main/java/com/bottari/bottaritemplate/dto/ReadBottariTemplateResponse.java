@@ -2,6 +2,7 @@ package com.bottari.bottaritemplate.dto;
 
 import com.bottari.bottaritemplate.domain.BottariTemplate;
 import com.bottari.bottaritemplate.domain.BottariTemplateItem;
+import com.bottari.bottaritemplate.repository.dto.BottariTemplateProjection;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,6 +30,24 @@ public record ReadBottariTemplateResponse(
                 bottariTemplate.getMember().getName(),
                 bottariTemplate.getCreatedAt(),
                 bottariTemplate.getTakenCount()
+        );
+    }
+
+    public static ReadBottariTemplateResponse of(
+            final BottariTemplateProjection projection,
+            final List<BottariTemplateItem> bottariTemplateItems
+    ) {
+        final List<BottariTemplateItemResponse> items = bottariTemplateItems.stream()
+                .map(BottariTemplateItemResponse::from)
+                .toList();
+
+        return new ReadBottariTemplateResponse(
+                projection.getBottariTemplateId(),
+                projection.getTitle(),
+                items,
+                projection.getMemberName(),
+                projection.getBottariTemplateCreatedAt(),
+                projection.getTakenCount()
         );
     }
 

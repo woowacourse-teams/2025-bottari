@@ -5,6 +5,8 @@ import com.bottari.error.ErrorCode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
@@ -35,7 +37,10 @@ public record BottariTemplateCursor(
             return "";
         }
 
-        return query;
+        return Arrays.stream(query.trim().split("\\s+"))
+                .filter(word -> !word.isBlank())
+                .map(word -> "+" + word)
+                .collect(Collectors.joining(" "));
     }
 
     private static int normalizeSize(final int size) {
