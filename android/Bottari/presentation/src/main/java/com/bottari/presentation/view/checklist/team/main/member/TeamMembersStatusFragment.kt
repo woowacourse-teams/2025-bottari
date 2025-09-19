@@ -47,9 +47,6 @@ class TeamMembersStatusFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                TeamMembersStatusUiEvent.FetchMembersStatusFailure ->
-                    requireView().showSnackbar(R.string.team_members_status_fetch_failure_text)
-
                 is TeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess ->
                     requireView().showSnackbar(
                         getString(
@@ -58,11 +55,25 @@ class TeamMembersStatusFragment :
                         ),
                     )
 
-                TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
-                    requireView().showSnackbar(R.string.team_members_status_send_remind_message_failure_text)
+                TeamMembersStatusUiEvent.FetchMembersStatusFailure.PermissionException,
+                TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure.PermissionException ->
+                    requireView().showSnackbar("우리 보따리 접근 권한이 없어요")
 
-                TeamMembersStatusUiEvent.FetchMemberIdFailure ->
-                    requireView().showSnackbar(R.string.team_members_status_fetch_member_id_failure_text)
+                TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure.DuplicatedException ->
+                    requireView().showSnackbar("해당 팀원은 이미 물건을 다 챙겼어요")
+
+                TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure.InvalidException ->
+                    requireView().showSnackbar("보챌 수 없는 팀원이에요")
+
+                TeamMembersStatusUiEvent.FetchMemberIdFailure.NotFoundException,
+                TeamMembersStatusUiEvent.FetchMembersStatusFailure.NotFoundException,
+                TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure.NotFoundException,
+                -> requireView().showSnackbar("사용자 인증에 실패했어요")
+
+                TeamMembersStatusUiEvent.FetchMemberIdFailure.UnexpectedException,
+                TeamMembersStatusUiEvent.FetchMembersStatusFailure.UnexpectedException,
+                TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure.UnexpectedException,
+                -> requireView().showSnackbar(R.string.common_unexpected_exception_text)
             }
         }
     }

@@ -10,6 +10,10 @@ import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.MemberUseCaseProvider
 import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.model.event.EventState
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.model.team.member.TeamMemberStatus
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
@@ -71,7 +75,7 @@ class TeamMembersStatusViewModel(
     private fun sendRemindMessage(member: TeamMemberUiModel) {
         val memberId =
             member.id ?: run {
-                emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure)
+                emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure.PermissionException)
                 return
             }
         launch {
@@ -82,7 +86,23 @@ class TeamMembersStatusViewModel(
                             member.nickname,
                         ),
                     )
-                }.onFailure { emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure) }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.InvalidException ->
+                            emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure.InvalidException)
+
+                        BottariException.PermissionException ->
+                            emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure.PermissionException)
+
+                        BottariException.NotFoundException ->
+                            emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure.NotFoundException)
+
+                        BottariException.DuplicatedException ->
+                            emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure.DuplicatedException)
+
+                        else -> emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure.UnexpectedException) }
         }
     }
 
@@ -92,7 +112,14 @@ class TeamMembersStatusViewModel(
                 .onSuccess { id ->
                     updateState { copy(myId = id) }
                     fetchTeamMembersStatus()
-                }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMemberIdFailure) }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.NotFoundException ->
+                            emitEvent(TeamMembersStatusUiEvent.FetchMemberIdFailure.NotFoundException)
+
+                        else -> emitEvent(TeamMembersStatusUiEvent.FetchMemberIdFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(TeamMembersStatusUiEvent.FetchMemberIdFailure.UnexpectedException) }
         }
     }
 
@@ -108,7 +135,17 @@ class TeamMembersStatusViewModel(
                             membersStatus = updated,
                         )
                     }
-                }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure) }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.PermissionException ->
+                            emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure.PermissionException)
+
+                        BottariException.NotFoundException ->
+                            emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure.NotFoundException)
+
+                        else -> emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure.UnexpectedException) }
             updateState { copy(isLoading = false) }
         }
     }
