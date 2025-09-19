@@ -50,6 +50,9 @@ class TeamManagementFragment :
                     uiState.teamMemberHeadCount,
                     uiState.maxHeadCount,
                 )
+            binding.btnShare.isEnabled =
+                uiState.inviteCode.isNotBlank() &&
+                uiState.teamBottariName.isNotBlank()
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
@@ -61,6 +64,7 @@ class TeamManagementFragment :
     private fun setupUI() {
         binding.rvMemberList.adapter = adapter
         binding.rvMemberList.layoutManager = LinearLayoutManager(requireContext())
+        binding.btnShare.isEnabled = false
     }
 
     private fun setupListener() {
