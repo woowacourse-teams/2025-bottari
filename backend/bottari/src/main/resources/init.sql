@@ -8,6 +8,18 @@ VALUES ('test_ssaid_1', '다이스'),
        ('test_ssaid_6', '민호떡'),
        ('test_ssaid_7', '김훌라');
 
+INSERT INTO member (ssaid, name)
+WITH RECURSIVE seq AS (
+    SELECT 8 AS x
+    UNION ALL
+    SELECT x + 1 FROM seq WHERE x < 1000
+)
+SELECT CONCAT('test_ssaid_', x),
+       CONCAT('이', x)
+FROM seq;
+
+
+
 -- 보따리 데이터
 INSERT INTO bottari (title, member_id, created_at)
 VALUES

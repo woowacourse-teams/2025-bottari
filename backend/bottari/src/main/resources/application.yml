@@ -6,9 +6,20 @@ spring:
       ddl-auto: create
     defer-datasource-initialization: true
     open-in-view: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Asia/Seoul
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
       mode: always
+      data-locations: classpath:init.sql
 firebase:
   service:
     key-path: ${FIREBASE_SERVICE_ACCOUNT_JSON}
