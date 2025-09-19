@@ -1,5 +1,11 @@
 package com.bottari.presentation.view.edit.team.management
 
-interface TeamManagementUiEvent {
-    data object FetchTeamMembersFailure : TeamManagementUiEvent
+sealed interface TeamManagementUiEvent {
+    sealed interface FetchTeamMembersFailure : TeamManagementUiEvent {
+        data object PermissionException : FetchTeamMembersFailure
+
+        data object NotFoundException : FetchTeamMembersFailure
+
+        data object UnexpectedException : FetchTeamMembersFailure
+    }
 }

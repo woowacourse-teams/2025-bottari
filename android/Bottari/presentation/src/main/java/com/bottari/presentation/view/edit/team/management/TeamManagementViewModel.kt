@@ -9,6 +9,10 @@ import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.model.team.member.TeamStatus
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
@@ -55,9 +59,20 @@ class TeamManagementViewModel(
                 .onSuccess { teamMembers ->
                     updateState { copyFromTeamMembers(teamMembers) }
                     logTeamMembersFetch(teamMembers)
-                }.onFailure {
-                    emitEvent(TeamManagementUiEvent.FetchTeamMembersFailure)
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        is BottariException.NotFoundException,
+                        -> emitEvent(TeamManagementUiEvent.FetchTeamMembersFailure.NotFoundException)
+
+                        is BottariException.PermissionException,
+                        -> emitEvent(TeamManagementUiEvent.FetchTeamMembersFailure.PermissionException)
+
+                        else -> emitEvent(TeamManagementUiEvent.FetchTeamMembersFailure.UnexpectedException)
+                    }
+                }.onApiError {
+                    emitEvent(TeamManagementUiEvent.FetchTeamMembersFailure.UnexpectedException)
                 }
+
             updateState { copy(isLoading = false) }
         }
     }
