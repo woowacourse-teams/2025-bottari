@@ -56,15 +56,24 @@ class TemplateCreateFragment : BaseFragment<FragmentTemplateCreateBinding>(Fragm
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                TemplateCreateUiEvent.FetchMyBottariesFailure ->
-                    requireView().showSnackbar(
-                        R.string.template_fetch_bottari_details_failure_text,
-                    )
-                TemplateCreateUiEvent.CreateTemplateFailure -> requireView().showSnackbar(R.string.template_create_failure_text)
                 TemplateCreateUiEvent.CreateTemplateSuccuss ->
                     requireView().showSnackbar(R.string.template_create_success_text) {
                         requireActivity().onBackPressedDispatcher.onBackPressed()
                     }
+
+                TemplateCreateUiEvent.CreateTemplateFailure.DuplicatedException ->
+                    requireView().showSnackbar("중복된 보따리 템플릿 물품이 있습니다.")
+
+                TemplateCreateUiEvent.CreateTemplateFailure.InvalidException ->
+                    requireView().showSnackbar("보따리 제목 및 물품명을 확인해 주세요.")
+
+                TemplateCreateUiEvent.CreateTemplateFailure.NotFoundException,
+                TemplateCreateUiEvent.FetchMyBottariesFailure.NotFoundException,
+                -> requireView().showSnackbar("사용자를 찾을 수 없습니다.")
+
+                TemplateCreateUiEvent.CreateTemplateFailure.UnexpectedException,
+                TemplateCreateUiEvent.FetchMyBottariesFailure.UnexpectedException,
+                -> requireView().showSnackbar(R.string.common_unexpected_exception_text)
             }
         }
     }

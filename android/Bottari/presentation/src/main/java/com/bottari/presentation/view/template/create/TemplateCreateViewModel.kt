@@ -6,6 +6,10 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.di.usecase.BottariUseCaseProvider
 import com.bottari.domain.model.bottari.Bottari
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.logger.BottariLogger
@@ -39,7 +43,6 @@ class TemplateCreateViewModel(
             val items = currentState.currentBottariItems.map { it.name }
             createBottariTemplateUseCase(title, items)
                 .onSuccess { createdTemplateId ->
-                    if (createdTemplateId == null) return@onSuccess
                     BottariLogger.ui(
                         UiEventType.TEMPLATE_UPLOAD,
                         mapOf(
@@ -49,10 +52,14 @@ class TemplateCreateViewModel(
                         ),
                     )
                     emitEvent(TemplateCreateUiEvent.CreateTemplateSuccuss)
-                }.onFailure {
-                    updateState { copy(isLoading = false) }
-                    emitEvent(TemplateCreateUiEvent.CreateTemplateFailure)
-                }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.NotFoundException -> emitEvent(TemplateCreateUiEvent.CreateTemplateFailure.NotFoundException)
+                        BottariException.InvalidException -> emitEvent(TemplateCreateUiEvent.CreateTemplateFailure.InvalidException)
+                        BottariException.DuplicatedException -> emitEvent(TemplateCreateUiEvent.CreateTemplateFailure.DuplicatedException)
+                        else -> emitEvent(TemplateCreateUiEvent.CreateTemplateFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(TemplateCreateUiEvent.CreateTemplateFailure.UnexpectedException) }
         }
     }
 
@@ -62,7 +69,12 @@ class TemplateCreateViewModel(
         launch {
             fetchBottariDetailsUseCase()
                 .onSuccess { handleFetchBottariDetails(it) }
-                .onFailure { emitEvent(TemplateCreateUiEvent.FetchMyBottariesFailure) }
+                .onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.NotFoundException -> emitEvent(TemplateCreateUiEvent.FetchMyBottariesFailure.NotFoundException)
+                        else -> emitEvent(TemplateCreateUiEvent.FetchMyBottariesFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(TemplateCreateUiEvent.FetchMyBottariesFailure.UnexpectedException) }
 
             updateState { copy(isLoading = false) }
         }

@@ -6,6 +6,10 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariTemplateUseCaseProvider
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
 import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
 import com.bottari.logger.BottariLogger
@@ -32,20 +36,20 @@ class TemplateDetailViewModel(
         launch {
             takeBottariTemplateDetailUseCase(currentState.templateId)
                 .onSuccess { createdBottariId ->
-                    if (createdBottariId == null) return@onSuccess
-                    BottariLogger.ui(
-                        UiEventType.TEMPLATE_TAKE,
-                        mapOf(
-                            "template_id" to currentState.templateId,
-                            "template_title" to currentState.title,
-                            "template_items" to currentState.items.toString(),
-                        ),
-                    )
-                    emitEvent(
-                        TemplateDetailUiEvent.TakeBottariTemplateSuccess(createdBottariId),
-                    )
-                }.onFailure {
-                    emitEvent(TemplateDetailUiEvent.TakeBottariTemplateFailure)
+                    logTakeBottariSuccess()
+                    emitEvent(TemplateDetailUiEvent.TakeBottariTemplateSuccess(createdBottariId))
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        is BottariException.NotFoundException,
+                        -> emitEvent(TemplateDetailUiEvent.TakeBottariTemplateFailure.NotFoundException)
+
+                        is BottariException.InvalidException,
+                        -> emitEvent(TemplateDetailUiEvent.TakeBottariTemplateFailure.InvalidException)
+
+                        else -> emitEvent(TemplateDetailUiEvent.TakeBottariTemplateFailure.UnexpectedException)
+                    }
+                }.onApiError {
+                    emitEvent(TemplateDetailUiEvent.TakeBottariTemplateFailure.UnexpectedException)
                 }
 
             updateState { copy(isLoading = false) }
@@ -58,14 +62,32 @@ class TemplateDetailViewModel(
         launch {
             fetchBottariTemplateDetailUseCase(currentState.templateId)
                 .onSuccess { template ->
-                    val itemUiModels = template.items.map { BottariTemplateItemUiModel.fromDomain(it) }
+                    val itemUiModels =
+                        template.items.map { BottariTemplateItemUiModel.fromDomain(it) }
                     updateState { copy(title = template.title, items = itemUiModels) }
-                }.onFailure {
-                    emitEvent(TemplateDetailUiEvent.FetchBottariDetailFailure)
-                }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        is BottariException.NotFoundException,
+                        -> emitEvent(TemplateDetailUiEvent.FetchBottariDetailFailure.NotFoundException)
 
+                        else -> emitEvent(TemplateDetailUiEvent.FetchBottariDetailFailure.UnexpectedException)
+                    }
+                }.onApiError {
+                    emitEvent(TemplateDetailUiEvent.FetchBottariDetailFailure.UnexpectedException)
+                }
             updateState { copy(isLoading = false) }
         }
+    }
+
+    private fun logTakeBottariSuccess() {
+        BottariLogger.ui(
+            UiEventType.TEMPLATE_TAKE,
+            mapOf(
+                "template_id" to currentState.templateId,
+                "template_title" to currentState.title,
+                "template_items" to currentState.items.toString(),
+            ),
+        )
     }
 
     companion object {

@@ -24,10 +24,7 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
     }
 
     private val isMyTemplate: Boolean by lazy {
-        requireArguments().getBoolean(
-            ARG_IS_MY_TEMPLATE,
-            false,
-        )
+        requireArguments().getBoolean(ARG_IS_MY_TEMPLATE, false)
     }
     private val adapter by lazy { TemplateDetailAdapter() }
     private val popupMenu by lazy { createPopupMenu() }
@@ -72,17 +69,18 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
 
     private fun handleUiEvent(event: TemplateDetailUiEvent) {
         when (event) {
-            TemplateDetailUiEvent.FetchBottariDetailFailure -> {
+            is TemplateDetailUiEvent.TakeBottariTemplateSuccess -> navigateToBottariEdit(event.bottariId)
+
+            TemplateDetailUiEvent.FetchBottariDetailFailure.NotFoundException ->
                 requireView().showSnackbar(R.string.template_detail_fetch_failure_text)
-            }
 
-            TemplateDetailUiEvent.TakeBottariTemplateFailure -> {
-                requireView().showSnackbar(R.string.template_detail_take_failure_text)
-            }
+            TemplateDetailUiEvent.TakeBottariTemplateFailure.NotFoundException,
+            TemplateDetailUiEvent.TakeBottariTemplateFailure.InvalidException,
+            -> requireView().showSnackbar(R.string.template_detail_take_failure_text)
 
-            is TemplateDetailUiEvent.TakeBottariTemplateSuccess -> {
-                navigateToBottariEdit(event.bottariId)
-            }
+            TemplateDetailUiEvent.TakeBottariTemplateFailure.UnexpectedException,
+            TemplateDetailUiEvent.FetchBottariDetailFailure.UnexpectedException,
+            -> requireView().showSnackbar(R.string.common_unexpected_exception_text)
         }
     }
 
