@@ -1,0 +1,10 @@
+services:
+  db:
+    container_name: bottari-mysql
+    image: mysql:8.0.42
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: bottari
+      MYSQL_ROOT_PASSWORD: 1234
+    command: ["--ngram_token_size=1"]
