@@ -11,6 +11,10 @@ import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
 import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.model.team.bottari.TeamBottariCheckList
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
@@ -132,9 +136,17 @@ class TeamChecklistViewModel(
             fetchTeamBottariChecklistUseCase(teamBottariId)
                 .onSuccess { checklistData ->
                     setTeamCheckList(checklistData)
-                }.onFailure {
-                    emitEvent(TeamChecklistUiEvent.FetchChecklistFailure)
-                }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.PermissionException ->
+                            emitEvent(TeamChecklistUiEvent.FetchChecklistFailure.PermissionException)
+
+                        BottariException.NotFoundException ->
+                            emitEvent(TeamChecklistUiEvent.FetchChecklistFailure.NotFoundException)
+
+                        else -> emitEvent(TeamChecklistUiEvent.FetchChecklistFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(TeamChecklistUiEvent.FetchChecklistFailure.UnexpectedException) }
             updateState { copy(isLoading = false) }
         }
     }
@@ -285,9 +297,17 @@ class TeamChecklistViewModel(
         executeCheckUseCase(item)
             .onSuccess {
                 updateOriginalItem(item)
-            }.onFailure {
-                emitEvent(TeamChecklistUiEvent.CheckItemFailure)
-            }
+            }.onApiException { bottariException ->
+                when (bottariException) {
+                    BottariException.NotFoundException ->
+                        emitEvent(TeamChecklistUiEvent.CheckItemFailure.NotFoundException)
+
+                    BottariException.DuplicatedException ->
+                        emitEvent(TeamChecklistUiEvent.CheckItemFailure.DuplicatedException)
+
+                    else -> emitEvent(TeamChecklistUiEvent.CheckItemFailure.UnexpectedException)
+                }
+            }.onApiError { emitEvent(TeamChecklistUiEvent.CheckItemFailure.UnexpectedException) }
     }
 
     private suspend fun executeCheckUseCase(item: TeamChecklistProductUiModel) =
