@@ -64,23 +64,22 @@ class TeamManagementFragment :
     }
 
     private fun setupListener() {
-        binding.btnShare.setOnClickListener { copyInviteCode() }
+        binding.btnShare.setOnClickListener { shareInvite() }
         binding.btnPrevious.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 
-    private fun copyInviteCode() {
+    private fun shareInvite() {
+        val state =
+            viewModel.uiState.value ?: run {
+                requireView().showSnackbar(R.string.team_management_share_failure_text)
+                return
+            }
         val inviteCode =
-            viewModel.uiState.value?.inviteCode ?: run {
-                requireView().showSnackbar(R.string.team_management_copy_invite_code_failure_text)
-                return
-            }
+            state.inviteCode
         val bottariName =
-            viewModel.uiState.value?.teamBottariName ?: run {
-                requireView().showSnackbar(R.string.team_management_copy_invite_code_failure_text)
-                return
-            }
+            state.teamBottariName
         val inviteLink = createDeeplink(inviteCode)
         val shareMessage =
             getString(
