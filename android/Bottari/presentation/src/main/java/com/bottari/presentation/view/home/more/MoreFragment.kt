@@ -40,10 +40,23 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>(FragmentMoreBinding::infl
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                MoreUiEvent.FetchMemberInfoFailure -> requireView().showSnackbar(R.string.profile_fetch_failure_text)
-                MoreUiEvent.SaveMemberNicknameSuccess -> requireView().showSnackbar(R.string.profile_nickname_save_success_text)
-                MoreUiEvent.SaveMemberNicknameFailure -> requireView().showSnackbar(R.string.profile_nickname_save_failure_text)
-                MoreUiEvent.InvalidNicknameRule -> requireView().showSnackbar(R.string.profile_invalid_nickname_rule_text)
+                MoreUiEvent.SaveMemberNicknameSuccess ->
+                    requireView().showSnackbar(R.string.profile_nickname_save_success_text)
+
+                MoreUiEvent.FetchMemberInfoFailure,
+                MoreUiEvent.SaveMemberNicknameFailure.NotFoundException,
+                -> requireView().showSnackbar(R.string.profile_fetch_failure_text)
+
+                // 닉네임 미변경, 닉네임 길이 모두 해당 이벤트가 발생
+                // 이벤트 메시지를 더 명확하게 개선해야 함
+                MoreUiEvent.SaveMemberNicknameFailure.InvalidException ->
+                    requireView().showSnackbar(R.string.profile_invalid_nickname_rule_text)
+
+                MoreUiEvent.SaveMemberNicknameFailure.DuplicatedException ->
+                    requireView().showSnackbar("이미 존재하는 닉네임이에요")
+
+                MoreUiEvent.SaveMemberNicknameFailure.UnexpectedException ->
+                    requireView().showSnackbar(R.string.common_unexpected_exception_text)
             }
         }
     }

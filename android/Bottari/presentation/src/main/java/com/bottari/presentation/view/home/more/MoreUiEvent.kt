@@ -3,9 +3,15 @@ package com.bottari.presentation.view.home.more
 sealed interface MoreUiEvent {
     data object FetchMemberInfoFailure : MoreUiEvent
 
-    data object SaveMemberNicknameFailure : MoreUiEvent
+    sealed interface SaveMemberNicknameFailure : MoreUiEvent {
+        data object InvalidException : SaveMemberNicknameFailure
+
+        data object NotFoundException : SaveMemberNicknameFailure
+
+        data object DuplicatedException : SaveMemberNicknameFailure
+
+        data object UnexpectedException : SaveMemberNicknameFailure
+    }
 
     data object SaveMemberNicknameSuccess : MoreUiEvent
-
-    data object InvalidNicknameRule : MoreUiEvent
 }

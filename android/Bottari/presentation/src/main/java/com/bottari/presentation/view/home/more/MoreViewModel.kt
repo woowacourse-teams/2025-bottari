@@ -4,6 +4,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.MemberUseCaseProvider
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
 import com.bottari.logger.BottariLogger
@@ -39,14 +43,17 @@ class MoreViewModel(
                     )
                     updateState { copy(nickname = editingNickname) }
                     emitEvent(MoreUiEvent.SaveMemberNicknameSuccess)
-                }.onFailure { error ->
+                }.onApiException { bottariException ->
                     updateState { copy(editingNickname = this.nickname) }
-                    emitEvent(
-                        when (error) {
-                            is IllegalArgumentException -> MoreUiEvent.InvalidNicknameRule
-                            else -> MoreUiEvent.SaveMemberNicknameFailure
-                        },
-                    )
+                    when (bottariException) {
+                        BottariException.InvalidException -> emitEvent(MoreUiEvent.SaveMemberNicknameFailure.InvalidException)
+                        BottariException.NotFoundException -> emitEvent(MoreUiEvent.SaveMemberNicknameFailure.NotFoundException)
+                        BottariException.DuplicatedException -> emitEvent(MoreUiEvent.SaveMemberNicknameFailure.DuplicatedException)
+                        else -> emitEvent(MoreUiEvent.SaveMemberNicknameFailure.UnexpectedException)
+                    }
+                }.onApiError {
+                    updateState { copy(editingNickname = this.nickname) }
+                    emitEvent(MoreUiEvent.SaveMemberNicknameFailure.UnexpectedException)
                 }
             updateState { copy(isLoading = false) }
         }
@@ -64,7 +71,7 @@ class MoreViewModel(
                             editingNickname = it.name.orEmpty(),
                         )
                     }
-                }.onFailure { emitEvent(MoreUiEvent.FetchMemberInfoFailure) }
+                }.onApiError { emitEvent(MoreUiEvent.FetchMemberInfoFailure) }
 
             updateState { copy(isLoading = false) }
         }
