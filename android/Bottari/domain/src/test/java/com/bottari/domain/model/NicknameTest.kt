@@ -1,5 +1,6 @@
 package com.bottari.domain.model
 
+import com.bottari.domain.model.exception.BottariException
 import com.bottari.domain.model.member.Nickname
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
@@ -36,7 +37,7 @@ class NicknameTest {
         // when
         // then
         nickname.length shouldBeLessThan 2
-        shouldThrow<IllegalArgumentException> { Nickname(nickname) }
+        shouldThrow<BottariException.InvalidException> { Nickname(nickname) }
     }
 
     @DisplayName("닉네임은 10글자를 초과할 수 없다")
@@ -48,6 +49,6 @@ class NicknameTest {
         // when
         // then
         nickname.length shouldBeGreaterThan 10
-        shouldThrow<IllegalArgumentException> { Nickname(nickname) }
+        shouldThrow<BottariException.InvalidException> { Nickname(nickname) }
     }
 }
