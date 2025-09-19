@@ -1,7 +1,6 @@
 package com.bottari.presentation.view.edit.team.management
 
-import android.content.ClipData
-import android.content.ClipboardManager
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -19,14 +18,12 @@ class TeamManagementFragment :
         FragmentTeamManagementBinding::inflate,
     ) {
     private val viewModel: TeamManagementViewModel by viewModels {
-        TeamManagementViewModel.Factory(requireArguments().getLong(ARG_TEAM_BOTTARI_ID))
-    }
-    private val adapter: TeamMemberAdapter by lazy { TeamMemberAdapter() }
-    private val clipboardManager: ClipboardManager by lazy {
-        requireContext().getSystemService(
-            ClipboardManager::class.java,
+        TeamManagementViewModel.Factory(
+            requireArguments().getLong(ARG_TEAM_BOTTARI_ID),
+            requireArguments().getString(ARG_TEAM_BOTTARI_NAME) ?: "",
         )
     }
+    private val adapter: TeamMemberAdapter by lazy { TeamMemberAdapter() }
 
     override fun onViewCreated(
         view: View,
@@ -67,7 +64,7 @@ class TeamManagementFragment :
     }
 
     private fun setupListener() {
-        binding.btnClipboard.setOnClickListener { copyInviteCode() }
+        binding.btnShare.setOnClickListener { copyInviteCode() }
         binding.btnPrevious.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
@@ -79,20 +76,35 @@ class TeamManagementFragment :
                 requireView().showSnackbar(R.string.team_management_copy_invite_code_failure_text)
                 return
             }
+        val bottariName =
+            viewModel.uiState.value?.teamBottariName ?: run {
+                requireView().showSnackbar(R.string.team_management_copy_invite_code_failure_text)
+                return
+            }
         val inviteLink = createDeeplink(inviteCode)
-        val clip = ClipData.newPlainText(LABEL_INVITE_CODE, inviteLink)
-        clipboardManager.setPrimaryClip(clip)
-        requireView().showSnackbar(R.string.team_management_copy_invite_code_success_text)
+        val shareMessage =
+            getString(R.string.team_management_share_template_text, bottariName, inviteLink)
+        val sendIntent: Intent =
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, shareMessage)
+                type = "text/plain"
+            }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 
     companion object {
         private const val ARG_TEAM_BOTTARI_ID = "ARG_TEAM_BOTTARI_ID"
-        private const val LABEL_INVITE_CODE = "LABEL_INVITE_CODE"
+        private const val ARG_TEAM_BOTTARI_NAME = "ARG_TEAM_BOTTARI_NAME"
 
         @JvmStatic
-        fun newInstance(id: Long) =
-            TeamManagementFragment().apply {
-                arguments = bundleOf(ARG_TEAM_BOTTARI_ID to id)
-            }
+        fun newInstance(
+            id: Long,
+            teamBottariName: String,
+        ) = TeamManagementFragment().apply {
+            arguments = bundleOf(ARG_TEAM_BOTTARI_ID to id, ARG_TEAM_BOTTARI_NAME to teamBottariName)
+        }
     }
 }

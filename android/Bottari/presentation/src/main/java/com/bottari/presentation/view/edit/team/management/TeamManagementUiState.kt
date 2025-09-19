@@ -4,6 +4,7 @@ import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 
 data class TeamManagementUiState(
     val isLoading: Boolean = false,
+    val teamBottariName: String = "",
     val inviteCode: String = "",
     val teamMemberHeadCount: Int = DEFAULT_VALUE,
     val maxHeadCount: Int = DEFAULT_VALUE,

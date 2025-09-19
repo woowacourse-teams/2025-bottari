@@ -69,7 +69,11 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
     private fun setupListener() {
         binding.btnPrevious.setOnClickListener { handlePreviousButtonClick() }
         binding.viewTeamMemberEdit.root.setOnClickListener {
-            (requireActivity() as? TeamBottariEditNavigator)?.navigateToMemberEdit(teamBottariId)
+            val teamBottariName = viewModel.uiState.value?.bottariTitle ?: return@setOnClickListener
+            (requireActivity() as? TeamBottariEditNavigator)?.navigateToMemberEdit(
+                teamBottariId,
+                teamBottariName,
+            )
         }
         binding.viewTeamPersonalItemEdit.btnRoot.setOnClickListener {
             navigateToItemEdit(
