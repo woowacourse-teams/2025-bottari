@@ -71,13 +71,21 @@ class TeamBottariFragment :
         }
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
-            val message =
-                when (uiEvent) {
-                    TeamBottariUiEvent.BottariDeleteFailure -> R.string.bottari_home_delete_failure_text
-                    TeamBottariUiEvent.BottariDeleteSuccess -> R.string.bottari_home_delete_success_text
-                    TeamBottariUiEvent.FetchBottariesFailure -> R.string.bottari_home_fetch_failure_text
-                }
-            requireView().showSnackbar(message)
+            when (uiEvent) {
+                TeamBottariUiEvent.BottariDeleteSuccess,
+                -> requireView().showSnackbar(R.string.bottari_home_delete_success_text)
+
+                TeamBottariUiEvent.FetchBottariesFailure.NotFoundException,
+                -> requireView().showSnackbar(R.string.bottari_home_fetch_failure_text)
+
+                TeamBottariUiEvent.BottariDeleteFailure.PermissionException,
+                TeamBottariUiEvent.BottariDeleteFailure.NotFoundException,
+                -> requireView().showSnackbar(R.string.bottari_home_delete_failure_text)
+
+                TeamBottariUiEvent.FetchBottariesFailure.UnexpectedException,
+                TeamBottariUiEvent.BottariDeleteFailure.UnexpectedException,
+                -> requireView().showSnackbar(R.string.common_unexpected_exception_text)
+            }
         }
     }
 

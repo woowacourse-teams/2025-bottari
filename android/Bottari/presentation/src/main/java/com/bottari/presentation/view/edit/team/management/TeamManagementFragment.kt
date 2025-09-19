@@ -56,7 +56,12 @@ class TeamManagementFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                is TeamManagementUiEvent.FetchTeamMembersFailure -> requireView().showSnackbar(R.string.team_management_fetch_failure_text)
+                TeamManagementUiEvent.FetchTeamMembersFailure.NotFoundException,
+                TeamManagementUiEvent.FetchTeamMembersFailure.PermissionException,
+                -> requireView().showSnackbar(R.string.team_management_fetch_failure_text)
+
+                TeamManagementUiEvent.FetchTeamMembersFailure.UnexpectedException,
+                -> requireView().showSnackbar(R.string.common_unexpected_exception_text)
             }
         }
     }
