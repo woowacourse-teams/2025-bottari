@@ -5,6 +5,10 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariUseCaseProvider
 import com.bottari.di.usecase.CommonUseCaseProvider
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
 import com.bottari.domain.usecase.notification.DeleteNotificationUseCase
@@ -27,10 +31,16 @@ class BottariViewModel(
 
         launch {
             fetchBottariesUseCase()
-                .onSuccess { bottaries -> updateState { copy(bottaries = bottaries.map { BottariUiModel.fromDomain(it) }) } }
-                .onFailure {
-                    emitEvent(BottariUiEvent.FetchBottariesFailure)
-                }
+                .onSuccess { bottaries ->
+                    updateState {
+                        copy(bottaries = bottaries.map(BottariUiModel::fromDomain))
+                    }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.NotFoundException -> emitEvent(BottariUiEvent.FetchBottariesFailure.NotFoundException)
+                        else -> emitEvent(BottariUiEvent.FetchBottariesFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(BottariUiEvent.FetchBottariesFailure.UnexpectedException) }
 
             updateState { copy(isLoading = false, isFetched = true) }
         }
@@ -53,9 +63,13 @@ class BottariViewModel(
                     deleteNotification(bottari)
                     fetchBottaries()
                     emitEvent(BottariUiEvent.BottariDeleteSuccess)
-                }.onFailure {
-                    emitEvent(BottariUiEvent.BottariDeleteFailure)
-                }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        is BottariException.NotFoundException -> emitEvent(BottariUiEvent.BottariDeleteFailure.NotFoundException)
+                        is BottariException.PermissionException -> emitEvent(BottariUiEvent.BottariDeleteFailure.PermissionException)
+                        else -> emitEvent(BottariUiEvent.BottariDeleteFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(BottariUiEvent.BottariDeleteFailure.UnexpectedException) }
 
             updateState { copy(isLoading = false) }
         }
@@ -65,12 +79,7 @@ class BottariViewModel(
         if (bottari == null) return
         launch {
             deleteNotificationUseCase(bottari.id)
-                .onFailure { exception ->
-                    BottariLogger.error(
-                        exception.stackTraceToString(),
-                        exception,
-                    )
-                }
+                .onApiError { emitEvent(BottariUiEvent.DeleteNotificationFailure) }
         }
     }
 

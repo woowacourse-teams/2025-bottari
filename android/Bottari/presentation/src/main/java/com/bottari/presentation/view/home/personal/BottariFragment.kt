@@ -72,13 +72,30 @@ class BottariFragment :
         }
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
-            val message =
-                when (uiEvent) {
-                    BottariUiEvent.BottariDeleteFailure -> R.string.bottari_home_delete_failure_text
-                    BottariUiEvent.BottariDeleteSuccess -> R.string.bottari_home_delete_success_text
-                    BottariUiEvent.FetchBottariesFailure -> R.string.bottari_home_fetch_failure_text
-                }
-            requireView().showSnackbar(message)
+            when (uiEvent) {
+                BottariUiEvent.BottariDeleteSuccess ->
+                    requireView().showSnackbar(R.string.bottari_home_delete_success_text)
+
+                BottariUiEvent.BottariDeleteFailure.NotFoundException ->
+                    requireView().showSnackbar(
+                        "삭제할 보따리를 찾지 못했어요",
+                    )
+
+                BottariUiEvent.BottariDeleteFailure.PermissionException ->
+                    requireView().showSnackbar(
+                        "보따리에 접근할 수 없어요",
+                    )
+
+                BottariUiEvent.FetchBottariesFailure.NotFoundException ->
+                    requireView().showSnackbar(
+                        "보따리를 가져올 수 없어요",
+                    )
+
+                BottariUiEvent.DeleteNotificationFailure,
+                BottariUiEvent.BottariDeleteFailure.UnexpectedException,
+                BottariUiEvent.FetchBottariesFailure.UnexpectedException,
+                -> requireView().showSnackbar(R.string.common_unexpected_exception_text)
+            }
         }
     }
 
