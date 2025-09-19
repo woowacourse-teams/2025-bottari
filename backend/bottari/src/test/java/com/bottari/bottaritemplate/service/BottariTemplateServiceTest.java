@@ -22,7 +22,7 @@ import com.bottari.member.domain.Member;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -125,15 +125,15 @@ class BottariTemplateServiceTest {
 
             // then
             assertAll(() -> {
-                        assertThat(actual).hasSize(2);
-                        assertThat(actual.get(0).title()).isEqualTo(memberTemplate2.getTitle());
-                        assertThat(actual.get(0).items()).hasSize(1);
-                        assertThat(actual.get(0).items().getFirst().name()).isEqualTo(item3.getName());
-                        assertThat(actual.get(1).title()).isEqualTo(memberTemplate1.getTitle());
-                        assertThat(actual.get(1).items()).hasSize(2);
-                        assertThat(actual.get(1).items().get(0).name()).isEqualTo(item1.getName());
-                        assertThat(actual.get(1).items().get(1).name()).isEqualTo(item2.getName());
-                    }
+                          assertThat(actual).hasSize(2);
+                          assertThat(actual.get(0).title()).isEqualTo(memberTemplate2.getTitle());
+                          assertThat(actual.get(0).items()).hasSize(1);
+                          assertThat(actual.get(0).items().getFirst().name()).isEqualTo(item3.getName());
+                          assertThat(actual.get(1).title()).isEqualTo(memberTemplate1.getTitle());
+                          assertThat(actual.get(1).items()).hasSize(2);
+                          assertThat(actual.get(1).items().get(0).name()).isEqualTo(item1.getName());
+                          assertThat(actual.get(1).items().get(1).name()).isEqualTo(item2.getName());
+                      }
             );
         }
 
@@ -324,7 +324,7 @@ class BottariTemplateServiceTest {
             );
         }
 
-        @Ignore
+        @Disabled
         @DisplayName("검색어로 필터링하여 다음 페이지 템플릿 목록을 조회한다.")
         @Test
         void getNextAll_WithQuery() {
@@ -410,11 +410,12 @@ class BottariTemplateServiceTest {
             final Long actual = bottariTemplateService.create(member.getSsaid(), request);
 
             // then
-            final List<BottariTemplateItem> actualItems = entityManager.createQuery("""
-                            SELECT i
-                            FROM BottariTemplateItem i
-                            WHERE i.bottariTemplate.id =: bottariTemplateId
-                            """, BottariTemplateItem.class)
+            final List<BottariTemplateItem> actualItems = entityManager.createQuery(
+                            """
+                                    SELECT i
+                                    FROM BottariTemplateItem i
+                                    WHERE i.bottariTemplate.id =: bottariTemplateId
+                                    """, BottariTemplateItem.class)
                     .setParameter("bottariTemplateId", actual)
                     .getResultList();
 
@@ -531,12 +532,13 @@ class BottariTemplateServiceTest {
             bottariTemplateService.createBottari(bottariTemplate.getId(), ssaid);
 
             // then
-            final BottariTemplateHistory acutalBottariTemplateHistory = entityManager.createQuery("""
-                                             SELECT bh
-                                             FROM BottariTemplateHistory bh
-                                             WHERE bh.id.memberId = :memberId
-                                             AND bh.id.bottariTemplateId = :bottariTemplateId
-                            """, BottariTemplateHistory.class)
+            final BottariTemplateHistory acutalBottariTemplateHistory = entityManager.createQuery(
+                            """
+                                                     SELECT bh
+                                                     FROM BottariTemplateHistory bh
+                                                     WHERE bh.id.memberId = :memberId
+                                                     AND bh.id.bottariTemplateId = :bottariTemplateId
+                                    """, BottariTemplateHistory.class)
                     .setParameter("memberId", member.getId())
                     .setParameter("bottariTemplateId", bottariTemplate.getId())
                     .getSingleResult();
@@ -573,16 +575,18 @@ class BottariTemplateServiceTest {
 
             // then
             final Long actualHistoryCount = entityManager.createQuery("""
-                                             SELECT COUNT(bh)
-                                             FROM BottariTemplateHistory bh
-                                             WHERE bh.id.memberId = :memberId
-                                             AND bh.id.bottariTemplateId = :bottariTemplateId
-                            """, Long.class)
+                                                                                               SELECT COUNT(bh)
+                                                                                               FROM BottariTemplateHistory bh
+                                                                                               WHERE bh.id.memberId = :memberId
+                                                                                               AND bh.id.bottariTemplateId = :bottariTemplateId
+                                                                              """, Long.class)
                     .setParameter("memberId", member.getId())
                     .setParameter("bottariTemplateId", bottariTemplate.getId())
                     .getSingleResult();
-            final BottariTemplate actualBottariTemplate = entityManager.find(BottariTemplate.class,
-                    bottariTemplate.getId());
+            final BottariTemplate actualBottariTemplate = entityManager.find(
+                    BottariTemplate.class,
+                    bottariTemplate.getId()
+            );
             assertAll(
                     () -> assertThat(actualBottariTemplate.getTakenCount()).isEqualTo(1),
                     () -> assertThat(actualHistoryCount).isEqualTo(1L)
