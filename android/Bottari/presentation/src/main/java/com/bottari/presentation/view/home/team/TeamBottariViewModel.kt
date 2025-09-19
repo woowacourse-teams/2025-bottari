@@ -4,6 +4,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.TeamBottariUseCaseProvider
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.usecase.team.ExitTeamBottariUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.logger.BottariLogger
@@ -21,10 +25,17 @@ class TeamBottariViewModel(
         launch {
             fetchTeamBottariesUseCase()
                 .onSuccess { bottaries ->
-                    updateState {
-                        copy(bottaries = bottaries.map { bottari -> TeamBottariUiModel.fromDomain(bottari) })
+                    val newBottaries =
+                        bottaries.map { bottari -> TeamBottariUiModel.fromDomain(bottari) }
+                    updateState { copy(bottaries = newBottaries) }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        is BottariException.NotFoundException -> emitEvent(TeamBottariUiEvent.FetchBottariesFailure.NotFoundException)
+                        else -> emitEvent(TeamBottariUiEvent.FetchBottariesFailure.UnexpectedException)
                     }
-                }.onFailure { emitEvent(TeamBottariUiEvent.FetchBottariesFailure) }
+                }.onApiError {
+                    emitEvent(TeamBottariUiEvent.FetchBottariesFailure.UnexpectedException)
+                }
 
             updateState { copy(isLoading = false, isFetched = true) }
         }
@@ -39,7 +50,15 @@ class TeamBottariViewModel(
                     logPersonalBottariDelete(bottariId)
                     fetchBottaries()
                     emitEvent(TeamBottariUiEvent.BottariDeleteSuccess)
-                }.onFailure { emitEvent(TeamBottariUiEvent.BottariDeleteFailure) }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        is BottariException.PermissionException -> emitEvent(TeamBottariUiEvent.BottariDeleteFailure.PermissionException)
+                        is BottariException.NotFoundException -> emitEvent(TeamBottariUiEvent.BottariDeleteFailure.NotFoundException)
+                        else -> emitEvent(TeamBottariUiEvent.BottariDeleteFailure.UnexpectedException)
+                    }
+                }.onApiError {
+                    emitEvent(TeamBottariUiEvent.BottariDeleteFailure.UnexpectedException)
+                }
 
             updateState { copy(isLoading = false) }
         }
