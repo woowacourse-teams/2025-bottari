@@ -57,10 +57,11 @@
 
         <ImageView
             android:id="@+id/btn_share"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="38dp"
+            android:layout_height="35dp"
             android:contentDescription="@string/team_management_clipboard_btn_description"
-            android:padding="@dimen/space_small"
+            android:layout_marginEnd="@dimen/space_small"
+            android:padding="@dimen/space_x_small"
             android:src="@drawable/btn_share"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
