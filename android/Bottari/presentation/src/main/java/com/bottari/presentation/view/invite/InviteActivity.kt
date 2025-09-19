@@ -28,23 +28,21 @@ class InviteActivity : BaseActivity<ActivityInviteBinding>(ActivityInviteBinding
         }
         viewModel.uiEvent.observe(this) { uiEvent ->
             when (uiEvent) {
-                InviteUiEvent.JoinTeamBottariFailure -> {
-                    binding.root.showSnackbar(
-                        R.string.join_team_bottari_failure_text,
-                        SnackBarDuration.VERY_SHORT_DELAY,
-                    ) {
-                        navigateToHome(false)
-                    }
-                }
+                InviteUiEvent.JoinTeamBottariFailure.DuplicatedException ->
+                    binding.root.showSnackbar(R.string.join_team_bottari_duplicated_exception_text)
+
+                InviteUiEvent.JoinTeamBottariFailure.NotFoundException ->
+                    binding.root.showSnackbar(R.string.join_team_bottari_not_found_exception_text)
 
                 InviteUiEvent.JoinTeamBottariSuccess -> {
                     binding.root.showSnackbar(
                         R.string.join_team_bottari_success_text,
                         SnackBarDuration.VERY_SHORT_DELAY,
-                    ) {
-                        navigateToHome(true)
-                    }
+                    ) { navigateToHome(true) }
                 }
+
+                InviteUiEvent.JoinTeamBottariFailure.UnexpectedException ->
+                    binding.root.showSnackbar(R.string.common_unexpected_exception_text)
             }
         }
     }
