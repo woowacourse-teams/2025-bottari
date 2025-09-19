@@ -3,5 +3,11 @@ package com.bottari.presentation.view.invite
 sealed interface InviteUiEvent {
     data object JoinTeamBottariSuccess : InviteUiEvent
 
-    data object JoinTeamBottariFailure : InviteUiEvent
+    sealed interface JoinTeamBottariFailure : InviteUiEvent {
+        data object NotFoundException : JoinTeamBottariFailure
+
+        data object DuplicatedException : JoinTeamBottariFailure
+
+        data object UnexpectedException : JoinTeamBottariFailure
+    }
 }
