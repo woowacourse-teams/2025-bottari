@@ -17,9 +17,7 @@ class SaveAlarmUseCase(
         bottariTitle: String,
         alarm: Alarm,
     ): BottariResult<Unit> {
-        val alarmId =
-            alarm.id
-                ?: return BottariResult.ApiException(BottariException.AlarmException.NotFoundException)
+        val alarmId = alarm.id ?: return BottariResult.ApiException(BottariException.NotFoundException)
 
         return alarmRepository
             .saveAlarm(alarmId, alarm)
