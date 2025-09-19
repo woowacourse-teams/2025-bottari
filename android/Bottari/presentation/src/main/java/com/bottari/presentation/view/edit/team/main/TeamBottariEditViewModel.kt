@@ -9,6 +9,10 @@ import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.di.usecase.TeamBottariUseCaseProvider
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.model.team.bottari.TeamBottariDetail
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
@@ -50,7 +54,17 @@ class TeamBottariEditViewModel(
         launch {
             fetchTeamBottariDetailUseCase(bottariId)
                 .onSuccess { handleFetchTeamBottariDetail(it) }
-                .onFailure { emitEvent(TeamBottariEditUiEvent.FetchTeamBottariDetailFailure) }
+                .onApiException { bottariException ->
+                    when (bottariException) {
+                        is BottariException.NotFoundException,
+                        -> emitEvent(TeamBottariEditUiEvent.FetchTeamBottariDetailFailure.NotFoundException)
+
+                        is BottariException.PermissionException,
+                        -> emitEvent(TeamBottariEditUiEvent.FetchTeamBottariDetailFailure.PermissionException)
+
+                        else -> emitEvent(TeamBottariEditUiEvent.FetchTeamBottariDetailFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(TeamBottariEditUiEvent.FetchTeamBottariDetailFailure.UnexpectedException) }
 
             updateState { copy(isLoading = false, isFetched = true) }
         }
@@ -74,8 +88,18 @@ class TeamBottariEditViewModel(
         updateState {
             copy(
                 bottariTitle = teamBottariDetail.bottari.title,
-                personalItems = teamBottariDetail.personalItems.map { BottariItemUiModel.fromDomain(it) },
-                assignedItems = teamBottariDetail.assignedItems.map { BottariItemUiModel.fromDomain(it) },
+                personalItems =
+                    teamBottariDetail.personalItems.map {
+                        BottariItemUiModel.fromDomain(
+                            it,
+                        )
+                    },
+                assignedItems =
+                    teamBottariDetail.assignedItems.map {
+                        BottariItemUiModel.fromDomain(
+                            it,
+                        )
+                    },
                 sharedItems = teamBottariDetail.sharedItems.map { BottariItemUiModel.fromDomain(it) },
                 alarm = alarmUi,
                 alarmSwitchState = alarmUi?.isActive ?: false,

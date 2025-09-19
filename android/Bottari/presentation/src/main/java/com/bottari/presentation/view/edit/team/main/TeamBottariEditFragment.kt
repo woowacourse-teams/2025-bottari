@@ -152,11 +152,12 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
 
     private fun handleUiEvent(uiEvent: TeamBottariEditUiEvent) {
         when (uiEvent) {
-            TeamBottariEditUiEvent.FetchTeamBottariDetailFailure ->
-                showSnackbar(R.string.bottari_edit_fetch_failure_text)
+            TeamBottariEditUiEvent.FetchTeamBottariDetailFailure.NotFoundException,
+            TeamBottariEditUiEvent.FetchTeamBottariDetailFailure.PermissionException,
+            -> showSnackbar(R.string.bottari_edit_fetch_failure_text)
 
-            TeamBottariEditUiEvent.ToggleAlarmStateFailure ->
-                showSnackbar(R.string.bottari_edit_toggle_alarm_state_failure_text)
+            TeamBottariEditUiEvent.FetchTeamBottariDetailFailure.UnexpectedException,
+            -> showSnackbar(R.string.common_unexpected_exception_text)
         }
     }
 
