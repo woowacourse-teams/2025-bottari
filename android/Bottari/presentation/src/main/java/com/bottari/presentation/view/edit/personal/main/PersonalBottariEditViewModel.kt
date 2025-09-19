@@ -9,6 +9,10 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.AlarmUseCaseProvider
 import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.di.usecase.BottariUseCaseProvider
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
 import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
@@ -49,9 +53,13 @@ class PersonalBottariEditViewModel(
                 currentState.id,
             ).onSuccess {
                 updateState { PersonalBottariEditUiState.from(BottariDetailUiModel.fromDomain(it)) }
-            }.onFailure {
-                emitEvent(PersonalBottariEditUiEvent.FetchBottariFailure)
-            }
+            }.onApiException { bottariException ->
+                when (bottariException) {
+                    BottariException.PermissionException -> emitEvent(PersonalBottariEditUiEvent.FetchBottariFailure.PermissionException)
+                    BottariException.NotFoundException -> emitEvent(PersonalBottariEditUiEvent.FetchBottariFailure.NotFoundException)
+                    else -> emitEvent(PersonalBottariEditUiEvent.FetchBottariFailure.UnexpectedException)
+                }
+            }.onApiError { emitEvent(PersonalBottariEditUiEvent.FetchBottariFailure.UnexpectedException) }
 
             updateState { copy(isLoading = false) }
         }
@@ -65,7 +73,6 @@ class PersonalBottariEditViewModel(
         launch {
             createBottariTemplateUseCase(currentState.title, items)
                 .onSuccess { createdTemplateId ->
-                    if (createdTemplateId == null) return@onSuccess
                     BottariLogger.ui(
                         UiEventType.TEMPLATE_UPLOAD,
                         mapOf(
@@ -75,9 +82,13 @@ class PersonalBottariEditViewModel(
                         ),
                     )
                     emitEvent(PersonalBottariEditUiEvent.CreateTemplateSuccess)
-                }.onFailure {
-                    emitEvent(PersonalBottariEditUiEvent.CreateTemplateFailure)
-                }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.InvalidException -> emitEvent(PersonalBottariEditUiEvent.CreateTemplateFailure.InvalidException)
+                        BottariException.NotFoundException -> emitEvent(PersonalBottariEditUiEvent.CreateTemplateFailure.NotFoundException)
+                        else -> emitEvent(PersonalBottariEditUiEvent.CreateTemplateFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(PersonalBottariEditUiEvent.CreateTemplateFailure.UnexpectedException) }
 
             updateState { copy(isLoading = false) }
         }
@@ -104,9 +115,17 @@ class PersonalBottariEditViewModel(
                 )
                 scheduleAlarm(isActive, alarm)
                 updateState { copy(alarm = alarm.copy(isActive = isActive)) }
-            }.onFailure {
-                emitEvent(PersonalBottariEditUiEvent.ToggleAlarmStateFailure)
-            }
+            }.onApiException { bottariException ->
+                when (bottariException) {
+                    BottariException.NotFoundException ->
+                        emitEvent(PersonalBottariEditUiEvent.ToggleAlarmStateFailure.NotFoundException)
+
+                    BottariException.DuplicatedException ->
+                        emitEvent(PersonalBottariEditUiEvent.ToggleAlarmStateFailure.DuplicatedException)
+
+                    else -> emitEvent(PersonalBottariEditUiEvent.ToggleAlarmStateFailure.UnexpectedException)
+                }
+            }.onApiError { emitEvent(PersonalBottariEditUiEvent.ToggleAlarmStateFailure.UnexpectedException) }
         }
     }
 

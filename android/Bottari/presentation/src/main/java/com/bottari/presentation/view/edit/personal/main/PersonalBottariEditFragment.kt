@@ -79,21 +79,29 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                PersonalBottariEditUiEvent.FetchBottariFailure -> requireView().showSnackbar(R.string.bottari_edit_fetch_failure_text)
-                PersonalBottariEditUiEvent.CreateTemplateFailure ->
-                    requireView().showSnackbar(
-                        R.string.bottari_edit_create_template_failure_text,
-                    )
-
                 PersonalBottariEditUiEvent.CreateTemplateSuccess ->
                     requireView().showSnackbar(
                         R.string.bottari_edit_create_template_success_text,
                     )
 
-                is PersonalBottariEditUiEvent.ToggleAlarmStateFailure ->
-                    requireView().showSnackbar(
-                        R.string.bottari_edit_toggle_alarm_state_failure_text,
-                    )
+                PersonalBottariEditUiEvent.CreateTemplateFailure.InvalidException ->
+                    requireView().showSnackbar("보따리 이름 혹은 물건 이름이 올바르지 않아요")
+
+                PersonalBottariEditUiEvent.FetchBottariFailure.PermissionException ->
+                    requireView().showSnackbar("보따리 접근 권한이 없어요")
+
+                PersonalBottariEditUiEvent.ToggleAlarmStateFailure.DuplicatedException ->
+                    requireView().showSnackbar("현재 알람 상태와 동일한 요청이에요")
+
+                PersonalBottariEditUiEvent.CreateTemplateFailure.NotFoundException,
+                PersonalBottariEditUiEvent.FetchBottariFailure.NotFoundException,
+                PersonalBottariEditUiEvent.ToggleAlarmStateFailure.NotFoundException,
+                -> requireView().showSnackbar("사용자 인증에 실패했어요")
+
+                PersonalBottariEditUiEvent.CreateTemplateFailure.UnexpectedException,
+                PersonalBottariEditUiEvent.FetchBottariFailure.UnexpectedException,
+                PersonalBottariEditUiEvent.ToggleAlarmStateFailure.UnexpectedException,
+                -> requireView().showSnackbar(R.string.common_unexpected_exception_text)
             }
         }
     }
