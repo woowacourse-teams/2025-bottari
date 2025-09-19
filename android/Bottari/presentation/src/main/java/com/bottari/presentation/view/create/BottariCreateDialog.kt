@@ -94,11 +94,27 @@ class BottariCreateDialog :
             binding.etBottariCreateName.setSelection(uiState.bottariTitle.length)
         }
 
+        // 문자열 리소스로 분리 후 아래에 선언된 showSnackbar를 적용해야 함
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                is BottariCreateUiEvent.CreatePersonalBottariSuccess -> navigateToPersonalEdit(uiEvent.bottariId)
-                is BottariCreateUiEvent.CreateTeamBottariSuccess -> navigateToTeamBottariEdit(uiEvent.bottariId)
-                BottariCreateUiEvent.CreateBottariFailure -> showSnackbar(R.string.bottari_create_failure_text)
+                is BottariCreateUiEvent.CreatePersonalBottariSuccess ->
+                    navigateToPersonalEdit(
+                        uiEvent.bottariId,
+                    )
+
+                is BottariCreateUiEvent.CreateTeamBottariSuccess ->
+                    navigateToTeamBottariEdit(
+                        uiEvent.bottariId,
+                    )
+
+                BottariCreateUiEvent.CreateBottariFailure.InvalidException ->
+                    requireView().showSnackbar("보따리 이름이 올바르지 않아요")
+
+                BottariCreateUiEvent.CreateBottariFailure.NotFoundException ->
+                    requireView().showSnackbar("사용자 인증에 실패했어요")
+
+                BottariCreateUiEvent.CreateBottariFailure.UnexpectedException ->
+                    requireView().showSnackbar(R.string.common_unexpected_exception_text)
             }
         }
     }

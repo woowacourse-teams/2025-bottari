@@ -9,5 +9,11 @@ sealed interface BottariCreateUiEvent {
         val bottariId: Long?,
     ) : BottariCreateUiEvent
 
-    data object CreateBottariFailure : BottariCreateUiEvent
+    sealed interface CreateBottariFailure : BottariCreateUiEvent {
+        data object InvalidException : CreateBottariFailure
+
+        data object NotFoundException : CreateBottariFailure
+
+        data object UnexpectedException : CreateBottariFailure
+    }
 }

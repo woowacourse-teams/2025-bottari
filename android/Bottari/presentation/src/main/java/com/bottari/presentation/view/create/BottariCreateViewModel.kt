@@ -8,6 +8,10 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariUseCaseProvider
 import com.bottari.di.usecase.TeamBottariUseCaseProvider
 import com.bottari.domain.model.bottari.BottariType
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.domain.usecase.team.CreateTeamBottariUseCase
 import com.bottari.logger.BottariLogger
@@ -43,10 +47,19 @@ class BottariCreateViewModel(
         launch {
             createBottariUseCase(title)
                 .onSuccess { createdBottariId ->
-                    if (createdBottariId == null) return@onSuccess
                     logCreateBottariEvent(UiEventType.PERSONAL_BOTTARI_CREATE, title)
                     emitEvent(BottariCreateUiEvent.CreatePersonalBottariSuccess(createdBottariId))
-                }.onFailure { emitEvent(BottariCreateUiEvent.CreateBottariFailure) }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.InvalidException ->
+                            emitEvent(BottariCreateUiEvent.CreateBottariFailure.InvalidException)
+
+                        BottariException.NotFoundException ->
+                            emitEvent(BottariCreateUiEvent.CreateBottariFailure.NotFoundException)
+
+                        else -> emitEvent(BottariCreateUiEvent.CreateBottariFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(BottariCreateUiEvent.CreateBottariFailure.UnexpectedException) }
         }
     }
 
@@ -56,10 +69,19 @@ class BottariCreateViewModel(
         launch {
             createTeamBottariUseCase(title)
                 .onSuccess { createdBottariId ->
-                    if (createdBottariId == null) return@onSuccess
                     logCreateBottariEvent(UiEventType.TEAM_BOTTARI_CREATE, title)
                     emitEvent(BottariCreateUiEvent.CreateTeamBottariSuccess(createdBottariId))
-                }.onFailure { emitEvent(BottariCreateUiEvent.CreateBottariFailure) }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.InvalidException ->
+                            emitEvent(BottariCreateUiEvent.CreateBottariFailure.InvalidException)
+
+                        BottariException.NotFoundException ->
+                            emitEvent(BottariCreateUiEvent.CreateBottariFailure.NotFoundException)
+
+                        else -> emitEvent(BottariCreateUiEvent.CreateBottariFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(BottariCreateUiEvent.CreateBottariFailure.UnexpectedException) }
         }
     }
 
