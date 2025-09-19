@@ -47,20 +47,19 @@ class MyTemplateFragment :
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                MyTemplateUiEvent.FetchMyTemplateFailure ->
-                    requireView().showSnackbar(
-                        R.string.template_my_template_fetch_failure_text,
-                    )
+                MyTemplateUiEvent.FetchMyTemplateFailure.NotFoundException,
+                -> requireView().showSnackbar(R.string.template_my_template_fetch_failure_text)
 
-                MyTemplateUiEvent.DeleteMyTemplateFailure ->
-                    requireView().showSnackbar(
-                        R.string.template_my_template_delete_failure_text,
-                    )
+                MyTemplateUiEvent.DeleteMyTemplateFailure.NotFoundException,
+                MyTemplateUiEvent.DeleteMyTemplateFailure.PermissionException,
+                -> requireView().showSnackbar(R.string.template_my_template_delete_failure_text)
 
-                MyTemplateUiEvent.DeleteMyTemplateSuccess ->
-                    requireView().showSnackbar(
-                        R.string.template_my_template_delete_success_text,
-                    )
+                MyTemplateUiEvent.FetchMyTemplateFailure.UnexpectedException,
+                MyTemplateUiEvent.DeleteMyTemplateFailure.UnexpectedException,
+                -> requireView().showSnackbar(R.string.common_unexpected_exception_text)
+
+                MyTemplateUiEvent.DeleteMyTemplateSuccess,
+                -> requireView().showSnackbar(R.string.template_my_template_delete_success_text)
             }
         }
     }

@@ -3,6 +3,7 @@ package com.bottari.presentation.view.template
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.commit
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityTemplateBinding
@@ -22,28 +23,27 @@ class TemplateActivity :
         bottariTemplateId: Long,
         isMyTemplate: Boolean,
     ) {
-        supportFragmentManager.beginTransaction().apply {
+        supportFragmentManager.commit {
             replace(
                 R.id.fcv_template,
                 TemplateDetailFragment::class.java,
                 TemplateDetailFragment.newBundle(bottariTemplateId, isMyTemplate),
             )
             if (isMyTemplate) addToBackStack(null)
-            commit()
         }
     }
 
     override fun navigateToMyTemplate() {
-        supportFragmentManager.beginTransaction().apply {
+        supportFragmentManager.commit {
             replace(R.id.fcv_template, MyTemplateFragment::class.java, null)
-            commit()
         }
     }
 
     private fun navigateToScreen() {
         val type =
             TemplateDestinationType.valueOf(
-                intent.getStringExtra(EXTRA_DESTINATION_TYPE) ?: TemplateDestinationType.MY_TEMPLATE.name,
+                intent.getStringExtra(EXTRA_DESTINATION_TYPE)
+                    ?: TemplateDestinationType.MY_TEMPLATE.name,
             )
         when (type) {
             TemplateDestinationType.MY_TEMPLATE -> navigateToMyTemplate()
@@ -60,9 +60,8 @@ class TemplateActivity :
     }
 
     private fun navigateToCreateTemplate() {
-        supportFragmentManager.beginTransaction().apply {
+        supportFragmentManager.commit {
             replace(R.id.fcv_template, TemplateCreateFragment::class.java, null)
-            commit()
         }
     }
 
