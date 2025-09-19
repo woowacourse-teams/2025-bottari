@@ -20,7 +20,9 @@ class TeamManagementFragment :
     private val viewModel: TeamManagementViewModel by viewModels {
         TeamManagementViewModel.Factory(
             requireArguments().getLong(ARG_TEAM_BOTTARI_ID),
-            requireArguments().getString(ARG_TEAM_BOTTARI_NAME) ?: "",
+            requireNotNull(
+                requireArguments().getString(ARG_TEAM_BOTTARI_NAME),
+            ),
         )
     }
     private val adapter: TeamMemberAdapter by lazy { TeamMemberAdapter() }
