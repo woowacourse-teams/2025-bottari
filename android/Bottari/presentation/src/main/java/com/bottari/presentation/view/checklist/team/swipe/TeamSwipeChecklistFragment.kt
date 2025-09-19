@@ -89,8 +89,19 @@ class TeamSwipeChecklistFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                TeamChecklistUiEvent.CheckItemFailure -> requireView().showSnackbar(R.string.checklist_check_failure_text)
-                TeamChecklistUiEvent.FetchChecklistFailure -> requireView().showSnackbar(R.string.checklist_fetch_failure_text)
+                TeamChecklistUiEvent.CheckItemFailure.DuplicatedException ->
+                    requireView().showSnackbar("현재 체크 상태와 동일한 요청이예요")
+
+                TeamChecklistUiEvent.FetchChecklistFailure.PermissionException ->
+                    requireView().showSnackbar("우리 보따리 접근 권한이 없어요")
+
+                TeamChecklistUiEvent.CheckItemFailure.NotFoundException,
+                TeamChecklistUiEvent.FetchChecklistFailure.NotFoundException,
+                -> requireView().showSnackbar("사용자 인증에 실패했어요")
+
+                TeamChecklistUiEvent.CheckItemFailure.UnexpectedException,
+                TeamChecklistUiEvent.FetchChecklistFailure.UnexpectedException,
+                -> requireView().showSnackbar(R.string.common_unexpected_exception_text)
             }
         }
     }
