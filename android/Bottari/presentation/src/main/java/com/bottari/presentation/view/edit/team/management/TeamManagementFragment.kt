@@ -82,10 +82,8 @@ class TeamManagementFragment :
                 requireView().showSnackbar(R.string.team_management_share_failure_text)
                 return
             }
-        val inviteCode =
-            state.inviteCode
-        val bottariName =
-            state.teamBottariName
+        val inviteCode = state.inviteCode
+        val bottariName = state.teamBottariName
         val inviteLink = createDeeplink(inviteCode)
         val shareMessage =
             getString(
