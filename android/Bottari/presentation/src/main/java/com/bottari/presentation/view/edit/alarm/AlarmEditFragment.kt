@@ -127,8 +127,17 @@ class AlarmEditFragment :
                 parentFragmentManager.popBackStack()
             }
 
-            AlarmUiEvent.AlarmCreateFailure -> requireView().showSnackbar(R.string.alarm_edit_create_failure_text)
-            AlarmUiEvent.AlarmSaveFailure -> requireView().showSnackbar(R.string.alarm_edit_save_failure_text)
+            AlarmUiEvent.AlarmCreateFailure.InvalidException,
+            AlarmUiEvent.AlarmSaveFailure.InvalidException,
+            -> requireView().showSnackbar("날짜 및 시간 알람을 먼저 설정해주세요")
+
+            AlarmUiEvent.AlarmCreateFailure.NotFoundException,
+            AlarmUiEvent.AlarmSaveFailure.NotFoundException,
+            -> requireView().showSnackbar("사용자 인증에 실패했어요")
+
+            AlarmUiEvent.AlarmCreateFailure.UnexpectedException,
+            AlarmUiEvent.AlarmSaveFailure.UnexpectedException,
+            -> requireView().showSnackbar(R.string.common_unexpected_exception_text)
         }
     }
 
@@ -186,8 +195,17 @@ class AlarmEditFragment :
             val isVisible = group == visibleView
             group.isVisible = isVisible
             when (group) {
-                binding.groupAlarmNonRepeat -> updateAlarmTypeText(binding.tvAlarmTypeNonRepeat, isVisible)
-                binding.groupAlarmRepeat -> updateAlarmTypeText(binding.tvAlarmTypeRepeat, isVisible)
+                binding.groupAlarmNonRepeat ->
+                    updateAlarmTypeText(
+                        binding.tvAlarmTypeNonRepeat,
+                        isVisible,
+                    )
+
+                binding.groupAlarmRepeat ->
+                    updateAlarmTypeText(
+                        binding.tvAlarmTypeRepeat,
+                        isVisible,
+                    )
             }
         }
     }

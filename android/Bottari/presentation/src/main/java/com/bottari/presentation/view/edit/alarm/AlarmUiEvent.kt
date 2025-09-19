@@ -7,11 +7,23 @@ sealed interface AlarmUiEvent {
         val notification: NotificationUiModel,
     ) : AlarmUiEvent
 
-    data object AlarmCreateFailure : AlarmUiEvent
+    sealed interface AlarmCreateFailure : AlarmUiEvent {
+        data object InvalidException : AlarmCreateFailure
+
+        data object NotFoundException : AlarmCreateFailure
+
+        data object UnexpectedException : AlarmCreateFailure
+    }
 
     data class AlarmSaveSuccess(
         val notification: NotificationUiModel,
     ) : AlarmUiEvent
 
-    data object AlarmSaveFailure : AlarmUiEvent
+    sealed interface AlarmSaveFailure : AlarmUiEvent {
+        data object InvalidException : AlarmCreateFailure
+
+        data object NotFoundException : AlarmCreateFailure
+
+        data object UnexpectedException : AlarmCreateFailure
+    }
 }

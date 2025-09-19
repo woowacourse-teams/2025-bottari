@@ -7,6 +7,10 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.AlarmUseCaseProvider
 import com.bottari.domain.model.alarm.Alarm
+import com.bottari.domain.model.exception.BottariException
+import com.bottari.domain.model.exception.onApiError
+import com.bottari.domain.model.exception.onApiException
+import com.bottari.domain.model.exception.onSuccess
 import com.bottari.domain.usecase.alarm.CreateAlarmUseCase
 import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
 import com.bottari.logger.BottariLogger
@@ -82,9 +86,17 @@ class AlarmEditViewModel(
                         mapOf("alarm_id" to it, "alarm_info" to alarm.toString()),
                     )
                     emitEvent(AlarmUiEvent.AlarmCreateSuccess(createNotification()))
-                }.onFailure {
-                    emitEvent(AlarmUiEvent.AlarmCreateFailure)
-                }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.InvalidException ->
+                            emitEvent(AlarmUiEvent.AlarmCreateFailure.InvalidException)
+
+                        BottariException.NotFoundException ->
+                            emitEvent(AlarmUiEvent.AlarmCreateFailure.NotFoundException)
+
+                        else -> emitEvent(AlarmUiEvent.AlarmCreateFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(AlarmUiEvent.AlarmCreateFailure.UnexpectedException) }
         }
         updateState { copy(isLoading = false) }
     }
@@ -103,9 +115,17 @@ class AlarmEditViewModel(
                         ),
                     )
                     emitEvent(AlarmUiEvent.AlarmSaveSuccess(createNotification()))
-                }.onFailure {
-                    emitEvent(AlarmUiEvent.AlarmSaveFailure)
-                }
+                }.onApiException { bottariException ->
+                    when (bottariException) {
+                        BottariException.InvalidException ->
+                            emitEvent(AlarmUiEvent.AlarmSaveFailure.InvalidException)
+
+                        BottariException.NotFoundException ->
+                            emitEvent(AlarmUiEvent.AlarmSaveFailure.NotFoundException)
+
+                        else -> emitEvent(AlarmUiEvent.AlarmSaveFailure.UnexpectedException)
+                    }
+                }.onApiError { emitEvent(AlarmUiEvent.AlarmSaveFailure.UnexpectedException) }
         }
         updateState { copy(isLoading = false) }
     }
