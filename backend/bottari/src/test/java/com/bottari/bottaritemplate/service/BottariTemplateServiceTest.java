@@ -22,7 +22,7 @@ import com.bottari.member.domain.Member;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.transaction.TestTransaction;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -236,6 +237,17 @@ class BottariTemplateServiceTest {
     @Nested
     class GetNextAllTest {
 
+        @AfterEach
+        void tearDown() {
+            // 쿼리로 데이터베이스 테이블 초기화
+            entityManager.createNativeQuery("SET FOREIGN_KEY_CHECKS = 0").executeUpdate();
+            entityManager.createNativeQuery("TRUNCATE TABLE bottari_template_history").executeUpdate();
+            entityManager.createNativeQuery("TRUNCATE TABLE bottari_template_item").executeUpdate();
+            entityManager.createNativeQuery("TRUNCATE TABLE bottari_template").executeUpdate();
+            entityManager.createNativeQuery("TRUNCATE TABLE member").executeUpdate();
+            entityManager.createNativeQuery("SET FOREIGN_KEY_CHECKS = 1").executeUpdate();
+        }
+
         @DisplayName("createdAt 기준으로 다음 페이지 템플릿 목록을 조회한다.")
         @Test
         void getNextAll_ByCreatedAt() {
@@ -324,7 +336,6 @@ class BottariTemplateServiceTest {
             );
         }
 
-        @Disabled
         @DisplayName("검색어로 필터링하여 다음 페이지 템플릿 목록을 조회한다.")
         @Test
         void getNextAll_WithQuery() {
@@ -345,6 +356,20 @@ class BottariTemplateServiceTest {
             entityManager.persist(item1);
             entityManager.persist(item2);
             entityManager.persist(item3);
+
+            /*
+             * --- 트랜잭션을 강제로 커밋 ---
+             * 1. 현재 트랜잭션을 커밋하도록 설정
+             * 2. 현재 트랜잭션을 종료 (여기서 실제 DB에 COMMIT 됨)
+             * 3. 다음 로직을 위해 새로운 트랜잭션 시작
+             * 사유:
+             * MySQL의 InnoDB는 커밋된 데이터만 Full-Text Index에 반영하기 때문에,
+             * 테스트 내에서 Full-Text Index를 사용하는 쿼리를 실행하려면
+             * 트랜잭션을 커밋해야 한다.
+             */
+            TestTransaction.flagForCommit();
+            TestTransaction.end();
+            TestTransaction.start();
 
             final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
                     "체크리스트",
