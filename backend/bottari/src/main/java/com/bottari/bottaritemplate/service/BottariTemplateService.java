@@ -160,7 +160,6 @@ public class BottariTemplateService {
             final Pageable pageable,
             final List<BottariTemplateProjection> bottariTemplateProjections
     ) {
-        System.out.println("사이즈 = " + bottariTemplateProjections.size());
         final boolean hasNext = bottariTemplateProjections.size() > pageable.getPageSize();
         List<BottariTemplateProjection> projections = new ArrayList<>(bottariTemplateProjections);
         if (hasNext) {
