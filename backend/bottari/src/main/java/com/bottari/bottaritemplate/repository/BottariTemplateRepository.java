@@ -2,12 +2,9 @@ package com.bottari.bottaritemplate.repository;
 
 import com.bottari.bottaritemplate.domain.BottariTemplate;
 import com.bottari.bottaritemplate.repository.dto.BottariTemplateProjection;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -41,7 +38,7 @@ public interface BottariTemplateRepository extends JpaRepository<BottariTemplate
                        m.id AS memberId,
                        m.name AS memberName
             FROM bottari_template bt
-            JOIN member m ON m.id = bt.member_id
+            JOIN member m ON m.id = bt.member_id 
             WHERE (:query = '' OR MATCH(bt.title) AGAINST(:query IN BOOLEAN MODE))
                 AND(
                         bt.created_at < :lastCreatedAt

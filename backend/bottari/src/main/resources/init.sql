@@ -18,8 +18,6 @@ SELECT CONCAT('test_ssaid_', x),
        CONCAT('이', x)
 FROM seq;
 
-
-
 -- 보따리 데이터
 INSERT INTO bottari (title, member_id, created_at)
 VALUES
