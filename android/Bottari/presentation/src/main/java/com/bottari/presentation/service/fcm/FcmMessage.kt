@@ -15,7 +15,7 @@ sealed class FcmMessage {
             notificationHelper.sendTeamMessage(
                 teamBottariId,
                 teamBottariTitle,
-                R.string.common_team_bottari_notification_item_changed_message_text,
+                R.string.notification_team_bottari_item_changed_message,
             )
         }
 
@@ -37,7 +37,7 @@ sealed class FcmMessage {
             notificationHelper.sendTeamMessage(
                 teamBottariId,
                 teamBottariTitle,
-                R.string.common_team_bottari_notification_send_remind_by_member_message_text,
+                R.string.notification_remind_by_member_message,
             )
         }
 
@@ -60,7 +60,7 @@ sealed class FcmMessage {
             notificationHelper.sendTeamMessage(
                 teamBottariId,
                 teamBottariTitle,
-                R.string.common_team_bottari_notification_send_remind_by_item_message_text,
+                R.string.notification_team_bottari_remind_by_item_message,
                 itemName,
                 teamBottariTitle,
             )
@@ -90,7 +90,7 @@ sealed class FcmMessage {
             notificationHelper.sendTeamMessage(
                 teamBottariId,
                 teamBottariTitle,
-                R.string.common_team_bottari_notification_exit_team_bottari_message_text,
+                R.string.notification_team_bottari_notification_exit_message,
                 memberName,
                 teamBottariTitle,
             )

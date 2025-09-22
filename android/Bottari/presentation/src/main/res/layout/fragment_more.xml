@@ -61,7 +61,7 @@
             android:id="@+id/btn_nickname_edit"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="@string/nickname_edit_btn_description"
+            android:contentDescription="@string/common_btn_nickname_edit_description"
             android:padding="@dimen/space_small"
             android:src="@drawable/ic_pen"
             app:layout_constraintBottom_toBottomOf="parent"

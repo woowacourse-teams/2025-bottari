@@ -82,8 +82,8 @@ class NotificationHelper(
             .Builder(context, BOTTARI_CHANNEL_ID)
             .setSmallIcon(R.drawable.img_bottari_logo)
             .setContentTitle(
-                context.getString(R.string.common_bottari_notification_title, bottariTitle),
-            ).setContentText(context.getString(R.string.common_bottari_notification_message))
+                context.getString(R.string.notification_bottari_title_format, bottariTitle),
+            ).setContentText(context.getString(R.string.notification_bottari_remind_message))
             .setContentIntent(intent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
@@ -115,12 +115,8 @@ class NotificationHelper(
         NotificationCompat
             .Builder(context, TEAM_BOTTARI_CHANNEL_ID)
             .setSmallIcon(R.drawable.img_bottari_logo)
-            .setContentTitle(
-                context.getString(
-                    R.string.common_team_bottari_notification_title_text,
-                    bottariTitle,
-                ),
-            ).setContentText(message)
+            .setContentTitle(bottariTitle)
+            .setContentText(message)
             .setContentIntent(intent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
@@ -130,7 +126,7 @@ class NotificationHelper(
         val audioAttributes = createAudioAttributes()
         return NotificationChannel(
             channelId,
-            context.getString(R.string.common_bottari_notification_channel_name),
+            context.getString(R.string.notification_personal_bottari_channel_name),
             NotificationManager.IMPORTANCE_HIGH,
         ).apply {
             enableLights(true)

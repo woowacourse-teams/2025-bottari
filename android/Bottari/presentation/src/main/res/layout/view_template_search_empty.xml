@@ -9,7 +9,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginBottom="@dimen/space_small"
-        android:contentDescription="@string/search_icon_description"
+        android:contentDescription="@string/common_icon_search_description"
         android:src="@drawable/ic_search"
         app:layout_constraintBottom_toTopOf="@+id/tv_empty_view_title"
         app:layout_constraintEnd_toEndOf="parent"

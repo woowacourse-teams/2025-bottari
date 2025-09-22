@@ -90,7 +90,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun checkPermissionAndNavigate(permissionFlag: Boolean) {
         if (!hasRequiredPermission(permissionFlag)) {
-            binding.root.showSnackbar(R.string.splash_screen_permission_denied_text) {
+            binding.root.showSnackbar(R.string.common_permission_denied_text) {
                 if (!checkDeeplink()) navigateToHome()
             }
             return
