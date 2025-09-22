@@ -60,6 +60,7 @@ jobs:
           DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
           DATABASE_USERNAME: ${{ secrets.TEST_DATABASE_USERNAME }}
           DATABASE_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
         run: ./gradlew clean build --no-daemon
         continue-on-error: true
 
