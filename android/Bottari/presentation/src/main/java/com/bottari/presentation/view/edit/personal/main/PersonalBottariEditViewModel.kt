@@ -148,16 +148,6 @@ class PersonalBottariEditViewModel(
             alarm = alarm,
         )
 
-    private fun BottariDetail.toState(): PersonalBottariEditUiState =
-        PersonalBottariEditUiState(
-            isLoading = false,
-            bottariId = id,
-            bottariTitle = title,
-            alarm = alarm?.toUiModel(),
-            items = items.map { item -> item.toUiModel() },
-            isAlarmActive = alarm?.isActive ?: false,
-        )
-
     companion object {
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
         private const val ERROR_BOTTARI_ID_MISSING = "[ERROR] 보따리 Id가 없습니다"

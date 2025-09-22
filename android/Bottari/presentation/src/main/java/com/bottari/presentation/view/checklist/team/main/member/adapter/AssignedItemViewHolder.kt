@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
+import com.bottari.presentation.databinding.ItemChipBinding
 import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 
 class AssignedItemViewHolder(
