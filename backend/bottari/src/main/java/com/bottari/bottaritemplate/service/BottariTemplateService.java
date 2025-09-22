@@ -21,7 +21,6 @@ import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -169,7 +168,8 @@ public class BottariTemplateService {
     }
 
     private Map<BottariTemplate, List<BottariTemplateItem>> groupingItemsByTemplate(
-            final List<BottariTemplate> bottariTemplates) {
+            final List<BottariTemplate> bottariTemplates
+    ) {
         final Map<BottariTemplate, List<BottariTemplateItem>> groupByTemplates = new LinkedHashMap<>();
         final List<BottariTemplateItem> items = bottariTemplateItemRepository.findAllByBottariTemplateIn(
                 bottariTemplates);
@@ -188,7 +188,7 @@ public class BottariTemplateService {
             final List<BottariTemplateProjection> bottariTemplates
     ) {
         final Map<Long, List<BottariTemplateItem>> groupByTemplates = new LinkedHashMap<>();
-        List<Long> ids = bottariTemplates.stream()
+        final List<Long> ids = bottariTemplates.stream()
                 .map(BottariTemplateProjection::getBottariTemplateId)
                 .toList();
         final List<BottariTemplateItem> items = bottariTemplateItemRepository.findAllByBottariTemplateIds(ids);

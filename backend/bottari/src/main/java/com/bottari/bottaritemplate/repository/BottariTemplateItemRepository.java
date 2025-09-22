@@ -13,7 +13,11 @@ public interface BottariTemplateItemRepository extends JpaRepository<BottariTemp
 
     List<BottariTemplateItem> findAllByBottariTemplateIn(final List<BottariTemplate> bottariTemplates);
 
-    @Query("SELECT bti FROM BottariTemplateItem bti WHERE bti.bottariTemplate.id IN :templateIds")
+    @Query("""
+            SELECT bti
+            FROM BottariTemplateItem bti
+            WHERE bti.bottariTemplate.id IN :templateIds
+            """)
     List<BottariTemplateItem> findAllByBottariTemplateIds(List<Long> templateIds);
 
     @Modifying(clearAutomatically = true)
