@@ -6,7 +6,7 @@ import com.bottari.data.model.remote.bottari.BottariCreateRequest
 import com.bottari.data.model.remote.bottari.BottariFetchResponse
 import com.bottari.data.model.remote.bottari.BottariTitleUpdateRequest
 import com.bottari.data.model.remote.bottari.BottariesFetchResponse
-import com.bottari.data.service.bottari.BottariService
+import com.bottari.data.service.BottariService
 
 class BottariRemoteDataSourceImpl(
     private val bottariService: BottariService,

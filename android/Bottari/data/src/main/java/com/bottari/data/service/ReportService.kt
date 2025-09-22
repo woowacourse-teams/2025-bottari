@@ -1,4 +1,4 @@
-package com.bottari.data.service.report
+package com.bottari.data.service
 
 import com.bottari.data.model.remote.report.TemplateReportRequest
 import retrofit2.Response

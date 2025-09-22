@@ -4,7 +4,7 @@ import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
 import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse
-import com.bottari.data.service.bottari.template.BottariTemplateService
+import com.bottari.data.service.BottariTemplateService
 
 class BottariTemplateRemoteDataSourceImpl(
     private val bottariTemplateService: BottariTemplateService,

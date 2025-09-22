@@ -1,4 +1,4 @@
-package com.bottari.data.service.team.bottari
+package com.bottari.data.service
 
 import com.bottari.data.model.remote.team.bottari.TeamBottariCreateRequest
 import com.bottari.data.model.remote.team.bottari.TeamBottariDetailFetchResponse

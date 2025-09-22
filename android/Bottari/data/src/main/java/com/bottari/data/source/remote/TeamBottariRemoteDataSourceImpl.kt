@@ -20,9 +20,9 @@ import com.bottari.data.model.remote.team.bottari.item.response.PersonalItemsFet
 import com.bottari.data.model.remote.team.bottari.item.response.SharedItemsFetchResponse
 import com.bottari.data.model.remote.team.bottari.item.response.TeamBottariItemChecklistFetchResponse
 import com.bottari.data.model.remote.team.member.TeamMemberFetchResponse
-import com.bottari.data.service.team.bottari.TeamBottariService
-import com.bottari.data.service.team.bottari.item.TeamBottariItemsService
-import com.bottari.data.service.team.member.TeamMemberService
+import com.bottari.data.service.TeamBottariItemsService
+import com.bottari.data.service.TeamBottariService
+import com.bottari.data.service.TeamMemberService
 
 class TeamBottariRemoteDataSourceImpl(
     private val teamBottariService: TeamBottariService,
