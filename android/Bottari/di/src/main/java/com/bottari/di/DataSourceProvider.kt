@@ -25,8 +25,12 @@ import com.bottari.data.source.remote.RemoteConfigRemoteDataSource
 import com.bottari.data.source.remote.RemoteConfigRemoteDataSourceImpl
 import com.bottari.data.source.remote.ReportRemoteDataSource
 import com.bottari.data.source.remote.ReportRemoteDataSourceImpl
+import com.bottari.data.source.remote.TeamBottariItemsRemoteDataSource
+import com.bottari.data.source.remote.TeamBottariItemsRemoteDataSourceImpl
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.data.source.remote.TeamBottariRemoteDataSourceImpl
+import com.bottari.data.source.remote.TeamMemberRemoteDataSource
+import com.bottari.data.source.remote.TeamMemberRemoteDataSourceImpl
 
 object DataSourceProvider {
     val memberRemoteDataSource: MemberRemoteDataSource by lazy {
@@ -73,7 +77,15 @@ object DataSourceProvider {
     val teamBottariRemoteDataSource: TeamBottariRemoteDataSource by lazy {
         TeamBottariRemoteDataSourceImpl(
             NetworkProvider.teamBottariService,
+        )
+    }
+    val teamMemberRemoteDataSource: TeamMemberRemoteDataSource by lazy {
+        TeamMemberRemoteDataSourceImpl(
             NetworkProvider.teamMemberService,
+        )
+    }
+    val teamBottariItemRemoteDataSource: TeamBottariItemsRemoteDataSource by lazy {
+        TeamBottariItemsRemoteDataSourceImpl(
             NetworkProvider.teamBottariItemsService,
         )
     }

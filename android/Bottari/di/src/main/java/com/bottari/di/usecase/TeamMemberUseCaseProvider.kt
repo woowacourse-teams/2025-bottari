@@ -4,27 +4,23 @@ import com.bottari.di.RepositoryProvider
 import com.bottari.domain.usecase.team.FetchTeamBottariMembersUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
-import com.bottari.domain.usecase.team.FetchTeamStatusUseCase
 import com.bottari.domain.usecase.team.JoinTeamBottariUseCase
 import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
 
 object TeamMemberUseCaseProvider {
     val sendRemindByMemberMessageUseCase: SendRemindByMemberMessageUseCase by lazy {
-        SendRemindByMemberMessageUseCase(RepositoryProvider.teamBottariRepository)
+        SendRemindByMemberMessageUseCase(RepositoryProvider.teamMemberRepository)
     }
     val joinTeamBottariUseCase: JoinTeamBottariUseCase by lazy {
-        JoinTeamBottariUseCase(RepositoryProvider.teamBottariRepository)
+        JoinTeamBottariUseCase(RepositoryProvider.teamMemberRepository)
     }
     val fetchTeamMembersStatusUseCase: FetchTeamMembersStatusUseCase by lazy {
-        FetchTeamMembersStatusUseCase(RepositoryProvider.teamBottariRepository)
-    }
-    val fetchTeamStatusUseCase: FetchTeamStatusUseCase by lazy {
-        FetchTeamStatusUseCase(RepositoryProvider.teamBottariRepository)
+        FetchTeamMembersStatusUseCase(RepositoryProvider.teamMemberRepository)
     }
     val fetchTeamMembersUseCase: FetchTeamMembersUseCase by lazy {
-        FetchTeamMembersUseCase(RepositoryProvider.teamBottariRepository)
+        FetchTeamMembersUseCase(RepositoryProvider.teamMemberRepository)
     }
     val fetchTeamBottariMembersUseCase: FetchTeamBottariMembersUseCase by lazy {
-        FetchTeamBottariMembersUseCase(RepositoryProvider.teamBottariRepository)
+        FetchTeamBottariMembersUseCase(RepositoryProvider.teamMemberRepository)
     }
 }

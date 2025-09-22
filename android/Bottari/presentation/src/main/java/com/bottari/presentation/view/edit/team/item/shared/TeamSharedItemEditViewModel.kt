@@ -6,7 +6,7 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.CommonUseCaseProvider
-import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
+import com.bottari.di.usecase.TeamBottariItemsUseCaseProvider
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
@@ -120,9 +120,9 @@ class TeamSharedItemEditViewModel(
                     stateHandle[KEY_BOTTARI_ID] = bottariId
                     TeamSharedItemEditViewModel(
                         stateHandle,
-                        TeamBottariItemUseCaseProvider.fetchTeamSharedItemsUseCase,
-                        TeamBottariItemUseCaseProvider.createTeamSharedItemUseCase,
-                        TeamBottariItemUseCaseProvider.deleteTeamBottariItemUseCase,
+                        TeamBottariItemsUseCaseProvider.fetchTeamSharedItemsUseCase,
+                        TeamBottariItemsUseCaseProvider.createTeamSharedItemUseCase,
+                        TeamBottariItemsUseCaseProvider.deleteTeamBottariItemUseCase,
                         CommonUseCaseProvider.connectTeamEventUseCase,
                     )
                 }

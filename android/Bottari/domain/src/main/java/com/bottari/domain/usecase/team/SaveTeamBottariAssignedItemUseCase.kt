@@ -1,9 +1,9 @@
 package com.bottari.domain.usecase.team
 
-import com.bottari.domain.repository.TeamBottariRepository
+import com.bottari.domain.repository.TeamBottariItemsRepository
 
 class SaveTeamBottariAssignedItemUseCase(
-    private val teamBottariRepository: TeamBottariRepository,
+    private val teamBottariItemsRepository: TeamBottariItemsRepository,
 ) {
     suspend operator fun invoke(
         teamBottariId: Long,
@@ -11,7 +11,7 @@ class SaveTeamBottariAssignedItemUseCase(
         name: String,
         assigneeIds: List<Long>,
     ): Result<Unit> =
-        teamBottariRepository.saveTeamBottariAssignedItem(
+        teamBottariItemsRepository.saveTeamBottariAssignedItem(
             teamBottariId,
             assignedItemId,
             name,
