@@ -9,15 +9,6 @@ on:
 jobs:
   ci-and-pr-notification:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: ${{ secrets.TEST_DATABASE_IMAGE }}
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.TEST_DATABASE_NAME }}
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping -h localhost" --health-interval=10s --health-timeout=5s --health-retries=10 -v ${{ github.workspace }}/custom-mysql.cnf:/etc/mysql/conf.d/custom.cnf
 
     steps:
       - name: Checkout Repository
@@ -36,6 +27,27 @@ jobs:
         run: |
           echo "[mysqld]" > custom-mysql.cnf
           echo "ngram_token_size=${{ secrets.TEST_NGRAM_TOKEN_SIZE }}" >> custom-mysql.cnf
+
+      - name: Start MySQL with custom image
+        run: |
+          docker run -d \
+            --name test-mysql \
+            -e MYSQL_ROOT_PASSWORD=${{ secrets.TEST_DATABASE_PASSWORD }} \
+            -e MYSQL_DATABASE=${{ secrets.TEST_DATABASE_NAME }} \
+            -p 3306:3306 \
+            -v ${{ github.workspace }}/custom-mysql.cnf:/etc/mysql/conf.d/custom.cnf \
+            ${{ secrets.TEST_DATABASE_IMAGE }}
+
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..30}; do
+            if docker exec test-mysql mysqladmin ping -h localhost -u root -p${{ secrets.TEST_DATABASE_PASSWORD }} --silent; then
+              echo "MySQL is up!"
+              break
+            fi
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
 
       # Webhook 설정
       - name: Determine Webhook
@@ -58,7 +70,6 @@ jobs:
           BASE_BRANCH=${{ github.event.pull_request.base.ref }}
           HEAD_BRANCH=${{ github.event.pull_request.head.ref }}
 
-          # 리뷰어 멘션 & 리스트 생성
           REVIEWERS=$(jq -r '.pull_request.requested_reviewers[].login' <<< '${{ toJson(github.event) }}')
           MENTIONS=""
           REVIEWER_NAMES=""
@@ -119,3 +130,8 @@ jobs:
           }'
           echo "$MESSAGE" > payload.json
           curl -H "Content-Type: application/json" -d @payload.json $WEBHOOK
+
+      # 항상 DB 컨테이너 정리
+      - name: Cleanup MySQL
+        if: always()
+        run: docker rm -f test-mysql || true
