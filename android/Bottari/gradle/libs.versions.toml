@@ -7,7 +7,7 @@ compileSdk = "35"
 versionCode = "8"
 
 # Android Gradle Plugin & Kotlin
-agp = "8.9.0"
+agp = "8.9.1"
 kotlin = "2.0.21"
 jvmTarget = "21"
 jetbrainsKotlinJvm = "2.0.21"
@@ -33,7 +33,7 @@ threetenabp = "1.4.9"
 
 # Compose
 composeBom = "2025.09.00"
-activityCompose = "1.11.0"
+activityCompose = "1.10.1"
 lifecycleViewmodelCompose = "2.9.4"
 
 # Network
