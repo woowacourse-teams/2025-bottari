@@ -22,7 +22,7 @@ jobs:
 
       - name: Build Jar
         working-directory: ./backend/bottari
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x test
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

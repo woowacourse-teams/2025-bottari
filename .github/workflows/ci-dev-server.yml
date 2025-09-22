@@ -9,6 +9,16 @@ on:
 jobs:
   ci-and-pr-notification:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: ${{ secrets.TEST_DATABASE_IMAGE }}
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.TEST_DATABASE_NAME }}
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping -h localhost" --health-interval=10s --health-timeout=5s --health-retries=10 -v ${{ github.workspace }}/custom-mysql.cnf:/etc/mysql/conf.d/custom.cnf
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -22,12 +32,22 @@ jobs:
       - name: Grant Execute Permission for Gradlew
         run: chmod +x ./backend/bottari/gradlew
 
+      - name: Create MySQL Custom Config for ngram
+        run: |
+          echo "[mysqld]" > custom-mysql.cnf
+          echo "ngram_token_size=${{ secrets.TEST_NGRAM_TOKEN_SIZE }}" >> custom-mysql.cnf
+
       # Webhook 설정
       - name: Determine Webhook
         run: echo "WEBHOOK=${{ secrets.DISCORD_BACKEND_WEBHOOK }}" >> $GITHUB_ENV
 
       - name: Build and Test
         id: test
+        working-directory: ./backend/bottari
+        env:
+          DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          DATABASE_USERNAME: ${{ secrets.TEST_DATABASE_USERNAME }}
+          DATABASE_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
         run: ./gradlew clean build --no-daemon
         continue-on-error: true
 
