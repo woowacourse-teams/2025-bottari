@@ -70,7 +70,9 @@ class TeamManagementFragment :
     }
 
     private fun setupListener() {
-        binding.btnShare.setOnClickListener { shareInvite() }
+        binding.clAddTeamMember.setOnClickListener {
+            shareInvite()
+        }
         binding.btnPrevious.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
