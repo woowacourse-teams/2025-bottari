@@ -18,7 +18,7 @@ spring:
 management:
   metrics:
     enable:
-      all: false
+      all: true
       app.health.status: true
   cloudwatch:
     metrics:
