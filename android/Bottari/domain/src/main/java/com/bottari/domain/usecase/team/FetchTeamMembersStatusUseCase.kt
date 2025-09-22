@@ -1,10 +1,10 @@
 package com.bottari.domain.usecase.team
 
 import com.bottari.domain.model.team.member.TeamMemberStatus
-import com.bottari.domain.repository.TeamBottariRepository
+import com.bottari.domain.repository.TeamMemberRepository
 
 class FetchTeamMembersStatusUseCase(
-    private val repository: TeamBottariRepository,
+    private val teamMemberRepository: TeamMemberRepository,
 ) {
-    suspend operator fun invoke(id: Long): Result<List<TeamMemberStatus>> = repository.fetchTeamMembersStatus(id)
+    suspend operator fun invoke(id: Long): Result<List<TeamMemberStatus>> = teamMemberRepository.fetchTeamMembersStatus(id)
 }

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.CommonUseCaseProvider
-import com.bottari.di.usecase.TeamBottariItemUseCaseProvider
+import com.bottari.di.usecase.TeamBottariItemsUseCaseProvider
 import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
@@ -309,9 +309,9 @@ class TeamChecklistViewModel(
                     stateHandle[KEY_BOTTARI_ID] = bottariId
                     TeamChecklistViewModel(
                         stateHandle,
-                        TeamBottariItemUseCaseProvider.fetchTeamChecklistUseCase,
-                        TeamBottariItemUseCaseProvider.checkTeamBottariItemUseCase,
-                        TeamBottariItemUseCaseProvider.uncheckTeamBottariItemUseCase,
+                        TeamBottariItemsUseCaseProvider.fetchTeamChecklistUseCase,
+                        TeamBottariItemsUseCaseProvider.checkTeamBottariItemUseCase,
+                        TeamBottariItemsUseCaseProvider.uncheckTeamBottariItemUseCase,
                         CommonUseCaseProvider.connectTeamEventUseCase,
                         CommonUseCaseProvider.disconnectTeamEventUseCase,
                     )

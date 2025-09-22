@@ -1,12 +1,12 @@
 package com.bottari.domain.usecase.team
 
-import com.bottari.domain.repository.TeamBottariRepository
+import com.bottari.domain.repository.TeamBottariItemsRepository
 
 class UncheckTeamBottariItemUseCase(
-    private val teamBottariRepository: TeamBottariRepository,
+    private val teamBottariItemsRepository: TeamBottariItemsRepository,
 ) {
     suspend operator fun invoke(
         id: Long,
         type: String,
-    ): Result<Unit> = teamBottariRepository.uncheckBottariItem(id, type)
+    ): Result<Unit> = teamBottariItemsRepository.uncheckBottariItem(id, type)
 }
