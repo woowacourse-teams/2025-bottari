@@ -61,7 +61,7 @@
             android:id="@+id/btn_share"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginEnd="@dimen/space_small"
+            android:layout_marginEnd="@dimen/space_median"
             android:clickable="false"
             android:contentDescription="@string/team_management_share_btn_description"
             android:src="@drawable/btn_share"
