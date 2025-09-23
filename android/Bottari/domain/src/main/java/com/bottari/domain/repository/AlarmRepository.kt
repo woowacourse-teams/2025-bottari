@@ -1,19 +1,18 @@
 package com.bottari.domain.repository
 
 import com.bottari.domain.model.alarm.Alarm
+import kotlinx.coroutines.flow.Flow
 
 interface AlarmRepository {
-    suspend fun saveAlarm(
-        id: Long,
-        alarm: Alarm,
-    ): Result<Unit>
+    fun fetchAlarm(bottariId: Long): Flow<Alarm>
 
-    suspend fun createAlarm(
+    suspend fun saveAlarm(
         bottariId: Long,
         alarm: Alarm,
     ): Result<Unit>
 
-    suspend fun activeAlarm(alarmId: Long): Result<Unit>
-
-    suspend fun inactiveAlarm(alarmId: Long): Result<Unit>
+    suspend fun updateAlarmActivate(
+        id: Long,
+        isActive: Boolean,
+    ): Result<Unit>
 }
