@@ -4,7 +4,7 @@ import com.bottari.data.model.local.bottari.ItemEntity
 import kotlinx.coroutines.flow.Flow
 
 interface ItemLocalDataSource {
-    fun fetchItems(bottariId: Long): Result<Flow<List<ItemEntity>>>
+    fun fetchItems(bottariId: Long): Flow<List<ItemEntity>>
 
     suspend fun saveItems(items: List<ItemEntity>): Result<Unit>
 

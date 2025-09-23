@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class ItemLocalDataSourceImpl(
     private val dao: ItemDao,
 ) : ItemLocalDataSource {
-    override fun fetchItems(bottariId: Long): Result<Flow<List<ItemEntity>>> = runCatching { dao.fetchItems(bottariId) }
+    override fun fetchItems(bottariId: Long): Flow<List<ItemEntity>> = dao.fetchItems(bottariId)
 
     override suspend fun saveItems(items: List<ItemEntity>): Result<Unit> = runCatching { dao.saveItem(*items.toTypedArray()) }
 

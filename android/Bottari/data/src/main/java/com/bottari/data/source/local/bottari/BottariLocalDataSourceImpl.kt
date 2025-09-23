@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class BottariLocalDataSourceImpl(
     private val dao: BottariDao,
 ) : BottariLocalDataSource {
-    override fun fetchBottaries(): Result<Flow<List<BottariEntity>>> = runCatching { dao.fetchBottaries() }
+    override fun fetchBottaries(): Flow<List<BottariEntity>> = dao.fetchBottaries()
 
     override suspend fun saveBottari(bottari: BottariEntity): Result<Unit> = runCatching { dao.saveBottari(bottari) }
 

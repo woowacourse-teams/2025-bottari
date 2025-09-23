@@ -4,7 +4,7 @@ import com.bottari.data.model.local.bottari.BottariEntity
 import kotlinx.coroutines.flow.Flow
 
 interface BottariLocalDataSource {
-    fun fetchBottaries(): Result<Flow<List<BottariEntity>>>
+    fun fetchBottaries(): Flow<List<BottariEntity>>
 
     suspend fun saveBottari(bottari: BottariEntity): Result<Unit>
 

@@ -4,7 +4,7 @@ import com.bottari.data.model.local.bottari.AlarmEntity
 import kotlinx.coroutines.flow.Flow
 
 interface AlarmLocalDataSource {
-    fun fetchAlarm(bottariId: Long): Result<Flow<AlarmEntity>>
+    fun fetchAlarm(bottariId: Long): Flow<AlarmEntity>
 
     suspend fun saveAlarm(alarm: AlarmEntity): Result<Unit>
 
