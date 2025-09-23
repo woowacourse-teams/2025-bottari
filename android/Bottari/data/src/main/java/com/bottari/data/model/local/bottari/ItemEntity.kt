@@ -39,15 +39,14 @@ data class ItemEntity(
         )
 
     companion object {
-        fun fromDomain(
+        fun from(
             bottariId: Long,
-            checklistItem: ChecklistItem,
+            itemName: String,
         ): ItemEntity =
             ItemEntity(
-                id = checklistItem.id,
                 bottariId = bottariId,
-                name = checklistItem.name,
-                isChecked = checklistItem.isChecked,
+                name = itemName,
+                isChecked = false,
             )
     }
 }
