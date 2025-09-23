@@ -9,24 +9,26 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.AlarmUseCaseProvider
 import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.di.usecase.BottariUseCaseProvider
-import com.bottari.domain.usecase.alarm.ToggleAlarmStateUseCase
-import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
+import com.bottari.domain.usecase.alarm.UpdateAlarmActivateUseCase
+import com.bottari.domain.usecase.bottari.FetchBottariDetailUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
-import com.bottari.presentation.common.base.BaseViewModel
+import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
 import com.bottari.presentation.model.alarm.NotificationUiModel
-import com.bottari.presentation.model.bottari.personal.BottariDetailUiModel
 import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.util.debounce
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class PersonalBottariEditViewModel(
     savedStateHandle: SavedStateHandle,
     private val fetchBottariDetailUseCase: FetchBottariDetailUseCase,
-    private val toggleAlarmStateUseCase: ToggleAlarmStateUseCase,
+    private val updateAlarmActivateUseCase: UpdateAlarmActivateUseCase,
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
-) : BaseViewModel<PersonalBottariEditUiState, PersonalBottariEditUiEvent>(
+) : FlowBaseViewModel<PersonalBottariEditUiState, PersonalBottariEditUiEvent>(
         PersonalBottariEditUiState(
             bottariId = savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID_MISSING),
         ),
@@ -39,21 +41,12 @@ class PersonalBottariEditViewModel(
 
     fun fetchBottari() {
         updateState { copy(isLoading = true) }
-
-        launch {
-            fetchBottariDetailUseCase(
-                currentState.bottariId,
-            ).onSuccess { bottariDetail ->
-                updateState {
-                    val data = BottariDetailUiModel.fromDomain(bottariDetail)
-                    PersonalBottariEditUiState.from(data)
-                }
-            }.onFailure {
+        fetchBottariDetailUseCase(currentState.id)
+            .onEach(PersonalBottariEditUiState::from)
+            .catch {
                 emitEvent(PersonalBottariEditUiEvent.FetchBottariFailure)
-            }
-
-            updateState { copy(isLoading = false, isFetched = true) }
-        }
+                updateState { copy(isLoading = false) }
+            }.launchIn(viewModelScope)
     }
 
     fun createBottariTemplate() {
@@ -85,7 +78,7 @@ class PersonalBottariEditViewModel(
         if (alarm.isActive == newActiveState) return
 
         launch {
-            toggleAlarmStateUseCase(
+            updateAlarmActivateUseCase(
                 currentState.bottariId,
                 currentState.bottariTitle,
                 alarm.toDomain(),
@@ -163,7 +156,7 @@ class PersonalBottariEditViewModel(
                     PersonalBottariEditViewModel(
                         stateHandle,
                         BottariUseCaseProvider.fetchBottariDetailUseCase,
-                        AlarmUseCaseProvider.toggleAlarmStateUseCase,
+                        AlarmUseCaseProvider.updateAlarmActivateUseCase,
                         BottariTemplateUseCaseProvider.createBottariTemplateUseCase,
                     )
                 }
