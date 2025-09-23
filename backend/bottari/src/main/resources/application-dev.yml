@@ -25,6 +25,10 @@ management:
       http.server.requests: true
       jvm.threads.states: true
       jvm.threads.live: true
+      hikaricp.connections.active: true
+      hikaricp.connections.idle: true
+      hikaricp.connections.pending: true
+      hikaricp.connections.max: true
       app.health.status: true
   cloudwatch:
     metrics:
