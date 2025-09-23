@@ -59,14 +59,13 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        collectWithLifecycle(viewModel.uiState) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
             renderTitle(uiState.bottariTitle)
             renderItems(uiState)
             renderAlarm(uiState)
         }
-
-        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+        collectWithLifecycle(viewModel.uiEvent) { uiEvent ->
             when (uiEvent) {
                 PersonalBottariEditUiEvent.FetchBottariFailure ->
                     showSnackbar(R.string.bottari_edit_fetch_failure_text)
@@ -93,13 +92,12 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         binding.btnPrevious.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
 
         binding.viewPersonalItemEdit.btnRoot.setOnClickListener {
-            viewModel.uiState.value?.let { uiState ->
+            viewModel.uiState.value.run {
                 navigateToScreen(
                     PersonalItemEditFragment::class.java,
                     PersonalItemEditFragment.newBundle(
-                        uiState.bottariId,
-                        uiState.bottariTitle,
-                        uiState.items,
+                        bottariId,
+                        bottariTitle,
                     ),
                 )
             }
@@ -165,10 +163,10 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun navigateToAlarmEditScreen() {
-        viewModel.uiState.value?.let { uiState ->
+        viewModel.uiState.value.run {
             navigateToScreen(
                 AlarmEditFragment::class.java,
-                AlarmEditFragment.newBundle(uiState.bottariId, uiState.bottariTitle, uiState.alarm),
+                AlarmEditFragment.newBundle(bottariId, bottariTitle, alarm),
             )
         }
     }
@@ -239,9 +237,9 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     private fun showRenameDialog() {
-        viewModel.uiState.value?.let { uiState ->
+        viewModel.uiState.value.run {
             BottariRenameDialog
-                .newInstance(uiState.bottariId, uiState.bottariTitle)
+                .newInstance(bottariId, bottariTitle)
                 .show(parentFragmentManager, BottariRenameDialog::class.java.name)
         }
     }
