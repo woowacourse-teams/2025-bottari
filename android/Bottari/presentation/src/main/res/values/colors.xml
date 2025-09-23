@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="transparent">#00000000</color>
-
-    <color name="primary">#FF0064FF</color>
-    <color name="secondary">#FF00AEFF</color>
-    <color name="red">#FFFF0000</color>
-    <color name="red_soft">#FFFF3B30</color>
-    <color name="green">#FF6EBA76</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="gray_f8f8f8">#FFF8F8F8</color>
-    <color name="gray_f2f2f5">#FFF2F2F5</color>
-    <color name="gray_eeeeee">#FFEEEEEE</color>
-    <color name="gray_d1dee8">#FFD1DEE8</color>
-    <color name="gray_c4c4c4">#FFC4C4C4</color>
-    <color name="gray_a6a6a6">#FFA6A6A6</color>
-    <color name="gray_787878">#FF787878</color>
-    <color name="gray_999999">#FF999999</color>
+    <color name="primary">#FF0064FF</color>
+
+    <color name="red">#FFFF0000</color>
+    <color name="red_soft">#FFFF3B30</color>
+
+    <color name="gray_50">#FFF8F8F8</color>
+    <color name="gray_100">#FFF2F2F5</color>
+    <color name="gray_200">#FFEEEEEE</color>
+    <color name="gray_300">#FFD1DEE8</color>
+    <color name="gray_400">#FFC4C4C4</color>
+    <color name="gray_500">#FFA6A6A6</color>
+    <color name="gray_600">#FF999999</color>
+    <color name="gray_700">#FF787878</color>
+
+    <color name="product_type_personal">#FF0064FF</color>
+    <color name="product_type_shared">#FF6EBA76</color>
+    <color name="product_type_assigned">#FF00AEFF</color>
 </resources>

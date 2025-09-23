@@ -10,7 +10,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginBottom="@dimen/space_large"
-        android:contentDescription="@string/checklist_swipe_check_all_icon"
+        android:contentDescription="@string/checklist_icon_swipe_all_checked_description"
         android:src="@drawable/ic_bottari_item_empty_view"
         app:layout_constraintBottom_toTopOf="@+id/tv_view_swipe_empty_title"
         app:layout_constraintEnd_toEndOf="parent"

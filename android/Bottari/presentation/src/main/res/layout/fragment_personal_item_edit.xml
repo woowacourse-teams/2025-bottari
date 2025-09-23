@@ -18,7 +18,7 @@
             android:layout_height="48dp"
             android:contentDescription="@string/common_previous_btn_description"
             android:padding="@dimen/space_small"
-            android:src="@drawable/btn_previous" />
+            android:src="@drawable/ic_previous" />
 
         <TextView
             android:id="@+id/tv_bottari_title"
@@ -78,7 +78,7 @@
         android:paddingHorizontal="@dimen/space_median"
         android:paddingVertical="@dimen/space_small"
         android:textColor="@color/black"
-        android:textColorHint="@color/gray_a6a6a6"
+        android:textColorHint="@color/gray_500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_personal_item_add"
         app:layout_constraintStart_toStartOf="parent" />
@@ -87,9 +87,9 @@
         android:id="@+id/btn_personal_item_add"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:contentDescription="@string/bottari_personal_item_add_btn_description"
+        android:contentDescription="@string/bottari_btn_item_add_description"
         android:padding="@dimen/space_small"
-        android:src="@drawable/btn_send"
+        android:src="@drawable/ic_send"
         app:layout_constraintBottom_toBottomOf="@id/et_personal_item"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/et_personal_item" />

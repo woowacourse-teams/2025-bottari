@@ -22,7 +22,7 @@
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="@id/rv_bottari"
         app:layout_constraintBottom_toBottomOf="@id/rv_bottari"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/btn_bottari_create"
@@ -31,10 +31,10 @@
         android:layout_marginHorizontal="@dimen/space_large"
         android:layout_marginBottom="@dimen/space_median"
         android:background="@drawable/bg_primary_oval"
-        android:contentDescription="@string/bottari_create_btn_description"
+        android:contentDescription="@string/bottari_btn_create_description"
         android:elevation="2dp"
         android:padding="@dimen/space_large"
-        android:src="@drawable/btn_plus"
+        android:src="@drawable/ic_plus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

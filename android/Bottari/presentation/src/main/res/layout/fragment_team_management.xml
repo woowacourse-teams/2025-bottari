@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_f8f8f8">
+    android:background="@color/gray_50">
 
     <Toolbar
         android:id="@+id/tb_team_bottari"
@@ -19,7 +19,7 @@
             android:layout_height="48dp"
             android:contentDescription="@string/common_previous_btn_description"
             android:padding="@dimen/space_small"
-            android:src="@drawable/btn_previous" />
+            android:src="@drawable/ic_previous" />
 
         <TextView
             android:id="@+id/tv_team_bottari_title"
@@ -61,8 +61,8 @@
             android:layout_height="20dp"
             android:layout_marginEnd="@dimen/space_median"
             android:clickable="false"
-            android:contentDescription="@string/team_management_share_btn_description"
-            android:src="@drawable/btn_share"
+            android:contentDescription="@string/team_btn_share_link_description"
+            android:src="@drawable/ic_share"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -115,4 +115,3 @@
             tools:listitem="@layout/item_team_member" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
-

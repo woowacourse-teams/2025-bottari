@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_small"
         android:background="@drawable/bg_white_radius_12dp"
-        android:backgroundTint="@color/gray_eeeeee"
+        android:backgroundTint="@color/gray_200"
         android:hint="@string/bottari_rename_dialog_hint_text"
         android:importantForAutofill="no"
         android:inputType="text"
@@ -35,7 +35,7 @@
         android:paddingHorizontal="@dimen/space_median"
         android:paddingVertical="@dimen/space_small"
         android:textColor="@color/black"
-        android:textColorHint="@color/gray_a6a6a6"
+        android:textColorHint="@color/gray_500"
         app:layout_constraintTop_toBottomOf="@id/tv_bottari_rename_title" />
 
     <TextView
@@ -63,7 +63,7 @@
         android:paddingStart="@dimen/space_x_large"
         android:paddingEnd="0dp"
         android:paddingBottom="@dimen/space_x_large"
-        android:src="@drawable/btn_close"
+        android:src="@drawable/ic_close"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

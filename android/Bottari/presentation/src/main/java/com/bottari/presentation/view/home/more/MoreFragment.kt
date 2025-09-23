@@ -71,11 +71,11 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>(FragmentMoreBinding::infl
         binding.btnNicknameEdit.setOnClickListener {
             if (binding.etNicknameEdit.isFocused) {
                 setEditMode(false)
-                binding.btnNicknameEdit.setImageResource(R.drawable.btn_edit)
+                binding.btnNicknameEdit.setImageResource(R.drawable.ic_pen)
                 return@setOnClickListener
             }
             setEditMode(true)
-            binding.btnNicknameEdit.setImageResource(R.drawable.btn_confirm)
+            binding.btnNicknameEdit.setImageResource(R.drawable.ic_confirm)
         }
     }
 
@@ -91,7 +91,7 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>(FragmentMoreBinding::infl
     }
 
     private fun confirmNicknameEdit() {
-        binding.btnNicknameEdit.setImageResource(R.drawable.btn_edit)
+        binding.btnNicknameEdit.setImageResource(R.drawable.ic_pen)
         viewModel.saveNickname()
     }
 

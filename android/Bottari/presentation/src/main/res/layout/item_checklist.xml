@@ -17,7 +17,7 @@
         style="@style/Pretendard_Medium_20"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/cb_checklist"
+        android:drawableStart="@drawable/selector_checkbox"
         android:drawablePadding="@dimen/space_small"
         android:gravity="center_vertical"
         android:textColor="@color/black"

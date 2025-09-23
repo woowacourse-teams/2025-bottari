@@ -28,13 +28,9 @@ class PersonalBottariEditViewModel(
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
 ) : BaseViewModel<PersonalBottariEditUiState, PersonalBottariEditUiEvent>(
         PersonalBottariEditUiState(
-            id = savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID_MISSING),
+            bottariId = savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID_MISSING),
         ),
     ) {
-    init {
-        fetchBottari()
-    }
-
     private val debouncedAlarmState: ((Boolean) -> Unit) =
         debounce(
             timeMillis = DEBOUNCE_DELAY,
@@ -46,34 +42,29 @@ class PersonalBottariEditViewModel(
 
         launch {
             fetchBottariDetailUseCase(
-                currentState.id,
-            ).onSuccess {
-                updateState { PersonalBottariEditUiState.from(BottariDetailUiModel.fromDomain(it)) }
+                currentState.bottariId,
+            ).onSuccess { bottariDetail ->
+                updateState {
+                    val data = BottariDetailUiModel.fromDomain(bottariDetail)
+                    PersonalBottariEditUiState.from(data)
+                }
             }.onFailure {
                 emitEvent(PersonalBottariEditUiEvent.FetchBottariFailure)
             }
 
-            updateState { copy(isLoading = false) }
+            updateState { copy(isLoading = false, isFetched = true) }
         }
     }
 
     fun createBottariTemplate() {
-        if (currentState.title.isBlank()) return
+        if (currentState.bottariTitle.isBlank()) return
         updateState { copy(isLoading = true) }
 
         val items = currentState.items.map { it.name }
         launch {
-            createBottariTemplateUseCase(currentState.title, items)
+            createBottariTemplateUseCase(currentState.bottariTitle, items)
                 .onSuccess { createdTemplateId ->
-                    if (createdTemplateId == null) return@onSuccess
-                    BottariLogger.ui(
-                        UiEventType.TEMPLATE_UPLOAD,
-                        mapOf(
-                            "template_id" to createdTemplateId,
-                            "template_title" to currentState.title,
-                            "template_items" to items.toString(),
-                        ),
-                    )
+                    handleCreateTemplateSuccess(createdTemplateId)
                     emitEvent(PersonalBottariEditUiEvent.CreateTemplateSuccess)
                 }.onFailure {
                     emitEvent(PersonalBottariEditUiEvent.CreateTemplateFailure)
@@ -85,28 +76,56 @@ class PersonalBottariEditViewModel(
 
     fun updateAlarmState() {
         val isActive = currentState.isAlarmActive.not()
+        updateState { copy(isAlarmActive = isActive) }
         debouncedAlarmState(isActive)
     }
 
-    private fun toggleAlarmState(isActive: Boolean) {
+    private fun toggleAlarmState(newActiveState: Boolean) {
         val alarm = currentState.alarm ?: return
+        if (alarm.isActive == newActiveState) return
 
         launch {
             toggleAlarmStateUseCase(
-                currentState.id,
-                currentState.title,
+                currentState.bottariId,
+                currentState.bottariTitle,
                 alarm.toDomain(),
-                isActive,
+                newActiveState,
             ).onSuccess {
-                BottariLogger.ui(
-                    if (isActive) UiEventType.ALARM_ACTIVE else UiEventType.ALARM_INACTIVE,
-                    mapOf("alarm_id" to alarm.id!!),
-                )
-                scheduleAlarm(isActive, alarm)
-                updateState { copy(alarm = alarm.copy(isActive = isActive)) }
+                handleAlarmStateChanged(newActiveState, alarm)
             }.onFailure {
                 emitEvent(PersonalBottariEditUiEvent.ToggleAlarmStateFailure)
             }
+        }
+    }
+
+    private fun handleCreateTemplateSuccess(createdTemplateId: Long?) {
+        if (createdTemplateId == null) return
+
+        val itemNames = currentState.items.map { it.name }
+        BottariLogger.ui(
+            UiEventType.TEMPLATE_UPLOAD,
+            mapOf(
+                "template_id" to createdTemplateId,
+                "template_title" to currentState.bottariTitle,
+                "template_items" to itemNames.toString(),
+            ),
+        )
+    }
+
+    private fun handleAlarmStateChanged(
+        newActiveState: Boolean,
+        alarm: AlarmUiModel,
+    ) {
+        BottariLogger.ui(
+            if (newActiveState) UiEventType.ALARM_ACTIVE else UiEventType.ALARM_INACTIVE,
+            mapOf("alarm_id" to alarm.id!!),
+        )
+        scheduleAlarm(newActiveState, alarm)
+        updateState {
+            copy(
+                isAlarmActive = newActiveState,
+                alarm = alarm.copy(isActive = newActiveState),
+            )
         }
     }
 
@@ -124,8 +143,8 @@ class PersonalBottariEditViewModel(
 
     private fun createNotification(alarm: AlarmUiModel): NotificationUiModel =
         NotificationUiModel(
-            bottariId = currentState.id,
-            bottariTitle = currentState.title,
+            bottariId = currentState.bottariId,
+            bottariTitle = currentState.bottariTitle,
             alarm = alarm,
         )
 
@@ -133,7 +152,7 @@ class PersonalBottariEditViewModel(
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
         private const val ERROR_BOTTARI_ID_MISSING = "[ERROR] 보따리 Id가 없습니다"
 
-        private const val DEBOUNCE_DELAY = 500L
+        private const val DEBOUNCE_DELAY = 700L
 
         fun Factory(bottariId: Long): ViewModelProvider.Factory =
             viewModelFactory {

@@ -19,7 +19,7 @@
         android:paddingHorizontal="@dimen/space_median"
         android:paddingVertical="@dimen/space_median"
         android:textColor="@color/black"
-        android:textColorHint="@color/gray_a6a6a6"
+        android:textColorHint="@color/gray_500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_small"
         android:text="@string/template_my_template_btn_text"
-        android:textColor="@color/gray_787878"
+        android:textColor="@color/gray_700"
         app:layout_constraintEnd_toEndOf="@id/et_bottari_template_title"
         app:layout_constraintTop_toBottomOf="@id/et_bottari_template_title" />
 

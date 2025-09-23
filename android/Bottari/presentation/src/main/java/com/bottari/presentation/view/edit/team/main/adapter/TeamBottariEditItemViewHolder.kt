@@ -5,12 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
-import com.bottari.presentation.databinding.ItemChecklistMiniBinding
+import com.bottari.presentation.databinding.ItemChipBinding
 import com.bottari.presentation.model.bottari.BottariItemUiModel
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 
 class TeamBottariEditItemViewHolder private constructor(
-    private val binding: ItemChecklistMiniBinding,
+    private val binding: ItemChipBinding,
     private val bottariItemType: BottariItemTypeUiModel,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: BottariItemUiModel) {
@@ -21,9 +21,9 @@ class TeamBottariEditItemViewHolder private constructor(
     private fun View.applyStyle() {
         val backgroundColor =
             when (bottariItemType) {
-                is BottariItemTypeUiModel.ASSIGNED -> R.color.secondary
-                BottariItemTypeUiModel.PERSONAL -> R.color.primary
-                BottariItemTypeUiModel.SHARED -> R.color.green
+                is BottariItemTypeUiModel.ASSIGNED -> R.color.product_type_assigned
+                BottariItemTypeUiModel.PERSONAL -> R.color.product_type_personal
+                BottariItemTypeUiModel.SHARED -> R.color.product_type_shared
             }
         backgroundTintList = context.getColorStateList(backgroundColor)
     }
@@ -34,7 +34,7 @@ class TeamBottariEditItemViewHolder private constructor(
             bottariItemType: BottariItemTypeUiModel,
         ): TeamBottariEditItemViewHolder {
             val inflater = LayoutInflater.from(parent.context)
-            val binding = ItemChecklistMiniBinding.inflate(inflater, parent, false)
+            val binding = ItemChipBinding.inflate(inflater, parent, false)
             return TeamBottariEditItemViewHolder(binding, bottariItemType)
         }
     }

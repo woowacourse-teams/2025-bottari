@@ -4,22 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_f8f8f8">
+    android:background="@color/gray_50">
 
     <include
         android:id="@+id/view_swipe_complete_not_all"
         layout="@layout/view_swipe_complete_not_all"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <include
         android:id="@+id/view_swipe_complete_all"
         layout="@layout/view_swipe_complete_all"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <include
         android:id="@+id/view_swipe_empty"
         layout="@layout/view_swipe_empty"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/pb_checklist_swipe"
@@ -110,6 +110,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

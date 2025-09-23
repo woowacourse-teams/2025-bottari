@@ -17,7 +17,7 @@
             android:layout_height="48dp"
             android:contentDescription="@string/common_previous_btn_description"
             android:padding="@dimen/space_small"
-            android:src="@drawable/btn_previous" />
+            android:src="@drawable/ic_previous" />
 
         <TextView
             android:id="@+id/tv_bottari_title"
@@ -40,7 +40,7 @@
         app:tabSelectedTextAppearance="@style/CustomTabText"
         app:tabSelectedTextColor="@color/black"
         app:tabTextAppearance="@style/CustomTabText"
-        app:tabTextColor="@color/gray_c4c4c4" />
+        app:tabTextColor="@color/gray_400" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp_team_bottari_item_edit"

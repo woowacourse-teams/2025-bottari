@@ -6,21 +6,25 @@ import com.bottari.presentation.model.bottari.personal.BottariDetailUiModel
 
 data class PersonalBottariEditUiState(
     val isLoading: Boolean = false,
-    val id: Long,
-    val title: String = "",
+    val isFetched: Boolean = false,
+    val bottariId: Long,
+    val bottariTitle: String = "",
     val alarm: AlarmUiModel? = null,
     val items: List<BottariItemUiModel> = emptyList(),
+    val isAlarmActive: Boolean = false,
 ) {
-    val isAlarmActive: Boolean = alarm?.isActive ?: false
+    val isEmpty: Boolean = isFetched && items.isEmpty()
+    val isShowAlarm: Boolean = isAlarmActive && alarm != null
+    val isShowAlarmCreate: Boolean = isAlarmActive && alarm == null
 
     companion object {
-        fun from(bottari: BottariDetailUiModel): PersonalBottariEditUiState =
+        fun from(bottariDetail: BottariDetailUiModel): PersonalBottariEditUiState =
             PersonalBottariEditUiState(
-                isLoading = false,
-                id = bottari.id,
-                title = bottari.title,
-                alarm = bottari.alarm,
-                items = bottari.items,
+                bottariId = bottariDetail.id,
+                bottariTitle = bottariDetail.title,
+                alarm = bottariDetail.alarm,
+                items = bottariDetail.items,
+                isAlarmActive = bottariDetail.alarm?.isActive ?: false,
             )
     }
 }

@@ -43,10 +43,10 @@
             android:layout_height="64dp"
             android:layout_gravity="end"
             android:background="@drawable/bg_primary_oval"
-            android:contentDescription="@string/team_bottari_create_option_btn_description"
+            android:contentDescription="@string/team_btn_bottari_create_option_description"
             android:elevation="2dp"
             android:padding="@dimen/space_large"
-            android:src="@drawable/btn_plus" />
+            android:src="@drawable/ic_plus" />
 
         <TextView
             android:id="@+id/btn_team_bottari_create"
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:background="@drawable/bg_primary_radius_16dp"
-            android:contentDescription="@string/bottari_create_btn_description"
+            android:contentDescription="@string/bottari_btn_create_description"
             android:elevation="2dp"
             android:padding="@dimen/space_median"
             android:text="@string/team_bottari_create_btn_text"
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:background="@drawable/bg_primary_radius_16dp"
-            android:contentDescription="@string/team_bottari_join_btn_description"
+            android:contentDescription="@string/team_btn_bottari_join_description"
             android:elevation="2dp"
             android:padding="@dimen/space_median"
             android:text="@string/team_bottari_join_btn_text"

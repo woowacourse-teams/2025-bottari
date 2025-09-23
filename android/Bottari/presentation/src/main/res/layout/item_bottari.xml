@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/space_small"
         android:layout_marginEnd="@dimen/space_small"
-        android:textColor="@color/gray_a6a6a6"
+        android:textColor="@color/gray_500"
         app:layout_constraintBottom_toBottomOf="@id/tv_bottari_quantity_status"
         app:layout_constraintEnd_toStartOf="@id/btn_bottari_more"
         app:layout_constraintStart_toEndOf="@id/tv_bottari_quantity_status"
@@ -60,7 +60,7 @@
         android:layout_height="48dp"
         android:contentDescription="@string/common_option_btn_description"
         android:padding="@dimen/space_small"
-        android:src="@drawable/btn_more"
+        android:src="@drawable/ic_more"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

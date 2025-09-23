@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/space_median"
@@ -19,8 +18,8 @@
         app:mcv_calendarMode="month"
         app:mcv_dateTextAppearance="@style/CustomCalendarText"
         app:mcv_firstDayOfWeek="sunday"
-        app:mcv_leftArrow="@drawable/btn_previous"
-        app:mcv_rightArrow="@drawable/btn_next"
+        app:mcv_leftArrow="@drawable/ic_previous"
+        app:mcv_rightArrow="@drawable/ic_arrow"
         app:mcv_selectionMode="single"
         app:mcv_titleAnimationOrientation="horizontal"
         app:mcv_weekDayTextAppearance="@style/CustomCalendarText" />
