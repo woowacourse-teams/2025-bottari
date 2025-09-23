@@ -18,7 +18,13 @@ spring:
 management:
   metrics:
     enable:
-      all: true
+      all: false
+      jvm.memory.used: true
+      jvm.memory.max: true
+      jvm.gc.pause: true
+      http.server.requests: true
+      jvm.threads.states: true
+      jvm.threads.live: true
       app.health.status: true
   cloudwatch:
     metrics:
