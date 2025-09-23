@@ -39,7 +39,6 @@
         android:layout_marginVertical="@dimen/space_median"
         android:background="@drawable/btn_white_ripple_effect"
         android:elevation="2dp"
-        android:focusable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tb_team_bottari">
 
