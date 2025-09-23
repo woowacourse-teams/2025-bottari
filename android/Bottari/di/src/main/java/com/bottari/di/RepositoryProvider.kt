@@ -36,11 +36,11 @@ object RepositoryProvider {
             DataSourceProvider.memberIdentifierLocalDataSource,
         )
     }
-    val bottariRepository: BottariRepository by lazy { BottariRepositoryImpl(DataSourceProvider.bottariRemoteDataSource) }
-    val alarmRepository: AlarmRepository by lazy { AlarmRepositoryImpl(DataSourceProvider.alarmRemoteDataSource) }
+    val bottariRepository: BottariRepository by lazy { BottariRepositoryImpl(DataSourceProvider.bottariLocalDataSource) }
+    val alarmRepository: AlarmRepository by lazy { AlarmRepositoryImpl(DataSourceProvider.alarmLocalDataSource) }
     val bottariItemRepository: BottariItemRepository by lazy {
         BottariItemRepositoryImpl(
-            DataSourceProvider.bottariItemRemoteDataSource,
+            DataSourceProvider.bottariItemLocalDataSource,
         )
     }
     val bottariTemplateRepository: BottariTemplateRepository by lazy {
