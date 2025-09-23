@@ -60,6 +60,7 @@ jobs:
           SPRING_PROFILES_ACTIVE=dev \
           nohup java -Duser.timezone=Asia/Seoul \
           -javaagent:/home/ubuntu/pinpoint-agent-3.0.3/pinpoint-bootstrap-3.0.3.jar \
+          -Dpinpoint.config=/home/ubuntu/pinpoint-agent-3.0.3/pinpoint-root.config \
           -Dpinpoint.agentId=dev-bottari-1 \
           -Dpinpoint.applicationName=dev-bottari \
           -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
