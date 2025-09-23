@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.getParcelableCompat
 import com.bottari.presentation.common.extension.safeArgument
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentAlarmEditBinding
@@ -33,7 +32,6 @@ class AlarmEditFragment :
         AlarmEditViewModel.Factory(
             bottariId = safeArgument { getLong(ARG_BOTTARI_ID) },
             bottariTitle = safeArgument { getString(ARG_BOTTARI_TITLE) },
-            alarm = safeArgument { getParcelableCompat(ARG_ALARM) },
         )
     }
     private val adapter: RepeatDayAdapter by lazy { RepeatDayAdapter(viewModel::updateDaysOfWeek) }
@@ -71,16 +69,18 @@ class AlarmEditFragment :
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        collectWithLifecycle(viewModel.uiState) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
-            handleAlarmState(uiState.alarm)
-            if (uiState.alarm.type == AlarmTypeUiModel.NON_REPEAT) {
-                showOnly(binding.groupAlarmNonRepeat)
-                return@observe
+            uiState.alarm?.let { alarm ->
+                handleAlarmState(alarm)
+                if (alarm.type == AlarmTypeUiModel.NON_REPEAT) {
+                    showOnly(binding.groupAlarmNonRepeat)
+                    return@collectWithLifecycle
+                }
             }
             showOnly(binding.groupAlarmRepeat)
         }
-        viewModel.uiEvent.observe(viewLifecycleOwner, ::handleAlarmEvent)
+        collectWithLifecycle(viewModel.uiEvent) { uiEvent -> handleAlarmEvent(uiEvent) }
     }
 
     private fun setupUI() {
@@ -186,8 +186,17 @@ class AlarmEditFragment :
             val isVisible = group == visibleView
             group.isVisible = isVisible
             when (group) {
-                binding.groupAlarmNonRepeat -> updateAlarmTypeText(binding.tvAlarmTypeNonRepeat, isVisible)
-                binding.groupAlarmRepeat -> updateAlarmTypeText(binding.tvAlarmTypeRepeat, isVisible)
+                binding.groupAlarmNonRepeat ->
+                    updateAlarmTypeText(
+                        binding.tvAlarmTypeNonRepeat,
+                        isVisible,
+                    )
+
+                binding.groupAlarmRepeat ->
+                    updateAlarmTypeText(
+                        binding.tvAlarmTypeRepeat,
+                        isVisible,
+                    )
             }
         }
     }

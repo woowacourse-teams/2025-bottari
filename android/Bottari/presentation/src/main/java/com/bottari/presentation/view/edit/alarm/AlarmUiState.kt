@@ -4,5 +4,5 @@ import com.bottari.presentation.model.alarm.AlarmUiModel
 
 data class AlarmUiState(
     val isLoading: Boolean = false,
-    val alarm: AlarmUiModel,
+    val alarm: AlarmUiModel? = null,
 )
