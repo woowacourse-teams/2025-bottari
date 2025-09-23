@@ -5,7 +5,6 @@ import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.AlarmRepository
 import com.bottari.domain.repository.NotificationRepository
-import java.lang.Exception
 
 class ToggleAlarmStateUseCase(
     private val alarmRepository: AlarmRepository,
@@ -16,26 +15,16 @@ class ToggleAlarmStateUseCase(
         bottariTitle: String,
         alarm: Alarm,
         isActive: Boolean,
-    ): Result<Unit> {
-        val alarmId = alarm.id ?: return Result.failure(Exception(ERROR_REQUIRE_ALARM_ID))
-        val toggleAlarmResult =
-            if (isActive) {
-                alarmRepository.activeAlarm(alarmId)
-            } else {
-                alarmRepository.inactiveAlarm(alarmId)
+    ): Result<Unit> =
+        alarmRepository
+            .updateAlarmActivate(bottariId, isActive)
+            .flatMap {
+                notificationRepository.saveNotification(
+                    Notification(
+                        bottariId,
+                        bottariTitle,
+                        alarm,
+                    ),
+                )
             }
-        return toggleAlarmResult.flatMap {
-            notificationRepository.saveNotification(
-                Notification(
-                    bottariId,
-                    bottariTitle,
-                    alarm.copy(isActive = isActive),
-                ),
-            )
-        }
-    }
-
-    companion object {
-        private const val ERROR_REQUIRE_ALARM_ID = "[ERROR] 알람 ID가 존재하지 않습니다."
-    }
 }
