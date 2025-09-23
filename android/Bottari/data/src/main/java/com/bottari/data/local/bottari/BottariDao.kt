@@ -5,9 +5,13 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import com.bottari.data.model.local.bottari.BottariEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BottariDao {
+    @Query("SELECT * FROM Bottaries")
+    fun fetchBottaries(): Flow<List<BottariEntity>>
+
     @Insert(onConflict = REPLACE)
     suspend fun createBottari(title: String)
 
