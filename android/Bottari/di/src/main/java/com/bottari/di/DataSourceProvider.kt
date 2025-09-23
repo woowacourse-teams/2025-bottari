@@ -5,6 +5,12 @@ import com.bottari.data.source.local.AppConfigDataSource
 import com.bottari.data.source.local.AppConfigLocalDataSourceImpl
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.local.MemberIdentifierLocalDataSourceImpl
+import com.bottari.data.source.local.bottari.AlarmLocalDataSource
+import com.bottari.data.source.local.bottari.AlarmLocalDataSourceImpl
+import com.bottari.data.source.local.bottari.BottariLocalDataSource
+import com.bottari.data.source.local.bottari.BottariLocalDataSourceImpl
+import com.bottari.data.source.local.bottari.ItemLocalDataSource
+import com.bottari.data.source.local.bottari.ItemLocalDataSourceImpl
 import com.bottari.data.source.remote.AlarmRemoteDataSource
 import com.bottari.data.source.remote.AlarmRemoteDataSourceImpl
 import com.bottari.data.source.remote.BottariItemRemoteDataSource
@@ -43,14 +49,32 @@ object DataSourceProvider {
             NetworkProvider.bottariService,
         )
     }
+
+    val bottariLocalDataSource: BottariLocalDataSource by lazy {
+        BottariLocalDataSourceImpl(
+            DatabaseProvider.bottariDatabase.bottariDao(),
+        )
+    }
     val alarmRemoteDataSource: AlarmRemoteDataSource by lazy {
         AlarmRemoteDataSourceImpl(
             NetworkProvider.alarmService,
         )
     }
+
+    val alarmLocalDataSource: AlarmLocalDataSource by lazy {
+        AlarmLocalDataSourceImpl(
+            DatabaseProvider.bottariDatabase.alarmDao(),
+        )
+    }
     val bottariItemRemoteDataSource: BottariItemRemoteDataSource by lazy {
         BottariItemRemoteDataSourceImpl(
             NetworkProvider.bottariItemService,
+        )
+    }
+
+    val bottariItemLocalDataSource: ItemLocalDataSource by lazy {
+        ItemLocalDataSourceImpl(
+            DatabaseProvider.bottariDatabase.itemDao(),
         )
     }
     val bottariTemplateRemoteSource: BottariTemplateRemoteDataSource by lazy {
