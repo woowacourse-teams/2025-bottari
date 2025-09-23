@@ -1,36 +1,35 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.remote.bottari.BottariCreateRequest
-import com.bottari.data.model.remote.bottari.BottariTitleUpdateRequest
-import com.bottari.data.source.remote.BottariRemoteDataSource
+import com.bottari.data.model.local.bottari.BottariEntity
+import com.bottari.data.source.local.bottari.BottariLocalDataSource
 import com.bottari.domain.model.bottari.Bottari
-import com.bottari.domain.model.bottari.BottariState
 import com.bottari.domain.repository.BottariRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class BottariRepositoryImpl(
-    private val bottariRemoteDataSource: BottariRemoteDataSource,
+    private val bottariLocalDataSource: BottariLocalDataSource,
 ) : BottariRepository {
-    override suspend fun fetchBottaries(): Result<List<BottariState>> =
-        bottariRemoteDataSource
+    override fun fetchBottaries(): Flow<List<Bottari>> =
+        bottariLocalDataSource
             .fetchBottaries()
-            .mapCatching { bottaries -> bottaries.map { it.toDomain() } }
+            .map { bottaries -> bottaries.map(BottariEntity::toDomain) }
 
-    override suspend fun fetchBottariDetail(id: Long): Result<Bottari> =
-        bottariRemoteDataSource.fetchBottariDetail(id).mapCatching { it.toDomain() }
+    override fun fetchBottari(id: Long): Flow<Bottari> =
+        bottariLocalDataSource
+            .fetchBottari(id)
+            .map(BottariEntity::toDomain)
 
-    override suspend fun createBottari(title: String): Result<Long?> =
-        bottariRemoteDataSource.createBottari(
-            BottariCreateRequest(title),
-        )
+    override suspend fun createBottari(title: String): Result<Unit> = bottariLocalDataSource.createBottari(title)
 
-    override suspend fun deleteBottari(id: Long): Result<Unit> = bottariRemoteDataSource.deleteBottari(id)
+    override suspend fun deleteBottari(id: Long): Result<Unit> = bottariLocalDataSource.deleteBottari(id)
 
     override suspend fun saveBottariTitle(
         id: Long,
         title: String,
     ): Result<Unit> =
-        bottariRemoteDataSource.saveBottariTitle(
+        bottariLocalDataSource.updateBottariTitle(
             id,
-            BottariTitleUpdateRequest(title),
+            title,
         )
 }
