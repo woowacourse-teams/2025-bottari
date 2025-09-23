@@ -52,7 +52,7 @@
         style="@style/Pretendard_Medium_20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_ripple_effect"
+        android:background="@drawable/btn_blue_ripple_effect"
         android:clickable="true"
         android:focusable="true"
         android:paddingHorizontal="@dimen/space_small"

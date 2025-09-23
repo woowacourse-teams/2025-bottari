@@ -35,9 +35,12 @@ class TeamBottariEditActivity :
         supportFragmentManager.popBackStack()
     }
 
-    override fun navigateToMemberEdit(teamBottariId: Long) {
+    override fun navigateToMemberEdit(
+        teamBottariId: Long,
+        teamBottariName: String,
+    ) {
         supportFragmentManager.commit {
-            replace(R.id.fcv_team_edit, TeamManagementFragment.newInstance(teamBottariId))
+            replace(R.id.fcv_team_edit, TeamManagementFragment.newInstance(teamBottariId, teamBottariName))
             addToBackStack(null)
         }
     }

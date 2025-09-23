@@ -32,7 +32,7 @@ class TeamManagementViewModelTest {
         fetchTeamMembersUseCase = mockk<FetchTeamMembersUseCase>()
         connectTeamEventUseCase = mockk<ConnectTeamEventUseCase>()
         disconnectTeamEventUseCase = mockk<DisconnectTeamEventUseCase>()
-        stateHandle = SavedStateHandle(mapOf("KEY_TEAM_BOTTARI_ID" to 1L))
+        stateHandle = SavedStateHandle(mapOf("KEY_TEAM_BOTTARI_ID" to 1L, "KEY_TEAM_BOTTARI_NAME" to "테스트"))
         viewModel =
             TeamManagementViewModel(
                 stateHandle,

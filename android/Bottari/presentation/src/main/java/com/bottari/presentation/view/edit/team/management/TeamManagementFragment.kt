@@ -1,7 +1,6 @@
 package com.bottari.presentation.view.edit.team.management
 
-import android.content.ClipData
-import android.content.ClipboardManager
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -19,14 +18,11 @@ class TeamManagementFragment :
         FragmentTeamManagementBinding::inflate,
     ) {
     private val viewModel: TeamManagementViewModel by viewModels {
-        TeamManagementViewModel.Factory(requireArguments().getLong(ARG_TEAM_BOTTARI_ID))
-    }
-    private val adapter: TeamMemberAdapter by lazy { TeamMemberAdapter() }
-    private val clipboardManager: ClipboardManager by lazy {
-        requireContext().getSystemService(
-            ClipboardManager::class.java,
+        TeamManagementViewModel.Factory(
+            requireArguments().getLong(ARG_TEAM_BOTTARI_ID),
         )
     }
+    private val adapter: TeamMemberAdapter by lazy { TeamMemberAdapter() }
 
     override fun onViewCreated(
         view: View,
@@ -53,6 +49,7 @@ class TeamManagementFragment :
                     uiState.teamMemberHeadCount,
                     uiState.maxHeadCount,
                 )
+            binding.btnShare.isEnabled = uiState.isInviteCodeValid
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
@@ -64,35 +61,58 @@ class TeamManagementFragment :
     private fun setupUI() {
         binding.rvMemberList.adapter = adapter
         binding.rvMemberList.layoutManager = LinearLayoutManager(requireContext())
+        binding.btnShare.isEnabled = false
     }
 
     private fun setupListener() {
-        binding.btnClipboard.setOnClickListener { copyInviteCode() }
+        binding.clAddTeamMember.setOnClickListener {
+            shareInvite()
+        }
         binding.btnPrevious.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 
-    private fun copyInviteCode() {
-        val inviteCode =
-            viewModel.uiState.value?.inviteCode ?: run {
-                requireView().showSnackbar(R.string.team_management_copy_invite_code_failure_text)
+    private fun shareInvite() {
+        val state =
+            viewModel.uiState.value ?: run {
+                requireView().showSnackbar(R.string.team_management_share_failure_text)
                 return
             }
+        val shareMessage = generateShareMessage(state.inviteCode)
+        val sendIntent: Intent =
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, shareMessage)
+                type = "text/plain"
+            }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
+    }
+
+    private fun generateShareMessage(inviteCode: String): String {
+        val bottariName = requireArguments().getString(ARG_TEAM_BOTTARI_NAME)
         val inviteLink = createDeeplink(inviteCode)
-        val clip = ClipData.newPlainText(LABEL_INVITE_CODE, inviteLink)
-        clipboardManager.setPrimaryClip(clip)
-        requireView().showSnackbar(R.string.team_management_copy_invite_code_success_text)
+        return getString(
+            R.string.team_management_share_template_text,
+            bottariName,
+            inviteCode,
+            inviteLink,
+        )
     }
 
     companion object {
         private const val ARG_TEAM_BOTTARI_ID = "ARG_TEAM_BOTTARI_ID"
-        private const val LABEL_INVITE_CODE = "LABEL_INVITE_CODE"
+        private const val ARG_TEAM_BOTTARI_NAME = "ARG_TEAM_BOTTARI_NAME"
 
         @JvmStatic
-        fun newInstance(id: Long) =
-            TeamManagementFragment().apply {
-                arguments = bundleOf(ARG_TEAM_BOTTARI_ID to id)
-            }
+        fun newInstance(
+            id: Long,
+            teamBottariName: String,
+        ) = TeamManagementFragment().apply {
+            arguments =
+                bundleOf(ARG_TEAM_BOTTARI_ID to id, ARG_TEAM_BOTTARI_NAME to teamBottariName)
+        }
     }
 }
