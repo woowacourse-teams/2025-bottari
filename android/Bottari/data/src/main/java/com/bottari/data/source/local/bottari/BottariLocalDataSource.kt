@@ -8,6 +8,8 @@ interface BottariLocalDataSource {
 
     fun fetchBottari(id: Long): Flow<BottariEntity>
 
+    suspend fun createBottari(title: String): Result<Unit>
+
     suspend fun saveBottari(bottari: BottariEntity): Result<Unit>
 
     suspend fun deleteBottari(bottariId: Long): Result<Unit>
