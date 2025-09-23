@@ -13,6 +13,14 @@ data class BottariEntity(
     @ColumnInfo(name = "title")
     val title: String,
 ) {
+    fun toDomain(): Bottari =
+        Bottari(
+            id = id,
+            title = title,
+            alarm = null,
+            items = emptyList(),
+        )
+
     companion object {
         fun fromDomain(bottari: Bottari): BottariEntity =
             BottariEntity(
