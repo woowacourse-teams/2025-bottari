@@ -3,7 +3,7 @@ package com.bottari.data.model.local.bottari
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.bottari.domain.model.bottari.Bottari
+import com.bottari.domain.model.bottari.personal.PersonalBottari
 
 @Entity("Bottaries")
 data class BottariEntity(
@@ -13,8 +13,8 @@ data class BottariEntity(
     @ColumnInfo(name = "title")
     val title: String,
 ) {
-    fun toDomain(): Bottari =
-        Bottari(
+    fun toDomain(): PersonalBottari =
+        PersonalBottari(
             id = id,
             title = title,
             alarm = null,
@@ -22,7 +22,7 @@ data class BottariEntity(
         )
 
     companion object {
-        fun fromDomain(bottari: Bottari): BottariEntity =
+        fun fromDomain(bottari: PersonalBottari): BottariEntity =
             BottariEntity(
                 id = bottari.id,
                 title = bottari.title,
