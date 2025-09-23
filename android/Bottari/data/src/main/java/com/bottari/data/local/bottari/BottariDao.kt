@@ -12,6 +12,9 @@ interface BottariDao {
     @Query("SELECT * FROM Bottaries")
     fun fetchBottaries(): Flow<List<BottariEntity>>
 
+    @Query("SELECT * FROM Bottaries WHERE id = :id")
+    fun fetchBottari(id: Long): Flow<BottariEntity>
+
     @Insert(onConflict = REPLACE)
     suspend fun createBottari(title: String)
 

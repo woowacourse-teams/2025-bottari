@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 interface BottariLocalDataSource {
     fun fetchBottaries(): Flow<List<BottariEntity>>
 
+    fun fetchBottari(id: Long): Flow<BottariEntity>
+
     suspend fun saveBottari(bottari: BottariEntity): Result<Unit>
 
     suspend fun deleteBottari(bottariId: Long): Result<Unit>
