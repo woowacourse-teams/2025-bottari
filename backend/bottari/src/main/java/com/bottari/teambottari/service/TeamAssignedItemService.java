@@ -107,6 +107,13 @@ public class TeamAssignedItemService {
         validateMemberInTeam(teamAssignedItemInfo.getTeamBottari().getId(), ssaid);
         teamAssignedItemRepository.deleteAllByInfo(teamAssignedItemInfo);
         teamAssignedItemInfoRepository.delete(teamAssignedItemInfo);
+        publishDeleteEvent(id, teamAssignedItemInfo);
+    }
+
+    private void publishDeleteEvent(
+            final Long id,
+            final TeamAssignedItemInfo teamAssignedItemInfo
+    ) {
         applicationEventPublisher.publishEvent(new DeleteAssignedItemEvent(
                 teamAssignedItemInfo.getTeamBottari().getId(),
                 id,

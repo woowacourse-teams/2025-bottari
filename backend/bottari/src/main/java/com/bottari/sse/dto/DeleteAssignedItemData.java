@@ -4,15 +4,13 @@ import com.bottari.teambottari.event.DeleteAssignedItemEvent;
 import java.time.LocalDateTime;
 
 public record DeleteAssignedItemData(
-        Long infoId,
-        String name,
+        Long teamBottariId,
         LocalDateTime publishedAt
 ) {
 
     public static DeleteAssignedItemData from(final DeleteAssignedItemEvent event) {
         return new DeleteAssignedItemData(
-                event.getInfoId(),
-                event.getName(),
+                event.getTeamBottariId(),
                 event.getPublishedAt()
         );
     }

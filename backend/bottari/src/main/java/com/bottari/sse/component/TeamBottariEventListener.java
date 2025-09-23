@@ -8,6 +8,7 @@ import com.bottari.sse.dto.CreateTeamMemberData;
 import com.bottari.sse.dto.CreateTeamSharedItemData;
 import com.bottari.sse.dto.CreateTeamSharedItemInfoData;
 import com.bottari.sse.dto.DeleteAssignedItemData;
+import com.bottari.sse.dto.DeleteAssignedItemInfoData;
 import com.bottari.sse.dto.DeleteTeamSharedItemData;
 import com.bottari.sse.dto.DeleteTeamSharedItemInfoData;
 import com.bottari.sse.dto.ExitTeamMemberData;
@@ -146,12 +147,20 @@ public class TeamBottariEventListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleDeleteAssignedItemEvent(final DeleteAssignedItemEvent event) {
-        final SseMessage message = new SseMessage(
+        final List<ReadAssignedItemResponse> idempotentInfos = teamAssignedItemService.getAllByTeamBottariId(
+                event.getTeamBottariId());
+        final SseMessage deleteAssignedItemInfoMessage = new SseMessage(
                 SseResourceType.ASSIGNED_ITEM_INFO,
+                SseEventType.DELETE,
+                DeleteAssignedItemInfoData.of(idempotentInfos, event)
+        );
+        final SseMessage deleteAssignedItemMessage = new SseMessage(
+                SseResourceType.ASSIGNED_ITEM,
                 SseEventType.DELETE,
                 DeleteAssignedItemData.from(event)
         );
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), deleteAssignedItemInfoMessage);
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), deleteAssignedItemMessage);
     }
 
     @Async
