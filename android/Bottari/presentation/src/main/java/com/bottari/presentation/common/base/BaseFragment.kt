@@ -5,10 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.view.common.LoadingDialog
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 abstract class BaseFragment<VB : ViewBinding>(
     private val bindingFactory: (LayoutInflater, ViewGroup?, Boolean) -> VB,
@@ -98,5 +105,17 @@ abstract class BaseFragment<VB : ViewBinding>(
             return
         }
         if (dialog.isShowing) dialog.dismiss()
+    }
+
+    protected fun <T> LifecycleOwner.collectWithLifecycle(
+        flow: Flow<T>,
+        state: Lifecycle.State = Lifecycle.State.STARTED,
+        collector: suspend (T) -> Unit,
+    ) {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(state) {
+                flow.collect(collector)
+            }
+        }
     }
 }
