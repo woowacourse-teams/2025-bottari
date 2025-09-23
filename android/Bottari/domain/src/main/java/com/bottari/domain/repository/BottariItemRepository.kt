@@ -4,7 +4,7 @@ import com.bottari.domain.model.bottari.item.ChecklistItem
 import kotlinx.coroutines.flow.Flow
 
 interface BottariItemRepository {
-    fun fetchChecklist(bottariId: Long): Flow<List<ChecklistItem>>
+    fun fetchItems(bottariId: Long): Flow<List<ChecklistItem>>
 
     suspend fun saveItems(
         bottariId: Long,

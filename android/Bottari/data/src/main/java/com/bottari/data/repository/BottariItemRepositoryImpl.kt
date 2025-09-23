@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 class BottariItemRepositoryImpl(
     private val itemLocalDataSource: ItemLocalDataSource,
 ) : BottariItemRepository {
-    override fun fetchChecklist(bottariId: Long): Flow<List<ChecklistItem>> =
+    override fun fetchItems(bottariId: Long): Flow<List<ChecklistItem>> =
         itemLocalDataSource
             .fetchItems(bottariId)
             .map { items -> items.map(ItemEntity::toDomain) }
