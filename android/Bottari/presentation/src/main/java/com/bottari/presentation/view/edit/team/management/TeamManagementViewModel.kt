@@ -39,9 +39,6 @@ class TeamManagementViewModel(
     private val teamBottariId: Long =
         stateHandle[KEY_TEAM_BOTTARI_ID] ?: error(ERROR_REQUIRE_TEAM_BOTTARI_ID)
 
-    private val teamBottariName: String =
-        stateHandle[KEY_TEAM_BOTTARI_NAME] ?: error(ERROR_REQUIRE_TEAM_BOTTARI_NAME)
-
     init {
         handleEvent()
     }
@@ -82,7 +79,6 @@ class TeamManagementViewModel(
     private fun TeamManagementUiState.copyFromTeamMembers(teamStatus: TeamStatus): TeamManagementUiState =
         copy(
             inviteCode = teamStatus.inviteCode,
-            teamBottariName = this@TeamManagementViewModel.teamBottariName,
             teamMemberHeadCount = teamStatus.memberCount.value,
             maxHeadCount = teamStatus.memberCount.maxValue,
             members = TeamMemberUiModel.fromDomain(teamStatus),
@@ -102,20 +98,14 @@ class TeamManagementViewModel(
 
     companion object {
         private const val KEY_TEAM_BOTTARI_ID = "KEY_TEAM_BOTTARI_ID"
-        private const val KEY_TEAM_BOTTARI_NAME = "KEY_TEAM_BOTTARI_NAME"
         private const val ERROR_REQUIRE_TEAM_BOTTARI_ID = "[ERROR] 팀 보따리 ID가 존재하지 않습니다."
-        private const val ERROR_REQUIRE_TEAM_BOTTARI_NAME = "[ERROR] 팀 보따리 이름이 존재하지 않습니다."
         private const val DEBOUNCE_DELAY = 500L
 
-        fun Factory(
-            teamBottariId: Long,
-            teamBottariName: String,
-        ): ViewModelProvider.Factory =
+        fun Factory(teamBottariId: Long): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
                     stateHandle[KEY_TEAM_BOTTARI_ID] = teamBottariId
-                    stateHandle[KEY_TEAM_BOTTARI_NAME] = teamBottariName
                     TeamManagementViewModel(
                         stateHandle = stateHandle,
                         fetchTeamMembersUseCase = TeamMemberUseCaseProvider.fetchTeamMembersUseCase,

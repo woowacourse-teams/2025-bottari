@@ -20,9 +20,6 @@ class TeamManagementFragment :
     private val viewModel: TeamManagementViewModel by viewModels {
         TeamManagementViewModel.Factory(
             requireArguments().getLong(ARG_TEAM_BOTTARI_ID),
-            requireNotNull(
-                requireArguments().getString(ARG_TEAM_BOTTARI_NAME),
-            ),
         )
     }
     private val adapter: TeamMemberAdapter by lazy { TeamMemberAdapter() }
@@ -53,8 +50,7 @@ class TeamManagementFragment :
                     uiState.maxHeadCount,
                 )
             binding.btnShare.isEnabled =
-                uiState.inviteCode.isNotBlank() &&
-                uiState.teamBottariName.isNotBlank()
+                uiState.inviteCode.isNotBlank()
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
@@ -85,7 +81,7 @@ class TeamManagementFragment :
                 return
             }
         val inviteCode = state.inviteCode
-        val bottariName = state.teamBottariName
+        val bottariName = requireArguments().getString(ARG_TEAM_BOTTARI_NAME)
         val inviteLink = createDeeplink(inviteCode)
         val shareMessage =
             getString(
