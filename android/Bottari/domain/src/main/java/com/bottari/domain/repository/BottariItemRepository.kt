@@ -1,19 +1,22 @@
 package com.bottari.domain.repository
 
 import com.bottari.domain.model.bottari.item.ChecklistItem
+import kotlinx.coroutines.flow.Flow
 
 interface BottariItemRepository {
-    suspend fun fetchChecklist(bottariId: Long): Result<List<ChecklistItem>>
+    fun fetchChecklist(bottariId: Long): Flow<List<ChecklistItem>>
 
-    suspend fun uncheckBottariItem(bottariItemId: Long): Result<Unit>
-
-    suspend fun checkBottariItem(bottariItemId: Long): Result<Unit>
-
-    suspend fun saveBottariItems(
+    suspend fun saveItems(
         bottariId: Long,
-        deleteItemIds: List<Long>,
-        createItemNames: List<String>,
+        items: List<String>,
     ): Result<Unit>
 
-    suspend fun resetBottariItemCheckState(bottariId: Long): Result<Unit>
+    suspend fun deleteItem(id: Long): Result<Unit>
+
+    suspend fun updateCheckState(
+        id: Long,
+        isChecked: Boolean,
+    ): Result<Unit>
+
+    suspend fun resetCheckState(bottariId: Long): Result<Unit>
 }
