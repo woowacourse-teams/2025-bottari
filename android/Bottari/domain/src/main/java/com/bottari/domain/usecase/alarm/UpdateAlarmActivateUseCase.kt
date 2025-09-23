@@ -6,7 +6,7 @@ import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.AlarmRepository
 import com.bottari.domain.repository.NotificationRepository
 
-class ToggleAlarmStateUseCase(
+class UpdateAlarmActivateUseCase(
     private val alarmRepository: AlarmRepository,
     private val notificationRepository: NotificationRepository,
 ) {
