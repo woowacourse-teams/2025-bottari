@@ -61,8 +61,8 @@
             android:layout_height="20dp"
             android:layout_marginEnd="@dimen/space_median"
             android:clickable="false"
-            android:contentDescription="@string/team_management_share_btn_description"
-            android:src="@drawable/btn_share"
+            android:contentDescription="@string/team_btn_share_link_description"
+            android:src="@drawable/ic_share"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
