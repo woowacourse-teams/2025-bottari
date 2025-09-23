@@ -49,8 +49,7 @@ class TeamManagementFragment :
                     uiState.teamMemberHeadCount,
                     uiState.maxHeadCount,
                 )
-            binding.btnShare.isEnabled =
-                uiState.inviteCode.isNotBlank()
+            binding.btnShare.isEnabled = uiState.isInviteCodeValid
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
