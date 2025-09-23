@@ -58,4 +58,8 @@ jobs:
           DATABASE_PASSWORD='${{ secrets.DATABASE_DEV_PASSWORD }}' \
           FIREBASE_SERVICE_ACCOUNT_JSON='${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}' \
           SPRING_PROFILES_ACTIVE=dev \
-          nohup java -Duser.timezone=Asia/Seoul -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
+          nohup java -Duser.timezone=Asia/Seoul \
+          -javaagent:/home/ubuntu/pinpoint-agent-3.0.3/pinpoint-bootstrap-3.0.3.jar \
+          -Dpinpoint.agentId=dev-bottari-1 \
+          -Dpinpoint.applicationName=dev-bottari \
+          -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
