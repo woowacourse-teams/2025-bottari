@@ -3,6 +3,7 @@ package com.bottari.sse.component;
 import com.bottari.sse.dto.ChangeAssignedItemData;
 import com.bottari.sse.dto.CheckTeamItemData;
 import com.bottari.sse.dto.CreateAssignedItemData;
+import com.bottari.sse.dto.CreateAssignedItemInfoData;
 import com.bottari.sse.dto.CreateTeamMemberData;
 import com.bottari.sse.dto.CreateTeamSharedItemData;
 import com.bottari.sse.dto.CreateTeamSharedItemInfoData;
@@ -13,6 +14,7 @@ import com.bottari.sse.dto.ExitTeamMemberData;
 import com.bottari.sse.message.SseEventType;
 import com.bottari.sse.message.SseMessage;
 import com.bottari.sse.message.SseResourceType;
+import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.event.ChangeTeamAssignedItemEvent;
 import com.bottari.teambottari.event.CheckTeamAssignedItemEvent;
@@ -23,6 +25,7 @@ import com.bottari.teambottari.event.DeleteAssignedItemEvent;
 import com.bottari.teambottari.event.DeleteTeamSharedItemEvent;
 import com.bottari.teambottari.event.ExitTeamMemberEvent;
 import com.bottari.teambottari.service.CreateTeamMemberEvent;
+import com.bottari.teambottari.service.TeamAssignedItemService;
 import com.bottari.teambottari.service.TeamSharedItemService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +40,7 @@ public class TeamBottariEventListener {
 
     private final SseService sseService;
     private final TeamSharedItemService teamSharedItemService;
+    private final TeamAssignedItemService teamAssignedItemService;
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -52,12 +56,12 @@ public class TeamBottariEventListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCreateTeamSharedItemEvent(final CreateTeamSharedItemEvent event) {
-        final List<ReadSharedItemResponse> infos =
+        final List<ReadSharedItemResponse> idempotentInfos =
                 teamSharedItemService.getAllByTeamBottariId(event.getTeamBottariId());
         final SseMessage createSharedItemInfoMessage = new SseMessage(
                 SseResourceType.SHARED_ITEM_INFO,
                 SseEventType.CREATE,
-                CreateTeamSharedItemInfoData.of(infos, event)
+                CreateTeamSharedItemInfoData.of(idempotentInfos, event)
         );
         final SseMessage createSharedItemMessage = new SseMessage(
                 SseResourceType.SHARED_ITEM,
@@ -71,12 +75,12 @@ public class TeamBottariEventListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleDeleteTeamSharedItemEvent(final DeleteTeamSharedItemEvent event) {
-        final List<ReadSharedItemResponse> infos =
+        final List<ReadSharedItemResponse> idempotentInfos =
                 teamSharedItemService.getAllByTeamBottariId(event.getTeamBottariId());
         final SseMessage deleteSharedItemInfoMessage = new SseMessage(
                 SseResourceType.SHARED_ITEM_INFO,
                 SseEventType.DELETE,
-                DeleteTeamSharedItemInfoData.of(infos, event)
+                DeleteTeamSharedItemInfoData.of(idempotentInfos, event)
         );
         final SseMessage deleteSharedItemMessage = new SseMessage(
                 SseResourceType.SHARED_ITEM,
@@ -112,12 +116,20 @@ public class TeamBottariEventListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCreateAssignedItemEvent(final CreateAssignedItemEvent event) {
-        final SseMessage message = new SseMessage(
+        final List<ReadAssignedItemResponse> idempotentInfos =
+                teamAssignedItemService.getAllByTeamBottariId(event.getTeamBottariId());
+        final SseMessage createAssignedItemInfoMessage = new SseMessage(
                 SseResourceType.ASSIGNED_ITEM_INFO,
+                SseEventType.CREATE,
+                CreateAssignedItemInfoData.of(idempotentInfos, event)
+        );
+        final SseMessage createAssignedItemMessage = new SseMessage(
+                SseResourceType.ASSIGNED_ITEM,
                 SseEventType.CREATE,
                 CreateAssignedItemData.from(event)
         );
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), createAssignedItemInfoMessage);
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), createAssignedItemMessage);
     }
 
     @Async

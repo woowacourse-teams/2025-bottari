@@ -2,20 +2,15 @@ package com.bottari.sse.dto;
 
 import com.bottari.teambottari.event.CreateAssignedItemEvent;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record CreateAssignedItemData(
-        Long infoId,
-        String name,
-        List<Long> memberIds,
+        Long teamBottariId,
         LocalDateTime publishedAt
 ) {
 
     public static CreateAssignedItemData from(final CreateAssignedItemEvent event) {
         return new CreateAssignedItemData(
-                event.getInfoId(),
-                event.getName(),
-                event.getMemberIds(),
+                event.getTeamBottariId(),
                 event.getPublishedAt()
         );
     }
