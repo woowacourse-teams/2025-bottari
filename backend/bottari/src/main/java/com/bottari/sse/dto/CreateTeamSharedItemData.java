@@ -2,17 +2,16 @@ package com.bottari.sse.dto;
 
 import com.bottari.teambottari.event.CreateTeamSharedItemEvent;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record CreateTeamSharedItemData(
-        Long infoId,
-        String name,
+        List<Long> itemIds,
         LocalDateTime publishedAt
 ) {
 
     public static CreateTeamSharedItemData from(final CreateTeamSharedItemEvent event) {
         return new CreateTeamSharedItemData(
-                event.getInfoId(),
-                event.getName(),
+                event.getItemIds(),
                 event.getPublishedAt()
         );
     }

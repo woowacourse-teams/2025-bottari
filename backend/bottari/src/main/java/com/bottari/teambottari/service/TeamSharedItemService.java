@@ -62,8 +62,8 @@ public class TeamSharedItemService {
         validateDuplicateName(teamBottari.getId(), request.name());
         final TeamSharedItemInfo savedTeamSharedItemInfo = saveTeamSharedItemInfo(request.name(), teamBottari);
         final List<TeamMember> teamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId());
-        saveSharedItemToTeamMembers(savedTeamSharedItemInfo, teamMembers);
-        publishCreateEvent(savedTeamSharedItemInfo);
+        final List<TeamSharedItem> savedItems = saveSharedItemToTeamMembers(savedTeamSharedItemInfo, teamMembers);
+        publishCreateEvent(savedTeamSharedItemInfo, savedItems);
 
         return savedTeamSharedItemInfo.getId();
     }
@@ -167,21 +167,29 @@ public class TeamSharedItemService {
         }
     }
 
-    private void saveSharedItemToTeamMembers(
+    private List<TeamSharedItem> saveSharedItemToTeamMembers(
             final TeamSharedItemInfo savedTeamSharedItemInfo,
             final List<TeamMember> teamMembers
     ) {
         final List<TeamSharedItem> teamSharedItems = teamMembers.stream()
                 .map(member -> new TeamSharedItem(savedTeamSharedItemInfo, member))
                 .toList();
-        teamSharedItemRepository.saveAll(teamSharedItems);
+
+        return teamSharedItemRepository.saveAll(teamSharedItems);
     }
 
-    private void publishCreateEvent(final TeamSharedItemInfo info) {
+    private void publishCreateEvent(
+            final TeamSharedItemInfo info,
+            final List<TeamSharedItem> items
+    ) {
+        final List<Long> itemIds = items.stream()
+                .map(TeamSharedItem::getId)
+                .toList();
         final CreateTeamSharedItemEvent event = new CreateTeamSharedItemEvent(
                 info.getTeamBottari().getId(),
                 info.getId(),
-                info.getName()
+                info.getName(),
+                itemIds
         );
         applicationEventPublisher.publishEvent(event);
     }

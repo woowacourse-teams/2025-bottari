@@ -5,6 +5,7 @@ import com.bottari.sse.dto.CheckTeamItemData;
 import com.bottari.sse.dto.CreateAssignedItemData;
 import com.bottari.sse.dto.CreateTeamMemberData;
 import com.bottari.sse.dto.CreateTeamSharedItemData;
+import com.bottari.sse.dto.CreateTeamSharedItemInfoData;
 import com.bottari.sse.dto.DeleteAssignedItemData;
 import com.bottari.sse.dto.DeleteTeamSharedItemData;
 import com.bottari.sse.dto.ExitTeamMemberData;
@@ -46,12 +47,18 @@ public class TeamBottariEventListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCreateTeamSharedItemEvent(final CreateTeamSharedItemEvent event) {
-        final SseMessage message = new SseMessage(
+        final SseMessage createSharedItemInfoMessage = new SseMessage(
                 SseResourceType.SHARED_ITEM_INFO,
+                SseEventType.CREATE,
+                CreateTeamSharedItemInfoData.from(event)
+        );
+        final SseMessage createSharedItemMessage = new SseMessage(
+                SseResourceType.SHARED_ITEM,
                 SseEventType.CREATE,
                 CreateTeamSharedItemData.from(event)
         );
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), createSharedItemInfoMessage);
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), createSharedItemMessage);
     }
 
     @Async
