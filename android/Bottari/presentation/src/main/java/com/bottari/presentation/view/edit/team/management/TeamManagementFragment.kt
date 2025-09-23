@@ -79,16 +79,7 @@ class TeamManagementFragment :
                 requireView().showSnackbar(R.string.team_management_share_failure_text)
                 return
             }
-        val inviteCode = state.inviteCode
-        val bottariName = requireArguments().getString(ARG_TEAM_BOTTARI_NAME)
-        val inviteLink = createDeeplink(inviteCode)
-        val shareMessage =
-            getString(
-                R.string.team_management_share_template_text,
-                bottariName,
-                inviteCode,
-                inviteLink,
-            )
+        val shareMessage = generateShareMessage(state.inviteCode)
         val sendIntent: Intent =
             Intent().apply {
                 action = Intent.ACTION_SEND
@@ -98,6 +89,17 @@ class TeamManagementFragment :
 
         val shareIntent = Intent.createChooser(sendIntent, null)
         startActivity(shareIntent)
+    }
+
+    private fun generateShareMessage(inviteCode: String): String {
+        val bottariName = requireArguments().getString(ARG_TEAM_BOTTARI_NAME)
+        val inviteLink = createDeeplink(inviteCode)
+        return getString(
+            R.string.team_management_share_template_text,
+            bottariName,
+            inviteCode,
+            inviteLink,
+        )
     }
 
     companion object {
