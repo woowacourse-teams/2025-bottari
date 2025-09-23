@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record CreateTeamSharedItemInfoData(
+        Long teamBottariId,
         List<ReadSharedItemResponse> infos,
         LocalDateTime publishedAt
 ) {
@@ -15,6 +16,7 @@ public record CreateTeamSharedItemInfoData(
             final CreateTeamSharedItemEvent event
     ) {
         return new CreateTeamSharedItemInfoData(
+                event.getTeamBottariId(),
                 infos,
                 event.getPublishedAt()
         );

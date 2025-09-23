@@ -4,6 +4,7 @@ import com.bottari.sse.dto.ChangeAssignedItemData;
 import com.bottari.sse.dto.CheckTeamItemData;
 import com.bottari.sse.dto.CreateAssignedItemData;
 import com.bottari.sse.dto.CreateTeamMemberData;
+import com.bottari.sse.dto.CreateTeamSharedItemData;
 import com.bottari.sse.dto.CreateTeamSharedItemInfoData;
 import com.bottari.sse.dto.DeleteAssignedItemData;
 import com.bottari.sse.dto.DeleteTeamSharedItemData;
@@ -60,7 +61,7 @@ public class TeamBottariEventListener {
         final SseMessage createSharedItemMessage = new SseMessage(
                 SseResourceType.SHARED_ITEM,
                 SseEventType.CREATE,
-                ""
+                CreateTeamSharedItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), createSharedItemInfoMessage);
         sseService.sendByTeamBottariId(event.getTeamBottariId(), createSharedItemMessage);
