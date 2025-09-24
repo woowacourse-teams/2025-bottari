@@ -11,6 +11,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.showSnackbar
+import com.bottari.presentation.compose.home.ComposeHomeActivity
 import com.bottari.presentation.databinding.ActivityMainBinding
 import com.bottari.presentation.util.DeeplinkHelper.getInviteCode
 import com.bottari.presentation.util.DeeplinkHelper.validateUri
@@ -22,7 +23,6 @@ import com.bottari.presentation.view.common.PermissionDescriptionDialog
 import com.bottari.presentation.view.common.alert.CustomAlertDialog
 import com.bottari.presentation.view.common.alert.DialogListener
 import com.bottari.presentation.view.common.alert.DialogPresetType
-import com.bottari.presentation.view.home.HomeActivity
 import com.bottari.presentation.view.invite.InviteActivity
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
@@ -127,7 +127,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun navigateToHome() {
-        val intent = HomeActivity.newIntent(this)
+//        val intent = HomeActivity.newIntent(this)
+//        startActivity(intent)
+//        finish()
+        val intent = Intent(this, ComposeHomeActivity::class.java)
         startActivity(intent)
         finish()
     }
