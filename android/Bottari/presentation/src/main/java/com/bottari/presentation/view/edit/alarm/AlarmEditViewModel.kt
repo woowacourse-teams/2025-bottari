@@ -15,6 +15,7 @@ import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.alarm.AlarmTypeUiModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
+import com.bottari.presentation.model.alarm.AlarmUiModel.Companion.DEFAULT_ALARM_UI_MODEL
 import com.bottari.presentation.model.alarm.NotificationUiModel
 import com.bottari.presentation.model.alarm.RepeatDayUiModel
 import kotlinx.coroutines.flow.catch
@@ -37,28 +38,28 @@ class AlarmEditViewModel(
     }
 
     fun updateAlarm() {
-        if (isEveryWeekRepeatWithoutSelectedDay()) return
-        saveAlarm(currentState.alarm.toDomain())
+        val alarm = currentState.alarm?.toDomain() ?: return
+        saveAlarm(alarm)
     }
 
     fun updateAlarmType(alarmTypeUiModel: AlarmTypeUiModel) {
-        val alarm = currentState.alarm
+        val alarm = currentState.alarm ?: return
         updateState { copy(alarm = alarm.copy(type = alarmTypeUiModel)) }
     }
 
     fun updateAlarmTime(time: LocalTime) {
-        val alarm = currentState.alarm
+        val alarm = currentState.alarm ?: return
         updateState { copy(alarm = alarm.copy(time = time)) }
     }
 
     fun updateAlarmDate(date: LocalDate) {
-        val alarm = currentState.alarm
+        val alarm = currentState.alarm ?: return
         if (alarm.type != AlarmTypeUiModel.NON_REPEAT) return
         updateState { copy(alarm = alarm.copy(date = date)) }
     }
 
     fun updateDaysOfWeek(dayOfWeek: RepeatDayUiModel) {
-        val alarm = currentState.alarm
+        val alarm = currentState.alarm ?: return
         val newRepeatDays =
             alarm.repeatDays.map {
                 if (it.dayOfWeek != dayOfWeek.dayOfWeek) return@map it
@@ -72,25 +73,16 @@ class AlarmEditViewModel(
         updateState { copy(isLoading = true) }
         fetchAlarmUseCase(bottariId)
             .onEach { alarm ->
-                if (alarm == null) {
-                    updateState { copy(isLoading = false) }
-                    return@onEach
-                }
                 updateState {
                     copy(
                         isLoading = false,
-                        alarm = AlarmUiModel.fromDomain(alarm),
+                        alarm = alarm?.let(AlarmUiModel::fromDomain) ?: DEFAULT_ALARM_UI_MODEL,
                     )
                 }
             }.catch {
                 updateState { copy(isLoading = false) }
                 emitEvent(AlarmUiEvent.FetchAlarmFailure)
             }.launchIn(viewModelScope)
-    }
-
-    private fun isEveryWeekRepeatWithoutSelectedDay(): Boolean {
-        val alarm = currentState.alarm
-        return alarm.type == AlarmTypeUiModel.REPEAT && alarm.repeatDays.none { it.isChecked }
     }
 
     private fun saveAlarm(alarm: Alarm) {
@@ -106,7 +98,7 @@ class AlarmEditViewModel(
                             "new_alarm_info" to currentState.alarm.toString(),
                         ),
                     )
-                    emitEvent(AlarmUiEvent.SaveAlarmSuccess(createNotification()))
+                    emitEvent(AlarmUiEvent.SaveAlarmSuccess(createNotification(alarm)))
                 }.onFailure {
                     emitEvent(AlarmUiEvent.SaveAlarmFailure)
                 }
@@ -114,11 +106,11 @@ class AlarmEditViewModel(
         updateState { copy(isLoading = false) }
     }
 
-    private fun createNotification(): NotificationUiModel =
+    private fun createNotification(alarm: Alarm): NotificationUiModel =
         NotificationUiModel(
             bottariId = bottariId,
             bottariTitle = bottariTitle,
-            alarm = currentState.alarm,
+            alarm = AlarmUiModel.fromDomain(alarm),
         )
 
     companion object {

@@ -71,15 +71,16 @@ class AlarmEditFragment :
 
     private fun setupObserver() {
         collectWithLifecycle(viewModel.uiState) { uiState ->
-            uiState.run {
-                toggleLoadingIndicator(isLoading)
+            toggleLoadingIndicator(uiState.isLoading)
+            handleConfirmButtonState(uiState.isRepeatWithoutDays.not())
+            uiState.alarm?.let { alarm ->
                 handleAlarmState(alarm)
                 if (alarm.type == AlarmTypeUiModel.NON_REPEAT) {
                     showOnly(binding.groupAlarmNonRepeat)
                     return@collectWithLifecycle
                 }
+                showOnly(binding.groupAlarmRepeat)
             }
-            showOnly(binding.groupAlarmRepeat)
         }
         collectWithLifecycle(viewModel.uiEvent) { uiEvent -> handleAlarmEvent(uiEvent) }
     }
@@ -106,6 +107,13 @@ class AlarmEditFragment :
         }
         setupAlarmTimePickers()
         setupAlarmTypeSwitchers()
+    }
+
+    private fun handleConfirmButtonState(isEnabled: Boolean) {
+        binding.btnConfirm.isEnabled = isEnabled
+        val textColorRes = if (isEnabled) R.color.black else R.color.gray_700
+        val textColor = ContextCompat.getColor(requireContext(), textColorRes)
+        binding.btnConfirm.setTextColor(textColor)
     }
 
     private fun handleAlarmState(alarm: AlarmUiModel) {

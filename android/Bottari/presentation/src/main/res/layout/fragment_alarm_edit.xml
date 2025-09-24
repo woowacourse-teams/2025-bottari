@@ -98,7 +98,7 @@
                     android:id="@+id/group_alarm_non_repeat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:constraint_referenced_ids="tv_non_repeat_alarm_date_title, tv_non_repeat_alarm_date_title, btn_calendar, tv_non_repeat_alarm_date, layout_non_repeat_alarm_time" />
 
                 <TextView
@@ -166,7 +166,7 @@
                     android:id="@+id/group_alarm_repeat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:constraint_referenced_ids="tv_alarm_day_of_week, rv_day_of_week, layout_repeat_alarm_time" />
 
                 <TextView
