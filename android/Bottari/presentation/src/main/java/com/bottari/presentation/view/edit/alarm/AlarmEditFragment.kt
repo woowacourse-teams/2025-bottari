@@ -116,20 +116,21 @@ class AlarmEditFragment :
 
     private fun handleAlarmEvent(uiEvent: AlarmUiEvent) {
         when (uiEvent) {
-            is AlarmUiEvent.AlarmCreateSuccess -> {
+            is AlarmUiEvent.CreateAlarmSuccess -> {
                 scheduleAlarm(notification = uiEvent.notification)
                 requireView().showSnackbar(R.string.alarm_edit_create_success_text)
                 parentFragmentManager.popBackStack()
             }
 
-            is AlarmUiEvent.AlarmSaveSuccess -> {
+            is AlarmUiEvent.SaveAlarmSuccess -> {
                 scheduleAlarm(notification = uiEvent.notification)
                 requireView().showSnackbar(R.string.alarm_edit_save_success_text)
                 parentFragmentManager.popBackStack()
             }
 
-            AlarmUiEvent.AlarmCreateFailure -> requireView().showSnackbar(R.string.alarm_edit_create_failure_text)
-            AlarmUiEvent.AlarmSaveFailure -> requireView().showSnackbar(R.string.alarm_edit_save_failure_text)
+            AlarmUiEvent.FetchAlarmFailure -> requireView().showSnackbar(R.string.alarm_edit_fetch_failure_text)
+            AlarmUiEvent.CreateAlarmFailure -> requireView().showSnackbar(R.string.alarm_edit_create_failure_text)
+            AlarmUiEvent.SaveAlarmFailure -> requireView().showSnackbar(R.string.alarm_edit_save_failure_text)
         }
     }
 
@@ -219,16 +220,13 @@ class AlarmEditFragment :
     companion object {
         private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
         private const val ARG_BOTTARI_TITLE = "ARG_BOTTARI_TITLE"
-        private const val ARG_ALARM = "ARG_ALARM"
 
         fun newBundle(
             bottariId: Long,
             bottariTitle: String,
-            alarm: AlarmUiModel?,
         ) = Bundle().apply {
             putLong(ARG_BOTTARI_ID, bottariId)
             putString(ARG_BOTTARI_TITLE, bottariTitle)
-            putParcelable(ARG_ALARM, alarm)
         }
     }
 }

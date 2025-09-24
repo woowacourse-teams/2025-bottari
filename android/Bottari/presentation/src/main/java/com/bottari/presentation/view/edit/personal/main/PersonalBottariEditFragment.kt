@@ -167,7 +167,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         viewModel.uiState.value.run {
             navigateToScreen(
                 AlarmEditFragment::class.java,
-                AlarmEditFragment.newBundle(bottariId, bottariTitle, alarm),
+                AlarmEditFragment.newBundle(bottariId, bottariTitle),
             )
         }
     }

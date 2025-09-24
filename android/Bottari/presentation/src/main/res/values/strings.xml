@@ -262,6 +262,7 @@
     <string name="alarm_edit_time_text">시간</string>
     <string name="alarm_edit_day_of_week_text">요일</string>
     <string name="alarm_edit_location_title_text">알람 장소</string>
+    <string name="alarm_edit_fetch_failure_text">알람을 불러오지 못했어요</string>
     <string name="alarm_edit_save_success_text">알람을 저장했어요</string>
     <string name="alarm_edit_save_failure_text">알람을 저장하지 못했어요</string>
     <string name="alarm_edit_create_success_text">알람을 만들었어요</string>

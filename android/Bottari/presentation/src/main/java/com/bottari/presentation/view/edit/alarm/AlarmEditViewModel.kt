@@ -3,27 +3,38 @@ package com.bottari.presentation.view.edit.alarm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.AlarmUseCaseProvider
 import com.bottari.domain.model.alarm.Alarm
+import com.bottari.domain.usecase.alarm.FetchAlarmUseCase
 import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.alarm.AlarmTypeUiModel
+import com.bottari.presentation.model.alarm.AlarmUiModel
 import com.bottari.presentation.model.alarm.NotificationUiModel
 import com.bottari.presentation.model.alarm.RepeatDayUiModel
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
 import java.time.LocalTime
 
 class AlarmEditViewModel(
     stateHandle: SavedStateHandle,
+    private val fetchAlarmUseCase: FetchAlarmUseCase,
     private val saveAlarmUseCase: SaveAlarmUseCase,
 ) : FlowBaseViewModel<AlarmUiState, AlarmUiEvent>(AlarmUiState()) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val bottariTitle: String =
         stateHandle[KEY_BOTTARI_TITLE] ?: error(ERROR_REQUIRE_BOTTARI_TITLE)
+
+    init {
+        fetchAlarm()
+    }
 
     fun updateAlarm() {
         if (isEveryWeekRepeatWithoutSelectedDay()) return
@@ -58,6 +69,22 @@ class AlarmEditViewModel(
         updateState { copy(alarm = newAlarm) }
     }
 
+    private fun fetchAlarm() {
+        updateState { copy(isLoading = true) }
+        fetchAlarmUseCase(bottariId)
+            .onEach { alarm ->
+                updateState {
+                    copy(
+                        isLoading = false,
+                        alarm = AlarmUiModel.fromDomain(alarm),
+                    )
+                }
+            }.catch {
+                updateState { copy(isLoading = false) }
+                emitEvent(AlarmUiEvent.FetchAlarmFailure)
+            }.launchIn(viewModelScope)
+    }
+
     private fun isEveryWeekRepeatWithoutSelectedDay(): Boolean {
         val alarm = currentState.alarm ?: return true
         return alarm.type == AlarmTypeUiModel.REPEAT && alarm.repeatDays.none { it.isChecked }
@@ -76,9 +103,9 @@ class AlarmEditViewModel(
                             "new_alarm_info" to currentState.alarm.toString(),
                         ),
                     )
-                    emitEvent(AlarmUiEvent.AlarmSaveSuccess(createNotification()))
+                    emitEvent(AlarmUiEvent.SaveAlarmSuccess(createNotification()))
                 }.onFailure {
-                    emitEvent(AlarmUiEvent.AlarmSaveFailure)
+                    emitEvent(AlarmUiEvent.SaveAlarmFailure)
                 }
         }
         updateState { copy(isLoading = false) }
@@ -109,6 +136,7 @@ class AlarmEditViewModel(
                     stateHandle[KEY_BOTTARI_TITLE] = bottariTitle
                     AlarmEditViewModel(
                         stateHandle = stateHandle,
+                        fetchAlarmUseCase = AlarmUseCaseProvider.fetchAlarmUseCase,
                         saveAlarmUseCase = AlarmUseCaseProvider.saveAlarmUseCase,
                     )
                 }
