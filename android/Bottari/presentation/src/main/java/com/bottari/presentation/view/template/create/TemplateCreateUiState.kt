@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.template.create
 
-import com.bottari.presentation.model.bottari.BottariItemUiModel
+import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 import com.bottari.presentation.model.template.SelectableBottariUiModel
 
 data class TemplateCreateUiState(
@@ -12,7 +12,7 @@ data class TemplateCreateUiState(
 
     val shouldShowEmptyView: Boolean get() = bottaries.isEmpty()
 
-    val currentBottariItems: List<BottariItemUiModel>
+    val currentBottariItems: List<ChecklistItemUiModel>
         get() = bottaries.find { it.id == selectedBottariId }?.items ?: emptyList()
 
     val canCreateTemplate: Boolean get() = currentBottariItems.isNotEmpty()

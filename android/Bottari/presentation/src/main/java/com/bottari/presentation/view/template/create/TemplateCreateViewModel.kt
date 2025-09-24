@@ -1,22 +1,28 @@
 package com.bottari.presentation.view.template.create
 
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.di.usecase.BottariUseCaseProvider
 import com.bottari.domain.model.bottari.Bottari
+import com.bottari.domain.model.bottari.personal.PersonalBottari
 import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
+import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.template.SelectableBottariUiModel
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class TemplateCreateViewModel(
     private val fetchBottariDetailsUseCase: FetchBottariDetailsUseCase,
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
-) : BaseViewModel<TemplateCreateUiState, TemplateCreateUiEvent>(TemplateCreateUiState()) {
+) : FlowBaseViewModel<TemplateCreateUiState, TemplateCreateUiEvent>(TemplateCreateUiState()) {
     init {
         fetchBottariDetails()
     }
@@ -58,21 +64,20 @@ class TemplateCreateViewModel(
 
     private fun fetchBottariDetails() {
         updateState { copy(isLoading = true) }
-
-        launch {
-            fetchBottariDetailsUseCase()
-                .onSuccess { handleFetchBottariDetails(it) }
-                .onFailure { emitEvent(TemplateCreateUiEvent.FetchMyBottariesFailure) }
-
-            updateState { copy(isLoading = false) }
-        }
+        fetchBottariDetailsUseCase()
+            .onEach(::handleFetchBottariDetails)
+            .catch {
+                emitEvent(TemplateCreateUiEvent.FetchMyBottariesFailure)
+                updateState { copy(isLoading = false) }
+            }.launchIn(viewModelScope)
     }
 
-    private fun handleFetchBottariDetails(bottaries: List<Bottari>) {
+    private fun handleFetchBottariDetails(bottaries: List<PersonalBottari>) {
         val myBottaries = bottaries.map { SelectableBottariUiModel.fromDomain(it) }
         val selectedBottariId = myBottaries.firstOrNull()?.id
         updateState {
             copy(
+                isLoading = false,
                 selectedBottariId = selectedBottariId,
                 bottaries = myBottaries.updateBottariSelectedState(selectedBottariId),
             )

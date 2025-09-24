@@ -1,21 +1,21 @@
 package com.bottari.presentation.model.template
 
-import com.bottari.domain.model.bottari.Bottari
-import com.bottari.presentation.model.bottari.BottariItemUiModel
+import com.bottari.domain.model.bottari.personal.PersonalBottari
+import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 
 data class SelectableBottariUiModel(
     val id: Long,
     val title: String,
-    val items: List<BottariItemUiModel>,
+    val items: List<ChecklistItemUiModel>,
     val isSelected: Boolean,
 ) {
     companion object {
-        fun fromDomain(bottari: Bottari): SelectableBottariUiModel =
+        fun fromDomain(bottari: PersonalBottari): SelectableBottariUiModel =
             SelectableBottariUiModel(
                 id = bottari.id,
                 title = bottari.title,
                 isSelected = false,
-                items = bottari.items.map { item -> BottariItemUiModel.fromDomain(item) },
+                items = bottari.items.map(ChecklistItemUiModel::fromDomain),
             )
     }
 }
