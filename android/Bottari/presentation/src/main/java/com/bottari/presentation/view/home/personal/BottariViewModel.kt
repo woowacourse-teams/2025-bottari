@@ -41,7 +41,6 @@ class BottariViewModel(
 
     fun deleteBottari(bottariId: Long) {
         updateState { copy(isLoading = true) }
-
         launch {
             deleteBottariUseCase(bottariId)
                 .onSuccess {
@@ -53,8 +52,13 @@ class BottariViewModel(
                             "bottari_title" to bottari?.title.orEmpty(),
                         ),
                     )
+                    updateState {
+                        copy(
+                            isLoading = false,
+                            bottaries = currentState.bottaries.filterNot { bottari -> bottari.id == bottariId },
+                        )
+                    }
                     deleteNotification(bottari)
-                    fetchBottaries()
                     emitEvent(BottariUiEvent.BottariDeleteSuccess)
                 }.onFailure {
                     emitEvent(BottariUiEvent.BottariDeleteFailure)
