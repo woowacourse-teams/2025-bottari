@@ -50,6 +50,10 @@
             android:name=".view.invite.InviteActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".compose.home.ComposeHomeActivity"
+            android:exported="false" />
+
         <receiver android:name=".receiver.AlarmReceiver" />
         <receiver
             android:name=".receiver.BootReceiver"
