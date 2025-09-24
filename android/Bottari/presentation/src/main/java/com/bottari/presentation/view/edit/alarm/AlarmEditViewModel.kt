@@ -38,28 +38,27 @@ class AlarmEditViewModel(
 
     fun updateAlarm() {
         if (isEveryWeekRepeatWithoutSelectedDay()) return
-        val alarm = currentState.alarm?.toDomain() ?: return
-        saveAlarm(alarm)
+        saveAlarm(currentState.alarm.toDomain())
     }
 
     fun updateAlarmType(alarmTypeUiModel: AlarmTypeUiModel) {
-        val alarm = currentState.alarm ?: return
+        val alarm = currentState.alarm
         updateState { copy(alarm = alarm.copy(type = alarmTypeUiModel)) }
     }
 
     fun updateAlarmTime(time: LocalTime) {
-        val alarm = currentState.alarm ?: return
+        val alarm = currentState.alarm
         updateState { copy(alarm = alarm.copy(time = time)) }
     }
 
     fun updateAlarmDate(date: LocalDate) {
-        val alarm = currentState.alarm ?: return
+        val alarm = currentState.alarm
         if (alarm.type != AlarmTypeUiModel.NON_REPEAT) return
         updateState { copy(alarm = alarm.copy(date = date)) }
     }
 
     fun updateDaysOfWeek(dayOfWeek: RepeatDayUiModel) {
-        val alarm = currentState.alarm ?: return
+        val alarm = currentState.alarm
         val newRepeatDays =
             alarm.repeatDays.map {
                 if (it.dayOfWeek != dayOfWeek.dayOfWeek) return@map it
@@ -73,6 +72,10 @@ class AlarmEditViewModel(
         updateState { copy(isLoading = true) }
         fetchAlarmUseCase(bottariId)
             .onEach { alarm ->
+                if (alarm == null) {
+                    updateState { copy(isLoading = false) }
+                    return@onEach
+                }
                 updateState {
                     copy(
                         isLoading = false,
@@ -86,7 +89,7 @@ class AlarmEditViewModel(
     }
 
     private fun isEveryWeekRepeatWithoutSelectedDay(): Boolean {
-        val alarm = currentState.alarm ?: return true
+        val alarm = currentState.alarm
         return alarm.type == AlarmTypeUiModel.REPEAT && alarm.repeatDays.none { it.isChecked }
     }
 
@@ -115,7 +118,7 @@ class AlarmEditViewModel(
         NotificationUiModel(
             bottariId = bottariId,
             bottariTitle = bottariTitle,
-            alarm = currentState.alarm!!,
+            alarm = currentState.alarm,
         )
 
     companion object {

@@ -71,8 +71,8 @@ class AlarmEditFragment :
 
     private fun setupObserver() {
         collectWithLifecycle(viewModel.uiState) { uiState ->
-            toggleLoadingIndicator(uiState.isLoading)
-            uiState.alarm?.let { alarm ->
+            uiState.run {
+                toggleLoadingIndicator(isLoading)
                 handleAlarmState(alarm)
                 if (alarm.type == AlarmTypeUiModel.NON_REPEAT) {
                     showOnly(binding.groupAlarmNonRepeat)

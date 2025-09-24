@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.map
 class AlarmRepositoryImpl(
     private val alarmLocalDataSource: AlarmLocalDataSource,
 ) : AlarmRepository {
-    override fun fetchAlarm(bottariId: Long): Flow<Alarm> =
+    override fun fetchAlarm(bottariId: Long): Flow<Alarm?> =
         alarmLocalDataSource
             .fetchAlarm(bottariId)
-            .map { alarm -> alarm.toDomain() }
+            .map { alarm -> alarm?.toDomain() }
 
     override suspend fun saveAlarm(
         bottariId: Long,

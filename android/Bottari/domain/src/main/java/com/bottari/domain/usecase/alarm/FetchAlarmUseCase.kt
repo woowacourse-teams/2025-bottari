@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 class FetchAlarmUseCase(
     private val alarmRepository: AlarmRepository,
 ) {
-    operator fun invoke(bottariId: Long): Flow<Alarm> = alarmRepository.fetchAlarm(bottariId)
+    operator fun invoke(bottariId: Long): Flow<Alarm?> = alarmRepository.fetchAlarm(bottariId)
 }
