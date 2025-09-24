@@ -124,12 +124,6 @@ class AlarmEditFragment :
 
     private fun handleAlarmEvent(uiEvent: AlarmUiEvent) {
         when (uiEvent) {
-            is AlarmUiEvent.CreateAlarmSuccess -> {
-                scheduleAlarm(notification = uiEvent.notification)
-                requireView().showSnackbar(R.string.alarm_edit_create_success_text)
-                parentFragmentManager.popBackStack()
-            }
-
             is AlarmUiEvent.SaveAlarmSuccess -> {
                 scheduleAlarm(notification = uiEvent.notification)
                 requireView().showSnackbar(R.string.alarm_edit_save_success_text)
@@ -137,7 +131,6 @@ class AlarmEditFragment :
             }
 
             AlarmUiEvent.FetchAlarmFailure -> requireView().showSnackbar(R.string.alarm_edit_fetch_failure_text)
-            AlarmUiEvent.CreateAlarmFailure -> requireView().showSnackbar(R.string.alarm_edit_create_failure_text)
             AlarmUiEvent.SaveAlarmFailure -> requireView().showSnackbar(R.string.alarm_edit_save_failure_text)
         }
     }

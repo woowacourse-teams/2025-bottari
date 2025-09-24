@@ -93,7 +93,7 @@ class AlarmEditViewModel(
                     BottariLogger.ui(
                         UiEventType.ALARM_EDIT,
                         mapOf(
-                            "alarm_id" to alarm.id!!,
+                            "alarm_id" to alarm.id.toString(),
                             "old_alarm_info" to alarm.toString(),
                             "new_alarm_info" to currentState.alarm.toString(),
                         ),

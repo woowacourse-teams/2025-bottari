@@ -267,8 +267,6 @@
     <string name="alarm_edit_fetch_failure_text">알람을 불러오지 못했어요</string>
     <string name="alarm_edit_save_success_text">알람을 저장했어요</string>
     <string name="alarm_edit_save_failure_text">알람을 저장하지 못했어요</string>
-    <string name="alarm_edit_create_success_text">알람을 만들었어요</string>
-    <string name="alarm_edit_create_failure_text">알람을 만들지 못했어요</string>
     <string name="alarm_edit_exact_alarm_permission_dialog_message_text">보따리 알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
 
     <!--  Calendar  -->
