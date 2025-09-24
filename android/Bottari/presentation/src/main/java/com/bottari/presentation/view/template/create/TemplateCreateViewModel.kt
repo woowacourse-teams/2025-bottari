@@ -6,13 +6,11 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.di.usecase.BottariUseCaseProvider
-import com.bottari.domain.model.bottari.Bottari
 import com.bottari.domain.model.bottari.personal.PersonalBottari
 import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
-import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.template.SelectableBottariUiModel
 import kotlinx.coroutines.flow.catch
