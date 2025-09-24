@@ -12,6 +12,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.collectWithLifecycle
 import com.bottari.presentation.common.extension.formatWithPattern
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalBottariEditBinding

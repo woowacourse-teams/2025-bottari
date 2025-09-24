@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.collectWithLifecycle
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentSwipeChecklistBinding
 import com.bottari.presentation.model.bottari.ChecklistItemUiModel
@@ -69,7 +70,7 @@ class SwipeChecklistFragment :
     override fun onCardRewound() {}
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        collectWithLifecycle(viewModel.uiState) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
             handleSwipeChecklistStatus(uiState)
             handleProgressBar(uiState)
@@ -78,7 +79,7 @@ class SwipeChecklistFragment :
             handleEmptyView(uiState.isItemsEmpty)
             showDoneButton(uiState.isDone)
         }
-        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+        collectWithLifecycle(viewModel.uiEvent) { uiEvent ->
             when (uiEvent) {
                 ChecklistUiEvent.FetchChecklistFailure -> requireView().showSnackbar(R.string.checklist_fetch_failure_text)
                 ChecklistUiEvent.ResetCheckStateFailure -> requireView().showSnackbar(R.string.checklist_reset_failure_text)

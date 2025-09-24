@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
+import com.bottari.presentation.common.extension.collectWithLifecycle
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentChecklistBinding
 import com.bottari.presentation.view.checklist.personal.ChecklistUiEvent
@@ -38,12 +39,12 @@ class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChe
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        collectWithLifecycle(viewModel.uiState) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
             adapter.submitList(uiState.bottariItems)
             handleEmptyView(uiState.isItemsEmpty)
         }
-        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+        collectWithLifecycle(viewModel.uiEvent) { uiEvent ->
             when (uiEvent) {
                 ChecklistUiEvent.FetchChecklistFailure -> requireView().showSnackbar(R.string.checklist_fetch_failure_text)
                 ChecklistUiEvent.ResetCheckStateFailure -> requireView().showSnackbar(R.string.checklist_reset_failure_text)
