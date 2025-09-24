@@ -7,6 +7,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.bottari.presentation.compose.common.theme.BottariTheme.colors
 import com.bottari.presentation.compose.common.theme.BottariTheme.typography
 
 object BottariTheme {
@@ -35,7 +36,7 @@ val BottariStatusBarStyle =
 @Composable
 fun BottariTheme(content: @Composable () -> Unit) {
     CompositionLocalProvider(
-        LocalBottariBgColor provides LocalBottariBgColor.current,
+        LocalBottariBgColor provides colors.gray50,
     ) {
         ProvideTextStyle(value = typography.medium14.toTextStyle()) {
             content()
