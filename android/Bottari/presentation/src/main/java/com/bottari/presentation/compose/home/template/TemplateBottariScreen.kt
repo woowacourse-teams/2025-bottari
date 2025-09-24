@@ -20,6 +20,6 @@ fun TemplateBottariScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = "우리 보따리")
+        Text(text = "모두의 보따리")
     }
 }
