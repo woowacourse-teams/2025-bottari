@@ -84,6 +84,7 @@ class PersonalItemEditViewModel(
                         isLoading = false,
                         initialItems = itemUiModels,
                         items = itemUiModels,
+                        isFetched = true,
                     )
                 }
             }.catch { emitEvent(PersonalItemEditUiEvent.FetchBottariItemsFailure) }
