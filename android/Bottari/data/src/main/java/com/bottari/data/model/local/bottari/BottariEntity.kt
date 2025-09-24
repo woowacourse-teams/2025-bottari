@@ -12,6 +12,8 @@ data class BottariEntity(
     val id: Long = 0,
     @ColumnInfo(name = "title")
     val title: String,
+    @ColumnInfo(name = "createdAt")
+    val createdAt: Long = System.currentTimeMillis(),
 ) {
     fun toDomain(): PersonalBottari =
         PersonalBottari(

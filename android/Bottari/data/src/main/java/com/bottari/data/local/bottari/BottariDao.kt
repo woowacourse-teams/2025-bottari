@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BottariDao {
-    @Query("SELECT * FROM Bottaries")
+    @Query("SELECT * FROM Bottaries ORDER BY createdAt DESC")
     fun fetchBottaries(): Flow<List<BottariEntity>>
 
     @Query("SELECT * FROM Bottaries WHERE id = :id")

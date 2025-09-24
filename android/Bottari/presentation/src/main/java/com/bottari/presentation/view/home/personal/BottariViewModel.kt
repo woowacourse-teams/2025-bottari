@@ -34,7 +34,6 @@ class BottariViewModel(
                     )
                 }
             }.catch {
-                BottariLogger.error(it.stackTraceToString())
                 emitEvent(BottariUiEvent.FetchBottariesFailure)
                 updateState { copy(isLoading = false) }
             }.launchIn(viewModelScope)
