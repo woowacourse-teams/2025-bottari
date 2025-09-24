@@ -21,6 +21,7 @@ data class PersonalBottariEditUiState(
         fun from(bottari: PersonalBottari): PersonalBottariEditUiState =
             PersonalBottariEditUiState(
                 isLoading = false,
+                isFetched = true,
                 bottariId = bottari.id,
                 bottariTitle = bottari.title,
                 alarm = bottari.alarm?.let(AlarmUiModel::fromDomain),

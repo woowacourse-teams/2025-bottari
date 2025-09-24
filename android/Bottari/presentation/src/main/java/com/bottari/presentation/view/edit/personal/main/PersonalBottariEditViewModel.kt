@@ -42,8 +42,9 @@ class PersonalBottariEditViewModel(
     fun fetchBottari() {
         updateState { copy(isLoading = true) }
         fetchBottariDetailUseCase(currentState.bottariId)
-            .onEach(PersonalBottariEditUiState::from)
-            .catch {
+            .onEach { bottari ->
+                updateState { PersonalBottariEditUiState.from(bottari) }
+            }.catch {
                 emitEvent(PersonalBottariEditUiEvent.FetchBottariFailure)
                 updateState { copy(isLoading = false) }
             }.launchIn(viewModelScope)
