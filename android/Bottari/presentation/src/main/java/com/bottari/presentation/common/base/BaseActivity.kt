@@ -9,9 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.LogEventHelper
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 abstract class BaseActivity<VB : ViewBinding>(
     private val bindingFactory: (LayoutInflater) -> VB,
@@ -54,6 +59,18 @@ abstract class BaseActivity<VB : ViewBinding>(
     override fun onDestroy() {
         super.onDestroy()
         logLifecycle("onDestroy")
+    }
+
+    protected fun <T> collectWithLifecycle(
+        flow: Flow<T>,
+        state: Lifecycle.State = Lifecycle.State.STARTED,
+        collector: suspend (T) -> Unit,
+    ) {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(state) {
+                flow.collect(collector)
+            }
+        }
     }
 
     private fun logLifecycle(event: String) {

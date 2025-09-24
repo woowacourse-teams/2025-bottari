@@ -13,7 +13,6 @@ import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
-import com.bottari.presentation.common.extension.collectWithLifecycle
 import com.bottari.presentation.databinding.ActivityChecklistBinding
 import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 import com.bottari.presentation.view.checklist.personal.main.MainChecklistFragment

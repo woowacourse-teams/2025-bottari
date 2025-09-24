@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bottari.domain.model.bottari.BottariType
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.collectWithLifecycle
 import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.common.extension.showSnackbar
