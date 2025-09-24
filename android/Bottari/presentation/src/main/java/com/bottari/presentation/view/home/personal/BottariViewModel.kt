@@ -40,10 +40,7 @@ class BottariViewModel(
                         ),
                     )
                     updateState {
-                        copy(
-                            isLoading = false,
-                            bottaries = currentState.bottaries.filterNot { bottari -> bottari.id == bottariId },
-                        )
+                        copy(bottaries = currentState.bottaries.filterNot { bottari -> bottari.id == bottariId })
                     }
                     deleteNotification(bottari)
                     emitEvent(BottariUiEvent.BottariDeleteSuccess)
