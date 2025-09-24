@@ -1,15 +1,11 @@
 package com.bottari.presentation.compose.common.theme
 
 import androidx.activity.SystemBarStyle
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.bottari.presentation.compose.common.theme.BottariTheme.typography
