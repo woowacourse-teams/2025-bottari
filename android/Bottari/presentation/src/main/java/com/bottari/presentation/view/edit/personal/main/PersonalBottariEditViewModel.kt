@@ -41,7 +41,7 @@ class PersonalBottariEditViewModel(
 
     fun fetchBottari() {
         updateState { copy(isLoading = true) }
-        fetchBottariDetailUseCase(currentState.id)
+        fetchBottariDetailUseCase(currentState.bottariId)
             .onEach(PersonalBottariEditUiState::from)
             .catch {
                 emitEvent(PersonalBottariEditUiEvent.FetchBottariFailure)

@@ -16,10 +16,7 @@ interface BottariDao {
     fun fetchBottari(id: Long): Flow<BottariEntity>
 
     @Insert(onConflict = REPLACE)
-    suspend fun createBottari(title: String)
-
-    @Insert(onConflict = REPLACE)
-    suspend fun saveBottari(bottari: BottariEntity)
+    suspend fun createBottari(bottari: BottariEntity): Long
 
     @Query("DELETE FROM Bottaries WHERE id = :bottariId")
     suspend fun deleteBottari(bottariId: Long)

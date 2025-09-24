@@ -8,7 +8,7 @@ interface BottariRepository {
 
     fun fetchBottari(id: Long): Flow<PersonalBottari>
 
-    suspend fun createBottari(title: String): Result<Unit>
+    suspend fun saveBottari(title: String): Result<Long>
 
     suspend fun deleteBottari(id: Long): Result<Unit>
 

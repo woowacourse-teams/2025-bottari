@@ -20,7 +20,10 @@ class BottariRepositoryImpl(
             .fetchBottari(id)
             .map(BottariEntity::toDomain)
 
-    override suspend fun createBottari(title: String): Result<Unit> = bottariLocalDataSource.createBottari(title)
+    override suspend fun saveBottari(title: String): Result<Long> =
+        bottariLocalDataSource.createBottari(
+            BottariEntity(title = title),
+        )
 
     override suspend fun deleteBottari(id: Long): Result<Unit> = bottariLocalDataSource.deleteBottari(id)
 

@@ -43,7 +43,6 @@ class BottariCreateViewModel(
         launch {
             createBottariUseCase(title)
                 .onSuccess { createdBottariId ->
-                    if (createdBottariId == null) return@onSuccess
                     logCreateBottariEvent(UiEventType.PERSONAL_BOTTARI_CREATE, title)
                     emitEvent(BottariCreateUiEvent.CreatePersonalBottariSuccess(createdBottariId))
                 }.onFailure { emitEvent(BottariCreateUiEvent.CreateBottariFailure) }

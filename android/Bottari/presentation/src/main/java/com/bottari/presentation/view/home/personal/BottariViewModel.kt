@@ -22,10 +22,6 @@ class BottariViewModel(
     private val deleteBottariUseCase: DeleteBottariUseCase,
     private val deleteNotificationUseCase: DeleteNotificationUseCase,
 ) : FlowBaseViewModel<BottariUiState, BottariUiEvent>(BottariUiState()) {
-    init {
-        fetchBottaries()
-    }
-
     fun fetchBottaries() {
         updateState { copy(isLoading = true) }
         fetchBottariesUseCase()
@@ -34,10 +30,13 @@ class BottariViewModel(
                     copy(
                         isLoading = false,
                         bottaries = bottaries.map(BottariUiModel::fromPersonalBottari),
+                        isFetched = true,
                     )
                 }
             }.catch {
+                BottariLogger.error(it.stackTraceToString())
                 emitEvent(BottariUiEvent.FetchBottariesFailure)
+                updateState { copy(isLoading = false) }
             }.launchIn(viewModelScope)
     }
 
