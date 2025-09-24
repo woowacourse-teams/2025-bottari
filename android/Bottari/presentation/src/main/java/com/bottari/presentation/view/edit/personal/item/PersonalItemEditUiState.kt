@@ -11,5 +11,5 @@ data class PersonalItemEditUiState(
     var items: List<ChecklistItemUiModel> = emptyList(),
 ) {
     val isDifferent: Boolean = initialItems != items
-    val isEmpty: Boolean = !isLoading && isFetched
+    val isEmpty: Boolean = !isLoading && isFetched && items.isEmpty()
 }

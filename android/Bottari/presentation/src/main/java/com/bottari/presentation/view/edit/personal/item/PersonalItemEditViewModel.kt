@@ -87,8 +87,10 @@ class PersonalItemEditViewModel(
                         isFetched = true,
                     )
                 }
-            }.catch { emitEvent(PersonalItemEditUiEvent.FetchBottariItemsFailure) }
-            .launchIn(viewModelScope)
+            }.catch {
+                emitEvent(PersonalItemEditUiEvent.FetchBottariItemsFailure)
+                updateState { copy(isLoading = false) }
+            }.launchIn(viewModelScope)
     }
 
     private fun restoreItem(itemToRestore: ChecklistItemUiModel) {
