@@ -4,4 +4,8 @@ sealed interface PersonalItemEditUiEvent {
     data object SaveBottariItemsSuccess : PersonalItemEditUiEvent
 
     data object SaveBottariItemsFailure : PersonalItemEditUiEvent
+
+    data object FetchBottariItemsFailure : PersonalItemEditUiEvent
+
+    data object DeleteItemFailure : PersonalItemEditUiEvent
 }

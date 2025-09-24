@@ -15,11 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.applyImeBottomPadding
+import com.bottari.presentation.common.extension.collectWithLifecycle
 import com.bottari.presentation.common.extension.dpToPx
-import com.bottari.presentation.common.extension.getParcelableArrayListCompat
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
-import com.bottari.presentation.model.bottari.BottariItemUiModel
+import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 import com.bottari.presentation.view.common.alert.CustomAlertDialog
 import com.bottari.presentation.view.common.alert.DialogListener
 import com.bottari.presentation.view.common.alert.DialogPresetType
@@ -35,14 +35,13 @@ class PersonalItemEditFragment :
         PersonalItemEditViewModel.Factory(
             bottariId = arguments.getLong(ARG_EXTRA_BOTTARI_ID),
             title = arguments.getString(ARG_BOTTARI_TITLE) ?: "",
-            items = arguments.getParcelableArrayListCompat(ARG_BOTTARI_ITEMS) ?: emptyList(),
         )
     }
 
     private val adapter by lazy {
-        PersonalItemEditAdapter {
+        PersonalItemEditAdapter { itemId ->
             onBackPressedCallback.isEnabled = true
-            viewModel.markItemAsDeleted(it)
+            viewModel.deleteItem(itemId)
         }
     }
 
@@ -77,21 +76,29 @@ class PersonalItemEditFragment :
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        collectWithLifecycle(viewModel.uiState) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
             handleBottariNameState(uiState.title)
             handleItemState(uiState.items)
-            handleEmptyView(uiState.items.isEmpty())
+            handleEmptyView(uiState.isEmpty)
             handleDialog(uiState.isDifferent)
             handleSaveBtn(uiState.isDifferent)
         }
-        viewModel.uiEvent.observe(viewLifecycleOwner) { event ->
+        collectWithLifecycle(viewModel.uiEvent) { event ->
             when (event) {
-                PersonalItemEditUiEvent.SaveBottariItemsFailure -> requireView().showSnackbar(R.string.common_save_failure_text)
+                PersonalItemEditUiEvent.SaveBottariItemsFailure ->
+                    requireView().showSnackbar(R.string.common_save_failure_text)
+
                 PersonalItemEditUiEvent.SaveBottariItemsSuccess -> {
                     onBackPressedCallback.isEnabled = false
                     requireActivity().onBackPressedDispatcher.onBackPressed()
                 }
+
+                PersonalItemEditUiEvent.FetchBottariItemsFailure ->
+                    requireView().showSnackbar(R.string.bottari_personal_item_fetch_failure_text)
+
+                PersonalItemEditUiEvent.DeleteItemFailure ->
+                    requireView().showSnackbar(R.string.bottari_personal_item_delete_failure_text)
             }
         }
     }
@@ -108,13 +115,9 @@ class PersonalItemEditFragment :
 
     private fun setupListener() {
         binding.btnPrevious.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
-
         binding.btnPersonalItemAdd.setOnClickListener { addItemFromInput() }
-
         binding.etPersonalItem.addTextChangedListener(this)
-
-        binding.btnConfirm.setOnClickListener { viewModel.saveChanges() }
-
+        binding.btnConfirm.setOnClickListener { viewModel.saveItems() }
         binding.etPersonalItem.setOnEditorActionListener { _, actionId, _ ->
             if (actionId != EditorInfo.IME_ACTION_SEND) return@setOnEditorActionListener false
             addItemFromInput()
@@ -153,8 +156,8 @@ class PersonalItemEditFragment :
         binding.tvBottariTitle.text = title
     }
 
-    private fun handleItemState(bottariItems: List<BottariItemUiModel>) {
-        adapter.submitList(bottariItems)
+    private fun handleItemState(items: List<ChecklistItemUiModel>) {
+        adapter.submitList(items)
     }
 
     private fun handleEmptyView(isEmpty: Boolean) {
@@ -197,7 +200,6 @@ class PersonalItemEditFragment :
     companion object {
         private const val ARG_EXTRA_BOTTARI_ID = "ARG_EXTRA_BOTTARI_ID"
         private const val ARG_BOTTARI_TITLE = "ARG_BOTTARI_TITLE"
-        private const val ARG_BOTTARI_ITEMS = "ARG_BOTTARI_ITEMS"
 
         private const val DUPLICATE_BORDER_WIDTH_DP = 2
         private const val DISABLED_ALPHA = 0.3f
@@ -206,11 +208,9 @@ class PersonalItemEditFragment :
         fun newBundle(
             id: Long,
             title: String,
-            items: List<BottariItemUiModel>,
         ) = Bundle().apply {
             putLong(ARG_EXTRA_BOTTARI_ID, id)
             putString(ARG_BOTTARI_TITLE, title)
-            putParcelableArrayList(ARG_BOTTARI_ITEMS, ArrayList(items))
         }
     }
 }

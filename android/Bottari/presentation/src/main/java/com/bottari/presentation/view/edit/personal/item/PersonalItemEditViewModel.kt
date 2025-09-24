@@ -3,31 +3,35 @@ package com.bottari.presentation.view.edit.personal.item
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariItemUseCaseProvider
-import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
+import com.bottari.domain.usecase.item.DeleteItemUseCase
+import com.bottari.domain.usecase.item.FetchItemsUseCase
+import com.bottari.domain.usecase.item.SaveItemsUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
-import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.model.bottari.BottariItemUiModel
-import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
+import com.bottari.presentation.common.base.FlowBaseViewModel
+import com.bottari.presentation.model.bottari.ChecklistItemUiModel
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class PersonalItemEditViewModel(
     stateHandle: SavedStateHandle,
-    private val saveBottariItemsUseCase: SaveBottariItemsUseCase,
-) : BaseViewModel<PersonalItemEditUiState, PersonalItemEditUiEvent>(
+    private val fetchItemsUseCase: FetchItemsUseCase,
+    private val saveItemsUseCase: SaveItemsUseCase,
+    private val deleteItemUseCase: DeleteItemUseCase,
+) : FlowBaseViewModel<PersonalItemEditUiState, PersonalItemEditUiEvent>(
         PersonalItemEditUiState(
             bottariId = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID),
             title = stateHandle[KEY_BOTTARI_TITLE] ?: "",
-            initialItems = stateHandle[KEY_BOTTARI_ITEMS] ?: emptyList(),
-            items = stateHandle[KEY_BOTTARI_ITEMS] ?: emptyList(),
         ),
     ) {
-    private data class ItemChanges(
-        val deleteItemIds: List<Long>,
-        val createItemNames: List<String>,
-    )
+    init {
+        fetchItems()
+    }
 
     fun addNewItemIfNeeded(itemName: String) {
         if (itemName.isBlank() || isDuplicateItem(itemName)) return
@@ -46,42 +50,20 @@ class PersonalItemEditViewModel(
         updateState { copy(items = currentState.items + newItem) }
     }
 
-    fun markItemAsDeleted(itemId: Long) {
-        updateState { copy(items = currentState.items.filterNot { it.id == itemId }) }
-    }
-
-    fun saveChanges() {
-        val changes = calculateItemChanges()
-
-        if (changes.deleteItemIds.isEmpty() && changes.createItemNames.isEmpty()) {
-            return
-        }
-
-        updateState { copy(isLoading = true) }
-        executeSaveChanges(changes)
-    }
-
-    private fun calculateItemChanges(): ItemChanges {
-        val initialItems = currentState.initialItems
-        val finalItems = currentState.items
-
-        val initialItemIds = initialItems.map { it.id }.toSet()
-        val finalItemIds = finalItems.map { it.id }.toSet()
-        val deleteItemIds = initialItemIds.filterNot { it in finalItemIds }
-        val createItemNames =
-            finalItems
-                .filterNot { item -> item.id in initialItemIds }
-                .map { item -> item.name }
-
-        return ItemChanges(deleteItemIds, createItemNames)
-    }
-
-    private fun executeSaveChanges(changes: ItemChanges) {
+    fun deleteItem(itemId: Long) {
         launch {
-            saveBottariItemsUseCase(
+            deleteItemUseCase(itemId)
+                .onSuccess {
+                    updateState { copy(items = currentState.items.filterNot { it.id == itemId }) }
+                }.onFailure { emitEvent(PersonalItemEditUiEvent.DeleteItemFailure) }
+        }
+    }
+
+    fun saveItems() {
+        launch {
+            saveItemsUseCase(
                 bottariId = currentState.bottariId,
-                deleteItemIds = changes.deleteItemIds,
-                createItemNames = changes.createItemNames,
+                items = currentState.items.map { item -> item.name },
             ).onSuccess {
                 logSaveChanges()
                 emitEvent(PersonalItemEditUiEvent.SaveBottariItemsSuccess)
@@ -92,18 +74,23 @@ class PersonalItemEditViewModel(
         }
     }
 
-    private fun logSaveChanges() {
-        BottariLogger.ui(
-            UiEventType.PERSONAL_BOTTARI_ITEM_EDIT,
-            mapOf(
-                "bottari_id" to currentState.bottariId.toString(),
-                "old_items" to currentState.initialItems.toString(),
-                "new_items" to currentState.items.toString(),
-            ),
-        )
+    private fun fetchItems() {
+        updateState { copy(isLoading = true) }
+        fetchItemsUseCase(currentState.bottariId)
+            .onEach { items ->
+                val itemUiModels = items.map(ChecklistItemUiModel::fromDomain)
+                updateState {
+                    copy(
+                        isLoading = false,
+                        initialItems = itemUiModels,
+                        items = itemUiModels,
+                    )
+                }
+            }.catch { emitEvent(PersonalItemEditUiEvent.FetchBottariItemsFailure) }
+            .launchIn(viewModelScope)
     }
 
-    private fun restoreItem(itemToRestore: BottariItemUiModel) {
+    private fun restoreItem(itemToRestore: ChecklistItemUiModel) {
         val restoredList = currentState.items + itemToRestore
 
         val originalOrderMap =
@@ -120,39 +107,48 @@ class PersonalItemEditViewModel(
 
     private fun isDuplicateItem(name: String): Boolean = currentState.items.any { item -> item.name == name }
 
-    private fun generateNewItemUiModel(name: String): BottariItemUiModel =
-        BottariItemUiModel(
+    private fun generateNewItemUiModel(name: String): ChecklistItemUiModel =
+        ChecklistItemUiModel(
             id = nextGeneratedItemId(),
             name = name,
-            type = BottariItemTypeUiModel.PERSONAL,
+            isChecked = false,
         )
 
     private fun nextGeneratedItemId(): Long = (currentState.items.maxOfOrNull { item -> item.id } ?: DEFAULT_ITEM_ID) + ITEM_ID_INCREMENT
 
+    private fun logSaveChanges() {
+        BottariLogger.ui(
+            UiEventType.PERSONAL_BOTTARI_ITEM_EDIT,
+            mapOf(
+                "bottari_id" to currentState.bottariId.toString(),
+                "old_items" to currentState.initialItems.toString(),
+                "new_items" to currentState.items.toString(),
+            ),
+        )
+    }
+
     companion object {
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
         private const val KEY_BOTTARI_TITLE = "KEY_BOTTARI_TITLE"
-        private const val KEY_BOTTARI_ITEMS = "KEY_BOTTARI_ITEMS"
         private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 없습니다"
-
         private const val DEFAULT_ITEM_ID = 0L
         private const val ITEM_ID_INCREMENT = 1L
 
         fun Factory(
             bottariId: Long,
             title: String,
-            items: List<BottariItemUiModel>,
         ): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     val stateHandle = createSavedStateHandle()
                     stateHandle[KEY_BOTTARI_ID] = bottariId
                     stateHandle[KEY_BOTTARI_TITLE] = title
-                    stateHandle[KEY_BOTTARI_ITEMS] = ArrayList(items)
 
                     PersonalItemEditViewModel(
                         stateHandle = stateHandle,
-                        saveBottariItemsUseCase = BottariItemUseCaseProvider.saveBottariItemsUseCase,
+                        fetchItemsUseCase = BottariItemUseCaseProvider.fetchItemsUseCase,
+                        saveItemsUseCase = BottariItemUseCaseProvider.saveItemsUseCase,
+                        deleteItemUseCase = BottariItemUseCaseProvider.deleteItemUseCase,
                     )
                 }
             }

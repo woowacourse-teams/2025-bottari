@@ -212,6 +212,8 @@
     <string name="bottari_personal_item_edit_confirm_btn_text">추가하기</string>
     <string name="bottari_personal_item_edit_hint_text">추가할 물건을 입력해 주세요</string>
     <string name="bottari_personal_item_empty_view_title">보따리 안에 물건이 없어요</string>
+    <string name="bottari_personal_item_fetch_failure_text">물건을 불러오지 못했어요</string>
+    <string name="bottari_personal_item_delete_failure_text">물건을 삭제하지 못했어요</string>
     <string name="bottari_personal_item_empty_view_text">무엇을 챙겨야 할지 모르겠다면,\n‘모두의 보따리’를 살펴보세요! </string>
 
     <!-- Bottari Rename -->
