@@ -53,11 +53,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         setupListener()
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.fetchBottari()
-    }
-
     private fun setupObserver() {
         collectWithLifecycle(viewModel.uiState) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
@@ -113,11 +108,6 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         binding.viewAlarmEdit.switchAlarmEdit.setOnClickListener {
             viewModel.updateAlarmState()
         }
-
-        parentFragmentManager.setFragmentResultListener(
-            BottariRenameDialog.SAVE_BOTTARI_TITLE_RESULT_KEY,
-            viewLifecycleOwner,
-        ) { _, _ -> viewModel.fetchBottari() }
     }
 
     private fun renderTitle(title: String) {

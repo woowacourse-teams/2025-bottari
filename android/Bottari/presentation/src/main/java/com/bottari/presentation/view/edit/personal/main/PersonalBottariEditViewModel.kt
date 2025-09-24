@@ -39,6 +39,10 @@ class PersonalBottariEditViewModel(
             coroutineScope = viewModelScope,
         ) { isActive -> toggleAlarmState(isActive) }
 
+    init {
+        fetchBottari()
+    }
+
     fun fetchBottari() {
         updateState { copy(isLoading = true) }
         fetchBottariDetailUseCase(currentState.bottariId)

@@ -42,11 +42,6 @@ class BottariFragment :
         setupListener()
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.fetchBottaries()
-    }
-
     override fun onBottariClick(
         bottariId: Long,
         bottariTitle: String,
