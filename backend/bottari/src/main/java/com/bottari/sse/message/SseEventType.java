@@ -5,5 +5,6 @@ public enum SseEventType {
     CREATE,
     DELETE,
     CHANGE,
+    CHECK,
     ;
 }

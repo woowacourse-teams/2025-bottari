@@ -1,6 +1,6 @@
 package com.bottari.sse.dto;
 
-import com.bottari.teambottari.service.CreateTeamMemberEvent;
+import com.bottari.teambottari.event.CreateTeamMemberEvent;
 import java.time.LocalDateTime;
 
 public record CreateTeamMemberData(

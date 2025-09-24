@@ -21,11 +21,11 @@ import com.bottari.teambottari.event.ChangeTeamAssignedItemEvent;
 import com.bottari.teambottari.event.CheckTeamAssignedItemEvent;
 import com.bottari.teambottari.event.CheckTeamSharedItemEvent;
 import com.bottari.teambottari.event.CreateAssignedItemEvent;
+import com.bottari.teambottari.event.CreateTeamMemberEvent;
 import com.bottari.teambottari.event.CreateTeamSharedItemEvent;
 import com.bottari.teambottari.event.DeleteAssignedItemEvent;
 import com.bottari.teambottari.event.DeleteTeamSharedItemEvent;
 import com.bottari.teambottari.event.ExitTeamMemberEvent;
-import com.bottari.teambottari.service.CreateTeamMemberEvent;
 import com.bottari.teambottari.service.TeamAssignedItemService;
 import com.bottari.teambottari.service.TeamSharedItemService;
 import java.util.List;
@@ -97,7 +97,7 @@ public class TeamBottariEventListener {
     public void handleCheckTeamSharedItemEvent(final CheckTeamSharedItemEvent event) {
         final SseMessage message = new SseMessage(
                 SseResourceType.SHARED_ITEM,
-                SseEventType.CHANGE,
+                SseEventType.CHECK,
                 CheckTeamItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
@@ -108,7 +108,7 @@ public class TeamBottariEventListener {
     public void handleCheckTeamAssignedItemEvent(final CheckTeamAssignedItemEvent event) {
         final SseMessage message = new SseMessage(
                 SseResourceType.ASSIGNED_ITEM,
-                SseEventType.CHANGE,
+                SseEventType.CHECK,
                 CheckTeamItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), message);

@@ -1,4 +1,4 @@
-package com.bottari.teambottari.service;
+package com.bottari.teambottari.event;
 
 import com.bottari.support.CustomApplicationEvent;
 import lombok.Getter;
