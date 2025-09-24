@@ -63,7 +63,13 @@ class ChecklistViewModel(
                 .onSuccess {
                     val clearedItems =
                         currentState.bottariItems.map { item -> item.copy(isChecked = false) }
-                    updateState { copy(bottariItems = clearedItems) }
+                    updateState {
+                        copy(
+                            bottariItems = clearedItems,
+                            initialItems = clearedItems,
+                        )
+                    }
+                    pendingCheckStatusMap.clear()
                 }.onFailure { emitEvent(ChecklistUiEvent.ResetCheckStateFailure) }
             updateState { copy(isLoading = false) }
         }
