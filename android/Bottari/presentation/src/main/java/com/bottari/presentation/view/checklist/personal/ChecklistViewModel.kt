@@ -8,7 +8,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariItemUseCaseProvider
 import com.bottari.domain.usecase.item.FetchItemsUseCase
-import com.bottari.domain.usecase.item.ResetBottariItemCheckStateUseCase
+import com.bottari.domain.usecase.item.ResetItemsCheckStateUseCase
 import com.bottari.domain.usecase.item.UpdateItemCheckStateUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.ChecklistItemUiModel
@@ -23,7 +23,7 @@ class ChecklistViewModel(
     stateHandle: SavedStateHandle,
     private val fetchItemsUseCase: FetchItemsUseCase,
     private val updateItemCheckStateUseCase: UpdateItemCheckStateUseCase,
-    private val resetBottariItemCheckStateUseCase: ResetBottariItemCheckStateUseCase,
+    private val resetItemsCheckStateUseCase: ResetItemsCheckStateUseCase,
 ) : FlowBaseViewModel<ChecklistUiState, ChecklistUiEvent>(ChecklistUiState()) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private val pendingCheckStatusMap = mutableMapOf<Long, ChecklistItemUiModel>()
@@ -59,7 +59,7 @@ class ChecklistViewModel(
     fun resetItemsCheckState() {
         updateState { copy(isLoading = true) }
         launch {
-            resetBottariItemCheckStateUseCase(bottariId)
+            resetItemsCheckStateUseCase(bottariId)
                 .onSuccess {
                     val clearedItems =
                         currentState.bottariItems.map { item -> item.copy(isChecked = false) }
@@ -156,7 +156,7 @@ class ChecklistViewModel(
                         stateHandle,
                         BottariItemUseCaseProvider.fetchItemsUseCase,
                         BottariItemUseCaseProvider.updateItemCheckStateUseCase,
-                        BottariItemUseCaseProvider.resetBottariItemCheckStateUseCase,
+                        BottariItemUseCaseProvider.resetItemsCheckStateUseCase,
                     )
                 }
             }

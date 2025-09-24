@@ -2,7 +2,7 @@ package com.bottari.domain.usecase.item
 
 import com.bottari.domain.repository.BottariItemRepository
 
-class SaveBottariItemsUseCase(
+class SaveItemsUseCase(
     private val bottariItemRepository: BottariItemRepository,
 ) {
     suspend operator fun invoke(

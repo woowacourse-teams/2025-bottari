@@ -2,7 +2,7 @@ package com.bottari.domain.usecase.item
 
 import com.bottari.domain.repository.BottariItemRepository
 
-class ResetBottariItemCheckStateUseCase(
+class ResetItemsCheckStateUseCase(
     private val bottariItemRepository: BottariItemRepository,
 ) {
     suspend operator fun invoke(bottariId: Long): Result<Unit> = bottariItemRepository.resetCheckState(bottariId)
