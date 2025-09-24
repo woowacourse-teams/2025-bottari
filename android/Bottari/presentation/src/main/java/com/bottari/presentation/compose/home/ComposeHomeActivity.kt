@@ -6,18 +6,15 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
 import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.common.theme.LocalBottariStatusStyle
 
 class ComposeHomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        enableEdgeToEdge(BottariStatusBarStyle)
         setContent {
-            BottariTheme {
-                enableEdgeToEdge(LocalBottariStatusStyle.current)
-                HomeScreen()
-            }
+            BottariTheme { HomeScreen() }
         }
     }
 
