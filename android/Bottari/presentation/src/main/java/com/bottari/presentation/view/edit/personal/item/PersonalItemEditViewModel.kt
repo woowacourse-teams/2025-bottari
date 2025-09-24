@@ -80,12 +80,16 @@ class PersonalItemEditViewModel(
             .onEach { items ->
                 val itemUiModels = items.map(ChecklistItemUiModel::fromDomain)
                 updateState {
-                    copy(
-                        isLoading = false,
-                        initialItems = itemUiModels,
-                        items = itemUiModels,
-                        isFetched = true,
-                    )
+                    if (!isFetched) {
+                        copy(
+                            isLoading = false,
+                            initialItems = itemUiModels,
+                            items = itemUiModels,
+                            isFetched = true,
+                        )
+                    } else {
+                        copy(items = itemUiModels)
+                    }
                 }
             }.catch {
                 emitEvent(PersonalItemEditUiEvent.FetchBottariItemsFailure)
