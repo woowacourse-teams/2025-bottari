@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,11 +24,16 @@ import com.bottari.presentation.compose.home.template.TemplateBottariScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navigateToPersonalBottariEdit: () -> Unit = {}, // 다른 Activity로 가는 로직이 필요할 경우 여기에 추가
+    navigateToPersonalBottariEdit: () -> Unit = {}, // Todo: 다른 Activity로 가는 로직
 ) {
     val navController =
         rememberSaveable(saver = NavigationController.saver) {
             NavigationController(HomeScreenRoute.Personal)
+        }
+
+    val currentScreen =
+        remember(navController.currentScreen) {
+            navController.currentScreen as HomeScreenRoute
         }
 
     Scaffold(
@@ -36,7 +42,7 @@ fun HomeScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(navController.currentScreen.labelResId),
+                        text = stringResource(currentScreen.labelResId()),
                         style = BottariTheme.typography.bold20.toTextStyle(),
                     )
                 },
@@ -50,7 +56,7 @@ fun HomeScreen(
         bottomBar = {
             HomeBottomNavigationBar(
                 screens = HomeScreenRoute.entries,
-                selectedTab = navController.currentScreen,
+                selectedTab = currentScreen,
                 onTabSelected = { tab -> navController.navigate(tab) },
             )
         },

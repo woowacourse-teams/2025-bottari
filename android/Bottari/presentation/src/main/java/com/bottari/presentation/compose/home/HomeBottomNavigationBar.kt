@@ -10,6 +10,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,21 +37,23 @@ fun HomeBottomNavigationBar(
         containerColor = BottariTheme.colors.white,
         modifier = modifier.clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)),
     ) {
-        screens.forEach { screen ->
-            NavigationBarItem(
-                icon = { HomeNavigationBarIcon(screen) },
-                alwaysShowLabel = false,
-                selected = screen == selectedTab,
-                onClick = { onTabSelected(screen) },
-                colors =
-                    NavigationBarItemDefaults.colors(
-                        indicatorColor = BottariTheme.colors.transparent,
-                        selectedIconColor = selectedColor,
-                        selectedTextColor = selectedColor,
-                        unselectedIconColor = unselectedColor,
-                        unselectedTextColor = unselectedColor,
-                    ),
-            )
+        key(selectedTab) {
+            screens.forEach { screen ->
+                NavigationBarItem(
+                    icon = { HomeNavigationBarIcon(screen) },
+                    alwaysShowLabel = false,
+                    selected = screen == selectedTab,
+                    onClick = { onTabSelected(screen) },
+                    colors =
+                        NavigationBarItemDefaults.colors(
+                            indicatorColor = BottariTheme.colors.transparent,
+                            selectedIconColor = selectedColor,
+                            selectedTextColor = selectedColor,
+                            unselectedIconColor = unselectedColor,
+                            unselectedTextColor = unselectedColor,
+                        ),
+                )
+            }
         }
     }
 }
@@ -69,12 +72,12 @@ private fun HomeNavigationBarIcon(
     ) {
         Icon(
             painter = painterResource(id = iconRes),
-            contentDescription = stringResource(screen.labelResId),
+            contentDescription = stringResource(screen.labelResId()),
             modifier = modifier.size(32.dp),
         )
 
         Text(
-            text = stringResource(screen.labelResId),
+            text = stringResource(screen.labelResId()),
             style = BottariTheme.typography.medium12.toTextStyle(),
         )
     }
