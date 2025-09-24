@@ -78,7 +78,7 @@ private fun HomeNavigationBarIcon(
 
         Text(
             text = stringResource(screen.labelResId()),
-            style = BottariTheme.typography.medium12.toTextStyle(),
+            style = BottariTheme.typography.medium14.toTextStyle(),
         )
     }
 }
