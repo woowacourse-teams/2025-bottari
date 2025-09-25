@@ -62,7 +62,7 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
         }
         collectWithLifecycle(viewModel.uiEvent) { uiEvent ->
             when (uiEvent) {
-                PersonalBottariEditUiEvent.FetchBottariFailure ->
+                PersonalBottariEditUiEvent.FindBottariFailure ->
                     showSnackbar(R.string.bottari_edit_fetch_failure_text)
 
                 PersonalBottariEditUiEvent.CreateTemplateFailure ->

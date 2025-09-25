@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface BottariRepository {
     fun fetchBottaries(): Flow<List<PersonalBottari>>
 
-    fun fetchBottari(id: Long): Flow<PersonalBottari>
+    fun findBottari(id: Long): Flow<PersonalBottari?>
 
     suspend fun saveBottari(title: String): Result<Long>
 

@@ -7,18 +7,18 @@ import com.bottari.domain.repository.BottariRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
-class FetchBottariDetailUseCase(
+class FindBottariUseCase(
     private val bottariRepository: BottariRepository,
     private val bottariItemRepository: BottariItemRepository,
     private val alarmRepository: AlarmRepository,
 ) {
-    operator fun invoke(id: Long): Flow<PersonalBottari> =
+    operator fun invoke(id: Long): Flow<PersonalBottari?> =
         combine(
-            bottariRepository.fetchBottari(id),
+            bottariRepository.findBottari(id),
             bottariItemRepository.fetchItems(id),
             alarmRepository.fetchAlarm(id),
         ) { bottari, items, alarm ->
-            bottari.copy(
+            bottari?.copy(
                 alarm = alarm,
                 items = items,
             )

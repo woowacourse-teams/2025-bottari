@@ -6,6 +6,7 @@ import com.bottari.domain.model.bottari.personal.PersonalBottari
 import com.bottari.domain.repository.BottariRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 
 class BottariRepositoryImpl(
     private val bottariLocalDataSource: BottariLocalDataSource,
@@ -15,10 +16,10 @@ class BottariRepositoryImpl(
             .fetchBottaries()
             .map { bottaries -> bottaries.map(BottariEntity::toDomain) }
 
-    override fun fetchBottari(id: Long): Flow<PersonalBottari> =
+    override fun findBottari(id: Long): Flow<PersonalBottari?> =
         bottariLocalDataSource
-            .fetchBottari(id)
-            .map(BottariEntity::toDomain)
+            .findBottari(id)
+            .map { bottari -> bottari?.let(BottariEntity::toDomain) }
 
     override suspend fun saveBottari(title: String): Result<Long> =
         bottariLocalDataSource.createBottari(

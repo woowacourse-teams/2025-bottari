@@ -9,7 +9,7 @@ class BottariLocalDataSourceImpl(
 ) : BottariLocalDataSource {
     override fun fetchBottaries(): Flow<List<BottariEntity>> = dao.fetchBottaries()
 
-    override fun fetchBottari(id: Long): Flow<BottariEntity> = dao.fetchBottari(id)
+    override fun findBottari(id: Long): Flow<BottariEntity?> = dao.findBottari(id)
 
     override suspend fun createBottari(bottari: BottariEntity): Result<Long> = runCatching { dao.createBottari(bottari) }
 

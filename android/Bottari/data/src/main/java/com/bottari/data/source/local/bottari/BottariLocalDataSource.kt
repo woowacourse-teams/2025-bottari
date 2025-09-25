@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface BottariLocalDataSource {
     fun fetchBottaries(): Flow<List<BottariEntity>>
 
-    fun fetchBottari(id: Long): Flow<BottariEntity>
+    fun findBottari(id: Long): Flow<BottariEntity?>
 
     suspend fun createBottari(bottari: BottariEntity): Result<Long>
 
