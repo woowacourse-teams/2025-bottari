@@ -1,0 +1,52 @@
+package com.bottari.presentation.compose.common.component
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.bottari.presentation.compose.common.modifier.dropShadow
+import com.bottari.presentation.compose.common.theme.BottariTheme
+
+@Composable
+fun BottariBox(
+    modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(12.dp),
+    contentPadding: PaddingValues = PaddingValues(16.dp),
+    content: @Composable BoxScope.() -> Unit,
+) {
+    Box(
+        modifier =
+            modifier
+                .dropShadow(shape = shape)
+                .background(
+                    shape = shape,
+                    color = BottariTheme.colors.white,
+                ).padding(contentPadding),
+    ) {
+        content()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CardBoxPreview() {
+    BottariTheme {
+        Box(
+            modifier = Modifier.padding(16.dp),
+        ) {
+            BottariBox(
+                content = {
+                    Text(text = "보따리")
+                },
+            )
+        }
+    }
+}

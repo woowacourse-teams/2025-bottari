@@ -22,8 +22,8 @@ fun Modifier.dropShadow(
     color: Color = Color.Black.copy(0.25f),
     blur: Dp = 1.dp,
     offsetY: Dp = 1.dp,
-    offsetX: Dp = 1.dp,
-    spread: Dp = 1.dp,
+    offsetX: Dp = 0.dp,
+    spread: Dp = 0.dp,
 ) = composed {
     val density = LocalDensity.current
 
