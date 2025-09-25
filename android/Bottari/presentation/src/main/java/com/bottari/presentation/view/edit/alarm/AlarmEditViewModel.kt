@@ -8,7 +8,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.AlarmUseCaseProvider
 import com.bottari.domain.model.alarm.Alarm
-import com.bottari.domain.usecase.alarm.FetchAlarmUseCase
+import com.bottari.domain.usecase.alarm.FindAlarmUseCase
 import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
@@ -26,7 +26,7 @@ import java.time.LocalTime
 
 class AlarmEditViewModel(
     stateHandle: SavedStateHandle,
-    private val fetchAlarmUseCase: FetchAlarmUseCase,
+    private val findAlarmUseCase: FindAlarmUseCase,
     private val saveAlarmUseCase: SaveAlarmUseCase,
 ) : FlowBaseViewModel<AlarmUiState, AlarmUiEvent>(AlarmUiState()) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
@@ -71,7 +71,7 @@ class AlarmEditViewModel(
 
     private fun fetchAlarm() {
         updateState { copy(isLoading = true) }
-        fetchAlarmUseCase(bottariId)
+        findAlarmUseCase(bottariId)
             .onEach { alarm ->
                 updateState {
                     copy(
@@ -131,7 +131,7 @@ class AlarmEditViewModel(
                     stateHandle[KEY_BOTTARI_TITLE] = bottariTitle
                     AlarmEditViewModel(
                         stateHandle = stateHandle,
-                        fetchAlarmUseCase = AlarmUseCaseProvider.fetchAlarmUseCase,
+                        findAlarmUseCase = AlarmUseCaseProvider.findAlarmUseCase,
                         saveAlarmUseCase = AlarmUseCaseProvider.saveAlarmUseCase,
                     )
                 }

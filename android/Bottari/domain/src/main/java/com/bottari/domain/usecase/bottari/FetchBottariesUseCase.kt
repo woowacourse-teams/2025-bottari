@@ -30,6 +30,6 @@ class FetchBottariesUseCase(
     private fun combineBottari(bottari: PersonalBottari): Flow<PersonalBottari> =
         combine(
             bottariItemRepository.fetchItems(bottari.id),
-            alarmRepository.fetchAlarm(bottari.id),
+            alarmRepository.findAlarm(bottari.id),
         ) { items, alarm -> bottari.copy(alarm = alarm, items = items) }
 }

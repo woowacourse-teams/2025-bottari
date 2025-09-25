@@ -16,7 +16,7 @@ class FindBottariUseCase(
         combine(
             bottariRepository.findBottari(id),
             bottariItemRepository.fetchItems(id),
-            alarmRepository.fetchAlarm(id),
+            alarmRepository.findAlarm(id),
         ) { bottari, items, alarm ->
             bottari?.copy(
                 alarm = alarm,

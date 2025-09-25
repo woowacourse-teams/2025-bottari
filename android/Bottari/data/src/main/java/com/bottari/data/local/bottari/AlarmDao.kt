@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AlarmDao {
     @Query("SELECT * FROM Alarms WHERE bottariId = :bottariId")
-    fun fetchAlarm(bottariId: Long): Flow<AlarmEntity?>
+    fun findAlarm(bottariId: Long): Flow<AlarmEntity?>
 
     @Insert(onConflict = REPLACE)
     suspend fun saveAlarm(alarm: AlarmEntity)

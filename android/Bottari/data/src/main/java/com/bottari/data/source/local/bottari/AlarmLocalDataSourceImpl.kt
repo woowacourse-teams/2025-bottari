@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class AlarmLocalDataSourceImpl(
     private val dao: AlarmDao,
 ) : AlarmLocalDataSource {
-    override fun fetchAlarm(bottariId: Long): Flow<AlarmEntity?> = dao.fetchAlarm(bottariId)
+    override fun findAlarm(bottariId: Long): Flow<AlarmEntity?> = dao.findAlarm(bottariId)
 
     override suspend fun saveAlarm(alarm: AlarmEntity): Result<Unit> = runCatching { dao.saveAlarm(alarm) }
 

@@ -1,13 +1,13 @@
 package com.bottari.di.usecase
 
 import com.bottari.di.RepositoryProvider
-import com.bottari.domain.usecase.alarm.FetchAlarmUseCase
+import com.bottari.domain.usecase.alarm.FindAlarmUseCase
 import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
 import com.bottari.domain.usecase.alarm.UpdateAlarmActivateUseCase
 
 object AlarmUseCaseProvider {
-    val fetchAlarmUseCase: FetchAlarmUseCase by lazy {
-        FetchAlarmUseCase(
+    val findAlarmUseCase: FindAlarmUseCase by lazy {
+        FindAlarmUseCase(
             RepositoryProvider.alarmRepository,
         )
     }
