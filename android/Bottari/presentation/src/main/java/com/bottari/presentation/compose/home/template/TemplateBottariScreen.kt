@@ -12,8 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -30,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
+import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.component.CollapsedListLine
 import com.bottari.presentation.compose.common.extension.topBottomFadingEdge
 import com.bottari.presentation.compose.common.theme.BottariTheme
@@ -91,14 +90,10 @@ private fun TemplateItem(
     onClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
-        colors =
-            CardDefaults.cardColors(
-                containerColor = BottariTheme.colors.white,
-                contentColor = BottariTheme.colors.gray600,
-            ),
-        elevation = CardDefaults.cardElevation(1.dp),
-        modifier = modifier.fillMaxWidth(),
+    BottariBox(
+        modifier = modifier,
+        shape = RoundedCornerShape(16.dp),
+        contentPadding = PaddingValues(),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             TemplateItemHeader(template, onClick)
