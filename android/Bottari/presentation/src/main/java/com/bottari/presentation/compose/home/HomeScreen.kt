@@ -18,7 +18,10 @@ import com.bottari.presentation.compose.home.team.TeamBottariScreen
 import com.bottari.presentation.compose.home.template.TemplateBottariScreen
 
 @Composable
-fun HomeScreen(navigateToTemplateDetail: (Long) -> Unit) {
+fun HomeScreen(
+    navigateToTemplateDetail: (Long) -> Unit,
+    navigateToTemplateCreate: () -> Unit
+) {
     val navController =
         rememberSaveable(saver = NavigationController.saver) {
             NavigationController(HomeScreenRoute.Personal)
@@ -43,6 +46,7 @@ fun HomeScreen(navigateToTemplateDetail: (Long) -> Unit) {
         HomeScreenRouter(
             navController = navController,
             navigateToTemplateDetail = navigateToTemplateDetail,
+            navigateToTemplateCreate = navigateToTemplateCreate,
             modifier = Modifier.padding(innerPadding),
         )
     }
@@ -52,6 +56,7 @@ fun HomeScreen(navigateToTemplateDetail: (Long) -> Unit) {
 fun HomeScreenRouter(
     navController: NavigationController,
     navigateToTemplateDetail: (Long) -> Unit,
+    navigateToTemplateCreate: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Navigation(
@@ -76,6 +81,7 @@ fun HomeScreenRouter(
             HomeScreenRoute.Template ->
                 TemplateBottariScreen(
                     navigateToTemplateDetail = navigateToTemplateDetail,
+                    navigateToTemplateCreate = navigateToTemplateCreate,
                 )
 
             HomeScreenRoute.More ->
@@ -94,6 +100,7 @@ private fun HomeScreenPreview() {
     BottariTheme {
         HomeScreen(
             navigateToTemplateDetail = {},
+            navigateToTemplateCreate = {},
         )
     }
 }

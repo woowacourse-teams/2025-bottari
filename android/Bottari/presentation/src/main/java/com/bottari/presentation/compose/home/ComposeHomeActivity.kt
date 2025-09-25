@@ -21,6 +21,10 @@ class ComposeHomeActivity : AppCompatActivity() {
                         val newIntent = TemplateActivity.newIntentForDetail(this, templateId)
                         startActivity(newIntent)
                     },
+                    navigateToTemplateCreate = {
+                        val newIntent = TemplateActivity.newIntentForCreateTemplate(this)
+                        startActivity(newIntent)
+                    },
                 )
             }
         }

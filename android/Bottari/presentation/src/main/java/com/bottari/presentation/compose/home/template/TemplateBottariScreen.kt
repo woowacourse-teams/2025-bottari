@@ -2,7 +2,10 @@ package com.bottari.presentation.compose.home.template
 
 import android.view.LayoutInflater
 import android.widget.Toast
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,12 +16,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +50,7 @@ import kotlinx.coroutines.flow.filter
 @Composable
 fun TemplateBottariScreen(
     navigateToTemplateDetail: (Long) -> Unit,
+    navigateToTemplateCreate: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TemplateViewModel = viewModel(factory = TemplateViewModel.Factory()),
 ) {
@@ -73,6 +83,7 @@ fun TemplateBottariScreen(
         onClickDetail = navigateToTemplateDetail,
         onQueryChange = viewModel::updateSearchWord,
         onLoadNextPage = viewModel::fetchTemplates,
+        onClickAdd = navigateToTemplateCreate,
         modifier =
             modifier.noRippleClickable {
                 focusManager.clearFocus()
@@ -88,9 +99,14 @@ private fun TemplateBottariScreen(
     onClickDetail: (Long) -> Unit,
     onQueryChange: (String) -> Unit,
     onLoadNextPage: () -> Unit,
+    onClickAdd: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isScrolledToEnd by listState.rememberScrolledToEnd(5)
+    val fabAlpha by animateFloatAsState(
+        targetValue = if (listState.isScrollInProgress) 0f else 1f,
+        animationSpec = tween(durationMillis = 300),
+    )
 
     LaunchedEffect(Unit) {
         snapshotFlow { isScrolledToEnd }
@@ -99,19 +115,20 @@ private fun TemplateBottariScreen(
             .collect { onLoadNextPage() }
     }
 
-    Column(modifier = modifier) {
+    Box(modifier = modifier) {
         TemplatePager(
             pageTitles = listOf("전체 템플릿", "나의 템플릿"),
             modifier = Modifier,
         ) { page ->
             when (page) {
-                0 -> AllTemplateContent(
-                    templates = uiState.templates,
-                    listState = listState,
-                    query = uiState.searchWord,
-                    onQueryChange = onQueryChange,
-                    onClickDetail = onClickDetail,
-                )
+                0 ->
+                    AllTemplateContent(
+                        templates = uiState.templates,
+                        listState = listState,
+                        query = uiState.searchWord,
+                        onQueryChange = onQueryChange,
+                        onClickDetail = onClickDetail,
+                    )
 
                 1 ->
                     TemplateLazyColumn(
@@ -119,6 +136,34 @@ private fun TemplateBottariScreen(
                         listState = myListState,
                         onClickDetail = onClickDetail,
                     )
+            }
+        }
+
+        FloatingActionButton(
+            onClick = onClickAdd,
+            shape = RoundedCornerShape(12.dp),
+            containerColor = BottariTheme.colors.primary,
+            contentColor = BottariTheme.colors.white,
+            elevation =
+                FloatingActionButtonDefaults.elevation(
+                    defaultElevation = 2.dp,
+                    pressedElevation = 0.dp,
+                    hoveredElevation = 0.dp,
+                    focusedElevation = 0.dp,
+                ),
+            modifier =
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
+                    .alpha(fabAlpha),
+        ) {
+            Box(
+                modifier = Modifier.padding(horizontal = 8.dp),
+            ) {
+                Text(
+                    text = "보따리 등록하기",
+                    style = BottariTheme.typography.medium14.toTextStyle(),
+                )
             }
         }
     }
@@ -187,12 +232,14 @@ private fun TemplatePager(
 ) {
     val pagerState: PagerState = rememberPagerState(initialPage = 0) { pageTitles.size }
 
-    BottariTabBar(
-        pageTitles = pageTitles,
-        pagerState = pagerState,
-        modifier = modifier,
-        screen = screen,
-    )
+    Column {
+        BottariTabBar(
+            pageTitles = pageTitles,
+            pagerState = pagerState,
+            modifier = modifier,
+            screen = screen,
+        )
+    }
 }
 
 @Composable
@@ -238,6 +285,7 @@ private fun TemplateBottariScreenPreview() {
             onClickDetail = {},
             onQueryChange = {},
             onLoadNextPage = {},
+            onClickAdd = {},
         )
     }
 }
