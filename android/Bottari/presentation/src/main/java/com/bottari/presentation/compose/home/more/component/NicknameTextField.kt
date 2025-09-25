@@ -48,7 +48,7 @@ fun NicknameTextField(
                 .copy(color = BottariTheme.colors.black),
         singleLine = true,
         readOnly = !isEditing,
-        cursorBrush = SolidColor(BottariTheme.colors.transparent),
+        cursorBrush = SolidColor(BottariTheme.colors.black),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { onSaveNickname() }),
         decorationBox = { innerTextField ->
