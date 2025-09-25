@@ -14,6 +14,8 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.common.extension.showSnackbar
+import com.bottari.presentation.compose.home.template.TemplateUiEvent
+import com.bottari.presentation.compose.home.template.TemplateViewModel
 import com.bottari.presentation.databinding.FragmentTemplateBinding
 import com.bottari.presentation.view.common.decoration.BottomPaddingDecoration
 import com.bottari.presentation.view.home.template.adapter.TemplateAdapter
@@ -56,7 +58,7 @@ class TemplateFragment :
         count: Int,
     ) {
         val inputText = s?.toString()?.trim().orEmpty()
-        viewModel.searchTemplates(inputText)
+        viewModel.updateSearchWord(inputText)
     }
 
     override fun onTemplateClick(bottariTemplateId: Long) {
@@ -71,6 +73,8 @@ class TemplateFragment :
         }
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
+                is TemplateUiEvent.SearchTemplateSuccess -> Unit
+
                 TemplateUiEvent.FetchBottariTemplatesFailure ->
                     requireView().showSnackbar(
                         R.string.template_fetch_template_failure_text,

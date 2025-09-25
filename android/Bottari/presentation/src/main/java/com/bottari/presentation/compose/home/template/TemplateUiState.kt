@@ -6,8 +6,9 @@ import com.bottari.presentation.model.template.BottariTemplateUiModel
 @Immutable
 data class TemplateUiState(
     val isLoading: Boolean = false,
-    val templates: List<BottariTemplateUiModel> = emptyList(),
     val isFetched: Boolean = false,
+    val templates: List<BottariTemplateUiModel> = emptyList(),
+    val searchWord: String = "",
 ) {
     val isEmpty: Boolean = isFetched && templates.isEmpty()
 }
