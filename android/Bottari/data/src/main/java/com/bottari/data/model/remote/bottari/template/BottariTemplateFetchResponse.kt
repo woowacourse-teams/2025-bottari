@@ -12,7 +12,7 @@ data class BottariTemplateFetchResponse(
     @SerialName("title")
     val title: String,
     @SerialName("items")
-    val items: List<com.bottari.data.model.remote.bottari.template.BottariTemplateItemFetchResponse>,
+    val items: List<BottariTemplateItemFetchResponse>,
     @SerialName("author")
     val author: String,
     @SerialName("createdAt")
