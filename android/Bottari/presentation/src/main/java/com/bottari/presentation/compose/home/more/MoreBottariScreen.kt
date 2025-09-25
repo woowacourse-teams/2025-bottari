@@ -51,7 +51,7 @@ fun MoreBottariScreen(
         )
         SettingItem(
             text = stringResource(R.string.setting_privacy_policy_title_text),
-            onClick = { onNavigateToBrowser(BuildConfig.USER_FEEDBACK_URL) },
+            onClick = { onNavigateToBrowser(BuildConfig.PRIVACY_POLICY_URL) },
         )
         SettingItem(
             text = stringResource(R.string.setting_user_feedback_title_text),
