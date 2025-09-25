@@ -84,9 +84,7 @@ fun NicknameBox(
             }
             IconButton(
                 onClick = {
-                    if (isEditing.not()) {
-                        onSaveNickname()
-                    }
+                    if (isEditing) onSaveNickname()
                     isEditing = isEditing.not()
                 },
                 modifier = Modifier.align(Alignment.CenterVertically),
