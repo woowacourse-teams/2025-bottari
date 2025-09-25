@@ -1,10 +1,13 @@
 package com.bottari.data.source.remote
 
 import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
+import com.bottari.data.model.remote.bottari.template.BottariTemplateCursorFetchResponse
 import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse
+import com.bottari.data.model.remote.common.PageableRequest
+import com.bottari.data.model.remote.common.PageableResponse
 
 interface BottariTemplateRemoteDataSource {
-    suspend fun fetchBottariTemplates(searchWord: String?): Result<List<BottariTemplateFetchResponse>>
+    suspend fun fetchBottariTemplates(pageableRequest: PageableRequest): Result<PageableResponse<BottariTemplateCursorFetchResponse>>
 
     suspend fun createBottariTemplate(bottariTemplateCreateRequest: BottariTemplateCreateRequest): Result<Long?>
 

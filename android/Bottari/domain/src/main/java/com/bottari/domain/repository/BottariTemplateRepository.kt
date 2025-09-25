@@ -1,9 +1,13 @@
 package com.bottari.domain.repository
 
 import com.bottari.domain.model.bottari.template.BottariTemplate
+import com.bottari.domain.model.common.Pageable
 
 interface BottariTemplateRepository {
-    suspend fun fetchBottariTemplates(searchWord: String?): Result<List<BottariTemplate>>
+    suspend fun fetchBottariTemplates(
+        query: String?,
+        pageable: Pageable<BottariTemplate>,
+    ): Result<Pageable<BottariTemplate>>
 
     suspend fun createBottariTemplate(
         title: String,

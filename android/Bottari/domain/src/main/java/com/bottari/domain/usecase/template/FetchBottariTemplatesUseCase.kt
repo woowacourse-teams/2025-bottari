@@ -1,10 +1,18 @@
 package com.bottari.domain.usecase.template
 
 import com.bottari.domain.model.bottari.template.BottariTemplate
+import com.bottari.domain.model.common.Pageable
 import com.bottari.domain.repository.BottariTemplateRepository
 
 class FetchBottariTemplatesUseCase(
     private val bottariTemplateRepository: BottariTemplateRepository,
 ) {
-    suspend operator fun invoke(): Result<List<BottariTemplate>> = bottariTemplateRepository.fetchBottariTemplates(null)
+    suspend operator fun invoke(
+        query: String,
+        pageable: Pageable<BottariTemplate>,
+    ): Result<Pageable<BottariTemplate>> =
+        bottariTemplateRepository.fetchBottariTemplates(
+            query = query.ifEmpty { null },
+            pageable = pageable,
+        )
 }
