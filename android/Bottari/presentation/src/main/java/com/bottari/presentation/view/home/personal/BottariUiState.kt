@@ -7,5 +7,5 @@ data class BottariUiState(
     val bottaries: List<BottariUiModel> = emptyList(),
     val isFetched: Boolean = false,
 ) {
-    val isEmpty: Boolean = isFetched && bottaries.isEmpty()
+    val isEmpty: Boolean = isFetched && bottaries.isEmpty() && !isLoading
 }

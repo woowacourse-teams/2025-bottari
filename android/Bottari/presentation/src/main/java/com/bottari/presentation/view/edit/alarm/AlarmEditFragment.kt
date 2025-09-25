@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.getParcelableCompat
 import com.bottari.presentation.common.extension.safeArgument
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentAlarmEditBinding
@@ -33,7 +32,6 @@ class AlarmEditFragment :
         AlarmEditViewModel.Factory(
             bottariId = safeArgument { getLong(ARG_BOTTARI_ID) },
             bottariTitle = safeArgument { getString(ARG_BOTTARI_TITLE) },
-            alarm = safeArgument { getParcelableCompat(ARG_ALARM) },
         )
     }
     private val adapter: RepeatDayAdapter by lazy { RepeatDayAdapter(viewModel::updateDaysOfWeek) }
@@ -71,16 +69,19 @@ class AlarmEditFragment :
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        collectWithLifecycle(viewModel.uiState) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
-            handleAlarmState(uiState.alarm)
-            if (uiState.alarm.type == AlarmTypeUiModel.NON_REPEAT) {
-                showOnly(binding.groupAlarmNonRepeat)
-                return@observe
+            handleConfirmButtonState(uiState.isRepeatWithoutDays.not())
+            uiState.alarm?.let { alarm ->
+                handleAlarmState(alarm)
+                if (alarm.type == AlarmTypeUiModel.NON_REPEAT) {
+                    showOnly(binding.groupAlarmNonRepeat)
+                    return@collectWithLifecycle
+                }
+                showOnly(binding.groupAlarmRepeat)
             }
-            showOnly(binding.groupAlarmRepeat)
         }
-        viewModel.uiEvent.observe(viewLifecycleOwner, ::handleAlarmEvent)
+        collectWithLifecycle(viewModel.uiEvent) { uiEvent -> handleAlarmEvent(uiEvent) }
     }
 
     private fun setupUI() {
@@ -107,6 +108,13 @@ class AlarmEditFragment :
         setupAlarmTypeSwitchers()
     }
 
+    private fun handleConfirmButtonState(isEnabled: Boolean) {
+        binding.btnConfirm.isEnabled = isEnabled
+        val textColorRes = if (isEnabled) R.color.black else R.color.gray_700
+        val textColor = ContextCompat.getColor(requireContext(), textColorRes)
+        binding.btnConfirm.setTextColor(textColor)
+    }
+
     private fun handleAlarmState(alarm: AlarmUiModel) {
         updateAlarmTimePickers(alarm.time)
         adapter.submitList(alarm.repeatDays)
@@ -115,20 +123,14 @@ class AlarmEditFragment :
 
     private fun handleAlarmEvent(uiEvent: AlarmUiEvent) {
         when (uiEvent) {
-            is AlarmUiEvent.AlarmCreateSuccess -> {
-                scheduleAlarm(notification = uiEvent.notification)
-                requireView().showSnackbar(R.string.alarm_edit_create_success_text)
-                parentFragmentManager.popBackStack()
-            }
-
-            is AlarmUiEvent.AlarmSaveSuccess -> {
+            is AlarmUiEvent.SaveAlarmSuccess -> {
                 scheduleAlarm(notification = uiEvent.notification)
                 requireView().showSnackbar(R.string.alarm_edit_save_success_text)
                 parentFragmentManager.popBackStack()
             }
 
-            AlarmUiEvent.AlarmCreateFailure -> requireView().showSnackbar(R.string.alarm_edit_create_failure_text)
-            AlarmUiEvent.AlarmSaveFailure -> requireView().showSnackbar(R.string.alarm_edit_save_failure_text)
+            AlarmUiEvent.FetchAlarmFailure -> requireView().showSnackbar(R.string.alarm_edit_fetch_failure_text)
+            AlarmUiEvent.SaveAlarmFailure -> requireView().showSnackbar(R.string.alarm_edit_save_failure_text)
         }
     }
 
@@ -186,8 +188,17 @@ class AlarmEditFragment :
             val isVisible = group == visibleView
             group.isVisible = isVisible
             when (group) {
-                binding.groupAlarmNonRepeat -> updateAlarmTypeText(binding.tvAlarmTypeNonRepeat, isVisible)
-                binding.groupAlarmRepeat -> updateAlarmTypeText(binding.tvAlarmTypeRepeat, isVisible)
+                binding.groupAlarmNonRepeat ->
+                    updateAlarmTypeText(
+                        binding.tvAlarmTypeNonRepeat,
+                        isVisible,
+                    )
+
+                binding.groupAlarmRepeat ->
+                    updateAlarmTypeText(
+                        binding.tvAlarmTypeRepeat,
+                        isVisible,
+                    )
             }
         }
     }
@@ -209,16 +220,13 @@ class AlarmEditFragment :
     companion object {
         private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
         private const val ARG_BOTTARI_TITLE = "ARG_BOTTARI_TITLE"
-        private const val ARG_ALARM = "ARG_ALARM"
 
         fun newBundle(
             bottariId: Long,
             bottariTitle: String,
-            alarm: AlarmUiModel?,
         ) = Bundle().apply {
             putLong(ARG_BOTTARI_ID, bottariId)
             putString(ARG_BOTTARI_TITLE, bottariTitle)
-            putParcelable(ARG_ALARM, alarm)
         }
     }
 }

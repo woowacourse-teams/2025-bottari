@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.databinding.ItemEditPersonalItemBinding
-import com.bottari.presentation.model.bottari.BottariItemUiModel
+import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 import com.bottari.presentation.view.edit.personal.item.listener.OnEditItemClickListener
 
 class PersonalItemEditViewHolder(
@@ -19,7 +19,7 @@ class PersonalItemEditViewHolder(
         }
     }
 
-    fun bind(item: BottariItemUiModel) {
+    fun bind(item: ChecklistItemUiModel) {
         itemId = item.id
         binding.tvPersonalItemName.text = item.name
     }

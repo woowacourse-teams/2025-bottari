@@ -47,14 +47,14 @@ class TemplateCreateFragment : BaseFragment<FragmentTemplateCreateBinding>(Fragm
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        collectWithLifecycle(viewModel.uiState) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
             handleEmptyView(uiState.shouldShowEmptyView)
             handleCreateButtonState(uiState.canCreateTemplate)
             bottariAdapter.submitList(uiState.bottaries)
             itemAdapter.submitList(uiState.currentBottariItems)
         }
-        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+        collectWithLifecycle(viewModel.uiEvent) { uiEvent ->
             when (uiEvent) {
                 TemplateCreateUiEvent.FetchMyBottariesFailure ->
                     requireView().showSnackbar(

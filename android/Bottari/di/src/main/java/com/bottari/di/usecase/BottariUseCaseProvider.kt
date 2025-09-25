@@ -5,17 +5,23 @@ import com.bottari.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
+import com.bottari.domain.usecase.bottari.FindBottariUseCase
 import com.bottari.domain.usecase.bottari.SaveBottariTitleUseCase
-import com.bottari.domain.usecase.bottariDetail.FetchBottariDetailUseCase
 
 object BottariUseCaseProvider {
     val fetchBottariesUseCase: FetchBottariesUseCase by lazy {
         FetchBottariesUseCase(
-            RepositoryProvider.bottariRepository,
+            bottariRepository = RepositoryProvider.bottariRepository,
+            bottariItemRepository = RepositoryProvider.bottariItemRepository,
+            alarmRepository = RepositoryProvider.alarmRepository,
         )
     }
-    val fetchBottariDetailUseCase: FetchBottariDetailUseCase by lazy {
-        FetchBottariDetailUseCase(RepositoryProvider.bottariRepository)
+    val findBottariUseCase: FindBottariUseCase by lazy {
+        FindBottariUseCase(
+            bottariRepository = RepositoryProvider.bottariRepository,
+            bottariItemRepository = RepositoryProvider.bottariItemRepository,
+            alarmRepository = RepositoryProvider.alarmRepository,
+        )
     }
     val fetchBottariDetailsUseCase by lazy {
         FetchBottariDetailsUseCase(
@@ -32,7 +38,7 @@ object BottariUseCaseProvider {
             RepositoryProvider.bottariRepository,
         )
     }
-    val SaveBottariTitleUseCase: SaveBottariTitleUseCase by lazy {
+    val saveBottariTitleUseCase: SaveBottariTitleUseCase by lazy {
         SaveBottariTitleUseCase(
             RepositoryProvider.bottariRepository,
         )

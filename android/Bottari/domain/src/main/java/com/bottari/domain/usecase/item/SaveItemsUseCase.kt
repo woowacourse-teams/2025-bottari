@@ -2,12 +2,11 @@ package com.bottari.domain.usecase.item
 
 import com.bottari.domain.repository.BottariItemRepository
 
-class SaveBottariItemsUseCase(
+class SaveItemsUseCase(
     private val bottariItemRepository: BottariItemRepository,
 ) {
     suspend operator fun invoke(
         bottariId: Long,
-        deleteItemIds: List<Long>,
-        createItemNames: List<String>,
-    ): Result<Unit> = bottariItemRepository.saveBottariItems(bottariId, deleteItemIds, createItemNames)
+        items: List<String>,
+    ): Result<Unit> = bottariItemRepository.saveItems(bottariId, items)
 }

@@ -6,7 +6,7 @@ import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.AlarmRepository
 import com.bottari.domain.repository.NotificationRepository
 
-class CreateAlarmUseCase(
+class UpdateAlarmActivateUseCase(
     private val alarmRepository: AlarmRepository,
     private val notificationRepository: NotificationRepository,
 ) {
@@ -14,12 +14,17 @@ class CreateAlarmUseCase(
         bottariId: Long,
         bottariTitle: String,
         alarm: Alarm,
+        isActive: Boolean,
     ): Result<Unit> =
         alarmRepository
-            .createAlarm(bottariId, alarm)
+            .updateAlarmActivate(bottariId, isActive)
             .flatMap {
                 notificationRepository.saveNotification(
-                    Notification(bottariId, bottariTitle, alarm),
+                    Notification(
+                        bottariId,
+                        bottariTitle,
+                        alarm,
+                    ),
                 )
             }
 }

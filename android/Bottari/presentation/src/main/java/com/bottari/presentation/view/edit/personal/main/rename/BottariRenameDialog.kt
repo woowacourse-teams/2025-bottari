@@ -94,7 +94,7 @@ class BottariRenameDialog :
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                BottariRenameUiEvent.SaveBottariTitleSuccess -> handleRenameState()
+                BottariRenameUiEvent.SaveBottariTitleSuccess -> dismiss()
                 BottariRenameUiEvent.SaveBottariTitleFailure -> requireView().showSnackbar(R.string.bottari_rename_failure_text)
             }
         }
@@ -121,21 +121,10 @@ class BottariRenameDialog :
         }
     }
 
-    private fun handleRenameState() {
-        parentFragmentManager.setFragmentResult(
-            SAVE_BOTTARI_TITLE_RESULT_KEY,
-            Bundle(),
-        )
-        dismiss()
-    }
-
     companion object {
         private const val WIDTH_RATIO = 0.9
         private const val DISABLED_ALPHA_VALUE = 0.4f
         private const val ENABLED_ALPHA_VALUE = 1f
-
-        const val SAVE_BOTTARI_TITLE_RESULT_KEY = "RENAME_RESULT_KEY"
-
         private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
         private const val EXTRA_INITIAL_TITLE = "EXTRA_INITIAL_TITLE"
 

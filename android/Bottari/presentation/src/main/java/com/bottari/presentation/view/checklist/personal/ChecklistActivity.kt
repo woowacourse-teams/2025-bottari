@@ -52,7 +52,7 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(this) { uiState ->
+        collectWithLifecycle(viewModel.uiState) { uiState ->
             updateToolbar(isMainChecklist() && uiState.bottariItems.isNotEmpty())
             binding.btnReset.isVisible = uiState.isAnyChecked
             if (uiState.isAllChecked) logChecklistFinished(uiState.bottariItems)

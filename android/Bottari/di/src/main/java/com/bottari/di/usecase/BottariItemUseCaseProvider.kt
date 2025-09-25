@@ -1,34 +1,37 @@
 package com.bottari.di.usecase
 
 import com.bottari.di.RepositoryProvider
-import com.bottari.domain.usecase.item.CheckBottariItemUseCase
-import com.bottari.domain.usecase.item.FetchChecklistUseCase
-import com.bottari.domain.usecase.item.ResetBottariItemCheckStateUseCase
-import com.bottari.domain.usecase.item.SaveBottariItemsUseCase
-import com.bottari.domain.usecase.item.UnCheckBottariItemUseCase
+import com.bottari.domain.usecase.item.DeleteItemUseCase
+import com.bottari.domain.usecase.item.FetchItemsUseCase
+import com.bottari.domain.usecase.item.ResetItemsCheckStateUseCase
+import com.bottari.domain.usecase.item.SaveItemsUseCase
+import com.bottari.domain.usecase.item.UpdateItemCheckStateUseCase
 
 object BottariItemUseCaseProvider {
-    val fetchChecklistUseCase: FetchChecklistUseCase by lazy {
-        FetchChecklistUseCase(
+    val fetchItemsUseCase: FetchItemsUseCase by lazy {
+        FetchItemsUseCase(
             RepositoryProvider.bottariItemRepository,
         )
     }
-    val saveBottariItemsUseCase: SaveBottariItemsUseCase by lazy {
-        SaveBottariItemsUseCase(
+    val saveItemsUseCase: SaveItemsUseCase by lazy {
+        SaveItemsUseCase(
             RepositoryProvider.bottariItemRepository,
         )
     }
-    val checkBottariItemUseCase: CheckBottariItemUseCase by lazy {
-        CheckBottariItemUseCase(
+
+    val deleteItemUseCase: DeleteItemUseCase by lazy {
+        DeleteItemUseCase(
             RepositoryProvider.bottariItemRepository,
         )
     }
-    val unCheckBottariItemUseCase: UnCheckBottariItemUseCase by lazy {
-        UnCheckBottariItemUseCase(
+
+    val updateItemCheckStateUseCase: UpdateItemCheckStateUseCase by lazy {
+        UpdateItemCheckStateUseCase(
             RepositoryProvider.bottariItemRepository,
         )
     }
-    val resetBottariItemCheckStateUseCase: ResetBottariItemCheckStateUseCase by lazy {
-        ResetBottariItemCheckStateUseCase(RepositoryProvider.bottariItemRepository)
+
+    val resetItemsCheckStateUseCase: ResetItemsCheckStateUseCase by lazy {
+        ResetItemsCheckStateUseCase(RepositoryProvider.bottariItemRepository)
     }
 }

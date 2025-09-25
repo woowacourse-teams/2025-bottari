@@ -3,15 +3,11 @@ package com.bottari.presentation.view.edit.alarm
 import com.bottari.presentation.model.alarm.NotificationUiModel
 
 sealed interface AlarmUiEvent {
-    data class AlarmCreateSuccess(
+    data object FetchAlarmFailure : AlarmUiEvent
+
+    data class SaveAlarmSuccess(
         val notification: NotificationUiModel,
     ) : AlarmUiEvent
 
-    data object AlarmCreateFailure : AlarmUiEvent
-
-    data class AlarmSaveSuccess(
-        val notification: NotificationUiModel,
-    ) : AlarmUiEvent
-
-    data object AlarmSaveFailure : AlarmUiEvent
+    data object SaveAlarmFailure : AlarmUiEvent
 }

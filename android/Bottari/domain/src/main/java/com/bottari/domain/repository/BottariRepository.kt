@@ -1,14 +1,14 @@
 package com.bottari.domain.repository
 
-import com.bottari.domain.model.bottari.Bottari
-import com.bottari.domain.model.bottari.BottariState
+import com.bottari.domain.model.bottari.personal.PersonalBottari
+import kotlinx.coroutines.flow.Flow
 
 interface BottariRepository {
-    suspend fun fetchBottaries(): Result<List<BottariState>>
+    fun fetchBottaries(): Flow<List<PersonalBottari>>
 
-    suspend fun fetchBottariDetail(id: Long): Result<Bottari>
+    fun findBottari(id: Long): Flow<PersonalBottari?>
 
-    suspend fun createBottari(title: String): Result<Long?>
+    suspend fun saveBottari(title: String): Result<Long>
 
     suspend fun deleteBottari(id: Long): Result<Unit>
 

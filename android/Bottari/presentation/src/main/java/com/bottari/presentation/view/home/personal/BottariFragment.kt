@@ -42,11 +42,6 @@ class BottariFragment :
         setupListener()
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.fetchBottaries()
-    }
-
     override fun onBottariClick(
         bottariId: Long,
         bottariTitle: String,
@@ -65,13 +60,13 @@ class BottariFragment :
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        collectWithLifecycle(viewModel.uiState) { uiState ->
             binding.emptyView.clBottariEmptyView.isVisible = uiState.isEmpty
             toggleLoadingIndicator(uiState.isLoading)
             adapter.submitList(uiState.bottaries)
         }
 
-        viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
+        collectWithLifecycle(viewModel.uiEvent) { uiEvent ->
             val message =
                 when (uiEvent) {
                     BottariUiEvent.BottariDeleteFailure -> R.string.bottari_home_delete_failure_text

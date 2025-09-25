@@ -212,6 +212,8 @@
     <string name="bottari_personal_item_edit_confirm_btn_text">추가하기</string>
     <string name="bottari_personal_item_edit_hint_text">추가할 물건을 입력해 주세요</string>
     <string name="bottari_personal_item_empty_view_title">보따리 안에 물건이 없어요</string>
+    <string name="bottari_personal_item_fetch_failure_text">물건을 불러오지 못했어요</string>
+    <string name="bottari_personal_item_delete_failure_text">물건을 삭제하지 못했어요</string>
     <string name="bottari_personal_item_empty_view_text">무엇을 챙겨야 할지 모르겠다면,\n‘모두의 보따리’를 살펴보세요! </string>
 
     <!-- Bottari Rename -->
@@ -262,10 +264,9 @@
     <string name="alarm_edit_time_text">시간</string>
     <string name="alarm_edit_day_of_week_text">요일</string>
     <string name="alarm_edit_location_title_text">알람 장소</string>
+    <string name="alarm_edit_fetch_failure_text">알람을 불러오지 못했어요</string>
     <string name="alarm_edit_save_success_text">알람을 저장했어요</string>
     <string name="alarm_edit_save_failure_text">알람을 저장하지 못했어요</string>
-    <string name="alarm_edit_create_success_text">알람을 만들었어요</string>
-    <string name="alarm_edit_create_failure_text">알람을 만들지 못했어요</string>
     <string name="alarm_edit_exact_alarm_permission_dialog_message_text">보따리 알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
 
     <!--  Calendar  -->
