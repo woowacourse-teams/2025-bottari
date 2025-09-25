@@ -30,17 +30,10 @@ class TemplateDetailViewModel(
         updateState { copy(isLoading = true) }
 
         launch {
-            takeBottariTemplateDetailUseCase(currentState.templateId)
+            val items = currentState.items.map { it.name }
+            takeBottariTemplateDetailUseCase(currentState.templateId, currentState.title, items)
                 .onSuccess { createdBottariId ->
-                    if (createdBottariId == null) return@onSuccess
-                    BottariLogger.ui(
-                        UiEventType.TEMPLATE_TAKE,
-                        mapOf(
-                            "template_id" to currentState.templateId,
-                            "template_title" to currentState.title,
-                            "template_items" to currentState.items.toString(),
-                        ),
-                    )
+                    logTemplateTaken()
                     emitEvent(
                         TemplateDetailUiEvent.TakeBottariTemplateSuccess(createdBottariId),
                     )
@@ -58,7 +51,8 @@ class TemplateDetailViewModel(
         launch {
             fetchBottariTemplateDetailUseCase(currentState.templateId)
                 .onSuccess { template ->
-                    val itemUiModels = template.items.map { BottariTemplateItemUiModel.fromDomain(it) }
+                    val itemUiModels =
+                        template.items.map { BottariTemplateItemUiModel.fromDomain(it) }
                     updateState { copy(title = template.title, items = itemUiModels) }
                 }.onFailure {
                     emitEvent(TemplateDetailUiEvent.FetchBottariDetailFailure)
@@ -66,6 +60,17 @@ class TemplateDetailViewModel(
 
             updateState { copy(isLoading = false) }
         }
+    }
+
+    private fun logTemplateTaken() {
+        BottariLogger.ui(
+            UiEventType.TEMPLATE_TAKE,
+            mapOf(
+                "template_id" to currentState.templateId,
+                "template_title" to currentState.title,
+                "template_items" to currentState.items.toString(),
+            ),
+        )
     }
 
     companion object {

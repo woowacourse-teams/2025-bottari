@@ -33,6 +33,8 @@ object BottariTemplateUseCaseProvider {
     val takeBottariTemplateDetailUseCase: TakeBottariTemplateDetailUseCase by lazy {
         TakeBottariTemplateDetailUseCase(
             RepositoryProvider.bottariTemplateRepository,
+            RepositoryProvider.bottariRepository,
+            RepositoryProvider.bottariItemRepository,
         )
     }
     val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase by lazy {
