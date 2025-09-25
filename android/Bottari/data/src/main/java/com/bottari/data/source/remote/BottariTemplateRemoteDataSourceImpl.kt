@@ -8,7 +8,6 @@ import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchRespon
 import com.bottari.data.model.remote.common.PageableRequest
 import com.bottari.data.model.remote.common.PageableResponse
 import com.bottari.data.service.BottariTemplateService
-import com.bottari.logger.BottariLogger
 
 class BottariTemplateRemoteDataSourceImpl(
     private val bottariTemplateService: BottariTemplateService,

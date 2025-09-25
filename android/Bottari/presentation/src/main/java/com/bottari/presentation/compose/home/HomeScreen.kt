@@ -20,7 +20,7 @@ import com.bottari.presentation.compose.home.template.TemplateBottariScreen
 @Composable
 fun HomeScreen(
     navigateToTemplateDetail: (Long) -> Unit,
-    navigateToTemplateCreate: () -> Unit
+    navigateToTemplateCreate: () -> Unit,
 ) {
     val navController =
         rememberSaveable(saver = NavigationController.saver) {
