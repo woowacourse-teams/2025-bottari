@@ -1,14 +1,9 @@
 package com.bottari.presentation.compose.home.more.component
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -22,14 +17,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -109,56 +101,15 @@ fun NicknameBox(
     }
 }
 
-@Composable
-private fun NicknameTextField(
-    textFieldValue: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
-    onSaveNickname: () -> Unit,
-    isEditing: Boolean,
-    focusRequester: FocusRequester,
-) {
-    BasicTextField(
-        value = textFieldValue,
-        onValueChange = onValueChange,
-        modifier =
-            Modifier
-                .padding(top = 4.dp)
-                .focusRequester(focusRequester)
-                .fillMaxWidth(),
-        textStyle =
-            BottariTheme.typography.medium16
-                .toTextStyle()
-                .copy(color = BottariTheme.colors.black),
-        singleLine = true,
-        readOnly = !isEditing,
-        cursorBrush = SolidColor(BottariTheme.colors.transparent),
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = { onSaveNickname() }),
-        decorationBox = { innerTextField ->
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.CenterStart,
-            ) {
-                if (textFieldValue.text.isEmpty() && isEditing) {
-                    Text(
-                        text = stringResource(R.string.profile_nickname_hint_text),
-                        color = BottariTheme.colors.gray500,
-                        style = BottariTheme.typography.medium16.toTextStyle(),
-                    )
-                }
-                innerTextField()
-            }
-        },
-    )
-}
-
 @Preview
 @Composable
 private fun NicknameTextFieldPreview() {
     var nickname by remember { mutableStateOf("오이") }
-    NicknameBox(
-        nickname = nickname,
-        onChangeNickname = { nickname = it },
-        onSaveNickname = {},
-    )
+    BottariTheme {
+        NicknameBox(
+            nickname = nickname,
+            onChangeNickname = { nickname = it },
+            onSaveNickname = {},
+        )
+    }
 }
