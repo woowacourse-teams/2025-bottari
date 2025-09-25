@@ -1,5 +1,6 @@
 package com.bottari.presentation.compose.home.template
 
+import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,9 +23,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariSearchBar
+import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.compose.common.extension.rememberScrolledToEnd
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
@@ -43,13 +48,14 @@ fun TemplateBottariScreen(
     val context = LocalContext.current
     val uiState = viewModel.uiState.observeAsState().value ?: return
     val uiEvent = viewModel.uiEvent.observeAsState().value
-    val listState = rememberLazyListState()
+    val mainListState = rememberLazyListState()
+    val myListState = rememberLazyListState()
 
     LaunchedEffect(uiEvent) {
         if (uiEvent == null) return@LaunchedEffect
 
         when (uiEvent) {
-            is TemplateUiEvent.SearchTemplateSuccess -> listState.scrollToItem(0)
+            is TemplateUiEvent.SearchTemplateSuccess -> mainListState.scrollToItem(0)
             is TemplateUiEvent.FetchBottariTemplatesFailure ->
                 Toast
                     .makeText(
@@ -62,7 +68,8 @@ fun TemplateBottariScreen(
 
     TemplateBottariScreen(
         uiState = uiState,
-        listState = listState,
+        listState = mainListState,
+        myListState = myListState,
         onClickDetail = navigateToTemplateDetail,
         onQueryChange = viewModel::updateSearchWord,
         onLoadNextPage = viewModel::fetchTemplates,
@@ -77,6 +84,7 @@ fun TemplateBottariScreen(
 private fun TemplateBottariScreen(
     uiState: TemplateUiState,
     listState: LazyListState,
+    myListState: LazyListState,
     onClickDetail: (Long) -> Unit,
     onQueryChange: (String) -> Unit,
     onLoadNextPage: () -> Unit,
@@ -91,11 +99,42 @@ private fun TemplateBottariScreen(
             .collect { onLoadNextPage() }
     }
 
-    Column(
-        modifier = modifier.fillMaxSize(),
-    ) {
+    Column(modifier = modifier) {
+        TemplatePager(
+            pageTitles = listOf("전체 템플릿", "나의 템플릿"),
+            modifier = Modifier,
+        ) { page ->
+            when (page) {
+                0 -> AllTemplateContent(
+                    templates = uiState.templates,
+                    listState = listState,
+                    query = uiState.searchWord,
+                    onQueryChange = onQueryChange,
+                    onClickDetail = onClickDetail,
+                )
+
+                1 ->
+                    TemplateLazyColumn(
+                        templates = uiState.myTemplates,
+                        listState = myListState,
+                        onClickDetail = onClickDetail,
+                    )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AllTemplateContent(
+    templates: List<BottariTemplateUiModel>,
+    listState: LazyListState,
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onClickDetail: (Long) -> Unit,
+) {
+    Column {
         BottariSearchBar(
-            query = uiState.searchWord,
+            query = query,
             onQueryChange = onQueryChange,
             placeholderText = "검색어를 입력하세요",
             onSearch = {},
@@ -105,23 +144,69 @@ private fun TemplateBottariScreen(
                     horizontal = BottariTheme.spacing.spaceLarge,
                 ),
         )
-        LazyColumn(
-            state = listState,
-            modifier =
-                Modifier
-                    .padding(horizontal = BottariTheme.spacing.spaceLarge)
-                    .topBottomFadingEdge(color = BottariTheme.colors.gray50, width = 8.dp),
-            contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceSmall),
-            verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
-        ) {
-            items(uiState.templates, key = { template -> template.id }) { template ->
-                TemplateItem(
-                    template = template,
-                    modifier = Modifier.noRippleClickable { onClickDetail(template.id) },
-                )
-            }
+
+        TemplateLazyColumn(
+            templates = templates,
+            listState = listState,
+            onClickDetail = onClickDetail,
+        )
+    }
+}
+
+@Composable
+private fun TemplateLazyColumn(
+    templates: List<BottariTemplateUiModel>,
+    listState: LazyListState,
+    onClickDetail: (Long) -> Unit,
+) {
+    LazyColumn(
+        state = listState,
+        modifier =
+            Modifier
+                .padding(horizontal = BottariTheme.spacing.spaceLarge)
+                .topBottomFadingEdge(color = BottariTheme.colors.gray50, width = 8.dp),
+        contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceSmall),
+        verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
+    ) {
+        templates.ifEmpty { item { TemplateMyEmptyView() } }
+
+        items(templates, key = { template -> template.id }) { template ->
+            TemplateItem(
+                template = template,
+                modifier = Modifier.noRippleClickable { onClickDetail(template.id) },
+            )
         }
     }
+}
+
+@Composable
+private fun TemplatePager(
+    pageTitles: List<String>,
+    modifier: Modifier = Modifier,
+    screen: @Composable (Int) -> Unit,
+) {
+    val pagerState: PagerState = rememberPagerState(initialPage = 0) { pageTitles.size }
+
+    BottariTabBar(
+        pageTitles = pageTitles,
+        pagerState = pagerState,
+        modifier = modifier,
+        screen = screen,
+    )
+}
+
+@Composable
+fun TemplateMyEmptyView() {
+    AndroidView(
+        factory = { context ->
+            LayoutInflater
+                .from(context)
+                .inflate(R.layout.view_my_template_empty, null, false)
+        },
+        modifier =
+            Modifier
+                .fillMaxSize(),
+    )
 }
 
 @Preview(showBackground = true)
@@ -149,6 +234,7 @@ private fun TemplateBottariScreenPreview() {
         TemplateBottariScreen(
             uiState = TemplateUiState(templates = templates),
             listState = rememberLazyListState(),
+            myListState = rememberLazyListState(),
             onClickDetail = {},
             onQueryChange = {},
             onLoadNextPage = {},

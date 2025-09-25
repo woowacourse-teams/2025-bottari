@@ -56,13 +56,11 @@ fun BottariSearchBar(
                 .background(
                     color = Color.White,
                     shape = shape,
-                )
-                .border(
+                ).border(
                     width = 1.dp,
                     color = if (isFocused) BottariTheme.colors.primary else Color.Transparent,
                     shape = shape,
-                )
-                .padding(4.dp),
+                ).padding(4.dp),
     ) {
         TextField(
             value = query,

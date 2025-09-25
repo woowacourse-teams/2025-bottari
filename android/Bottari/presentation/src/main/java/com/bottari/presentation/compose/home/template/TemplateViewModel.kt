@@ -8,12 +8,14 @@ import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.model.common.Pageable
 import com.bottari.domain.usecase.template.FetchBottariTemplatesUseCase
+import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
 import com.bottari.presentation.util.debounce
 
 class TemplateViewModel(
     private val fetchBottariTemplatesUseCase: FetchBottariTemplatesUseCase,
+    private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
 ) : BaseViewModel<TemplateUiState, TemplateUiEvent>(TemplateUiState()) {
     private val debouncedSearch: (Unit) -> Unit
 
@@ -22,6 +24,7 @@ class TemplateViewModel(
 
     init {
         fetchTemplates()
+        fetchMyUploadTemplates()
         debouncedSearch = viewModelScope.debounce(DEBOUNCE_DELAY) { fetchTemplates() }
     }
 
@@ -33,6 +36,8 @@ class TemplateViewModel(
     fun fetchTemplates() {
         val isSearched = currentState.searchWord.isNotEmpty()
         val currentPageable = if (isSearched) searchPageable else mainPageable
+
+        updateState { copy(isLoading = true) }
 
         launch {
             fetchBottariTemplatesUseCase(
@@ -66,6 +71,22 @@ class TemplateViewModel(
         updateState { copy(templates = uiModels) }
     }
 
+    private fun fetchMyUploadTemplates() {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            fetchMyBottariTemplatesUseCase()
+                .onSuccess { templates ->
+                    val uiModels = templates.map { BottariTemplateUiModel.fromDomain(it) }
+                    updateState { copy(myTemplates = uiModels) }
+                }.onFailure {
+                    emitEvent(TemplateUiEvent.FetchBottariTemplatesFailure)
+                }
+
+            updateState { copy(isLoading = false) }
+        }
+    }
+
     companion object {
         private const val DEBOUNCE_DELAY = 300L
 
@@ -74,6 +95,7 @@ class TemplateViewModel(
                 initializer {
                     TemplateViewModel(
                         BottariTemplateUseCaseProvider.fetchBottariTemplatesUseCase,
+                        BottariTemplateUseCaseProvider.fetchMyBottariTemplatesUseCase,
                     )
                 }
             }
