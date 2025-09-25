@@ -21,7 +21,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,7 +69,7 @@ private fun TemplateBottariScreen(
             modifier =
                 Modifier
                     .padding(horizontal = BottariTheme.spacing.spaceLarge)
-                    .topBottomFadingEdge(color = Color.White),
+                    .topBottomFadingEdge(color = BottariTheme.colors.gray50),
             contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceSmall),
             verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
         ) {
@@ -92,7 +91,6 @@ private fun TemplateItem(
 ) {
     BottariBox(
         modifier = modifier,
-        shape = RoundedCornerShape(16.dp),
         contentPadding = PaddingValues(),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
