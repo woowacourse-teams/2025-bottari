@@ -6,7 +6,6 @@ import com.bottari.domain.model.bottari.personal.PersonalBottari
 import com.bottari.domain.repository.BottariRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 
 class BottariRepositoryImpl(
     private val bottariLocalDataSource: BottariLocalDataSource,
