@@ -77,7 +77,10 @@ fun NicknameBox(
                         textFieldValue = newValue
                         onChangeNickname(newValue.text)
                     },
-                    onSaveNickname = onSaveNickname,
+                    onSaveNickname = {
+                        isEditing = false
+                        onSaveNickname()
+                    },
                     isEditing = isEditing,
                     focusRequester = focusRequester,
                 )
