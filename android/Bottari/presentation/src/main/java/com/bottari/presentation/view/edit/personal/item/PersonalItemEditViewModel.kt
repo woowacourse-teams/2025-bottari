@@ -88,7 +88,7 @@ class PersonalItemEditViewModel(
                             isFetched = true,
                         )
                     } else {
-                        copy(items = itemUiModels)
+                        copy(initialItems = itemUiModels)
                     }
                 }
             }.catch {
