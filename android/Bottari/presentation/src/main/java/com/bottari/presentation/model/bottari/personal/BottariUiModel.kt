@@ -3,14 +3,15 @@ package com.bottari.presentation.model.bottari.personal
 import com.bottari.domain.model.bottari.BottariState
 import com.bottari.domain.model.bottari.personal.PersonalBottari
 import com.bottari.presentation.model.alarm.AlarmUiModel
+import com.bottari.presentation.model.bottari.MyBottariUiModel
 
 data class BottariUiModel(
-    val id: Long,
-    val title: String,
-    val totalQuantity: Int,
-    val checkedQuantity: Int,
-    val alarm: AlarmUiModel?,
-) {
+    override val id: Long,
+    override val title: String,
+    override val totalQuantity: Int,
+    override val checkedQuantity: Int,
+    override val alarm: AlarmUiModel?,
+): MyBottariUiModel {
     companion object {
         fun fromDomain(bottariState: BottariState): BottariUiModel =
             BottariUiModel(

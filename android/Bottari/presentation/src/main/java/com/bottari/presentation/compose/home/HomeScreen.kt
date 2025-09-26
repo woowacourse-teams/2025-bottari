@@ -14,11 +14,15 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.home.more.MoreBottariScreen
 import com.bottari.presentation.compose.home.personal.PersonalBottariScreen
-import com.bottari.presentation.compose.home.team.TeamBottariScreen
+import com.bottari.presentation.compose.home.team.MyBottariScreen
 import com.bottari.presentation.compose.home.template.TemplateBottariScreen
 
 @Composable
 fun HomeScreen(
+    navigateToPersonalBottariEdit: (Long, Boolean) -> Unit,
+    navigateToTeamBottariEdit: (Long, Boolean) -> Unit,
+    navigateToPersonalBottariChecklist: (Long, String) -> Unit,
+    navigateToTeamBottariChecklist: (Long, String) -> Unit,
     navigateToBrowser: (String) -> Unit,
     navigateToTemplateDetail: (Long) -> Unit,
     navigateToTemplateCreate: () -> Unit,
@@ -50,6 +54,10 @@ fun HomeScreen(
             navigateToTemplateCreate = navigateToTemplateCreate,
             navigateToBrowser = navigateToBrowser,
             modifier = Modifier.padding(innerPadding),
+            navigateToPersonalBottariEdit = navigateToPersonalBottariEdit,
+            navigateToTeamBottariEdit = navigateToTeamBottariEdit,
+            navigateToPersonalBottariChecklist = navigateToPersonalBottariChecklist,
+            navigateToTeamBottariChecklist = navigateToTeamBottariChecklist,
         )
     }
 }
@@ -61,6 +69,10 @@ fun HomeScreenRouter(
     navigateToTemplateDetail: (Long) -> Unit,
     navigateToTemplateCreate: () -> Unit,
     modifier: Modifier = Modifier,
+    navigateToPersonalBottariEdit: (Long, Boolean) -> Unit,
+    navigateToTeamBottariEdit: (Long, Boolean) -> Unit,
+    navigateToPersonalBottariChecklist: (Long, String) -> Unit,
+    navigateToTeamBottariChecklist: (Long, String) -> Unit,
 ) {
     Navigation(
         navigationController = navController,
@@ -75,10 +87,31 @@ fun HomeScreenRouter(
                 )
 
             HomeScreenRoute.Team ->
-                TeamBottariScreen(
-                    onNavigateToPersonal = { nav.navigate(HomeScreenRoute.Personal) },
-                    onNavigateToTemplate = { nav.navigate(HomeScreenRoute.Template) },
-                    onNavigateToMore = { nav.navigate(HomeScreenRoute.More) },
+                MyBottariScreen(
+                    onNavigateToPersonalEdit = { bottariId, isNew ->
+                        navigateToPersonalBottariEdit(
+                            bottariId,
+                            isNew,
+                        )
+                    },
+                    onNavigateToTeamEdit = { bottariId, isNew ->
+                        navigateToTeamBottariEdit(
+                            bottariId,
+                            isNew,
+                        )
+                    },
+                    onNavigateToPersonalChecklist = { bottariId, bottariTitle ->
+                        navigateToPersonalBottariChecklist(
+                            bottariId,
+                            bottariTitle,
+                        )
+                    },
+                    onNavigateToTeamChecklist = { bottariId, bottariTitle ->
+                        navigateToTeamBottariChecklist(
+                            bottariId,
+                            bottariTitle,
+                        )
+                    },
                 )
 
             HomeScreenRoute.Template ->

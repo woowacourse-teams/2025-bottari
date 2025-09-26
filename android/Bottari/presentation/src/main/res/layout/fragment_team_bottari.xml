@@ -13,6 +13,8 @@
         android:layout_height="match_parent"
         android:fadingEdgeLength="8dp"
         android:requiresFadingEdge="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
         tools:listitem="@layout/item_bottari" />
 
     <include

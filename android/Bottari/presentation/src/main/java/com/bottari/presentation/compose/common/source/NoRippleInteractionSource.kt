@@ -10,5 +10,5 @@ class NoRippleInteractionSource : MutableInteractionSource {
 
     override suspend fun emit(interaction: Interaction) {}
 
-    override fun tryEmit(interaction: Interaction): Boolean = true
+    override fun tryEmit(interaction: Interaction) = true
 }
