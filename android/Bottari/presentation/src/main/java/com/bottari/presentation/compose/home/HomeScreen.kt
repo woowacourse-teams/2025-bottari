@@ -19,6 +19,7 @@ import com.bottari.presentation.compose.home.template.TemplateBottariScreen
 
 @Composable
 fun HomeScreen(
+    navigateToBrowser: (String) -> Unit,
     navigateToTemplateDetail: (Long) -> Unit,
     navigateToTemplateCreate: () -> Unit,
 ) {
@@ -47,6 +48,7 @@ fun HomeScreen(
             navController = navController,
             navigateToTemplateDetail = navigateToTemplateDetail,
             navigateToTemplateCreate = navigateToTemplateCreate,
+            navigateToBrowser = navigateToBrowser,
             modifier = Modifier.padding(innerPadding),
         )
     }
@@ -55,6 +57,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreenRouter(
     navController: NavigationController,
+    navigateToBrowser: (String) -> Unit,
     navigateToTemplateDetail: (Long) -> Unit,
     navigateToTemplateCreate: () -> Unit,
     modifier: Modifier = Modifier,
@@ -86,9 +89,7 @@ fun HomeScreenRouter(
 
             HomeScreenRoute.More ->
                 MoreBottariScreen(
-                    onNavigateToPersonal = { nav.navigate(HomeScreenRoute.Personal) },
-                    onNavigateToTeam = { nav.navigate(HomeScreenRoute.Team) },
-                    onNavigateToTemplate = { nav.navigate(HomeScreenRoute.Template) },
+                    onNavigateToBrowser = navigateToBrowser,
                 )
         }
     }
@@ -101,6 +102,7 @@ private fun HomeScreenPreview() {
         HomeScreen(
             navigateToTemplateDetail = {},
             navigateToTemplateCreate = {},
+            navigateToBrowser = {},
         )
     }
 }
