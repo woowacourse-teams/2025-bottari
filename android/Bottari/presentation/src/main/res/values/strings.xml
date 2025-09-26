@@ -175,6 +175,8 @@
     <string name="setting_toolbar_title_text">설정</string>
     <string name="setting_privacy_policy_title_text">개인정보 처리 방침</string>
     <string name="setting_user_feedback_title_text">의견 보내기</string>
+    <string name="setting_version_text">보따리 버전</string>
+    <string name="setting_unknown_version_text">알 수 없음</string>
 
     <!-- Checklist -->
     <string name="checklist_fetch_failure_text">체크리스트를 불러오지 못했어요</string>
