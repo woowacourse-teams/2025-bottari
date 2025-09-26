@@ -1,17 +1,22 @@
 package com.bottari.data.repository
 
 import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
+import com.bottari.data.model.remote.common.PageableRequest
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
 import com.bottari.domain.model.bottari.template.BottariTemplate
+import com.bottari.domain.model.common.Pageable
 import com.bottari.domain.repository.BottariTemplateRepository
 
 class BottariTemplateRepositoryImpl(
     private val bottariTemplateRemoteDataSource: BottariTemplateRemoteDataSource,
 ) : BottariTemplateRepository {
-    override suspend fun fetchBottariTemplates(searchWord: String?): Result<List<BottariTemplate>> =
+    override suspend fun fetchBottariTemplates(
+        query: String?,
+        pageable: Pageable<BottariTemplate>,
+    ): Result<Pageable<BottariTemplate>> =
         bottariTemplateRemoteDataSource
-            .fetchBottariTemplates(searchWord)
-            .mapCatching { response -> response.map { it.toDomain() } }
+            .fetchBottariTemplates(PageableRequest.of(query, pageable))
+            .mapCatching { response -> response.toDomain { contents -> contents.toDomain() } }
 
     override suspend fun createBottariTemplate(
         title: String,

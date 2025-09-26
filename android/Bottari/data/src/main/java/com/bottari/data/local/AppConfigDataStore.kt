@@ -10,7 +10,7 @@ class AppConfigDataStore(
     private val context: Context,
 ) {
     private val Context.dataStore by preferencesDataStore(name = DATASTORE_NAME)
-    private val keyPermissionFlag = booleanPreferencesKey(KEY_PERMISSION_FLAG)
+    private val keyPermissionFlag = booleanPreferencesKey(name = KEY_PERMISSION_FLAG)
 
     suspend fun savePermissionFlag(flag: Boolean) {
         context.dataStore.edit { prefs ->

@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.navigation.Screen
+import com.bottari.presentation.compose.common.source.NoRippleInteractionSource
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
@@ -32,6 +33,7 @@ fun HomeBottomNavigationBar(
 ) {
     val selectedColor = BottariTheme.colors.black
     val unselectedColor = BottariTheme.colors.gray500
+    val noRippleInteractionSource = remember { NoRippleInteractionSource() }
 
     NavigationBar(
         containerColor = BottariTheme.colors.white,
@@ -42,6 +44,7 @@ fun HomeBottomNavigationBar(
                 NavigationBarItem(
                     icon = { HomeNavigationBarIcon(screen) },
                     alwaysShowLabel = false,
+                    interactionSource = noRippleInteractionSource,
                     selected = screen == selectedTab,
                     onClick = { onTabSelected(screen) },
                     colors =
@@ -78,7 +81,7 @@ private fun HomeNavigationBarIcon(
 
         Text(
             text = stringResource(screen.labelResId()),
-            style = BottariTheme.typography.medium12.toTextStyle(),
+            style = BottariTheme.typography.medium14.toTextStyle(),
         )
     }
 }

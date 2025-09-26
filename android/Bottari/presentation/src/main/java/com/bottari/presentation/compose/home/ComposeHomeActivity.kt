@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
 import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.view.template.TemplateActivity
 
 class ComposeHomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,7 +18,17 @@ class ComposeHomeActivity : AppCompatActivity() {
         setContent {
             BottariTheme {
                 HomeScreen(
-                    navigateToBrowser = { url -> navigateToBrowser(url) },
+                    navigateToBrowser = { url ->
+                        navigateToBrowser(url)
+                    },
+                    navigateToTemplateDetail = { templateId ->
+                        val newIntent = TemplateActivity.newIntentForDetail(this, templateId)
+                        startActivity(newIntent)
+                    },
+                    navigateToTemplateCreate = {
+                        val newIntent = TemplateActivity.newIntentForCreateTemplate(this)
+                        startActivity(newIntent)
+                    },
                 )
             }
         }

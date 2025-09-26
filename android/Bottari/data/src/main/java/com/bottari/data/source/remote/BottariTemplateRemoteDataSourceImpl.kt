@@ -3,14 +3,21 @@ package com.bottari.data.source.remote
 import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
+import com.bottari.data.model.remote.bottari.template.BottariTemplateCursorFetchResponse
 import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse
+import com.bottari.data.model.remote.common.PageableRequest
+import com.bottari.data.model.remote.common.PageableResponse
 import com.bottari.data.service.BottariTemplateService
 
 class BottariTemplateRemoteDataSourceImpl(
     private val bottariTemplateService: BottariTemplateService,
 ) : BottariTemplateRemoteDataSource {
-    override suspend fun fetchBottariTemplates(searchWord: String?): Result<List<BottariTemplateFetchResponse>> =
-        safeApiCall { bottariTemplateService.fetchBottariTemplates(searchWord) }
+    override suspend fun fetchBottariTemplates(
+        pageableRequest: PageableRequest,
+    ): Result<PageableResponse<BottariTemplateCursorFetchResponse>> =
+        safeApiCall {
+            bottariTemplateService.fetchBottariTemplates(pageableRequest.toQueryMap())
+        }
 
     override suspend fun createBottariTemplate(bottariTemplateCreateRequest: BottariTemplateCreateRequest): Result<Long?> =
         runCatching {

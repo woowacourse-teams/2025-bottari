@@ -1,20 +1,22 @@
 package com.bottari.data.service
 
 import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
+import com.bottari.data.model.remote.bottari.template.BottariTemplateCursorFetchResponse
 import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse
+import com.bottari.data.model.remote.common.PageableResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 interface BottariTemplateService {
-    @GET("/templates")
+    @GET("/templates/cursor")
     suspend fun fetchBottariTemplates(
-        @Query("query") searchWord: String?,
-    ): Response<List<BottariTemplateFetchResponse>>
+        @QueryMap params: Map<String, String>,
+    ): Response<PageableResponse<BottariTemplateCursorFetchResponse>>
 
     @POST("/templates")
     suspend fun createBottariTemplate(

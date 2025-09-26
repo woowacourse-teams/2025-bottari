@@ -28,7 +28,10 @@ import com.bottari.presentation.view.home.more.MoreViewModel
 fun MoreBottariScreen(
     onNavigateToBrowser: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MoreViewModel = viewModel(),
+    viewModel: MoreViewModel =
+        viewModel(
+            factory = MoreViewModel.Factory(),
+        ),
 ) {
     val uiState = viewModel.uiState.observeAsState().value ?: MoreUiState()
 

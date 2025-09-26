@@ -6,13 +6,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BottariTemplateFetchResponse(
+data class BottariTemplateCursorFetchResponse(
     @SerialName("id")
     val id: Long,
     @SerialName("title")
     val title: String,
     @SerialName("items")
-    val items: List<BottariTemplateItemFetchResponse>,
+    val items: List<Item>,
     @SerialName("author")
     val author: String,
     @SerialName("createdAt")
@@ -20,6 +20,20 @@ data class BottariTemplateFetchResponse(
     @SerialName("takenCount")
     val takenCount: Int,
 ) {
+    @Serializable
+    data class Item(
+        @SerialName("id")
+        val id: Long,
+        @SerialName("name")
+        val name: String,
+    ) {
+        fun toDomain(): BottariTemplateItem =
+            BottariTemplateItem(
+                id = id,
+                name = name,
+            )
+    }
+
     fun toDomain(): BottariTemplate =
         BottariTemplate(
             id = id,
@@ -27,19 +41,5 @@ data class BottariTemplateFetchResponse(
             items = items.map { it.toDomain() },
             author = author,
             takenCount = takenCount,
-        )
-}
-
-@Serializable
-data class BottariTemplateItemFetchResponse(
-    @SerialName("id")
-    val id: Long,
-    @SerialName("name")
-    val name: String,
-) {
-    fun toDomain(): BottariTemplateItem =
-        BottariTemplateItem(
-            id = id,
-            name = name,
         )
 }

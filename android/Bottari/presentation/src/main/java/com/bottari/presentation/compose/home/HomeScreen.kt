@@ -1,11 +1,7 @@
 package com.bottari.presentation.compose.home
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,9 +17,12 @@ import com.bottari.presentation.compose.home.personal.PersonalBottariScreen
 import com.bottari.presentation.compose.home.team.TeamBottariScreen
 import com.bottari.presentation.compose.home.template.TemplateBottariScreen
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navigateToBrowser: (String) -> Unit) {
+fun HomeScreen(
+    navigateToBrowser: (String) -> Unit,
+    navigateToTemplateDetail: (Long) -> Unit,
+    navigateToTemplateCreate: () -> Unit,
+) {
     val navController =
         rememberSaveable(saver = NavigationController.saver) {
             NavigationController(HomeScreenRoute.Personal)
@@ -36,21 +35,7 @@ fun HomeScreen(navigateToBrowser: (String) -> Unit) {
 
     Scaffold(
         containerColor = LocalBottariBgColor.current,
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(currentScreen.labelResId()),
-                        style = BottariTheme.typography.bold20.toTextStyle(),
-                    )
-                },
-                colors =
-                    TopAppBarDefaults.topAppBarColors(
-                        containerColor = BottariTheme.colors.gray50,
-                        titleContentColor = BottariTheme.colors.black,
-                    ),
-            )
-        },
+        topBar = { HomeTopAppBar(title = stringResource(currentScreen.labelResId())) },
         bottomBar = {
             HomeBottomNavigationBar(
                 screens = HomeScreenRoute.entries,
@@ -61,6 +46,8 @@ fun HomeScreen(navigateToBrowser: (String) -> Unit) {
     ) { innerPadding ->
         HomeScreenRouter(
             navController = navController,
+            navigateToTemplateDetail = navigateToTemplateDetail,
+            navigateToTemplateCreate = navigateToTemplateCreate,
             navigateToBrowser = navigateToBrowser,
             modifier = Modifier.padding(innerPadding),
         )
@@ -71,6 +58,8 @@ fun HomeScreen(navigateToBrowser: (String) -> Unit) {
 fun HomeScreenRouter(
     navController: NavigationController,
     navigateToBrowser: (String) -> Unit,
+    navigateToTemplateDetail: (Long) -> Unit,
+    navigateToTemplateCreate: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Navigation(
@@ -94,9 +83,8 @@ fun HomeScreenRouter(
 
             HomeScreenRoute.Template ->
                 TemplateBottariScreen(
-                    onNavigateToPersonal = { nav.navigate(HomeScreenRoute.Personal) },
-                    onNavigateToTeam = { nav.navigate(HomeScreenRoute.Team) },
-                    onNavigateToMore = { nav.navigate(HomeScreenRoute.More) },
+                    navigateToTemplateDetail = navigateToTemplateDetail,
+                    navigateToTemplateCreate = navigateToTemplateCreate,
                 )
 
             HomeScreenRoute.More ->
@@ -111,6 +99,10 @@ fun HomeScreenRouter(
 @Composable
 private fun HomeScreenPreview() {
     BottariTheme {
-        HomeScreen(navigateToBrowser = {})
+        HomeScreen(
+            navigateToTemplateDetail = {},
+            navigateToTemplateCreate = {},
+            navigateToBrowser = {},
+        )
     }
 }
