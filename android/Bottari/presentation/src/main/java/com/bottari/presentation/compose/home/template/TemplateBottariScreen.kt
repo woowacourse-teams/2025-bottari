@@ -124,7 +124,7 @@ private fun TemplateBottariScreen(
             modifier = Modifier,
         ) { page ->
             when (page) {
-                1 ->
+                0 ->
                     AllTemplateContent(
                         templates = uiState.templates,
                         listState = listState,
@@ -133,7 +133,7 @@ private fun TemplateBottariScreen(
                         onClickDetail = onClickDetail,
                     )
 
-                0 ->
+                1 ->
                     TemplateLazyColumn(
                         templates = uiState.myTemplates,
                         listState = myListState,
