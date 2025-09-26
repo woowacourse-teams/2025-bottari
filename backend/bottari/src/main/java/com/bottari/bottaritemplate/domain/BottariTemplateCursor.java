@@ -19,7 +19,7 @@ public record BottariTemplateCursor(
         String property
 ) {
 
-    private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
+    private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss.SSSSSS";
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
     private static final int DEFAULT_SIZE = 10;
 
