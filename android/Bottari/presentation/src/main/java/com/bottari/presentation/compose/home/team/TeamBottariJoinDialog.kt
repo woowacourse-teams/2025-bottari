@@ -21,12 +21,11 @@ import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
-fun BottariCreateDialog(
+fun TeamBottariJoinDialog(
     text: String,
     onChangeText: (String) -> Unit,
     isClickable : Boolean,
     onClick: () -> Unit,
-    placeholder: String = "",
 ) {
     BottariBox(
         modifier =
@@ -35,10 +34,10 @@ fun BottariCreateDialog(
                 .padding(horizontal = 30.dp),
     ) {
         Column {
-            Text(text = "보따리 이름 작성", style = BottariTheme.typography.medium16.toTextStyle())
+            Text(text = "팀 보따리 코드 입력", style = BottariTheme.typography.medium16.toTextStyle())
             Text(
                 modifier = Modifier.padding(top = 4.dp),
-                text = "이름은 언제든지 수정할 수 있어요.",
+                text = "공유받은 팀 보따리 코드를 입력해주세요.",
                 style = BottariTheme.typography.regular12.toTextStyle(),
             )
             TextField(
@@ -57,7 +56,6 @@ fun BottariCreateDialog(
                 shape = RoundedCornerShape(8.dp),
                 value = text,
                 onValueChange = { text -> onChangeText(text) },
-                placeholder = { Text(text = placeholder, style = BottariTheme.typography.medium16.toTextStyle()) },
                 singleLine = true,
             )
             Button(
@@ -84,6 +82,6 @@ fun BottariCreateDialog(
 
 @Preview
 @Composable
-fun MyCustomDialogContentPreview() {
-    BottariCreateDialog(text = "", onChangeText = {}, onClick = {} , isClickable = true, placeholder = "새 보따리")
+fun TeamBottariJoinDialogContentPreview() {
+    TeamBottariJoinDialog(text = "", onChangeText = {}, onClick = {} , isClickable = true)
 }

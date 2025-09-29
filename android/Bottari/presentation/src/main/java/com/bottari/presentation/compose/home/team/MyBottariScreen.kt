@@ -49,9 +49,9 @@ fun MyBottariScreen(
         uiState = uiState,
         onNavigateToPersonalChecklist = onNavigateToPersonalChecklist,
         onNavigateToTeamChecklist = onNavigateToTeamChecklist,
+        onDeletePersonalBottari = { viewModel.deletePersonalBottari(it) },
+        onDeleteTeamBottari = { viewModel.deleteTeamBottari(it) },
+        onEditPersonalBottari = onNavigateToPersonalEdit,
+        onEditTeamBottari = onNavigateToTeamEdit,
     )
-}
-
-@Composable
-fun PopUpMenu() {
 }

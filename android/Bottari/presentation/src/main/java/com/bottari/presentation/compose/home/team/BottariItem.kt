@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,11 +30,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
 import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.formatWithPattern
 import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.modifier.dropShadow
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.alarm.AlarmTypeUiModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
@@ -68,15 +66,22 @@ fun TeamBottariScreenPreview() {
                         repeatDays = DayOfWeek.entries.map { RepeatDayUiModel(it, true) },
                     ),
             ),
+        onPersonalBottariDelete = {},
+        onTeamBottariDelete = {},
+        onPersonalBottariEdit = { _, _ -> },
+        onTeamBottariEdit = { _, _ -> },
     )
 }
 
 @Composable
 fun BottariItem(
     bottari: MyBottariUiModel,
+    onPersonalBottariDelete: (Long) -> Unit,
+    onTeamBottariDelete: (Long) -> Unit,
+    onPersonalBottariEdit: (Long, Boolean) -> Unit,
+    onTeamBottariEdit: (Long, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // 1. 팝업 메뉴의 표시 여부를 관리하는 상태 변수 추가
     var showMenu by remember { mutableStateOf(false) }
 
     BottariBox(modifier = modifier, contentPadding = PaddingValues(13.dp)) {
@@ -87,7 +92,7 @@ fun BottariItem(
                 Box(
                     Modifier
                         .size(8.dp)
-                        .clip(RoundedCornerShape(30.dp))
+                        .clip(CircleShape)
                         .background(
                             chooseBottariStateColor(bottari.checkedQuantity, bottari.totalQuantity),
                         ),
@@ -96,9 +101,8 @@ fun BottariItem(
                 Spacer(modifier = Modifier.weight(1f))
                 DateText(
                     alarmUiModel = bottari.alarm,
+                    modifier = Modifier.padding(end = 16.dp),
                 )
-
-                // 2. 이미지를 Box로 감싸서 위치 기준(앵커)을 만들고, 팝업을 포함시킴
                 Box {
                     Image(
                         painter = painterResource(R.drawable.ic_more_horizontal),
@@ -106,26 +110,18 @@ fun BottariItem(
                         modifier =
                             Modifier
                                 .rotate(90f)
-                                .clickable { showMenu = true }, // 3. 클릭 시 상태를 true로 변경
+                                .clickable { showMenu = true },
                     )
 
-                    // 4. showMenu가 true일 때 Popup을 표시
-                    if (showMenu) {
-                        Popup(
-                            alignment = Alignment.TopEnd, // 앵커의 우측 하단에 위치
-                            onDismissRequest = { showMenu = false }, // 바깥 영역 클릭 시 닫기
-                        ) {
-                            // 팝업으로 보여줄 커스텀 메뉴 UI
-                            MoreMenuPopup(
-                                onEdit = {
-                                    showMenu = false
-                                },
-                                onDelete = {
-                                    showMenu = false
-                                },
-                            )
-                        }
-                    }
+                    BottariMenuPopup(
+                        bottari = bottari,
+                        showMenu = showMenu,
+                        onDismissRequest = { showMenu = false },
+                        onPersonalBottariDelete = onPersonalBottariDelete,
+                        onTeamBottariDelete = onTeamBottariDelete,
+                        onPersonalBottariEdit = onPersonalBottariEdit,
+                        onTeamBottariEdit = onTeamBottariEdit,
+                    )
                 }
             }
             Text(
@@ -155,57 +151,6 @@ fun BottariItem(
 }
 
 @Composable
-private fun MoreMenuPopup(
-    onEdit: () -> Unit,
-    onDelete: () -> Unit,
-) {
-    Row(
-        modifier =
-            Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .size(200.dp, 100.dp)
-                .fillMaxWidth()
-                .dropShadow(RoundedCornerShape(8.dp), Color.Black.copy(0.05f), 2.dp, 0.dp, 1.dp)
-                .background(Color.White),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        // 첫 번째 절반 영역 (왼쪽)
-        Box(
-            modifier =
-                Modifier
-                    .weight(1f)
-                    .fillMaxHeight() // 세로로 꽉 채워 클릭 영역을 넓힘
-                    .clickable(onClick = onEdit),
-            // 1. Box에 클릭 이벤트 적용
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_pen),
-                contentDescription = "수정하기",
-                // 2. Icon에서는 clickable 제거
-            )
-        }
-
-        // 두 번째 절반 영역 (오른쪽)
-        Box(
-            modifier =
-                Modifier
-                    .weight(1f)
-                    .fillMaxHeight() // 세로로 꽉 채워 클릭 영역을 넓힘
-                    .clickable(onClick = onDelete),
-            // 1. Box에 클릭 이벤트 적용
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_delete),
-                contentDescription = "삭제하기",
-                // 2. Icon에서는 clickable 제거
-            )
-        }
-    }
-}
-
-@Composable
 private fun BottariTypeText(bottari: MyBottariUiModel) {
     val teamTypeText =
         when (bottari) {
@@ -221,7 +166,7 @@ private fun chooseBottariStateColor(
     checkedQuantity: Int,
     totalQuantity: Int,
 ): Color {
-    if (totalQuantity == 0) return colorResource(R.color.gray_400)
+    if (checkedQuantity == 0) return colorResource(R.color.gray_400)
     if (checkedQuantity == totalQuantity) return colorResource(R.color.primary)
     return Color.Red
 }
@@ -261,7 +206,10 @@ private fun generateIndicatorSize(
 }
 
 @Composable
-fun DateText(alarmUiModel: AlarmUiModel?) {
+fun DateText(
+    alarmUiModel: AlarmUiModel?,
+    modifier: Modifier = Modifier,
+) {
     if (alarmUiModel == null) return
 
     val dateFormat = stringResource(R.string.common_format_date_alarm)
@@ -279,7 +227,7 @@ fun DateText(alarmUiModel: AlarmUiModel?) {
                 }
             }
         }
-    Text(text)
+    Text(text = text, modifier = modifier)
 }
 
 @Composable

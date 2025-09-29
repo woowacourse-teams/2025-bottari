@@ -6,10 +6,14 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariUseCaseProvider
 import com.bottari.di.usecase.TeamBottariUseCaseProvider
+import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.usecase.bottari.CreateBottariUseCase
+import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
 import com.bottari.domain.usecase.team.CreateTeamBottariUseCase
+import com.bottari.domain.usecase.team.ExitTeamBottariUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariesUseCase
+import com.bottari.domain.usecase.team.JoinTeamBottariUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
@@ -24,9 +28,36 @@ class MyBottariViewModel(
     private val fetchTeamBottariesUseCase: FetchTeamBottariesUseCase,
     private val createBottariUseCase: CreateBottariUseCase,
     private val createTeamBottariUseCase: CreateTeamBottariUseCase,
+    private val deleteBottariUseCase: DeleteBottariUseCase,
+    private val deleteTeamBottariUseCase: ExitTeamBottariUseCase,
+    private val joinTeamBottariUseCase: JoinTeamBottariUseCase,
 ) : FlowBaseViewModel<MyBottariUiState, MyBottariUiEvent>(MyBottariUiState()) {
     init {
         fetchMyBottaries()
+    }
+
+    fun deletePersonalBottari(bottariId: Long) {
+        launch {
+            deleteBottariUseCase(bottariId).onSuccess {
+            }
+            fetchPersonalBottaries()
+        }
+    }
+
+    fun deleteTeamBottari(bottariId: Long) {
+        launch {
+            deleteTeamBottariUseCase(bottariId).onSuccess {}
+            fetchTeamBottaries()
+        }
+    }
+
+    fun inputTeamBottariCode(code: String) {
+        launch {
+            joinTeamBottariUseCase(code).onSuccess {
+                fetchTeamBottaries()
+                closeCodeDialog()
+            }
+        }
     }
 
     fun createPersonalBottari(title: String) {
@@ -49,12 +80,20 @@ class MyBottariViewModel(
         }
     }
 
+    fun openCodeDialog() {
+        updateState { copy(showCodeDialog = true) }
+    }
+
     fun openPersonalDialog() {
         updateState { copy(showPersonalDialog = true) }
     }
 
     fun openTeamDialog() {
         updateState { copy(showTeamDialog = true) }
+    }
+
+    fun closeCodeDialog() {
+        updateState { copy(showCodeDialog = false) }
     }
 
     fun closePersonalDialog() {
@@ -114,6 +153,9 @@ class MyBottariViewModel(
                         TeamBottariUseCaseProvider.fetchTeamBottariesUseCase,
                         BottariUseCaseProvider.createBottariUseCase,
                         TeamBottariUseCaseProvider.createTeamBottariUseCase,
+                        BottariUseCaseProvider.deleteBottariUseCase,
+                        TeamBottariUseCaseProvider.exitTeamBottariUseCase,
+                        TeamMemberUseCaseProvider.joinTeamBottariUseCase,
                     )
                 }
             }

@@ -16,6 +16,10 @@ import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
 fun BottariList(
     bottaries: List<MyBottariUiModel>,
     onBottariClick: (MyBottariUiModel) -> Unit,
+    onDeletePersonalBottari: (Long) -> Unit,
+    onDeleteTeamBottari: (Long) -> Unit,
+    onPersonalBottariEdit: (Long, Boolean) -> Unit,
+    onTeamBottariEdit: (Long, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier.fillMaxSize()) {
@@ -29,6 +33,10 @@ fun BottariList(
                     Modifier
                         .padding(horizontal = 16.dp, vertical = 6.dp)
                         .clickable { onBottariClick(bottari) },
+                onPersonalBottariDelete = onDeletePersonalBottari,
+                onTeamBottariDelete = onDeleteTeamBottari,
+                onPersonalBottariEdit = onPersonalBottariEdit,
+                onTeamBottariEdit = onTeamBottariEdit,
             )
         }
     }

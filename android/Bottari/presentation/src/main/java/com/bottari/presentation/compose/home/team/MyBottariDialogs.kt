@@ -11,9 +11,29 @@ import androidx.compose.ui.window.DialogProperties
 @Composable
 fun MyBottariDialogs(
     uiState: MyBottariUiState,
-    viewModel: MyBottariViewModel
+    viewModel: MyBottariViewModel,
 ) {
     var bottariTitle by remember { mutableStateOf("") }
+    var bottariCode by remember { mutableStateOf("") }
+
+    if (uiState.showCodeDialog) {
+        Dialog(
+            properties = DialogProperties(usePlatformDefaultWidth = false),
+            onDismissRequest = {
+                viewModel.closeCodeDialog()
+                bottariCode = ""
+            },
+        ) {
+            TeamBottariJoinDialog(
+                text = bottariCode,
+                onChangeText = { newText -> bottariCode = newText },
+                onClick = {
+                    viewModel.inputTeamBottariCode(bottariCode)
+                },
+                isClickable = true,
+            )
+        }
+    }
 
     if (uiState.showPersonalDialog) {
         Dialog(
@@ -27,9 +47,10 @@ fun MyBottariDialogs(
                 text = bottariTitle,
                 onChangeText = { newText -> bottariTitle = newText },
                 onClick = {
-                    viewModel.createPersonalBottari(bottariTitle)
+                    viewModel.createPersonalBottari(bottariTitle.ifBlank { "새 보따리" })
                 },
-                isClickable = bottariTitle.isNotBlank(),
+                isClickable = true,
+                placeholder = "새 보따리",
             )
         }
     }
@@ -45,9 +66,10 @@ fun MyBottariDialogs(
                 text = bottariTitle,
                 onChangeText = { newText -> bottariTitle = newText },
                 onClick = {
-                    viewModel.createTeamBottari(bottariTitle)
+                    viewModel.createTeamBottari(bottariTitle.ifBlank { "새 보따리" })
                 },
-                isClickable = bottariTitle.isNotBlank(),
+                isClickable = true,
+                placeholder = "새 보따리",
             )
         }
     }

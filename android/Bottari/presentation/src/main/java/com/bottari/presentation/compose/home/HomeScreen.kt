@@ -13,7 +13,6 @@ import com.bottari.presentation.compose.common.navigation.NavigationController
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.home.more.MoreBottariScreen
-import com.bottari.presentation.compose.home.personal.PersonalBottariScreen
 import com.bottari.presentation.compose.home.team.MyBottariScreen
 import com.bottari.presentation.compose.home.template.TemplateBottariScreen
 
@@ -29,7 +28,7 @@ fun HomeScreen(
 ) {
     val navController =
         rememberSaveable(saver = NavigationController.saver) {
-            NavigationController(HomeScreenRoute.Personal)
+            NavigationController(HomeScreenRoute.Team)
         }
 
     val currentScreen =
@@ -79,13 +78,6 @@ fun HomeScreenRouter(
         modifier = modifier,
     ) { screen, nav ->
         when (screen) {
-            HomeScreenRoute.Personal ->
-                PersonalBottariScreen(
-                    onNavigateToTeam = { nav.navigate(HomeScreenRoute.Team) },
-                    onNavigateToTemplate = { nav.navigate(HomeScreenRoute.Template) },
-                    onNavigateToMore = { nav.navigate(HomeScreenRoute.More) },
-                )
-
             HomeScreenRoute.Team ->
                 MyBottariScreen(
                     onNavigateToPersonalEdit = { bottariId, isNew ->
@@ -136,6 +128,10 @@ private fun HomeScreenPreview() {
             navigateToTemplateDetail = {},
             navigateToTemplateCreate = {},
             navigateToBrowser = {},
+            navigateToPersonalBottariEdit = { _, _ -> },
+            navigateToTeamBottariEdit = { _, _ -> },
+            navigateToPersonalBottariChecklist = { _, _ -> },
+            navigateToTeamBottariChecklist = { _, _ -> },
         )
     }
 }

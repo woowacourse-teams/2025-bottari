@@ -88,7 +88,6 @@ private fun HomeNavigationBarIcon(
 
 private fun HomeScreenRoute.toIconResId(): Int =
     when (this) {
-        HomeScreenRoute.Personal -> R.drawable.ic_personal
         HomeScreenRoute.Team -> R.drawable.ic_team
         HomeScreenRoute.Template -> R.drawable.ic_template
         HomeScreenRoute.More -> R.drawable.ic_more_horizontal
@@ -100,7 +99,7 @@ private fun HomeBottomNavigationBarPreview() {
     BottariTheme {
         HomeBottomNavigationBar(
             screens = HomeScreenRoute.entries.toList(),
-            selectedTab = HomeScreenRoute.Personal,
+            selectedTab = HomeScreenRoute.Team,
             onTabSelected = {},
         )
     }

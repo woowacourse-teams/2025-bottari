@@ -3,7 +3,6 @@ package com.bottari.presentation.compose.home.team
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,7 +15,11 @@ fun MyBottariContent(
     uiState: MyBottariUiState,
     onNavigateToPersonalChecklist: (Long, String) -> Unit,
     onNavigateToTeamChecklist: (Long, String) -> Unit,
-    modifier: Modifier = Modifier
+    onDeletePersonalBottari: (Long) -> Unit,
+    onDeleteTeamBottari: (Long) -> Unit,
+    onEditPersonalBottari: (Long, Boolean) -> Unit,
+    onEditTeamBottari: (Long, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
@@ -41,16 +44,28 @@ fun MyBottariContent(
                     BottariList(
                         bottaries = uiState.myBottaries,
                         onBottariClick = onBottariClick,
+                        onDeletePersonalBottari = onDeletePersonalBottari,
+                        onDeleteTeamBottari = onDeleteTeamBottari,
+                        onPersonalBottariEdit = onEditPersonalBottari,
+                        onTeamBottariEdit = onEditTeamBottari,
                     )
                 1 ->
                     BottariList(
                         bottaries = uiState.personalBottaries,
                         onBottariClick = onBottariClick,
+                        onDeletePersonalBottari = onDeletePersonalBottari,
+                        onDeleteTeamBottari = onDeleteTeamBottari,
+                        onPersonalBottariEdit = onEditPersonalBottari,
+                        onTeamBottariEdit = onEditTeamBottari,
                     )
                 2 ->
                     BottariList(
                         bottaries = uiState.teamBottaries,
                         onBottariClick = onBottariClick,
+                        onDeletePersonalBottari = onDeletePersonalBottari,
+                        onDeleteTeamBottari = onDeleteTeamBottari,
+                        onPersonalBottariEdit = onEditPersonalBottari,
+                        onTeamBottariEdit = onEditTeamBottari,
                     )
             }
         }

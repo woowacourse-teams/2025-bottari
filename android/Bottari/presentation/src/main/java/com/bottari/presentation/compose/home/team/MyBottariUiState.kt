@@ -10,6 +10,7 @@ data class MyBottariUiState(
     val teamBottaries: List<TeamBottariUiModel> = emptyList<TeamBottariUiModel>(),
     val showPersonalDialog: Boolean = false,
     val showTeamDialog: Boolean = false,
+    val showCodeDialog: Boolean = false,
 ) {
     val myBottaries: List<MyBottariUiModel> = personalBottaries + teamBottaries
 }
