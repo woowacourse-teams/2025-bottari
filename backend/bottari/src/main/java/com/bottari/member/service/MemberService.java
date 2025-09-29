@@ -28,6 +28,13 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final FcmTokenRepository fcmTokenRepository;
 
+    public Long getIdBySsaid(final String ssaid) {
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+
+        return member.getId();
+    }
+
     @Transactional
     public Long create(final CreateMemberRequest request) {
         validateDuplicateSsaid(request.ssaid());

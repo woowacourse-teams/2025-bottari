@@ -1,5 +1,6 @@
 package com.bottari.push.sse.component;
 
+import com.bottari.config.MemberIdentifier;
 import com.bottari.push.sse.message.SseEventType;
 import com.bottari.push.sse.message.SseMessage;
 import com.bottari.push.sse.message.SseResourceType;
@@ -16,6 +17,21 @@ public class SseConnector implements SseConnectorApiDocs {
 
     private final SseService sseService;
 
+    /**
+     * 멤버 ID 기반 SSE 연결
+     */
+    @GetMapping(path = "/connect/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @Override
+    public SseEmitter connect(
+            @MemberIdentifier final String ssaid
+    ) {
+        final long timeout = 60 * 60 * 1000L;
+        final SseEmitter sseEmitter = new SseEmitter(timeout);
+        sseService.register(ssaid, sseEmitter);
+
+        return sseEmitter;
+    }
+
     @GetMapping(path = "/team-bottaries/{teamBottariId}/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @Override
     public SseEmitter connectTeamBottari(
@@ -23,7 +39,7 @@ public class SseConnector implements SseConnectorApiDocs {
     ) {
         final long timeout = 60 * 60 * 1000L;
         final SseEmitter sseEmitter = new SseEmitter(timeout);
-        sseService.register(teamBottariId, sseEmitter);
+        sseService.registerByTeamBottariId(teamBottariId, sseEmitter);
 
         return sseEmitter;
     }

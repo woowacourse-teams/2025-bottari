@@ -1,5 +1,6 @@
 package com.bottari.push.sse.component;
 
+import com.bottari.member.service.MemberService;
 import com.bottari.push.sse.message.SseMessage;
 import java.io.IOException;
 import java.util.List;
@@ -13,6 +14,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class SseService {
 
     private final SseRepository sseRepository;
+    private final SseSessions sseSessions;
+    private final MemberService memberService;
 
     public void sendByTeamBottariId(
             final Long teamBottariId,
@@ -33,7 +36,7 @@ public class SseService {
         }
     }
 
-    public void register(
+    public void registerByTeamBottariId(
             final Long teamBottariId,
             final SseEmitter sseEmitter
     ) {
@@ -41,5 +44,16 @@ public class SseService {
         sseEmitter.onTimeout(() -> sseRepository.remove(teamBottariId, sseEmitter));
         sseEmitter.onError(throwable -> sseRepository.remove(teamBottariId, sseEmitter));
         sseRepository.save(teamBottariId, sseEmitter);
+    }
+
+    public void register(
+            final String ssaid,
+            final SseEmitter sseEmitter
+    ) {
+        final Long memberId = memberService.getIdBySsaid(ssaid);
+        sseEmitter.onCompletion(() -> sseSessions.remove(memberId));
+        sseEmitter.onTimeout(() -> sseSessions.remove(memberId));
+        sseEmitter.onError(throwable -> sseSessions.remove(memberId));
+        sseSessions.save(memberId, sseEmitter);
     }
 }
