@@ -2,8 +2,8 @@ package com.bottari.member.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.fcm.domain.FcmToken;
-import com.bottari.fcm.repository.FcmTokenRepository;
+import com.bottari.push.fcm.domain.FcmToken;
+import com.bottari.push.fcm.repository.FcmTokenRepository;
 import com.bottari.member.domain.Member;
 import com.bottari.member.dto.CheckRegistrationResponse;
 import com.bottari.member.dto.CreateMemberRequest;

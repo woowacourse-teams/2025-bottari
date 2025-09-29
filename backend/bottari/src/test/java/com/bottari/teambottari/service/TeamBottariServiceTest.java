@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
-import com.bottari.fcm.FcmMessageConverter;
-import com.bottari.fcm.FcmMessageSender;
+import com.bottari.push.fcm.FcmMessageConverter;
+import com.bottari.push.fcm.FcmMessageSender;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;

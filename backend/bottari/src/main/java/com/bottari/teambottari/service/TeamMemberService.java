@@ -2,10 +2,10 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.fcm.FcmMessageConverter;
-import com.bottari.fcm.FcmMessageSender;
-import com.bottari.fcm.dto.MessageType;
-import com.bottari.fcm.dto.SendMessageRequest;
+import com.bottari.push.fcm.FcmMessageConverter;
+import com.bottari.push.fcm.FcmMessageSender;
+import com.bottari.push.fcm.dto.MessageType;
+import com.bottari.push.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.teambottari.domain.TeamAssignedItem;

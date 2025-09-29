@@ -8,10 +8,11 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 
 import com.bottari.error.BusinessException;
-import com.bottari.fcm.domain.FcmToken;
-import com.bottari.fcm.dto.MessageType;
-import com.bottari.fcm.dto.SendMessageRequest;
-import com.bottari.fcm.service.FcmTokenService;
+import com.bottari.push.fcm.FcmMessageSender;
+import com.bottari.push.fcm.domain.FcmToken;
+import com.bottari.push.fcm.dto.MessageType;
+import com.bottari.push.fcm.dto.SendMessageRequest;
+import com.bottari.push.fcm.service.FcmTokenService;
 import com.bottari.fixture.FcmTokenFixture;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.member.domain.Member;
