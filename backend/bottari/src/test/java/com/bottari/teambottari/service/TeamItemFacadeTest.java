@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
+import com.bottari.push.fcm.service.FcmChannel;
 import com.bottari.push.fcm.FcmMessageConverter;
-import com.bottari.push.fcm.FcmMessageSender;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
@@ -59,7 +59,7 @@ public class TeamItemFacadeTest {
     private TeamItemFacade teamItemFacade;
 
     @MockitoBean
-    private FcmMessageSender fcmMessageSender;
+    private FcmChannel fcmChannel;
 
     @Autowired
     private EntityManager entityManager;

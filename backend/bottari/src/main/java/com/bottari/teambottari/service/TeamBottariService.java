@@ -2,8 +2,8 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.push.fcm.service.FcmChannel;
 import com.bottari.push.fcm.FcmMessageConverter;
-import com.bottari.push.fcm.FcmMessageSender;
 import com.bottari.push.fcm.dto.MessageType;
 import com.bottari.push.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
@@ -52,7 +52,7 @@ public class TeamBottariService {
     private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
     private final TeamAssignedItemInfoRepository teamAssignedItemInfoRepository;
 
-    private final FcmMessageSender fcmMessageSender;
+    private final FcmChannel fcmChannel;
     private final FcmMessageConverter fcmMessageConverter;
 
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -138,7 +138,7 @@ public class TeamBottariService {
                 .map(Member::getId)
                 .toList();
         final SendMessageRequest request = fcmMessageConverter.convert(teamBottari, exitTeamMember, MessageType.EXIT_TEAM_BOTTARI);
-        fcmMessageSender.sendMessageToMembers(remainMemberIds, request);
+        fcmChannel.multicast(request, remainMemberIds);
     }
 
     private List<TeamMember> findRemainMembers(

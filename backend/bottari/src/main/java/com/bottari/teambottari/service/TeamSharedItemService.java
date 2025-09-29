@@ -2,8 +2,8 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.push.fcm.service.FcmChannel;
 import com.bottari.push.fcm.FcmMessageConverter;
-import com.bottari.push.fcm.FcmMessageSender;
 import com.bottari.push.fcm.dto.MessageType;
 import com.bottari.push.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
@@ -35,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TeamSharedItemService {
 
-    private final FcmMessageSender fcmMessageSender;
+    private final FcmChannel fcmChannel;
     private final FcmMessageConverter fcmMessageConverter;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final TeamSharedItemRepository teamSharedItemRepository;
@@ -265,7 +265,7 @@ public class TeamSharedItemService {
     ) {
         final SendMessageRequest sendMessageRequest = fcmMessageConverter.convert(info.getTeamBottari(), info,
                 MessageType.REMIND_BY_ITEM);
-        fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
+        fcmChannel.multicast(sendMessageRequest, uncheckedMemberIds);
     }
 
     private void validateOwner(

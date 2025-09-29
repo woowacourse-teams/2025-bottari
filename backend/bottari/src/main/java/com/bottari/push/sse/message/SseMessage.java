@@ -1,10 +1,12 @@
 package com.bottari.push.sse.message;
 
+import com.bottari.push.ChannelType;
+import com.bottari.push.PushMessage;
 import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
-public class SseMessage {
+public class SseMessage implements PushMessage {
 
     private final String resource;
     private final String event;
@@ -20,5 +22,10 @@ public class SseMessage {
         this.event = event.name();
         this.data = data;
         this.publishedAt = LocalDateTime.now();
+    }
+
+    @Override
+    public ChannelType channelType() {
+        return ChannelType.SSE;
     }
 }

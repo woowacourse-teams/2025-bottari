@@ -103,7 +103,8 @@ public enum ErrorCode {
 
     // ===== 기타 =====
     DATE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 날짜 형식입니다."),
-    NUMBER_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 숫자 형식입니다.");
+    NUMBER_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 숫자 형식입니다."),
+    INVALID_PUSH_MESSAGE_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 푸시 메시지 타입입니다.");
 
     private final HttpStatus status;
     private final String message;

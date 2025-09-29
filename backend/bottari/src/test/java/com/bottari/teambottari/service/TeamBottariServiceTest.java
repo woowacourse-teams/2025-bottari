@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
+import com.bottari.push.fcm.service.FcmChannel;
 import com.bottari.push.fcm.FcmMessageConverter;
-import com.bottari.push.fcm.FcmMessageSender;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
@@ -46,7 +46,7 @@ class TeamBottariServiceTest {
     private EntityManager entityManager;
 
     @MockitoBean
-    private FcmMessageSender fcmMessageSender;
+    private FcmChannel fcmChannel;
 
     @Nested
     class GetAllBySsaid {

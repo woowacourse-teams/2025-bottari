@@ -10,8 +10,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
 import com.bottari.error.BusinessException;
+import com.bottari.push.fcm.service.FcmChannel;
 import com.bottari.push.fcm.FcmMessageConverter;
-import com.bottari.push.fcm.FcmMessageSender;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
@@ -50,7 +50,7 @@ class TeamMemberServiceTest {
     private EntityManager entityManager;
 
     @MockitoBean
-    private FcmMessageSender fcmMessageSender;
+    private FcmChannel fcmChannel;
 
     @Nested
     class GetTeamMemberInfoByTeamBottariIdTest {
@@ -518,7 +518,7 @@ class TeamMemberServiceTest {
             final TeamAssignedItem teamAssignedItem = new TeamAssignedItem(teamAssignedItemInfo, anotherTeamMember);
             entityManager.persist(teamAssignedItem);
 
-            doNothing().when(fcmMessageSender).sendMessageToMember(eq(anotherMember.getId()), any());
+            doNothing().when(fcmChannel).unicast(any(), eq(anotherMember.getId()));
 
             // when & then
             assertThatCode(() -> teamMemberService.sendRemindAlarm(
@@ -526,7 +526,7 @@ class TeamMemberServiceTest {
                     anotherMember.getId(),
                     owner.getSsaid())
             ).doesNotThrowAnyException();
-            verify(fcmMessageSender).sendMessageToMember(eq(anotherMember.getId()), any());
+            verify(fcmChannel).unicast(any(), eq(anotherMember.getId()));
         }
 
         @DisplayName("존재하지 않는 ssaid인 경우, 예외를 던진다.")

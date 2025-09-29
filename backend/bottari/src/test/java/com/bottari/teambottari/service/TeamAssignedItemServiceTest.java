@@ -11,8 +11,8 @@ import static org.mockito.Mockito.verify;
 
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
+import com.bottari.push.fcm.service.FcmChannel;
 import com.bottari.push.fcm.FcmMessageConverter;
-import com.bottari.push.fcm.FcmMessageSender;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
@@ -46,7 +46,7 @@ class TeamAssignedItemServiceTest {
     private TeamAssignedItemService teamAssignedItemService;
 
     @MockitoBean
-    private FcmMessageSender fcmMessageSender;
+    private FcmChannel fcmChannel;
 
     @Autowired
     private EntityManager entityManager;
@@ -759,13 +759,13 @@ class TeamAssignedItemServiceTest {
                     antherMember.getId()
             );
 
-            doNothing().when(fcmMessageSender).sendMessageToMembers(eq(uncheckedMemberIds), any());
+            doNothing().when(fcmChannel).multicast(any(), eq(uncheckedMemberIds));
 
             // when & then
             assertThatCode(
                     () -> teamAssignedItemService.sendRemindAlarm(teamAssignedItemInfo.getId(), member.getSsaid()))
                     .doesNotThrowAnyException();
-            verify(fcmMessageSender).sendMessageToMembers(eq(uncheckedMemberIds), any());
+            verify(fcmChannel).multicast(any(), eq(uncheckedMemberIds));
         }
 
         @DisplayName("보채기 알람을 보낼 때, 물품 정보가 존재하지 않는다면 예외를 던진다.")

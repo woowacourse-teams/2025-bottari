@@ -2,8 +2,8 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
+import com.bottari.push.fcm.service.FcmChannel;
 import com.bottari.push.fcm.FcmMessageConverter;
-import com.bottari.push.fcm.FcmMessageSender;
 import com.bottari.push.fcm.dto.MessageType;
 import com.bottari.push.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
@@ -45,7 +45,7 @@ public class TeamAssignedItemService {
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
 
-    private final FcmMessageSender fcmMessageSender;
+    private final FcmChannel fcmChannel;
     private final FcmMessageConverter fcmMessageConverter;
 
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -429,7 +429,7 @@ public class TeamAssignedItemService {
                 info,
                 MessageType.REMIND_BY_ITEM
         );
-        fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
+        fcmChannel.multicast(sendMessageRequest, uncheckedMemberIds);
     }
 
     private void validateOwner(
