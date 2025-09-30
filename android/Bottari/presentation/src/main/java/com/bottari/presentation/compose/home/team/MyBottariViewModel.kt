@@ -40,7 +40,6 @@ class MyBottariViewModel(
         launch {
             deleteBottariUseCase(bottariId)
                 .onSuccess {
-                    emitEvent(MyBottariUiEvent.FetchPersonalBottariSuccess)
                     fetchPersonalBottaries()
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.FetchPersonalBottariFailure)
@@ -53,7 +52,6 @@ class MyBottariViewModel(
             deleteTeamBottariUseCase(bottariId)
                 .onSuccess {
                     fetchTeamBottaries()
-                    emitEvent(MyBottariUiEvent.ExitTeamBottariSuccess)
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.ExitTeamBottariFailure)
                 }
@@ -75,7 +73,6 @@ class MyBottariViewModel(
             joinTeamBottariUseCase(code)
                 .onSuccess {
                     fetchTeamBottaries()
-                    emitEvent(MyBottariUiEvent.JoinTeamBottariSuccess)
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.JoinTeamBottariFailure)
                 }

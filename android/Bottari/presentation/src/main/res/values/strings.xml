@@ -148,7 +148,6 @@
     <string name="bottari_home_fetch_failure_text">보따리 목록을 불러오지 못했어요</string>
     <string name="bottari_home_fetch_bottari_failure_text">보따리를 불러오지 못했어요</string>
     <string name="bottari_home_delete_success_text">보따리를 삭제했어요</string>
-    <string name="bottari_home_exit_success_text">보따리에서 나갔어요</string>
     <string name="bottari_home_delete_failure_text">보따리를 삭제하지 못했어요</string>
     <string name="bottari_home_empty_view_title_text">보따리가 없습니다</string>
     <string name="bottari_home_empty_view_description_text">오른쪽 아래 버튼을 눌러 새 보따리를 만들거나,\n‘모두의 보따리’에서 원하는 보따리를 가져와보세요!</string>
@@ -164,9 +163,11 @@
     <string name="team_bottari_create_btn_text">팀 보따리 만들기</string>
     <string name="team_bottari_join_btn_text">코드로 참가</string>
 
-    <!--  Join Team Bottari  -->
+    <!--  Team Bottari  -->
     <string name="join_team_bottari_success_text">팀 보따리에 참가했어요</string>
     <string name="join_team_bottari_failure_text">팀 보따리에 참가하지 못했어요</string>
+    <string name="exit_team_bottari_success_text">팀 보따리에서 나갔어요</string>
+    <string name="exit_team_bottari_failure_text">팀 보따리에서 나가지 못했어요</string>
 
     <!-- Bottari Item -->
     <string name="bottari_item_alarm_repeat_everyday_text">매일 알람</string>

@@ -11,10 +11,6 @@ sealed interface MyBottariUiEvent {
 
     data object DeletePersonalBottariFailure : MyBottariUiEvent
 
-    data object FetchPersonalBottariSuccess : MyBottariUiEvent
-
-    data object JoinTeamBottariSuccess : MyBottariUiEvent
-
     data object ExitTeamBottariSuccess : MyBottariUiEvent
 
     data object DeletePersonalBottariSuccess : MyBottariUiEvent

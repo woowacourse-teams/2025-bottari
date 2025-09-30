@@ -32,16 +32,15 @@ fun MyBottariScreen(
 
     val snackbarMessage =
         when (uiEvent.value) {
-            MyBottariUiEvent.DeletePersonalBottariFailure -> TODO()
+            MyBottariUiEvent.DeletePersonalBottariFailure -> stringResource(id = R.string.bottari_home_delete_failure_text)
             MyBottariUiEvent.DeletePersonalBottariSuccess -> stringResource(id = R.string.bottari_home_delete_success_text)
-            MyBottariUiEvent.ExitTeamBottariFailure -> TODO()
-            MyBottariUiEvent.ExitTeamBottariSuccess -> stringResource(id = R.string.bottari_home_exit_success_text)
+            MyBottariUiEvent.ExitTeamBottariFailure -> stringResource(id = R.string.exit_team_bottari_failure_text)
+            MyBottariUiEvent.ExitTeamBottariSuccess -> stringResource(id = R.string.exit_team_bottari_success_text)
             MyBottariUiEvent.FetchTeamBottariFailure,
             MyBottariUiEvent.FetchPersonalBottariFailure,
-            ->
-                stringResource(id = R.string.bottari_home_fetch_failure_text)
+            -> stringResource(id = R.string.bottari_home_fetch_failure_text)
 
-            MyBottariUiEvent.JoinTeamBottariFailure -> TODO()
+            MyBottariUiEvent.JoinTeamBottariFailure -> stringResource(R.string.join_team_bottari_failure_text)
             else -> null
         }
 
