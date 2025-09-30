@@ -93,7 +93,7 @@ public final class FcmChannel implements NotificationBasedChannel {
             final FcmToken fcmToken
     ) {
         try {
-            final String data = objectMapper.writeValueAsString(message);
+            final String data = objectMapper.writeValueAsString(message.getData());
 
             return Message.builder()
                     .setToken(fcmToken.getToken())

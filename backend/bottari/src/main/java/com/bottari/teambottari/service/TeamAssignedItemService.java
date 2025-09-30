@@ -2,12 +2,13 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.push.fcm.service.FcmChannel;
-import com.bottari.push.fcm.FcmMessageConverter;
-import com.bottari.push.fcm.dto.MessageType;
-import com.bottari.push.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
+import com.bottari.push.fcm.TeamBottariMessageConverter;
+import com.bottari.push.fcm.service.FcmChannel;
+import com.bottari.push.message.MessageEventType;
+import com.bottari.push.message.MessageResourceType;
+import com.bottari.push.message.PushMessage;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
@@ -46,7 +47,7 @@ public class TeamAssignedItemService {
     private final MemberRepository memberRepository;
 
     private final FcmChannel fcmChannel;
-    private final FcmMessageConverter fcmMessageConverter;
+    private final TeamBottariMessageConverter teamBottariMessageConverter;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -424,12 +425,13 @@ public class TeamAssignedItemService {
             final TeamAssignedItemInfo info,
             final List<Long> uncheckedMemberIds
     ) {
-        final SendMessageRequest sendMessageRequest = fcmMessageConverter.convert(
+        final PushMessage pushMessage = teamBottariMessageConverter.convert(
+                MessageResourceType.ASSIGNED_ITEM_INFO,
+                MessageEventType.REMIND,
                 info.getTeamBottari(),
-                info,
-                MessageType.REMIND_BY_ITEM
+                info
         );
-        fcmChannel.multicast(sendMessageRequest, uncheckedMemberIds);
+        fcmChannel.multicast(pushMessage, uncheckedMemberIds);
     }
 
     private void validateOwner(

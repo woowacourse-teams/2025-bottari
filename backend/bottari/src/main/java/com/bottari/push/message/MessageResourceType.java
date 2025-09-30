@@ -2,6 +2,7 @@ package com.bottari.push.message;
 
 public enum MessageResourceType {
 
+    TEAM_BOTTARI,
     TEAM_MEMBER,
     SHARED_ITEM_INFO,
     SHARED_ITEM,

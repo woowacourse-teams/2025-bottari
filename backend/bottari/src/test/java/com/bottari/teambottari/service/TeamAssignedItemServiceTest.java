@@ -11,11 +11,11 @@ import static org.mockito.Mockito.verify;
 
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
-import com.bottari.push.fcm.service.FcmChannel;
-import com.bottari.push.fcm.FcmMessageConverter;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
+import com.bottari.push.fcm.TeamBottariMessageConverter;
+import com.bottari.push.fcm.service.FcmChannel;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
@@ -37,7 +37,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 @DataJpaTest
 @Import({
         TeamAssignedItemService.class,
-        FcmMessageConverter.class,
+        TeamBottariMessageConverter.class,
         JpaAuditingConfig.class,
 })
 class TeamAssignedItemServiceTest {
