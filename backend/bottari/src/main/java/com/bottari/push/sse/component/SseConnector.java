@@ -1,9 +1,9 @@
 package com.bottari.push.sse.component;
 
 import com.bottari.config.MemberIdentifier;
-import com.bottari.push.sse.message.SseEventType;
-import com.bottari.push.sse.message.SseMessage;
-import com.bottari.push.sse.message.SseResourceType;
+import com.bottari.push.message.MessageEventType;
+import com.bottari.push.message.MessageResourceType;
+import com.bottari.push.message.PushMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,9 +47,9 @@ public class SseConnector implements SseConnectorApiDocs {
     @GetMapping("test/test")
     public void test() {
         sseService.sendByTeamBottariId(1L,
-                new SseMessage(
-                        SseResourceType.ASSIGNED_ITEM,
-                        SseEventType.CHANGE,
+                new PushMessage(
+                        MessageResourceType.ASSIGNED_ITEM,
+                        MessageEventType.CHANGE,
                         "test message"
                 ));
     }

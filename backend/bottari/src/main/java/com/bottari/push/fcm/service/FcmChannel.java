@@ -1,15 +1,16 @@
 package com.bottari.push.fcm.service;
 
 import static com.bottari.error.ErrorCode.FCM_INVALID_TOKEN;
+import static com.bottari.error.ErrorCode.FCM_MESSAGE_CONVERT_FAIL;
 import static com.bottari.error.ErrorCode.FCM_MESSAGE_SEND_FAIL;
-import static com.bottari.error.ErrorCode.INVALID_PUSH_MESSAGE_TYPE;
 
 import com.bottari.error.BusinessException;
 import com.bottari.push.ChannelType;
 import com.bottari.push.NotificationBasedChannel;
-import com.bottari.push.PushMessage;
 import com.bottari.push.fcm.domain.FcmToken;
-import com.bottari.push.fcm.dto.SendMessageRequest;
+import com.bottari.push.message.PushMessage;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public final class FcmChannel implements NotificationBasedChannel {
 
+    private final ObjectMapper objectMapper;
     private final FcmTokenService fcmTokenService;
     private final FirebaseMessaging firebaseMessaging;
 
@@ -90,15 +92,17 @@ public final class FcmChannel implements NotificationBasedChannel {
             final PushMessage message,
             final FcmToken fcmToken
     ) {
-        if (message.channelType() != ChannelType.FCM) {
-            throw new BusinessException(INVALID_PUSH_MESSAGE_TYPE, "FCM");
-        }
-        final SendMessageRequest request = (SendMessageRequest) message;
+        try {
+            final String data = objectMapper.writeValueAsString(message);
 
-        return Message.builder()
-                .setToken(fcmToken.getToken())
-                .putData("type", request.getMessageType().name())
-                .putAllData(request.getData())
-                .build();
+            return Message.builder()
+                    .setToken(fcmToken.getToken())
+                    .putData("resource", message.getResource())
+                    .putData("event", message.getEvent())
+                    .putData("data", data)
+                    .build();
+        } catch (final JsonProcessingException e) {
+            throw new BusinessException(FCM_MESSAGE_CONVERT_FAIL);
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.bottari.push.sse.component;
 
 import com.bottari.member.service.MemberService;
-import com.bottari.push.sse.message.SseMessage;
+import com.bottari.push.message.PushMessage;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class SseService {
 
     public void sendByTeamBottariId(
             final Long teamBottariId,
-            final SseMessage message
+            final PushMessage message
     ) {
         final List<SseEmitter> sseEmitters = sseRepository.findByTeamBottariId(teamBottariId);
         for (final SseEmitter sseEmitter : sseEmitters) {

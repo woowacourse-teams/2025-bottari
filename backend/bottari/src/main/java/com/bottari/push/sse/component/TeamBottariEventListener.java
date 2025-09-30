@@ -1,5 +1,10 @@
 package com.bottari.push.sse.component;
 
+import com.bottari.push.ChannelType;
+import com.bottari.push.PushManager;
+import com.bottari.push.message.MessageEventType;
+import com.bottari.push.message.MessageResourceType;
+import com.bottari.push.message.PushMessage;
 import com.bottari.push.sse.dto.ChangeAssignedItemData;
 import com.bottari.push.sse.dto.CheckTeamItemData;
 import com.bottari.push.sse.dto.CreateAssignedItemData;
@@ -12,9 +17,6 @@ import com.bottari.push.sse.dto.DeleteAssignedItemInfoData;
 import com.bottari.push.sse.dto.DeleteTeamSharedItemData;
 import com.bottari.push.sse.dto.DeleteTeamSharedItemInfoData;
 import com.bottari.push.sse.dto.ExitTeamMemberData;
-import com.bottari.push.sse.message.SseEventType;
-import com.bottari.push.sse.message.SseMessage;
-import com.bottari.push.sse.message.SseResourceType;
 import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.event.ChangeTeamAssignedItemEvent;
@@ -42,16 +44,17 @@ public class TeamBottariEventListener {
     private final SseService sseService;
     private final TeamSharedItemService teamSharedItemService;
     private final TeamAssignedItemService teamAssignedItemService;
+    private final PushManager pushManager;
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCreateTeamMemberEvent(final CreateTeamMemberEvent event) {
-        final SseMessage sseMessage = new SseMessage(
-                SseResourceType.TEAM_MEMBER,
-                SseEventType.CREATE,
+        final PushMessage pushMessage = new PushMessage(
+                MessageResourceType.TEAM_MEMBER,
+                MessageEventType.CREATE,
                 CreateTeamMemberData.from(event)
         );
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), sseMessage);
+        sseService.sendByTeamBottariId(event.getTeamBottariId(), pushMessage);
     }
 
     @Async
@@ -59,14 +62,14 @@ public class TeamBottariEventListener {
     public void handleCreateTeamSharedItemEvent(final CreateTeamSharedItemEvent event) {
         final List<ReadSharedItemResponse> idempotentInfos =
                 teamSharedItemService.getAllByTeamBottariId(event.getTeamBottariId());
-        final SseMessage createSharedItemInfoMessage = new SseMessage(
-                SseResourceType.SHARED_ITEM_INFO,
-                SseEventType.CREATE,
+        final PushMessage createSharedItemInfoMessage = new PushMessage(
+                MessageResourceType.SHARED_ITEM_INFO,
+                MessageEventType.CREATE,
                 CreateTeamSharedItemInfoData.of(idempotentInfos, event)
         );
-        final SseMessage createSharedItemMessage = new SseMessage(
-                SseResourceType.SHARED_ITEM,
-                SseEventType.CREATE,
+        final PushMessage createSharedItemMessage = new PushMessage(
+                MessageResourceType.SHARED_ITEM,
+                MessageEventType.CREATE,
                 CreateTeamSharedItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), createSharedItemInfoMessage);
@@ -78,14 +81,14 @@ public class TeamBottariEventListener {
     public void handleDeleteTeamSharedItemEvent(final DeleteTeamSharedItemEvent event) {
         final List<ReadSharedItemResponse> idempotentInfos =
                 teamSharedItemService.getAllByTeamBottariId(event.getTeamBottariId());
-        final SseMessage deleteSharedItemInfoMessage = new SseMessage(
-                SseResourceType.SHARED_ITEM_INFO,
-                SseEventType.DELETE,
+        final PushMessage deleteSharedItemInfoMessage = new PushMessage(
+                MessageResourceType.SHARED_ITEM_INFO,
+                MessageEventType.DELETE,
                 DeleteTeamSharedItemInfoData.of(idempotentInfos, event)
         );
-        final SseMessage deleteSharedItemMessage = new SseMessage(
-                SseResourceType.SHARED_ITEM,
-                SseEventType.DELETE,
+        final PushMessage deleteSharedItemMessage = new PushMessage(
+                MessageResourceType.SHARED_ITEM,
+                MessageEventType.DELETE,
                 DeleteTeamSharedItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), deleteSharedItemInfoMessage);
@@ -95,9 +98,9 @@ public class TeamBottariEventListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCheckTeamSharedItemEvent(final CheckTeamSharedItemEvent event) {
-        final SseMessage message = new SseMessage(
-                SseResourceType.SHARED_ITEM,
-                SseEventType.CHECK,
+        final PushMessage message = new PushMessage(
+                MessageResourceType.SHARED_ITEM,
+                MessageEventType.CHECK,
                 CheckTeamItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
@@ -106,9 +109,9 @@ public class TeamBottariEventListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCheckTeamAssignedItemEvent(final CheckTeamAssignedItemEvent event) {
-        final SseMessage message = new SseMessage(
-                SseResourceType.ASSIGNED_ITEM,
-                SseEventType.CHECK,
+        final PushMessage message = new PushMessage(
+                MessageResourceType.ASSIGNED_ITEM,
+                MessageEventType.CHECK,
                 CheckTeamItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
@@ -119,14 +122,14 @@ public class TeamBottariEventListener {
     public void handleCreateAssignedItemEvent(final CreateAssignedItemEvent event) {
         final List<ReadAssignedItemResponse> idempotentInfos =
                 teamAssignedItemService.getAllByTeamBottariId(event.getTeamBottariId());
-        final SseMessage createAssignedItemInfoMessage = new SseMessage(
-                SseResourceType.ASSIGNED_ITEM_INFO,
-                SseEventType.CREATE,
+        final PushMessage createAssignedItemInfoMessage = new PushMessage(
+                MessageResourceType.ASSIGNED_ITEM_INFO,
+                MessageEventType.CREATE,
                 CreateAssignedItemInfoData.of(idempotentInfos, event)
         );
-        final SseMessage createAssignedItemMessage = new SseMessage(
-                SseResourceType.ASSIGNED_ITEM,
-                SseEventType.CREATE,
+        final PushMessage createAssignedItemMessage = new PushMessage(
+                MessageResourceType.ASSIGNED_ITEM,
+                MessageEventType.CREATE,
                 CreateAssignedItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), createAssignedItemInfoMessage);
@@ -136,9 +139,9 @@ public class TeamBottariEventListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleChangeAssignedItemEvent(final ChangeTeamAssignedItemEvent event) {
-        final SseMessage message = new SseMessage(
-                SseResourceType.ASSIGNED_ITEM_INFO,
-                SseEventType.CHANGE,
+        final PushMessage message = new PushMessage(
+                MessageResourceType.ASSIGNED_ITEM_INFO,
+                MessageEventType.CHANGE,
                 ChangeAssignedItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
@@ -149,14 +152,14 @@ public class TeamBottariEventListener {
     public void handleDeleteAssignedItemEvent(final DeleteAssignedItemEvent event) {
         final List<ReadAssignedItemResponse> idempotentInfos = teamAssignedItemService.getAllByTeamBottariId(
                 event.getTeamBottariId());
-        final SseMessage deleteAssignedItemInfoMessage = new SseMessage(
-                SseResourceType.ASSIGNED_ITEM_INFO,
-                SseEventType.DELETE,
+        final PushMessage deleteAssignedItemInfoMessage = new PushMessage(
+                MessageResourceType.ASSIGNED_ITEM_INFO,
+                MessageEventType.DELETE,
                 DeleteAssignedItemInfoData.of(idempotentInfos, event)
         );
-        final SseMessage deleteAssignedItemMessage = new SseMessage(
-                SseResourceType.ASSIGNED_ITEM,
-                SseEventType.DELETE,
+        final PushMessage deleteAssignedItemMessage = new PushMessage(
+                MessageResourceType.ASSIGNED_ITEM,
+                MessageEventType.DELETE,
                 DeleteAssignedItemData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), deleteAssignedItemInfoMessage);
@@ -166,11 +169,12 @@ public class TeamBottariEventListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleExitTeamMemberEvent(final ExitTeamMemberEvent event) {
-        final SseMessage message = new SseMessage(
-                SseResourceType.TEAM_MEMBER,
-                SseEventType.DELETE,
+        final PushMessage message = new PushMessage(
+                MessageResourceType.TEAM_MEMBER,
+                MessageEventType.DELETE,
                 ExitTeamMemberData.from(event)
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+        pushManager.multicast(message, List.of(1L, 2L, 3L, 4L), ChannelType.FCM, ChannelType.SSE);
     }
 }

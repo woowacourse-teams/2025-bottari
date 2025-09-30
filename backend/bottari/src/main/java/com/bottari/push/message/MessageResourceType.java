@@ -1,6 +1,6 @@
-package com.bottari.push.sse.message;
+package com.bottari.push.message;
 
-public enum SseResourceType {
+public enum MessageResourceType {
 
     TEAM_MEMBER,
     SHARED_ITEM_INFO,

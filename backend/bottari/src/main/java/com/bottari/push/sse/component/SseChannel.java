@@ -2,7 +2,7 @@ package com.bottari.push.sse.component;
 
 import com.bottari.push.ChannelType;
 import com.bottari.push.ConnectionBasedChannel;
-import com.bottari.push.PushMessage;
+import com.bottari.push.message.PushMessage;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

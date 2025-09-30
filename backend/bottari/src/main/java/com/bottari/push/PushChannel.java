@@ -1,5 +1,6 @@
 package com.bottari.push;
 
+import com.bottari.push.message.PushMessage;
 import java.util.List;
 
 public interface PushChannel {
