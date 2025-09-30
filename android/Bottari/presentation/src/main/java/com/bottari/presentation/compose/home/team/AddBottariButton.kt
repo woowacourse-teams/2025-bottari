@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -55,15 +56,20 @@ fun AddBottariButton(
     ) {
         AnimatedVisibility(
             visible = isExpanded,
-            enter = fadeIn() + slideInVertically(initialOffsetY = { it }),
-            exit = fadeOut() + slideOutVertically(targetOffsetY = { it }),
+            enter = fadeIn() + slideInVertically(initialOffsetY = { it / 2 }),
+            exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 2 }),
         ) {
             Column(
+                modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceMedium),
             ) {
                 ExtendedFloatingActionButton(
-                    modifier = Modifier.height(buttonSize),
+                    modifier = Modifier
+                        .height(buttonSize)
+                        .graphicsLayer {
+                            shadowElevation = 0f
+                        },
                     shape = RoundedCornerShape(BottariTheme.spacing.spaceMedium),
                     onClick = onCodeClick,
                     containerColor = Color.White,
@@ -77,7 +83,11 @@ fun AddBottariButton(
                 }
 
                 LargeFloatingActionButton(
-                    modifier = Modifier.size(buttonSize),
+                    modifier = Modifier
+                        .size(buttonSize)
+                        .graphicsLayer {
+                            shadowElevation = 0f
+                        },
                     shape = CircleShape,
                     onClick = onTeamClick,
                     containerColor = Color.White,
@@ -90,7 +100,11 @@ fun AddBottariButton(
                 }
 
                 LargeFloatingActionButton(
-                    modifier = Modifier.size(buttonSize),
+                    modifier = Modifier
+                        .size(buttonSize)
+                        .graphicsLayer {
+                            shadowElevation = 0f
+                        },
                     shape = CircleShape,
                     onClick = onPersonalClick,
                     containerColor = Color.White,
@@ -105,7 +119,8 @@ fun AddBottariButton(
         }
 
         LargeFloatingActionButton(
-            modifier = Modifier.size(buttonSize),
+            modifier =
+                Modifier.size(buttonSize),
             shape = CircleShape,
             containerColor = BottariTheme.colors.primary,
             onClick = { isExpanded = !isExpanded },
