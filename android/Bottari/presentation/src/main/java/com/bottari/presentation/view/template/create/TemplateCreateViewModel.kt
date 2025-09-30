@@ -7,7 +7,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.di.usecase.BottariUseCaseProvider
 import com.bottari.domain.model.bottari.personal.PersonalBottari
-import com.bottari.domain.usecase.bottari.FetchBottariDetailsUseCase
+import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class TemplateCreateViewModel(
-    private val fetchBottariDetailsUseCase: FetchBottariDetailsUseCase,
+    private val fetchBottariesUseCase: FetchBottariesUseCase,
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
 ) : FlowBaseViewModel<TemplateCreateUiState, TemplateCreateUiEvent>(TemplateCreateUiState()) {
     init {
@@ -62,16 +62,19 @@ class TemplateCreateViewModel(
 
     private fun fetchBottariDetails() {
         updateState { copy(isLoading = true) }
-        fetchBottariDetailsUseCase()
-            .onEach(::handleFetchBottariDetails)
+        fetchBottariesUseCase()
+            .onEach(::handleFetchBottaries)
             .catch {
                 emitEvent(TemplateCreateUiEvent.FetchMyBottariesFailure)
                 updateState { copy(isLoading = false) }
             }.launchIn(viewModelScope)
     }
 
-    private fun handleFetchBottariDetails(bottaries: List<PersonalBottari>) {
-        val myBottaries = bottaries.map { SelectableBottariUiModel.fromDomain(it) }
+    private fun handleFetchBottaries(bottaries: List<PersonalBottari>) {
+        val myBottaries =
+            bottaries.filterNot { bottari -> bottari.items.isEmpty() }.map(
+                SelectableBottariUiModel::fromDomain,
+            )
         val selectedBottariId = myBottaries.firstOrNull()?.id
         updateState {
             copy(
@@ -90,7 +93,7 @@ class TemplateCreateViewModel(
             viewModelFactory {
                 initializer {
                     TemplateCreateViewModel(
-                        BottariUseCaseProvider.fetchBottariDetailsUseCase,
+                        BottariUseCaseProvider.fetchBottariesUseCase,
                         BottariTemplateUseCaseProvider.createBottariTemplateUseCase,
                     )
                 }
