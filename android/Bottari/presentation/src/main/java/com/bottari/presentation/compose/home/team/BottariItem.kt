@@ -17,10 +17,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -69,21 +65,25 @@ fun TeamBottariScreenPreview() {
         onPersonalBottariDelete = {},
         onTeamBottariDelete = {},
         onPersonalBottariEdit = { _, _ -> },
+        isShowMenu = true,
         onTeamBottariEdit = { _, _ -> },
+        showMenu = {},
+        closeMenu = {},
     )
 }
 
 @Composable
 fun BottariItem(
     bottari: MyBottariUiModel,
+    isShowMenu: Boolean,
+    showMenu: () -> Unit,
+    closeMenu: () -> Unit,
     onPersonalBottariDelete: (Long) -> Unit,
     onTeamBottariDelete: (Long) -> Unit,
     onPersonalBottariEdit: (Long, Boolean) -> Unit,
     onTeamBottariEdit: (Long, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var showMenu by remember { mutableStateOf(false) }
-
     BottariBox(
         modifier = modifier,
         contentPadding = PaddingValues(BottariTheme.spacing.spaceSmall),
@@ -113,13 +113,13 @@ fun BottariItem(
                         modifier =
                             Modifier
                                 .rotate(90f)
-                                .clickable { showMenu = true },
+                                .clickable { showMenu() },
                     )
 
                     BottariMenuPopup(
                         bottari = bottari,
-                        showMenu = showMenu,
-                        onDismissRequest = { showMenu = false },
+                        showMenu = isShowMenu,
+                        onDismissRequest = closeMenu,
                         onPersonalBottariDelete = onPersonalBottariDelete,
                         onTeamBottariDelete = onTeamBottariDelete,
                         onPersonalBottariEdit = onPersonalBottariEdit,
