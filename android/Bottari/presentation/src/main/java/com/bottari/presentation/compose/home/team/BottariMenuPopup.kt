@@ -100,6 +100,7 @@ private fun MoreMenuPopup(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
+                modifier = Modifier.size(30.dp),
                 painter = painterResource(R.drawable.ic_pen),
                 contentDescription = stringResource(R.string.bottari_edit_btn_description_text),
             )
@@ -114,6 +115,7 @@ private fun MoreMenuPopup(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
+                modifier = Modifier.size(30.dp),
                 painter = painterResource(R.drawable.ic_delete),
                 contentDescription = stringResource(R.string.bottari_delete_btn_description_text),
             )
