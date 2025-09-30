@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -42,6 +41,7 @@ fun AddBottariButton(
     onCodeClick: () -> Unit,
     onTeamClick: () -> Unit,
     onPersonalClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -49,79 +49,74 @@ fun AddBottariButton(
         targetValue = if (isExpanded) 45f else 0f,
         label = "rotation",
     )
-
-    Box(
-        modifier = Modifier.padding(16.dp),
-        contentAlignment = Alignment.BottomEnd,
+    Column(
+        modifier = modifier.padding(16.dp),
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Column(
-            horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+        AnimatedVisibility(
+            visible = isExpanded,
+            enter = fadeIn() + slideInVertically(initialOffsetY = { it }),
+            exit = fadeOut() + slideOutVertically(targetOffsetY = { it }),
         ) {
-            AnimatedVisibility(
-                visible = isExpanded,
-                enter = fadeIn() + slideInVertically(initialOffsetY = { it }),
-                exit = fadeOut() + slideOutVertically(targetOffsetY = { it }),
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Column(
-                    horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ExtendedFloatingActionButton(
+                    modifier = Modifier.height(buttonSize),
+                    shape = RoundedCornerShape(16.dp),
+                    onClick = onCodeClick,
+                    containerColor = Color.White,
+                    contentColor = Color.Black,
                 ) {
-                    ExtendedFloatingActionButton(
-                        modifier = Modifier.height(buttonSize),
-                        shape = RoundedCornerShape(16.dp),
-                        onClick = onCodeClick,
-                        containerColor = Color.White,
-                        contentColor = Color.Black,
-                    ) {
-                        Text(
-                            text = "코드로 참여",
-                            style = BottariTheme.typography.medium20.toTextStyle(),
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                        )
-                    }
+                    Text(
+                        text = "코드로 참여",
+                        style = BottariTheme.typography.medium20.toTextStyle(),
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                    )
+                }
 
-                    LargeFloatingActionButton(
-                        modifier = Modifier.size(buttonSize),
-                        shape = CircleShape,
-                        onClick = onTeamClick,
-                        containerColor = Color.White,
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(40.dp),
-                            painter = painterResource(R.drawable.ic_people),
-                            contentDescription = "Team",
-                        )
-                    }
+                LargeFloatingActionButton(
+                    modifier = Modifier.size(buttonSize),
+                    shape = CircleShape,
+                    onClick = onTeamClick,
+                    containerColor = Color.White,
+                ) {
+                    Icon(
+                        modifier = Modifier.size(40.dp),
+                        painter = painterResource(R.drawable.ic_people),
+                        contentDescription = "Team",
+                    )
+                }
 
-                    LargeFloatingActionButton(
-                        modifier = Modifier.size(buttonSize),
-                        shape = CircleShape,
-                        onClick = onPersonalClick,
-                        containerColor = Color.White,
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(40.dp),
-                            painter = painterResource(R.drawable.ic_person_filled),
-                            contentDescription = "Personal",
-                        )
-                    }
+                LargeFloatingActionButton(
+                    modifier = Modifier.size(buttonSize),
+                    shape = CircleShape,
+                    onClick = onPersonalClick,
+                    containerColor = Color.White,
+                ) {
+                    Icon(
+                        modifier = Modifier.size(40.dp),
+                        painter = painterResource(R.drawable.ic_person_filled),
+                        contentDescription = "Personal",
+                    )
                 }
             }
+        }
 
-            LargeFloatingActionButton(
-                modifier = Modifier.size(buttonSize),
-                shape = CircleShape,
-                containerColor = colorResource(R.color.primary),
-                onClick = { isExpanded = !isExpanded },
-            ) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "Add",
-                    modifier = Modifier.rotate(rotation).size(50.dp),
-                    tint = Color.White,
-                )
-            }
+        LargeFloatingActionButton(
+            modifier = Modifier.size(buttonSize),
+            shape = CircleShape,
+            containerColor = colorResource(R.color.primary),
+            onClick = { isExpanded = !isExpanded },
+        ) {
+            Icon(
+                Icons.Filled.Add,
+                contentDescription = "Add",
+                modifier = Modifier.rotate(rotation).size(50.dp),
+                tint = Color.White,
+            )
         }
     }
 }

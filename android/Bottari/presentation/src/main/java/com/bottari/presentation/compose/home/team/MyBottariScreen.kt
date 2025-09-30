@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
@@ -44,8 +45,8 @@ fun MyBottariScreen(
         viewModel = viewModel,
     )
 
-    MyBottariScaffold(
-        viewModel = viewModel,
+    MyBottariContent(
+        modifier = Modifier,
         uiState = uiState,
         onNavigateToPersonalChecklist = onNavigateToPersonalChecklist,
         onNavigateToTeamChecklist = onNavigateToTeamChecklist,
@@ -53,5 +54,6 @@ fun MyBottariScreen(
         onDeleteTeamBottari = { viewModel.deleteTeamBottari(it) },
         onEditPersonalBottari = onNavigateToPersonalEdit,
         onEditTeamBottari = onNavigateToTeamEdit,
+        viewModel = viewModel,
     )
 }

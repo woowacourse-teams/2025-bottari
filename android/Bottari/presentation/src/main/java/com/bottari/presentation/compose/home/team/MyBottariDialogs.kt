@@ -54,6 +54,7 @@ fun MyBottariDialogs(
             )
         }
     }
+
     if (uiState.showTeamDialog) {
         Dialog(
             properties = DialogProperties(usePlatformDefaultWidth = false),
