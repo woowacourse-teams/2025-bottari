@@ -255,8 +255,9 @@ private fun generateIndicatorSize(
     checkedQuantity: Int,
     totalQuantity: Int,
 ): Float {
-    if (totalQuantity == 0) return 0F
-    return (checkedQuantity.toFloat() / totalQuantity.toFloat())
+    if (totalQuantity <= 0) return 0F
+    val safeChecked = checkedQuantity.coerceIn(0, totalQuantity)
+    return safeChecked.toFloat() / totalQuantity.toFloat()
 }
 
 @Composable
