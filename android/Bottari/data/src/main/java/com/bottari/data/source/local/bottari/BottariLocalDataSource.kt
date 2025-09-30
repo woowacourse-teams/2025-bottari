@@ -11,6 +11,11 @@ interface BottariLocalDataSource {
 
     suspend fun createBottari(bottari: BottariEntity): Result<Long>
 
+    suspend fun createBottariWithItems(
+        bottari: BottariEntity,
+        itemNames: List<String>,
+    ): Result<Long>
+
     suspend fun deleteBottari(bottariId: Long): Result<Unit>
 
     suspend fun updateBottariTitle(

@@ -10,6 +10,11 @@ interface BottariRepository {
 
     suspend fun saveBottari(title: String): Result<Long>
 
+    suspend fun saveBottariWithItems(
+        title: String,
+        itemNames: List<String>,
+    ): Result<Long>
+
     suspend fun deleteBottari(id: Long): Result<Unit>
 
     suspend fun saveBottariTitle(

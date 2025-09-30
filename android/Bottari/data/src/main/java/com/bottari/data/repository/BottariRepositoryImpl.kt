@@ -26,6 +26,15 @@ class BottariRepositoryImpl(
             BottariEntity(title = title),
         )
 
+    override suspend fun saveBottariWithItems(
+        title: String,
+        itemNames: List<String>,
+    ): Result<Long> =
+        bottariLocalDataSource.createBottariWithItems(
+            bottari = BottariEntity(title = title),
+            itemNames = itemNames,
+        )
+
     override suspend fun deleteBottari(id: Long): Result<Unit> = bottariLocalDataSource.deleteBottari(id)
 
     override suspend fun saveBottariTitle(
