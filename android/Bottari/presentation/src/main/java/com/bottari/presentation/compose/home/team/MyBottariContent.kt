@@ -1,13 +1,18 @@
 package com.bottari.presentation.compose.home.team
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +28,7 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun MyBottariContent(
@@ -39,6 +45,17 @@ fun MyBottariContent(
     modifier: Modifier = Modifier,
 ) {
     var isCreateBottariBtnExpanded by remember { mutableStateOf(false) }
+    val listState = rememberLazyListState()
+    var fabVisible by remember { mutableStateOf(true) }
+
+    LaunchedEffect(listState.isScrollInProgress) {
+        if (listState.isScrollInProgress) {
+            fabVisible = false
+        } else {
+            delay(1000)
+            fabVisible = true
+        }
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(
@@ -80,6 +97,7 @@ fun MyBottariContent(
                     onDeleteTeamBottari = onDeleteTeamBottari,
                     onPersonalBottariEdit = onEditPersonalBottari,
                     onTeamBottariEdit = onEditTeamBottari,
+                    listState = listState,
                 )
             }
         }
@@ -96,15 +114,21 @@ fun MyBottariContent(
                         },
             )
         }
-        AddBottariButton(
-            buttonSize = 80.dp,
-            onCodeClick = onOpenCodeDialog,
-            onTeamClick = onOpenTeamDialog,
-            onPersonalClick = onOpenPersonalDialog,
-            isExpanded = isCreateBottariBtnExpanded,
-            onClick = { isCreateBottariBtnExpanded = !isCreateBottariBtnExpanded },
+        AnimatedVisibility(
+            visible = fabVisible,
+            enter = fadeIn(),
+            exit = fadeOut(),
             modifier = Modifier.align(Alignment.BottomEnd),
-        )
+        ) {
+            AddBottariButton(
+                buttonSize = 80.dp,
+                onCodeClick = onOpenCodeDialog,
+                onTeamClick = onOpenTeamDialog,
+                onPersonalClick = onOpenPersonalDialog,
+                isExpanded = isCreateBottariBtnExpanded,
+                onClick = { isCreateBottariBtnExpanded = !isCreateBottariBtnExpanded },
+            )
+        }
     }
 }
 

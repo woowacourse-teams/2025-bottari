@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,11 +27,13 @@ fun BottariList(
     onDeleteTeamBottari: (Long) -> Unit,
     onPersonalBottariEdit: (Long, Boolean) -> Unit,
     onTeamBottariEdit: (Long, Boolean) -> Unit,
+    listState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
     var openedMenuBottariId by remember { mutableStateOf<Long?>(null) }
 
     LazyColumn(
+        state = listState,
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
         contentPadding = PaddingValues(bottom = BottariTheme.spacing.spaceXSmall),
