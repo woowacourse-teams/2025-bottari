@@ -60,7 +60,7 @@ fun AddBottariButton(
             exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 2 }),
         ) {
             Column(
-                modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
+                modifier = Modifier.padding(bottom = 8.dp),
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceMedium),
             ) {
