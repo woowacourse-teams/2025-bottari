@@ -40,7 +40,6 @@ fun MyBottariContent(
 ) {
     var isCreateBottariBtnExpanded by remember { mutableStateOf(false) }
 
-
     Box(modifier = modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxSize(),

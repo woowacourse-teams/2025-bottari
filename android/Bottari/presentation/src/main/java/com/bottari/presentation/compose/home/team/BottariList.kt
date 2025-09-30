@@ -42,8 +42,7 @@ fun BottariList(
                         .padding(
                             horizontal = BottariTheme.spacing.spaceMedium,
                             vertical = BottariTheme.spacing.spaceXSmall,
-                        )
-                        .clickable { onBottariClick(bottari) },
+                        ).clickable { onBottariClick(bottari) },
                 onPersonalBottariDelete = onDeletePersonalBottari,
                 onTeamBottariDelete = onDeleteTeamBottari,
                 onPersonalBottariEdit = onPersonalBottariEdit,
