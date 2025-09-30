@@ -17,8 +17,6 @@ object BottariUseCaseProvider {
     val findBottariUseCase: FindBottariUseCase by lazy {
         FindBottariUseCase(
             bottariRepository = RepositoryProvider.bottariRepository,
-            bottariItemRepository = RepositoryProvider.bottariItemRepository,
-            alarmRepository = RepositoryProvider.alarmRepository,
         )
     }
     val fetchBottariDetailsUseCase by lazy {
