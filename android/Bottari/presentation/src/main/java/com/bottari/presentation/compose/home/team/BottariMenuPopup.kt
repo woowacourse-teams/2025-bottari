@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import com.bottari.presentation.R
@@ -94,7 +95,7 @@ private fun MoreMenuPopup(
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_pen),
-                contentDescription = "수정하기",
+                contentDescription = stringResource(R.string.bottari_edit_btn_description_text),
             )
         }
 
@@ -108,7 +109,7 @@ private fun MoreMenuPopup(
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_delete),
-                contentDescription = "삭제하기",
+                contentDescription = stringResource(R.string.bottari_delete_btn_description_text),
             )
         }
     }

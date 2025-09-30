@@ -169,8 +169,8 @@ fun BottariItem(
 private fun BottariTypeText(bottari: MyBottariUiModel) {
     val teamTypeText =
         when (bottari) {
-            is TeamBottariUiModel -> "팀"
-            is BottariUiModel -> "개인"
+            is TeamBottariUiModel -> stringResource(R.string.team_bottari_text)
+            is BottariUiModel -> stringResource(R.string.personal_bottari_text)
             else -> return
         }
     Text(text = teamTypeText, modifier = Modifier.padding(start = BottariTheme.spacing.spaceXSmall))

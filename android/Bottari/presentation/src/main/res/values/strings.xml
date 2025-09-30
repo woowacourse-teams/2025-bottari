@@ -144,6 +144,12 @@
     <string name="home_nav_template_title_text">모두의 보따리</string>
     <string name="home_nav_more_title_text">더보기</string>
 
+    <!-- My Bottari Screen -->
+    <string name="team_bottari_text">팀</string>
+    <string name="personal_bottari_text">개인</string>
+    <string name="common_bottari_text">공통</string>
+
+
     <!-- Personal Bottari -->
     <string name="bottari_home_fetch_failure_text">보따리 목록을 불러오지 못했어요</string>
     <string name="bottari_home_fetch_bottari_failure_text">보따리를 불러오지 못했어요</string>
@@ -329,6 +335,8 @@
     <string name="team_status_send_remind_btn_text">보채기</string>
 
     <!-- Description 접근성 -->
+    <string name="bottari_edit_btn_description_text">보따리 수정 버튼</string>
+    <string name="bottari_delete_btn_description_text">보따리 삭제 버튼</string>
     <string name="bottari_btn_create_description">보따리 만들기 버튼</string>
     <string name="bottari_btn_template_delete_description">보따리 템플릿 삭제 버튼</string>
     <string name="bottari_btn_item_add_description">물건 추가 버튼</string>

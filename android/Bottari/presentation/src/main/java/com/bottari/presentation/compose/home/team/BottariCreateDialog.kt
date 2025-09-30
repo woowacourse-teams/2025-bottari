@@ -105,7 +105,7 @@ fun MyCustomDialogContentPreview() {
         text = "",
         onChangeText = {},
         onClick = {},
-        placeholder = "새 보따리",
+        placeholder = stringResource(R.string.bottari_create_default_title_text),
         title = stringResource(R.string.bottari_create_dialog_title_text),
         subTitle = stringResource(R.string.bottari_create_dialog_description_text),
         btnText = stringResource(R.string.bottari_create_dialog_btn_text),

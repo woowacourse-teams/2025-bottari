@@ -10,7 +10,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 
@@ -33,7 +35,12 @@ fun MyBottariContent(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            val pageTitles = listOf("공통", "개인", "팀")
+            val pageTitles =
+                listOf(
+                    stringResource(R.string.common_bottari_text),
+                    stringResource(R.string.personal_bottari_text),
+                    stringResource(R.string.team_bottari_text),
+                )
 
             BottariTabBar(
                 pageTitles = pageTitles,
