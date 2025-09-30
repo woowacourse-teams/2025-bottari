@@ -50,6 +50,20 @@ sealed interface EventData {
         val name: String,
     ) : EventData
 
+    data class SharedItemCheck(
+        override val publishedAt: LocalDateTime,
+        val infoId: Long,
+        val memberId: Long,
+        val isChecked: Boolean,
+    ) : EventData
+
+    data class AssignedItemCheck(
+        override val publishedAt: LocalDateTime,
+        val infoId: Long,
+        val memberId: Long,
+        val isChecked: Boolean,
+    ) : EventData
+
     data class SharedItemChange(
         override val publishedAt: LocalDateTime,
         val infoId: Long,
