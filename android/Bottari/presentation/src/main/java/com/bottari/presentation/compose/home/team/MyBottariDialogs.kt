@@ -1,8 +1,12 @@
 package com.bottari.presentation.compose.home.team
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.bottari.presentation.R
+import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun MyBottariDialogs(
@@ -55,5 +59,9 @@ fun MyBottariDialogs(
         onDismiss = onDismiss,
         placeholder = placeholder,
         isClickable = isClickable,
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = BottariTheme.spacing.space2xLarge),
     )
 }

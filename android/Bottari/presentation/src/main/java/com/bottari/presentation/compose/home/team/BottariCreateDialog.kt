@@ -31,6 +31,7 @@ fun BottariCreateDialog(
     onChangeText: (String) -> Unit,
     onClick: () -> Unit,
     onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
     placeholder: String = "",
     isClickable: Boolean = true,
 ) {
@@ -40,9 +41,7 @@ fun BottariCreateDialog(
     ) {
         BottariBox(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = BottariTheme.spacing.space2xLarge),
+            modifier,
         ) {
             Column {
                 Text(text = title, style = BottariTheme.typography.medium16.toTextStyle())
