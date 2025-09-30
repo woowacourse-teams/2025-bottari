@@ -134,8 +134,13 @@ public class TeamBottariService {
                 .map(TeamMember::getMember)
                 .map(Member::getId)
                 .toList();
-        applicationEventPublisher.publishEvent(
-                new ExitTeamMemberEvent(teamBottari.getId(), exitTeamMember.getMember().getId(), remainMemberIds));
+        applicationEventPublisher.publishEvent(new ExitTeamMemberEvent(
+                teamBottari.getId(),
+                teamBottari.getTitle(),
+                exitTeamMember.getMember().getId(),
+                exitTeamMember.getMember().getName(),
+                remainMemberIds
+        ));
     }
 
     private List<TeamMember> findRemainMembers(

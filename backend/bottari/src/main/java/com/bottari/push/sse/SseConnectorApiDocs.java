@@ -34,25 +34,4 @@ public interface SseConnectorApiDocs {
     SseEmitter connect(
             @Parameter(hidden = true) final String ssaid
     );
-
-    @Operation(
-            summary = "팀 보따리 SSE 연결",
-            parameters = {
-                    @Parameter(
-                            name = HttpHeaders.ACCEPT,
-                            in = ParameterIn.HEADER,
-                            required = true,
-                            description = "SSE 스트림 연결을 위해 'text/event-stream' 값을 명시해야 합니다.",
-                            schema = @Schema(type = "string", defaultValue = "text/event-stream")
-                    )
-            }
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "SSE 연결 성공(스트림 시작)"),
-    })
-    @ApiErrorCodes({
-    })
-    SseEmitter connectTeamBottari(
-            final Long teamBottariId
-    );
 }

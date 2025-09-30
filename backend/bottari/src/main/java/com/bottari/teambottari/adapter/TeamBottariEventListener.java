@@ -5,7 +5,6 @@ import com.bottari.push.PushManager;
 import com.bottari.push.message.MessageEventType;
 import com.bottari.push.message.MessageResourceType;
 import com.bottari.push.message.PushMessage;
-import com.bottari.push.sse.SseService;
 import com.bottari.teambottari.adapter.data.ChangeAssignedItemData;
 import com.bottari.teambottari.adapter.data.CheckTeamItemData;
 import com.bottari.teambottari.adapter.data.CreateAssignedItemData;
@@ -30,6 +29,7 @@ import com.bottari.teambottari.event.DeleteAssignedItemEvent;
 import com.bottari.teambottari.event.DeleteTeamSharedItemEvent;
 import com.bottari.teambottari.event.ExitTeamMemberEvent;
 import com.bottari.teambottari.service.TeamAssignedItemService;
+import com.bottari.teambottari.service.TeamMemberService;
 import com.bottari.teambottari.service.TeamSharedItemService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -42,10 +42,10 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 public class TeamBottariEventListener {
 
-    private final SseService sseService;
+    private final PushManager pushManager;
+    private final TeamMemberService teamMemberService;
     private final TeamSharedItemService teamSharedItemService;
     private final TeamAssignedItemService teamAssignedItemService;
-    private final PushManager pushManager;
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -55,7 +55,8 @@ public class TeamBottariEventListener {
                 MessageEventType.CREATE,
                 CreateTeamMemberData.from(event)
         );
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), pushMessage);
+        final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
+        pushManager.multicast(pushMessage, memberIds, ChannelType.SSE);
     }
 
     @Async
@@ -73,8 +74,9 @@ public class TeamBottariEventListener {
                 MessageEventType.CREATE,
                 CreateTeamSharedItemData.from(event)
         );
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), createSharedItemInfoMessage);
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), createSharedItemMessage);
+        final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
+        pushManager.multicast(createSharedItemInfoMessage, memberIds, ChannelType.SSE);
+        pushManager.multicast(createSharedItemMessage, memberIds, ChannelType.SSE);
     }
 
     @Async
@@ -92,8 +94,9 @@ public class TeamBottariEventListener {
                 MessageEventType.DELETE,
                 DeleteTeamSharedItemData.from(event)
         );
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), deleteSharedItemInfoMessage);
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), deleteSharedItemMessage);
+        final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
+        pushManager.multicast(deleteSharedItemInfoMessage, memberIds, ChannelType.SSE);
+        pushManager.multicast(deleteSharedItemMessage, memberIds, ChannelType.SSE);
     }
 
     @Async
@@ -104,7 +107,8 @@ public class TeamBottariEventListener {
                 MessageEventType.CHECK,
                 CheckTeamItemData.from(event)
         );
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+        final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
+        pushManager.multicast(message, memberIds, ChannelType.SSE);
     }
 
     @Async
@@ -115,7 +119,8 @@ public class TeamBottariEventListener {
                 MessageEventType.CHECK,
                 CheckTeamItemData.from(event)
         );
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+        final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
+        pushManager.multicast(message, memberIds, ChannelType.SSE);
     }
 
     @Async
@@ -133,8 +138,9 @@ public class TeamBottariEventListener {
                 MessageEventType.CREATE,
                 CreateAssignedItemData.from(event)
         );
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), createAssignedItemInfoMessage);
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), createAssignedItemMessage);
+        final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
+        pushManager.multicast(createAssignedItemInfoMessage, memberIds, ChannelType.SSE);
+        pushManager.multicast(createAssignedItemMessage, memberIds, ChannelType.SSE);
     }
 
     @Async
@@ -145,7 +151,8 @@ public class TeamBottariEventListener {
                 MessageEventType.CHANGE,
                 ChangeAssignedItemData.from(event)
         );
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
+        final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
+        pushManager.multicast(message, memberIds, ChannelType.SSE);
     }
 
     @Async
@@ -163,8 +170,9 @@ public class TeamBottariEventListener {
                 MessageEventType.DELETE,
                 DeleteAssignedItemData.from(event)
         );
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), deleteAssignedItemInfoMessage);
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), deleteAssignedItemMessage);
+        final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
+        pushManager.multicast(deleteAssignedItemInfoMessage, memberIds, ChannelType.SSE);
+        pushManager.multicast(deleteAssignedItemMessage, memberIds, ChannelType.SSE);
     }
 
     @Async

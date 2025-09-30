@@ -50,6 +50,13 @@ public class TeamMemberService {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional(readOnly = true)
+    public List<Long> getMemberIdsByTeamBottariId(final Long teamBottariId) {
+            return teamMemberRepository.findAllByTeamBottariId(teamBottariId).stream()
+                    .map(teamMember -> teamMember.getMember().getId())
+                    .toList();
+    }
+
+    @Transactional(readOnly = true)
     public ReadTeamMemberInfoResponse getTeamMemberInfoByTeamBottariId(
             final Long teamBottariId,
             final String ssaid

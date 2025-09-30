@@ -101,27 +101,4 @@ public class TeamBottariMessageConverter {
             throw new BusinessException(ErrorCode.FCM_MESSAGE_CONVERT_FAIL);
         }
     }
-
-    public PushMessage convert(
-            final MessageResourceType resourceType,
-            final MessageEventType eventType,
-            final TeamBottari teamBottari,
-            final TeamMember exitTeamMember
-    ) {
-        final Long teamBottariId = teamBottari.getId();
-        final String teamBottariTitle = teamBottari.getTitle();
-        final Long exitMemberId = exitTeamMember.getMember().getId();
-        final String exitMemberName = exitTeamMember.getMember().getName();
-
-        return new PushMessage(
-                MessageResourceType.TEAM_BOTTARI,
-                MessageEventType.DELETE,
-                Map.of(
-                        TEAM_BOTTARI_ID, String.valueOf(teamBottariId),
-                        TEAM_BOTTARI_TITLE, teamBottariTitle,
-                        EXIT_MEMBER_ID, String.valueOf(exitMemberId),
-                        EXIT_MEMBER_NAME, exitMemberName
-                )
-        );
-    }
 }
