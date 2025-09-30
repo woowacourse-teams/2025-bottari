@@ -77,6 +77,18 @@ fun OnEventRaw.toEvent(json: Json): EventStateResponse.OnEventResponse {
                     data,
                 )
 
+            ResourceResponse.SHARED_ITEM to EventResponse.CHECK ->
+                json.decodeFromJsonElement(
+                    EventDataResponse.SharedItemCheckResponse.serializer(),
+                    data,
+                )
+
+            ResourceResponse.ASSIGNED_ITEM to EventResponse.CHECK ->
+                json.decodeFromJsonElement(
+                    EventDataResponse.AssignedItemCheckResponse.serializer(),
+                    data,
+                )
+
             else -> throw IllegalArgumentException("[ERROR] Unknown event or resource.")
         }
     return EventStateResponse.OnEventResponse(resource, event, eventData, publishedAt)

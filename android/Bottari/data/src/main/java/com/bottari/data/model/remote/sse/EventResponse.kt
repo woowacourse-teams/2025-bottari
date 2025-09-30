@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 enum class EventResponse {
     CREATE,
     CHANGE,
+    CHECK,
     DELETE,
 }

@@ -124,6 +124,21 @@ sealed interface EventDataResponse {
     }
 
     @Serializable
+    data class SharedItemCheckResponse(
+        @SerialName("publishedAt")
+        @Serializable(with = LocalDateTimeSerializer::class)
+        override val publishedAt: LocalDateTime,
+        @SerialName("infoId")
+        val infoId: Long,
+        @SerialName("memberId")
+        val memberId: Long,
+        @SerialName("isChecked")
+        val isChecked: Boolean,
+    ) : EventDataResponse {
+        override fun toDomain(): EventData = EventData.SharedItemCheck(publishedAt, infoId, memberId, isChecked)
+    }
+
+    @Serializable
     data class AssignedItemChangeResponse(
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)
@@ -136,5 +151,20 @@ sealed interface EventDataResponse {
         val isChecked: Boolean,
     ) : EventDataResponse {
         override fun toDomain(): EventData = EventData.AssignedItemChange(publishedAt, infoId, memberId, isChecked)
+    }
+
+    @Serializable
+    data class AssignedItemCheckResponse(
+        @SerialName("publishedAt")
+        @Serializable(with = LocalDateTimeSerializer::class)
+        override val publishedAt: LocalDateTime,
+        @SerialName("infoId")
+        val infoId: Long,
+        @SerialName("memberId")
+        val memberId: Long,
+        @SerialName("isChecked")
+        val isChecked: Boolean,
+    ) : EventDataResponse {
+        override fun toDomain(): EventData = EventData.AssignedItemCheck(publishedAt, infoId, memberId, isChecked)
     }
 }
