@@ -66,7 +66,7 @@ fun MyBottariScreen(
         MyBottariDialogs(
             dialogType = type,
             onChangeText = { newText -> dialogText = newText },
-            onClick = { viewModel.onclickDialog(dialogText.ifBlank { defaultBottariTitle }) },
+            onClick = { viewModel.onClickDialog(dialogText.ifBlank { defaultBottariTitle }) },
             onDismiss = {
                 viewModel.closeDialog()
                 dialogText = ""

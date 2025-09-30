@@ -61,7 +61,7 @@ class MyBottariViewModel(
         }
     }
 
-    fun onclickDialog(text: String) {
+    fun onClickDialog(text: String) {
         uiState.value.showDialogType?.let { type ->
             when (type) {
                 MyBottariDialogType.CODE -> inputTeamBottariCode(text)
