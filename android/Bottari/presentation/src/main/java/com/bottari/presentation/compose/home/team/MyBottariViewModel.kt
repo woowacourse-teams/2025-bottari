@@ -54,6 +54,7 @@ class MyBottariViewModel(
             deleteTeamBottariUseCase(bottariId)
                 .onSuccess {
                     fetchTeamBottaries()
+                    emitEvent(MyBottariUiEvent.ExitTeamBottariSuccess)
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.ExitTeamBottariFailure)
                 }
