@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -24,9 +25,11 @@ fun MyBottariContent(
     viewModel: MyBottariViewModel,
     modifier: Modifier = Modifier,
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Box(modifier = modifier.fillMaxSize()) {
         Column(
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -43,53 +46,30 @@ fun MyBottariContent(
                         onNavigateToTeamChecklist,
                     )
                 }
-                when (page) {
-                    0 ->
-                        BottariList(
-                            bottaries =
-                                viewModel.uiState
-                                    .collectAsState()
-                                    .value.myBottaries,
-                            onBottariClick = onBottariClick,
-                            onDeletePersonalBottari = onDeletePersonalBottari,
-                            onDeleteTeamBottari = onDeleteTeamBottari,
-                            onPersonalBottariEdit = onEditPersonalBottari,
-                            onTeamBottariEdit = onEditTeamBottari,
-                        )
 
-                    1 ->
-                        BottariList(
-                            bottaries =
-                                viewModel.uiState
-                                    .collectAsState()
-                                    .value.personalBottaries,
-                            onBottariClick = onBottariClick,
-                            onDeletePersonalBottari = onDeletePersonalBottari,
-                            onDeleteTeamBottari = onDeleteTeamBottari,
-                            onPersonalBottariEdit = onEditPersonalBottari,
-                            onTeamBottariEdit = onEditTeamBottari,
-                        )
+                val currentList =
+                    when (page) {
+                        0 -> uiState.myBottaries
+                        1 -> uiState.personalBottaries
+                        2 -> uiState.teamBottaries
+                        else -> emptyList()
+                    }
 
-                    2 ->
-                        BottariList(
-                            bottaries =
-                                viewModel.uiState
-                                    .collectAsState()
-                                    .value.teamBottaries,
-                            onBottariClick = onBottariClick,
-                            onDeletePersonalBottari = onDeletePersonalBottari,
-                            onDeleteTeamBottari = onDeleteTeamBottari,
-                            onPersonalBottariEdit = onEditPersonalBottari,
-                            onTeamBottariEdit = onEditTeamBottari,
-                        )
-                }
+                BottariList(
+                    bottaries = currentList,
+                    onBottariClick = onBottariClick,
+                    onDeletePersonalBottari = onDeletePersonalBottari,
+                    onDeleteTeamBottari = onDeleteTeamBottari,
+                    onPersonalBottariEdit = onEditPersonalBottari,
+                    onTeamBottariEdit = onEditTeamBottari,
+                )
             }
         }
         AddBottariButton(
-            80.dp,
-            { viewModel.openCodeDialog() },
-            { viewModel.openTeamDialog() },
-            { viewModel.openPersonalDialog() },
+            buttonSize = 80.dp,
+            onCodeClick = { viewModel.openCodeDialog() },
+            onTeamClick = { viewModel.openTeamDialog() },
+            onPersonalClick = { viewModel.openPersonalDialog() },
             modifier = Modifier.align(Alignment.BottomEnd),
         )
     }
