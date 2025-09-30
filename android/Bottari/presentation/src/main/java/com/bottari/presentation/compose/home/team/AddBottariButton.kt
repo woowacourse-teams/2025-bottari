@@ -99,7 +99,7 @@ fun AddBottariButton(
                     Icon(
                         modifier = Modifier.size(40.dp),
                         painter = painterResource(R.drawable.ic_person_filled),
-                        contentDescription = stringResource(R.string.bottari_btn_create_description),
+                        contentDescription = stringResource(R.string.personal_bottari_btn_create_description),
                     )
                 }
             }
@@ -114,7 +114,7 @@ fun AddBottariButton(
         ) {
             Icon(
                 imageVector = Icons.Filled.Add,
-                contentDescription = "Add",
+                contentDescription = stringResource(R.string.bottari_btn_create_description),
                 modifier = Modifier.graphicsLayer { rotationZ = rotation }.size(50.dp),
                 tint = Color.White,
             )

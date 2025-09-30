@@ -343,6 +343,7 @@
     <string name="bottari_icon_item_empty_description">빈 물건 아이콘</string>
     <string name="bottari_icon_home_description">보따리 아이콘 이미지</string>
     <string name="bottari_icon_type_description">보따리 타입 아이콘</string>
+    <string name="personal_bottari_btn_create_description">개인 보따리 만들기 버튼</string>
     <string name="checklist_btn_swipe_description">스와이프 전환 버튼</string>
     <string name="checklist_btn_reset_description">체크리스트 초기화 버튼</string>
     <string name="checklist_icon_swipe_partial_unchecked_description">보따리 일부 품목 미체크 이미지</string>
