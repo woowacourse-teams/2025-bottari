@@ -145,8 +145,17 @@ class TeamChecklistViewModel(
             connectTeamEventUseCase(teamBottariId)
                 .filterIsInstance<EventState.OnEvent>()
                 .map { event -> event.data }
-                .filter { eventData -> eventData !is EventData.TeamMemberCreate }
-                .debounce(DEBOUNCE_DELAY)
+                .filter { eventData ->
+                    when (eventData) {
+                        is EventData.TeamMemberCreate,
+                        is EventData.TeamMemberDelete,
+                        is EventData.SharedItemCheck,
+                        is EventData.AssignedItemCheck,
+                        -> false
+
+                        else -> true
+                    }
+                }.debounce(DEBOUNCE_DELAY)
                 .onEach { fetchTeamCheckList() }
                 .launchIn(this)
         }
