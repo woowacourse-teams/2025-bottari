@@ -85,46 +85,48 @@ fun MyBottariContent(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun MyBottariContentPreview() {
-    val fakeUiState = MyBottariUiState(
-        personalBottaries = listOf(
-            BottariUiModel(
-                id = 1,
-                title = "개인 보따리 1",
-                totalQuantity = 10,
-                checkedQuantity = 5,
-                alarm = null
-            ),
-            BottariUiModel(
-                id = 2,
-                title = "마트 장보기",
-                totalQuantity = 5,
-                checkedQuantity = 1,
-                alarm = null
-            )
-        ),
-        teamBottaries = listOf(
-            TeamBottariUiModel(
-                id = 3,
-                title = "팀 프로젝트 준비물",
-                totalQuantity = 8,
-                checkedQuantity = 8,
-                memberCount = 5,
-                alarm = null,
-            ),
-            TeamBottariUiModel(
-                id = 4,
-                title = "가족 여행",
-                totalQuantity = 20,
-                checkedQuantity = 10,
-                memberCount = 4,
-                alarm = null,
-            )
-        ),
-    )
+    val fakeUiState =
+        MyBottariUiState(
+            personalBottaries =
+                listOf(
+                    BottariUiModel(
+                        id = 1,
+                        title = "개인 보따리 1",
+                        totalQuantity = 10,
+                        checkedQuantity = 5,
+                        alarm = null,
+                    ),
+                    BottariUiModel(
+                        id = 2,
+                        title = "마트 장보기",
+                        totalQuantity = 5,
+                        checkedQuantity = 1,
+                        alarm = null,
+                    ),
+                ),
+            teamBottaries =
+                listOf(
+                    TeamBottariUiModel(
+                        id = 3,
+                        title = "팀 프로젝트 준비물",
+                        totalQuantity = 8,
+                        checkedQuantity = 8,
+                        memberCount = 5,
+                        alarm = null,
+                    ),
+                    TeamBottariUiModel(
+                        id = 4,
+                        title = "가족 여행",
+                        totalQuantity = 20,
+                        checkedQuantity = 10,
+                        memberCount = 4,
+                        alarm = null,
+                    ),
+                ),
+        )
 
     BottariTheme {
         MyBottariContent(
@@ -137,7 +139,7 @@ fun MyBottariContentPreview() {
             onDeletePersonalBottari = {},
             onDeleteTeamBottari = {},
             onEditPersonalBottari = { _, _ -> },
-            onEditTeamBottari = { _, _ -> }
+            onEditTeamBottari = { _, _ -> },
         )
     }
 }

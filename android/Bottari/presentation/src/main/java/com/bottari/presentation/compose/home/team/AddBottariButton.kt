@@ -142,7 +142,7 @@ fun AddBottariButton(
 
 @Composable
 @Preview
-fun AddBottariButtonPreview(){
+fun AddBottariButtonPreview() {
     AddBottariButton(
         buttonSize = 60.dp,
         onCodeClick = {},
