@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.Transaction
 import androidx.room.TypeConverters
 import com.bottari.data.common.util.LocalDateConverter
 import com.bottari.data.common.util.LocalTimeConverter
@@ -28,6 +29,23 @@ abstract class BottariDatabase : RoomDatabase() {
     abstract fun itemDao(): ItemDao
 
     abstract fun alarmDao(): AlarmDao
+
+    @Transaction
+    suspend fun createBottariWithItems(
+        bottari: BottariEntity,
+        itemNames: List<String>,
+    ): Long {
+        val bottariId = bottariDao().createBottari(bottari)
+        val items =
+            Array(itemNames.size) { index ->
+                ItemEntity.from(
+                    bottariId = bottariId,
+                    itemName = itemNames[index],
+                )
+            }
+        itemDao().saveItem(*items)
+        return bottariId
+    }
 
     companion object {
         private const val DATABASE_NAME = "Bottari"
