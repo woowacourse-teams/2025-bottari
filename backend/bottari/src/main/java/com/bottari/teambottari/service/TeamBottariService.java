@@ -4,12 +4,8 @@ import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
-import com.bottari.push.ChannelType;
 import com.bottari.push.PushManager;
 import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
-import com.bottari.push.message.MessageEventType;
-import com.bottari.push.message.MessageResourceType;
-import com.bottari.push.message.PushMessage;
 import com.bottari.teambottari.domain.InviteCodeGenerator;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
@@ -123,17 +119,14 @@ public class TeamBottariService {
         transferOwnerIfNeeded(remainMembers, teamBottari, exitTeamMember);
         teamMemberRepository.deleteById(exitTeamMember.getId());
         deleteTeamBottariIfEmpty(remainMembers, teamBottari);
-        applicationEventPublisher.publishEvent(
-                new ExitTeamMemberEvent(teamBottari.getId(), exitTeamMember.getMember().getId()));
-        notifyMemberExitToRemainMember(teamBottari, exitTeamMember, remainMembers);
+        publishExitEvent(teamBottari, exitTeamMember, remainMembers);
     }
 
-    private void notifyMemberExitToRemainMember(
+    private void publishExitEvent(
             final TeamBottari teamBottari,
             final TeamMember exitTeamMember,
             final List<TeamMember> remainMembers
     ) {
-        // todo
         if (remainMembers.isEmpty()) {
             return;
         }
@@ -141,13 +134,8 @@ public class TeamBottariService {
                 .map(TeamMember::getMember)
                 .map(Member::getId)
                 .toList();
-        final PushMessage pushMessage = teamBottariMessageConverter.convert(
-                MessageResourceType.TEAM_BOTTARI,
-                MessageEventType.DELETE,
-                teamBottari,
-                exitTeamMember
-        );
-        pushManager.multicast(pushMessage, remainMemberIds, ChannelType.FCM);
+        applicationEventPublisher.publishEvent(
+                new ExitTeamMemberEvent(teamBottari.getId(), exitTeamMember.getMember().getId(), remainMemberIds));
     }
 
     private List<TeamMember> findRemainMembers(

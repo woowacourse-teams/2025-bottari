@@ -175,8 +175,6 @@ public class TeamBottariEventListener {
                 MessageEventType.DELETE,
                 ExitTeamMemberData.from(event)
         );
-        sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
-        pushManager.multicast(message, List.of(1L, 2L, 3L, 4L), ChannelType.FCM, ChannelType.SSE);
-        // todo
+        pushManager.multicast(message, event.getRemainMemberIds(), ChannelType.FCM, ChannelType.SSE);
     }
 }
