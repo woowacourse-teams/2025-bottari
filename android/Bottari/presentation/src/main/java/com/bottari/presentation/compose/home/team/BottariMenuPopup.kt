@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.modifier.dropShadow
+import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
@@ -41,9 +42,9 @@ fun BottariMenuPopup(
             Box(
                 modifier =
                     Modifier.padding(
-                        top = 4.dp,
-                        bottom = 8.dp,
-                        end = 8.dp,
+                        top = BottariTheme.spacing.space2xSmall,
+                        bottom = BottariTheme.spacing.spaceXSmall,
+                        end = BottariTheme.spacing.spaceXSmall,
                     ),
             ) {
                 MoreMenuPopup(

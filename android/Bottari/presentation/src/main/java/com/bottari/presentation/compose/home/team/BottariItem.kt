@@ -83,7 +83,10 @@ fun BottariItem(
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
-    BottariBox(modifier = modifier, contentPadding = PaddingValues(13.dp)) {
+    BottariBox(
+        modifier = modifier,
+        contentPadding = PaddingValues(BottariTheme.spacing.spaceSmall),
+    ) {
         Column {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -100,7 +103,7 @@ fun BottariItem(
                 Spacer(modifier = Modifier.weight(1f))
                 DateText(
                     alarmUiModel = bottari.alarm,
-                    modifier = Modifier.padding(end = 16.dp),
+                    modifier = Modifier.padding(end = BottariTheme.spacing.spaceMedium),
                 )
                 Box {
                     Image(
@@ -125,22 +128,35 @@ fun BottariItem(
             }
             Text(
                 bottari.title,
-                modifier = Modifier.padding(start = 13.dp, top = 20.dp, bottom = 10.dp),
+                modifier =
+                    Modifier.padding(
+                        start = BottariTheme.spacing.spaceSmall,
+                        top = BottariTheme.spacing.spaceLarge,
+                        bottom = BottariTheme.spacing.spaceSmall,
+                    ),
                 style = BottariTheme.typography.semiBold24.toTextStyle(),
             )
             Row(
-                Modifier.padding(start = 13.dp, end = 13.dp, bottom = 7.dp),
+                Modifier.padding(
+                    start = BottariTheme.spacing.spaceSmall,
+                    end = BottariTheme.spacing.spaceSmall,
+                    bottom = BottariTheme.spacing.spaceXSmall,
+                ),
                 verticalAlignment = Alignment.Bottom,
             ) {
                 BottariCheckIndicator(
                     Modifier
                         .weight(1f)
-                        .size(4.dp),
+                        .size(BottariTheme.spacing.space2xSmall),
                     bottari.checkedQuantity,
                     bottari.totalQuantity,
                 )
                 Text(
-                    modifier = Modifier.padding(start = 13.dp, end = 5.dp),
+                    modifier =
+                        Modifier.padding(
+                            start = BottariTheme.spacing.spaceSmall,
+                            end = BottariTheme.spacing.space2xSmall,
+                        ),
                     text = "${bottari.checkedQuantity}/${bottari.totalQuantity}",
                     style = BottariTheme.typography.medium14.toTextStyle(),
                 )
@@ -157,7 +173,7 @@ private fun BottariTypeText(bottari: MyBottariUiModel) {
             is BottariUiModel -> "개인"
             else -> return
         }
-    Text(text = teamTypeText, modifier = Modifier.padding(start = 8.dp))
+    Text(text = teamTypeText, modifier = Modifier.padding(start = BottariTheme.spacing.spaceXSmall))
 }
 
 @Composable
@@ -217,12 +233,25 @@ fun DateText(
 
     val text =
         when (alarmUiModel.type) {
-            AlarmTypeUiModel.NON_REPEAT -> formatNonRepeat(alarmUiModel.date, alarmUiModel.time, dateFormat, timeFormat, separator)
+            AlarmTypeUiModel.NON_REPEAT ->
+                formatNonRepeat(
+                    alarmUiModel.date,
+                    alarmUiModel.time,
+                    dateFormat,
+                    timeFormat,
+                    separator,
+                )
+
             AlarmTypeUiModel.REPEAT -> {
                 if (alarmUiModel.isRepeatEveryDay) {
                     formatEveryDayRepeat(alarmUiModel.time, timeFormat, separator)
                 } else {
-                    formatEveryWeekRepeat(alarmUiModel.time, alarmUiModel.repeatDays, timeFormat, separator)
+                    formatEveryWeekRepeat(
+                        alarmUiModel.time,
+                        alarmUiModel.repeatDays,
+                        timeFormat,
+                        separator,
+                    )
                 }
             }
         }

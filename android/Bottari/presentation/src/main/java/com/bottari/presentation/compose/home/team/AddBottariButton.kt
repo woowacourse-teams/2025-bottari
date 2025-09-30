@@ -49,9 +49,9 @@ fun AddBottariButton(
         label = "rotation",
     )
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier.padding(BottariTheme.spacing.spaceMedium),
         horizontalAlignment = Alignment.End,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceMedium),
     ) {
         AnimatedVisibility(
             visible = isExpanded,
@@ -60,11 +60,11 @@ fun AddBottariButton(
         ) {
             Column(
                 horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceMedium),
             ) {
                 ExtendedFloatingActionButton(
                     modifier = Modifier.height(buttonSize),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(BottariTheme.spacing.spaceMedium),
                     onClick = onCodeClick,
                     containerColor = Color.White,
                     contentColor = Color.Black,
@@ -72,7 +72,7 @@ fun AddBottariButton(
                     Text(
                         text = "코드로 참여",
                         style = BottariTheme.typography.medium20.toTextStyle(),
-                        modifier = Modifier.padding(horizontal = 8.dp),
+                        modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceXSmall),
                     )
                 }
 

@@ -30,19 +30,19 @@ fun BottariCreateDialog(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 30.dp),
+                .padding(horizontal = BottariTheme.spacing.space2xLarge),
     ) {
         Column {
             Text(text = "보따리 이름 작성", style = BottariTheme.typography.medium16.toTextStyle())
             Text(
-                modifier = Modifier.padding(top = 4.dp),
+                modifier = Modifier.padding(top = BottariTheme.spacing.space2xSmall),
                 text = "이름은 언제든지 수정할 수 있어요.",
                 style = BottariTheme.typography.regular12.toTextStyle(),
             )
             TextField(
                 modifier =
                     Modifier
-                        .padding(top = 12.dp)
+                        .padding(top = BottariTheme.spacing.spaceSmall)
                         .height(48.dp)
                         .fillMaxWidth(),
                 colors =
@@ -61,7 +61,7 @@ fun BottariCreateDialog(
             Button(
                 modifier =
                     Modifier
-                        .padding(top = 16.dp)
+                        .padding(top = BottariTheme.spacing.spaceMedium)
                         .height(48.dp)
                         .fillMaxWidth(),
                 onClick = onClick,

@@ -7,7 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
@@ -31,7 +31,7 @@ fun BottariList(
                 bottari = bottari,
                 modifier =
                     Modifier
-                        .padding(horizontal = 16.dp, vertical = 6.dp)
+                        .padding(horizontal = BottariTheme.spacing.spaceMedium, vertical = BottariTheme.spacing.spaceXSmall)
                         .clickable { onBottariClick(bottari) },
                 onPersonalBottariDelete = onDeletePersonalBottari,
                 onTeamBottariDelete = onDeleteTeamBottari,

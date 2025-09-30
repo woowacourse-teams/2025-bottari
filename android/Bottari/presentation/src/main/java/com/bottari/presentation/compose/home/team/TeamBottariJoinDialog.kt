@@ -29,19 +29,19 @@ fun TeamBottariJoinDialog(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 30.dp),
+                .padding(horizontal = BottariTheme.spacing.space2xLarge),
     ) {
         Column {
             Text(text = "팀 보따리 코드 입력", style = BottariTheme.typography.medium16.toTextStyle())
             Text(
-                modifier = Modifier.padding(top = 4.dp),
+                modifier = Modifier.padding(top = BottariTheme.spacing.space2xSmall),
                 text = "공유받은 팀 보따리 코드를 입력해주세요.",
                 style = BottariTheme.typography.regular12.toTextStyle(),
             )
             TextField(
                 modifier =
                     Modifier
-                        .padding(top = 12.dp)
+                        .padding(top = BottariTheme.spacing.spaceSmall)
                         .height(48.dp)
                         .fillMaxWidth(),
                 colors =
@@ -59,7 +59,7 @@ fun TeamBottariJoinDialog(
             Button(
                 modifier =
                     Modifier
-                        .padding(top = 16.dp)
+                        .padding(top = BottariTheme.spacing.spaceMedium)
                         .height(48.dp)
                         .fillMaxWidth(),
                 onClick = onClick,
