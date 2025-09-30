@@ -21,9 +21,6 @@ import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -43,14 +40,15 @@ fun AddBottariButton(
     onCodeClick: () -> Unit,
     onTeamClick: () -> Unit,
     onPersonalClick: () -> Unit,
+    isExpanded: Boolean,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
-
     val rotation by animateFloatAsState(
         targetValue = if (isExpanded) 45f else 0f,
         label = "rotation",
     )
+
     Column(
         modifier = modifier.padding(BottariTheme.spacing.spaceMedium),
         horizontalAlignment = Alignment.End,
@@ -128,7 +126,7 @@ fun AddBottariButton(
                 Modifier.size(buttonSize),
             shape = CircleShape,
             containerColor = BottariTheme.colors.primary,
-            onClick = { isExpanded = !isExpanded },
+            onClick = onClick,
         ) {
             Icon(
                 imageVector = Icons.Filled.Add,
@@ -141,12 +139,14 @@ fun AddBottariButton(
 }
 
 @Composable
-@Preview
+@Preview(showBackground = true)
 fun AddBottariButtonPreview() {
     AddBottariButton(
         buttonSize = 60.dp,
         onCodeClick = {},
         onTeamClick = {},
         onPersonalClick = {},
+        isExpanded = true,
+        onClick = {},
     )
 }

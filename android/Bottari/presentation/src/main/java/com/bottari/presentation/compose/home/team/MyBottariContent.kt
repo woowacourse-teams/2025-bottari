@@ -1,11 +1,17 @@
 package com.bottari.presentation.compose.home.team
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,6 +38,9 @@ fun MyBottariContent(
     onOpenCodeDialog: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var isCreateBottariBtnExpanded by remember { mutableStateOf(false) }
+
+
     Box(modifier = modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -75,11 +84,26 @@ fun MyBottariContent(
                 )
             }
         }
+        if (isCreateBottariBtnExpanded) {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                        ) {
+                            isCreateBottariBtnExpanded = false
+                        },
+            )
+        }
         AddBottariButton(
             buttonSize = 80.dp,
-            onCodeClick = { onOpenCodeDialog },
-            onTeamClick = { onOpenTeamDialog },
-            onPersonalClick = { onOpenPersonalDialog },
+            onCodeClick = onOpenCodeDialog,
+            onTeamClick = onOpenTeamDialog,
+            onPersonalClick = onOpenPersonalDialog,
+            isExpanded = isCreateBottariBtnExpanded,
+            onClick = { isCreateBottariBtnExpanded = !isCreateBottariBtnExpanded },
             modifier = Modifier.align(Alignment.BottomEnd),
         )
     }
