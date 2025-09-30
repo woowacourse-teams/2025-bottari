@@ -44,13 +44,11 @@ fun MyBottariScreen(
             else -> null
         }
 
-    LaunchedEffect(key1 = snackbarMessage) {
+    LaunchedEffect(uiEvent.value) {
         snackbarMessage?.let {
             snackbarState.showSnackbar(it)
         }
-    }
 
-    LaunchedEffect(key1 = uiEvent.value) {
         when (val event = uiEvent.value) {
             is MyBottariUiEvent.CreatePersonalBottariSuccess ->
                 onNavigateToPersonalEdit(event.bottariId, true)
