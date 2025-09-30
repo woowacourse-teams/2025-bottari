@@ -1,88 +1,59 @@
 package com.bottari.presentation.compose.home.team
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import androidx.compose.ui.res.stringResource
+import com.bottari.presentation.R
 
 @Composable
 fun MyBottariDialogs(
-    viewModel: MyBottariViewModel,
-    defaultBottariTitle: String = "새 보따리",
+    dialogType: MyBottariDialogType?,
+    onChangeText: (String) -> Unit,
+    onClick: () -> Unit,
+    onDismiss: () -> Unit,
+    text: String,
+    defaultBottariTitle: String,
 ) {
-    var bottariTitle by remember { mutableStateOf("") }
-    var bottariCode by remember { mutableStateOf("") }
+    if (dialogType == null) return
 
-    if (viewModel.uiState
-            .collectAsState()
-            .value.showCodeDialog
-    ) {
-        Dialog(
-            properties = DialogProperties(usePlatformDefaultWidth = false),
-            onDismissRequest = {
-                viewModel.closeCodeDialog()
-                bottariCode = ""
-            },
-        ) {
-            TeamBottariJoinDialog(
-                text = bottariCode,
-                onChangeText = { newText -> bottariCode = newText },
-                onClick = {
-                    viewModel.inputTeamBottariCode(bottariCode)
-                },
-                isClickable = true,
-            )
+    val title =
+        when (dialogType) {
+            MyBottariDialogType.PERSONAL, MyBottariDialogType.TEAM -> stringResource(R.string.bottari_create_dialog_title_text)
+            MyBottariDialogType.CODE -> stringResource(R.string.team_bottari_join_dialog_title_text)
         }
-    }
 
-    if (viewModel.uiState
-            .collectAsState()
-            .value.showPersonalDialog
-    ) {
-        Dialog(
-            properties = DialogProperties(usePlatformDefaultWidth = false),
-            onDismissRequest = {
-                viewModel.closePersonalDialog()
-                bottariTitle = ""
-            },
-        ) {
-            BottariTheme {
-                BottariCreateDialog(
-                    text = bottariTitle,
-                    onChangeText = { newText -> bottariTitle = newText },
-                    onClick = {
-                        viewModel.createPersonalBottari(bottariTitle.ifBlank { defaultBottariTitle })
-                    },
-                    placeholder = defaultBottariTitle,
-                )
-            }
+    val subTitle =
+        when (dialogType) {
+            MyBottariDialogType.PERSONAL, MyBottariDialogType.TEAM -> stringResource(R.string.bottari_create_dialog_description_text)
+            MyBottariDialogType.CODE -> stringResource(R.string.team_bottari_join_dialog_description_text)
         }
-    }
 
-    if (viewModel.uiState
-            .collectAsState()
-            .value.showTeamDialog
-    ) {
-        Dialog(
-            properties = DialogProperties(usePlatformDefaultWidth = false),
-            onDismissRequest = {
-                viewModel.closeTeamDialog()
-                bottariTitle = ""
-            },
-        ) {
-            BottariCreateDialog(
-                text = bottariTitle,
-                onChangeText = { newText -> bottariTitle = newText },
-                onClick = {
-                    viewModel.createTeamBottari(bottariTitle.ifBlank { defaultBottariTitle })
-                },
-                placeholder = defaultBottariTitle,
-            )
+    val btnText =
+        when (dialogType) {
+            MyBottariDialogType.PERSONAL, MyBottariDialogType.TEAM -> stringResource(R.string.bottari_create_dialog_btn_text)
+            MyBottariDialogType.CODE -> stringResource(R.string.team_bottari_join_dialog_btn_text)
         }
-    }
+
+    val placeholder =
+        when (dialogType) {
+            MyBottariDialogType.PERSONAL, MyBottariDialogType.TEAM -> defaultBottariTitle
+            MyBottariDialogType.CODE -> ""
+        }
+
+    val isClickable =
+        when (dialogType) {
+            MyBottariDialogType.PERSONAL, MyBottariDialogType.TEAM -> true
+            MyBottariDialogType.CODE -> text.isNotEmpty()
+        }
+
+    BottariCreateDialog(
+        title = title,
+        subTitle = subTitle,
+        btnText = btnText,
+        text = text,
+        onChangeText = onChangeText,
+        onClick = onClick,
+        onDismiss = onDismiss,
+        placeholder = placeholder,
+        isClickable = isClickable,
+    )
 }

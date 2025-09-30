@@ -2,6 +2,8 @@ package com.bottari.presentation.compose.home
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -26,6 +28,8 @@ fun HomeScreen(
     navigateToTemplateDetail: (Long) -> Unit,
     navigateToTemplateCreate: () -> Unit,
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val navController =
         rememberSaveable(saver = NavigationController.saver) {
             NavigationController(HomeScreenRoute.Team)
@@ -37,6 +41,7 @@ fun HomeScreen(
         }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = LocalBottariBgColor.current,
         topBar = { HomeTopAppBar(title = stringResource(currentScreen.labelResId())) },
         bottomBar = {
@@ -57,6 +62,7 @@ fun HomeScreen(
             navigateToTeamBottariEdit = navigateToTeamBottariEdit,
             navigateToPersonalBottariChecklist = navigateToPersonalBottariChecklist,
             navigateToTeamBottariChecklist = navigateToTeamBottariChecklist,
+            snackbarState = snackbarHostState,
         )
     }
 }
@@ -72,6 +78,7 @@ fun HomeScreenRouter(
     navigateToTeamBottariEdit: (Long, Boolean) -> Unit,
     navigateToPersonalBottariChecklist: (Long, String) -> Unit,
     navigateToTeamBottariChecklist: (Long, String) -> Unit,
+    snackbarState: SnackbarHostState,
 ) {
     Navigation(
         navigationController = navController,
@@ -104,6 +111,7 @@ fun HomeScreenRouter(
                             bottariTitle,
                         )
                     },
+                    snackbarState = snackbarState,
                 )
 
             HomeScreenRoute.Template ->

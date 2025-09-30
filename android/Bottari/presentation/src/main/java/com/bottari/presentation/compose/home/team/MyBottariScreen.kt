@@ -1,9 +1,17 @@
 package com.bottari.presentation.compose.home.team
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.presentation.R
 
 @Composable
 fun MyBottariScreen(
@@ -11,35 +19,65 @@ fun MyBottariScreen(
     onNavigateToTeamEdit: (Long, Boolean) -> Unit,
     onNavigateToPersonalChecklist: (Long, String) -> Unit,
     onNavigateToTeamChecklist: (Long, String) -> Unit,
-) {
-    val viewModel: MyBottariViewModel =
+    snackbarState: SnackbarHostState,
+    viewModel: MyBottariViewModel =
         viewModel(
             factory = MyBottariViewModel.Factory(),
-        )
+        ),
+) {
+    val uiEvent = viewModel.uiEvent.collectAsState(initial = null)
+    val uiState = viewModel.uiState.collectAsState()
 
-    LaunchedEffect(key1 = true) {
-        viewModel.uiEvent.collect { event ->
-            when (event) {
-                MyBottariUiEvent.PersonalBottariFetchFailure -> TODO()
-                MyBottariUiEvent.TeamBottariFetchFailure -> TODO()
-                is MyBottariUiEvent.CreatePersonalBottariSuccess ->
-                    onNavigateToPersonalEdit(
-                        event.bottariId,
-                        true,
-                    )
+    var dialogText by remember { mutableStateOf("") }
 
-                is MyBottariUiEvent.CreateTeamBottariSuccess ->
-                    onNavigateToTeamEdit(
-                        event.bottariId,
-                        true,
-                    )
-            }
+    val snackbarMessage =
+        when (uiEvent.value) {
+            MyBottariUiEvent.DeletePersonalBottariFailure -> TODO()
+            MyBottariUiEvent.DeletePersonalBottariSuccess -> stringResource(id = R.string.bottari_home_delete_success_text)
+            MyBottariUiEvent.ExitTeamBottariFailure -> TODO()
+            MyBottariUiEvent.ExitTeamBottariSuccess -> stringResource(id = R.string.bottari_home_exit_success_text)
+            MyBottariUiEvent.FetchTeamBottariFailure,
+            MyBottariUiEvent.FetchPersonalBottariFailure,
+            ->
+                stringResource(id = R.string.bottari_home_fetch_failure_text)
+
+            MyBottariUiEvent.JoinTeamBottariFailure -> TODO()
+            else -> null
+        }
+
+    LaunchedEffect(key1 = snackbarMessage) {
+        snackbarMessage?.let {
+            snackbarState.showSnackbar(it)
         }
     }
 
-    MyBottariDialogs(
-        viewModel = viewModel,
-    )
+    LaunchedEffect(key1 = uiEvent.value) {
+        when (val event = uiEvent.value) {
+            is MyBottariUiEvent.CreatePersonalBottariSuccess ->
+                onNavigateToPersonalEdit(event.bottariId, true)
+
+            is MyBottariUiEvent.CreateTeamBottariSuccess ->
+                onNavigateToTeamEdit(event.bottariId, true)
+
+            else -> {}
+        }
+    }
+
+    val defaultBottariTitle = stringResource(id = R.string.bottari_create_default_title_text)
+
+    uiState.value.showDialogType.let { type ->
+        MyBottariDialogs(
+            dialogType = type,
+            onChangeText = { newText -> dialogText = newText },
+            onClick = { viewModel.onclickDialog(dialogText.ifBlank { defaultBottariTitle }) },
+            onDismiss = {
+                viewModel.closeDialog()
+                dialogText = ""
+            },
+            text = dialogText,
+            defaultBottariTitle = defaultBottariTitle,
+        )
+    }
 
     MyBottariContent(
         modifier = Modifier,

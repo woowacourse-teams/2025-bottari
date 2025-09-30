@@ -126,7 +126,7 @@ fun AddBottariButton(
             onClick = { isExpanded = !isExpanded },
         ) {
             Icon(
-                Icons.Filled.Add,
+                imageVector = Icons.Filled.Add,
                 contentDescription = "Add",
                 modifier = Modifier.rotate(rotation).size(50.dp),
                 tint = Color.White,

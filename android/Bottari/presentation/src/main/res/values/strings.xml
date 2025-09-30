@@ -117,6 +117,7 @@
 
     <!-- Dialog: 우리 보따리 입장 다이얼로그 텍스트 -->
     <string name="team_bottari_join_dialog_title_text">초대 코드를 입력해 주세요</string>
+    <string name="team_bottari_join_dialog_description_text">초대 코드를 입력하고 팀에 참여하세요</string>
     <string name="team_bottari_join_invalid_invite_code_text">유효하지 않은 초대 코드예요</string>
     <string name="team_bottari_join_dialog_name_hint_text">초대 코드를 입력해 주세요</string>
     <string name="team_bottari_join_dialog_btn_text">참가하기</string>
@@ -147,6 +148,7 @@
     <string name="bottari_home_fetch_failure_text">보따리 목록을 불러오지 못했어요</string>
     <string name="bottari_home_fetch_bottari_failure_text">보따리를 불러오지 못했어요</string>
     <string name="bottari_home_delete_success_text">보따리를 삭제했어요</string>
+    <string name="bottari_home_exit_success_text">보따리에서 나갔어요</string>
     <string name="bottari_home_delete_failure_text">보따리를 삭제하지 못했어요</string>
     <string name="bottari_home_empty_view_title_text">보따리가 없습니다</string>
     <string name="bottari_home_empty_view_description_text">오른쪽 아래 버튼을 눌러 새 보따리를 만들거나,\n‘모두의 보따리’에서 원하는 보따리를 가져와보세요!</string>

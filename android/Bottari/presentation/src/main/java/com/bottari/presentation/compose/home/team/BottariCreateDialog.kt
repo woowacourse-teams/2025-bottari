@@ -13,66 +13,86 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun BottariCreateDialog(
+    title: String,
+    subTitle: String,
+    btnText: String,
     text: String,
     onChangeText: (String) -> Unit,
     onClick: () -> Unit,
+    onDismiss: () -> Unit,
     placeholder: String = "",
+    isClickable: Boolean = true,
 ) {
-    BottariBox(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = BottariTheme.spacing.space2xLarge),
+    Dialog(
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+        onDismissRequest = onDismiss,
     ) {
-        Column {
-            Text(text = "보따리 이름 작성", style = BottariTheme.typography.medium16.toTextStyle())
-            Text(
-                modifier = Modifier.padding(top = BottariTheme.spacing.space2xSmall),
-                text = "이름은 언제든지 수정할 수 있어요.",
-                style = BottariTheme.typography.regular12.toTextStyle(),
-            )
-            TextField(
-                modifier =
-                    Modifier
-                        .padding(top = BottariTheme.spacing.spaceSmall)
-                        .height(48.dp)
-                        .fillMaxWidth(),
-                colors =
-                    TextFieldDefaults.colors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        unfocusedContainerColor = BottariTheme.colors.gray200,
-                        focusedContainerColor = BottariTheme.colors.gray200,
-                    ),
-                shape = RoundedCornerShape(8.dp),
-                value = text,
-                onValueChange = { text -> onChangeText(text) },
-                placeholder = { Text(text = placeholder, style = BottariTheme.typography.medium16.toTextStyle()) },
-                singleLine = true,
-            )
-            Button(
-                modifier =
-                    Modifier
-                        .padding(top = BottariTheme.spacing.spaceMedium)
-                        .height(48.dp)
-                        .fillMaxWidth(),
-                onClick = onClick,
-                colors =
-                    ButtonDefaults.buttonColors(
-                        containerColor = BottariTheme.colors.primary,
-                        disabledContainerColor = BottariTheme.colors.gray400,
-                        contentColor = Color.White,
-                    ),
-                shape = RoundedCornerShape(12.dp),
-            ) {
-                Text("생성하기", style = BottariTheme.typography.semiBold16.toTextStyle())
+        BottariBox(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = BottariTheme.spacing.space2xLarge),
+        ) {
+            Column {
+                Text(text = title, style = BottariTheme.typography.medium16.toTextStyle())
+                Text(
+                    modifier = Modifier.padding(top = BottariTheme.spacing.space2xSmall),
+                    text = subTitle,
+                    style = BottariTheme.typography.regular12.toTextStyle(),
+                )
+                TextField(
+                    modifier =
+                        Modifier
+                            .padding(top = BottariTheme.spacing.spaceSmall)
+                            .height(48.dp)
+                            .fillMaxWidth(),
+                    colors =
+                        TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            unfocusedContainerColor = BottariTheme.colors.gray200,
+                            focusedContainerColor = BottariTheme.colors.gray200,
+                        ),
+                    shape = RoundedCornerShape(8.dp),
+                    value = text,
+                    onValueChange = { text -> onChangeText(text) },
+                    placeholder = {
+                        Text(
+                            text = placeholder,
+                            style = BottariTheme.typography.medium16.toTextStyle(),
+                        )
+                    },
+                    singleLine = true,
+                )
+                Button(
+                    modifier =
+                        Modifier
+                            .padding(top = BottariTheme.spacing.spaceMedium)
+                            .height(48.dp)
+                            .fillMaxWidth(),
+                    onClick = onClick,
+                    enabled = isClickable,
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = BottariTheme.colors.primary,
+                            disabledContainerColor = BottariTheme.colors.gray400,
+                            contentColor = Color.White,
+                        ),
+                    shape = RoundedCornerShape(12.dp),
+                ) {
+                    Text(text = btnText, style = BottariTheme.typography.semiBold16.toTextStyle())
+                }
             }
         }
     }
@@ -81,5 +101,15 @@ fun BottariCreateDialog(
 @Preview
 @Composable
 fun MyCustomDialogContentPreview() {
-    BottariCreateDialog(text = "", onChangeText = {}, onClick = {}, placeholder = "새 보따리")
+    BottariCreateDialog(
+        text = "",
+        onChangeText = {},
+        onClick = {},
+        placeholder = "새 보따리",
+        title = stringResource(R.string.bottari_create_dialog_title_text),
+        subTitle = stringResource(R.string.bottari_create_dialog_description_text),
+        btnText = stringResource(R.string.bottari_create_dialog_btn_text),
+        onDismiss = {},
+        isClickable = true,
+    )
 }

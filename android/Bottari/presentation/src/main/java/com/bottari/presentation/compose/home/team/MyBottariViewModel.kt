@@ -38,42 +38,66 @@ class MyBottariViewModel(
 
     fun deletePersonalBottari(bottariId: Long) {
         launch {
-            deleteBottariUseCase(bottariId).onSuccess {
-            }
-            fetchPersonalBottaries()
+            deleteBottariUseCase(bottariId)
+                .onSuccess {
+                    emitEvent(MyBottariUiEvent.FetchPersonalBottariSuccess)
+                    fetchPersonalBottaries()
+                }.onFailure {
+                    emitEvent(MyBottariUiEvent.FetchPersonalBottariFailure)
+                }
         }
     }
 
     fun deleteTeamBottari(bottariId: Long) {
         launch {
-            deleteTeamBottariUseCase(bottariId).onSuccess {}
-            fetchTeamBottaries()
+            deleteTeamBottariUseCase(bottariId)
+                .onSuccess {
+                    fetchTeamBottaries()
+                    emitEvent(MyBottariUiEvent.ExitTeamBottariSuccess)
+                }.onFailure {
+                    emitEvent(MyBottariUiEvent.ExitTeamBottariFailure)
+                }
         }
     }
 
-    fun inputTeamBottariCode(code: String) {
-        launch {
-            joinTeamBottariUseCase(code).onSuccess {
-                fetchTeamBottaries()
-                closeCodeDialog()
+    fun onclickDialog(text: String) {
+        uiState.value.showDialogType?.let { type ->
+            when (type) {
+                MyBottariDialogType.CODE -> inputTeamBottariCode(text)
+                MyBottariDialogType.PERSONAL -> createPersonalBottari(text)
+                MyBottariDialogType.TEAM -> createTeamBottari(text)
             }
         }
     }
 
-    fun createPersonalBottari(title: String) {
+    private fun inputTeamBottariCode(code: String) {
+        launch {
+            joinTeamBottariUseCase(code)
+                .onSuccess {
+                    fetchTeamBottaries()
+                    emitEvent(MyBottariUiEvent.JoinTeamBottariSuccess)
+                }.onFailure {
+                    emitEvent(MyBottariUiEvent.JoinTeamBottariFailure)
+                }
+            closeDialog()
+        }
+    }
+
+    private fun createPersonalBottari(title: String) {
         launch {
             createBottariUseCase(title).onSuccess { bottariId ->
-                updateState { copy(showPersonalDialog = false) }
+
+                closeDialog()
                 emitEvent(MyBottariUiEvent.CreatePersonalBottariSuccess(bottariId))
             }
         }
     }
 
-    fun createTeamBottari(title: String) {
+    private fun createTeamBottari(title: String) {
         launch {
             createTeamBottariUseCase(title).onSuccess { bottariId ->
                 bottariId?.let {
-                    updateState { copy(showTeamDialog = false) }
+                    closeDialog()
                     emitEvent(MyBottariUiEvent.CreateTeamBottariSuccess(it))
                 }
             }
@@ -81,27 +105,19 @@ class MyBottariViewModel(
     }
 
     fun openCodeDialog() {
-        updateState { copy(showCodeDialog = true) }
+        updateState { copy(showDialogType = MyBottariDialogType.CODE) }
     }
 
     fun openPersonalDialog() {
-        updateState { copy(showPersonalDialog = true) }
+        updateState { copy(showDialogType = MyBottariDialogType.PERSONAL) }
     }
 
     fun openTeamDialog() {
-        updateState { copy(showTeamDialog = true) }
+        updateState { copy(showDialogType = MyBottariDialogType.TEAM) }
     }
 
-    fun closeCodeDialog() {
-        updateState { copy(showCodeDialog = false) }
-    }
-
-    fun closePersonalDialog() {
-        updateState { copy(showPersonalDialog = false) }
-    }
-
-    fun closeTeamDialog() {
-        updateState { copy(showTeamDialog = false) }
+    fun closeDialog() {
+        updateState { copy(showDialogType = null) }
     }
 
     private fun fetchMyBottaries() {
@@ -126,22 +142,22 @@ class MyBottariViewModel(
                                 },
                         )
                     }
-                }.onFailure { emitEvent(MyBottariUiEvent.TeamBottariFetchFailure) }
+                }.onFailure { emitEvent(MyBottariUiEvent.FetchTeamBottariFailure) }
         }
 
     private fun fetchPersonalBottaries() =
         fetchBottariesUseCase()
-            .onEach { bottaris ->
+            .onEach { bottaries ->
                 updateState {
                     copy(
                         personalBottaries =
-                            bottaris.map { bottari ->
+                            bottaries.map { bottari ->
                                 BottariUiModel.fromPersonalBottari(bottari)
                             },
                     )
                 }
             }.catch {
-                emitEvent(MyBottariUiEvent.PersonalBottariFetchFailure)
+                emitEvent(MyBottariUiEvent.FetchPersonalBottariFailure)
             }.launchIn(viewModelScope)
 
     companion object {
