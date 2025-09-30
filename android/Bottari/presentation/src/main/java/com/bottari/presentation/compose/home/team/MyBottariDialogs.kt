@@ -11,7 +11,10 @@ import androidx.compose.ui.window.DialogProperties
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
-fun MyBottariDialogs(viewModel: MyBottariViewModel) {
+fun MyBottariDialogs(
+    viewModel: MyBottariViewModel,
+    defaultBottariTitle: String = "새 보따리",
+) {
     var bottariTitle by remember { mutableStateOf("") }
     var bottariCode by remember { mutableStateOf("") }
 
@@ -53,9 +56,9 @@ fun MyBottariDialogs(viewModel: MyBottariViewModel) {
                     text = bottariTitle,
                     onChangeText = { newText -> bottariTitle = newText },
                     onClick = {
-                        viewModel.createPersonalBottari(bottariTitle.ifBlank { "새 보따리" })
+                        viewModel.createPersonalBottari(bottariTitle.ifBlank { defaultBottariTitle })
                     },
-                    placeholder = "새 보따리",
+                    placeholder = defaultBottariTitle,
                 )
             }
         }
@@ -76,9 +79,9 @@ fun MyBottariDialogs(viewModel: MyBottariViewModel) {
                 text = bottariTitle,
                 onChangeText = { newText -> bottariTitle = newText },
                 onClick = {
-                    viewModel.createTeamBottari(bottariTitle.ifBlank { "새 보따리" })
+                    viewModel.createTeamBottari(bottariTitle.ifBlank { defaultBottariTitle })
                 },
-                placeholder = "새 보따리",
+                placeholder = defaultBottariTitle,
             )
         }
     }
