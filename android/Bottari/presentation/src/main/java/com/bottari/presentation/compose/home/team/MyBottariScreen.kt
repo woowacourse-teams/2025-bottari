@@ -79,6 +79,7 @@ fun MyBottariScreen(
     }
 
     MyBottariContent(
+        uiState = uiState.value,
         modifier = Modifier,
         onNavigateToPersonalChecklist = onNavigateToPersonalChecklist,
         onNavigateToTeamChecklist = onNavigateToTeamChecklist,
@@ -86,6 +87,8 @@ fun MyBottariScreen(
         onDeleteTeamBottari = { viewModel.deleteTeamBottari(it) },
         onEditPersonalBottari = onNavigateToPersonalEdit,
         onEditTeamBottari = onNavigateToTeamEdit,
-        viewModel = viewModel,
+        onOpenPersonalDialog = { viewModel.openDialog(MyBottariDialogType.PERSONAL) },
+        onOpenTeamDialog = { viewModel.openDialog(MyBottariDialogType.TEAM) },
+        onOpenCodeDialog = { viewModel.openDialog(MyBottariDialogType.CODE) },
     )
 }

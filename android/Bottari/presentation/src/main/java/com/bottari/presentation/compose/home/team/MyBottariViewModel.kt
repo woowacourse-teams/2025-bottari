@@ -68,16 +68,8 @@ class MyBottariViewModel(
         }
     }
 
-    fun openCodeDialog() {
-        updateState { copy(showDialogType = MyBottariDialogType.CODE) }
-    }
-
-    fun openPersonalDialog() {
-        updateState { copy(showDialogType = MyBottariDialogType.PERSONAL) }
-    }
-
-    fun openTeamDialog() {
-        updateState { copy(showDialogType = MyBottariDialogType.TEAM) }
+    fun openDialog(type: MyBottariDialogType) {
+        updateState { copy(showDialogType = type) }
     }
 
     fun closeDialog() {
