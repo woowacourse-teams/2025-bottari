@@ -151,9 +151,9 @@ class TeamChecklistViewModel(
                         is EventData.TeamMemberDelete,
                         is EventData.SharedItemCheck,
                         is EventData.AssignedItemCheck,
-                        -> true
+                        -> false
 
-                        else -> false
+                        else -> true
                     }
                 }.debounce(DEBOUNCE_DELAY)
                 .onEach { fetchTeamCheckList() }
