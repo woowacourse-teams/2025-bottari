@@ -1,22 +1,23 @@
-package com.bottari.push.sse.component;
+package com.bottari.teambottari.adapter;
 
 import com.bottari.push.ChannelType;
 import com.bottari.push.PushManager;
 import com.bottari.push.message.MessageEventType;
 import com.bottari.push.message.MessageResourceType;
 import com.bottari.push.message.PushMessage;
-import com.bottari.push.sse.dto.ChangeAssignedItemData;
-import com.bottari.push.sse.dto.CheckTeamItemData;
-import com.bottari.push.sse.dto.CreateAssignedItemData;
-import com.bottari.push.sse.dto.CreateAssignedItemInfoData;
-import com.bottari.push.sse.dto.CreateTeamMemberData;
-import com.bottari.push.sse.dto.CreateTeamSharedItemData;
-import com.bottari.push.sse.dto.CreateTeamSharedItemInfoData;
-import com.bottari.push.sse.dto.DeleteAssignedItemData;
-import com.bottari.push.sse.dto.DeleteAssignedItemInfoData;
-import com.bottari.push.sse.dto.DeleteTeamSharedItemData;
-import com.bottari.push.sse.dto.DeleteTeamSharedItemInfoData;
-import com.bottari.push.sse.dto.ExitTeamMemberData;
+import com.bottari.push.sse.SseService;
+import com.bottari.teambottari.adapter.data.ChangeAssignedItemData;
+import com.bottari.teambottari.adapter.data.CheckTeamItemData;
+import com.bottari.teambottari.adapter.data.CreateAssignedItemData;
+import com.bottari.teambottari.adapter.data.CreateAssignedItemInfoData;
+import com.bottari.teambottari.adapter.data.CreateTeamMemberData;
+import com.bottari.teambottari.adapter.data.CreateTeamSharedItemData;
+import com.bottari.teambottari.adapter.data.CreateTeamSharedItemInfoData;
+import com.bottari.teambottari.adapter.data.DeleteAssignedItemData;
+import com.bottari.teambottari.adapter.data.DeleteAssignedItemInfoData;
+import com.bottari.teambottari.adapter.data.DeleteTeamSharedItemData;
+import com.bottari.teambottari.adapter.data.DeleteTeamSharedItemInfoData;
+import com.bottari.teambottari.adapter.data.ExitTeamMemberData;
 import com.bottari.teambottari.dto.ReadAssignedItemResponse;
 import com.bottari.teambottari.dto.ReadSharedItemResponse;
 import com.bottari.teambottari.event.ChangeTeamAssignedItemEvent;
@@ -176,5 +177,6 @@ public class TeamBottariEventListener {
         );
         sseService.sendByTeamBottariId(event.getTeamBottariId(), message);
         pushManager.multicast(message, List.of(1L, 2L, 3L, 4L), ChannelType.FCM, ChannelType.SSE);
+        // todo
     }
 }

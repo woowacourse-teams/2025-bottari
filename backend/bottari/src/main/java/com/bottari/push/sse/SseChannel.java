@@ -1,4 +1,4 @@
-package com.bottari.push.sse.component;
+package com.bottari.push.sse;
 
 import com.bottari.push.ChannelType;
 import com.bottari.push.ConnectionBasedChannel;

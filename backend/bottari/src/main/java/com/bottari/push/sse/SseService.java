@@ -1,4 +1,4 @@
-package com.bottari.push.sse.component;
+package com.bottari.push.sse;
 
 import com.bottari.member.service.MemberService;
 import com.bottari.push.message.PushMessage;

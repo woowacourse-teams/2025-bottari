@@ -1,4 +1,4 @@
-package com.bottari.push.sse.component;
+package com.bottari.push.sse;
 
 import java.util.List;
 import java.util.Map;

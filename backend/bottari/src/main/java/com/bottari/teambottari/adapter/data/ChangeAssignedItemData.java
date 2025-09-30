@@ -1,4 +1,4 @@
-package com.bottari.push.sse.dto;
+package com.bottari.teambottari.adapter.data;
 
 import com.bottari.teambottari.event.ChangeTeamAssignedItemEvent;
 import java.time.LocalDateTime;

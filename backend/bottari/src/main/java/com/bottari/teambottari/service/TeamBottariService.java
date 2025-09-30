@@ -6,7 +6,7 @@ import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.push.ChannelType;
 import com.bottari.push.PushManager;
-import com.bottari.push.fcm.TeamBottariMessageConverter;
+import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.push.message.MessageEventType;
 import com.bottari.push.message.MessageResourceType;
 import com.bottari.push.message.PushMessage;
@@ -133,6 +133,7 @@ public class TeamBottariService {
             final TeamMember exitTeamMember,
             final List<TeamMember> remainMembers
     ) {
+        // todo
         if (remainMembers.isEmpty()) {
             return;
         }

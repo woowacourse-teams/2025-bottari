@@ -1,21 +1,21 @@
-package com.bottari.push.sse.dto;
+package com.bottari.teambottari.adapter.data;
 
 import com.bottari.teambottari.dto.ReadAssignedItemResponse;
-import com.bottari.teambottari.event.CreateAssignedItemEvent;
+import com.bottari.teambottari.event.DeleteAssignedItemEvent;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record CreateAssignedItemInfoData(
+public record DeleteAssignedItemInfoData(
         Long teamBottariId,
         List<ReadAssignedItemResponse> infos,
         LocalDateTime publishedAt
 ) {
 
-    public static CreateAssignedItemInfoData of(
+    public static DeleteAssignedItemInfoData of(
             final List<ReadAssignedItemResponse> infos,
-            final CreateAssignedItemEvent event
+            final DeleteAssignedItemEvent event
     ) {
-        return new CreateAssignedItemInfoData(
+        return new DeleteAssignedItemInfoData(
                 event.getTeamBottariId(),
                 infos,
                 event.getPublishedAt()

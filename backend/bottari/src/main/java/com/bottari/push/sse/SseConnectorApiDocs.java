@@ -1,4 +1,4 @@
-package com.bottari.push.sse.component;
+package com.bottari.push.sse;
 
 import com.bottari.error.ApiErrorCodes;
 import io.swagger.v3.oas.annotations.Operation;

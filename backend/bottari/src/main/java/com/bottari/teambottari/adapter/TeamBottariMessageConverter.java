@@ -1,4 +1,4 @@
-package com.bottari.push.fcm;
+package com.bottari.teambottari.adapter;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
