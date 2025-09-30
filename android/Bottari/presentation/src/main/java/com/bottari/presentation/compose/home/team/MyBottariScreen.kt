@@ -41,6 +41,11 @@ fun MyBottariScreen(
             -> stringResource(id = R.string.bottari_home_fetch_failure_text)
 
             MyBottariUiEvent.JoinTeamBottariFailure -> stringResource(R.string.join_team_bottari_failure_text)
+            MyBottariUiEvent.CreatePersonalBottariFailure, MyBottariUiEvent.CreateTeamBottariFailure ->
+                stringResource(
+                    R.string.bottari_create_failure_text,
+                )
+
             else -> null
         }
 

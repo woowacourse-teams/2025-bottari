@@ -93,22 +93,28 @@ class MyBottariViewModel(
 
     private fun createPersonalBottari(title: String) {
         launch {
-            createBottariUseCase(title).onSuccess { bottariId ->
-
-                closeDialog()
-                emitEvent(MyBottariUiEvent.CreatePersonalBottariSuccess(bottariId))
-            }
+            createBottariUseCase(title)
+                .onSuccess { bottariId ->
+                    emitEvent(MyBottariUiEvent.CreatePersonalBottariSuccess(bottariId))
+                }.onFailure {
+                    emitEvent(MyBottariUiEvent.CreatePersonalBottariFailure)
+                }
+            closeDialog()
         }
     }
 
     private fun createTeamBottari(title: String) {
         launch {
-            createTeamBottariUseCase(title).onSuccess { bottariId ->
-                bottariId?.let { id ->
-                    closeDialog()
-                    emitEvent(MyBottariUiEvent.CreateTeamBottariSuccess(id))
+            createTeamBottariUseCase(title)
+                .onSuccess { bottariId ->
+                    bottariId?.let { id ->
+
+                        emitEvent(MyBottariUiEvent.CreateTeamBottariSuccess(id))
+                    }
+                }.onFailure {
+                    emitEvent(MyBottariUiEvent.CreateTeamBottariFailure)
                 }
-            }
+            closeDialog()
         }
     }
 

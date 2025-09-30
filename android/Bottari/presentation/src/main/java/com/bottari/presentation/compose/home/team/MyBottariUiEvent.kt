@@ -22,4 +22,8 @@ sealed interface MyBottariUiEvent {
     data class CreateTeamBottariSuccess(
         val bottariId: Long,
     ) : MyBottariUiEvent
+
+    data object CreatePersonalBottariFailure : MyBottariUiEvent
+
+    data object CreateTeamBottariFailure : MyBottariUiEvent
 }
