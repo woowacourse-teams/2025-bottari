@@ -42,8 +42,9 @@ class MyBottariViewModel(
             deleteBottariUseCase(bottariId)
                 .onSuccess {
                     fetchPersonalBottaries()
+                    emitEvent(MyBottariUiEvent.DeletePersonalBottariSuccess)
                 }.onFailure {
-                    emitEvent(MyBottariUiEvent.FetchPersonalBottariFailure)
+                    emitEvent(MyBottariUiEvent.DeletePersonalBottariFailure)
                 }
         }
     }
