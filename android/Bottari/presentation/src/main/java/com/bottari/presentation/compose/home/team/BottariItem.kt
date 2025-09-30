@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -147,7 +148,7 @@ fun BottariItem(
                 BottariCheckIndicator(
                     Modifier
                         .weight(1f)
-                        .size(BottariTheme.spacing.space2xSmall),
+                        .height(BottariTheme.spacing.space2xSmall),
                     bottari.checkedQuantity,
                     bottari.totalQuantity,
                 )
