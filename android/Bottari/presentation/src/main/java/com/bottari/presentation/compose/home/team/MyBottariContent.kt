@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -14,7 +15,6 @@ import com.bottari.presentation.model.bottari.MyBottariUiModel
 
 @Composable
 fun MyBottariContent(
-    uiState: MyBottariUiState,
     onNavigateToPersonalChecklist: (Long, String) -> Unit,
     onNavigateToTeamChecklist: (Long, String) -> Unit,
     onDeletePersonalBottari: (Long) -> Unit,
@@ -46,7 +46,10 @@ fun MyBottariContent(
                 when (page) {
                     0 ->
                         BottariList(
-                            bottaries = uiState.myBottaries,
+                            bottaries =
+                                viewModel.uiState
+                                    .collectAsState()
+                                    .value.myBottaries,
                             onBottariClick = onBottariClick,
                             onDeletePersonalBottari = onDeletePersonalBottari,
                             onDeleteTeamBottari = onDeleteTeamBottari,
@@ -56,7 +59,10 @@ fun MyBottariContent(
 
                     1 ->
                         BottariList(
-                            bottaries = uiState.personalBottaries,
+                            bottaries =
+                                viewModel.uiState
+                                    .collectAsState()
+                                    .value.personalBottaries,
                             onBottariClick = onBottariClick,
                             onDeletePersonalBottari = onDeletePersonalBottari,
                             onDeleteTeamBottari = onDeleteTeamBottari,
@@ -66,7 +72,10 @@ fun MyBottariContent(
 
                     2 ->
                         BottariList(
-                            bottaries = uiState.teamBottaries,
+                            bottaries =
+                                viewModel.uiState
+                                    .collectAsState()
+                                    .value.teamBottaries,
                             onBottariClick = onBottariClick,
                             onDeletePersonalBottari = onDeletePersonalBottari,
                             onDeleteTeamBottari = onDeleteTeamBottari,

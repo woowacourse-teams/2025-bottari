@@ -2,8 +2,6 @@ package com.bottari.presentation.compose.home.team
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 
@@ -19,7 +17,6 @@ fun MyBottariScreen(
             factory = MyBottariViewModel.Factory(),
         )
 
-    val uiState: MyBottariUiState by viewModel.uiState.collectAsState()
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
@@ -41,13 +38,11 @@ fun MyBottariScreen(
     }
 
     MyBottariDialogs(
-        uiState = uiState,
         viewModel = viewModel,
     )
 
     MyBottariContent(
         modifier = Modifier,
-        uiState = uiState,
         onNavigateToPersonalChecklist = onNavigateToPersonalChecklist,
         onNavigateToTeamChecklist = onNavigateToTeamChecklist,
         onDeletePersonalBottari = { viewModel.deletePersonalBottari(it) },

@@ -22,7 +22,6 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 fun BottariCreateDialog(
     text: String,
     onChangeText: (String) -> Unit,
-    isClickable: Boolean,
     onClick: () -> Unit,
     placeholder: String = "",
 ) {
@@ -65,7 +64,6 @@ fun BottariCreateDialog(
                         .height(48.dp)
                         .fillMaxWidth(),
                 onClick = onClick,
-                enabled = isClickable,
                 colors =
                     ButtonDefaults.buttonColors(
                         containerColor = BottariTheme.colors.primary,
@@ -83,5 +81,5 @@ fun BottariCreateDialog(
 @Preview
 @Composable
 fun MyCustomDialogContentPreview() {
-    BottariCreateDialog(text = "", onChangeText = {}, onClick = {}, isClickable = true, placeholder = "새 보따리")
+    BottariCreateDialog(text = "", onChangeText = {}, onClick = {}, placeholder = "새 보따리")
 }

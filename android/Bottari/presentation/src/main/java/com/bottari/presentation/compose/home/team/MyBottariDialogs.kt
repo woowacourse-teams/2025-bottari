@@ -1,6 +1,7 @@
 package com.bottari.presentation.compose.home.team
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -10,14 +11,14 @@ import androidx.compose.ui.window.DialogProperties
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
-fun MyBottariDialogs(
-    uiState: MyBottariUiState,
-    viewModel: MyBottariViewModel,
-) {
+fun MyBottariDialogs(viewModel: MyBottariViewModel) {
     var bottariTitle by remember { mutableStateOf("") }
     var bottariCode by remember { mutableStateOf("") }
 
-    if (uiState.showCodeDialog) {
+    if (viewModel.uiState
+            .collectAsState()
+            .value.showCodeDialog
+    ) {
         Dialog(
             properties = DialogProperties(usePlatformDefaultWidth = false),
             onDismissRequest = {
@@ -36,7 +37,10 @@ fun MyBottariDialogs(
         }
     }
 
-    if (uiState.showPersonalDialog) {
+    if (viewModel.uiState
+            .collectAsState()
+            .value.showPersonalDialog
+    ) {
         Dialog(
             properties = DialogProperties(usePlatformDefaultWidth = false),
             onDismissRequest = {
@@ -51,14 +55,16 @@ fun MyBottariDialogs(
                     onClick = {
                         viewModel.createPersonalBottari(bottariTitle.ifBlank { "새 보따리" })
                     },
-                    isClickable = true,
                     placeholder = "새 보따리",
                 )
             }
         }
     }
 
-    if (uiState.showTeamDialog) {
+    if (viewModel.uiState
+            .collectAsState()
+            .value.showTeamDialog
+    ) {
         Dialog(
             properties = DialogProperties(usePlatformDefaultWidth = false),
             onDismissRequest = {
@@ -72,7 +78,6 @@ fun MyBottariDialogs(
                 onClick = {
                     viewModel.createTeamBottari(bottariTitle.ifBlank { "새 보따리" })
                 },
-                isClickable = true,
                 placeholder = "새 보따리",
             )
         }
