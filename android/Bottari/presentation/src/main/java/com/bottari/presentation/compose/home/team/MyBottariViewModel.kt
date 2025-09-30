@@ -17,6 +17,7 @@ import com.bottari.domain.usecase.team.JoinTeamBottariUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -111,7 +112,7 @@ class MyBottariViewModel(
 
     private fun fetchMyBottaries() {
         updateState { copy(isLoading = true) }
-        viewModelScope.launch {
+        launch {
             val personalBottariesJob = fetchPersonalBottaries()
             val teamBottariesJob = fetchTeamBottaries()
             joinAll(personalBottariesJob, teamBottariesJob)
@@ -119,7 +120,7 @@ class MyBottariViewModel(
         }
     }
 
-    private fun fetchTeamBottaries() =
+    private fun fetchTeamBottaries(): Job =
         viewModelScope.launch {
             fetchTeamBottariesUseCase()
                 .onSuccess { bottaries ->
