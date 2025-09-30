@@ -93,9 +93,9 @@ class MyBottariViewModel(
     private fun createTeamBottari(title: String) {
         launch {
             createTeamBottariUseCase(title).onSuccess { bottariId ->
-                bottariId?.let {
+                bottariId?.let { id ->
                     closeDialog()
-                    emitEvent(MyBottariUiEvent.CreateTeamBottariSuccess(it))
+                    emitEvent(MyBottariUiEvent.CreateTeamBottariSuccess(id))
                 }
             }
         }
@@ -162,13 +162,13 @@ class MyBottariViewModel(
             viewModelFactory {
                 initializer {
                     MyBottariViewModel(
-                        BottariUseCaseProvider.fetchBottariesUseCase,
-                        TeamBottariUseCaseProvider.fetchTeamBottariesUseCase,
-                        BottariUseCaseProvider.createBottariUseCase,
-                        TeamBottariUseCaseProvider.createTeamBottariUseCase,
-                        BottariUseCaseProvider.deleteBottariUseCase,
-                        TeamBottariUseCaseProvider.exitTeamBottariUseCase,
-                        TeamMemberUseCaseProvider.joinTeamBottariUseCase,
+                        fetchBottariesUseCase = BottariUseCaseProvider.fetchBottariesUseCase,
+                        fetchTeamBottariesUseCase = TeamBottariUseCaseProvider.fetchTeamBottariesUseCase,
+                        createBottariUseCase = BottariUseCaseProvider.createBottariUseCase,
+                        createTeamBottariUseCase = TeamBottariUseCaseProvider.createTeamBottariUseCase,
+                        deleteBottariUseCase = BottariUseCaseProvider.deleteBottariUseCase,
+                        deleteTeamBottariUseCase = TeamBottariUseCaseProvider.exitTeamBottariUseCase,
+                        joinTeamBottariUseCase = TeamMemberUseCaseProvider.joinTeamBottariUseCase,
                     )
                 }
             }

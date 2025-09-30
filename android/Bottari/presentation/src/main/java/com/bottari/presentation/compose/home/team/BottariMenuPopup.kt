@@ -79,9 +79,14 @@ private fun MoreMenuPopup(
     Row(
         modifier =
             Modifier
-                .size(200.dp, 100.dp)
-                .dropShadow(RoundedCornerShape(8.dp), Color.Black.copy(0.1f), 8.dp, 0.dp, 4.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .size(width = 200.dp, height = 100.dp)
+                .dropShadow(
+                    shape = RoundedCornerShape(8.dp),
+                    color = Color.Black.copy(0.1f),
+                    blur = 8.dp,
+                    offsetY = 0.dp,
+                    offsetX = 4.dp,
+                ).clip(RoundedCornerShape(8.dp))
                 .background(Color.White),
         verticalAlignment = Alignment.CenterVertically,
     ) {
