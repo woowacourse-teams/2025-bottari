@@ -25,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,17 +59,12 @@ fun AddBottariButton(
             exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 2 }),
         ) {
             Column(
-                modifier = Modifier.padding(bottom = 8.dp),
+                modifier = Modifier.padding(bottom = 8.dp).padding(horizontal = BottariTheme.spacing.spaceXSmall),
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceMedium),
             ) {
                 ExtendedFloatingActionButton(
-                    modifier =
-                        Modifier
-                            .height(buttonSize)
-                            .graphicsLayer {
-                                shadowElevation = 0f
-                            },
+                    modifier = Modifier.height(buttonSize),
                     shape = RoundedCornerShape(BottariTheme.spacing.spaceMedium),
                     onClick = onCodeClick,
                     containerColor = Color.White,
@@ -84,12 +78,7 @@ fun AddBottariButton(
                 }
 
                 LargeFloatingActionButton(
-                    modifier =
-                        Modifier
-                            .size(buttonSize)
-                            .graphicsLayer {
-                                shadowElevation = 0f
-                            },
+                    modifier = Modifier.size(buttonSize),
                     shape = CircleShape,
                     onClick = onTeamClick,
                     containerColor = Color.White,
@@ -102,12 +91,7 @@ fun AddBottariButton(
                 }
 
                 LargeFloatingActionButton(
-                    modifier =
-                        Modifier
-                            .size(buttonSize)
-                            .graphicsLayer {
-                                shadowElevation = 0f
-                            },
+                    modifier = Modifier.size(buttonSize),
                     shape = CircleShape,
                     onClick = onPersonalClick,
                     containerColor = Color.White,
@@ -123,7 +107,7 @@ fun AddBottariButton(
 
         LargeFloatingActionButton(
             modifier =
-                Modifier.size(buttonSize),
+                Modifier.padding(end = BottariTheme.spacing.spaceXSmall).size(buttonSize),
             shape = CircleShape,
             containerColor = BottariTheme.colors.primary,
             onClick = onClick,
