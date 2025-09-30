@@ -177,16 +177,6 @@ private fun BottariTypeText(bottari: MyBottariUiModel) {
 }
 
 @Composable
-private fun chooseBottariStateColor(
-    checkedQuantity: Int,
-    totalQuantity: Int,
-): Color {
-    if (checkedQuantity == 0) return BottariTheme.colors.gray400
-    if (checkedQuantity == totalQuantity) return BottariTheme.colors.primary
-    return Color.Red
-}
-
-@Composable
 fun BottariCheckIndicator(
     modifier: Modifier = Modifier,
     checkedQuantity: Int,
@@ -210,14 +200,6 @@ fun BottariCheckIndicator(
                     .background(chooseBottariStateColor(checkedQuantity, totalQuantity)),
         )
     }
-}
-
-private fun generateIndicatorSize(
-    checkedQuantity: Int,
-    totalQuantity: Int,
-): Float {
-    if (totalQuantity == 0) return 0F
-    return (checkedQuantity.toFloat() / totalQuantity.toFloat())
 }
 
 @Composable
@@ -256,6 +238,24 @@ fun DateText(
             }
         }
     Text(text = text, modifier = modifier)
+}
+
+@Composable
+private fun chooseBottariStateColor(
+    checkedQuantity: Int,
+    totalQuantity: Int,
+): Color {
+    if (checkedQuantity == 0) return BottariTheme.colors.gray400
+    if (checkedQuantity == totalQuantity) return BottariTheme.colors.primary
+    return Color.Red
+}
+
+private fun generateIndicatorSize(
+    checkedQuantity: Int,
+    totalQuantity: Int,
+): Float {
+    if (totalQuantity == 0) return 0F
+    return (checkedQuantity.toFloat() / totalQuantity.toFloat())
 }
 
 @Composable

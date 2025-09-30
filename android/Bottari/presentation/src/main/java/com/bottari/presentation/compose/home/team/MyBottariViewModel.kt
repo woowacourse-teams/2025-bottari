@@ -68,6 +68,22 @@ class MyBottariViewModel(
         }
     }
 
+    fun openCodeDialog() {
+        updateState { copy(showDialogType = MyBottariDialogType.CODE) }
+    }
+
+    fun openPersonalDialog() {
+        updateState { copy(showDialogType = MyBottariDialogType.PERSONAL) }
+    }
+
+    fun openTeamDialog() {
+        updateState { copy(showDialogType = MyBottariDialogType.TEAM) }
+    }
+
+    fun closeDialog() {
+        updateState { copy(showDialogType = null) }
+    }
+
     private fun inputTeamBottariCode(code: String) {
         launch {
             joinTeamBottariUseCase(code)
@@ -99,22 +115,6 @@ class MyBottariViewModel(
                 }
             }
         }
-    }
-
-    fun openCodeDialog() {
-        updateState { copy(showDialogType = MyBottariDialogType.CODE) }
-    }
-
-    fun openPersonalDialog() {
-        updateState { copy(showDialogType = MyBottariDialogType.PERSONAL) }
-    }
-
-    fun openTeamDialog() {
-        updateState { copy(showDialogType = MyBottariDialogType.TEAM) }
-    }
-
-    fun closeDialog() {
-        updateState { copy(showDialogType = null) }
     }
 
     private fun fetchMyBottaries() {

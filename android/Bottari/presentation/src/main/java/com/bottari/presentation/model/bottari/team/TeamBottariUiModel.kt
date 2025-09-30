@@ -11,7 +11,7 @@ data class TeamBottariUiModel(
     override val checkedQuantity: Int,
     val memberCount: Int,
     override val alarm: AlarmUiModel?,
-): MyBottariUiModel {
+) : MyBottariUiModel {
     companion object {
         fun fromDomain(teamBottari: TeamBottari): TeamBottariUiModel =
             TeamBottariUiModel(

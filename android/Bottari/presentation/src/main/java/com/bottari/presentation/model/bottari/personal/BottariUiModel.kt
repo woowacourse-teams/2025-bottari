@@ -11,7 +11,7 @@ data class BottariUiModel(
     override val totalQuantity: Int,
     override val checkedQuantity: Int,
     override val alarm: AlarmUiModel?,
-): MyBottariUiModel {
+) : MyBottariUiModel {
     companion object {
         fun fromDomain(bottariState: BottariState): BottariUiModel =
             BottariUiModel(

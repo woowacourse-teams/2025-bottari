@@ -38,7 +38,6 @@ class ComposeHomeActivity : AppCompatActivity() {
                     navigateToPersonalBottariChecklist = ::navigateToPersonalBottariChecklist,
                     navigateToTeamBottariChecklist = ::navigateToTeamBottariChecklist,
                 )
-
             }
         }
     }
