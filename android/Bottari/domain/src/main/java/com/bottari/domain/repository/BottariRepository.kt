@@ -8,9 +8,9 @@ interface BottariRepository {
 
     fun findBottari(id: Long): Flow<PersonalBottari?>
 
-    suspend fun saveBottari(title: String): Result<Long>
+    suspend fun createBottari(title: String): Result<Long>
 
-    suspend fun saveBottariWithItems(
+    suspend fun createBottariWithItems(
         title: String,
         itemNames: List<String>,
     ): Result<Long>

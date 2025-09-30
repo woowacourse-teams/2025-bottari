@@ -21,12 +21,12 @@ class BottariRepositoryImpl(
             .findBottari(id)
             .map { bottari -> bottari?.let(BottariWithAlarmAndItems::toDomain) }
 
-    override suspend fun saveBottari(title: String): Result<Long> =
+    override suspend fun createBottari(title: String): Result<Long> =
         bottariLocalDataSource.createBottari(
             BottariEntity(title = title),
         )
 
-    override suspend fun saveBottariWithItems(
+    override suspend fun createBottariWithItems(
         title: String,
         itemNames: List<String>,
     ): Result<Long> =

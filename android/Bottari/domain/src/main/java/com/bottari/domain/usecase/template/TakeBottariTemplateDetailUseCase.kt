@@ -13,7 +13,7 @@ class TakeBottariTemplateDetailUseCase(
         itemNames: List<String>,
     ): Result<Long> =
         runCatching {
-            val bottariId = bottariRepository.saveBottariWithItems(title, itemNames).getOrThrow()
+            val bottariId = bottariRepository.createBottariWithItems(title, itemNames).getOrThrow()
             bottariTemplateRepository.takeBottariTemplate(bottariId)
             bottariId
         }
