@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -108,7 +107,7 @@ fun AddBottariButton(
         LargeFloatingActionButton(
             modifier = Modifier.size(buttonSize),
             shape = CircleShape,
-            containerColor = colorResource(R.color.primary),
+            containerColor = BottariTheme.colors.primary,
             onClick = { isExpanded = !isExpanded },
         ) {
             Icon(

@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun MyBottariDialogs(
@@ -43,15 +44,17 @@ fun MyBottariDialogs(
                 bottariTitle = ""
             },
         ) {
-            BottariCreateDialog(
-                text = bottariTitle,
-                onChangeText = { newText -> bottariTitle = newText },
-                onClick = {
-                    viewModel.createPersonalBottari(bottariTitle.ifBlank { "새 보따리" })
-                },
-                isClickable = true,
-                placeholder = "새 보따리",
-            )
+            BottariTheme {
+                BottariCreateDialog(
+                    text = bottariTitle,
+                    onChangeText = { newText -> bottariTitle = newText },
+                    onClick = {
+                        viewModel.createPersonalBottari(bottariTitle.ifBlank { "새 보따리" })
+                    },
+                    isClickable = true,
+                    placeholder = "새 보따리",
+                )
+            }
         }
     }
 

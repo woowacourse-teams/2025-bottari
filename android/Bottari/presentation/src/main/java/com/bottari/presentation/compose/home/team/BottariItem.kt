@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -166,8 +165,8 @@ private fun chooseBottariStateColor(
     checkedQuantity: Int,
     totalQuantity: Int,
 ): Color {
-    if (checkedQuantity == 0) return colorResource(R.color.gray_400)
-    if (checkedQuantity == totalQuantity) return colorResource(R.color.primary)
+    if (checkedQuantity == 0) return BottariTheme.colors.gray400
+    if (checkedQuantity == totalQuantity) return BottariTheme.colors.primary
     return Color.Red
 }
 
@@ -184,7 +183,7 @@ fun BottariCheckIndicator(
                     .fillMaxWidth()
                     .fillMaxHeight()
                     .clip(shape = RoundedCornerShape(16.dp))
-                    .background(colorResource(R.color.gray_400)),
+                    .background(BottariTheme.colors.gray400),
         )
         Box(
             modifier =

@@ -13,10 +13,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
@@ -50,8 +48,8 @@ fun TeamBottariJoinDialog(
                     TextFieldDefaults.colors(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-                        unfocusedContainerColor = colorResource(R.color.gray_200),
-                        focusedContainerColor = colorResource(R.color.gray_200),
+                        unfocusedContainerColor = BottariTheme.colors.gray200,
+                        focusedContainerColor = BottariTheme.colors.gray200,
                     ),
                 shape = RoundedCornerShape(8.dp),
                 value = text,
@@ -68,8 +66,8 @@ fun TeamBottariJoinDialog(
                 enabled = isClickable,
                 colors =
                     ButtonDefaults.buttonColors(
-                        containerColor = colorResource(R.color.primary),
-                        disabledContainerColor = colorResource(R.color.gray_400),
+                        containerColor = BottariTheme.colors.primary,
+                        disabledContainerColor = BottariTheme.colors.gray400,
                         contentColor = Color.White,
                     ),
                 shape = RoundedCornerShape(12.dp),

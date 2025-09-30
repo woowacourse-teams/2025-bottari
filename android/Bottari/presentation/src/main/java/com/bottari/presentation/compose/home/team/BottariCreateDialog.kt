@@ -13,10 +13,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
@@ -24,7 +22,7 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 fun BottariCreateDialog(
     text: String,
     onChangeText: (String) -> Unit,
-    isClickable : Boolean,
+    isClickable: Boolean,
     onClick: () -> Unit,
     placeholder: String = "",
 ) {
@@ -51,8 +49,8 @@ fun BottariCreateDialog(
                     TextFieldDefaults.colors(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
-                        unfocusedContainerColor = colorResource(R.color.gray_200),
-                        focusedContainerColor = colorResource(R.color.gray_200),
+                        unfocusedContainerColor = BottariTheme.colors.gray200,
+                        focusedContainerColor = BottariTheme.colors.gray200,
                     ),
                 shape = RoundedCornerShape(8.dp),
                 value = text,
@@ -70,8 +68,8 @@ fun BottariCreateDialog(
                 enabled = isClickable,
                 colors =
                     ButtonDefaults.buttonColors(
-                        containerColor = colorResource(R.color.primary),
-                        disabledContainerColor = colorResource(R.color.gray_400),
+                        containerColor = BottariTheme.colors.primary,
+                        disabledContainerColor = BottariTheme.colors.gray400,
                         contentColor = Color.White,
                     ),
                 shape = RoundedCornerShape(12.dp),
@@ -85,5 +83,5 @@ fun BottariCreateDialog(
 @Preview
 @Composable
 fun MyCustomDialogContentPreview() {
-    BottariCreateDialog(text = "", onChangeText = {}, onClick = {} , isClickable = true, placeholder = "새 보따리")
+    BottariCreateDialog(text = "", onChangeText = {}, onClick = {}, isClickable = true, placeholder = "새 보따리")
 }

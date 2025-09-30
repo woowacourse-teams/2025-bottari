@@ -26,12 +26,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.zIndex
-import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.modifier.dropShadow
 import com.bottari.presentation.compose.common.source.NoRippleInteractionSource
 import com.bottari.presentation.compose.common.theme.BottariTheme
@@ -97,7 +95,7 @@ private fun BottariTap(
     Tab(
         modifier = modifier.zIndex(2f),
         text = {
-            val textColor = if (isSelected) Color.Black else colorResource(R.color.gray_700)
+            val textColor = if (isSelected) Color.Black else BottariTheme.colors.gray700
             Text(
                 text = title,
                 color = textColor,
