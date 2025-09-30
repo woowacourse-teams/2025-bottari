@@ -4,8 +4,9 @@ import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
+import com.bottari.push.ChannelType;
+import com.bottari.push.PushManager;
 import com.bottari.push.fcm.TeamBottariMessageConverter;
-import com.bottari.push.fcm.service.FcmChannel;
 import com.bottari.push.message.MessageEventType;
 import com.bottari.push.message.MessageResourceType;
 import com.bottari.push.message.PushMessage;
@@ -46,7 +47,7 @@ public class TeamAssignedItemService {
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
 
-    private final FcmChannel fcmChannel;
+    private final PushManager pushManager;
     private final TeamBottariMessageConverter teamBottariMessageConverter;
 
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -431,7 +432,7 @@ public class TeamAssignedItemService {
                 info.getTeamBottari(),
                 info
         );
-        fcmChannel.multicast(pushMessage, uncheckedMemberIds);
+        pushManager.multicast(pushMessage, uncheckedMemberIds, ChannelType.FCM);
     }
 
     private void validateOwner(

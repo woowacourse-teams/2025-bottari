@@ -8,8 +8,8 @@ import com.bottari.error.BusinessException;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
+import com.bottari.push.PushManager;
 import com.bottari.push.fcm.TeamBottariMessageConverter;
-import com.bottari.push.fcm.service.FcmChannel;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
@@ -46,7 +46,7 @@ class TeamBottariServiceTest {
     private EntityManager entityManager;
 
     @MockitoBean
-    private FcmChannel fcmChannel;
+    private PushManager pushManager;
 
     @Nested
     class GetAllBySsaid {
