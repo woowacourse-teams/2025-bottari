@@ -1,6 +1,8 @@
 package com.bottari.presentation.compose.home.team
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,12 +30,15 @@ fun BottariList(
 ) {
     var openedMenuBottariId by remember { mutableStateOf<Long?>(null) }
 
-    LazyColumn(modifier = modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
+        contentPadding = PaddingValues(bottom = BottariTheme.spacing.spaceXSmall),
+    ) {
         items(
             items = bottaries,
             key = { bottari -> bottari.id to bottari::class.java.simpleName },
         ) { bottari ->
-
             BottariItem(
                 bottari = bottari,
                 isShowMenu = openedMenuBottariId == bottari.id,
@@ -41,7 +46,6 @@ fun BottariList(
                     Modifier
                         .padding(
                             horizontal = BottariTheme.spacing.spaceMedium,
-                            vertical = BottariTheme.spacing.spaceXSmall,
                         ).clickable { onBottariClick(bottari) },
                 onPersonalBottariDelete = onDeletePersonalBottari,
                 onTeamBottariDelete = onDeleteTeamBottari,

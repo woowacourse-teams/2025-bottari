@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -100,12 +101,13 @@ fun BottariItem(
                             chooseBottariStateColor(bottari.checkedQuantity, bottari.totalQuantity),
                         ),
                 )
+                Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceXSmall))
                 BottariTypeText(bottari)
                 Spacer(modifier = Modifier.weight(1f))
                 DateText(
                     alarmUiModel = bottari.alarm,
-                    modifier = Modifier.padding(end = BottariTheme.spacing.spaceMedium),
                 )
+                Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceMedium))
                 Box {
                     Image(
                         painter = painterResource(R.drawable.ic_more_horizontal),
@@ -127,21 +129,20 @@ fun BottariItem(
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceLarge))
             Text(
                 bottari.title,
                 modifier =
                     Modifier.padding(
                         start = BottariTheme.spacing.spaceSmall,
-                        top = BottariTheme.spacing.spaceLarge,
-                        bottom = BottariTheme.spacing.spaceSmall,
                     ),
                 style = BottariTheme.typography.semiBold24.toTextStyle(),
             )
+            Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
             Row(
                 Modifier.padding(
                     start = BottariTheme.spacing.spaceSmall,
                     end = BottariTheme.spacing.spaceSmall,
-                    bottom = BottariTheme.spacing.spaceXSmall,
                 ),
                 verticalAlignment = Alignment.Bottom,
             ) {
@@ -152,16 +153,17 @@ fun BottariItem(
                     bottari.checkedQuantity,
                     bottari.totalQuantity,
                 )
+                Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceSmall))
                 Text(
                     modifier =
                         Modifier.padding(
-                            start = BottariTheme.spacing.spaceSmall,
                             end = BottariTheme.spacing.space2xSmall,
                         ),
                     text = "${bottari.checkedQuantity}/${bottari.totalQuantity}",
                     style = BottariTheme.typography.medium14.toTextStyle(),
                 )
             }
+            Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceXSmall))
         }
     }
 }
@@ -174,7 +176,7 @@ private fun BottariTypeText(bottari: MyBottariUiModel) {
             is BottariUiModel -> stringResource(R.string.personal_bottari_text)
             else -> return
         }
-    Text(text = teamTypeText, modifier = Modifier.padding(start = BottariTheme.spacing.spaceXSmall))
+    Text(text = teamTypeText)
 }
 
 @Composable

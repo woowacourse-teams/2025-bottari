@@ -1,9 +1,9 @@
 package com.bottari.presentation.compose.home.team
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -45,15 +45,15 @@ fun BottariCreateDialog(
         ) {
             Column {
                 Text(text = title, style = BottariTheme.typography.medium16.toTextStyle())
+                Spacer(modifier = Modifier.height(BottariTheme.spacing.space2xSmall))
                 Text(
-                    modifier = Modifier.padding(top = BottariTheme.spacing.space2xSmall),
                     text = subTitle,
                     style = BottariTheme.typography.regular12.toTextStyle(),
                 )
+                Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
                 TextField(
                     modifier =
                         Modifier
-                            .padding(top = BottariTheme.spacing.spaceSmall)
                             .height(48.dp)
                             .fillMaxWidth(),
                     colors =
@@ -74,10 +74,10 @@ fun BottariCreateDialog(
                     },
                     singleLine = true,
                 )
+                Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceMedium))
                 Button(
                     modifier =
                         Modifier
-                            .padding(top = BottariTheme.spacing.spaceMedium)
                             .height(48.dp)
                             .fillMaxWidth(),
                     onClick = onClick,
