@@ -52,7 +52,7 @@ object DataSourceProvider {
 
     val bottariLocalDataSource: BottariLocalDataSource by lazy {
         BottariLocalDataSourceImpl(
-            DatabaseProvider.bottariDatabase.bottariDao(),
+            DatabaseProvider.bottariDatabase,
         )
     }
     val alarmRemoteDataSource: AlarmRemoteDataSource by lazy {
