@@ -4,16 +4,20 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
+import androidx.room.Transaction
 import com.bottari.data.model.local.bottari.BottariEntity
+import com.bottari.data.model.local.bottari.BottariWithAlarmAndItems
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BottariDao {
+    @Transaction
     @Query("SELECT * FROM Bottaries ORDER BY createdAt DESC")
-    fun fetchBottaries(): Flow<List<BottariEntity>>
+    fun fetchBottariesWithAlarmAndItems(): Flow<List<BottariWithAlarmAndItems>>
 
+    @Transaction
     @Query("SELECT * FROM Bottaries WHERE id = :id")
-    fun findBottari(id: Long): Flow<BottariEntity?>
+    fun findBottariWithAlarmAndItems(id: Long): Flow<BottariWithAlarmAndItems?>
 
     @Insert(onConflict = REPLACE)
     suspend fun createBottari(bottari: BottariEntity): Long

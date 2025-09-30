@@ -2,14 +2,15 @@ package com.bottari.data.source.local.bottari
 
 import com.bottari.data.local.bottari.BottariDao
 import com.bottari.data.model.local.bottari.BottariEntity
+import com.bottari.data.model.local.bottari.BottariWithAlarmAndItems
 import kotlinx.coroutines.flow.Flow
 
 class BottariLocalDataSourceImpl(
     private val dao: BottariDao,
 ) : BottariLocalDataSource {
-    override fun fetchBottaries(): Flow<List<BottariEntity>> = dao.fetchBottaries()
+    override fun fetchBottaries(): Flow<List<BottariWithAlarmAndItems>> = dao.fetchBottariesWithAlarmAndItems()
 
-    override fun findBottari(id: Long): Flow<BottariEntity?> = dao.findBottari(id)
+    override fun findBottari(id: Long): Flow<BottariWithAlarmAndItems?> = dao.findBottariWithAlarmAndItems(id)
 
     override suspend fun createBottari(bottari: BottariEntity): Result<Long> = runCatching { dao.createBottari(bottari) }
 
