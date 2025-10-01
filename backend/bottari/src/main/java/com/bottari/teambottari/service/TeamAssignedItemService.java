@@ -112,17 +112,6 @@ public class TeamAssignedItemService {
         publishDeleteEvent(id, teamAssignedItemInfo);
     }
 
-    private void publishDeleteEvent(
-            final Long id,
-            final TeamAssignedItemInfo teamAssignedItemInfo
-    ) {
-        applicationEventPublisher.publishEvent(new DeleteAssignedItemEvent(
-                teamAssignedItemInfo.getTeamBottari().getId(),
-                id,
-                teamAssignedItemInfo.getName()
-        ));
-    }
-
     public List<TeamItemStatusResponse> getAllWithMemberStatusByTeamBottariId(final Long teamBottariId) {
         final List<TeamAssignedItem> items = teamAssignedItemRepository.findAllByTeamBottariId(teamBottariId);
         final Map<TeamAssignedItemInfo, List<TeamAssignedItem>> itemsByInfo = groupByInfo(items);
@@ -327,8 +316,8 @@ public class TeamAssignedItemService {
         ));
     }
 
-    // 삭제할 담당자 계산: (현재 담당자) - (요청된 담당자)
 
+    // 삭제할 담당자 계산: (현재 담당자) - (요청된 담당자)
     private void deleteItemsToRemove(
             final Set<Long> currentAssignedMemberIds,
             final Set<Long> requestedAssignMemberIds,
@@ -343,8 +332,8 @@ public class TeamAssignedItemService {
             teamAssignedItemRepository.deleteAllInBatch(itemsToRemove);
         }
     }
-    // 추가할 담당자 계산: (요청된 담당자) - (현재 담당자)
 
+    // 추가할 담당자 계산: (요청된 담당자) - (현재 담당자)
     private void createItemsToAdd(
             final TeamAssignedItemInfo teamAssignedItemInfo,
             final Set<Long> currentTeamMemberIds,
@@ -465,6 +454,17 @@ public class TeamAssignedItemService {
                 savedTeamAssignedItemInfo.getId(),
                 savedTeamAssignedItemInfo.getName(),
                 itemIds
+        ));
+    }
+
+    private void publishDeleteEvent(
+            final Long id,
+            final TeamAssignedItemInfo teamAssignedItemInfo
+    ) {
+        applicationEventPublisher.publishEvent(new DeleteAssignedItemEvent(
+                teamAssignedItemInfo.getTeamBottari().getId(),
+                id,
+                teamAssignedItemInfo.getName()
         ));
     }
 }

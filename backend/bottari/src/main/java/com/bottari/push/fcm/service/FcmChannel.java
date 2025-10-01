@@ -6,7 +6,7 @@ import static com.bottari.error.ErrorCode.FCM_MESSAGE_SEND_FAIL;
 
 import com.bottari.error.BusinessException;
 import com.bottari.push.ChannelType;
-import com.bottari.push.NotificationBasedChannel;
+import com.bottari.push.NotificationChannel;
 import com.bottari.push.fcm.domain.FcmToken;
 import com.bottari.push.message.PushMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public final class FcmChannel implements NotificationBasedChannel {
+public final class FcmChannel implements NotificationChannel {
 
     private final ObjectMapper objectMapper;
     private final FcmTokenService fcmTokenService;

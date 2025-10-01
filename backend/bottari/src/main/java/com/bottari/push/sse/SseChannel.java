@@ -1,7 +1,7 @@
 package com.bottari.push.sse;
 
 import com.bottari.push.ChannelType;
-import com.bottari.push.ConnectionBasedChannel;
+import com.bottari.push.ConnectionChannel;
 import com.bottari.push.message.PushMessage;
 import java.io.IOException;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Component
 @RequiredArgsConstructor
-public final class SseChannel implements ConnectionBasedChannel {
+public final class SseChannel implements ConnectionChannel {
 
     private final SseSessions sseSessions;
 
