@@ -87,31 +87,11 @@ private fun HomeScreenRouter(
         when (screen) {
             HomeScreenRoute.Bottari ->
                 MyBottariScreen(
-                    onNavigateToPersonalEdit = { bottariId, isNew ->
-                        navigateToPersonalBottariEdit(
-                            bottariId,
-                            isNew,
-                        )
-                    },
-                    onNavigateToTeamEdit = { bottariId, isNew ->
-                        navigateToTeamBottariEdit(
-                            bottariId,
-                            isNew,
-                        )
-                    },
-                    onNavigateToPersonalChecklist = { bottariId, bottariTitle ->
-                        navigateToPersonalBottariChecklist(
-                            bottariId,
-                            bottariTitle,
-                        )
-                    },
-                    onNavigateToTeamChecklist = { bottariId, bottariTitle ->
-                        navigateToTeamBottariChecklist(
-                            bottariId,
-                            bottariTitle,
-                        )
-                    },
                     snackbarState = snackbarState,
+                    onNavigateToPersonalEdit = navigateToPersonalBottariEdit,
+                    onNavigateToTeamEdit = navigateToTeamBottariEdit,
+                    onNavigateToPersonalChecklist = navigateToPersonalBottariChecklist,
+                    onNavigateToTeamChecklist = navigateToTeamBottariChecklist,
                 )
 
             HomeScreenRoute.Template ->
@@ -133,13 +113,13 @@ private fun HomeScreenRouter(
 private fun HomeScreenPreview() {
     BottariTheme {
         HomeScreen(
-            navigateToTemplateDetail = {},
-            navigateToTemplateCreate = {},
-            navigateToBrowser = {},
             navigateToPersonalBottariEdit = { _, _ -> },
             navigateToTeamBottariEdit = { _, _ -> },
             navigateToPersonalBottariChecklist = { _, _ -> },
             navigateToTeamBottariChecklist = { _, _ -> },
+            navigateToBrowser = {},
+            navigateToTemplateDetail = {},
+            navigateToTemplateCreate = {},
         )
     }
 }

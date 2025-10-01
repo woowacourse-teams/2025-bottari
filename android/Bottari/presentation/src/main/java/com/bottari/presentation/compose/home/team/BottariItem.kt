@@ -73,7 +73,7 @@ fun BottariItem(
                 onBottariEdit = onBottariEdit,
             )
             Text(
-                bottari.title,
+                text = bottari.title,
                 style = BottariTheme.typography.semiBold24.toTextStyle(),
             )
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
@@ -146,8 +146,8 @@ private fun BottariTypeLabel(bottari: MyBottariUiModel) {
                     .background(
                         color =
                             chooseBottariStateColor(
-                                bottari.checkedQuantity,
-                                bottari.totalQuantity,
+                                checkedQuantity = bottari.checkedQuantity,
+                                totalQuantity = bottari.totalQuantity,
                             ),
                     ),
         )
