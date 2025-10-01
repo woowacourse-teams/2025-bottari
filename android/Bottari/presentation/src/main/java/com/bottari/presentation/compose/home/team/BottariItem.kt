@@ -1,6 +1,5 @@
 package com.bottari.presentation.compose.home.team
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -111,7 +111,7 @@ private fun BottariInfo(
         Box(
             modifier = Modifier.size(48.dp),
         ) {
-            Image(
+            Icon(
                 painter = painterResource(R.drawable.ic_more_horizontal),
                 contentDescription = stringResource(R.string.bottari_btn_more_description),
                 modifier =
