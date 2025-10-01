@@ -25,43 +25,52 @@ fun MyBottariScreen(
             factory = MyBottariViewModel.Factory(),
         ),
 ) {
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(initialValue = null)
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     var dialogText by remember { mutableStateOf("") }
 
-    val snackbarMessage =
-        when (uiEvent.value) {
-            MyBottariUiEvent.DeletePersonalBottariFailure -> stringResource(id = R.string.bottari_home_delete_failure_text)
-            MyBottariUiEvent.DeletePersonalBottariSuccess -> stringResource(id = R.string.bottari_home_delete_success_text)
-            MyBottariUiEvent.ExitTeamBottariFailure -> stringResource(id = R.string.exit_team_bottari_failure_text)
-            MyBottariUiEvent.ExitTeamBottariSuccess -> stringResource(id = R.string.exit_team_bottari_success_text)
-            MyBottariUiEvent.FetchTeamBottariFailure,
-            MyBottariUiEvent.FetchPersonalBottariFailure,
-            -> stringResource(id = R.string.bottari_home_fetch_failure_text)
+    val deleteFailureMsg = stringResource(id = R.string.bottari_home_delete_failure_text)
+    val deleteSuccessMsg = stringResource(id = R.string.bottari_home_delete_success_text)
+    val exitFailureMsg = stringResource(id = R.string.exit_team_bottari_failure_text)
+    val exitSuccessMsg = stringResource(id = R.string.exit_team_bottari_success_text)
+    val fetchFailureMsg = stringResource(id = R.string.bottari_home_fetch_failure_text)
+    val joinFailureMsg = stringResource(id = R.string.join_team_bottari_failure_text)
+    val createFailureMsg = stringResource(id = R.string.bottari_create_failure_text)
 
-            MyBottariUiEvent.JoinTeamBottariFailure -> stringResource(R.string.join_team_bottari_failure_text)
-            MyBottariUiEvent.CreatePersonalBottariFailure, MyBottariUiEvent.CreateTeamBottariFailure ->
-                stringResource(
-                    R.string.bottari_create_failure_text,
-                )
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                MyBottariUiEvent.DeletePersonalBottariFailure ->
+                    snackbarState.showSnackbar(deleteFailureMsg)
 
-            else -> null
-        }
+                MyBottariUiEvent.DeletePersonalBottariSuccess ->
+                    snackbarState.showSnackbar(deleteSuccessMsg)
 
-    LaunchedEffect(uiEvent.value) {
-        snackbarMessage?.let {
-            snackbarState.showSnackbar(it)
-        }
+                MyBottariUiEvent.ExitTeamBottariFailure ->
+                    snackbarState.showSnackbar(exitFailureMsg)
 
-        when (val event = uiEvent.value) {
-            is MyBottariUiEvent.CreatePersonalBottariSuccess ->
-                onNavigateToPersonalEdit(event.bottariId, true)
+                MyBottariUiEvent.ExitTeamBottariSuccess ->
+                    snackbarState.showSnackbar(exitSuccessMsg)
 
-            is MyBottariUiEvent.CreateTeamBottariSuccess ->
-                onNavigateToTeamEdit(event.bottariId, true)
+                MyBottariUiEvent.FetchTeamBottariFailure,
+                MyBottariUiEvent.FetchPersonalBottariFailure,
+                ->
+                    snackbarState.showSnackbar(fetchFailureMsg)
 
-            else -> {}
+                MyBottariUiEvent.JoinTeamBottariFailure ->
+                    snackbarState.showSnackbar(joinFailureMsg)
+
+                MyBottariUiEvent.CreatePersonalBottariFailure,
+                MyBottariUiEvent.CreateTeamBottariFailure,
+                ->
+                    snackbarState.showSnackbar(createFailureMsg)
+
+                is MyBottariUiEvent.CreatePersonalBottariSuccess ->
+                    onNavigateToPersonalEdit(event.bottariId, true)
+
+                is MyBottariUiEvent.CreateTeamBottariSuccess ->
+                    onNavigateToTeamEdit(event.bottariId, true)
+            }
         }
     }
 
