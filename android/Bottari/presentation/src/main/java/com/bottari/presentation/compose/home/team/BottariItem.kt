@@ -234,12 +234,12 @@ private fun BottariCheckInfo(
         verticalAlignment = Alignment.Bottom,
     ) {
         BottariCheckIndicator(
+            checkedQuantity = checkedQuantity,
+            totalQuantity = totalQuantity,
             modifier =
                 Modifier
                     .weight(1f)
                     .height(BottariTheme.spacing.space2xSmall),
-            checkedQuantity = checkedQuantity,
-            totalQuantity = totalQuantity,
         )
         Spacer(modifier = Modifier.width(BottariTheme.spacing.space2xLarge))
         Text(
@@ -256,9 +256,9 @@ private fun BottariCheckInfo(
 
 @Composable
 private fun BottariCheckIndicator(
-    modifier: Modifier = Modifier,
     checkedQuantity: Int,
     totalQuantity: Int,
+    modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier, contentAlignment = Alignment.CenterStart) {
         Box(
