@@ -1,7 +1,9 @@
 package com.bottari.presentation.compose.home.team
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -32,30 +34,44 @@ fun BottariList(
 ) {
     var openedMenuBottariId by remember { mutableStateOf<Long?>(null) }
 
-    LazyColumn(
-        state = listState,
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
-        contentPadding = PaddingValues(bottom = BottariTheme.spacing.spaceXSmall),
-    ) {
-        items(
-            items = bottaries,
-            key = { bottari -> bottari.id to bottari::class.java.simpleName },
-        ) { bottari ->
-            BottariItem(
-                bottari = bottari,
-                isShowMenu = openedMenuBottariId == bottari.id,
+    Box(modifier = modifier.fillMaxSize()) {
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
+            contentPadding = PaddingValues(bottom = BottariTheme.spacing.spaceXSmall),
+        ) {
+            items(
+                items = bottaries,
+                key = { bottari -> bottari.id to bottari::class.java.simpleName },
+            ) { bottari ->
+                BottariItem(
+                    bottari = bottari,
+                    isShowMenu = openedMenuBottariId == bottari.id,
+                    modifier =
+                        Modifier
+                            .padding(
+                                horizontal = BottariTheme.spacing.spaceMedium,
+                            ).clickable { onBottariClick(bottari) },
+                    onPersonalBottariDelete = onDeletePersonalBottari,
+                    onTeamBottariDelete = onDeleteTeamBottari,
+                    onPersonalBottariEdit = onPersonalBottariEdit,
+                    onTeamBottariEdit = onTeamBottariEdit,
+                    showMenu = { openedMenuBottariId = bottari.id },
+                    closeMenu = { openedMenuBottariId = null },
+                )
+            }
+        }
+
+        if (openedMenuBottariId != null) {
+            Box(
                 modifier =
                     Modifier
-                        .padding(
-                            horizontal = BottariTheme.spacing.spaceMedium,
-                        ).clickable { onBottariClick(bottari) },
-                onPersonalBottariDelete = onDeletePersonalBottari,
-                onTeamBottariDelete = onDeleteTeamBottari,
-                onPersonalBottariEdit = onPersonalBottariEdit,
-                onTeamBottariEdit = onTeamBottariEdit,
-                showMenu = { openedMenuBottariId = bottari.id },
-                closeMenu = { openedMenuBottariId = null },
+                        .fillMaxSize()
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                        ) {},
             )
         }
     }

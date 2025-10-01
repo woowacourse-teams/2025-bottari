@@ -108,7 +108,6 @@ class MyBottariViewModel(
             createTeamBottariUseCase(title)
                 .onSuccess { bottariId ->
                     bottariId?.let { id ->
-
                         emitEvent(MyBottariUiEvent.CreateTeamBottariSuccess(id))
                     }
                 }.onFailure {
