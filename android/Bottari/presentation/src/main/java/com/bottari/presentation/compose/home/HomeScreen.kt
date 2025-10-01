@@ -54,15 +54,15 @@ fun HomeScreen(
     ) { innerPadding ->
         HomeScreenRouter(
             navController = navController,
+            navigateToBrowser = navigateToBrowser,
             navigateToTemplateDetail = navigateToTemplateDetail,
             navigateToTemplateCreate = navigateToTemplateCreate,
-            navigateToBrowser = navigateToBrowser,
-            modifier = Modifier.padding(innerPadding),
             navigateToPersonalBottariEdit = navigateToPersonalBottariEdit,
             navigateToTeamBottariEdit = navigateToTeamBottariEdit,
             navigateToPersonalBottariChecklist = navigateToPersonalBottariChecklist,
             navigateToTeamBottariChecklist = navigateToTeamBottariChecklist,
             snackbarState = snackbarHostState,
+            modifier = Modifier.padding(innerPadding),
         )
     }
 }
