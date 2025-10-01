@@ -267,14 +267,14 @@ private fun BottariCheckIndicator(
     totalQuantity: Int,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier, contentAlignment = Alignment.CenterStart) {
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .clip(shape = RoundedCornerShape(16.dp))
-                    .background(BottariTheme.colors.gray400),
-        )
+    Box(
+        modifier =
+            modifier
+                .fillMaxSize()
+                .clip(shape = RoundedCornerShape(16.dp))
+                .background(BottariTheme.colors.gray400),
+        contentAlignment = Alignment.CenterStart,
+    ) {
         Box(
             modifier =
                 Modifier
