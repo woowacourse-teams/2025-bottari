@@ -196,7 +196,7 @@ private fun DateText(
                 }
 
             AlarmTypeUiModel.REPEAT -> {
-                if (alarmUiModel.isRepeatEveryDay) {
+                if (!alarmUiModel.isRepeatEveryDay) {
                     val checkedDays = alarmUiModel.repeatDays.filter { it.isChecked }
                     buildString {
                         append(alarmUiModel.time.formatWithPattern(timeFormat))
