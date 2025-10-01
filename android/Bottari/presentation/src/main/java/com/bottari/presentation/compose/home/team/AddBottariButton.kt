@@ -78,8 +78,8 @@ fun AddBottariButton(
                 ) {
                     Text(
                         text = stringResource(R.string.team_bottari_join_btn_text),
-                        style = BottariTheme.typography.semiBold20.toTextStyle(),
                         modifier = Modifier.padding(horizontal = BottariTheme.spacing.space2xSmall),
+                        style = BottariTheme.typography.semiBold20.toTextStyle(),
                     )
                 }
 
@@ -95,8 +95,8 @@ fun AddBottariButton(
                 ) {
                     Text(
                         text = stringResource(R.string.team_bottari_join_btn_text),
-                        style = BottariTheme.typography.semiBold20.toTextStyle(),
                         modifier = Modifier.padding(horizontal = BottariTheme.spacing.space2xSmall),
+                        style = BottariTheme.typography.semiBold20.toTextStyle(),
                     )
                 }
 
@@ -112,8 +112,8 @@ fun AddBottariButton(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_person_filled),
-                        modifier = Modifier.size(40.dp),
                         contentDescription = stringResource(R.string.personal_bottari_btn_create_description),
+                        modifier = Modifier.size(40.dp),
                     )
                 }
             }
