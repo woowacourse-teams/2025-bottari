@@ -29,7 +29,7 @@ fun BottariList(
     onEditTeamBottari: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var openedMenuBottariId by remember { mutableStateOf<Long?>(null) }
+    var openedMenuBottari by remember { mutableStateOf<Any?>(null) }
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -43,9 +43,9 @@ fun BottariList(
         ) { bottari ->
             BottariItem(
                 bottari = bottari,
-                isMenuShown = (openedMenuBottariId == bottari.id),
-                onShowMenu = { openedMenuBottariId = bottari.id },
-                onCloseMenu = { openedMenuBottariId = null },
+                isMenuShown = (openedMenuBottari == bottari),
+                onShowMenu = { openedMenuBottari = bottari },
+                onCloseMenu = { openedMenuBottari = null },
                 onBottariDelete = onBottariDelete@{
                     if (bottari is BottariUiModel) {
                         onDeletePersonalBottari(bottari.id)
