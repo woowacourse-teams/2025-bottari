@@ -73,12 +73,12 @@ fun HomeScreenRouter(
     navigateToBrowser: (String) -> Unit,
     navigateToTemplateDetail: (Long) -> Unit,
     navigateToTemplateCreate: () -> Unit,
-    modifier: Modifier = Modifier,
     navigateToPersonalBottariEdit: (Long, Boolean) -> Unit,
     navigateToTeamBottariEdit: (Long, Boolean) -> Unit,
     navigateToPersonalBottariChecklist: (Long, String) -> Unit,
     navigateToTeamBottariChecklist: (Long, String) -> Unit,
     snackbarState: SnackbarHostState,
+    modifier: Modifier = Modifier,
 ) {
     Navigation(
         navigationController = navController,

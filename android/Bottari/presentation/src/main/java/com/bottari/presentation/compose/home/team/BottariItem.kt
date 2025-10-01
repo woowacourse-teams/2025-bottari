@@ -51,8 +51,8 @@ fun BottariItem(
     closeMenu: () -> Unit,
     onPersonalBottariDelete: (Long) -> Unit,
     onTeamBottariDelete: (Long) -> Unit,
-    onPersonalBottariEdit: (Long, Boolean) -> Unit,
-    onTeamBottariEdit: (Long, Boolean) -> Unit,
+    onPersonalBottariEdit: (Long) -> Unit,
+    onTeamBottariEdit: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BottariBox(
@@ -89,14 +89,23 @@ fun BottariItem(
                                 .clickable { showMenu() },
                     )
 
-                    BottariMenuPopup(
-                        bottari = bottari,
-                        showMenu = isShowMenu,
+                    BottariMenuDropdown(
+                        expanded = isShowMenu,
                         onDismissRequest = closeMenu,
-                        onPersonalBottariDelete = onPersonalBottariDelete,
-                        onTeamBottariDelete = onTeamBottariDelete,
-                        onPersonalBottariEdit = onPersonalBottariEdit,
-                        onTeamBottariEdit = onTeamBottariEdit,
+                        onBottariEdit = {
+                            if (bottari is TeamBottariUiModel) {
+                                onTeamBottariEdit(bottari.id)
+                            } else {
+                                onPersonalBottariEdit(bottari.id)
+                            }
+                        },
+                        onBottariDelete = {
+                            if (bottari is TeamBottariUiModel) {
+                                onTeamBottariDelete(bottari.id)
+                            } else {
+                                onPersonalBottariDelete(bottari.id)
+                            }
+                        },
                     )
                 }
             }
@@ -308,9 +317,9 @@ private fun TeamBottariScreenPreview() {
             ),
         onPersonalBottariDelete = {},
         onTeamBottariDelete = {},
-        onPersonalBottariEdit = { _, _ -> },
+        onPersonalBottariEdit = {},
         isShowMenu = false,
-        onTeamBottariEdit = { _, _ -> },
+        onTeamBottariEdit = { },
         showMenu = {},
         closeMenu = {},
     )

@@ -31,29 +31,30 @@ import kotlinx.coroutines.delay
 @Composable
 fun MyBottariContent(
     uiState: MyBottariUiState,
-    onNavigateToPersonalChecklist: (Long, String) -> Unit,
-    onNavigateToTeamChecklist: (Long, String) -> Unit,
+    onClickPersonalBottari: (Long, String) -> Unit,
+    onClickTeamBottari: (Long, String) -> Unit,
     onDeletePersonalBottari: (Long) -> Unit,
     onDeleteTeamBottari: (Long) -> Unit,
-    onEditPersonalBottari: (Long, Boolean) -> Unit,
-    onEditTeamBottari: (Long, Boolean) -> Unit,
+    onEditPersonalBottari: (Long) -> Unit,
+    onEditTeamBottari: (Long) -> Unit,
     onOpenPersonalDialog: () -> Unit,
     onOpenTeamDialog: () -> Unit,
     onOpenCodeDialog: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var isCreateBottariBtnExpanded by remember { mutableStateOf(false) }
+    var isFabExpanded by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
-    var fabVisible by remember { mutableStateOf(true) }
+    var isFabVisible by remember { mutableStateOf(true) }
     var openedMenuBottariId by remember { mutableStateOf<Long?>(null) }
 
     LaunchedEffect(listState.isScrollInProgress) {
         if (listState.isScrollInProgress) {
-            fabVisible = false
-        } else {
-            delay(1000)
-            fabVisible = true
+            isFabVisible = false
+            isFabExpanded = false
+            return@LaunchedEffect
         }
+        delay(1000)
+        isFabVisible = true
     }
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -74,15 +75,15 @@ fun MyBottariContent(
                 pagerState = rememberPagerState(initialPage = 0) { pageTitles.size },
             ) { page ->
                 val onBottariClick = onBottariClick@{ bottari: MyBottariUiModel ->
-                    if (isCreateBottariBtnExpanded || openedMenuBottariId != null) {
-                        isCreateBottariBtnExpanded = false
+                    if (isFabExpanded || openedMenuBottariId != null) {
+                        isFabExpanded = false
                         openedMenuBottariId = null
                         return@onBottariClick
                     }
                     navigateToChecklist(
                         bottari,
-                        onNavigateToPersonalChecklist,
-                        onNavigateToTeamChecklist,
+                        onClickPersonalBottari,
+                        onClickTeamBottari,
                     )
                 }
 
@@ -101,16 +102,13 @@ fun MyBottariContent(
                     onDeleteTeamBottari = onDeleteTeamBottari,
                     onPersonalBottariEdit = onEditPersonalBottari,
                     onTeamBottariEdit = onEditTeamBottari,
-                    openedMenuBottariId = openedMenuBottariId,
-                    onShowMenu = { bottariId -> openedMenuBottariId = bottariId },
-                    onCloseMenu = { openedMenuBottariId = null },
                     listState = listState,
                 )
             }
         }
 
         AnimatedVisibility(
-            visible = fabVisible,
+            visible = isFabVisible,
             enter = fadeIn(),
             exit = fadeOut(),
             modifier = Modifier.align(Alignment.BottomEnd),
@@ -120,8 +118,8 @@ fun MyBottariContent(
                 onCodeClick = onOpenCodeDialog,
                 onTeamClick = onOpenTeamDialog,
                 onPersonalClick = onOpenPersonalDialog,
-                isExpanded = isCreateBottariBtnExpanded,
-                onClick = { isCreateBottariBtnExpanded = !isCreateBottariBtnExpanded },
+                isExpanded = isFabExpanded,
+                onExpandClick = { isFabExpanded = !isFabExpanded },
             )
         }
     }
@@ -176,12 +174,12 @@ private fun MyBottariContentPreview() {
             onOpenPersonalDialog = {},
             onOpenTeamDialog = {},
             onOpenCodeDialog = {},
-            onNavigateToPersonalChecklist = { _, _ -> },
-            onNavigateToTeamChecklist = { _, _ -> },
+            onClickPersonalBottari = { _, _ -> },
+            onClickTeamBottari = { _, _ -> },
             onDeletePersonalBottari = {},
             onDeleteTeamBottari = {},
-            onEditPersonalBottari = { _, _ -> },
-            onEditTeamBottari = { _, _ -> },
+            onEditPersonalBottari = { },
+            onEditTeamBottari = { },
         )
     }
 }

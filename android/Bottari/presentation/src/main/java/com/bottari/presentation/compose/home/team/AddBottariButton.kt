@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.Text
@@ -36,16 +37,15 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 @Composable
 fun AddBottariButton(
     buttonSize: Dp,
+    isExpanded: Boolean,
+    onExpandClick: () -> Unit,
     onCodeClick: () -> Unit,
     onTeamClick: () -> Unit,
     onPersonalClick: () -> Unit,
-    isExpanded: Boolean,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val rotation by animateFloatAsState(
         targetValue = if (isExpanded) 45f else 0f,
-        label = "rotation",
     )
 
     Column(
@@ -59,7 +59,10 @@ fun AddBottariButton(
             exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 2 }),
         ) {
             Column(
-                modifier = Modifier.padding(bottom = 8.dp).padding(horizontal = BottariTheme.spacing.spaceXSmall),
+                modifier =
+                    Modifier
+                        .padding(bottom = 8.dp)
+                        .padding(horizontal = BottariTheme.spacing.spaceXSmall),
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceMedium),
             ) {
@@ -69,6 +72,10 @@ fun AddBottariButton(
                     onClick = onCodeClick,
                     containerColor = Color.White,
                     contentColor = Color.Black,
+                    elevation =
+                        FloatingActionButtonDefaults.elevation(
+                            defaultElevation = 4.dp,
+                        ),
                 ) {
                     Text(
                         text = stringResource(R.string.team_bottari_join_btn_text),
@@ -82,6 +89,10 @@ fun AddBottariButton(
                     shape = CircleShape,
                     onClick = onTeamClick,
                     containerColor = Color.White,
+                    elevation =
+                        FloatingActionButtonDefaults.elevation(
+                            defaultElevation = 4.dp,
+                        ),
                 ) {
                     Icon(
                         modifier = Modifier.size(40.dp),
@@ -95,6 +106,10 @@ fun AddBottariButton(
                     shape = CircleShape,
                     onClick = onPersonalClick,
                     containerColor = Color.White,
+                    elevation =
+                        FloatingActionButtonDefaults.elevation(
+                            defaultElevation = 4.dp,
+                        ),
                 ) {
                     Icon(
                         modifier = Modifier.size(40.dp),
@@ -110,7 +125,11 @@ fun AddBottariButton(
                 Modifier.padding(end = BottariTheme.spacing.spaceXSmall).size(buttonSize),
             shape = CircleShape,
             containerColor = BottariTheme.colors.primary,
-            onClick = onClick,
+            onClick = onExpandClick,
+            elevation =
+                FloatingActionButtonDefaults.elevation(
+                    defaultElevation = 4.dp,
+                ),
         ) {
             Icon(
                 imageVector = Icons.Filled.Add,
@@ -131,6 +150,6 @@ private fun AddBottariButtonPreview() {
         onTeamClick = {},
         onPersonalClick = {},
         isExpanded = true,
-        onClick = {},
+        onExpandClick = {},
     )
 }

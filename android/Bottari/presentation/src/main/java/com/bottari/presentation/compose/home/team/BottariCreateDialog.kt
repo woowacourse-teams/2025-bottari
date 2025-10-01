@@ -31,17 +31,16 @@ fun BottariCreateDialog(
     onChangeText: (String) -> Unit,
     onClick: () -> Unit,
     onDismiss: () -> Unit,
+    placeholder: String,
+    isClickable: Boolean,
     modifier: Modifier = Modifier,
-    placeholder: String = "",
-    isClickable: Boolean = true,
 ) {
     Dialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         onDismissRequest = onDismiss,
     ) {
         BottariBox(
-            modifier =
-            modifier,
+            modifier = modifier,
         ) {
             Column {
                 Text(text = title, style = BottariTheme.typography.medium16.toTextStyle())
