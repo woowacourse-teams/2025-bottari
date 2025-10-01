@@ -2,12 +2,14 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.fcm.FcmMessageConverter;
-import com.bottari.fcm.FcmMessageSender;
-import com.bottari.fcm.dto.MessageType;
-import com.bottari.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
+import com.bottari.push.ChannelType;
+import com.bottari.push.PushManager;
+import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
+import com.bottari.push.message.MessageEventType;
+import com.bottari.push.message.MessageResourceType;
+import com.bottari.push.message.PushMessage;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
@@ -42,10 +44,17 @@ public class TeamMemberService {
     private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
     private final MemberRepository memberRepository;
 
-    private final FcmMessageSender fcmMessageSender;
-    private final FcmMessageConverter fcmMessageConverter;
+    private final PushManager pushManager;
+    private final TeamBottariMessageConverter teamBottariMessageConverter;
 
     private final ApplicationEventPublisher applicationEventPublisher;
+
+    @Transactional(readOnly = true)
+    public List<Long> getMemberIdsByTeamBottariId(final Long teamBottariId) {
+            return teamMemberRepository.findAllByTeamBottariId(teamBottariId).stream()
+                    .map(teamMember -> teamMember.getMember().getId())
+                    .toList();
+    }
 
     @Transactional(readOnly = true)
     public ReadTeamMemberInfoResponse getTeamMemberInfoByTeamBottariId(
@@ -264,12 +273,13 @@ public class TeamMemberService {
             final List<TeamSharedItemInfo> uncheckedSharedItemInfos,
             final List<TeamAssignedItemInfo> uncheckedAssignedItemsInfos
     ) {
-        final SendMessageRequest message = fcmMessageConverter.convert(
+        final PushMessage pushMessage = teamBottariMessageConverter.convert(
+                MessageResourceType.TEAM_MEMBER,
+                MessageEventType.REMIND,
                 teamBottari,
                 uncheckedSharedItemInfos,
-                uncheckedAssignedItemsInfos,
-                MessageType.REMIND_BY_TEAM_MEMBER
+                uncheckedAssignedItemsInfos
         );
-        fcmMessageSender.sendMessageToMember(receiver.getId(), message);
+        pushManager.unicast(pushMessage, receiver.getId(), ChannelType.FCM);
     }
 }

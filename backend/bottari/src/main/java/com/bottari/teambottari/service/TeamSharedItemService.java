@@ -2,12 +2,13 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.fcm.FcmMessageConverter;
-import com.bottari.fcm.FcmMessageSender;
-import com.bottari.fcm.dto.MessageType;
-import com.bottari.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
+import com.bottari.push.PushManager;
+import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
+import com.bottari.push.message.MessageEventType;
+import com.bottari.push.message.MessageResourceType;
+import com.bottari.push.message.PushMessage;
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
@@ -35,8 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TeamSharedItemService {
 
-    private final FcmMessageSender fcmMessageSender;
-    private final FcmMessageConverter fcmMessageConverter;
+    private final PushManager pushManager;
+    private final TeamBottariMessageConverter teamBottariMessageConverter;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final TeamSharedItemRepository teamSharedItemRepository;
     private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
@@ -263,9 +264,13 @@ public class TeamSharedItemService {
             final TeamSharedItemInfo info,
             final List<Long> uncheckedMemberIds
     ) {
-        final SendMessageRequest sendMessageRequest = fcmMessageConverter.convert(info.getTeamBottari(), info,
-                MessageType.REMIND_BY_ITEM);
-        fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
+        final PushMessage pushMessage = teamBottariMessageConverter.convert(
+                MessageResourceType.SHARED_ITEM_INFO,
+                MessageEventType.REMIND,
+                info.getTeamBottari(),
+                info
+        );
+        pushManager.multicast(pushMessage, uncheckedMemberIds);
     }
 
     private void validateOwner(

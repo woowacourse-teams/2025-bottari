@@ -2,12 +2,10 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.fcm.FcmMessageConverter;
-import com.bottari.fcm.FcmMessageSender;
-import com.bottari.fcm.dto.MessageType;
-import com.bottari.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
+import com.bottari.push.PushManager;
+import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.teambottari.domain.InviteCodeGenerator;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
@@ -52,8 +50,8 @@ public class TeamBottariService {
     private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
     private final TeamAssignedItemInfoRepository teamAssignedItemInfoRepository;
 
-    private final FcmMessageSender fcmMessageSender;
-    private final FcmMessageConverter fcmMessageConverter;
+    private final PushManager pushManager;
+    private final TeamBottariMessageConverter teamBottariMessageConverter;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -121,11 +119,10 @@ public class TeamBottariService {
         transferOwnerIfNeeded(remainMembers, teamBottari, exitTeamMember);
         teamMemberRepository.deleteById(exitTeamMember.getId());
         deleteTeamBottariIfEmpty(remainMembers, teamBottari);
-        applicationEventPublisher.publishEvent(new ExitTeamMemberEvent(teamBottari.getId(), exitTeamMember.getMember().getId()));
-        notifyMemberExitToRemainMember(teamBottari, exitTeamMember, remainMembers);
+        publishExitEvent(teamBottari, exitTeamMember, remainMembers);
     }
 
-    private void notifyMemberExitToRemainMember(
+    private void publishExitEvent(
             final TeamBottari teamBottari,
             final TeamMember exitTeamMember,
             final List<TeamMember> remainMembers
@@ -137,8 +134,13 @@ public class TeamBottariService {
                 .map(TeamMember::getMember)
                 .map(Member::getId)
                 .toList();
-        final SendMessageRequest request = fcmMessageConverter.convert(teamBottari, exitTeamMember, MessageType.EXIT_TEAM_BOTTARI);
-        fcmMessageSender.sendMessageToMembers(remainMemberIds, request);
+        applicationEventPublisher.publishEvent(new ExitTeamMemberEvent(
+                teamBottari.getId(),
+                teamBottari.getTitle(),
+                exitTeamMember.getMember().getId(),
+                exitTeamMember.getMember().getName(),
+                remainMemberIds
+        ));
     }
 
     private List<TeamMember> findRemainMembers(
@@ -186,7 +188,8 @@ public class TeamBottariService {
     }
 
     private List<ReadTeamBottariPreviewResponse> buildReadTeamBottariPreviewResponses(
-            final List<TeamMember> teamMembers) {
+            final List<TeamMember> teamMembers
+    ) {
         final Map<TeamMember, List<TeamSharedItem>> teamSharedItemsGroup = groupingTeamSharedItem(teamMembers);
         final Map<TeamMember, List<TeamAssignedItem>> teamAssignedItemsGroup = groupingTeamAssignedItem(teamMembers);
         final Map<TeamMember, List<TeamPersonalItem>> teamPersonalItemsGroup = groupingTeamPersonalItem(teamMembers);

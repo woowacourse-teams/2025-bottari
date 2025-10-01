@@ -2,12 +2,14 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.fcm.FcmMessageConverter;
-import com.bottari.fcm.FcmMessageSender;
-import com.bottari.fcm.dto.MessageType;
-import com.bottari.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
+import com.bottari.push.ChannelType;
+import com.bottari.push.PushManager;
+import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
+import com.bottari.push.message.MessageEventType;
+import com.bottari.push.message.MessageResourceType;
+import com.bottari.push.message.PushMessage;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
@@ -45,8 +47,8 @@ public class TeamAssignedItemService {
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
 
-    private final FcmMessageSender fcmMessageSender;
-    private final FcmMessageConverter fcmMessageConverter;
+    private final PushManager pushManager;
+    private final TeamBottariMessageConverter teamBottariMessageConverter;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -108,17 +110,6 @@ public class TeamAssignedItemService {
         teamAssignedItemRepository.deleteAllByInfo(teamAssignedItemInfo);
         teamAssignedItemInfoRepository.delete(teamAssignedItemInfo);
         publishDeleteEvent(id, teamAssignedItemInfo);
-    }
-
-    private void publishDeleteEvent(
-            final Long id,
-            final TeamAssignedItemInfo teamAssignedItemInfo
-    ) {
-        applicationEventPublisher.publishEvent(new DeleteAssignedItemEvent(
-                teamAssignedItemInfo.getTeamBottari().getId(),
-                id,
-                teamAssignedItemInfo.getName()
-        ));
     }
 
     public List<TeamItemStatusResponse> getAllWithMemberStatusByTeamBottariId(final Long teamBottariId) {
@@ -326,7 +317,6 @@ public class TeamAssignedItemService {
     }
 
     // 삭제할 담당자 계산: (현재 담당자) - (요청된 담당자)
-
     private void deleteItemsToRemove(
             final Set<Long> currentAssignedMemberIds,
             final Set<Long> requestedAssignMemberIds,
@@ -341,8 +331,8 @@ public class TeamAssignedItemService {
             teamAssignedItemRepository.deleteAllInBatch(itemsToRemove);
         }
     }
-    // 추가할 담당자 계산: (요청된 담당자) - (현재 담당자)
 
+    // 추가할 담당자 계산: (요청된 담당자) - (현재 담당자)
     private void createItemsToAdd(
             final TeamAssignedItemInfo teamAssignedItemInfo,
             final Set<Long> currentTeamMemberIds,
@@ -424,12 +414,13 @@ public class TeamAssignedItemService {
             final TeamAssignedItemInfo info,
             final List<Long> uncheckedMemberIds
     ) {
-        final SendMessageRequest sendMessageRequest = fcmMessageConverter.convert(
+        final PushMessage pushMessage = teamBottariMessageConverter.convert(
+                MessageResourceType.ASSIGNED_ITEM_INFO,
+                MessageEventType.REMIND,
                 info.getTeamBottari(),
-                info,
-                MessageType.REMIND_BY_ITEM
+                info
         );
-        fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
+        pushManager.multicast(pushMessage, uncheckedMemberIds, ChannelType.FCM);
     }
 
     private void validateOwner(
@@ -462,6 +453,17 @@ public class TeamAssignedItemService {
                 savedTeamAssignedItemInfo.getId(),
                 savedTeamAssignedItemInfo.getName(),
                 itemIds
+        ));
+    }
+
+    private void publishDeleteEvent(
+            final Long id,
+            final TeamAssignedItemInfo teamAssignedItemInfo
+    ) {
+        applicationEventPublisher.publishEvent(new DeleteAssignedItemEvent(
+                teamAssignedItemInfo.getTeamBottari().getId(),
+                id,
+                teamAssignedItemInfo.getName()
         ));
     }
 }

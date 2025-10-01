@@ -11,11 +11,12 @@ import static org.mockito.Mockito.verify;
 
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
-import com.bottari.fcm.FcmMessageConverter;
-import com.bottari.fcm.FcmMessageSender;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
+import com.bottari.push.ChannelType;
+import com.bottari.push.PushManager;
+import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
@@ -39,7 +40,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({
         TeamAssignedItemService.class,
-        FcmMessageConverter.class,
+        TeamBottariMessageConverter.class,
         JpaAuditingConfig.class,
 })
 class TeamAssignedItemServiceTest {
@@ -48,7 +49,7 @@ class TeamAssignedItemServiceTest {
     private TeamAssignedItemService teamAssignedItemService;
 
     @MockitoBean
-    private FcmMessageSender fcmMessageSender;
+    private PushManager pushManager;
 
     @Autowired
     private EntityManager entityManager;
@@ -761,13 +762,13 @@ class TeamAssignedItemServiceTest {
                     antherMember.getId()
             );
 
-            doNothing().when(fcmMessageSender).sendMessageToMembers(eq(uncheckedMemberIds), any());
+            doNothing().when(pushManager).multicast(any(), eq(uncheckedMemberIds), eq(ChannelType.FCM));
 
             // when & then
             assertThatCode(
                     () -> teamAssignedItemService.sendRemindAlarm(teamAssignedItemInfo.getId(), member.getSsaid()))
                     .doesNotThrowAnyException();
-            verify(fcmMessageSender).sendMessageToMembers(eq(uncheckedMemberIds), any());
+            verify(pushManager).multicast(any(), eq(uncheckedMemberIds), eq(ChannelType.FCM));
         }
 
         @DisplayName("보채기 알람을 보낼 때, 물품 정보가 존재하지 않는다면 예외를 던진다.")

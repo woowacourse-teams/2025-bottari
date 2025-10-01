@@ -2,8 +2,8 @@ package com.bottari.member.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.fcm.domain.FcmToken;
-import com.bottari.fcm.repository.FcmTokenRepository;
+import com.bottari.push.fcm.domain.FcmToken;
+import com.bottari.push.fcm.repository.FcmTokenRepository;
 import com.bottari.member.domain.Member;
 import com.bottari.member.dto.CheckRegistrationResponse;
 import com.bottari.member.dto.CreateMemberRequest;
@@ -27,6 +27,13 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final FcmTokenRepository fcmTokenRepository;
+
+    public Long getIdBySsaid(final String ssaid) {
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+
+        return member.getId();
+    }
 
     @Transactional
     public Long create(final CreateMemberRequest request) {
