@@ -101,13 +101,21 @@ private fun BottariInfo(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        BottariTypeLabel(bottari)
+        when (bottari) {
+            is TeamBottariUiModel -> stringResource(R.string.team_bottari_text)
+            is BottariUiModel -> stringResource(R.string.personal_bottari_text)
+            else -> null
+        }?.let { bottariTypeText ->
+            BottariTypeLabel(
+                checkedQuantity = bottari.checkedQuantity,
+                totalQuantity = bottari.totalQuantity,
+                bottariTypeText = bottariTypeText,
+            )
+        }
 
         Spacer(modifier = Modifier.weight(1f))
+        bottari.alarm?.let { alarm -> DateText(alarmUiModel = alarm) }
 
-        DateText(
-            alarmUiModel = bottari.alarm,
-        )
         Box(
             modifier = Modifier.size(48.dp),
         ) {
@@ -136,18 +144,23 @@ private fun BottariInfo(
 }
 
 @Composable
-private fun BottariTypeLabel(bottari: MyBottariUiModel) {
+private fun BottariTypeLabel(
+    checkedQuantity: Int,
+    totalQuantity: Int,
+    bottariTypeText: String,
+    modifier: Modifier = Modifier,
+) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Box(
             modifier =
-                Modifier
+                modifier
                     .size(8.dp)
                     .clip(CircleShape)
                     .background(
                         color =
                             chooseBottariStateColor(
-                                checkedQuantity = bottari.checkedQuantity,
-                                totalQuantity = bottari.totalQuantity,
+                                checkedQuantity = checkedQuantity,
+                                totalQuantity = totalQuantity,
                             ),
                     ),
         )
@@ -156,11 +169,7 @@ private fun BottariTypeLabel(bottari: MyBottariUiModel) {
 
         Text(
             text =
-                when (bottari) {
-                    is TeamBottariUiModel -> stringResource(R.string.team_bottari_text)
-                    is BottariUiModel -> stringResource(R.string.personal_bottari_text)
-                    else -> return
-                },
+            bottariTypeText,
         )
     }
 }
@@ -177,11 +186,9 @@ private fun chooseBottariStateColor(
 
 @Composable
 private fun DateText(
-    alarmUiModel: AlarmUiModel?,
+    alarmUiModel: AlarmUiModel,
     modifier: Modifier = Modifier,
 ) {
-    if (alarmUiModel == null) return
-
     val dateFormat = stringResource(R.string.common_format_date_alarm)
     val timeFormat = stringResource(R.string.common_format_time_alarm)
     val separator = stringResource(R.string.common_separator_text)
