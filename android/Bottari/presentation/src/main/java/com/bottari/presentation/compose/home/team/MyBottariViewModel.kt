@@ -17,12 +17,9 @@ import com.bottari.domain.usecase.team.JoinTeamBottariUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 class MyBottariViewModel(
     private val fetchBottariesUseCase: FetchBottariesUseCase,
@@ -41,7 +38,6 @@ class MyBottariViewModel(
         launch {
             deleteBottariUseCase(bottariId)
                 .onSuccess {
-                    ::fetchPersonalBottaries
                     emitEvent(MyBottariUiEvent.DeletePersonalBottariSuccess)
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.DeletePersonalBottariFailure)
@@ -53,7 +49,7 @@ class MyBottariViewModel(
         launch {
             deleteTeamBottariUseCase(bottariId)
                 .onSuccess {
-                    ::fetchTeamBottaries
+                    fetchTeamBottaries()
                     emitEvent(MyBottariUiEvent.ExitTeamBottariSuccess)
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.ExitTeamBottariFailure)
@@ -118,32 +114,15 @@ class MyBottariViewModel(
     }
 
     private fun fetchMyBottaries() {
-        updateState { copy(isLoading = true) }
         launch {
-            val teamBottariesJob = fetchTeamBottaries()
-            fetchPersonalBottariesOnce()
-            teamBottariesJob.join()
-            updateState { copy(isLoading = false) }
             fetchPersonalBottaries()
+            fetchTeamBottaries()
         }
     }
 
-    private suspend fun fetchPersonalBottariesOnce() {
-        val bottaries =
-            fetchBottariesUseCase()
-                .catch {
-                    emitEvent(MyBottariUiEvent.FetchPersonalBottariFailure)
-                    emit(emptyList())
-                }.firstOrNull()
-                ?: return
-
-        updateState {
-            copy(personalBottaries = bottaries.map { BottariUiModel.fromPersonalBottari(it) })
-        }
-    }
-
-    private fun fetchTeamBottaries(): Job =
-        viewModelScope.launch {
+    private fun fetchTeamBottaries() =
+        launch {
+            updateState { copy(isLoading = true) }
             fetchTeamBottariesUseCase()
                 .onSuccess { bottaries ->
                     updateState {
@@ -152,9 +131,13 @@ class MyBottariViewModel(
                                 bottaries.map { bottari ->
                                     TeamBottariUiModel.fromDomain(bottari)
                                 },
+                            isLoading = false,
                         )
                     }
-                }.onFailure { emitEvent(MyBottariUiEvent.FetchTeamBottariFailure) }
+                }.onFailure {
+                    emitEvent(MyBottariUiEvent.FetchTeamBottariFailure)
+                    updateState { copy(isLoading = false) }
+                }
         }
 
     private fun fetchPersonalBottaries() =
