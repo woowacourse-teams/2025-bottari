@@ -19,7 +19,7 @@ import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -130,19 +130,17 @@ class MyBottariViewModel(
     }
 
     private suspend fun fetchPersonalBottariesOnce() {
-        fetchBottariesUseCase()
-            .catch { emitEvent(MyBottariUiEvent.FetchPersonalBottariFailure) }
-            .first()
-            .let { bottaries ->
-                updateState {
-                    copy(
-                        personalBottaries =
-                            bottaries.map { bottari ->
-                                BottariUiModel.fromPersonalBottari(bottari)
-                            },
-                    )
-                }
-            }
+        val bottaries =
+            fetchBottariesUseCase()
+                .catch {
+                    emitEvent(MyBottariUiEvent.FetchPersonalBottariFailure)
+                    emit(emptyList())
+                }.firstOrNull()
+                ?: return
+
+        updateState {
+            copy(personalBottaries = bottaries.map { BottariUiModel.fromPersonalBottari(it) })
+        }
     }
 
     private fun fetchTeamBottaries(): Job =
