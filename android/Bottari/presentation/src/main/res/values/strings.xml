@@ -339,7 +339,8 @@
     <string name="bottari_delete_btn_description_text">보따리 삭제 버튼</string>
     <string name="bottari_btn_create_description">보따리 만들기 버튼</string>
     <string name="bottari_btn_template_delete_description">보따리 템플릿 삭제 버튼</string>
-    <string name="bottari_btn_item_add_description">물건 추가 버튼</string>
+    <string name="bottari_btn_item_add_description">물건 추가 버튼</string>\
+    <string name="bottari_btn_more_description">더보기 버튼</string>
     <string name="bottari_icon_item_empty_description">빈 물건 아이콘</string>
     <string name="bottari_icon_home_description">보따리 아이콘 이미지</string>
     <string name="bottari_icon_type_description">보따리 타입 아이콘</string>
@@ -364,4 +365,5 @@
     <string name="team_btn_bottari_create_option_description">팀 보따리 생성 옵션 버튼</string>
     <string name="team_btn_bottari_join_description">팀 보따리 참가 버튼</string>
     <string name="team_btn_share_link_description">초대 코드 공유 버튼</string>
+
 </resources>

@@ -3,6 +3,7 @@ package com.bottari.presentation.compose.home.team
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -43,36 +43,6 @@ import java.time.LocalTime
 import java.time.format.TextStyle
 import java.util.Locale
 
-@Preview
-@Composable
-fun TeamBottariScreenPreview() {
-    BottariItem(
-        bottari =
-            TeamBottariUiModel(
-                id = 1,
-                title = "미리보기보따리",
-                totalQuantity = 10,
-                checkedQuantity = 7,
-                memberCount = 4,
-                alarm =
-                    AlarmUiModel(
-                        type = AlarmTypeUiModel.REPEAT,
-                        isActive = true,
-                        time = LocalTime.now(),
-                        date = LocalDate.now(),
-                        repeatDays = DayOfWeek.entries.map { RepeatDayUiModel(it, true) },
-                    ),
-            ),
-        onPersonalBottariDelete = {},
-        onTeamBottariDelete = {},
-        onPersonalBottariEdit = { _, _ -> },
-        isShowMenu = true,
-        onTeamBottariEdit = { _, _ -> },
-        showMenu = {},
-        closeMenu = {},
-    )
-}
-
 @Composable
 fun BottariItem(
     bottari: MyBottariUiModel,
@@ -87,33 +57,34 @@ fun BottariItem(
 ) {
     BottariBox(
         modifier = modifier,
-        contentPadding = PaddingValues(BottariTheme.spacing.spaceSmall),
+        contentPadding =
+            PaddingValues(
+                bottom = BottariTheme.spacing.spaceSmall,
+                start = BottariTheme.spacing.spaceLarge,
+                end = BottariTheme.spacing.spaceLarge,
+            ),
     ) {
         Column {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Box(
-                    Modifier
-                        .size(8.dp)
-                        .clip(CircleShape)
-                        .background(
-                            chooseBottariStateColor(bottari.checkedQuantity, bottari.totalQuantity),
-                        ),
-                )
-                Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceXSmall))
-                BottariTypeText(bottari)
+                BottariTypeLabel(bottari)
+
                 Spacer(modifier = Modifier.weight(1f))
+
                 DateText(
                     alarmUiModel = bottari.alarm,
                 )
-                Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceMedium))
-                Box {
+                Box(
+                    modifier = Modifier.size(48.dp),
+                ) {
                     Image(
                         painter = painterResource(R.drawable.ic_more_horizontal),
-                        contentDescription = "더보기 메뉴",
+                        contentDescription = stringResource(R.string.bottari_btn_more_description),
                         modifier =
                             Modifier
+                                .align(Alignment.CenterEnd)
                                 .rotate(90f)
                                 .clickable { showMenu() },
                     )
@@ -129,21 +100,12 @@ fun BottariItem(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceLarge))
             Text(
                 bottari.title,
-                modifier =
-                    Modifier.padding(
-                        start = BottariTheme.spacing.spaceSmall,
-                    ),
                 style = BottariTheme.typography.semiBold24.toTextStyle(),
             )
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
             Row(
-                Modifier.padding(
-                    start = BottariTheme.spacing.spaceSmall,
-                    end = BottariTheme.spacing.spaceSmall,
-                ),
                 verticalAlignment = Alignment.Bottom,
             ) {
                 BottariCheckIndicator(
@@ -153,12 +115,8 @@ fun BottariItem(
                     bottari.checkedQuantity,
                     bottari.totalQuantity,
                 )
-                Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceSmall))
+                Spacer(modifier = Modifier.width(BottariTheme.spacing.space2xLarge))
                 Text(
-                    modifier =
-                        Modifier.padding(
-                            end = BottariTheme.spacing.space2xSmall,
-                        ),
                     text = "${bottari.checkedQuantity}/${bottari.totalQuantity}",
                     style = BottariTheme.typography.medium14.toTextStyle(),
                 )
@@ -180,7 +138,7 @@ private fun BottariTypeText(bottari: MyBottariUiModel) {
 }
 
 @Composable
-fun BottariCheckIndicator(
+private fun BottariCheckIndicator(
     modifier: Modifier = Modifier,
     checkedQuantity: Int,
     totalQuantity: Int,
@@ -206,7 +164,7 @@ fun BottariCheckIndicator(
 }
 
 @Composable
-fun DateText(
+private fun DateText(
     alarmUiModel: AlarmUiModel?,
     modifier: Modifier = Modifier,
 ) {
@@ -241,6 +199,24 @@ fun DateText(
             }
         }
     Text(text = text, modifier = modifier)
+}
+
+@Composable
+private fun BottariTypeLabel(bottari: MyBottariUiModel) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(
+            Modifier
+                .size(8.dp)
+                .clip(CircleShape)
+                .background(
+                    color = chooseBottariStateColor(bottari.checkedQuantity, bottari.totalQuantity),
+                ),
+        )
+
+        Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceXSmall))
+
+        BottariTypeText(bottari)
+    }
 }
 
 @Composable
@@ -308,4 +284,34 @@ private fun formatEveryWeekRepeat(
             },
         )
     }
+}
+
+@Preview
+@Composable
+private fun TeamBottariScreenPreview() {
+    BottariItem(
+        bottari =
+            TeamBottariUiModel(
+                id = 1,
+                title = "미리보기보따리",
+                totalQuantity = 10,
+                checkedQuantity = 7,
+                memberCount = 4,
+                alarm =
+                    AlarmUiModel(
+                        type = AlarmTypeUiModel.REPEAT,
+                        isActive = true,
+                        time = LocalTime.now(),
+                        date = LocalDate.now(),
+                        repeatDays = DayOfWeek.entries.map { RepeatDayUiModel(it, true) },
+                    ),
+            ),
+        onPersonalBottariDelete = {},
+        onTeamBottariDelete = {},
+        onPersonalBottariEdit = { _, _ -> },
+        isShowMenu = false,
+        onTeamBottariEdit = { _, _ -> },
+        showMenu = {},
+        closeMenu = {},
+    )
 }

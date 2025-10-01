@@ -1,7 +1,6 @@
 package com.bottari.presentation.compose.home.team
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,10 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.bottari.MyBottariUiModel
@@ -29,11 +24,12 @@ fun BottariList(
     onDeleteTeamBottari: (Long) -> Unit,
     onPersonalBottariEdit: (Long, Boolean) -> Unit,
     onTeamBottariEdit: (Long, Boolean) -> Unit,
+    openedMenuBottariId: Long?,
+    onShowMenu: (Long) -> Unit,
+    onCloseMenu: () -> Unit,
     listState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
-    var openedMenuBottariId by remember { mutableStateOf<Long?>(null) }
-
     Box(modifier = modifier.fillMaxSize()) {
         LazyColumn(
             state = listState,
@@ -52,27 +48,16 @@ fun BottariList(
                         Modifier
                             .padding(
                                 horizontal = BottariTheme.spacing.spaceMedium,
-                            ).clickable { onBottariClick(bottari) },
+                            )
+                            .clickable(openedMenuBottariId == null) { onBottariClick(bottari) },
                     onPersonalBottariDelete = onDeletePersonalBottari,
                     onTeamBottariDelete = onDeleteTeamBottari,
                     onPersonalBottariEdit = onPersonalBottariEdit,
                     onTeamBottariEdit = onTeamBottariEdit,
-                    showMenu = { openedMenuBottariId = bottari.id },
-                    closeMenu = { openedMenuBottariId = null },
+                    showMenu = { onShowMenu(bottari.id) },
+                    closeMenu = { onCloseMenu },
                 )
             }
-        }
-
-        if (openedMenuBottariId != null) {
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                        ) {},
-            )
         }
     }
 }

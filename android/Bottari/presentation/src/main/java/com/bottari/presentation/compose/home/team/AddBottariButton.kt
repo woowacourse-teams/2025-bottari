@@ -72,8 +72,8 @@ fun AddBottariButton(
                 ) {
                     Text(
                         text = stringResource(R.string.team_bottari_join_btn_text),
-                        style = BottariTheme.typography.medium20.toTextStyle(),
-                        modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceXSmall),
+                        style = BottariTheme.typography.semiBold20.toTextStyle(),
+                        modifier = Modifier.padding(horizontal = BottariTheme.spacing.space2xSmall),
                     )
                 }
 
@@ -124,7 +124,7 @@ fun AddBottariButton(
 
 @Composable
 @Preview(showBackground = true)
-fun AddBottariButtonPreview() {
+private fun AddBottariButtonPreview() {
     AddBottariButton(
         buttonSize = 60.dp,
         onCodeClick = {},

@@ -79,7 +79,6 @@ fun BottariTabBar(
     }
 
     HorizontalPager(pagerState, modifier = Modifier.fillMaxSize()) { page ->
-
         screen(page)
     }
 }
@@ -149,7 +148,7 @@ private fun BottariIndicator(
 }
 
 @Composable
-fun BottariPagerScreen(
+private fun BottariPagerScreen(
     pageTitles: List<String>,
     modifier: Modifier = Modifier,
 ) {

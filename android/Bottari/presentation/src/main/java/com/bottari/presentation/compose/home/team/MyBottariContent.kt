@@ -3,8 +3,6 @@ package com.bottari.presentation.compose.home.team
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,6 +45,7 @@ fun MyBottariContent(
     var isCreateBottariBtnExpanded by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
     var fabVisible by remember { mutableStateOf(true) }
+    var openedMenuBottariId by remember { mutableStateOf<Long?>(null) }
 
     LaunchedEffect(listState.isScrollInProgress) {
         if (listState.isScrollInProgress) {
@@ -74,7 +73,12 @@ fun MyBottariContent(
                 pageTitles = pageTitles,
                 pagerState = rememberPagerState(initialPage = 0) { pageTitles.size },
             ) { page ->
-                val onBottariClick = { bottari: MyBottariUiModel ->
+                val onBottariClick = onBottariClick@{ bottari: MyBottariUiModel ->
+                    if (isCreateBottariBtnExpanded || openedMenuBottariId != null) {
+                        isCreateBottariBtnExpanded = false
+                        openedMenuBottariId = null
+                        return@onBottariClick
+                    }
                     navigateToChecklist(
                         bottari,
                         onNavigateToPersonalChecklist,
@@ -97,23 +101,14 @@ fun MyBottariContent(
                     onDeleteTeamBottari = onDeleteTeamBottari,
                     onPersonalBottariEdit = onEditPersonalBottari,
                     onTeamBottariEdit = onEditTeamBottari,
+                    openedMenuBottariId = openedMenuBottariId,
+                    onShowMenu = { bottariId -> openedMenuBottariId = bottariId },
+                    onCloseMenu = { openedMenuBottariId = null },
                     listState = listState,
                 )
             }
         }
-        if (isCreateBottariBtnExpanded) {
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                        ) {
-                            isCreateBottariBtnExpanded = false
-                        },
-            )
-        }
+
         AnimatedVisibility(
             visible = fabVisible,
             enter = fadeIn(),
@@ -134,7 +129,7 @@ fun MyBottariContent(
 
 @Preview(showBackground = true)
 @Composable
-fun MyBottariContentPreview() {
+private fun MyBottariContentPreview() {
     val fakeUiState =
         MyBottariUiState(
             personalBottaries =

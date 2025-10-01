@@ -99,7 +99,7 @@ fun BottariCreateDialog(
 
 @Preview
 @Composable
-fun MyCustomDialogContentPreview() {
+private fun MyCustomDialogContentPreview() {
     BottariCreateDialog(
         text = "",
         onChangeText = {},
