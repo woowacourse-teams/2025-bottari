@@ -35,9 +35,9 @@ public class PushManager {
     public void multicast(
             final PushMessage message,
             final List<Long> memberIds,
-            final ChannelType... channelType
+            final ChannelType... channelTypes
     ) {
-        for (final ChannelType type : channelType) {
+        for (final ChannelType type : channelTypes) {
             try {
                 multicast(message, memberIds, type);
             } catch (final UnsupportedOperationException ignore) {
@@ -48,9 +48,9 @@ public class PushManager {
 
     public void broadcast(
             final PushMessage message,
-            final ChannelType... channelType
+            final ChannelType... channelTypes
     ) {
-        for (final ChannelType type : channelType) {
+        for (final ChannelType type : channelTypes) {
             try {
                 broadcast(message, type);
             } catch (final UnsupportedOperationException ignore) {
