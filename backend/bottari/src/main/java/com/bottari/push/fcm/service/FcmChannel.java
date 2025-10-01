@@ -72,11 +72,6 @@ public final class FcmChannel implements NotificationChannel {
     }
 
     @Override
-    public void broadcast(final PushMessage message) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public ChannelType channelType() {
         return ChannelType.FCM;
     }

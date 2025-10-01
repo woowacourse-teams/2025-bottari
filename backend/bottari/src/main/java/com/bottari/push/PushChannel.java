@@ -15,7 +15,5 @@ public interface PushChannel {
             final List<Long> memberIds
     );
 
-    void broadcast(final PushMessage message);
-
     ChannelType channelType();
 }
