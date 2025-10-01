@@ -8,14 +8,14 @@ import kotlinx.parcelize.Parcelize
 enum class HomeScreenRoute(
     override val route: String,
 ) : Screen {
-    Team("team"),
+    Bottari("bottari"),
     Template("template"),
     More("more"),
     ;
 
     fun labelResId(): Int =
         when (this) {
-            Team -> R.string.home_nav_my_bottari_title_text
+            Bottari -> R.string.home_nav_my_bottari_title_text
             Template -> R.string.home_nav_template_title_text
             More -> R.string.home_nav_more_title_text
         }

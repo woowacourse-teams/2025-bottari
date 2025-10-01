@@ -28,16 +28,16 @@ fun BottariCreateDialog(
     subTitle: String,
     btnText: String,
     text: String,
-    onChangeText: (String) -> Unit,
-    onClick: () -> Unit,
-    onDismiss: () -> Unit,
     placeholder: String,
     isClickable: Boolean,
+    onChangeText: (String) -> Unit,
+    onClickBtn: () -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Dialog(
-        properties = DialogProperties(usePlatformDefaultWidth = false),
         onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         BottariBox(
             modifier = modifier,
@@ -51,20 +51,12 @@ fun BottariCreateDialog(
                 )
                 Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
                 TextField(
+                    value = text,
+                    onValueChange = { text -> onChangeText(text) },
                     modifier =
                         Modifier
                             .height(48.dp)
                             .fillMaxWidth(),
-                    colors =
-                        TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            unfocusedContainerColor = BottariTheme.colors.gray200,
-                            focusedContainerColor = BottariTheme.colors.gray200,
-                        ),
-                    shape = RoundedCornerShape(8.dp),
-                    value = text,
-                    onValueChange = { text -> onChangeText(text) },
                     placeholder = {
                         Text(
                             text = placeholder,
@@ -72,22 +64,30 @@ fun BottariCreateDialog(
                         )
                     },
                     singleLine = true,
+                    shape = RoundedCornerShape(8.dp),
+                    colors =
+                        TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            unfocusedContainerColor = BottariTheme.colors.gray200,
+                            focusedContainerColor = BottariTheme.colors.gray200,
+                        ),
                 )
                 Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceMedium))
                 Button(
+                    onClick = onClickBtn,
                     modifier =
                         Modifier
                             .height(48.dp)
                             .fillMaxWidth(),
-                    onClick = onClick,
                     enabled = isClickable,
+                    shape = RoundedCornerShape(12.dp),
                     colors =
                         ButtonDefaults.buttonColors(
                             containerColor = BottariTheme.colors.primary,
                             disabledContainerColor = BottariTheme.colors.gray400,
                             contentColor = Color.White,
                         ),
-                    shape = RoundedCornerShape(12.dp),
                 ) {
                     Text(text = btnText, style = BottariTheme.typography.semiBold16.toTextStyle())
                 }
@@ -100,14 +100,14 @@ fun BottariCreateDialog(
 @Composable
 private fun MyCustomDialogContentPreview() {
     BottariCreateDialog(
-        text = "",
-        onChangeText = {},
-        onClick = {},
-        placeholder = stringResource(R.string.bottari_create_default_title_text),
         title = stringResource(R.string.bottari_create_dialog_title_text),
         subTitle = stringResource(R.string.bottari_create_dialog_description_text),
         btnText = stringResource(R.string.bottari_create_dialog_btn_text),
-        onDismiss = {},
+        text = "",
+        placeholder = stringResource(R.string.bottari_create_default_title_text),
         isClickable = true,
+        onChangeText = {},
+        onClickBtn = {},
+        onDismiss = {},
     )
 }

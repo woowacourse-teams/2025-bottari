@@ -90,7 +90,8 @@ private fun BottariTap(
     Tab(
         modifier = modifier.zIndex(2f),
         text = {
-            val textColor = if (isSelected) Color.Black else BottariTheme.colors.gray700
+            val textColor =
+                if (isSelected) BottariTheme.colors.black else BottariTheme.colors.gray700
             Text(
                 text = title,
                 color = textColor,
@@ -117,7 +118,7 @@ private fun BottariIndicator(
                 .padding(horizontal = 4.dp)
                 .dropShadow(
                     CircleShape,
-                    color = Color.Black.copy(0.05f),
+                    color = BottariTheme.colors.black.copy(alpha = 0.05f),
                     blur = 2.dp,
                     offsetY = 1.dp,
                 ).background(color = Color.White, CircleShape)

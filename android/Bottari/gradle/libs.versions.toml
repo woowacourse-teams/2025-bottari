@@ -67,6 +67,7 @@ timber = "5.0.1"
 firebaseBom = "34.0.0"
 googleGmsGoogleServices = "4.4.3"
 googleFirebaseCrashlytics = "3.0.5"
+material3 = "1.4.0"
 
 [libraries]
 # --- AndroidX Core ---
@@ -132,7 +133,6 @@ firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-
 firebase-installations = { module = "com.google.firebase:firebase-installations" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 firebase-config = { module = "com.google.firebase:firebase-config" }
-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphics" }
 
 [plugins]
 # --- Android Plugins ---

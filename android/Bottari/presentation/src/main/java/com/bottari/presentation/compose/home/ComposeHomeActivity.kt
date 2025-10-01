@@ -22,21 +22,13 @@ class ComposeHomeActivity : AppCompatActivity() {
         setContent {
             BottariTheme {
                 HomeScreen(
-                    navigateToBrowser = { url ->
-                        navigateToBrowser(url)
-                    },
-                    navigateToTemplateDetail = { templateId ->
-                        val newIntent = TemplateActivity.newIntentForDetail(this, templateId)
-                        startActivity(newIntent)
-                    },
-                    navigateToTemplateCreate = {
-                        val newIntent = TemplateActivity.newIntentForCreateTemplate(this)
-                        startActivity(newIntent)
-                    },
                     navigateToPersonalBottariEdit = ::navigateToPersonalBottariEdit,
                     navigateToTeamBottariEdit = ::navigateToTeamBottariEdit,
                     navigateToPersonalBottariChecklist = ::navigateToPersonalBottariChecklist,
                     navigateToTeamBottariChecklist = ::navigateToTeamBottariChecklist,
+                    navigateToBrowser = ::navigateToBrowser,
+                    navigateToTemplateDetail = ::navigateToTemplateDetail,
+                    navigateToTemplateCreate = ::navigateToTemplateCreate,
                 )
             }
         }
@@ -47,7 +39,17 @@ class ComposeHomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun navigateToPersonalBottariEdit(
+    private fun navigateToTemplateDetail(templateId: Long) {
+        val intent = TemplateActivity.newIntentForDetail(this, templateId)
+        startActivity(intent)
+    }
+
+    private fun navigateToTemplateCreate() {
+        val intent = TemplateActivity.newIntentForCreateTemplate(this)
+        startActivity(intent)
+    }
+
+    private fun navigateToPersonalBottariEdit(
         bottariId: Long,
         isNew: Boolean,
     ) {
@@ -55,7 +57,7 @@ class ComposeHomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun navigateToTeamBottariEdit(
+    private fun navigateToTeamBottariEdit(
         bottariId: Long,
         isNew: Boolean,
     ) {
@@ -63,7 +65,7 @@ class ComposeHomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun navigateToPersonalBottariChecklist(
+    private fun navigateToPersonalBottariChecklist(
         bottariId: Long,
         bottariTitle: String,
     ) {
@@ -71,7 +73,7 @@ class ComposeHomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun navigateToTeamBottariChecklist(
+    private fun navigateToTeamBottariChecklist(
         bottariId: Long,
         bottariTitle: String,
     ) {

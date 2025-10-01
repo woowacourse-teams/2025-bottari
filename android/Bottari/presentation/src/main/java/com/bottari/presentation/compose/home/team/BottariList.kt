@@ -17,26 +17,25 @@ import androidx.compose.ui.Modifier
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
-import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
 
 @Composable
 fun BottariList(
     bottaries: List<MyBottariUiModel>,
+    listState: LazyListState,
     onBottariClick: (MyBottariUiModel) -> Unit,
     onDeletePersonalBottari: (Long) -> Unit,
     onDeleteTeamBottari: (Long) -> Unit,
-    onPersonalBottariEdit: (Long) -> Unit,
-    onTeamBottariEdit: (Long) -> Unit,
-    listState: LazyListState,
+    onEditPersonalBottari: (Long) -> Unit,
+    onEditTeamBottari: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var openedMenuBottariId by remember { mutableStateOf<Long?>(null) }
 
     LazyColumn(
-        state = listState,
         modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
+        state = listState,
         contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceSmall),
+        verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
     ) {
         items(
             items = bottaries,
@@ -45,29 +44,28 @@ fun BottariList(
             BottariItem(
                 bottari = bottari,
                 isMenuShown = (openedMenuBottariId == bottari.id),
+                onShowMenu = { openedMenuBottariId = bottari.id },
+                onCloseMenu = { openedMenuBottariId = null },
+                onBottariDelete = onBottariDelete@{
+                    if (bottari is BottariUiModel) {
+                        onDeletePersonalBottari(bottari.id)
+                        return@onBottariDelete
+                    }
+                    onDeleteTeamBottari(bottari.id)
+                },
+                onBottariEdit = onBottariEdit@{
+                    if (bottari is BottariUiModel) {
+                        onEditPersonalBottari(bottari.id)
+                        return@onBottariEdit
+                    }
+                    onEditTeamBottari(bottari.id)
+                },
                 modifier =
                     Modifier
                         .padding(
                             horizontal = BottariTheme.spacing.spaceMedium,
-                        ).clickable(enabled = openedMenuBottariId == null) { onBottariClick(bottari) },
-                onPersonalBottariDelete = onDeletePersonalBottari,
-                onTeamBottariDelete = onDeleteTeamBottari,
-                onPersonalBottariEdit = onPersonalBottariEdit,
-                onTeamBottariEdit = onTeamBottariEdit,
-                onShowMenu = { openedMenuBottariId = bottari.id },
-                onCloseMenu = { openedMenuBottariId = null },
+                        ).clickable { onBottariClick(bottari) },
             )
         }
-    }
-}
-
-fun navigateToChecklist(
-    bottari: MyBottariUiModel,
-    onNavigateToPersonalChecklist: (Long, String) -> Unit,
-    onNavigateToTeamChecklist: (Long, String) -> Unit,
-) {
-    when (bottari) {
-        is BottariUiModel -> onNavigateToPersonalChecklist(bottari.id, bottari.title)
-        is TeamBottariUiModel -> onNavigateToTeamChecklist(bottari.id, bottari.title)
     }
 }

@@ -32,7 +32,7 @@ fun HomeScreen(
 
     val navController =
         rememberSaveable(saver = NavigationController.saver) {
-            NavigationController(HomeScreenRoute.Team)
+            NavigationController(HomeScreenRoute.Bottari)
         }
 
     val currentScreen =
@@ -41,8 +41,6 @@ fun HomeScreen(
         }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        containerColor = LocalBottariBgColor.current,
         topBar = { HomeTopAppBar(title = stringResource(currentScreen.labelResId())) },
         bottomBar = {
             HomeBottomNavigationBar(
@@ -51,6 +49,8 @@ fun HomeScreen(
                 onTabSelected = { tab -> navController.navigate(tab) },
             )
         },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        containerColor = LocalBottariBgColor.current,
     ) { innerPadding ->
         HomeScreenRouter(
             navController = navController,
@@ -68,7 +68,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun HomeScreenRouter(
+private fun HomeScreenRouter(
     navController: NavigationController,
     navigateToBrowser: (String) -> Unit,
     navigateToTemplateDetail: (Long) -> Unit,
@@ -85,7 +85,7 @@ fun HomeScreenRouter(
         modifier = modifier,
     ) { screen, nav ->
         when (screen) {
-            HomeScreenRoute.Team ->
+            HomeScreenRoute.Bottari ->
                 MyBottariScreen(
                     onNavigateToPersonalEdit = { bottariId, isNew ->
                         navigateToPersonalBottariEdit(

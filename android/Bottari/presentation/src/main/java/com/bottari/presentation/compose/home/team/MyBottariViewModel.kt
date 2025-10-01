@@ -41,7 +41,7 @@ class MyBottariViewModel(
         launch {
             deleteBottariUseCase(bottariId)
                 .onSuccess {
-                    fetchPersonalBottaries()
+                    ::fetchPersonalBottaries
                     emitEvent(MyBottariUiEvent.DeletePersonalBottariSuccess)
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.DeletePersonalBottariFailure)
@@ -53,7 +53,7 @@ class MyBottariViewModel(
         launch {
             deleteTeamBottariUseCase(bottariId)
                 .onSuccess {
-                    fetchTeamBottaries()
+                    ::fetchTeamBottaries
                     emitEvent(MyBottariUiEvent.ExitTeamBottariSuccess)
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.ExitTeamBottariFailure)

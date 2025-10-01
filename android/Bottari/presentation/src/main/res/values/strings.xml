@@ -147,7 +147,7 @@
     <!-- My Bottari Screen -->
     <string name="team_bottari_text">팀</string>
     <string name="personal_bottari_text">개인</string>
-    <string name="common_bottari_text">공통</string>
+    <string name="all_bottari_text">전체</string>
 
 
     <!-- Personal Bottari -->

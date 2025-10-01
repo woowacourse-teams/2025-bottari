@@ -6,8 +6,8 @@ import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
 
 data class MyBottariUiState(
     val isLoading: Boolean = false,
-    val personalBottaries: List<BottariUiModel> = emptyList<BottariUiModel>(),
-    val teamBottaries: List<TeamBottariUiModel> = emptyList<TeamBottariUiModel>(),
+    val personalBottaries: List<BottariUiModel> = emptyList(),
+    val teamBottaries: List<TeamBottariUiModel> = emptyList(),
     val showDialogType: MyBottariDialogType? = null,
 ) {
     val myBottaries: List<MyBottariUiModel> = personalBottaries + teamBottaries

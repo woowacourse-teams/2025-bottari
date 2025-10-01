@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,8 +49,8 @@ fun AddBottariButton(
 
     Column(
         modifier = modifier.padding(BottariTheme.spacing.spaceMedium),
-        horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceMedium),
+        horizontalAlignment = Alignment.End,
     ) {
         AnimatedVisibility(
             visible = isExpanded,
@@ -63,15 +62,15 @@ fun AddBottariButton(
                     Modifier
                         .padding(bottom = BottariTheme.spacing.spaceXSmall)
                         .padding(horizontal = BottariTheme.spacing.spaceXSmall),
-                horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceMedium),
+                horizontalAlignment = Alignment.End,
             ) {
                 ExtendedFloatingActionButton(
+                    onClick = onCodeClick,
                     modifier = Modifier.height(buttonSize),
                     shape = RoundedCornerShape(BottariTheme.spacing.spaceMedium),
-                    onClick = onCodeClick,
-                    containerColor = Color.White,
-                    contentColor = Color.Black,
+                    containerColor = BottariTheme.colors.white,
+                    contentColor = BottariTheme.colors.black,
                     elevation =
                         FloatingActionButtonDefaults.elevation(
                             defaultElevation = 4.dp,
@@ -85,35 +84,35 @@ fun AddBottariButton(
                 }
 
                 LargeFloatingActionButton(
+                    onClick = onTeamClick,
                     modifier = Modifier.size(buttonSize),
                     shape = CircleShape,
-                    onClick = onTeamClick,
-                    containerColor = Color.White,
+                    containerColor = BottariTheme.colors.white,
                     elevation =
                         FloatingActionButtonDefaults.elevation(
                             defaultElevation = 4.dp,
                         ),
                 ) {
-                    Icon(
-                        modifier = Modifier.size(40.dp),
-                        painter = painterResource(R.drawable.ic_people),
-                        contentDescription = stringResource(R.string.team_btn_bottari_create_option_description),
+                    Text(
+                        text = stringResource(R.string.team_bottari_join_btn_text),
+                        style = BottariTheme.typography.semiBold20.toTextStyle(),
+                        modifier = Modifier.padding(horizontal = BottariTheme.spacing.space2xSmall),
                     )
                 }
 
                 LargeFloatingActionButton(
+                    onClick = onPersonalClick,
                     modifier = Modifier.size(buttonSize),
                     shape = CircleShape,
-                    onClick = onPersonalClick,
-                    containerColor = Color.White,
+                    containerColor = BottariTheme.colors.white,
                     elevation =
                         FloatingActionButtonDefaults.elevation(
                             defaultElevation = 4.dp,
                         ),
                 ) {
                     Icon(
-                        modifier = Modifier.size(40.dp),
                         painter = painterResource(R.drawable.ic_person_filled),
+                        modifier = Modifier.size(40.dp),
                         contentDescription = stringResource(R.string.personal_bottari_btn_create_description),
                     )
                 }
@@ -121,11 +120,11 @@ fun AddBottariButton(
         }
 
         LargeFloatingActionButton(
+            onClick = onExpandClick,
             modifier =
                 Modifier.padding(end = BottariTheme.spacing.spaceXSmall).size(buttonSize),
             shape = CircleShape,
             containerColor = BottariTheme.colors.primary,
-            onClick = onExpandClick,
             elevation =
                 FloatingActionButtonDefaults.elevation(
                     defaultElevation = 4.dp,
@@ -135,7 +134,7 @@ fun AddBottariButton(
                 imageVector = Icons.Filled.Add,
                 contentDescription = stringResource(R.string.bottari_btn_create_description),
                 modifier = Modifier.graphicsLayer { rotationZ = rotation }.size(50.dp),
-                tint = Color.White,
+                tint = BottariTheme.colors.white,
             )
         }
     }
@@ -146,10 +145,10 @@ fun AddBottariButton(
 private fun AddBottariButtonPreview() {
     AddBottariButton(
         buttonSize = 60.dp,
+        isExpanded = true,
+        onExpandClick = {},
         onCodeClick = {},
         onTeamClick = {},
         onPersonalClick = {},
-        isExpanded = true,
-        onExpandClick = {},
     )
 }

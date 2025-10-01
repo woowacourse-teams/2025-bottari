@@ -11,10 +11,10 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 @Composable
 fun MyBottariDialogs(
     dialogType: MyBottariDialogType?,
+    text: String,
     onChangeText: (String) -> Unit,
     onClick: () -> Unit,
     onDismiss: () -> Unit,
-    text: String,
     defaultBottariTitle: String,
 ) {
     if (dialogType == null) return
@@ -54,11 +54,11 @@ fun MyBottariDialogs(
         subTitle = subTitle,
         btnText = btnText,
         text = text,
-        onChangeText = onChangeText,
-        onClick = onClick,
-        onDismiss = onDismiss,
         placeholder = placeholder,
         isClickable = isClickable,
+        onChangeText = onChangeText,
+        onClickBtn = onClick,
+        onDismiss = onDismiss,
         modifier =
             Modifier
                 .fillMaxWidth()

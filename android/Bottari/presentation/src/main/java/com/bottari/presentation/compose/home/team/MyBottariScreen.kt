@@ -15,11 +15,11 @@ import com.bottari.presentation.R
 
 @Composable
 fun MyBottariScreen(
+    snackbarState: SnackbarHostState,
     onNavigateToPersonalEdit: (Long, Boolean) -> Unit,
     onNavigateToTeamEdit: (Long, Boolean) -> Unit,
     onNavigateToPersonalChecklist: (Long, String) -> Unit,
     onNavigateToTeamChecklist: (Long, String) -> Unit,
-    snackbarState: SnackbarHostState,
     viewModel: MyBottariViewModel =
         viewModel(
             factory = MyBottariViewModel.Factory(),
@@ -79,6 +79,7 @@ fun MyBottariScreen(
     uiState.value.showDialogType.let { type ->
         MyBottariDialogs(
             dialogType = type,
+            text = dialogText,
             onChangeText = { newText -> dialogText = newText },
             onClick = {
                 viewModel.onClickDialog(dialogText.ifBlank { defaultBottariTitle })
@@ -88,14 +89,12 @@ fun MyBottariScreen(
                 viewModel.closeDialog()
                 dialogText = ""
             },
-            text = dialogText,
             defaultBottariTitle = defaultBottariTitle,
         )
     }
 
     MyBottariContent(
         uiState = uiState.value,
-        modifier = Modifier,
         onClickPersonalBottari = onNavigateToPersonalChecklist,
         onClickTeamBottari = onNavigateToTeamChecklist,
         onDeletePersonalBottari = viewModel::deletePersonalBottari,
@@ -105,5 +104,6 @@ fun MyBottariScreen(
         onOpenPersonalDialog = { viewModel.openDialog(MyBottariDialogType.PERSONAL) },
         onOpenTeamDialog = { viewModel.openDialog(MyBottariDialogType.TEAM) },
         onOpenCodeDialog = { viewModel.openDialog(MyBottariDialogType.CODE) },
+        modifier = Modifier,
     )
 }

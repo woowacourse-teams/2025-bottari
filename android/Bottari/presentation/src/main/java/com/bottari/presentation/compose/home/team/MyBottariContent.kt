@@ -65,7 +65,7 @@ fun MyBottariContent(
         ) {
             val pageTitles =
                 listOf(
-                    stringResource(R.string.common_bottari_text),
+                    stringResource(R.string.all_bottari_text),
                     stringResource(R.string.personal_bottari_text),
                     stringResource(R.string.team_bottari_text),
                 )
@@ -97,31 +97,42 @@ fun MyBottariContent(
 
                 BottariList(
                     bottaries = currentList,
+                    listState = listState,
                     onBottariClick = onBottariClick,
                     onDeletePersonalBottari = onDeletePersonalBottari,
                     onDeleteTeamBottari = onDeleteTeamBottari,
-                    onPersonalBottariEdit = onEditPersonalBottari,
-                    onTeamBottariEdit = onEditTeamBottari,
-                    listState = listState,
+                    onEditPersonalBottari = onEditPersonalBottari,
+                    onEditTeamBottari = onEditTeamBottari,
                 )
             }
         }
 
         AnimatedVisibility(
             visible = isFabVisible,
+            modifier = Modifier.align(Alignment.BottomEnd),
             enter = fadeIn(),
             exit = fadeOut(),
-            modifier = Modifier.align(Alignment.BottomEnd),
         ) {
             AddBottariButton(
                 buttonSize = 80.dp,
+                isExpanded = isFabExpanded,
+                onExpandClick = { isFabExpanded = !isFabExpanded },
                 onCodeClick = onOpenCodeDialog,
                 onTeamClick = onOpenTeamDialog,
                 onPersonalClick = onOpenPersonalDialog,
-                isExpanded = isFabExpanded,
-                onExpandClick = { isFabExpanded = !isFabExpanded },
             )
         }
+    }
+}
+
+private fun navigateToChecklist(
+    bottari: MyBottariUiModel,
+    onNavigateToPersonalChecklist: (Long, String) -> Unit,
+    onNavigateToTeamChecklist: (Long, String) -> Unit,
+) {
+    when (bottari) {
+        is BottariUiModel -> onNavigateToPersonalChecklist(bottari.id, bottari.title)
+        is TeamBottariUiModel -> onNavigateToTeamChecklist(bottari.id, bottari.title)
     }
 }
 
@@ -171,15 +182,15 @@ private fun MyBottariContentPreview() {
     BottariTheme {
         MyBottariContent(
             uiState = fakeUiState,
-            onOpenPersonalDialog = {},
-            onOpenTeamDialog = {},
-            onOpenCodeDialog = {},
             onClickPersonalBottari = { _, _ -> },
             onClickTeamBottari = { _, _ -> },
             onDeletePersonalBottari = {},
             onDeleteTeamBottari = {},
             onEditPersonalBottari = { },
             onEditTeamBottari = { },
+            onOpenPersonalDialog = {},
+            onOpenTeamDialog = {},
+            onOpenCodeDialog = {},
         )
     }
 }

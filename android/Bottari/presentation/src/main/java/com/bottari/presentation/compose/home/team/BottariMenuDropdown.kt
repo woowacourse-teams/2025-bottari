@@ -30,19 +30,19 @@ fun BottariMenuDropdown(
     modifier: Modifier = Modifier,
 ) {
     DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismissRequest,
         modifier =
             modifier.padding(
                 horizontal = BottariTheme.spacing.spaceLarge,
             ),
-        expanded = expanded,
-        onDismissRequest = onDismissRequest,
-        containerColor = Color.White,
         shape = RoundedCornerShape(12.dp),
+        containerColor = Color.White,
     ) {
         Row(
             modifier = Modifier.height(60.dp),
-            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceMedium),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(
                 onClick = {
@@ -51,9 +51,9 @@ fun BottariMenuDropdown(
                 },
             ) {
                 Icon(
-                    modifier = Modifier.size(30.dp),
                     painter = painterResource(R.drawable.ic_edit),
                     contentDescription = stringResource(R.string.bottari_edit_btn_description_text),
+                    modifier = Modifier.size(30.dp),
                 )
             }
 
@@ -72,9 +72,9 @@ fun BottariMenuDropdown(
                 },
             ) {
                 Icon(
-                    modifier = Modifier.size(30.dp),
                     painter = painterResource(R.drawable.ic_delete),
                     contentDescription = stringResource(R.string.bottari_delete_btn_description_text),
+                    modifier = Modifier.size(30.dp),
                 )
             }
         }

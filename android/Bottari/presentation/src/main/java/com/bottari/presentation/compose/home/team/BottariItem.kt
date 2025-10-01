@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -49,10 +50,8 @@ fun BottariItem(
     isMenuShown: Boolean,
     onShowMenu: () -> Unit,
     onCloseMenu: () -> Unit,
-    onPersonalBottariDelete: (Long) -> Unit,
-    onTeamBottariDelete: (Long) -> Unit,
-    onPersonalBottariEdit: (Long) -> Unit,
-    onTeamBottariEdit: (Long) -> Unit,
+    onBottariDelete: (Long) -> Unit,
+    onBottariEdit: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BottariBox(
@@ -65,111 +64,115 @@ fun BottariItem(
             ),
     ) {
         Column {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                BottariTypeLabel(bottari)
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                DateText(
-                    alarmUiModel = bottari.alarm,
-                )
-                Box(
-                    modifier = Modifier.size(48.dp),
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_more_horizontal),
-                        contentDescription = stringResource(R.string.bottari_btn_more_description),
-                        modifier =
-                            Modifier
-                                .align(Alignment.CenterEnd)
-                                .rotate(90f)
-                                .clickable { onShowMenu() },
-                    )
-
-                    BottariMenuDropdown(
-                        expanded = isMenuShown,
-                        onDismissRequest = onCloseMenu,
-                        onBottariEdit = {
-                            if (bottari is TeamBottariUiModel) {
-                                onTeamBottariEdit(bottari.id)
-                            } else {
-                                onPersonalBottariEdit(bottari.id)
-                            }
-                        },
-                        onBottariDelete = {
-                            if (bottari is TeamBottariUiModel) {
-                                onTeamBottariDelete(bottari.id)
-                            } else {
-                                onPersonalBottariDelete(bottari.id)
-                            }
-                        },
-                    )
-                }
-            }
+            BottariInfo(
+                bottari = bottari,
+                isMenuShown = isMenuShown,
+                onShowMenu = onShowMenu,
+                onCloseMenu = onCloseMenu,
+                onBottariDelete = onBottariDelete,
+                onBottariEdit = onBottariEdit,
+            )
             Text(
                 bottari.title,
                 style = BottariTheme.typography.semiBold24.toTextStyle(),
             )
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
-            Row(
-                verticalAlignment = Alignment.Bottom,
-            ) {
-                BottariCheckIndicator(
-                    Modifier
-                        .weight(1f)
-                        .height(BottariTheme.spacing.space2xSmall),
-                    bottari.checkedQuantity,
-                    bottari.totalQuantity,
-                )
-                Spacer(modifier = Modifier.width(BottariTheme.spacing.space2xLarge))
-                Text(
-                    text = "${bottari.checkedQuantity}/${bottari.totalQuantity}",
-                    style = BottariTheme.typography.medium14.toTextStyle(),
-                )
-            }
+            BottariCheckInfo(
+                checkedQuantity = bottari.checkedQuantity,
+                totalQuantity = bottari.totalQuantity,
+            )
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceXSmall))
         }
     }
 }
 
 @Composable
-private fun BottariTypeText(bottari: MyBottariUiModel) {
-    val teamTypeText =
-        when (bottari) {
-            is TeamBottariUiModel -> stringResource(R.string.team_bottari_text)
-            is BottariUiModel -> stringResource(R.string.personal_bottari_text)
-            else -> return
+private fun BottariInfo(
+    bottari: MyBottariUiModel,
+    isMenuShown: Boolean,
+    onShowMenu: () -> Unit,
+    onCloseMenu: () -> Unit,
+    onBottariDelete: (Long) -> Unit,
+    onBottariEdit: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        BottariTypeLabel(bottari)
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        DateText(
+            alarmUiModel = bottari.alarm,
+        )
+        Box(
+            modifier = Modifier.size(48.dp),
+        ) {
+            Image(
+                painter = painterResource(R.drawable.ic_more_horizontal),
+                contentDescription = stringResource(R.string.bottari_btn_more_description),
+                modifier =
+                    Modifier
+                        .align(Alignment.CenterEnd)
+                        .rotate(90f)
+                        .clickable { onShowMenu() },
+            )
+
+            BottariMenuDropdown(
+                expanded = isMenuShown,
+                onDismissRequest = onCloseMenu,
+                onBottariDelete = {
+                    onBottariDelete(bottari.id)
+                },
+                onBottariEdit = {
+                    onBottariEdit(bottari.id)
+                },
+            )
         }
-    Text(text = teamTypeText)
+    }
 }
 
 @Composable
-private fun BottariCheckIndicator(
-    modifier: Modifier = Modifier,
-    checkedQuantity: Int,
-    totalQuantity: Int,
-) {
-    Box(modifier = modifier, contentAlignment = Alignment.CenterStart) {
+private fun BottariTypeLabel(bottari: MyBottariUiModel) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Box(
             modifier =
                 Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .clip(shape = RoundedCornerShape(16.dp))
-                    .background(BottariTheme.colors.gray400),
+                    .size(8.dp)
+                    .clip(CircleShape)
+                    .background(
+                        color =
+                            chooseBottariStateColor(
+                                bottari.checkedQuantity,
+                                bottari.totalQuantity,
+                            ),
+                    ),
         )
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxWidth(generateIndicatorSize(checkedQuantity, totalQuantity))
-                    .fillMaxHeight()
-                    .clip(shape = RoundedCornerShape(16.dp))
-                    .background(chooseBottariStateColor(checkedQuantity, totalQuantity)),
+
+        Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceXSmall))
+
+        Text(
+            text =
+                when (bottari) {
+                    is TeamBottariUiModel -> stringResource(R.string.team_bottari_text)
+                    is BottariUiModel -> stringResource(R.string.personal_bottari_text)
+                    else -> return
+                },
         )
     }
+}
+
+@Composable
+private fun chooseBottariStateColor(
+    checkedQuantity: Int,
+    totalQuantity: Int,
+): Color {
+    if (checkedQuantity == 0) return BottariTheme.colors.gray400
+    if (checkedQuantity == totalQuantity) return BottariTheme.colors.primary
+    return Color.Red
 }
 
 @Composable
@@ -186,24 +189,34 @@ private fun DateText(
     val text =
         when (alarmUiModel.type) {
             AlarmTypeUiModel.NON_REPEAT ->
-                formatNonRepeat(
-                    alarmUiModel.date,
-                    alarmUiModel.time,
-                    dateFormat,
-                    timeFormat,
-                    separator,
-                )
+                buildString {
+                    append(alarmUiModel.date.formatWithPattern(dateFormat))
+                    append(separator)
+                    append(alarmUiModel.time.formatWithPattern(timeFormat))
+                }
 
             AlarmTypeUiModel.REPEAT -> {
                 if (alarmUiModel.isRepeatEveryDay) {
-                    formatEveryDayRepeat(alarmUiModel.time, timeFormat, separator)
-                } else {
-                    formatEveryWeekRepeat(
-                        alarmUiModel.time,
-                        alarmUiModel.repeatDays,
-                        timeFormat,
-                        separator,
-                    )
+                    val checkedDays = alarmUiModel.repeatDays.filter { it.isChecked }
+                    buildString {
+                        append(alarmUiModel.time.formatWithPattern(timeFormat))
+                        append(separator)
+                        append(stringResource(R.string.bottari_item_alarm_repeat_everyweek_text))
+                        append(separator)
+                        append(
+                            checkedDays.joinToString { dayOfWeek ->
+                                dayOfWeek.dayOfWeek
+                                    .getDisplayName(TextStyle.SHORT, Locale.getDefault())
+                            },
+                        )
+                    }
+                    return
+                }
+
+                buildString {
+                    append(alarmUiModel.time.formatWithPattern(timeFormat))
+                    append(separator)
+                    append(stringResource(R.string.bottari_item_alarm_repeat_everyday_text))
                 }
             }
         }
@@ -211,31 +224,59 @@ private fun DateText(
 }
 
 @Composable
-private fun BottariTypeLabel(bottari: MyBottariUiModel) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Box(
-            Modifier
-                .size(8.dp)
-                .clip(CircleShape)
-                .background(
-                    color = chooseBottariStateColor(bottari.checkedQuantity, bottari.totalQuantity),
-                ),
+private fun BottariCheckInfo(
+    checkedQuantity: Int,
+    totalQuantity: Int,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.Bottom,
+    ) {
+        BottariCheckIndicator(
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .height(BottariTheme.spacing.space2xSmall),
+            checkedQuantity = checkedQuantity,
+            totalQuantity = totalQuantity,
         )
-
-        Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceXSmall))
-
-        BottariTypeText(bottari)
+        Spacer(modifier = Modifier.width(BottariTheme.spacing.space2xLarge))
+        Text(
+            text =
+                stringResource(
+                    R.string.team_management_member_head_count,
+                    checkedQuantity,
+                    totalQuantity,
+                ),
+            style = BottariTheme.typography.medium14.toTextStyle(),
+        )
     }
 }
 
 @Composable
-private fun chooseBottariStateColor(
+private fun BottariCheckIndicator(
+    modifier: Modifier = Modifier,
     checkedQuantity: Int,
     totalQuantity: Int,
-): Color {
-    if (checkedQuantity == 0) return BottariTheme.colors.gray400
-    if (checkedQuantity == totalQuantity) return BottariTheme.colors.primary
-    return Color.Red
+) {
+    Box(modifier = modifier, contentAlignment = Alignment.CenterStart) {
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .clip(shape = RoundedCornerShape(16.dp))
+                    .background(BottariTheme.colors.gray400),
+        )
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxWidth(generateIndicatorSize(checkedQuantity, totalQuantity))
+                    .fillMaxHeight()
+                    .clip(shape = RoundedCornerShape(16.dp))
+                    .background(chooseBottariStateColor(checkedQuantity, totalQuantity)),
+        )
+    }
 }
 
 private fun generateIndicatorSize(
@@ -245,54 +286,6 @@ private fun generateIndicatorSize(
     if (totalQuantity <= 0) return 0F
     val safeChecked = checkedQuantity.coerceIn(0, totalQuantity)
     return safeChecked.toFloat() / totalQuantity.toFloat()
-}
-
-@Composable
-private fun formatNonRepeat(
-    date: LocalDate,
-    time: LocalTime,
-    dateFormat: String,
-    timeFormat: String,
-    separator: String,
-): String =
-    buildString {
-        append(date.formatWithPattern(dateFormat))
-        append(separator)
-        append(time.formatWithPattern(timeFormat))
-    }
-
-@Composable
-private fun formatEveryDayRepeat(
-    time: LocalTime,
-    timeFormat: String,
-    separator: String,
-): String =
-    buildString {
-        append(time.formatWithPattern(timeFormat))
-        append(separator)
-        append(stringResource(R.string.bottari_item_alarm_repeat_everyday_text))
-    }
-
-@Composable
-private fun formatEveryWeekRepeat(
-    time: LocalTime,
-    repeatDays: List<RepeatDayUiModel>,
-    timeFormat: String,
-    separator: String,
-): String {
-    val checkedDays = repeatDays.filter { it.isChecked }
-    return buildString {
-        append(time.formatWithPattern(timeFormat))
-        append(separator)
-        append(stringResource(R.string.bottari_item_alarm_repeat_everyweek_text))
-        append(separator)
-        append(
-            checkedDays.joinToString { dayOfWeek ->
-                dayOfWeek.dayOfWeek
-                    .getDisplayName(TextStyle.SHORT, Locale.getDefault())
-            },
-        )
-    }
 }
 
 @Preview
@@ -305,7 +298,6 @@ private fun TeamBottariScreenPreview() {
                 title = "미리보기보따리",
                 totalQuantity = 10,
                 checkedQuantity = 7,
-                memberCount = 4,
                 alarm =
                     AlarmUiModel(
                         type = AlarmTypeUiModel.REPEAT,
@@ -314,13 +306,12 @@ private fun TeamBottariScreenPreview() {
                         date = LocalDate.now(),
                         repeatDays = DayOfWeek.entries.map { RepeatDayUiModel(it, true) },
                     ),
+                memberCount = 4,
             ),
-        onPersonalBottariDelete = {},
-        onTeamBottariDelete = {},
-        onPersonalBottariEdit = {},
         isMenuShown = false,
-        onTeamBottariEdit = { },
         onShowMenu = {},
         onCloseMenu = {},
+        onBottariDelete = {},
+        onBottariEdit = {},
     )
 }
