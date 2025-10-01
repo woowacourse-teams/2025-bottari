@@ -44,7 +44,7 @@ fun BottariList(
         ) { bottari ->
             BottariItem(
                 bottari = bottari,
-                isShowMenu = (openedMenuBottariId == bottari.id),
+                isMenuShown = (openedMenuBottariId == bottari.id),
                 modifier =
                     Modifier
                         .padding(
@@ -54,8 +54,8 @@ fun BottariList(
                 onTeamBottariDelete = onDeleteTeamBottari,
                 onPersonalBottariEdit = onPersonalBottariEdit,
                 onTeamBottariEdit = onTeamBottariEdit,
-                showMenu = { openedMenuBottariId = bottari.id },
-                closeMenu = { openedMenuBottariId = null },
+                onShowMenu = { openedMenuBottariId = bottari.id },
+                onCloseMenu = { openedMenuBottariId = null },
             )
         }
     }

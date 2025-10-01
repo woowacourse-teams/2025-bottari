@@ -61,7 +61,7 @@ fun AddBottariButton(
             Column(
                 modifier =
                     Modifier
-                        .padding(bottom = 8.dp)
+                        .padding(bottom = BottariTheme.spacing.spaceXSmall)
                         .padding(horizontal = BottariTheme.spacing.spaceXSmall),
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceMedium),

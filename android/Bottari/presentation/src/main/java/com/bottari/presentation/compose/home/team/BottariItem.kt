@@ -46,9 +46,9 @@ import java.util.Locale
 @Composable
 fun BottariItem(
     bottari: MyBottariUiModel,
-    isShowMenu: Boolean,
-    showMenu: () -> Unit,
-    closeMenu: () -> Unit,
+    isMenuShown: Boolean,
+    onShowMenu: () -> Unit,
+    onCloseMenu: () -> Unit,
     onPersonalBottariDelete: (Long) -> Unit,
     onTeamBottariDelete: (Long) -> Unit,
     onPersonalBottariEdit: (Long) -> Unit,
@@ -86,12 +86,12 @@ fun BottariItem(
                             Modifier
                                 .align(Alignment.CenterEnd)
                                 .rotate(90f)
-                                .clickable { showMenu() },
+                                .clickable { onShowMenu() },
                     )
 
                     BottariMenuDropdown(
-                        expanded = isShowMenu,
-                        onDismissRequest = closeMenu,
+                        expanded = isMenuShown,
+                        onDismissRequest = onCloseMenu,
                         onBottariEdit = {
                             if (bottari is TeamBottariUiModel) {
                                 onTeamBottariEdit(bottari.id)
@@ -318,9 +318,9 @@ private fun TeamBottariScreenPreview() {
         onPersonalBottariDelete = {},
         onTeamBottariDelete = {},
         onPersonalBottariEdit = {},
-        isShowMenu = false,
+        isMenuShown = false,
         onTeamBottariEdit = { },
-        showMenu = {},
-        closeMenu = {},
+        onShowMenu = {},
+        onCloseMenu = {},
     )
 }
