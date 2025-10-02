@@ -88,8 +88,8 @@ private fun HomeNavigationBarIcon(
 
 private fun HomeScreenRoute.toIconResId(): Int =
     when (this) {
-        HomeScreenRoute.Bottari -> R.drawable.ic_home
         HomeScreenRoute.Template -> R.drawable.ic_template
+        HomeScreenRoute.Bottari -> R.drawable.ic_home
         HomeScreenRoute.More -> R.drawable.ic_more_horizontal
     }
 

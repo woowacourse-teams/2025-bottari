@@ -85,6 +85,12 @@ private fun HomeScreenRouter(
         modifier = modifier,
     ) { screen, nav ->
         when (screen) {
+            HomeScreenRoute.Template ->
+                TemplateBottariScreen(
+                    navigateToTemplateDetail = navigateToTemplateDetail,
+                    navigateToTemplateCreate = navigateToTemplateCreate,
+                )
+
             HomeScreenRoute.Bottari ->
                 MyBottariScreen(
                     snackbarState = snackbarState,
@@ -92,12 +98,6 @@ private fun HomeScreenRouter(
                     onNavigateToTeamEdit = navigateToTeamBottariEdit,
                     onNavigateToPersonalChecklist = navigateToPersonalBottariChecklist,
                     onNavigateToTeamChecklist = navigateToTeamBottariChecklist,
-                )
-
-            HomeScreenRoute.Template ->
-                TemplateBottariScreen(
-                    navigateToTemplateDetail = navigateToTemplateDetail,
-                    navigateToTemplateCreate = navigateToTemplateCreate,
                 )
 
             HomeScreenRoute.More ->
