@@ -93,10 +93,10 @@ fun AddBottariButton(
                             defaultElevation = 4.dp,
                         ),
                 ) {
-                    Text(
-                        text = stringResource(R.string.team_bottari_join_btn_text),
-                        modifier = Modifier.padding(horizontal = BottariTheme.spacing.space2xSmall),
-                        style = BottariTheme.typography.semiBold20.toTextStyle(),
+                    Icon(
+                        painter = painterResource(R.drawable.ic_people),
+                        contentDescription = stringResource(R.string.personal_bottari_btn_create_description),
+                        modifier = Modifier.size(50.dp),
                     )
                 }
 
