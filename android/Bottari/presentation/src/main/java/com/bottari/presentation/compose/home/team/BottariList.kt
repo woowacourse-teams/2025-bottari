@@ -20,13 +20,13 @@ import com.bottari.presentation.model.bottari.personal.BottariUiModel
 
 @Composable
 fun BottariList(
-    bottaries: List<MyBottariUiModel>,
     listState: LazyListState,
     onBottariClick: (MyBottariUiModel) -> Unit,
     onDeletePersonalBottari: (Long) -> Unit,
     onDeleteTeamBottari: (Long) -> Unit,
     onEditPersonalBottari: (Long) -> Unit,
     onEditTeamBottari: (Long) -> Unit,
+    bottaries: List<MyBottariUiModel>,
     modifier: Modifier = Modifier,
 ) {
     var openedMenuBottari by remember { mutableStateOf<Any?>(null) }

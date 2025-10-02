@@ -56,7 +56,7 @@ fun MyBottariDialogs(
         isClickable = isClickable,
         onChangeText = onChangeText,
         onClickBtn = onClick,
-        onDismiss = onDismiss,
+        onDismissRequest = onDismiss,
         modifier =
             Modifier
                 .fillMaxWidth()

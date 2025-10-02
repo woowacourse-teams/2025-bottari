@@ -24,6 +24,7 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun BottariCreateDialog(
+    onDismissRequest: () -> Unit,
     title: String,
     subTitle: String,
     btnText: String,
@@ -32,11 +33,10 @@ fun BottariCreateDialog(
     isClickable: Boolean,
     onChangeText: (String) -> Unit,
     onClickBtn: () -> Unit,
-    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Dialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = onDismissRequest,
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         BottariBox(
@@ -108,6 +108,6 @@ private fun MyCustomDialogContentPreview() {
         isClickable = true,
         onChangeText = {},
         onClickBtn = {},
-        onDismiss = {},
+        onDismissRequest = {},
     )
 }
