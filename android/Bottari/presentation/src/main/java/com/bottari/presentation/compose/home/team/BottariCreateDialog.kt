@@ -52,7 +52,7 @@ fun BottariCreateDialog(
                 Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
                 TextField(
                     value = text,
-                    onValueChange = { text -> onChangeText(text) },
+                    onValueChange = { newText -> onChangeText(newText) },
                     modifier =
                         Modifier
                             .height(48.dp)
