@@ -80,6 +80,10 @@ fun BottariItem(
             BottariCheckInfo(
                 checkedQuantity = bottari.checkedQuantity,
                 totalQuantity = bottari.totalQuantity,
+                format =
+                    stringResource(
+                        R.string.team_management_member_head_count,
+                    ),
             )
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceXSmall))
         }
@@ -114,7 +118,19 @@ private fun BottariInfo(
         }
 
         Spacer(modifier = Modifier.weight(1f))
-        bottari.alarm?.let { alarm -> DateText(alarmUiModel = alarm) }
+        bottari.alarm?.let { alarm ->
+            Text(
+                text =
+                    dateText(
+                        alarmUiModel = alarm,
+                        dateFormat = stringResource(R.string.common_format_date_alarm),
+                        timeFormat = stringResource(R.string.common_format_time_alarm),
+                        separator = stringResource(R.string.common_separator_text),
+                        repeatEveryWeekText = stringResource(R.string.bottari_item_alarm_repeat_everyweek_text),
+                        repeatEveryDayText = stringResource(R.string.bottari_item_alarm_repeat_everyday_text),
+                    ),
+            )
+        }
 
         Box(
             modifier = Modifier.size(48.dp),
@@ -184,56 +200,54 @@ private fun chooseBottariStateColor(
     return Color.Red
 }
 
-@Composable
-private fun DateText(
+private fun dateText(
     alarmUiModel: AlarmUiModel,
-    modifier: Modifier = Modifier,
-) {
-    val dateFormat = stringResource(R.string.common_format_date_alarm)
-    val timeFormat = stringResource(R.string.common_format_time_alarm)
-    val separator = stringResource(R.string.common_separator_text)
-
-    val text =
-        when (alarmUiModel.type) {
-            AlarmTypeUiModel.NON_REPEAT ->
-                buildString {
-                    append(alarmUiModel.date.formatWithPattern(dateFormat))
-                    append(separator)
-                    append(alarmUiModel.time.formatWithPattern(timeFormat))
-                }
-
-            AlarmTypeUiModel.REPEAT -> {
-                if (!alarmUiModel.isRepeatEveryDay) {
-                    val checkedDays = alarmUiModel.repeatDays.filter { it.isChecked }
-                    buildString {
-                        append(alarmUiModel.time.formatWithPattern(timeFormat))
-                        append(separator)
-                        append(stringResource(R.string.bottari_item_alarm_repeat_everyweek_text))
-                        append(separator)
-                        append(
-                            checkedDays.joinToString { dayOfWeek ->
-                                dayOfWeek.dayOfWeek
-                                    .getDisplayName(TextStyle.SHORT, Locale.getDefault())
-                            },
-                        )
-                    }
-                    return
-                }
-
-                buildString {
-                    append(alarmUiModel.time.formatWithPattern(timeFormat))
-                    append(separator)
-                    append(stringResource(R.string.bottari_item_alarm_repeat_everyday_text))
-                }
+    dateFormat: String,
+    timeFormat: String,
+    separator: String,
+    repeatEveryWeekText: String,
+    repeatEveryDayText: String,
+): String {
+    when (alarmUiModel.type) {
+        AlarmTypeUiModel.NON_REPEAT -> {
+            return buildString {
+                append(alarmUiModel.date.formatWithPattern(dateFormat))
+                append(separator)
+                append(alarmUiModel.time.formatWithPattern(timeFormat))
             }
         }
-    Text(text = text, modifier = modifier)
+
+        AlarmTypeUiModel.REPEAT -> {
+            if (!alarmUiModel.isRepeatEveryDay) {
+                val checkedDays = alarmUiModel.repeatDays.filter { it.isChecked }
+                return buildString {
+                    append(alarmUiModel.time.formatWithPattern(timeFormat))
+                    append(separator)
+                    append(repeatEveryWeekText)
+                    append(separator)
+                    append(
+                        checkedDays.joinToString { dayOfWeek ->
+                            dayOfWeek.dayOfWeek
+                                .getDisplayName(TextStyle.SHORT, Locale.getDefault())
+                        },
+                    )
+                }
+            }
+
+            return buildString {
+                append(alarmUiModel.time.formatWithPattern(timeFormat))
+                append(separator)
+                append(repeatEveryDayText)
+            }
+        }
+    }
 }
 
 @Composable
 private fun BottariCheckInfo(
     checkedQuantity: Int,
     totalQuantity: Int,
+    format: String,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -251,8 +265,7 @@ private fun BottariCheckInfo(
         Spacer(modifier = Modifier.width(BottariTheme.spacing.space2xLarge))
         Text(
             text =
-                stringResource(
-                    R.string.team_management_member_head_count,
+                format.format(
                     checkedQuantity,
                     totalQuantity,
                 ),
