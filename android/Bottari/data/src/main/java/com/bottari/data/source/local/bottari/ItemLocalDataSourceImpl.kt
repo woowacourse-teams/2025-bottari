@@ -9,7 +9,7 @@ class ItemLocalDataSourceImpl(
 ) : ItemLocalDataSource {
     override fun fetchItems(bottariId: Long): Flow<List<ItemEntity>> = dao.fetchItems(bottariId)
 
-    override suspend fun saveItems(items: List<ItemEntity>): Result<Unit> = runCatching { dao.saveItem(*items.toTypedArray()) }
+    override suspend fun saveItem(item: ItemEntity): Result<Unit> = runCatching { dao.saveItem(item) }
 
     override suspend fun deleteItem(id: Long): Result<Unit> = runCatching { dao.deleteItem(id) }
 

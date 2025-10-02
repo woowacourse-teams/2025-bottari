@@ -4,7 +4,7 @@ import com.bottari.di.RepositoryProvider
 import com.bottari.domain.usecase.item.DeleteItemUseCase
 import com.bottari.domain.usecase.item.FetchItemsUseCase
 import com.bottari.domain.usecase.item.ResetItemsCheckStateUseCase
-import com.bottari.domain.usecase.item.SaveItemsUseCase
+import com.bottari.domain.usecase.item.SaveItemUseCase
 import com.bottari.domain.usecase.item.UpdateItemCheckStateUseCase
 
 object BottariItemUseCaseProvider {
@@ -13,8 +13,8 @@ object BottariItemUseCaseProvider {
             RepositoryProvider.bottariItemRepository,
         )
     }
-    val saveItemsUseCase: SaveItemsUseCase by lazy {
-        SaveItemsUseCase(
+    val saveItemUseCase: SaveItemUseCase by lazy {
+        SaveItemUseCase(
             RepositoryProvider.bottariItemRepository,
         )
     }

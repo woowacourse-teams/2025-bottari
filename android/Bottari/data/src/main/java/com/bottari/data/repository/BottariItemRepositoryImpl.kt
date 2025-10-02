@@ -15,12 +15,12 @@ class BottariItemRepositoryImpl(
             .fetchItems(bottariId)
             .map { items -> items.map(ItemEntity::toDomain) }
 
-    override suspend fun saveItems(
+    override suspend fun saveItem(
         bottariId: Long,
-        items: List<String>,
+        itemName: String,
     ): Result<Unit> {
-        val itemEntities = items.map { item -> ItemEntity.from(bottariId, item) }
-        return itemLocalDataSource.saveItems(itemEntities)
+        val itemEntity = ItemEntity.from(bottariId, itemName)
+        return itemLocalDataSource.saveItem(itemEntity)
     }
 
     override suspend fun deleteItem(id: Long): Result<Unit> = itemLocalDataSource.deleteItem(id)
