@@ -93,7 +93,7 @@ class MyBottariViewModel(
                 .onSuccess { bottariId ->
                     emitEvent(MyBottariUiEvent.CreatePersonalBottariSuccess(bottariId))
                 }.onFailure {
-                    emitEvent(MyBottariUiEvent.CreatePersonalBottariFailure)
+                    emitEvent(MyBottariUiEvent.CreateBottariFailure)
                 }
             closeDialog()
         }
@@ -107,7 +107,7 @@ class MyBottariViewModel(
                         emitEvent(MyBottariUiEvent.CreateTeamBottariSuccess(id))
                     }
                 }.onFailure {
-                    emitEvent(MyBottariUiEvent.CreateTeamBottariFailure)
+                    emitEvent(MyBottariUiEvent.CreateBottariFailure)
                 }
             closeDialog()
         }
@@ -136,7 +136,7 @@ class MyBottariViewModel(
                         )
                     }
                 }.onFailure {
-                    emitEvent(MyBottariUiEvent.FetchTeamBottariFailure)
+                    emitEvent(MyBottariUiEvent.FetchBottariFailure)
                     updateState { copy(isLoading = false) }
                 }
         }
@@ -153,7 +153,7 @@ class MyBottariViewModel(
                     )
                 }
             }.catch {
-                emitEvent(MyBottariUiEvent.FetchPersonalBottariFailure)
+                emitEvent(MyBottariUiEvent.FetchBottariFailure)
             }.launchIn(viewModelScope)
 
     companion object {

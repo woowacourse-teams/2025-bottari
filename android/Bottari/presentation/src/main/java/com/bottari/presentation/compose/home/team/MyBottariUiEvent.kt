@@ -1,9 +1,7 @@
 package com.bottari.presentation.compose.home.team
 
 sealed interface MyBottariUiEvent {
-    data object FetchPersonalBottariFailure : MyBottariUiEvent
-
-    data object FetchTeamBottariFailure : MyBottariUiEvent
+    data object FetchBottariFailure : MyBottariUiEvent
 
     data object JoinTeamBottariFailure : MyBottariUiEvent
 
@@ -23,7 +21,5 @@ sealed interface MyBottariUiEvent {
         val bottariId: Long,
     ) : MyBottariUiEvent
 
-    data object CreatePersonalBottariFailure : MyBottariUiEvent
-
-    data object CreateTeamBottariFailure : MyBottariUiEvent
+    data object CreateBottariFailure : MyBottariUiEvent
 }

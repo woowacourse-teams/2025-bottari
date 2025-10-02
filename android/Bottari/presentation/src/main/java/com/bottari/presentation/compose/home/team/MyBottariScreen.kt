@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -26,44 +27,35 @@ fun MyBottariScreen(
         ),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val uiEvent = viewModel.uiEvent
+
+    val context = LocalContext.current
 
     var dialogText by remember { mutableStateOf("") }
 
-    val deleteFailureMsg = stringResource(id = R.string.bottari_home_delete_failure_text)
-    val deleteSuccessMsg = stringResource(id = R.string.bottari_home_delete_success_text)
-    val exitFailureMsg = stringResource(id = R.string.exit_team_bottari_failure_text)
-    val exitSuccessMsg = stringResource(id = R.string.exit_team_bottari_success_text)
-    val fetchFailureMsg = stringResource(id = R.string.bottari_home_fetch_failure_text)
-    val joinFailureMsg = stringResource(id = R.string.join_team_bottari_failure_text)
-    val createFailureMsg = stringResource(id = R.string.bottari_create_failure_text)
-
-    LaunchedEffect(Unit) {
-        viewModel.uiEvent.collect { event ->
+    LaunchedEffect(uiEvent) {
+        uiEvent.collect { event ->
             when (event) {
                 MyBottariUiEvent.DeletePersonalBottariFailure ->
-                    snackbarState.showSnackbar(deleteFailureMsg)
+                    snackbarState.showSnackbar(context.getString(R.string.bottari_home_delete_failure_text))
 
                 MyBottariUiEvent.DeletePersonalBottariSuccess ->
-                    snackbarState.showSnackbar(deleteSuccessMsg)
+                    snackbarState.showSnackbar(context.getString(R.string.bottari_home_delete_success_text))
 
                 MyBottariUiEvent.ExitTeamBottariFailure ->
-                    snackbarState.showSnackbar(exitFailureMsg)
+                    snackbarState.showSnackbar(context.getString(R.string.exit_team_bottari_failure_text))
 
                 MyBottariUiEvent.ExitTeamBottariSuccess ->
-                    snackbarState.showSnackbar(exitSuccessMsg)
+                    snackbarState.showSnackbar(context.getString(R.string.exit_team_bottari_success_text))
 
-                MyBottariUiEvent.FetchTeamBottariFailure,
-                MyBottariUiEvent.FetchPersonalBottariFailure,
-                ->
-                    snackbarState.showSnackbar(fetchFailureMsg)
+                MyBottariUiEvent.FetchBottariFailure ->
+                    snackbarState.showSnackbar(context.getString(R.string.bottari_home_fetch_failure_text))
 
                 MyBottariUiEvent.JoinTeamBottariFailure ->
-                    snackbarState.showSnackbar(joinFailureMsg)
+                    snackbarState.showSnackbar(context.getString(R.string.join_team_bottari_failure_text))
 
-                MyBottariUiEvent.CreatePersonalBottariFailure,
-                MyBottariUiEvent.CreateTeamBottariFailure,
-                ->
-                    snackbarState.showSnackbar(createFailureMsg)
+                MyBottariUiEvent.CreateBottariFailure ->
+                    snackbarState.showSnackbar(context.getString(R.string.bottari_create_failure_text))
 
                 is MyBottariUiEvent.CreatePersonalBottariSuccess ->
                     onNavigateToPersonalEdit(event.bottariId, true)
