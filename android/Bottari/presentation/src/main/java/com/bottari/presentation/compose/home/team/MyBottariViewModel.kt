@@ -126,11 +126,12 @@ class MyBottariViewModel(
             fetchTeamBottariesUseCase()
                 .onSuccess { bottaries ->
                     updateState {
+                        val newBottaries =
+                            bottaries.map { bottari ->
+                                TeamBottariUiModel.fromDomain(bottari)
+                            }
                         copy(
-                            teamBottaries =
-                                bottaries.map { bottari ->
-                                    TeamBottariUiModel.fromDomain(bottari)
-                                },
+                            teamBottaries = newBottaries,
                             isLoading = false,
                         )
                     }
