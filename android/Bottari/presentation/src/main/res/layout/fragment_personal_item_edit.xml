@@ -28,16 +28,6 @@
             android:layout_gravity="center"
             android:textColor="@color/black"
             tools:text="나의 보따리" />
-
-        <TextView
-            android:id="@+id/btn_confirm"
-            style="@style/Pretendard_SemiBold_16"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:gravity="center"
-            android:text="@string/common_save_btn_text"
-            android:textColor="@color/black" />
     </Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView

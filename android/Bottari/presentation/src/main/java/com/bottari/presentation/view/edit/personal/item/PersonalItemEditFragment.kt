@@ -6,8 +6,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -19,16 +17,11 @@ import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.model.bottari.ChecklistItemUiModel
-import com.bottari.presentation.view.common.alert.CustomAlertDialog
-import com.bottari.presentation.view.common.alert.DialogListener
-import com.bottari.presentation.view.common.alert.DialogPresetType
 import com.bottari.presentation.view.edit.personal.item.adapter.PersonalItemEditAdapter
 
 class PersonalItemEditFragment :
     BaseFragment<FragmentPersonalItemEditBinding>(FragmentPersonalItemEditBinding::inflate),
     TextWatcher {
-    private lateinit var onBackPressedCallback: OnBackPressedCallback
-
     private val viewModel: PersonalItemEditViewModel by viewModels {
         val arguments = requireArguments()
         PersonalItemEditViewModel.Factory(
@@ -38,10 +31,7 @@ class PersonalItemEditFragment :
     }
 
     private val adapter by lazy {
-        PersonalItemEditAdapter { itemId ->
-            onBackPressedCallback.isEnabled = true
-            viewModel.deleteItem(itemId)
-        }
+        PersonalItemEditAdapter(viewModel::deleteItem)
     }
 
     override fun onViewCreated(
@@ -80,18 +70,11 @@ class PersonalItemEditFragment :
             handleBottariNameState(uiState.title)
             handleItemState(uiState.items)
             handleEmptyView(uiState.isEmpty)
-            handleDialog(uiState.isDifferent)
-            handleSaveBtn(uiState.isDifferent)
         }
         collectWithLifecycle(viewModel.uiEvent) { event ->
             when (event) {
-                PersonalItemEditUiEvent.SaveBottariItemsFailure ->
+                PersonalItemEditUiEvent.SaveBottariItemFailure ->
                     requireView().showSnackbar(R.string.common_save_failure_text)
-
-                PersonalItemEditUiEvent.SaveBottariItemsSuccess -> {
-                    onBackPressedCallback.isEnabled = false
-                    requireActivity().onBackPressedDispatcher.onBackPressed()
-                }
 
                 PersonalItemEditUiEvent.FetchBottariItemsFailure ->
                     requireView().showSnackbar(R.string.bottari_personal_item_fetch_failure_text)
@@ -106,17 +89,12 @@ class PersonalItemEditFragment :
         binding.rvPersonalItemEdit.adapter = adapter
         binding.rvPersonalItemEdit.layoutManager = LinearLayoutManager(requireContext())
         binding.root.applyImeBottomPadding()
-        onBackPressedCallback =
-            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, false) {
-                showExitConfirmationDialog()
-            }
     }
 
     private fun setupListener() {
         binding.btnPrevious.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.btnPersonalItemAdd.setOnClickListener { addItemFromInput() }
         binding.etPersonalItem.addTextChangedListener(this)
-        binding.btnConfirm.setOnClickListener { viewModel.saveItems() }
         binding.etPersonalItem.setOnEditorActionListener { _, actionId, _ ->
             if (actionId != EditorInfo.IME_ACTION_SEND) return@setOnEditorActionListener false
             addItemFromInput()
@@ -125,7 +103,7 @@ class PersonalItemEditFragment :
     }
 
     private fun addItemFromInput() {
-        viewModel.addNewItemIfNeeded(binding.etPersonalItem.text.toString())
+        viewModel.saveItem(binding.etPersonalItem.text.toString())
         binding.etPersonalItem.text.clear()
     }
 
@@ -161,39 +139,6 @@ class PersonalItemEditFragment :
 
     private fun handleEmptyView(isEmpty: Boolean) {
         binding.emptyView.clPersonalBottariItemEmptyView.isVisible = isEmpty
-    }
-
-    private fun handleDialog(isDifferent: Boolean) {
-        if (::onBackPressedCallback.isInitialized) {
-            onBackPressedCallback.isEnabled = isDifferent
-        }
-    }
-
-    private fun handleSaveBtn(isDifferent: Boolean) {
-        binding.btnConfirm.isVisible = isDifferent
-    }
-
-    private fun showExitConfirmationDialog() {
-        val existingDialog =
-            parentFragmentManager.findFragmentByTag(tag) as? CustomAlertDialog
-
-        if (existingDialog?.dialog?.isShowing == true) return
-
-        val dialog =
-            CustomAlertDialog
-                .newInstance(DialogPresetType.EXIT_WITHOUT_SAVE)
-                .setDialogListener(
-                    object : DialogListener {
-                        override fun onClickPositive() {
-                            onBackPressedCallback.isEnabled = false
-                            requireActivity().onBackPressedDispatcher.onBackPressed()
-                        }
-
-                        override fun onClickNegative() {}
-                    },
-                )
-
-        dialog.show(parentFragmentManager, tag)
     }
 
     companion object {
