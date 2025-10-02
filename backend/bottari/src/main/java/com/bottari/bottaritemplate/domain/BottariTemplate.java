@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -72,5 +73,18 @@ public class BottariTemplate {
         if (BadWordValidator.hasBadWord(title)) {
             throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_TITLE_OFFENSIVE);
         }
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (!(o instanceof final BottariTemplate that)) {
+            return false;
+        }
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
     }
 }
