@@ -1,17 +1,37 @@
 package com.bottari.data.source.local.bottari
 
+import androidx.room.withTransaction
 import com.bottari.data.local.bottari.BottariDao
+import com.bottari.data.local.bottari.BottariDatabase
 import com.bottari.data.model.local.bottari.BottariEntity
+import com.bottari.data.model.local.bottari.BottariWithAlarmAndItems
+import com.bottari.data.model.local.bottari.ItemEntity
 import kotlinx.coroutines.flow.Flow
 
 class BottariLocalDataSourceImpl(
-    private val dao: BottariDao,
+    private val database: BottariDatabase,
 ) : BottariLocalDataSource {
-    override fun fetchBottaries(): Flow<List<BottariEntity>> = dao.fetchBottaries()
+    private val dao: BottariDao = database.bottariDao()
 
-    override fun findBottari(id: Long): Flow<BottariEntity?> = dao.findBottari(id)
+    override fun fetchBottaries(): Flow<List<BottariWithAlarmAndItems>> = dao.fetchBottariesWithAlarmAndItems()
+
+    override fun findBottari(id: Long): Flow<BottariWithAlarmAndItems?> = dao.findBottariWithAlarmAndItems(id)
 
     override suspend fun createBottari(bottari: BottariEntity): Result<Long> = runCatching { dao.createBottari(bottari) }
+
+    override suspend fun createBottariWithItems(
+        bottari: BottariEntity,
+        itemNames: List<String>,
+    ): Result<Long> =
+        runCatching {
+            database.withTransaction {
+                val bottariId = database.bottariDao().createBottari(bottari)
+                val items =
+                    Array(itemNames.size) { index -> ItemEntity.from(bottariId, itemNames[index]) }
+                database.itemDao().saveItem(*items)
+                bottariId
+            }
+        }
 
     override suspend fun deleteBottari(bottariId: Long): Result<Unit> = runCatching { dao.deleteBottari(bottariId) }
 

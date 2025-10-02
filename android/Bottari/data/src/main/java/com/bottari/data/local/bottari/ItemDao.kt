@@ -13,7 +13,7 @@ interface ItemDao {
     fun fetchItems(bottariId: Long): Flow<List<ItemEntity>>
 
     @Insert(onConflict = REPLACE)
-    suspend fun saveItem(vararg items: ItemEntity)
+    suspend fun saveItem(vararg item: ItemEntity)
 
     @Query("DELETE FROM BottariItems WHERE id = :id")
     suspend fun deleteItem(id: Long)

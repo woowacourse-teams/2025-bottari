@@ -37,7 +37,7 @@ abstract class BottariDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): BottariDatabase =
             instance ?: synchronized(this) {
-                Room
+                instance ?: Room
                     .databaseBuilder(
                         context.applicationContext,
                         BottariDatabase::class.java,

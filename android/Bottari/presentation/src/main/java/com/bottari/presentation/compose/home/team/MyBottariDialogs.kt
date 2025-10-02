@@ -1,12 +1,11 @@
 package com.bottari.presentation.compose.home.team
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun MyBottariDialogs(
@@ -47,19 +46,19 @@ fun MyBottariDialogs(
             MyBottariDialogType.CODE -> text.isNotEmpty()
         }
 
-    BottariCreateDialog(
-        title = title,
-        subTitle = subTitle,
-        btnText = btnText,
-        text = text,
-        placeholder = placeholder,
-        isClickable = isClickable,
-        onChangeText = onChangeText,
-        onClickBtn = onClick,
-        onDismissRequest = onDismiss,
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = BottariTheme.spacing.space2xLarge),
-    )
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        BottariCreateDialog(
+            title = title,
+            subTitle = subTitle,
+            btnText = btnText,
+            text = text,
+            placeholder = placeholder,
+            isClickable = isClickable,
+            onChangeText = onChangeText,
+            onClickBtn = onClick,
+            onDismissRequest = onDismiss,
+        )
+    }
 }

@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 interface BottariItemRepository {
     fun fetchItems(bottariId: Long): Flow<List<ChecklistItem>>
 
-    suspend fun saveItems(
+    suspend fun saveItem(
         bottariId: Long,
-        items: List<String>,
+        itemName: String,
     ): Result<Unit>
 
     suspend fun deleteItem(id: Long): Result<Unit>

@@ -32,7 +32,10 @@ fun BottariList(
     var openedMenuBottari by remember { mutableStateOf<Any?>(null) }
 
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(horizontal = BottariTheme.spacing.spaceMedium),
         state = listState,
         contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceSmall),
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),

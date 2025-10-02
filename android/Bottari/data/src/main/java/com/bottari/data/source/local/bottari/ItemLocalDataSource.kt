@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface ItemLocalDataSource {
     fun fetchItems(bottariId: Long): Flow<List<ItemEntity>>
 
-    suspend fun saveItems(items: List<ItemEntity>): Result<Unit>
+    suspend fun saveItem(item: ItemEntity): Result<Unit>
 
     suspend fun deleteItem(id: Long): Result<Unit>
 
