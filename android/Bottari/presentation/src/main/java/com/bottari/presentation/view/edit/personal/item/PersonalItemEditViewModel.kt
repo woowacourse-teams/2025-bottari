@@ -63,14 +63,13 @@ class PersonalItemEditViewModel(
         launch {
             saveItemsUseCase(
                 bottariId = currentState.bottariId,
-                items = currentState.items.map { item -> item.name },
+                items = (currentState.items - currentState.initialItems).map { item -> item.name },
             ).onSuccess {
                 logSaveChanges()
                 emitEvent(PersonalItemEditUiEvent.SaveBottariItemsSuccess)
             }.onFailure {
                 emitEvent(PersonalItemEditUiEvent.SaveBottariItemsFailure)
             }
-            updateState { copy(isLoading = false) }
         }
     }
 
