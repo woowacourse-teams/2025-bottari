@@ -10,15 +10,13 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun MyBottariDialogs(
-    dialogType: MyBottariDialogType?,
+    dialogType: MyBottariDialogType,
     text: String,
     onChangeText: (String) -> Unit,
     onClick: () -> Unit,
     onDismiss: () -> Unit,
     defaultBottariTitle: String,
 ) {
-    if (dialogType == null) return
-
     val title =
         when (dialogType) {
             MyBottariDialogType.PERSONAL, MyBottariDialogType.TEAM -> stringResource(R.string.bottari_create_dialog_title_text)

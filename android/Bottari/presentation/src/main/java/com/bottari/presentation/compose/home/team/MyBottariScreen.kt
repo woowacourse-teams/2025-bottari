@@ -76,7 +76,7 @@ fun MyBottariScreen(
 
     val defaultBottariTitle = stringResource(id = R.string.bottari_create_default_title_text)
 
-    uiState.value.showDialogType.let { type ->
+    uiState.value.showDialogType?.let { type ->
         MyBottariDialogs(
             dialogType = type,
             text = dialogText,
