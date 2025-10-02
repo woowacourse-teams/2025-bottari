@@ -105,6 +105,7 @@ class MyBottariViewModel(
                 .onSuccess { bottariId ->
                     bottariId?.let { id ->
                         emitEvent(MyBottariUiEvent.CreateTeamBottariSuccess(id))
+                        fetchTeamBottaries()
                     }
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.CreateBottariFailure)
