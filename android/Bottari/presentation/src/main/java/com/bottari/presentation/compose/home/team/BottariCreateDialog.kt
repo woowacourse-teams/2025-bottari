@@ -37,7 +37,7 @@ fun BottariCreateDialog(
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties = DialogProperties(usePlatformDefaultWidth = false),
+        properties = DialogProperties(usePlatformDefaultWidth = true),
     ) {
         BottariBox(
             modifier = modifier,

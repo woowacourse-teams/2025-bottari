@@ -59,8 +59,6 @@ fun BottariItem(
         contentPadding =
             PaddingValues(
                 bottom = BottariTheme.spacing.spaceSmall,
-                start = BottariTheme.spacing.spaceLarge,
-                end = BottariTheme.spacing.spaceLarge,
             ),
     ) {
         Column {

@@ -70,14 +70,15 @@ private fun SettingItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BottariBox(modifier = modifier.fillMaxWidth()) {
+    BottariBox(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick),
+    ) {
         Text(
             text = text,
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = onClick)
-                    .padding(vertical = BottariTheme.spacing.spaceSmall),
+            modifier = Modifier.fillMaxWidth(),
             color = BottariTheme.colors.black,
             style = BottariTheme.typography.medium16.toTextStyle(),
         )
