@@ -29,8 +29,8 @@ fun HomeTopAppBar(
         modifier = modifier,
         title = {
             Row(
+                horizontalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 Image(
                     painter = painterResource(R.drawable.img_bottari_logo),

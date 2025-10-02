@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -26,17 +24,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.zIndex
-import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.modifier.dropShadow
+import com.bottari.presentation.compose.common.modifier.pagerTabIndicatorOffset
 import com.bottari.presentation.compose.common.source.NoRippleInteractionSource
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 
 @Composable
 fun BottariTabBar(
@@ -49,9 +44,8 @@ fun BottariTabBar(
     val interactionSource = remember { NoRippleInteractionSource() }
     val indicator = @Composable { tabPositions: List<TabPosition> ->
         BottariIndicator(
+            pagerState = pagerState,
             tabPositions = tabPositions,
-            fraction = pagerState.currentPageOffsetFraction,
-            currentPage = pagerState.currentPage,
         )
     }
 
@@ -81,7 +75,6 @@ fun BottariTabBar(
     }
 
     HorizontalPager(pagerState, modifier = Modifier.fillMaxSize()) { page ->
-
         screen(page)
     }
 }
@@ -97,7 +90,8 @@ private fun BottariTap(
     Tab(
         modifier = modifier.zIndex(2f),
         text = {
-            val textColor = if (isSelected) Color.Black else colorResource(R.color.gray_700)
+            val textColor =
+                if (isSelected) BottariTheme.colors.black else BottariTheme.colors.gray700
             Text(
                 text = title,
                 color = textColor,
@@ -113,36 +107,18 @@ private fun BottariTap(
 @Composable
 private fun BottariIndicator(
     tabPositions: List<TabPosition>,
-    fraction: Float,
-    currentPage: Int,
+    pagerState: PagerState,
 ) {
-    val currentTab = tabPositions[currentPage]
-
-    val targetPage =
-        when {
-            fraction > 0 -> currentPage + 1
-            fraction < 0 -> currentPage - 1
-            else -> currentPage
-        }.coerceIn(0, tabPositions.lastIndex)
-
-    val targetTab = tabPositions[targetPage]
-
-    val animationFraction = abs(fraction)
-
-    val indicatorStart = lerp(currentTab.left, targetTab.left, animationFraction)
-    val indicatorWidth = lerp(currentTab.width, targetTab.width, animationFraction)
-
     Box(
         modifier =
             Modifier
-                .offset(x = indicatorStart)
+                .pagerTabIndicatorOffset(pagerState = pagerState, tabPositions = tabPositions)
                 .wrapContentSize(align = Alignment.BottomStart)
-                .width(indicatorWidth)
                 .fillMaxSize()
                 .padding(horizontal = 4.dp)
                 .dropShadow(
                     CircleShape,
-                    color = Color.Black.copy(0.05f),
+                    color = BottariTheme.colors.black.copy(alpha = 0.05f),
                     blur = 2.dp,
                     offsetY = 1.dp,
                 ).background(color = Color.White, CircleShape)
@@ -151,7 +127,7 @@ private fun BottariIndicator(
 }
 
 @Composable
-fun BottariPagerScreen(
+private fun BottariPagerScreen(
     pageTitles: List<String>,
     modifier: Modifier = Modifier,
 ) {

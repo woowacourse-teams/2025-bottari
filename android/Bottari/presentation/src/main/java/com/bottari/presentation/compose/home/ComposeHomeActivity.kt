@@ -9,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
 import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.view.checklist.personal.ChecklistActivity
+import com.bottari.presentation.view.checklist.team.TeamChecklistActivity
+import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
+import com.bottari.presentation.view.edit.team.TeamBottariEditActivity
 import com.bottari.presentation.view.template.TemplateActivity
 
 class ComposeHomeActivity : AppCompatActivity() {
@@ -18,17 +22,13 @@ class ComposeHomeActivity : AppCompatActivity() {
         setContent {
             BottariTheme {
                 HomeScreen(
-                    navigateToBrowser = { url ->
-                        navigateToBrowser(url)
-                    },
-                    navigateToTemplateDetail = { templateId ->
-                        val newIntent = TemplateActivity.newIntentForDetail(this, templateId)
-                        startActivity(newIntent)
-                    },
-                    navigateToTemplateCreate = {
-                        val newIntent = TemplateActivity.newIntentForCreateTemplate(this)
-                        startActivity(newIntent)
-                    },
+                    navigateToPersonalBottariEdit = ::navigateToPersonalBottariEdit,
+                    navigateToTeamBottariEdit = ::navigateToTeamBottariEdit,
+                    navigateToPersonalBottariChecklist = ::navigateToPersonalBottariChecklist,
+                    navigateToTeamBottariChecklist = ::navigateToTeamBottariChecklist,
+                    navigateToBrowser = ::navigateToBrowser,
+                    navigateToTemplateDetail = ::navigateToTemplateDetail,
+                    navigateToTemplateCreate = ::navigateToTemplateCreate,
                 )
             }
         }
@@ -36,6 +36,48 @@ class ComposeHomeActivity : AppCompatActivity() {
 
     private fun navigateToBrowser(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+        startActivity(intent)
+    }
+
+    private fun navigateToTemplateDetail(templateId: Long) {
+        val intent = TemplateActivity.newIntentForDetail(this, templateId)
+        startActivity(intent)
+    }
+
+    private fun navigateToTemplateCreate() {
+        val intent = TemplateActivity.newIntentForCreateTemplate(this)
+        startActivity(intent)
+    }
+
+    private fun navigateToPersonalBottariEdit(
+        bottariId: Long,
+        isNew: Boolean,
+    ) {
+        val intent = PersonalBottariEditActivity.newIntent(this, bottariId, isNew)
+        startActivity(intent)
+    }
+
+    private fun navigateToTeamBottariEdit(
+        bottariId: Long,
+        isNew: Boolean,
+    ) {
+        val intent = TeamBottariEditActivity.newIntent(this, bottariId, isNew)
+        startActivity(intent)
+    }
+
+    private fun navigateToPersonalBottariChecklist(
+        bottariId: Long,
+        bottariTitle: String,
+    ) {
+        val intent = ChecklistActivity.newIntent(this, bottariId, bottariTitle)
+        startActivity(intent)
+    }
+
+    private fun navigateToTeamBottariChecklist(
+        bottariId: Long,
+        bottariTitle: String,
+    ) {
+        val intent = TeamChecklistActivity.newIntent(this, bottariId, bottariTitle)
         startActivity(intent)
     }
 

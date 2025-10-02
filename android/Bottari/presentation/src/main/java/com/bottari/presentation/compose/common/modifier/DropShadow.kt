@@ -15,11 +15,12 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun Modifier.dropShadow(
     shape: Shape,
-    color: Color = Color.Black.copy(0.25f),
+    color: Color = BottariTheme.colors.black.copy(alpha = 0.25f),
     blur: Dp = 1.dp,
     offsetY: Dp = 1.dp,
     offsetX: Dp = 0.dp,

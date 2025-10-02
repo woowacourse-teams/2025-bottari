@@ -42,11 +42,10 @@ fun HomeBottomNavigationBar(
         key(selectedTab) {
             screens.forEach { screen ->
                 NavigationBarItem(
-                    icon = { HomeNavigationBarIcon(screen) },
-                    alwaysShowLabel = false,
-                    interactionSource = noRippleInteractionSource,
                     selected = screen == selectedTab,
                     onClick = { onTabSelected(screen) },
+                    icon = { HomeNavigationBarIcon(screen) },
+                    alwaysShowLabel = false,
                     colors =
                         NavigationBarItemDefaults.colors(
                             indicatorColor = BottariTheme.colors.transparent,
@@ -55,6 +54,7 @@ fun HomeBottomNavigationBar(
                             unselectedIconColor = unselectedColor,
                             unselectedTextColor = unselectedColor,
                         ),
+                    interactionSource = noRippleInteractionSource,
                 )
             }
         }
@@ -69,9 +69,9 @@ private fun HomeNavigationBarIcon(
     val iconRes = remember(screen) { screen.toIconResId() }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier,
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
             painter = painterResource(id = iconRes),
@@ -88,9 +88,8 @@ private fun HomeNavigationBarIcon(
 
 private fun HomeScreenRoute.toIconResId(): Int =
     when (this) {
-        HomeScreenRoute.Personal -> R.drawable.ic_personal
-        HomeScreenRoute.Team -> R.drawable.ic_team
         HomeScreenRoute.Template -> R.drawable.ic_template
+        HomeScreenRoute.Bottari -> R.drawable.ic_home
         HomeScreenRoute.More -> R.drawable.ic_more_horizontal
     }
 
@@ -100,7 +99,7 @@ private fun HomeBottomNavigationBarPreview() {
     BottariTheme {
         HomeBottomNavigationBar(
             screens = HomeScreenRoute.entries.toList(),
-            selectedTab = HomeScreenRoute.Personal,
+            selectedTab = HomeScreenRoute.Bottari,
             onTabSelected = {},
         )
     }

@@ -2,15 +2,16 @@ package com.bottari.presentation.model.bottari.team
 
 import com.bottari.domain.model.team.bottari.TeamBottari
 import com.bottari.presentation.model.alarm.AlarmUiModel
+import com.bottari.presentation.model.bottari.MyBottariUiModel
 
 data class TeamBottariUiModel(
-    val id: Long,
-    val title: String,
-    val totalQuantity: Int,
-    val checkedQuantity: Int,
+    override val id: Long,
+    override val title: String,
+    override val totalQuantity: Int,
+    override val checkedQuantity: Int,
+    override val alarm: AlarmUiModel?,
     val memberCount: Int,
-    val alarm: AlarmUiModel?,
-) {
+) : MyBottariUiModel {
     companion object {
         fun fromDomain(teamBottari: TeamBottari): TeamBottariUiModel =
             TeamBottariUiModel(

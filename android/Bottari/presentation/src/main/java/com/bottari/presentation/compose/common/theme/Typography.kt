@@ -90,6 +90,13 @@ data class BottariTypography(
             lineHeight = 12.dp,
             fontSize = 12.dp,
         ),
+    val semiBold24: BottariTextStyle =
+        BottariTextStyle(
+            fontFamily = Pretendard,
+            fontWeight = FontWeight.W600,
+            lineHeight = 24.dp,
+            fontSize = 24.dp,
+        ),
     val semiBold20: BottariTextStyle =
         BottariTextStyle(
             fontFamily = Pretendard,

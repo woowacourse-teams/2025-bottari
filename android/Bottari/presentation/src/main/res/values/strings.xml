@@ -117,6 +117,7 @@
 
     <!-- Dialog: 우리 보따리 입장 다이얼로그 텍스트 -->
     <string name="team_bottari_join_dialog_title_text">초대 코드를 입력해 주세요</string>
+    <string name="team_bottari_join_dialog_description_text">초대 코드를 입력하고 팀에 참여하세요</string>
     <string name="team_bottari_join_invalid_invite_code_text">유효하지 않은 초대 코드예요</string>
     <string name="team_bottari_join_dialog_name_hint_text">초대 코드를 입력해 주세요</string>
     <string name="team_bottari_join_dialog_btn_text">참가하기</string>
@@ -139,9 +140,15 @@
 
     <!-- Home Navigation -->
     <string name="home_nav_personal_bottari_title_text">나의 보따리</string>
-    <string name="home_nav_team_bottari_title_text">우리 보따리</string>
+    <string name="home_nav_my_bottari_title_text">나의 보따리</string>
     <string name="home_nav_template_title_text">모두의 보따리</string>
     <string name="home_nav_more_title_text">더보기</string>
+
+    <!-- My Bottari Screen -->
+    <string name="team_bottari_text">팀</string>
+    <string name="personal_bottari_text">개인</string>
+    <string name="all_bottari_text">전체</string>
+
 
     <!-- Personal Bottari -->
     <string name="bottari_home_fetch_failure_text">보따리 목록을 불러오지 못했어요</string>
@@ -162,9 +169,11 @@
     <string name="team_bottari_create_btn_text">팀 보따리 만들기</string>
     <string name="team_bottari_join_btn_text">코드로 참가</string>
 
-    <!--  Join Team Bottari  -->
+    <!--  Team Bottari  -->
     <string name="join_team_bottari_success_text">팀 보따리에 참가했어요</string>
     <string name="join_team_bottari_failure_text">팀 보따리에 참가하지 못했어요</string>
+    <string name="exit_team_bottari_success_text">팀 보따리에서 나갔어요</string>
+    <string name="exit_team_bottari_failure_text">팀 보따리에서 나가지 못했어요</string>
 
     <!-- Bottari Item -->
     <string name="bottari_item_alarm_repeat_everyday_text">매일 알람</string>
@@ -326,12 +335,16 @@
     <string name="team_status_send_remind_btn_text">보채기</string>
 
     <!-- Description 접근성 -->
+    <string name="bottari_edit_btn_description_text">보따리 수정 버튼</string>
+    <string name="bottari_delete_btn_description_text">보따리 삭제 버튼</string>
     <string name="bottari_btn_create_description">보따리 만들기 버튼</string>
     <string name="bottari_btn_template_delete_description">보따리 템플릿 삭제 버튼</string>
     <string name="bottari_btn_item_add_description">물건 추가 버튼</string>
+    <string name="bottari_btn_more_description">더보기 버튼</string>
     <string name="bottari_icon_item_empty_description">빈 물건 아이콘</string>
     <string name="bottari_icon_home_description">보따리 아이콘 이미지</string>
     <string name="bottari_icon_type_description">보따리 타입 아이콘</string>
+    <string name="personal_bottari_btn_create_description">개인 보따리 만들기 버튼</string>
     <string name="checklist_btn_swipe_description">스와이프 전환 버튼</string>
     <string name="checklist_btn_reset_description">체크리스트 초기화 버튼</string>
     <string name="checklist_icon_swipe_partial_unchecked_description">보따리 일부 품목 미체크 이미지</string>
@@ -352,4 +365,5 @@
     <string name="team_btn_bottari_create_option_description">팀 보따리 생성 옵션 버튼</string>
     <string name="team_btn_bottari_join_description">팀 보따리 참가 버튼</string>
     <string name="team_btn_share_link_description">초대 코드 공유 버튼</string>
+
 </resources>
