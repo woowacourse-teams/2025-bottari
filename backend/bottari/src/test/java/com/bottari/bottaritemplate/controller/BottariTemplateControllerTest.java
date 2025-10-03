@@ -14,6 +14,7 @@ import com.bottari.bottaritemplate.domain.SortProperty;
 import com.bottari.bottaritemplate.dto.CreateBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse;
 import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse.BottariTemplateItemResponse;
+import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse.HashtagResponse;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
 import com.bottari.bottaritemplate.service.BottariTemplateService;
 import com.bottari.log.LogFormatter;
@@ -57,7 +58,11 @@ class BottariTemplateControllerTest {
                 ),
                 "author_1",
                 LocalDateTime.now(),
-                0
+                0,
+                List.of(
+                        new HashtagResponse(1L, "hashtag_1"),
+                        new HashtagResponse(2L, "hashtag_2")
+                )
         );
         given(bottariTemplateService.getById(1L))
                 .willReturn(response);
@@ -83,7 +88,11 @@ class BottariTemplateControllerTest {
                         ),
                         "author_1",
                         LocalDateTime.now(),
-                        0
+                        0,
+                        List.of(
+                                new HashtagResponse(1L, "hashtag_1"),
+                                new HashtagResponse(2L, "hashtag_2")
+                        )
                 ),
                 new ReadBottariTemplateResponse(
                         2L,
@@ -93,7 +102,11 @@ class BottariTemplateControllerTest {
                         ),
                         "author_2",
                         LocalDateTime.now(),
-                        0
+                        0,
+                        List.of(
+                                new HashtagResponse(1L, "hashtag_1"),
+                                new HashtagResponse(2L, "hashtag_2")
+                        )
                 )
         );
         given(bottariTemplateService.getBySsaid("ssaid"))
@@ -120,7 +133,11 @@ class BottariTemplateControllerTest {
                         ),
                         "author_1",
                         LocalDateTime.now(),
-                        0
+                        0,
+                        List.of(
+                                new HashtagResponse(1L, "hashtag_1"),
+                                new HashtagResponse(2L, "hashtag_2")
+                        )
                 ),
                 new ReadBottariTemplateResponse(
                         2L,
@@ -130,7 +147,11 @@ class BottariTemplateControllerTest {
                         ),
                         "author_2",
                         LocalDateTime.now(),
-                        0
+                        0,
+                        List.of(
+                                new HashtagResponse(1L, "hashtag_1"),
+                                new HashtagResponse(2L, "hashtag_2")
+                        )
                 )
         );
         given(bottariTemplateService.getAll(anyString()))
@@ -156,7 +177,11 @@ class BottariTemplateControllerTest {
                         ),
                         "author_1",
                         LocalDateTime.now().minusDays(2),
-                        5
+                        5,
+                        List.of(
+                                new HashtagResponse(1L, "호떡짱짱"),
+                                new HashtagResponse(2L, "혼자여행")
+                        )
                 ),
                 new ReadBottariTemplateResponse(
                         2L,
@@ -166,7 +191,11 @@ class BottariTemplateControllerTest {
                         ),
                         "author_2",
                         LocalDateTime.now().minusDays(1),
-                        3
+                        3,
+                        List.of(
+                                new HashtagResponse(3L, "캠핑"),
+                                new HashtagResponse(4L, "가족나들이")
+                        )
                 )
         );
         final ReadNextBottariTemplateResponse response = new ReadNextBottariTemplateResponse(

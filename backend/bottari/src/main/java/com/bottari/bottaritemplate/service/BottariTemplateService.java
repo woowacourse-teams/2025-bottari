@@ -6,13 +6,16 @@ import com.bottari.bottari.repository.BottariItemRepository;
 import com.bottari.bottari.repository.BottariRepository;
 import com.bottari.bottaritemplate.domain.BottariTemplate;
 import com.bottari.bottaritemplate.domain.BottariTemplateCursor;
+import com.bottari.bottaritemplate.domain.BottariTemplateHashtag;
 import com.bottari.bottaritemplate.domain.BottariTemplateHistory;
 import com.bottari.bottaritemplate.domain.BottariTemplateItem;
+import com.bottari.bottaritemplate.domain.Hashtag;
 import com.bottari.bottaritemplate.domain.SortProperty;
 import com.bottari.bottaritemplate.dto.CreateBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
+import com.bottari.bottaritemplate.repository.BottariTemplateHashtagRepository;
 import com.bottari.bottaritemplate.repository.BottariTemplateHistoryRepository;
 import com.bottari.bottaritemplate.repository.BottariTemplateItemRepository;
 import com.bottari.bottaritemplate.repository.BottariTemplateRepository;
@@ -41,6 +44,7 @@ public class BottariTemplateService {
 
     private final BottariTemplateRepository bottariTemplateRepository;
     private final BottariTemplateItemRepository bottariTemplateItemRepository;
+    private final BottariTemplateHashtagRepository bottariTemplateHashtagRepository;
     private final BottariTemplateHistoryRepository bottariTemplateHistoryRepository;
     private final BottariRepository bottariRepository;
     private final BottariItemRepository bottariItemRepository;
@@ -51,37 +55,48 @@ public class BottariTemplateService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.BOTTARI_TEMPLATE_NOT_FOUND));
         final List<BottariTemplateItem> bottariTemplateItems =
                 bottariTemplateItemRepository.findAllByBottariTemplateId(bottariTemplate.getId());
+        final List<Hashtag> hashtags = bottariTemplateHashtagRepository.findAllByBottariTemplateId(
+                        bottariTemplate.getId()).stream()
+                .map(BottariTemplateHashtag::getHashtag)
+                .toList();
 
-        return ReadBottariTemplateResponse.of(bottariTemplate, bottariTemplateItems);
+        return ReadBottariTemplateResponse.of(bottariTemplate, bottariTemplateItems, hashtags);
     }
 
     public List<ReadBottariTemplateResponse> getBySsaid(final String ssaid) {
         final Member member = memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
-        final List<BottariTemplate> bottariTemplateItems =
+        final List<BottariTemplate> bottariTemplates =
                 bottariTemplateRepository.findAllByMemberIdWithMember(member.getId());
         final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate =
-                groupingItemsByTemplate(bottariTemplateItems);
+                groupingItemsByTemplate(bottariTemplates);
+        final Map<BottariTemplate, List<Hashtag>> hashtagsGroupByTemplate =
+                groupingHashtagsByTemplate(bottariTemplates);
 
-        return buildReadBottariTemplateResponses(itemsGroupByTemplate);
+        return buildReadBottariTemplateResponses(bottariTemplates, itemsGroupByTemplate, hashtagsGroupByTemplate);
     }
 
     public List<ReadBottariTemplateResponse> getAll(final String query) {
         final List<BottariTemplate> bottariTemplates = bottariTemplateRepository.findAllWithMember(query);
-        final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate = groupingItemsByTemplate(
-                bottariTemplates);
+        final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate =
+                groupingItemsByTemplate(bottariTemplates);
+        final Map<BottariTemplate, List<Hashtag>> hashtagsGroupByTemplate =
+                groupingHashtagsByTemplate(bottariTemplates);
 
-        return buildReadBottariTemplateResponses(itemsGroupByTemplate);
+        return buildReadBottariTemplateResponses(bottariTemplates, itemsGroupByTemplate, hashtagsGroupByTemplate);
     }
 
     public ReadNextBottariTemplateResponse getNextAll(final ReadNextBottariTemplateRequest request) {
         final BottariTemplateCursor cursor = request.toCursor();
         final Pageable pageable = cursor.toPageable();
         final Slice<BottariTemplateProjection> bottariTemplates = getNextBySortProperty(cursor, pageable);
-        final Map<Long, List<BottariTemplateItem>> itemsGroupByTemplateId = groupingItemsByTemplateId(
-                bottariTemplates.getContent());
+        final Map<Long, List<BottariTemplateItem>> itemsGroupByTemplateId =
+                groupingItemsByTemplateId(bottariTemplates.getContent());
+        final Map<Long, List<Hashtag>> hashtagsGroupByTemplateId =
+                groupingHashtagsByTemplateId(bottariTemplates.getContent());
         final List<ReadBottariTemplateResponse> responses = buildReadBottariTemplateResponses(
                 itemsGroupByTemplateId,
+                hashtagsGroupByTemplateId,
                 bottariTemplates.getContent()
         );
 
@@ -184,6 +199,21 @@ public class BottariTemplateService {
         return groupByTemplates;
     }
 
+    private Map<BottariTemplate, List<Hashtag>> groupingHashtagsByTemplate(final List<BottariTemplate> bottariTemplateItems) {
+        final Map<BottariTemplate, List<Hashtag>> groupByTemplates = new LinkedHashMap<>();
+        final List<BottariTemplateHashtag> bottariTemplateHashtags =
+                bottariTemplateHashtagRepository.findAllByBottariTemplateIn(bottariTemplateItems);
+        for (final BottariTemplate bottariTemplate : bottariTemplateItems) {
+            groupByTemplates.put(bottariTemplate, new ArrayList<>());
+        }
+        for (final BottariTemplateHashtag item : bottariTemplateHashtags) {
+            final BottariTemplate bottariTemplate = item.getBottariTemplate();
+            groupByTemplates.get(bottariTemplate).add(item.getHashtag());
+        }
+
+        return groupByTemplates;
+    }
+
     private Map<Long, List<BottariTemplateItem>> groupingItemsByTemplateId(
             final List<BottariTemplateProjection> bottariTemplates
     ) {
@@ -203,16 +233,41 @@ public class BottariTemplateService {
         return groupByTemplates;
     }
 
+    private Map<Long, List<Hashtag>> groupingHashtagsByTemplateId(
+            final List<BottariTemplateProjection> bottariTemplates
+    ) {
+        final Map<Long, List<Hashtag>> groupByTemplates = new LinkedHashMap<>();
+        final List<Long> ids = bottariTemplates.stream()
+                .map(BottariTemplateProjection::getBottariTemplateId)
+                .toList();
+        final List<BottariTemplateHashtag> hashtags = bottariTemplateHashtagRepository.findAllByBottariTemplateIds(ids);
+        for (final Long id : ids) {
+            groupByTemplates.put(id, new ArrayList<>());
+        }
+        for (final BottariTemplateHashtag hashtag : hashtags) {
+            final BottariTemplate bottariTemplate = hashtag.getBottariTemplate();
+            groupByTemplates.get(bottariTemplate.getId()).add(hashtag.getHashtag());
+        }
+
+        return groupByTemplates;
+    }
+
     private List<ReadBottariTemplateResponse> buildReadBottariTemplateResponses(
-            final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate
+            final List<BottariTemplate> bottariTemplates,
+            final Map<BottariTemplate, List<BottariTemplateItem>> itemsGroupByTemplate,
+            final Map<BottariTemplate, List<Hashtag>> hashtagsGroupByTemplate
     ) {
         final List<ReadBottariTemplateResponse> responses = new ArrayList<>();
-        for (final BottariTemplate bottariTemplate : itemsGroupByTemplate.keySet()) {
+        for (final BottariTemplate bottariTemplate : bottariTemplates) {
             final List<BottariTemplateItem> templateItems = itemsGroupByTemplate.getOrDefault(
                     bottariTemplate,
                     List.of()
             );
-            responses.add(ReadBottariTemplateResponse.of(bottariTemplate, templateItems));
+            final List<Hashtag> hashtags = hashtagsGroupByTemplate.getOrDefault(
+                    bottariTemplate,
+                    List.of()
+            );
+            responses.add(ReadBottariTemplateResponse.of(bottariTemplate, templateItems, hashtags));
         }
 
         return responses;
@@ -220,6 +275,7 @@ public class BottariTemplateService {
 
     private List<ReadBottariTemplateResponse> buildReadBottariTemplateResponses(
             final Map<Long, List<BottariTemplateItem>> itemsGroupByTemplate,
+            final Map<Long, List<Hashtag>> hashtagsGroupByTemplate,
             final List<BottariTemplateProjection> projections
     ) {
         final List<ReadBottariTemplateResponse> responses = new ArrayList<>();
@@ -228,7 +284,11 @@ public class BottariTemplateService {
                     projection.getBottariTemplateId(),
                     List.of()
             );
-            responses.add(ReadBottariTemplateResponse.of(projection, items));
+            final List<Hashtag> hashtags = hashtagsGroupByTemplate.getOrDefault(
+                    projection.getBottariTemplateId(),
+                    List.of()
+            );
+            responses.add(ReadBottariTemplateResponse.of(projection, items, hashtags));
         }
 
         return responses;
