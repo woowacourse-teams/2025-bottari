@@ -112,7 +112,11 @@ fun MyBottariContent(
             enter = fadeIn(),
             exit = fadeOut(),
         ) {
-            BottariCreateFAB()
+            BottariCreateFAB(
+                onOpenPersonalDialog = onOpenPersonalDialog,
+                onOpenTeamDialog = onOpenTeamDialog,
+                onOpenCodeDialog = onOpenCodeDialog,
+            )
         }
     }
 }

@@ -40,14 +40,30 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 @SuppressLint("RememberInComposition")
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun BottariCreateFAB() {
+fun BottariCreateFAB(
+    onOpenPersonalDialog: () -> Unit,
+    onOpenTeamDialog: () -> Unit,
+    onOpenCodeDialog: () -> Unit,
+) {
     val focusRequester = FocusRequester()
 
     val items =
         listOf(
-            Pair(R.drawable.ic_team_invite_code, stringResource(R.string.team_bottari_join_btn_text)),
-            Pair(R.drawable.ic_people, stringResource(R.string.team_bottari_create_btn_text)),
-            Pair(R.drawable.ic_person_filled, stringResource(R.string.personal_bottari_create_btn_text)),
+            Triple(
+                R.drawable.ic_team_invite_code,
+                stringResource(R.string.team_bottari_join_btn_text),
+                onOpenCodeDialog,
+            ),
+            Triple(
+                R.drawable.ic_people,
+                stringResource(R.string.team_bottari_create_btn_text),
+                onOpenTeamDialog,
+            ),
+            Triple(
+                R.drawable.ic_person_filled,
+                stringResource(R.string.personal_bottari_create_btn_text),
+                onOpenPersonalDialog,
+            ),
         )
 
     var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
@@ -117,7 +133,10 @@ fun BottariCreateFAB() {
                                 Modifier
                             },
                         ),
-                onClick = { fabMenuExpanded = false },
+                onClick = {
+                    fabMenuExpanded = false
+                    item.third()
+                },
                 icon = {
                     Icon(
                         painter = painterResource(id = item.first),
