@@ -26,7 +26,7 @@ data class BottariColorSystem(
     val productTypeAssigned: Color = Color(0xFF00AEFF),
 )
 
-private val lightColorScheme = BottariColorSystem()
+val lightColorScheme = BottariColorSystem()
 
 val LocalBottariColorSystem = staticCompositionLocalOf { lightColorScheme }
 

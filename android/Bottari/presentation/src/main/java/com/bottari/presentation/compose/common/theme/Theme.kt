@@ -1,7 +1,9 @@
 package com.bottari.presentation.compose.common.theme
 
 import androidx.activity.SystemBarStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -27,6 +29,13 @@ object BottariTheme {
         get() = LocalBottariTypographySystem.current
 }
 
+private val LightColorScheme =
+    lightColorScheme(
+        primary = lightColorScheme.primary,
+        primaryContainer = lightColorScheme.primary,
+        onPrimaryContainer = lightColorScheme.white,
+        surface = lightColorScheme.white,
+    )
 val BottariStatusBarStyle =
     SystemBarStyle.light(
         scrim = Color.Black.toArgb(),
@@ -41,5 +50,11 @@ fun BottariTheme(content: @Composable () -> Unit) {
         ProvideTextStyle(value = typography.medium14.toTextStyle()) {
             content()
         }
+    }
+    CompositionLocalProvider(LocalBottariColorSystem provides lightColorScheme) {
+        MaterialTheme(
+            colorScheme = LightColorScheme,
+            content = content,
+        )
     }
 }
