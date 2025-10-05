@@ -74,7 +74,7 @@ fun BottariItem(
                 text = bottari.title,
                 style = BottariTheme.typography.semiBold24.toTextStyle(),
             )
-            Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
+            Spacer(modifier = Modifier.height(BottariTheme.spacing.space2xSmall))
             BottariCheckInfo(
                 checkedQuantity = bottari.checkedQuantity,
                 totalQuantity = bottari.totalQuantity,
