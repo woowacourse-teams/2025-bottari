@@ -63,6 +63,7 @@ public enum ErrorCode {
     HASHTAG_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "해시태그 제목이 너무 깁니다."),
     HASHTAG_NAME_CONTAINS_WHITESPACE(HttpStatus.BAD_REQUEST, "해시태그에는 공백을 포함할 수 없습니다."),
     HASHTAG_NAME_INVALID_CHARACTER(HttpStatus.BAD_REQUEST, "해시태그는 한글, 영문, 숫자, 언더스코어(_)만 사용할 수 있습니다."),
+    HASHTAG_ID_MISSING(HttpStatus.BAD_REQUEST,"해시태그로 템플릿 검색시 해시태그 아이디는 필수입니다."),
 
     // ===== TEAM_BOTTARI 관련 =====
     TEAM_BOTTARI_NOT_FOUND(HttpStatus.NOT_FOUND, "팀 보따리를 찾을 수 없습니다."),
