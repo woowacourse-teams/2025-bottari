@@ -118,10 +118,21 @@ INSERT INTO bottari_template (title, member_id, created_at, taken_count)
 VALUES ('기본 여행 템플릿', 1, '2024-01-15 10:00:00',5),
        ('출장 기본 템플릿', 1, '2024-01-16 14:30:00',2),
        ('캠핑 필수품', 2, '2024-01-17 09:15:00',3),
-       ('해외여행 체크리스트', 2, '2024-01-18 16:45:00',5),
+       ('해외여행 체크리스트', 2, '2024-01-18 16:45:00',4),
        ('아이 외출 필수품', 4, '2024-01-19 11:20:00',0),
        ('운동 기본템', 3, '2024-01-20 08:00:00',0),
        ('등산 준비물', 5, '2024-01-21 13:10:00',0);
+
+INSERT INTO hashtag (name)
+VALUES ('여행'),
+       ('운동'),
+       ('등산');
+
+INSERT INTO bottari_template_hashtag (bottari_template_id, hashtag_id)
+VALUES (1,1),
+       (4,1),
+       (6,2),
+       (7,3);
 
 -- 보따리 템플릿 아이템 데이터
 INSERT INTO bottari_template_item (name, bottari_template_id)
