@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.team
+package com.bottari.presentation.compose.home.bottari
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
