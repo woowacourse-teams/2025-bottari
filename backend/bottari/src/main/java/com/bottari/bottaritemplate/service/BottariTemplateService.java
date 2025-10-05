@@ -321,10 +321,30 @@ public class BottariTemplateService {
             final List<String> hashtagNames,
             final BottariTemplate bottariTemplate
     ) {
+        validateDuplicateHashtagNames(hashtagNames);
+        validateHashtagCount(hashtagNames);
+        final List<Hashtag> allHashtags = findOrCreateHashtags(hashtagNames);
+        final List<BottariTemplateHashtag> templateHashtags = allHashtags.stream()
+                .map(hashtag -> new BottariTemplateHashtag(bottariTemplate, hashtag))
+                .toList();
+        bottariTemplateHashtagRepository.saveAll(templateHashtags);
+    }
+
+    private void validateDuplicateHashtagNames(final List<String> hashtagNames) {
+        final Set<String> uniqueHashtagNames = new HashSet<>(hashtagNames);
+        if (uniqueHashtagNames.size() != hashtagNames.size()) {
+            throw new BusinessException(ErrorCode.HASHTAG_DUPLICATE_IN_REQUEST);
+        }
+    }
+
+    private void validateHashtagCount(final List<String> hashtagNames) {
         final int maxHashtagCount = 10;
         if (hashtagNames.size() > maxHashtagCount) {
             throw new BusinessException(ErrorCode.HASHTAG_TOO_MANY, "최대 %d개까지 입력 가능합니다.".formatted(maxHashtagCount));
         }
+    }
+
+    private List<Hashtag> findOrCreateHashtags(final List<String> hashtagNames) {
         final List<Hashtag> existingHashtags = hashtagRepository.findAllByNameIn(hashtagNames);
         final Set<String> existingHashtagNames = existingHashtags.stream()
                 .map(Hashtag::getName)
@@ -338,10 +358,8 @@ public class BottariTemplateService {
         }
         final List<Hashtag> allHashtagsToAssociate = new ArrayList<>(existingHashtags);
         allHashtagsToAssociate.addAll(newHashtags);
-        final List<BottariTemplateHashtag> templateHashtags = allHashtagsToAssociate.stream()
-                .map(hashtag -> new BottariTemplateHashtag(bottariTemplate, hashtag))
-                .toList();
-        bottariTemplateHashtagRepository.saveAll(templateHashtags);
+
+        return allHashtagsToAssociate;
     }
 
     private void validateOwner(

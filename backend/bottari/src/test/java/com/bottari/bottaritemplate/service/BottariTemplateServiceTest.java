@@ -602,6 +602,26 @@ class BottariTemplateServiceTest {
             );
         }
 
+        @DisplayName("요청에 중복된 해시태그가 있는 경우, 예외를 던진다.")
+        @Test
+        void create_Exception_DuplicateHashtagsInRequest() {
+            // given
+            final Member member = MemberFixture.MEMBER.get();
+            entityManager.persist(member);
+
+            final List<String> hashtagNames = List.of("여행", "여행", "준비물");
+            final CreateBottariTemplateRequest request = new CreateBottariTemplateRequest(
+                    "title",
+                    List.of("item1"),
+                    hashtagNames
+            );
+
+            // when & then
+            assertThatThrownBy(() -> bottariTemplateService.create(member.getSsaid(), request))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("요청에 중복된 해시태그가 있습니다.");
+        }
+
         @DisplayName("해시태그 10개 초과 시, 예외를 던진다.")
         @Test
         void create_Exception_ExceedHashtagLimit() {
