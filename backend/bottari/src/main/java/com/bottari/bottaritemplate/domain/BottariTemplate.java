@@ -36,6 +36,8 @@ public class BottariTemplate {
 
     private String title;
 
+    private String description;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -50,10 +52,13 @@ public class BottariTemplate {
 
     public BottariTemplate(
             final String title,
+            final String description,
             final Member member
     ) {
         validateTitle(title);
+        validateDescription(description);
         this.title = title;
+        this.description = description;
         this.member = member;
         this.takenCount = 0;
     }
@@ -71,6 +76,18 @@ public class BottariTemplate {
         }
         if (BadWordValidator.hasBadWord(title)) {
             throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_TITLE_OFFENSIVE);
+        }
+    }
+
+    private void validateDescription(final String description) {
+        if (description.isBlank()) {
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_DESCRIPTION_BLANK);
+        }
+        if (description.length() > 30) {
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_DESCRIPTION_TOO_LONG, "최대 30자까지 입력 가능합니다.");
+        }
+        if (BadWordValidator.hasBadWord(description)) {
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_DESCRIPTION_OFFENSIVE);
         }
     }
 }
