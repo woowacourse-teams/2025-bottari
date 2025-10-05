@@ -20,7 +20,7 @@ class BottariTemplateTest {
         final Member member = new Member("ssaid", "name");
 
         // when & then
-        assertThatThrownBy(() -> new BottariTemplate(title, member))
+        assertThatThrownBy(() -> new BottariTemplate(title, "description", member))
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("보따리 템플릿 제목은 공백일 수 없습니다.");
     }
@@ -33,7 +33,7 @@ class BottariTemplateTest {
         final Member member = new Member("ssaid", "name");
 
         // when & then
-        assertThatThrownBy(() -> new BottariTemplate(title, member))
+        assertThatThrownBy(() -> new BottariTemplate(title, "description", member))
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("보따리 템플릿 제목이 너무 깁니다. 최대 15자까지 입력 가능합니다.");
     }
@@ -46,7 +46,7 @@ class BottariTemplateTest {
         final Member member = new Member("ssaid", "name");
 
         // when & then
-        assertThatThrownBy(() -> new BottariTemplate(title, member))
+        assertThatThrownBy(() -> new BottariTemplate(title, "description", member))
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("보따리 템플릿 제목에 비속어를 입력할 수 없습니다.");
     }
@@ -63,7 +63,7 @@ class BottariTemplateTest {
     ) {
         // given
         final Member member = new Member("same_ssaid", "name");
-        final BottariTemplate bottariTemplate = new BottariTemplate("title", member);
+        final BottariTemplate bottariTemplate = new BottariTemplate("title", "description", member);
 
         // when
         final boolean actual = bottariTemplate.isOwner(ssaid);

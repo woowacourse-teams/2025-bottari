@@ -267,7 +267,7 @@ class BottariTemplateServiceTest {
             entityManager.persist(hashtag2);
             entityManager.persist(templateHashtag2);
 
-            final BottariTemplate template3 = new BottariTemplate("subject", member);
+            final BottariTemplate template3 = new BottariTemplate("subject", "description", member);
             final BottariTemplateItem item4 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_4.get(template3);
             final Hashtag hashtag3 = HashtagFixture.HASHTAG_3.get();
             final BottariTemplateHashtag templateHashtag3 = new BottariTemplateHashtag(template3, hashtag3);
@@ -320,9 +320,9 @@ class BottariTemplateServiceTest {
             final Member member = new Member("ssaid", "name");
             entityManager.persist(member);
 
-            final BottariTemplate template1 = new BottariTemplate("template1", member);
-            final BottariTemplate template2 = new BottariTemplate("template2", member);
-            final BottariTemplate template3 = new BottariTemplate("template3", member);
+            final BottariTemplate template1 = new BottariTemplate("template1", "description1", member);
+            final BottariTemplate template2 = new BottariTemplate("template2", "description2", member);
+            final BottariTemplate template3 = new BottariTemplate("template3", "description3", member);
             entityManager.persist(template1);
             entityManager.persist(template2);
             entityManager.persist(template3);
@@ -386,8 +386,8 @@ class BottariTemplateServiceTest {
             final Member member = new Member("ssaid", "name");
             entityManager.persist(member);
 
-            final BottariTemplate template1 = new BottariTemplate("template1", member);
-            final BottariTemplate template2 = new BottariTemplate("template2", member);
+            final BottariTemplate template1 = new BottariTemplate("template1", "description1", member);
+            final BottariTemplate template2 = new BottariTemplate("template2", "description2", member);
             entityManager.persist(template1);
             entityManager.persist(template2);
 
@@ -441,9 +441,9 @@ class BottariTemplateServiceTest {
             final Member member = new Member("ssaid", "name");
             entityManager.persist(member);
 
-            final BottariTemplate template1 = new BottariTemplate("여행용 체크리스트", member);
-            final BottariTemplate template2 = new BottariTemplate("캠핑 준비물", member);
-            final BottariTemplate template3 = new BottariTemplate("출장 체크리스트", member);
+            final BottariTemplate template1 = new BottariTemplate("여행용 체크리스트", "여행용", member);
+            final BottariTemplate template2 = new BottariTemplate("캠핑 준비물", "캠핑용", member);
+            final BottariTemplate template3 = new BottariTemplate("출장 체크리스트", "출장용", member);
             entityManager.persist(template1);
             entityManager.persist(template2);
             entityManager.persist(template3);
@@ -544,6 +544,7 @@ class BottariTemplateServiceTest {
             final List<String> bottariTemplateItems = List.of("item1", "item2", "item3");
             final CreateBottariTemplateRequest request = new CreateBottariTemplateRequest(
                     "title",
+                    "description",
                     bottariTemplateItems
             );
 
@@ -574,6 +575,7 @@ class BottariTemplateServiceTest {
             final List<String> bottariTemplateItems = List.of("item1", "item2", "item3");
             final CreateBottariTemplateRequest request = new CreateBottariTemplateRequest(
                     "title",
+                    "description",
                     bottariTemplateItems
             );
             final String invalidSsaid = "invalid_ssaid";
@@ -594,6 +596,7 @@ class BottariTemplateServiceTest {
             final List<String> bottariTemplateItems = List.of("item1", "duplicate_item", "duplicate_item");
             final CreateBottariTemplateRequest request = new CreateBottariTemplateRequest(
                     "title",
+                    "description",
                     bottariTemplateItems
             );
 
@@ -657,7 +660,7 @@ class BottariTemplateServiceTest {
             final Member templateOwner = new Member("owner_ssaid", "owner_name");
             entityManager.persist(templateOwner);
 
-            final BottariTemplate bottariTemplate = new BottariTemplate("title", templateOwner);
+            final BottariTemplate bottariTemplate = new BottariTemplate("title", "description", templateOwner);
             entityManager.persist(bottariTemplate);
 
             final BottariTemplateItem bottariTemplateItem1 = new BottariTemplateItem("item1", bottariTemplate);
@@ -698,7 +701,7 @@ class BottariTemplateServiceTest {
             final Member templateOwner = new Member("owner_ssaid", "owner_name");
             entityManager.persist(templateOwner);
 
-            final BottariTemplate bottariTemplate = new BottariTemplate("title", templateOwner);
+            final BottariTemplate bottariTemplate = new BottariTemplate("title", "description", templateOwner);
             entityManager.persist(bottariTemplate);
 
             final BottariTemplateItem bottariTemplateItem1 = new BottariTemplateItem("item1", bottariTemplate);

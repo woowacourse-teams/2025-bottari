@@ -230,6 +230,7 @@ class BottariTemplateControllerTest {
         final List<String> bottariTemplateItems = List.of("item1", "item2");
         final CreateBottariTemplateRequest request = new CreateBottariTemplateRequest(
                 "title",
+                "description",
                 bottariTemplateItems
         );
         given(bottariTemplateService.create(ssaid, request))

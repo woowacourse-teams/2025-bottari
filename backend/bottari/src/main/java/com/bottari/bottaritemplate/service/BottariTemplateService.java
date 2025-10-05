@@ -111,7 +111,7 @@ public class BottariTemplateService {
     ) {
         final Member member = memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
-        final BottariTemplate bottariTemplate = new BottariTemplate(request.title(), member);
+        final BottariTemplate bottariTemplate = new BottariTemplate(request.title(), request.description(), member);
         final BottariTemplate savedBottariTemplate = bottariTemplateRepository.save(bottariTemplate);
         validateDuplicateItemNames(request.bottariTemplateItems());
         final List<BottariTemplateItem> bottariTemplateItems = request.bottariTemplateItems().stream()
