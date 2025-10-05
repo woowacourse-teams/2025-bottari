@@ -49,7 +49,6 @@ public class BottariTemplateService {
     private final BottariTemplateHashtagRepository bottariTemplateHashtagRepository;
     private final BottariTemplateHistoryRepository bottariTemplateHistoryRepository;
     private final HashtagRepository hashtagRepository;
-    private final BottariTemplateHashtagRepository bottariTemplateHashtagRepository;
     private final BottariRepository bottariRepository;
     private final BottariItemRepository bottariItemRepository;
     private final MemberRepository memberRepository;
@@ -123,9 +122,7 @@ public class BottariTemplateService {
                 .map(name -> new BottariTemplateItem(name, savedBottariTemplate))
                 .toList();
         bottariTemplateItemRepository.saveAll(bottariTemplateItems);
-        if (request.hashtagNames() != null && !request.hashtagNames().isEmpty()) {
-            saveHashtags(request.hashtagNames(), savedBottariTemplate);
-        }
+        saveHashtagsIfPresent(request, savedBottariTemplate);
 
         return savedBottariTemplate.getId();
     }
@@ -308,6 +305,15 @@ public class BottariTemplateService {
             if (!uniqueItemNames.add(itemName)) {
                 throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_ITEM_DUPLICATE_IN_REQUEST);
             }
+        }
+    }
+
+    private void saveHashtagsIfPresent(
+            final CreateBottariTemplateRequest request,
+            final BottariTemplate savedBottariTemplate
+    ) {
+        if (request.hashtagNames() != null && !request.hashtagNames().isEmpty()) {
+            saveHashtags(request.hashtagNames(), savedBottariTemplate);
         }
     }
 
