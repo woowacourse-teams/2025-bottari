@@ -36,23 +36,29 @@ class MyBottariViewModel(
 
     fun deletePersonalBottari(bottariId: Long) {
         launch {
+            updateState { copy(isLoading = true) }
             deleteBottariUseCase(bottariId)
                 .onSuccess {
-                    emitEvent(MyBottariUiEvent.DeletePersonalBottariSuccess)
+                    emitEvent(event = MyBottariUiEvent.DeletePersonalBottariSuccess)
+                    updateState { copy(isLoading = false) }
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.DeletePersonalBottariFailure)
+                    updateState { copy(isLoading = false) }
                 }
         }
     }
 
     fun deleteTeamBottari(bottariId: Long) {
         launch {
+            updateState { copy(isLoading = true) }
             deleteTeamBottariUseCase(bottariId)
                 .onSuccess {
                     fetchTeamBottaries()
                     emitEvent(MyBottariUiEvent.ExitTeamBottariSuccess)
+                    updateState { copy(isLoading = false) }
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.ExitTeamBottariFailure)
+                    updateState { copy(isLoading = false) }
                 }
         }
     }
@@ -77,11 +83,14 @@ class MyBottariViewModel(
 
     private fun inputTeamBottariCode(code: String) {
         launch {
+            updateState { copy(isLoading = true) }
             joinTeamBottariUseCase(code)
                 .onSuccess {
                     fetchTeamBottaries()
+                    updateState { copy(isLoading = false) }
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.JoinTeamBottariFailure)
+                    updateState { copy(isLoading = false) }
                 }
             closeDialog()
         }
@@ -89,10 +98,13 @@ class MyBottariViewModel(
 
     private fun createPersonalBottari(title: String) {
         launch {
+            updateState { copy(isLoading = true) }
             createBottariUseCase(title)
                 .onSuccess { bottariId ->
+                    updateState { copy(isLoading = false) }
                     emitEvent(MyBottariUiEvent.CreatePersonalBottariSuccess(bottariId))
                 }.onFailure {
+                    updateState { copy(isLoading = false) }
                     emitEvent(MyBottariUiEvent.CreateBottariFailure)
                 }
             closeDialog()
@@ -101,13 +113,16 @@ class MyBottariViewModel(
 
     private fun createTeamBottari(title: String) {
         launch {
+            updateState { copy(isLoading = true) }
             createTeamBottariUseCase(title)
                 .onSuccess { bottariId ->
                     bottariId?.let { id ->
+                        updateState { copy(isLoading = false) }
                         emitEvent(MyBottariUiEvent.CreateTeamBottariSuccess(id))
                         fetchTeamBottaries()
                     }
                 }.onFailure {
+                    updateState { copy(isLoading = false) }
                     emitEvent(MyBottariUiEvent.CreateBottariFailure)
                 }
             closeDialog()

@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariTabBar
+import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
@@ -118,6 +119,8 @@ fun MyBottariContent(
                 onOpenCodeDialog = onOpenCodeDialog,
             )
         }
+
+        IndeterminateCircularIndicator(isLoading = uiState.isLoading)
     }
 }
 
