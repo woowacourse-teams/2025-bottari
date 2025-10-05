@@ -52,6 +52,7 @@ class BottariTemplateControllerTest {
         final ReadBottariTemplateResponse response = new ReadBottariTemplateResponse(
                 1L,
                 "title_1",
+                "description_1",
                 List.of(
                         new BottariTemplateItemResponse(1L, "item_1"),
                         new BottariTemplateItemResponse(2L, "item_2")
@@ -82,6 +83,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         1L,
                         "title_1",
+                        "description_1",
                         List.of(
                                 new BottariTemplateItemResponse(1L, "item_1"),
                                 new BottariTemplateItemResponse(2L, "item_2")
@@ -97,6 +99,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         2L,
                         "title_2",
+                        "description_2",
                         List.of(
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
@@ -127,6 +130,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         1L,
                         "title_1",
+                        "description_1",
                         List.of(
                                 new BottariTemplateItemResponse(1L, "item_1"),
                                 new BottariTemplateItemResponse(2L, "item_2")
@@ -142,6 +146,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         2L,
                         "title_2",
+                        "description_2",
                         List.of(
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
@@ -171,6 +176,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         1L,
                         "여행용 체크리스트",
+                        "여행용",
                         List.of(
                                 new BottariTemplateItemResponse(1L, "여권"),
                                 new BottariTemplateItemResponse(2L, "항공권")
@@ -186,6 +192,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         2L,
                         "캠핑 준비물",
+                        "캠핑용",
                         List.of(
                                 new BottariTemplateItemResponse(3L, "텐트")
                         ),
