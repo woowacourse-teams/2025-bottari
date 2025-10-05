@@ -95,6 +95,10 @@ fun MyBottariContent(
                         else -> emptyList()
                     }
 
+                if (currentList.isEmpty()) {
+                    MyBottariEmptyView()
+                }
+
                 BottariList(
                     bottaries = currentList,
                     listState = listState,
