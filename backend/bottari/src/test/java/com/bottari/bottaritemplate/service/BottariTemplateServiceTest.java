@@ -13,6 +13,7 @@ import com.bottari.bottaritemplate.domain.BottariTemplateItem;
 import com.bottari.bottaritemplate.domain.Hashtag;
 import com.bottari.bottaritemplate.dto.CreateBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse;
+import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateByHashtagRequest;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
 import com.bottari.config.JpaAuditingConfig;
@@ -145,8 +146,10 @@ class BottariTemplateServiceTest {
             final BottariTemplateItem item4 = BottariTemplateItemFixture.BOTTARI_TEMPLATE_ITEM_4.get(
                     anotherMemberBottariTemplate);
             final Hashtag hashtag3 = HashtagFixture.HASHTAG_3.get();
-            final BottariTemplateHashtag templateHashtag3 = new BottariTemplateHashtag(anotherMemberBottariTemplate,
-                    hashtag3);
+            final BottariTemplateHashtag templateHashtag3 = new BottariTemplateHashtag(
+                    anotherMemberBottariTemplate,
+                    hashtag3
+            );
             entityManager.persist(anotherMemberBottariTemplate);
             entityManager.persist(item4);
             entityManager.persist(hashtag3);
@@ -157,19 +160,19 @@ class BottariTemplateServiceTest {
 
             // then
             assertAll(() -> {
-                        assertThat(actual).hasSize(2);
-                        assertThat(actual.get(0).title()).isEqualTo(memberTemplate2.getTitle());
-                        assertThat(actual.get(0).items()).hasSize(1);
-                        assertThat(actual.get(0).items().getFirst().name()).isEqualTo(item3.getName());
-                        assertThat(actual.get(0).hashtags()).hasSize(1);
-                        assertThat(actual.get(0).hashtags().getFirst().name()).isEqualTo(hashtag2.getName());
-                        assertThat(actual.get(1).title()).isEqualTo(memberTemplate1.getTitle());
-                        assertThat(actual.get(1).items()).hasSize(2);
-                        assertThat(actual.get(1).items().get(0).name()).isEqualTo(item1.getName());
-                        assertThat(actual.get(1).items().get(1).name()).isEqualTo(item2.getName());
-                        assertThat(actual.get(1).hashtags()).hasSize(1);
-                        assertThat(actual.get(1).hashtags().getFirst().name()).isEqualTo(hashtag1.getName());
-                    }
+                          assertThat(actual).hasSize(2);
+                          assertThat(actual.get(0).title()).isEqualTo(memberTemplate2.getTitle());
+                          assertThat(actual.get(0).items()).hasSize(1);
+                          assertThat(actual.get(0).items().getFirst().name()).isEqualTo(item3.getName());
+                          assertThat(actual.get(0).hashtags()).hasSize(1);
+                          assertThat(actual.get(0).hashtags().getFirst().name()).isEqualTo(hashtag2.getName());
+                          assertThat(actual.get(1).title()).isEqualTo(memberTemplate1.getTitle());
+                          assertThat(actual.get(1).items()).hasSize(2);
+                          assertThat(actual.get(1).items().get(0).name()).isEqualTo(item1.getName());
+                          assertThat(actual.get(1).items().get(1).name()).isEqualTo(item2.getName());
+                          assertThat(actual.get(1).hashtags()).hasSize(1);
+                          assertThat(actual.get(1).hashtags().getFirst().name()).isEqualTo(hashtag1.getName());
+                      }
             );
         }
 
@@ -532,6 +535,170 @@ class BottariTemplateServiceTest {
     }
 
     @Nested
+    class GetNextAllByHashTagTest {
+
+        @DisplayName("createdAt 기준으로 다음 페이지 템플릿 목록을 조회한다.")
+        @Test
+        void getNextAllByHashTag_ByCreatedAt() {
+            // given
+            final Member member = new Member("ssaid", "name");
+            entityManager.persist(member);
+
+            final BottariTemplate template1 = new BottariTemplate("template1", member);
+            final BottariTemplate template2 = new BottariTemplate("template2", member);
+            final BottariTemplate template3 = new BottariTemplate("template3", member);
+            entityManager.persist(template1);
+            entityManager.persist(template2);
+            entityManager.persist(template3);
+
+            final BottariTemplateItem item1 = new BottariTemplateItem("item1", template1);
+            final BottariTemplateItem item2 = new BottariTemplateItem("item2", template2);
+            final BottariTemplateItem item3 = new BottariTemplateItem("item3", template3);
+            entityManager.persist(item1);
+            entityManager.persist(item2);
+            entityManager.persist(item3);
+
+            final Hashtag hashtag1 = new Hashtag("hashtag1");
+            final Hashtag hashtag2 = new Hashtag("hashtag2");
+            entityManager.persist(hashtag1);
+            entityManager.persist(hashtag2);
+
+            final BottariTemplateHashtag templateHashtag1 = new BottariTemplateHashtag(template1, hashtag1);
+            final BottariTemplateHashtag templateHashtag2 = new BottariTemplateHashtag(template2, hashtag2);
+            final BottariTemplateHashtag templateHashtag3 = new BottariTemplateHashtag(template3, hashtag2);
+            entityManager.persist(templateHashtag1);
+            entityManager.persist(templateHashtag2);
+            entityManager.persist(templateHashtag3);
+
+            final ReadNextBottariTemplateByHashtagRequest request = new ReadNextBottariTemplateByHashtagRequest(
+                    hashtag2.getId(),
+                    null,
+                    null,
+                    0,
+                    2,
+                    "createdAt"
+            );
+
+            // when
+            final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAllByHashTag(request);
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.contents()).hasSize(2),
+                    () -> assertThat(actual.contents().get(0).hashtags()).hasSize(1),
+                    () -> assertThat(actual.contents().get(0).hashtags().getFirst().name()).isEqualTo(
+                            hashtag2.getName()),
+                    () -> assertThat(actual.contents().get(0).title()).isEqualTo("template3"),
+                    () -> assertThat(actual.contents().get(0).items()).hasSize(1),
+                    () -> assertThat(actual.contents().get(0).items().getFirst().name()).isEqualTo("item3"),
+                    () -> assertThat(actual.contents().get(1).hashtags()).hasSize(1),
+                    () -> assertThat(actual.contents().get(1).hashtags().getFirst().name()).isEqualTo(
+                            hashtag2.getName()),
+                    () -> assertThat(actual.contents().get(1).title()).isEqualTo("template2"),
+                    () -> assertThat(actual.contents().get(1).items()).hasSize(1),
+                    () -> assertThat(actual.contents().get(1).items().getFirst().name()).isEqualTo("item2"),
+                    () -> assertThat(actual.currentPage()).isEqualTo(0),
+                    () -> assertThat(actual.size()).isEqualTo(2),
+                    () -> assertThat(actual.hasNext()).isFalse(),
+                    () -> assertThat(actual.first()).isTrue(),
+                    () -> assertThat(actual.last()).isTrue(),
+                    () -> assertThat(actual.lastId()).isNotNull(),
+                    () -> assertThat(actual.lastInfo()).isNotNull()
+            );
+        }
+
+        @DisplayName("takenCount 기준으로 다음 페이지 템플릿 목록을 조회한다.")
+        @Test
+        void getNextAllByHashTag_ByTakenCount() {
+            // given
+            final Member member = new Member("ssaid", "name");
+            entityManager.persist(member);
+
+            final BottariTemplate template1 = new BottariTemplate("template1", member);
+            final BottariTemplate template2 = new BottariTemplate("template2", member);
+            final BottariTemplate template3 = new BottariTemplate("template3", member);
+            entityManager.persist(template1);
+            entityManager.persist(template2);
+            entityManager.persist(template3);
+            entityManager.createQuery("""
+                                                  UPDATE BottariTemplate bt
+                                                  SET bt.takenCount = bt.takenCount + 1
+                                                  WHERE bt.id = :id
+                                              """)
+                    .setParameter("id", template2.getId())
+                    .executeUpdate();
+
+            final BottariTemplateItem item1 = new BottariTemplateItem("item1", template1);
+            final BottariTemplateItem item2 = new BottariTemplateItem("item2", template2);
+            final BottariTemplateItem item3 = new BottariTemplateItem("item3", template3);
+            entityManager.persist(item1);
+            entityManager.persist(item2);
+            entityManager.persist(item3);
+
+            final Hashtag hashtag1 = new Hashtag("hashtag1");
+            final Hashtag hashtag2 = new Hashtag("hashtag2");
+            entityManager.persist(hashtag1);
+            entityManager.persist(hashtag2);
+
+            final BottariTemplateHashtag templateHashtag1 = new BottariTemplateHashtag(template1, hashtag1);
+            final BottariTemplateHashtag templateHashtag2 = new BottariTemplateHashtag(template2, hashtag2);
+            final BottariTemplateHashtag templateHashtag3 = new BottariTemplateHashtag(template3, hashtag2);
+            entityManager.persist(templateHashtag1);
+            entityManager.persist(templateHashtag2);
+            entityManager.persist(templateHashtag3);
+
+            final ReadNextBottariTemplateByHashtagRequest request = new ReadNextBottariTemplateByHashtagRequest(
+                    hashtag2.getId(),
+                    null,
+                    "999999",
+                    0,
+                    1,
+                    "takenCount"
+            );
+
+            // when
+            final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAllByHashTag(request);
+
+            // then
+            assertAll(
+                    () -> assertThat(actual.contents()).hasSize(1),
+                    () -> assertThat(actual.contents().getFirst().hashtags()).hasSize(1),
+                    () -> assertThat(actual.contents().getFirst().hashtags().getFirst().name()).isEqualTo(
+                            hashtag2.getName()),
+                    () -> assertThat(actual.contents().getFirst().title()).isEqualTo("template2"),
+                    () -> assertThat(actual.contents().getFirst().items()).hasSize(1),
+                    () -> assertThat(actual.contents().getFirst().items().getFirst().name()).isEqualTo("item2"),
+                    () -> assertThat(actual.currentPage()).isEqualTo(0),
+                    () -> assertThat(actual.size()).isEqualTo(1),
+                    () -> assertThat(actual.hasNext()).isTrue(),
+                    () -> assertThat(actual.first()).isTrue(),
+                    () -> assertThat(actual.last()).isFalse(),
+                    () -> assertThat(actual.lastId()).isNotNull(),
+                    () -> assertThat(actual.lastInfo()).isNotNull()
+            );
+        }
+
+        @DisplayName("존재하지 않는 정렬 기준으로 조회 시 예외를 던진다.")
+        @Test
+        void getNextAllByHashTag_Exception_InvalidSortProperty() {
+            // given
+            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
+                    "",
+                    null,
+                    null,
+                    0,
+                    10,
+                    "invalidProperty"
+            );
+
+            // when & then
+            assertThatThrownBy(() -> bottariTemplateService.getNextAll(request))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("유효하지 않은 보따리 템플릿 정렬 타입입니다.");
+        }
+    }
+
+    @Nested
     class CreateTest {
 
         @DisplayName("보따리 템플릿을 생성한다.")
@@ -716,11 +883,11 @@ class BottariTemplateServiceTest {
 
             // then
             final Long actualHistoryCount = entityManager.createQuery("""
-                                             SELECT COUNT(bh)
-                                             FROM BottariTemplateHistory bh
-                                             WHERE bh.id.memberId = :memberId
-                                             AND bh.id.bottariTemplateId = :bottariTemplateId
-                            """, Long.class)
+                                                                                               SELECT COUNT(bh)
+                                                                                               FROM BottariTemplateHistory bh
+                                                                                               WHERE bh.id.memberId = :memberId
+                                                                                               AND bh.id.bottariTemplateId = :bottariTemplateId
+                                                                              """, Long.class)
                     .setParameter("memberId", member.getId())
                     .setParameter("bottariTemplateId", bottariTemplate.getId())
                     .getSingleResult();
