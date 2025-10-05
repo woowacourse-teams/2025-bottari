@@ -2,6 +2,7 @@ package com.bottari.bottaritemplate.controller;
 
 import com.bottari.bottaritemplate.dto.CreateBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse;
+import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateByHashtagRequest;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
 import com.bottari.bottaritemplate.service.BottariTemplateService;
@@ -64,6 +65,15 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
             @ModelAttribute final ReadNextBottariTemplateRequest request
     ) {
         final ReadNextBottariTemplateResponse response = bottariTemplateService.getNextAll(request);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/hashtag")
+    public ResponseEntity<ReadNextBottariTemplateResponse> readNextAllByHashtag(
+            @ModelAttribute final ReadNextBottariTemplateByHashtagRequest request
+    ) {
+        final ReadNextBottariTemplateResponse response = bottariTemplateService.getNextAllByHashTag(request);
 
         return ResponseEntity.ok(response);
     }
