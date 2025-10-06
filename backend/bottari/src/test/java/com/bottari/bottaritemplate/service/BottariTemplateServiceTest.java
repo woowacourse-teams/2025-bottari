@@ -621,10 +621,10 @@ class BottariTemplateServiceTest {
             entityManager.persist(template2);
             entityManager.persist(template3);
             entityManager.createQuery("""
-                                                  UPDATE BottariTemplate bt
-                                                  SET bt.takenCount = bt.takenCount + 1
-                                                  WHERE bt.id = :id
-                                              """)
+                    UPDATE BottariTemplate bt
+                    SET bt.takenCount = bt.takenCount + 1
+                    WHERE bt.id = :id
+            """)
                     .setParameter("id", template2.getId())
                     .executeUpdate();
 
@@ -719,11 +719,11 @@ class BottariTemplateServiceTest {
 
             // then
             final List<BottariTemplateItem> actualItems = entityManager.createQuery(
-                            """
-                                    SELECT i
-                                    FROM BottariTemplateItem i
-                                    WHERE i.bottariTemplate.id =: bottariTemplateId
-                                    """, BottariTemplateItem.class)
+            """
+                  SELECT i
+                  FROM BottariTemplateItem i
+                  WHERE i.bottariTemplate.id =: bottariTemplateId
+             """, BottariTemplateItem.class)
                     .setParameter("bottariTemplateId", actual)
                     .getResultList();
 
@@ -841,12 +841,12 @@ class BottariTemplateServiceTest {
 
             // then
             final BottariTemplateHistory acutalBottariTemplateHistory = entityManager.createQuery(
-                            """
-                                                     SELECT bh
-                                                     FROM BottariTemplateHistory bh
-                                                     WHERE bh.id.memberId = :memberId
-                                                     AND bh.id.bottariTemplateId = :bottariTemplateId
-                                    """, BottariTemplateHistory.class)
+            """
+                 SELECT bh
+                 FROM BottariTemplateHistory bh
+                 WHERE bh.id.memberId = :memberId
+                 AND bh.id.bottariTemplateId = :bottariTemplateId
+             """, BottariTemplateHistory.class)
                     .setParameter("memberId", member.getId())
                     .setParameter("bottariTemplateId", bottariTemplate.getId())
                     .getSingleResult();
@@ -882,12 +882,13 @@ class BottariTemplateServiceTest {
             bottariTemplateService.createBottari(bottariTemplate.getId(), ssaid);
 
             // then
-            final Long actualHistoryCount = entityManager.createQuery("""
-                                                                                               SELECT COUNT(bh)
-                                                                                               FROM BottariTemplateHistory bh
-                                                                                               WHERE bh.id.memberId = :memberId
-                                                                                               AND bh.id.bottariTemplateId = :bottariTemplateId
-                                                                              """, Long.class)
+            final Long actualHistoryCount = entityManager.createQuery(
+            """
+                       SELECT COUNT(bh)
+                       FROM BottariTemplateHistory bh
+                       WHERE bh.id.memberId = :memberId
+                       AND bh.id.bottariTemplateId = :bottariTemplateId
+            """, Long.class)
                     .setParameter("memberId", member.getId())
                     .setParameter("bottariTemplateId", bottariTemplate.getId())
                     .getSingleResult();
