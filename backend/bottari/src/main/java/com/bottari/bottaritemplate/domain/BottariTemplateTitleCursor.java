@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-public record BottariTemplateCursor(
+public record BottariTemplateTitleCursor(
         String query,
         Long lastId,
         String lastInfo,
@@ -23,7 +23,7 @@ public record BottariTemplateCursor(
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
     private static final int DEFAULT_SIZE = 10;
 
-    public BottariTemplateCursor {
+    public BottariTemplateTitleCursor {
         query = normalizeQuery(query);
         size = normalizeSize(size);
         page = normalizePage(page);

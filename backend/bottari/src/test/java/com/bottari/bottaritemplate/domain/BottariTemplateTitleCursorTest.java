@@ -17,7 +17,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.data.domain.Pageable;
 
-class BottariTemplateCursorTest {
+class BottariTemplateTitleCursorTest {
 
     @Nested
     class NormalizationTest {
@@ -30,7 +30,7 @@ class BottariTemplateCursorTest {
                 final String expected
         ) {
             // when
-            final BottariTemplateCursor actual = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor actual = new BottariTemplateTitleCursor(
                     query,
                     1L,
                     "info",
@@ -68,7 +68,7 @@ class BottariTemplateCursorTest {
                 final int expected
         ) {
             // when
-            final BottariTemplateCursor actual = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor actual = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     "info",
@@ -94,7 +94,7 @@ class BottariTemplateCursorTest {
                 final int expected
         ) {
             // when
-            final BottariTemplateCursor actual = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor actual = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     null,
@@ -114,7 +114,7 @@ class BottariTemplateCursorTest {
             final Long nullLastId = null;
 
             // when
-            final BottariTemplateCursor actual = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor actual = new BottariTemplateTitleCursor(
                     "",
                     nullLastId,
                     null,
@@ -135,7 +135,7 @@ class BottariTemplateCursorTest {
             final String expected = "createdAt";
 
             // when
-            final BottariTemplateCursor actual = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor actual = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     "info",
@@ -164,7 +164,7 @@ class BottariTemplateCursorTest {
                 final int size
         ) {
             // given
-            final BottariTemplateCursor cursor = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor cursor = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     "info",
@@ -196,7 +196,7 @@ class BottariTemplateCursorTest {
         })
         void getCreatedAt(final String dateString) {
             // given
-            final BottariTemplateCursor cursor = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor cursor = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     dateString,
@@ -221,7 +221,7 @@ class BottariTemplateCursorTest {
         })
         void getCreatedAt_Exception_InvalidDateTimeFormat(final String invalidDate) {
             // given
-            final BottariTemplateCursor cursor = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor cursor = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     invalidDate,
@@ -245,7 +245,7 @@ class BottariTemplateCursorTest {
         @ValueSource(strings = {"0", "1", "100", "9223372036854775807"})
         void getTakenCount(final String numberString) {
             // given
-            final BottariTemplateCursor cursor = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor cursor = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     numberString,
@@ -271,7 +271,7 @@ class BottariTemplateCursorTest {
         })
         void getTakenCount_Exception_InvalidNumberFormat(final String invalidNumber) {
             // given
-            final BottariTemplateCursor cursor = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor cursor = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     invalidNumber,

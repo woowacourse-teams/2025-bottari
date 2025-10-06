@@ -5,7 +5,7 @@ import com.bottari.bottari.domain.BottariItem;
 import com.bottari.bottari.repository.BottariItemRepository;
 import com.bottari.bottari.repository.BottariRepository;
 import com.bottari.bottaritemplate.domain.BottariTemplate;
-import com.bottari.bottaritemplate.domain.BottariTemplateCursor;
+import com.bottari.bottaritemplate.domain.BottariTemplateTitleCursor;
 import com.bottari.bottaritemplate.domain.BottariTemplateHashtag;
 import com.bottari.bottaritemplate.domain.BottariTemplateHashtagCursor;
 import com.bottari.bottaritemplate.domain.BottariTemplateHistory;
@@ -89,7 +89,7 @@ public class BottariTemplateService {
     }
 
     public ReadNextBottariTemplateResponse getNextAll(final ReadNextBottariTemplateRequest request) {
-        final BottariTemplateCursor cursor = request.toCursor();
+        final BottariTemplateTitleCursor cursor = request.toCursor();
         final Pageable pageable = cursor.toPageable();
         final Slice<BottariTemplateProjection> bottariTemplates = getNextBySortProperty(cursor, pageable);
         final Map<Long, List<BottariTemplateItem>> itemsGroupByTemplateId =
@@ -177,7 +177,7 @@ public class BottariTemplateService {
     }
 
     private Slice<BottariTemplateProjection> getNextBySortProperty(
-            final BottariTemplateCursor cursor,
+            final BottariTemplateTitleCursor cursor,
             final Pageable pageable
     ) {
         final SortProperty property = SortProperty.fromProperty(cursor.property());

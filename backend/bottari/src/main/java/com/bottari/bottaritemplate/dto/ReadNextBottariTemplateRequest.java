@@ -1,6 +1,6 @@
 package com.bottari.bottaritemplate.dto;
 
-import com.bottari.bottaritemplate.domain.BottariTemplateCursor;
+import com.bottari.bottaritemplate.domain.BottariTemplateTitleCursor;
 
 public record ReadNextBottariTemplateRequest(
         String query,
@@ -11,8 +11,8 @@ public record ReadNextBottariTemplateRequest(
         String property
 ) {
 
-    public BottariTemplateCursor toCursor() {
-        return new BottariTemplateCursor(
+    public BottariTemplateTitleCursor toCursor() {
+        return new BottariTemplateTitleCursor(
                 query,
                 lastId,
                 lastInfo,
