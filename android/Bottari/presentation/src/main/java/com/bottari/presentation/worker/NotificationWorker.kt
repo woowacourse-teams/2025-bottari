@@ -15,7 +15,7 @@ class NotificationWorker(
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result =
         fetchNotificationsUseCase()
-            .mapCatching(::scheduleActiveAlarms)
+            .mapCatching(::scheduleAlarms)
             .fold(
                 onSuccess = { Result.success() },
                 onFailure = { exception ->
@@ -24,10 +24,6 @@ class NotificationWorker(
                 },
             )
 
-    private fun scheduleActiveAlarms(notifications: List<Notification>) =
-        notifications.forEach { notification ->
-            if (notification.alarm.isActive) {
-                scheduleAlarm(notification = notification)
-            }
-        }
+    private fun scheduleAlarms(notifications: List<Notification>) =
+        notifications.forEach { notification -> scheduleAlarm(notification = notification) }
 }

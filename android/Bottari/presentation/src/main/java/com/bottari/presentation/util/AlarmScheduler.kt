@@ -24,6 +24,8 @@ object AlarmScheduler {
         context: Context = ApplicationContextProvider.applicationContext,
         notification: Notification,
     ) {
+        if (notification.alarm.isActive.not()) return
+
         if (notification.alarm.alarmType is AlarmType.NonRepeat) {
             scheduleNonRepeatAlarm(context, notification)
             return
@@ -35,6 +37,8 @@ object AlarmScheduler {
         context: Context = ApplicationContextProvider.applicationContext,
         notification: Notification,
     ) {
+        if (notification.alarm.isActive.not()) return
+
         val alarm = notification.alarm
         if (alarm.alarmType is AlarmType.NonRepeat) return
         val triggerTime = getNextTriggerTime(notification = notification)
