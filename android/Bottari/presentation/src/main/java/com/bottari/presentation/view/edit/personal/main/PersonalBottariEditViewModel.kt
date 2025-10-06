@@ -137,10 +137,10 @@ class PersonalBottariEditViewModel(
     ) {
         val notification = createNotification(alarm)
         if (isActive) {
-            AlarmScheduler.scheduleAlarm(notification = notification)
+            AlarmScheduler.scheduleAlarm(notification = notification.toDomain())
             return
         }
-        AlarmScheduler.cancelAlarm(notification = notification)
+        AlarmScheduler.cancelAlarm(notification = notification.toDomain())
     }
 
     private fun createNotification(alarm: AlarmUiModel): NotificationUiModel =

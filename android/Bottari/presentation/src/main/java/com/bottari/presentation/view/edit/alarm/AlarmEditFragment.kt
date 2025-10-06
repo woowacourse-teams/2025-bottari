@@ -124,7 +124,7 @@ class AlarmEditFragment :
     private fun handleAlarmEvent(uiEvent: AlarmUiEvent) {
         when (uiEvent) {
             is AlarmUiEvent.SaveAlarmSuccess -> {
-                scheduleAlarm(notification = uiEvent.notification)
+                scheduleAlarm(notification = uiEvent.notification.toDomain())
                 requireView().showSnackbar(R.string.alarm_edit_save_success_text)
                 parentFragmentManager.popBackStack()
             }

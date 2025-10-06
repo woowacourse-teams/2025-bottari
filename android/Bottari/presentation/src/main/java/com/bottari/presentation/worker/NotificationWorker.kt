@@ -6,7 +6,6 @@ import androidx.work.WorkerParameters
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.usecase.notification.GetNotificationsUseCase
 import com.bottari.logger.BottariLogger
-import com.bottari.presentation.model.alarm.NotificationUiModel
 import com.bottari.presentation.util.AlarmScheduler.scheduleAlarm
 
 class NotificationWorker(
@@ -28,7 +27,7 @@ class NotificationWorker(
     private fun scheduleActiveAlarms(notifications: List<Notification>) =
         notifications.forEach { notification ->
             if (notification.alarm.isActive) {
-                scheduleAlarm(notification = NotificationUiModel.fromDomain(notification))
+                scheduleAlarm(notification = notification)
             }
         }
 }
