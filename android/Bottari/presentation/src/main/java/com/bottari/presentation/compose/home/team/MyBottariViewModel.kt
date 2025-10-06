@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariUseCaseProvider
 import com.bottari.di.usecase.TeamBottariUseCaseProvider
 import com.bottari.di.usecase.TeamMemberUseCaseProvider
+import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
@@ -17,6 +18,7 @@ import com.bottari.domain.usecase.team.JoinTeamBottariUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
+import com.bottari.presentation.util.AlarmScheduler.cancelAlarm
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -35,9 +37,20 @@ class MyBottariViewModel(
     }
 
     fun deletePersonalBottari(bottariId: Long) {
+        val bottari = currentState.myBottaries.find { bottari -> bottari.id == bottariId } ?: return
         launch {
             deleteBottariUseCase(bottariId)
                 .onSuccess {
+                    bottari.alarm?.let { alarm ->
+                        cancelAlarm(
+                            notification =
+                                Notification(
+                                    bottariId = bottari.id,
+                                    bottariTitle = bottari.title,
+                                    alarm = alarm.toDomain(),
+                                ),
+                        )
+                    }
                     emitEvent(MyBottariUiEvent.DeletePersonalBottariSuccess)
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.DeletePersonalBottariFailure)
