@@ -64,11 +64,12 @@ object AlarmScheduler {
     private fun scheduleNonRepeatAlarm(
         context: Context,
         notification: Notification,
+        now: LocalDateTime = LocalDateTime.now(),
     ) {
         val alarm = notification.alarm
         val alarmType = alarm.alarmType as AlarmType.NonRepeat
         val alarmDateTime = LocalDateTime.of(alarmType.date, alarm.time)
-        if (alarmDateTime.isBefore(LocalDateTime.now())) return
+        if (alarmDateTime.isBefore(now)) return
         val triggerTime =
             LocalDateTime.of(alarmType.date, notification.alarm.time).toTimeMillis()
         scheduleAlarmInternal(context, notification, triggerTime)
