@@ -5,10 +5,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.BottariUseCaseProvider
-import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
-import com.bottari.domain.usecase.notification.DeleteNotificationUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel
@@ -20,7 +18,6 @@ import kotlinx.coroutines.flow.onEach
 class BottariViewModel(
     private val fetchBottariesUseCase: FetchBottariesUseCase,
     private val deleteBottariUseCase: DeleteBottariUseCase,
-    private val deleteNotificationUseCase: DeleteNotificationUseCase,
 ) : FlowBaseViewModel<BottariUiState, BottariUiEvent>(BottariUiState()) {
     init {
         fetchBottaries()
@@ -42,7 +39,6 @@ class BottariViewModel(
                     updateState {
                         copy(bottaries = currentState.bottaries.filterNot { bottari -> bottari.id == bottariId })
                     }
-                    deleteNotification(bottari)
                     emitEvent(BottariUiEvent.BottariDeleteSuccess)
                 }.onFailure {
                     emitEvent(BottariUiEvent.BottariDeleteFailure)
@@ -69,19 +65,6 @@ class BottariViewModel(
             }.launchIn(viewModelScope)
     }
 
-    private fun deleteNotification(bottari: BottariUiModel?) {
-        if (bottari == null) return
-        launch {
-            deleteNotificationUseCase(bottari.id)
-                .onFailure { exception ->
-                    BottariLogger.error(
-                        exception.stackTraceToString(),
-                        exception,
-                    )
-                }
-        }
-    }
-
     companion object {
         fun Factory(): ViewModelProvider.Factory =
             viewModelFactory {
@@ -89,7 +72,6 @@ class BottariViewModel(
                     BottariViewModel(
                         BottariUseCaseProvider.fetchBottariesUseCase,
                         BottariUseCaseProvider.deleteBottariUseCase,
-                        CommonUseCaseProvider.deleteNotificationUseCase,
                     )
                 }
             }
