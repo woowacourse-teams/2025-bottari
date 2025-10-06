@@ -4,17 +4,17 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.bottari.domain.model.notification.Notification
-import com.bottari.domain.usecase.notification.GetNotificationsUseCase
+import com.bottari.domain.usecase.notification.FetchNotificationsUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.util.AlarmScheduler.scheduleAlarm
 
 class NotificationWorker(
     context: Context,
     workerParams: WorkerParameters,
-    private val getNotificationsUseCase: GetNotificationsUseCase,
+    private val fetchNotificationsUseCase: FetchNotificationsUseCase,
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result =
-        getNotificationsUseCase()
+        fetchNotificationsUseCase()
             .mapCatching(::scheduleActiveAlarms)
             .fold(
                 onSuccess = { Result.success() },
