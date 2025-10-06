@@ -4,6 +4,7 @@ import com.bottari.data.model.local.bottari.BottariEntity
 import com.bottari.data.model.local.bottari.BottariWithAlarmAndItems
 import com.bottari.data.source.local.bottari.BottariLocalDataSource
 import com.bottari.domain.model.bottari.personal.PersonalBottari
+import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.BottariRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -15,6 +16,19 @@ class BottariRepositoryImpl(
         bottariLocalDataSource
             .fetchBottaries()
             .map { bottaries -> bottaries.map(BottariWithAlarmAndItems::toDomain) }
+
+    override suspend fun fetchNotifications(): Result<List<Notification>> =
+        bottariLocalDataSource
+            .fetchBottariesWithAlarm()
+            .mapCatching { bottariesWithAlarm ->
+                bottariesWithAlarm.map { bottariWithAlarm ->
+                    Notification(
+                        bottariId = bottariWithAlarm.bottari.id,
+                        bottariTitle = bottariWithAlarm.bottari.title,
+                        alarm = bottariWithAlarm.alarm.toDomain(),
+                    )
+                }
+            }
 
     override fun findBottari(id: Long): Flow<PersonalBottari?> =
         bottariLocalDataSource
