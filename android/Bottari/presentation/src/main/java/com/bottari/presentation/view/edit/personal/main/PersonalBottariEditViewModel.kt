@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.AlarmUseCaseProvider
 import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.di.usecase.BottariUseCaseProvider
+import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.usecase.alarm.UpdateAlarmActivateUseCase
 import com.bottari.domain.usecase.bottari.FindBottariUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
@@ -16,8 +17,8 @@ import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
-import com.bottari.presentation.model.alarm.NotificationUiModel
-import com.bottari.presentation.util.AlarmScheduler
+import com.bottari.presentation.util.AlarmScheduler.cancelAlarm
+import com.bottari.presentation.util.AlarmScheduler.scheduleAlarm
 import com.bottari.presentation.util.debounce
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -91,7 +92,18 @@ class PersonalBottariEditViewModel(
                 currentState.bottariId,
                 newActiveState,
             ).onSuccess {
-                handleAlarmStateChanged(newActiveState, alarm)
+                val newAlarm = alarm.copy(isActive = newActiveState)
+                handleAlarm(newAlarm)
+                updateState {
+                    copy(
+                        isAlarmActive = newActiveState,
+                        alarm = newAlarm,
+                    )
+                }
+                BottariLogger.ui(
+                    if (alarm.isActive) UiEventType.ALARM_ACTIVE else UiEventType.ALARM_INACTIVE,
+                    mapOf("alarm_id" to alarm.id!!),
+                )
             }.onFailure {
                 emitEvent(PersonalBottariEditUiEvent.ToggleAlarmStateFailure)
             }
@@ -112,46 +124,25 @@ class PersonalBottariEditViewModel(
         )
     }
 
-    private fun handleAlarmStateChanged(
-        newActiveState: Boolean,
-        alarm: AlarmUiModel,
-    ) {
-        BottariLogger.ui(
-            if (newActiveState) UiEventType.ALARM_ACTIVE else UiEventType.ALARM_INACTIVE,
-            mapOf("alarm_id" to alarm.id!!),
-        )
-        scheduleAlarm(newActiveState, alarm)
-        updateState {
-            copy(
-                isAlarmActive = newActiveState,
-                alarm = alarm.copy(isActive = newActiveState),
-            )
-        }
-    }
-
-    private fun scheduleAlarm(
-        isActive: Boolean,
-        alarm: AlarmUiModel,
-    ) {
+    private fun handleAlarm(alarm: AlarmUiModel) {
         val notification = createNotification(alarm)
-        if (isActive) {
-            AlarmScheduler.scheduleAlarm(notification = notification.toDomain())
+        if (alarm.isActive) {
+            scheduleAlarm(notification = notification)
             return
         }
-        AlarmScheduler.cancelAlarm(notification = notification.toDomain())
+        cancelAlarm(notification = notification)
     }
 
-    private fun createNotification(alarm: AlarmUiModel): NotificationUiModel =
-        NotificationUiModel(
+    private fun createNotification(alarm: AlarmUiModel): Notification =
+        Notification(
             bottariId = currentState.bottariId,
             bottariTitle = currentState.bottariTitle,
-            alarm = alarm,
+            alarm = alarm.toDomain(),
         )
 
     companion object {
         private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
-        private const val ERROR_BOTTARI_ID_MISSING = "[ERROR] 보따리 Id가 없습니다"
-
+        private const val ERROR_BOTTARI_ID_MISSING = "[ERROR] 보따리 ID가 없습니다"
         private const val DEBOUNCE_DELAY = 700L
 
         fun Factory(bottariId: Long): ViewModelProvider.Factory =
