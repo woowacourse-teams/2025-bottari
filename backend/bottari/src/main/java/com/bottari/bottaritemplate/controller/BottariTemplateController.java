@@ -59,9 +59,9 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     }
 
     // TODO: 연동 후, readAll로 대치
-    @GetMapping("/cursor")
+    @GetMapping("/title")
     @Override
-    public ResponseEntity<ReadNextBottariTemplateResponse> readNextAll(
+    public ResponseEntity<ReadNextBottariTemplateResponse> readNextAllByTitle(
             @ModelAttribute final ReadNextBottariTemplateByTitleRequest request
     ) {
         final ReadNextBottariTemplateResponse response = bottariTemplateService.getNextAllByTitle(request);
@@ -70,6 +70,7 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     }
 
     @GetMapping("/hashtag")
+    @Override
     public ResponseEntity<ReadNextBottariTemplateResponse> readNextAllByHashtag(
             @ModelAttribute final ReadNextBottariTemplateByHashtagRequest request
     ) {
