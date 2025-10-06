@@ -22,7 +22,7 @@ object CommonUseCaseProvider {
         ReportTemplateUseCase(RepositoryProvider.reportRepository)
     }
     val getNotificationsUseCase: GetNotificationsUseCase by lazy {
-        GetNotificationsUseCase(RepositoryProvider.notificationRepository)
+        GetNotificationsUseCase(RepositoryProvider.bottariRepository)
     }
     val deleteNotificationUseCase: DeleteNotificationUseCase by lazy {
         DeleteNotificationUseCase(RepositoryProvider.notificationRepository)

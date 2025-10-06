@@ -1,10 +1,10 @@
 package com.bottari.domain.usecase.notification
 
 import com.bottari.domain.model.notification.Notification
-import com.bottari.domain.repository.NotificationRepository
+import com.bottari.domain.repository.BottariRepository
 
 class GetNotificationsUseCase(
-    private val repository: NotificationRepository,
+    private val repository: BottariRepository,
 ) {
-    suspend operator fun invoke(): Result<List<Notification>> = repository.getNotifications()
+    suspend operator fun invoke(): Result<List<Notification>> = repository.fetchNotifications()
 }

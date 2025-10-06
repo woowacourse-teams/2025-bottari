@@ -89,8 +89,6 @@ class PersonalBottariEditViewModel(
         launch {
             updateAlarmActivateUseCase(
                 currentState.bottariId,
-                currentState.bottariTitle,
-                alarm.toDomain(),
                 newActiveState,
             ).onSuccess {
                 handleAlarmStateChanged(newActiveState, alarm)
