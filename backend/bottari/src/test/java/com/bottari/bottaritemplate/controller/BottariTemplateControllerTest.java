@@ -209,7 +209,7 @@ class BottariTemplateControllerTest {
                 2L,
                 "2024-12-20T10:30:00Z"
         );
-        given(bottariTemplateService.getNextAll(any()))
+        given(bottariTemplateService.getNextAllByTitle(any()))
                 .willReturn(response);
 
         // when & then

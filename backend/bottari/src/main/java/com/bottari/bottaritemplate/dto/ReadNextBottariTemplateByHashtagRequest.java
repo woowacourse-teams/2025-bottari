@@ -10,6 +10,7 @@ public record ReadNextBottariTemplateByHashtagRequest(
         int size,
         String property
 ) {
+
     public BottariTemplateHashtagCursor toCursor() {
         return new BottariTemplateHashtagCursor(
                 hashtagId,

@@ -40,7 +40,7 @@ class BottariTemplateTitleCursorTest {
             );
 
             // then
-            assertThat(actual.query()).isEqualTo(expected);
+            assertThat(actual.getTitle()).isEqualTo(expected);
         }
 
         private static Stream<Arguments> normalizeQuery() {
@@ -78,7 +78,7 @@ class BottariTemplateTitleCursorTest {
             );
 
             // then
-            assertThat(actual.page()).isEqualTo(expected);
+            assertThat(actual.getPage()).isEqualTo(expected);
         }
 
         @DisplayName("size 정규화 테스트")
@@ -104,7 +104,7 @@ class BottariTemplateTitleCursorTest {
             );
 
             // then
-            assertThat(actual.size()).isEqualTo(expected);
+            assertThat(actual.getSize()).isEqualTo(expected);
         }
 
         @DisplayName("lastId 정규화 테스트")
@@ -124,7 +124,7 @@ class BottariTemplateTitleCursorTest {
             );
 
             // then
-            assertThat(actual.lastId()).isEqualTo(Long.MAX_VALUE);
+            assertThat(actual.getLastId()).isEqualTo(Long.MAX_VALUE);
         }
 
         @DisplayName("property 정규화 테스트")
@@ -145,7 +145,7 @@ class BottariTemplateTitleCursorTest {
             );
 
             // then
-            assertThat(actual.property()).isEqualTo(expected);
+            assertThat(actual.getProperty()).isEqualTo(expected);
         }
     }
 
@@ -240,9 +240,9 @@ class BottariTemplateTitleCursorTest {
     @Nested
     class GetTakenCountTest {
 
-        @DisplayName("유효한 숫자 문자열을 Long으로 파싱한다.")
+        @DisplayName("유효한 숫자 문자열을 Integer으로 파싱한다.")
         @ParameterizedTest
-        @ValueSource(strings = {"0", "1", "100", "9223372036854775807"})
+        @ValueSource(strings = {"0", "1", "100", "2147483647"})
         void getTakenCount(final String numberString) {
             // given
             final BottariTemplateTitleCursor cursor = new BottariTemplateTitleCursor(
@@ -255,7 +255,7 @@ class BottariTemplateTitleCursorTest {
             );
 
             // when
-            final Long actual = cursor.getTakenCount();
+            final Integer actual = cursor.getTakenCount();
 
             // then
             assertThat(actual).isEqualTo(Long.parseLong(numberString));
@@ -267,7 +267,7 @@ class BottariTemplateTitleCursorTest {
                 "invalid-number",
                 "12.34",
                 "1,000",
-                "9223372036854775808" // Long.MAX_VALUE + 1
+                "9223372036854775807" // Long.MAX_VALUE
         })
         void getTakenCount_Exception_InvalidNumberFormat(final String invalidNumber) {
             // given

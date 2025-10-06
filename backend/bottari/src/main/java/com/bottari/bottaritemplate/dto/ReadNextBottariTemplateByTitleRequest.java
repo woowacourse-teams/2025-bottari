@@ -2,7 +2,7 @@ package com.bottari.bottaritemplate.dto;
 
 import com.bottari.bottaritemplate.domain.BottariTemplateTitleCursor;
 
-public record ReadNextBottariTemplateRequest(
+public record ReadNextBottariTemplateByTitleRequest(
         String query,
         Long lastId,
         String lastInfo,

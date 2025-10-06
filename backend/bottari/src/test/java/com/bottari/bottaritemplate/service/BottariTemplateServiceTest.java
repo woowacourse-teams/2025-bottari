@@ -14,7 +14,7 @@ import com.bottari.bottaritemplate.domain.Hashtag;
 import com.bottari.bottaritemplate.dto.CreateBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateByHashtagRequest;
-import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateRequest;
+import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateByTitleRequest;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
@@ -351,7 +351,7 @@ class BottariTemplateServiceTest {
             entityManager.persist(templateHashtag2);
             entityManager.persist(templateHashtag3);
 
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
+            final ReadNextBottariTemplateByTitleRequest request = new ReadNextBottariTemplateByTitleRequest(
                     "",
                     null,
                     null,
@@ -361,7 +361,7 @@ class BottariTemplateServiceTest {
             );
 
             // when
-            final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAll(request);
+            final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAllByTitle(request);
 
             // then
             assertAll(
@@ -409,7 +409,7 @@ class BottariTemplateServiceTest {
             entityManager.persist(templateHashtag1);
             entityManager.persist(templateHashtag2);
 
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
+            final ReadNextBottariTemplateByTitleRequest request = new ReadNextBottariTemplateByTitleRequest(
                     "",
                     null,
                     "999999",
@@ -419,7 +419,7 @@ class BottariTemplateServiceTest {
             );
 
             // when
-            final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAll(request);
+            final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAllByTitle(request);
 
             // then
             assertAll(
@@ -486,7 +486,7 @@ class BottariTemplateServiceTest {
             TestTransaction.end();
             TestTransaction.start();
 
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
+            final ReadNextBottariTemplateByTitleRequest request = new ReadNextBottariTemplateByTitleRequest(
                     "체크리스트",
                     null,
                     null,
@@ -498,7 +498,7 @@ class BottariTemplateServiceTest {
             entityManager.clear();
 
             // when
-            final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAll(request);
+            final ReadNextBottariTemplateResponse actual = bottariTemplateService.getNextAllByTitle(request);
 
             // then
             assertAll(
@@ -518,7 +518,7 @@ class BottariTemplateServiceTest {
         @Test
         void getNextAll_Exception_InvalidSortProperty() {
             // given
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
+            final ReadNextBottariTemplateByTitleRequest request = new ReadNextBottariTemplateByTitleRequest(
                     "",
                     null,
                     null,
@@ -528,7 +528,7 @@ class BottariTemplateServiceTest {
             );
 
             // when & then
-            assertThatThrownBy(() -> bottariTemplateService.getNextAll(request))
+            assertThatThrownBy(() -> bottariTemplateService.getNextAllByTitle(request))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("유효하지 않은 보따리 템플릿 정렬 타입입니다.");
         }
@@ -682,7 +682,7 @@ class BottariTemplateServiceTest {
         @Test
         void getNextAllByHashTag_Exception_InvalidSortProperty() {
             // given
-            final ReadNextBottariTemplateRequest request = new ReadNextBottariTemplateRequest(
+            final ReadNextBottariTemplateByTitleRequest request = new ReadNextBottariTemplateByTitleRequest(
                     "",
                     null,
                     null,
@@ -692,7 +692,7 @@ class BottariTemplateServiceTest {
             );
 
             // when & then
-            assertThatThrownBy(() -> bottariTemplateService.getNextAll(request))
+            assertThatThrownBy(() -> bottariTemplateService.getNextAllByTitle(request))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("유효하지 않은 보따리 템플릿 정렬 타입입니다.");
         }

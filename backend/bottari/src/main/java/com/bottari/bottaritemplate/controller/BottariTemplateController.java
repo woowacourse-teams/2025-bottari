@@ -3,7 +3,7 @@ package com.bottari.bottaritemplate.controller;
 import com.bottari.bottaritemplate.dto.CreateBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateByHashtagRequest;
-import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateRequest;
+import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateByTitleRequest;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
 import com.bottari.bottaritemplate.service.BottariTemplateService;
 import com.bottari.config.MemberIdentifier;
@@ -62,9 +62,9 @@ public class BottariTemplateController implements BottariTemplateApiDocs {
     @GetMapping("/cursor")
     @Override
     public ResponseEntity<ReadNextBottariTemplateResponse> readNextAll(
-            @ModelAttribute final ReadNextBottariTemplateRequest request
+            @ModelAttribute final ReadNextBottariTemplateByTitleRequest request
     ) {
-        final ReadNextBottariTemplateResponse response = bottariTemplateService.getNextAll(request);
+        final ReadNextBottariTemplateResponse response = bottariTemplateService.getNextAllByTitle(request);
 
         return ResponseEntity.ok(response);
     }

@@ -5,17 +5,18 @@ import com.bottari.bottari.domain.BottariItem;
 import com.bottari.bottari.repository.BottariItemRepository;
 import com.bottari.bottari.repository.BottariRepository;
 import com.bottari.bottaritemplate.domain.BottariTemplate;
-import com.bottari.bottaritemplate.domain.BottariTemplateTitleCursor;
+import com.bottari.bottaritemplate.domain.BottariTemplateCursor;
 import com.bottari.bottaritemplate.domain.BottariTemplateHashtag;
 import com.bottari.bottaritemplate.domain.BottariTemplateHashtagCursor;
 import com.bottari.bottaritemplate.domain.BottariTemplateHistory;
 import com.bottari.bottaritemplate.domain.BottariTemplateItem;
+import com.bottari.bottaritemplate.domain.BottariTemplateTitleCursor;
 import com.bottari.bottaritemplate.domain.Hashtag;
 import com.bottari.bottaritemplate.domain.SortProperty;
 import com.bottari.bottaritemplate.dto.CreateBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateByHashtagRequest;
-import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateRequest;
+import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateByTitleRequest;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
 import com.bottari.bottaritemplate.repository.BottariTemplateHashtagRepository;
 import com.bottari.bottaritemplate.repository.BottariTemplateHistoryRepository;
@@ -32,6 +33,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
@@ -88,40 +90,14 @@ public class BottariTemplateService {
         return buildReadBottariTemplateResponses(bottariTemplates, itemsGroupByTemplate, hashtagsGroupByTemplate);
     }
 
-    public ReadNextBottariTemplateResponse getNextAll(final ReadNextBottariTemplateRequest request) {
+    public ReadNextBottariTemplateResponse getNextAllByTitle(final ReadNextBottariTemplateByTitleRequest request) {
         final BottariTemplateTitleCursor cursor = request.toCursor();
-        final Pageable pageable = cursor.toPageable();
-        final Slice<BottariTemplateProjection> bottariTemplates = getNextBySortProperty(cursor, pageable);
-        final Map<Long, List<BottariTemplateItem>> itemsGroupByTemplateId =
-                groupingItemsByTemplateId(bottariTemplates.getContent());
-        final Map<Long, List<Hashtag>> hashtagsGroupByTemplateId =
-                groupingHashtagsByTemplateId(bottariTemplates.getContent());
-        final List<ReadBottariTemplateResponse> responses = buildReadBottariTemplateResponses(
-                itemsGroupByTemplateId,
-                hashtagsGroupByTemplateId,
-                bottariTemplates.getContent()
-        );
-
-        return ReadNextBottariTemplateResponse.of(
-                new SliceImpl<>(responses, pageable, bottariTemplates.hasNext()), cursor.property());
+        return getNextAll(cursor, c -> getNextBySortProperty(c, c.toPageable()));
     }
 
     public ReadNextBottariTemplateResponse getNextAllByHashTag(final ReadNextBottariTemplateByHashtagRequest request) {
         final BottariTemplateHashtagCursor cursor = request.toCursor();
-        final Pageable pageable = cursor.toPageable();
-        final Slice<BottariTemplateProjection> bottariTemplates = getNextBySortProperty(cursor, pageable);
-        final Map<Long, List<BottariTemplateItem>> itemsGroupByTemplateId =
-                groupingItemsByTemplateId(bottariTemplates.getContent());
-        final Map<Long, List<Hashtag>> hashtagsGroupByTemplateId =
-                groupingHashtagsByTemplateId(bottariTemplates.getContent());
-        final List<ReadBottariTemplateResponse> responses = buildReadBottariTemplateResponses(
-                itemsGroupByTemplateId,
-                hashtagsGroupByTemplateId,
-                bottariTemplates.getContent()
-        );
-
-        return ReadNextBottariTemplateResponse.of(
-                new SliceImpl<>(responses, pageable, bottariTemplates.hasNext()), cursor.property());
+        return getNextAll(cursor, c -> getNextBySortProperty(c, c.toPageable()));
     }
 
     @Transactional
@@ -176,17 +152,37 @@ public class BottariTemplateService {
         bottariTemplateRepository.deleteById(id);
     }
 
+    private <T extends BottariTemplateCursor> ReadNextBottariTemplateResponse getNextAll(
+            final T cursor,
+            final Function<T, Slice<BottariTemplateProjection>> fetchFunction
+    ) {
+        final Pageable pageable = cursor.toPageable();
+        final Slice<BottariTemplateProjection> bottariTemplates = fetchFunction.apply(cursor);
+        final Map<Long, List<BottariTemplateItem>> itemsGroupByTemplateId =
+                groupingItemsByTemplateId(bottariTemplates.getContent());
+        final Map<Long, List<Hashtag>> hashtagsGroupByTemplateId =
+                groupingHashtagsByTemplateId(bottariTemplates.getContent());
+        final List<ReadBottariTemplateResponse> responses = buildReadBottariTemplateResponses(
+                itemsGroupByTemplateId,
+                hashtagsGroupByTemplateId,
+                bottariTemplates.getContent()
+        );
+
+        return ReadNextBottariTemplateResponse.of(
+                new SliceImpl<>(responses, pageable, bottariTemplates.hasNext()), cursor.getProperty());
+    }
+
     private Slice<BottariTemplateProjection> getNextBySortProperty(
             final BottariTemplateTitleCursor cursor,
             final Pageable pageable
     ) {
-        final SortProperty property = SortProperty.fromProperty(cursor.property());
+        final SortProperty property = SortProperty.fromProperty(cursor.getProperty());
         final int limit = pageable.getPageSize() + 1;
         return switch (property) {
             case SortProperty.CREATED_AT -> toSlice(pageable, bottariTemplateRepository.findNextByCreatedAt(
-                    cursor.query(), cursor.getCreatedAt(), cursor.lastId(), limit));
+                    cursor.getTitle(), cursor.getCreatedAt(), cursor.getLastId(), limit));
             case SortProperty.TAKEN_COUNT -> toSlice(pageable, bottariTemplateRepository.findNextByTakenCount(
-                    cursor.query(), cursor.getTakenCount(), cursor.lastId(), limit));
+                    cursor.getTitle(), cursor.getTakenCount(), cursor.getLastId(), limit));
         };
     }
 
@@ -194,12 +190,12 @@ public class BottariTemplateService {
             final BottariTemplateHashtagCursor cursor,
             final Pageable pageable
     ) {
-        final SortProperty property = SortProperty.fromProperty(cursor.property());
+        final SortProperty property = SortProperty.fromProperty(cursor.getProperty());
         return switch (property) {
             case SortProperty.CREATED_AT -> bottariTemplateHashtagRepository.findNextByCreatedAt(
-                    cursor.hashtagId(), cursor.getCreatedAt(), cursor.lastId(), pageable);
+                    cursor.getHashtagId(), cursor.getCreatedAt(), cursor.getLastId(), pageable);
             case SortProperty.TAKEN_COUNT -> bottariTemplateHashtagRepository.findNextByTakenCount(
-                    cursor.hashtagId(), cursor.getTakenCount(), cursor.lastId(), pageable);
+                    cursor.getHashtagId(), cursor.getTakenCount(), cursor.getLastId(), pageable);
         };
     }
 

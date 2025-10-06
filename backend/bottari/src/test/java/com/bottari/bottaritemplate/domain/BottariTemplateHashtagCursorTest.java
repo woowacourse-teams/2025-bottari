@@ -58,7 +58,7 @@ class BottariTemplateHashtagCursorTest {
             );
 
             // then
-            assertThat(actual.page()).isEqualTo(expected);
+            assertThat(actual.getPage()).isEqualTo(expected);
         }
 
         @DisplayName("size 정규화 테스트")
@@ -84,7 +84,7 @@ class BottariTemplateHashtagCursorTest {
             );
 
             // then
-            assertThat(actual.size()).isEqualTo(expected);
+            assertThat(actual.getSize()).isEqualTo(expected);
         }
 
         @DisplayName("lastId 정규화 테스트")
@@ -104,7 +104,7 @@ class BottariTemplateHashtagCursorTest {
             );
 
             // then
-            assertThat(actual.lastId()).isEqualTo(Long.MAX_VALUE);
+            assertThat(actual.getLastId()).isEqualTo(Long.MAX_VALUE);
         }
 
         @DisplayName("property 정규화 테스트")
@@ -125,7 +125,7 @@ class BottariTemplateHashtagCursorTest {
             );
 
             // then
-            assertThat(actual.property()).isEqualTo(expected);
+            assertThat(actual.getProperty()).isEqualTo(expected);
         }
     }
 
