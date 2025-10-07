@@ -25,6 +25,7 @@ public class BottariTemplateHashtagCursor extends BottariTemplateCursor {
         if (hashtagId == null) {
             throw new BusinessException(ErrorCode.HASHTAG_ID_MISSING);
         }
+
         return hashtagId;
     }
 }

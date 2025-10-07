@@ -129,10 +129,10 @@ VALUES ('여행'),
        ('등산');
 
 INSERT INTO bottari_template_hashtag (bottari_template_id, hashtag_id)
-VALUES (1,1),
-       (4,1),
-       (6,2),
-       (7,3);
+VALUES (1, 1),
+       (4, 1),
+       (6, 2),
+       (7, 3);
 
 -- 보따리 템플릿 아이템 데이터
 INSERT INTO bottari_template_item (name, bottari_template_id)
