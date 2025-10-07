@@ -1,6 +1,7 @@
 package com.bottari.bottaritemplate.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.bottaritemplate.domain.BottariTemplate;
@@ -8,12 +9,15 @@ import com.bottari.bottaritemplate.domain.BottariTemplateHashtag;
 import com.bottari.bottaritemplate.domain.Hashtag;
 import com.bottari.bottaritemplate.dto.ReadPopularHashtagResponse;
 import com.bottari.config.JpaAuditingConfig;
+import com.bottari.error.BusinessException;
 import com.bottari.member.domain.Member;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -75,8 +79,7 @@ class HashtagServiceTest {
             final List<ReadPopularHashtagResponse> responses = hashtagService.getTopHashtagsByUsageCount(10);
 
             // then
-            assertAll(
-                    () -> assertThat(responses).hasSize(3),
+            assertAll(() -> assertThat(responses).hasSize(3),
                     () -> assertThat(responses.getFirst().ranking()).isEqualTo(1),
                     () -> assertThat(responses.getFirst().name()).isEqualTo("여행"),
                     () -> assertThat(responses.getFirst().usageCount()).isEqualTo(3),
@@ -85,8 +88,7 @@ class HashtagServiceTest {
                     () -> assertThat(responses.get(1).usageCount()).isEqualTo(2),
                     () -> assertThat(responses.get(2).ranking()).isEqualTo(3),
                     () -> assertThat(responses.get(2).name()).isEqualTo("등산"),
-                    () -> assertThat(responses.get(2).usageCount()).isEqualTo(1)
-            );
+                    () -> assertThat(responses.get(2).usageCount()).isEqualTo(1));
         }
 
         @DisplayName("사용 횟수가 같을 경우, ID가 작은 순서로 정렬된다.")
@@ -117,10 +119,8 @@ class HashtagServiceTest {
             final List<ReadPopularHashtagResponse> responses = hashtagService.getTopHashtagsByUsageCount(10);
 
             // then
-            assertAll(
-                    () -> assertThat(responses).hasSize(2),
-                    () -> assertThat(responses.get(0).id()).isLessThan(responses.get(1).id())
-            );
+            assertAll(() -> assertThat(responses).hasSize(2),
+                    () -> assertThat(responses.getFirst().id()).isLessThan(responses.get(1).id()));
         }
 
         @DisplayName("삭제된 보따리 템플릿 해시태그는 집계에서 제외된다.")
@@ -147,8 +147,7 @@ class HashtagServiceTest {
 
             // 하나를 soft delete
             entityManager.createNativeQuery("UPDATE bottari_template_hashtag SET deleted_at = NOW() WHERE id = :id")
-                    .setParameter("id", deletedHashtag.getId())
-                    .executeUpdate();
+                    .setParameter("id", deletedHashtag.getId()).executeUpdate();
 
             entityManager.clear();
 
@@ -156,10 +155,26 @@ class HashtagServiceTest {
             final List<ReadPopularHashtagResponse> responses = hashtagService.getTopHashtagsByUsageCount(10);
 
             // then
-            assertAll(
-                    () -> assertThat(responses).hasSize(1),
-                    () -> assertThat(responses.get(0).usageCount()).isEqualTo(1)
-            );
+            assertAll(() -> assertThat(responses).hasSize(1),
+                    () -> assertThat(responses.get(0).usageCount()).isEqualTo(1));
+        }
+
+        @DisplayName("limit이 0 이하일 경우, 예외를 던진다.")
+        @ParameterizedTest
+        @ValueSource(ints = {0, -1, -10})
+        void getTopHashtagsByUsageCount_Exception_LimitTooLow(final int limit) {
+            // when & then
+            assertThatThrownBy(() -> hashtagService.getTopHashtagsByUsageCount(limit)).isInstanceOf(
+                    BusinessException.class).hasMessage("인기 해시태그 조회 limit이 너무 적습니다. - 조회는 0개 이상 가능합니다.");
+        }
+
+        @DisplayName("limit이 100을 초과할 경우, 예외를 던진다.")
+        @ParameterizedTest
+        @ValueSource(ints = {101, 200, 1000})
+        void getTopHashtagsByUsageCount_Exception_LimitTooHigh(final int limit) {
+            // when & then
+            assertThatThrownBy(() -> hashtagService.getTopHashtagsByUsageCount(limit)).isInstanceOf(
+                    BusinessException.class).hasMessage("인기 해시태그 조회 limit이 너무 높습니다. - 조회는 100개 이하 가능합니다.");
         }
     }
 }
