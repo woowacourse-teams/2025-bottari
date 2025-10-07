@@ -6,6 +6,7 @@ import com.bottari.bottari.repository.BottariItemRepository;
 import com.bottari.bottari.repository.BottariRepository;
 import com.bottari.bottaritemplate.domain.BottariTemplate;
 import com.bottari.bottaritemplate.domain.BottariTemplateCursor;
+import com.bottari.bottaritemplate.domain.BottariTemplateFetcher;
 import com.bottari.bottaritemplate.domain.BottariTemplateHashtag;
 import com.bottari.bottaritemplate.domain.BottariTemplateHashtagCursor;
 import com.bottari.bottaritemplate.domain.BottariTemplateHistory;
@@ -33,7 +34,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
@@ -154,10 +154,10 @@ public class BottariTemplateService {
 
     private <T extends BottariTemplateCursor> ReadNextBottariTemplateResponse getNextAll(
             final T cursor,
-            final Function<T, Slice<BottariTemplateProjection>> fetchFunction
+            final BottariTemplateFetcher<T> bottariTemplateFetcher
     ) {
         final Pageable pageable = cursor.toPageable();
-        final Slice<BottariTemplateProjection> bottariTemplates = fetchFunction.apply(cursor);
+        final Slice<BottariTemplateProjection> bottariTemplates = bottariTemplateFetcher.fetch(cursor);
         final Map<Long, List<BottariTemplateItem>> itemsGroupByTemplateId =
                 groupingItemsByTemplateId(bottariTemplates.getContent());
         final Map<Long, List<Hashtag>> hashtagsGroupByTemplateId =
