@@ -2,7 +2,6 @@ package com.bottari.data.model.local.bottari
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.bottari.domain.model.notification.Notification
 
 data class BottariWithAlarm(
     @Embedded
@@ -11,12 +10,5 @@ data class BottariWithAlarm(
         parentColumn = "id",
         entityColumn = "bottariId",
     )
-    val alarm: AlarmEntity,
-) {
-    fun toDomain(): Notification =
-        Notification(
-            bottariId = bottari.id,
-            bottariTitle = bottari.title,
-            alarm = alarm.toDomain(),
-        )
-}
+    val alarm: AlarmEntity?,
+)

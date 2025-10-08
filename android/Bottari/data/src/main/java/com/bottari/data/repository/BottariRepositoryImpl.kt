@@ -21,12 +21,14 @@ class BottariRepositoryImpl(
         bottariLocalDataSource
             .fetchBottariesWithAlarm()
             .mapCatching { bottariesWithAlarm ->
-                bottariesWithAlarm.map { bottariWithAlarm ->
-                    Notification(
-                        bottariId = bottariWithAlarm.bottari.id,
-                        bottariTitle = bottariWithAlarm.bottari.title,
-                        alarm = bottariWithAlarm.alarm.toDomain(),
-                    )
+                bottariesWithAlarm.mapNotNull { bottariWithAlarm ->
+                    bottariWithAlarm.alarm?.let { alarm ->
+                        Notification(
+                            bottariId = bottariWithAlarm.bottari.id,
+                            bottariTitle = bottariWithAlarm.bottari.title,
+                            alarm = alarm.toDomain(),
+                        )
+                    }
                 }
             }
 
