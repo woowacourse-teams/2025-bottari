@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NotificationChannelProviderImpl implements NotificationChannelProvider {
+public class OnlyFcmChannelProvider implements NotificationChannelProvider {
 
     @Override
     public ChannelType channel(final Long memberId) {
