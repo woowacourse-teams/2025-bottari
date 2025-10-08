@@ -1,4 +1,4 @@
-package com.bottari.push.fcm.service;
+package com.bottari.push.notification.fcm.service;
 
 import static com.bottari.error.ErrorCode.FCM_INVALID_TOKEN;
 import static com.bottari.error.ErrorCode.FCM_MESSAGE_CONVERT_FAIL;
@@ -6,8 +6,8 @@ import static com.bottari.error.ErrorCode.FCM_MESSAGE_SEND_FAIL;
 
 import com.bottari.error.BusinessException;
 import com.bottari.push.ChannelType;
-import com.bottari.push.NotificationChannel;
-import com.bottari.push.fcm.domain.FcmToken;
+import com.bottari.push.notification.NotificationChannel;
+import com.bottari.push.notification.fcm.domain.FcmToken;
 import com.bottari.push.message.PushMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

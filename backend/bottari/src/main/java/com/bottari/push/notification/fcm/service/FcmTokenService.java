@@ -1,12 +1,12 @@
-package com.bottari.push.fcm.service;
+package com.bottari.push.notification.fcm.service;
 
 import static com.bottari.error.ErrorCode.FCM_TOKEN_NOT_FOUND;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.push.fcm.domain.FcmToken;
-import com.bottari.push.fcm.dto.UpdateFcmRequest;
-import com.bottari.push.fcm.repository.FcmTokenRepository;
+import com.bottari.push.notification.fcm.domain.FcmToken;
+import com.bottari.push.notification.fcm.dto.UpdateFcmRequest;
+import com.bottari.push.notification.fcm.repository.FcmTokenRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

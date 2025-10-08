@@ -1,6 +1,8 @@
 package com.bottari.push;
 
+import com.bottari.push.connection.ConnectionChannels;
 import com.bottari.push.message.PushMessage;
+import com.bottari.push.notification.NotificationChannels;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

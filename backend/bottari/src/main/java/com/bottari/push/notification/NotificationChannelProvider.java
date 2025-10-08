@@ -1,5 +1,6 @@
-package com.bottari.push;
+package com.bottari.push.notification;
 
+import com.bottari.push.ChannelType;
 import java.util.List;
 import java.util.Map;
 

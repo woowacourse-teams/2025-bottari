@@ -1,8 +1,8 @@
-package com.bottari.push.fcm.controller;
+package com.bottari.push.notification.fcm.controller;
 
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
-import com.bottari.push.fcm.dto.UpdateFcmRequest;
+import com.bottari.push.notification.fcm.dto.UpdateFcmRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

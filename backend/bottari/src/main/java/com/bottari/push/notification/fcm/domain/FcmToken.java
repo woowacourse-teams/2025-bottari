@@ -1,4 +1,4 @@
-package com.bottari.push.fcm.domain;
+package com.bottari.push.notification.fcm.domain;
 
 import com.bottari.member.domain.Member;
 import jakarta.persistence.Column;

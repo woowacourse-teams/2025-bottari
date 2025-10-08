@@ -1,8 +1,8 @@
-package com.bottari.push.fcm.controller;
+package com.bottari.push.notification.fcm.controller;
 
 import com.bottari.config.MemberIdentifier;
-import com.bottari.push.fcm.dto.UpdateFcmRequest;
-import com.bottari.push.fcm.service.FcmTokenService;
+import com.bottari.push.notification.fcm.dto.UpdateFcmRequest;
+import com.bottari.push.notification.fcm.service.FcmTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;

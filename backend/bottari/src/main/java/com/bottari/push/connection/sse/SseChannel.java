@@ -1,7 +1,7 @@
-package com.bottari.push.sse;
+package com.bottari.push.connection.sse;
 
 import com.bottari.push.ChannelType;
-import com.bottari.push.ConnectionChannel;
+import com.bottari.push.connection.ConnectionChannel;
 import com.bottari.push.message.PushMessage;
 import java.io.IOException;
 import java.util.List;

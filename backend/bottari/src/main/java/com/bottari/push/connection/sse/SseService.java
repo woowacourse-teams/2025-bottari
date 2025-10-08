@@ -1,4 +1,4 @@
-package com.bottari.push.sse;
+package com.bottari.push.connection.sse;
 
 import com.bottari.member.service.MemberService;
 import lombok.RequiredArgsConstructor;

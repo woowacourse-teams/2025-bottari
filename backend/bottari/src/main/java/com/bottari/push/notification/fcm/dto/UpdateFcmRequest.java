@@ -1,4 +1,4 @@
-package com.bottari.push.fcm.dto;
+package com.bottari.push.notification.fcm.dto;
 
 public record UpdateFcmRequest(
         String fcmToken

@@ -1,6 +1,6 @@
-package com.bottari.push.fcm.repository;
+package com.bottari.push.notification.fcm.repository;
 
-import com.bottari.push.fcm.domain.FcmToken;
+import com.bottari.push.notification.fcm.domain.FcmToken;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

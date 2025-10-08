@@ -1,4 +1,4 @@
-package com.bottari.push.sse;
+package com.bottari.push.connection.sse;
 
 import java.util.List;
 import java.util.Map;
