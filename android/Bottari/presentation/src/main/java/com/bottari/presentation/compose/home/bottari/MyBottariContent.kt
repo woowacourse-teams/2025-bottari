@@ -124,7 +124,9 @@ fun MyBottariContent(
             )
         }
 
-        IndeterminateCircularIndicator(isLoading = uiState.isLoading)
+        if (uiState.isLoading) {
+            IndeterminateCircularIndicator()
+        }
     }
 }
 

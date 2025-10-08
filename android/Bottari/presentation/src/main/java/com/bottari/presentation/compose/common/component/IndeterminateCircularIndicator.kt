@@ -12,8 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
-fun IndeterminateCircularIndicator(isLoading: Boolean) {
-    if (!isLoading) return
+fun IndeterminateCircularIndicator() {
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator(
@@ -27,5 +26,5 @@ fun IndeterminateCircularIndicator(isLoading: Boolean) {
 @Preview(showBackground = true)
 @Composable
 fun IndeterminateCircularIndicatorPreview() {
-    IndeterminateCircularIndicator(true)
+    IndeterminateCircularIndicator()
 }
