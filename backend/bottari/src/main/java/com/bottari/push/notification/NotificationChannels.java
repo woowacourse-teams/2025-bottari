@@ -42,9 +42,11 @@ public class NotificationChannels {
             final List<Long> memberIds
     ) {
         final Map<ChannelType, List<Long>> channelByMembers = notificationChannelProvider.channel(memberIds);
-        channelByMembers.keySet().stream()
-                .map(notificationChannels::get)
-                .filter(Objects::nonNull)
-                .forEach(channel -> channel.multicast(pushMessage, memberIds));
+        for (final ChannelType channelType : channelByMembers.keySet()) {
+            final NotificationChannel channel = notificationChannels.get(channelType);
+            if (channel != null) {
+                channel.multicast(pushMessage, channelByMembers.get(channelType));
+            }
+        }
     }
 }
