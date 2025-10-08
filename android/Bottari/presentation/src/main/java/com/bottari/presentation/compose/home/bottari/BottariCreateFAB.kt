@@ -1,6 +1,5 @@
 package com.bottari.presentation.compose.home.bottari
 
-import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButtonMenu
@@ -12,6 +11,7 @@ import androidx.compose.material3.animateFloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,7 +37,6 @@ import androidx.compose.ui.semantics.traversalIndex
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
-@SuppressLint("RememberInComposition")
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun BottariCreateFAB(
@@ -45,7 +44,7 @@ fun BottariCreateFAB(
     onOpenTeamDialog: () -> Unit,
     onOpenCodeDialog: () -> Unit,
 ) {
-    val focusRequester = FocusRequester()
+    val focusRequester = remember { FocusRequester() }
 
     val items =
         listOf(
