@@ -3,7 +3,7 @@ spring:
     name: bottari
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     defer-datasource-initialization: true
     open-in-view: true
     properties:

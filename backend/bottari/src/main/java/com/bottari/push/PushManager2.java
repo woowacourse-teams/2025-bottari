@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PushManager {
+public class PushManager2 {
 
     private final NotificationChannels notificationChannels;
     private final ConnectionChannels connectionChannels;
@@ -76,51 +76,44 @@ public class PushManager {
             return this;
         }
 
-        public UnicastChain unicast() {
-            return new UnicastChain(message, memberIds);
+        public ChannelChain unicast() {
+            return new ChannelChain(new UnicastExecutor(), message, memberIds);
         }
 
-        public MulticastChain multicast() {
-            return new MulticastChain(message, memberIds);
+        public ChannelChain multicast() {
+            return new ChannelChain(new MulticastExecutor(), message, memberIds);
         }
 
-        public BroadcastChain broadcast() {
-            return new BroadcastChain(message);
+        public ChannelChain broadcast() {
+            return new ChannelChain(new BroadcastExecutor(), message, List.of());
         }
     }
 
-    private abstract class ChannelChain {
+    public class ChannelChain {
 
-        private final List<Runnable> actions = new ArrayList<>();
+        private final ChannelExecutor channelExecutor;
         private final PushMessage message;
         private final List<Long> memberIds;
 
+        private final List<Runnable> actions = new ArrayList<>();
+
         public ChannelChain(
+                final ChannelExecutor channelExecutor,
                 final PushMessage message,
                 final List<Long> memberIds
         ) {
+            this.channelExecutor = channelExecutor;
             this.message = message;
             this.memberIds = memberIds;
         }
 
-        abstract void executeConnection(
-                final PushMessage message,
-                final List<Long> memberIds,
-                final ChannelType channelType
-        );
-
-        abstract void executeNotification(
-                final PushMessage message,
-                final List<Long> memberIds
-        );
-
         public ChannelChain viaConnection(final ChannelType channelType) {
-            actions.add(() -> executeConnection(message, memberIds, channelType));
+            actions.add(() -> channelExecutor.executeConnection(message, memberIds, channelType));
             return this;
         }
 
         public ChannelChain viaNotification() {
-            actions.add(() -> executeNotification(message, memberIds));
+            actions.add(() -> channelExecutor.executeNotification(message, memberIds));
             return this;
         }
 
@@ -129,17 +122,24 @@ public class PushManager {
         }
     }
 
-    public final class UnicastChain extends ChannelChain {
+    public interface ChannelExecutor {
 
-        public UnicastChain(
+        void executeConnection(
+                final PushMessage message,
+                final List<Long> memberIds,
+                final ChannelType channelType
+        );
+
+        void executeNotification(
                 final PushMessage message,
                 final List<Long> memberIds
-        ) {
-            super(message, memberIds);
-        }
+        );
+    }
+
+    public final class UnicastExecutor implements ChannelExecutor {
 
         @Override
-        void executeConnection(
+        public void executeConnection(
                 final PushMessage message,
                 final List<Long> memberIds,
                 final ChannelType channelType
@@ -148,7 +148,7 @@ public class PushManager {
         }
 
         @Override
-        void executeNotification(
+        public void executeNotification(
                 final PushMessage message,
                 final List<Long> memberIds
         ) {
@@ -156,17 +156,10 @@ public class PushManager {
         }
     }
 
-    public final class MulticastChain extends ChannelChain {
-
-        public MulticastChain(
-                final PushMessage message,
-                final List<Long> memberIds
-        ) {
-            super(message, memberIds);
-        }
+    public final class MulticastExecutor implements ChannelExecutor {
 
         @Override
-        void executeConnection(
+        public void executeConnection(
                 final PushMessage message,
                 final List<Long> memberIds,
                 final ChannelType channelType
@@ -175,23 +168,18 @@ public class PushManager {
         }
 
         @Override
-        void executeNotification(
+        public void executeNotification(
                 final PushMessage message,
                 final List<Long> memberIds
         ) {
             notificationChannels.multicast(message, memberIds);
         }
-
     }
 
-    public final class BroadcastChain extends ChannelChain {
-
-        public BroadcastChain(final PushMessage message) {
-            super(message, List.of());
-        }
+    public final class BroadcastExecutor implements ChannelExecutor {
 
         @Override
-        void executeConnection(
+        public void executeConnection(
                 final PushMessage message,
                 final List<Long> memberIds,
                 final ChannelType channelType
@@ -200,7 +188,7 @@ public class PushManager {
         }
 
         @Override
-        void executeNotification(
+        public void executeNotification(
                 final PushMessage message,
                 final List<Long> memberIds
         ) {
