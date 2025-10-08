@@ -5,6 +5,7 @@ import com.bottari.push.PushChannel;
 import com.bottari.push.message.PushMessage;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,7 +15,7 @@ public class ConnectionChannels {
 
     public ConnectionChannels(final List<ConnectionChannel> connectionChannels) {
         this.connectionChannels = connectionChannels.stream()
-                .collect(java.util.stream.Collectors.toMap(
+                .collect(Collectors.toMap(
                         PushChannel::channelType,
                         channel -> channel));
     }
