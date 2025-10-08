@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.google.firebase.annotations.concurrent.Background
 
 @Composable
 fun IndeterminateCircularIndicator(isLoading: Boolean) {
@@ -25,8 +24,7 @@ fun IndeterminateCircularIndicator(isLoading: Boolean) {
     }
 }
 
-@Preview
-@Background
+@Preview(showBackground = true)
 @Composable
 fun IndeterminateCircularIndicatorPreview() {
     IndeterminateCircularIndicator(true)
