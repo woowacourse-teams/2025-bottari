@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.bottari.bottaritemplate.dto.ReadPopularHashtagResponse;
+import com.bottari.bottaritemplate.dto.ReadHashtagWithUsageCountResponse;
 import com.bottari.bottaritemplate.service.HashtagService;
 import com.bottari.log.LogFormatter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,10 +35,10 @@ class HashtagControllerTest {
     @Test
     void readPopularHashtags() throws Exception {
         // given
-        final List<ReadPopularHashtagResponse> responses = List.of(
-                new ReadPopularHashtagResponse(1L, "여행", 1, 42),
-                new ReadPopularHashtagResponse(2L, "캠핑", 2, 35),
-                new ReadPopularHashtagResponse(3L, "등산", 3, 28)
+        final List<ReadHashtagWithUsageCountResponse> responses = List.of(
+                new ReadHashtagWithUsageCountResponse(1L, "여행", 42),
+                new ReadHashtagWithUsageCountResponse(2L, "캠핑", 35),
+                new ReadHashtagWithUsageCountResponse(3L, "등산", 28)
         );
         given(hashtagService.getTopHashtagsByUsageCount(10))
                 .willReturn(responses);
@@ -54,8 +54,8 @@ class HashtagControllerTest {
     @Test
     void readPopularHashtags_DefaultLimit() throws Exception {
         // given
-        final List<ReadPopularHashtagResponse> responses = List.of(
-                new ReadPopularHashtagResponse(1L, "여행", 1, 42)
+        final List<ReadHashtagWithUsageCountResponse> responses = List.of(
+                new ReadHashtagWithUsageCountResponse(1L, "여행", 42)
         );
         given(hashtagService.getTopHashtagsByUsageCount(10))
                 .willReturn(responses);
@@ -70,9 +70,9 @@ class HashtagControllerTest {
     @Test
     void readPopularHashtags_WithLimit() throws Exception {
         // given
-        final List<ReadPopularHashtagResponse> responses = List.of(
-                new ReadPopularHashtagResponse(1L, "여행", 1, 42),
-                new ReadPopularHashtagResponse(2L, "캠핑", 2, 35)
+        final List<ReadHashtagWithUsageCountResponse> responses = List.of(
+                new ReadHashtagWithUsageCountResponse(1L, "여행", 42),
+                new ReadHashtagWithUsageCountResponse(2L, "캠핑", 35)
         );
         given(hashtagService.getTopHashtagsByUsageCount(2))
                 .willReturn(responses);

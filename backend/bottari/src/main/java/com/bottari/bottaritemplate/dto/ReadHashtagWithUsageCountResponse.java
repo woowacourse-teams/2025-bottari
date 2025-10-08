@@ -2,21 +2,18 @@ package com.bottari.bottaritemplate.dto;
 
 import com.bottari.bottaritemplate.repository.dto.HashtagPopularityProjection;
 
-public record ReadPopularHashtagResponse(
+public record ReadHashtagWithUsageCountResponse(
         Long id,
         String name,
-        int ranking,
         int usageCount
 ) {
 
-    public static ReadPopularHashtagResponse of(
-            final int ranking,
+    public static ReadHashtagWithUsageCountResponse of(
             final HashtagPopularityProjection projection
     ) {
-        return new ReadPopularHashtagResponse(
+        return new ReadHashtagWithUsageCountResponse(
                 projection.getHashtagId(),
                 projection.getHashtagName(),
-                ranking,
                 projection.getUsageCount()
         );
     }

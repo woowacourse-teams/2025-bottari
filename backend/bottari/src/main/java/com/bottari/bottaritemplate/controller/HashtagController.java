@@ -1,6 +1,6 @@
 package com.bottari.bottaritemplate.controller;
 
-import com.bottari.bottaritemplate.dto.ReadPopularHashtagResponse;
+import com.bottari.bottaritemplate.dto.ReadHashtagWithUsageCountResponse;
 import com.bottari.bottaritemplate.service.HashtagService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +19,10 @@ public class HashtagController implements HashtagApiDocs {
 
     @GetMapping("/popular")
     @Override
-    public ResponseEntity<List<ReadPopularHashtagResponse>> readPopularHashtags(
+    public ResponseEntity<List<ReadHashtagWithUsageCountResponse>> readPopularHashtags(
             @RequestParam(defaultValue = "10") final int limit
     ) {
-        final List<ReadPopularHashtagResponse> responses = hashtagService.getTopHashtagsByUsageCount(limit);
+        final List<ReadHashtagWithUsageCountResponse> responses = hashtagService.getTopHashtagsByUsageCount(limit);
 
         return ResponseEntity.ok(responses);
     }

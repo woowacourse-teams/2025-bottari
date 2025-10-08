@@ -1,6 +1,6 @@
 package com.bottari.bottaritemplate.controller;
 
-import com.bottari.bottaritemplate.dto.ReadPopularHashtagResponse;
+import com.bottari.bottaritemplate.dto.ReadHashtagWithUsageCountResponse;
 import com.bottari.error.ApiErrorCodes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,7 +19,7 @@ public interface HashtagApiDocs {
     )
     @ApiErrorCodes({
     })
-    ResponseEntity<List<ReadPopularHashtagResponse>> readPopularHashtags(
+    ResponseEntity<List<ReadHashtagWithUsageCountResponse>> readPopularHashtags(
             final int limit
     );
 }

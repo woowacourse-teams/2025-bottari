@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.bottari.bottaritemplate.domain.BottariTemplate;
 import com.bottari.bottaritemplate.domain.BottariTemplateHashtag;
 import com.bottari.bottaritemplate.domain.Hashtag;
-import com.bottari.bottaritemplate.dto.ReadPopularHashtagResponse;
+import com.bottari.bottaritemplate.dto.ReadHashtagWithUsageCountResponse;
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
 import com.bottari.member.domain.Member;
@@ -76,17 +76,14 @@ class HashtagServiceTest {
             entityManager.clear();
 
             // when
-            final List<ReadPopularHashtagResponse> responses = hashtagService.getTopHashtagsByUsageCount(10);
+            final List<ReadHashtagWithUsageCountResponse> responses = hashtagService.getTopHashtagsByUsageCount(10);
 
             // then
             assertAll(() -> assertThat(responses).hasSize(3),
-                    () -> assertThat(responses.getFirst().ranking()).isEqualTo(1),
                     () -> assertThat(responses.getFirst().name()).isEqualTo("여행"),
                     () -> assertThat(responses.getFirst().usageCount()).isEqualTo(3),
-                    () -> assertThat(responses.get(1).ranking()).isEqualTo(2),
                     () -> assertThat(responses.get(1).name()).isEqualTo("캠핑"),
                     () -> assertThat(responses.get(1).usageCount()).isEqualTo(2),
-                    () -> assertThat(responses.get(2).ranking()).isEqualTo(3),
                     () -> assertThat(responses.get(2).name()).isEqualTo("등산"),
                     () -> assertThat(responses.get(2).usageCount()).isEqualTo(1));
         }
@@ -116,7 +113,7 @@ class HashtagServiceTest {
             entityManager.clear();
 
             // when
-            final List<ReadPopularHashtagResponse> responses = hashtagService.getTopHashtagsByUsageCount(10);
+            final List<ReadHashtagWithUsageCountResponse> responses = hashtagService.getTopHashtagsByUsageCount(10);
 
             // then
             assertAll(() -> assertThat(responses).hasSize(2),
@@ -152,7 +149,7 @@ class HashtagServiceTest {
             entityManager.clear();
 
             // when
-            final List<ReadPopularHashtagResponse> responses = hashtagService.getTopHashtagsByUsageCount(10);
+            final List<ReadHashtagWithUsageCountResponse> responses = hashtagService.getTopHashtagsByUsageCount(10);
 
             // then
             assertAll(() -> assertThat(responses).hasSize(1),
@@ -165,7 +162,7 @@ class HashtagServiceTest {
         void getTopHashtagsByUsageCount_Exception_LimitTooLow(final int limit) {
             // when & then
             assertThatThrownBy(() -> hashtagService.getTopHashtagsByUsageCount(limit)).isInstanceOf(
-                    BusinessException.class).hasMessage("인기 해시태그 조회 limit이 너무 적습니다. - 조회는 0개 이상 가능합니다.");
+                    BusinessException.class).hasMessage("인기 해시태그 조회 limit이 너무 적습니다. - 조회는 1개 이상 가능합니다.");
         }
 
         @DisplayName("limit이 100을 초과할 경우, 예외를 던진다.")
