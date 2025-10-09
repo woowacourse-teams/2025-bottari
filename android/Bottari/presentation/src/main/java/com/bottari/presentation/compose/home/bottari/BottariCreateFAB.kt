@@ -33,7 +33,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.traversalIndex
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.theme.BottariTheme
@@ -74,6 +73,9 @@ fun BottariCreateFAB(
     var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
     val items = rememberFabMenuItems(onOpenPersonalDialog, onOpenTeamDialog, onOpenCodeDialog)
 
+    val closeMenuDescription = stringResource(R.string.bottari_btn_create_close_menu_description)
+    val openMenuDescription = stringResource(R.string.bottari_btn_create_open_menu_description)
+
     BackHandler(fabMenuExpanded) { fabMenuExpanded = false }
 
     FloatingActionButtonMenu(
@@ -86,8 +88,8 @@ fun BottariCreateFAB(
                     Modifier
                         .semantics {
                             traversalIndex = -1f
-                            stateDescription = if (fabMenuExpanded) "Expanded" else "Collapsed"
-                            contentDescription = "Toggle menu"
+                            contentDescription =
+                                if (fabMenuExpanded) closeMenuDescription else openMenuDescription
                         }.animateFloatingActionButton(
                             visible = true,
                             alignment = Alignment.BottomEnd,
