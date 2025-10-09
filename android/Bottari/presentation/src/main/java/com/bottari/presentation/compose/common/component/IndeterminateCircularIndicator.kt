@@ -13,7 +13,6 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun IndeterminateCircularIndicator() {
-
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator(
             modifier = Modifier.then(Modifier.size(60.dp)),
