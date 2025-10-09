@@ -1,6 +1,7 @@
 package com.bottari.presentation.compose.home.bottari
 
 import androidx.activity.compose.BackHandler
+import androidx.annotation.DrawableRes
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButtonMenu
 import androidx.compose.material3.FloatingActionButtonMenuItem
@@ -37,6 +38,31 @@ import androidx.compose.ui.semantics.traversalIndex
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
+private data class FabMenuItem(
+    @DrawableRes val iconRes: Int,
+    val text: String,
+    val onClick: () -> Unit,
+)
+
+@Composable
+private fun rememberFabMenuItems(
+    onOpenPersonalDialog: () -> Unit,
+    onOpenTeamDialog: () -> Unit,
+    onOpenCodeDialog: () -> Unit,
+): List<FabMenuItem> {
+    val personalBottariText = stringResource(R.string.personal_bottari_create_btn_text)
+    val teamBottariText = stringResource(R.string.team_bottari_create_btn_text)
+    val joinTeamText = stringResource(R.string.team_bottari_join_btn_text)
+
+    return remember(onOpenPersonalDialog, onOpenTeamDialog, onOpenCodeDialog) {
+        listOf(
+            FabMenuItem(R.drawable.ic_team_invite_code, joinTeamText, onOpenCodeDialog),
+            FabMenuItem(R.drawable.ic_people, teamBottariText, onOpenTeamDialog),
+            FabMenuItem(R.drawable.ic_person_filled, personalBottariText, onOpenPersonalDialog),
+        )
+    }
+}
+
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun BottariCreateFAB(
@@ -45,27 +71,8 @@ fun BottariCreateFAB(
     onOpenCodeDialog: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
-
-    val items =
-        listOf(
-            Triple(
-                R.drawable.ic_team_invite_code,
-                stringResource(R.string.team_bottari_join_btn_text),
-                onOpenCodeDialog,
-            ),
-            Triple(
-                R.drawable.ic_people,
-                stringResource(R.string.team_bottari_create_btn_text),
-                onOpenTeamDialog,
-            ),
-            Triple(
-                R.drawable.ic_person_filled,
-                stringResource(R.string.personal_bottari_create_btn_text),
-                onOpenPersonalDialog,
-            ),
-        )
-
     var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
+    val items = rememberFabMenuItems(onOpenPersonalDialog, onOpenTeamDialog, onOpenCodeDialog)
 
     BackHandler(fabMenuExpanded) { fabMenuExpanded = false }
 
@@ -74,7 +81,7 @@ fun BottariCreateFAB(
         button = {
             ToggleFloatingActionButton(
                 checked = fabMenuExpanded,
-                onCheckedChange = { fabMenuExpanded = !fabMenuExpanded },
+                onCheckedChange = { fabMenuExpanded = it },
                 modifier =
                     Modifier
                         .semantics {
@@ -95,38 +102,34 @@ fun BottariCreateFAB(
             }
         },
     ) {
-        items.forEachIndexed { i, item ->
+        items.forEachIndexed { index, item ->
             FloatingActionButtonMenuItem(
                 modifier =
                     Modifier
                         .semantics {
                             isTraversalGroup = true
-                            if (i == items.size - 1) {
+                            if (index == items.lastIndex) {
                                 customActions =
                                     listOf(
-                                        CustomAccessibilityAction(
-                                            label = "Close menu",
-                                            action = {
-                                                fabMenuExpanded = false
-                                                true
-                                            },
-                                        ),
+                                        CustomAccessibilityAction(label = "Close menu") {
+                                            fabMenuExpanded = false
+                                            true
+                                        },
                                     )
                             }
                         }.then(
-                            if (i == 0) {
+                            if (index == 0) {
                                 Modifier.onKeyEvent {
-                                    if (
+                                    val isTargetKeyEvent =
                                         it.type == KeyEventType.KeyDown &&
-                                        (
-                                            it.key == Key.DirectionUp ||
-                                                (it.isShiftPressed && it.key == Key.Tab)
-                                        )
-                                    ) {
-                                        focusRequester.requestFocus()
-                                        return@onKeyEvent true
+                                            (it.key == Key.DirectionUp || (it.isShiftPressed && it.key == Key.Tab))
+
+                                    if (!isTargetKeyEvent) {
+                                        return@onKeyEvent false
                                     }
-                                    return@onKeyEvent false
+
+                                    focusRequester.requestFocus()
+                                    true
                                 }
                             } else {
                                 Modifier
@@ -134,15 +137,15 @@ fun BottariCreateFAB(
                         ),
                 onClick = {
                     fabMenuExpanded = false
-                    item.third()
+                    item.onClick()
                 },
                 icon = {
                     Icon(
-                        painter = painterResource(id = item.first),
+                        painter = painterResource(id = item.iconRes),
                         contentDescription = null,
                     )
                 },
-                text = { Text(text = item.second) },
+                text = { Text(text = item.text) },
             )
         }
     }
