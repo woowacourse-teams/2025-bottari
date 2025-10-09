@@ -33,6 +33,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.traversalIndex
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.theme.BottariTheme
@@ -71,9 +72,10 @@ fun BottariCreateFAB(
     var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
     val items = rememberFabMenuItems(onOpenPersonalDialog, onOpenTeamDialog, onOpenCodeDialog)
 
-    val closeMenuDescription = stringResource(R.string.bottari_btn_create_close_menu_description)
-    val openMenuDescription = stringResource(R.string.bottari_btn_create_open_menu_description)
-
+    val openMenuBtnDescription = stringResource(R.string.bottari_btn_create_description)
+    val openStateDescription = stringResource(R.string.common_state_open_description)
+    val closeStateDescription = stringResource(R.string.common_state_close_description)
+    val menuCloseLabel = stringResource(R.string.bottari_action_close_label)
     BackHandler(fabMenuExpanded) { fabMenuExpanded = false }
 
     FloatingActionButtonMenu(
@@ -86,8 +88,8 @@ fun BottariCreateFAB(
                     Modifier
                         .semantics {
                             traversalIndex = -1f
-                            contentDescription =
-                                if (fabMenuExpanded) closeMenuDescription else openMenuDescription
+                            contentDescription = openMenuBtnDescription
+                            stateDescription = if (fabMenuExpanded) openStateDescription else closeStateDescription
                         }.animateFloatingActionButton(
                             visible = true,
                             alignment = Alignment.BottomEnd,
@@ -111,7 +113,7 @@ fun BottariCreateFAB(
                             if (index == items.lastIndex) {
                                 customActions =
                                     listOf(
-                                        CustomAccessibilityAction(label = "Close menu") {
+                                        CustomAccessibilityAction(label = menuCloseLabel) {
                                             fabMenuExpanded = false
                                             true
                                         },

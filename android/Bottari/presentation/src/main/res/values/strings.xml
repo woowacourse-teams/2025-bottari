@@ -338,8 +338,8 @@
     <!-- Description 접근성 -->
     <string name="bottari_edit_btn_description_text">보따리 수정 버튼</string>
     <string name="bottari_delete_btn_description_text">보따리 삭제 버튼</string>
-    <string name="bottari_btn_create_open_menu_description">보따리 만들기 메뉴 열기 버튼</string>
-    <string name="bottari_btn_create_close_menu_description">보따리 만들기 메뉴 닫기 버튼</string>
+    <string name="bottari_btn_create_description">보따리 만들기 메뉴 열기 버튼</string>
+    <string name="bottari_action_close_label">보따리 만들기 메뉴 닫기</string>
     <string name="bottari_btn_template_delete_description">보따리 템플릿 삭제 버튼</string>
     <string name="bottari_btn_item_add_description">물건 추가 버튼</string>
     <string name="bottari_btn_more_description">더보기 버튼</string>
@@ -356,6 +356,8 @@
     <string name="common_btn_item_delete_description">물건 삭제 버튼</string>
     <string name="common_btn_nickname_edit_description">닉네임 수정 버튼</string>
     <string name="common_icon_search_description">검색 아이콘</string>
+    <string name="common_state_open_description">열림</string>
+    <string name="common_state_close_description">닫힘</string>
     <string name="alarm_btn_location_edit_description">위치 설정 버튼</string>
     <string name="alarm_btn_date_edit_description">날짜 수정 버튼</string>
     <string name="alarm_icon_permission_description">알람 및 리마인더 권한 이미지</string>
