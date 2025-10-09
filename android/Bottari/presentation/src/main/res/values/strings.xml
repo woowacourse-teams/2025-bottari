@@ -166,8 +166,8 @@
     <string name="team_checklist_empty_view_title_text">이곳은 아직 비어있어요.</string>
 
     <!-- Bottari Fab -->
-    <string name="personal_bottari_create_btn_text">새 개인 보따리</string>
-    <string name="team_bottari_create_btn_text">새 팀 보따리</string>
+    <string name="personal_bottari_create_btn_text">개인 보따리 생성</string>
+    <string name="team_bottari_create_btn_text">팀 보따리 생성</string>
     <string name="team_bottari_join_btn_text">코드로 참가</string>
 
     <!--  Team Bottari  -->
