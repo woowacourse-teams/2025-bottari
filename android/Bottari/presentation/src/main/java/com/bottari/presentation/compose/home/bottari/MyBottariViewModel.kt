@@ -39,7 +39,7 @@ class MyBottariViewModel(
             updateState { copy(isLoading = true) }
             deleteBottariUseCase(bottariId)
                 .onSuccess {
-                    emitEvent(event = MyBottariUiEvent.DeletePersonalBottariSuccess)
+                    emitEvent(MyBottariUiEvent.DeletePersonalBottariSuccess)
                     updateState { copy(isLoading = false) }
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.DeletePersonalBottariFailure)
