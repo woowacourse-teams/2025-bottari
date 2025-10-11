@@ -17,7 +17,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.data.domain.Pageable;
 
-class BottariTemplateCursorTest {
+class BottariTemplateTitleCursorTest {
 
     @Nested
     class NormalizationTest {
@@ -30,7 +30,7 @@ class BottariTemplateCursorTest {
                 final String expected
         ) {
             // when
-            final BottariTemplateCursor actual = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor actual = new BottariTemplateTitleCursor(
                     query,
                     1L,
                     "info",
@@ -40,7 +40,7 @@ class BottariTemplateCursorTest {
             );
 
             // then
-            assertThat(actual.query()).isEqualTo(expected);
+            assertThat(actual.getTitle()).isEqualTo(expected);
         }
 
         private static Stream<Arguments> normalizeQuery() {
@@ -68,7 +68,7 @@ class BottariTemplateCursorTest {
                 final int expected
         ) {
             // when
-            final BottariTemplateCursor actual = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor actual = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     "info",
@@ -78,7 +78,7 @@ class BottariTemplateCursorTest {
             );
 
             // then
-            assertThat(actual.page()).isEqualTo(expected);
+            assertThat(actual.getPage()).isEqualTo(expected);
         }
 
         @DisplayName("size 정규화 테스트")
@@ -94,7 +94,7 @@ class BottariTemplateCursorTest {
                 final int expected
         ) {
             // when
-            final BottariTemplateCursor actual = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor actual = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     null,
@@ -104,7 +104,7 @@ class BottariTemplateCursorTest {
             );
 
             // then
-            assertThat(actual.size()).isEqualTo(expected);
+            assertThat(actual.getSize()).isEqualTo(expected);
         }
 
         @DisplayName("lastId 정규화 테스트")
@@ -114,7 +114,7 @@ class BottariTemplateCursorTest {
             final Long nullLastId = null;
 
             // when
-            final BottariTemplateCursor actual = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor actual = new BottariTemplateTitleCursor(
                     "",
                     nullLastId,
                     null,
@@ -124,7 +124,7 @@ class BottariTemplateCursorTest {
             );
 
             // then
-            assertThat(actual.lastId()).isEqualTo(Long.MAX_VALUE);
+            assertThat(actual.getLastId()).isEqualTo(Long.MAX_VALUE);
         }
 
         @DisplayName("property 정규화 테스트")
@@ -135,7 +135,7 @@ class BottariTemplateCursorTest {
             final String expected = "createdAt";
 
             // when
-            final BottariTemplateCursor actual = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor actual = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     "info",
@@ -145,7 +145,7 @@ class BottariTemplateCursorTest {
             );
 
             // then
-            assertThat(actual.property()).isEqualTo(expected);
+            assertThat(actual.getProperty()).isEqualTo(expected);
         }
     }
 
@@ -164,7 +164,7 @@ class BottariTemplateCursorTest {
                 final int size
         ) {
             // given
-            final BottariTemplateCursor cursor = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor cursor = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     "info",
@@ -196,7 +196,7 @@ class BottariTemplateCursorTest {
         })
         void getCreatedAt(final String dateString) {
             // given
-            final BottariTemplateCursor cursor = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor cursor = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     dateString,
@@ -221,7 +221,7 @@ class BottariTemplateCursorTest {
         })
         void getCreatedAt_Exception_InvalidDateTimeFormat(final String invalidDate) {
             // given
-            final BottariTemplateCursor cursor = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor cursor = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     invalidDate,
@@ -240,12 +240,12 @@ class BottariTemplateCursorTest {
     @Nested
     class GetTakenCountTest {
 
-        @DisplayName("유효한 숫자 문자열을 Long으로 파싱한다.")
+        @DisplayName("유효한 숫자 문자열을 Integer으로 파싱한다.")
         @ParameterizedTest
-        @ValueSource(strings = {"0", "1", "100", "9223372036854775807"})
+        @ValueSource(strings = {"0", "1", "100", "2147483647"})
         void getTakenCount(final String numberString) {
             // given
-            final BottariTemplateCursor cursor = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor cursor = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     numberString,
@@ -255,7 +255,7 @@ class BottariTemplateCursorTest {
             );
 
             // when
-            final Long actual = cursor.getTakenCount();
+            final Integer actual = cursor.getTakenCount();
 
             // then
             assertThat(actual).isEqualTo(Long.parseLong(numberString));
@@ -267,11 +267,11 @@ class BottariTemplateCursorTest {
                 "invalid-number",
                 "12.34",
                 "1,000",
-                "9223372036854775808" // Long.MAX_VALUE + 1
+                "9223372036854775807" // Long.MAX_VALUE
         })
         void getTakenCount_Exception_InvalidNumberFormat(final String invalidNumber) {
             // given
-            final BottariTemplateCursor cursor = new BottariTemplateCursor(
+            final BottariTemplateTitleCursor cursor = new BottariTemplateTitleCursor(
                     "",
                     1L,
                     invalidNumber,

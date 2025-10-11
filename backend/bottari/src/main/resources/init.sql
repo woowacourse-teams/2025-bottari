@@ -123,6 +123,17 @@ VALUES ('기본 여행 템플릿', '국내외 여행 시 꼭 필요한 기본 �
        ('운동 기본템', '헬스장 운동을 위한 기본 준비물', 3, '2024-01-20 08:00:00',0),
        ('등산 준비물', '안전한 등산을 위한 필수품', 5, '2024-01-21 13:10:00',0);
 
+INSERT INTO hashtag (name)
+VALUES ('여행'),
+       ('운동'),
+       ('등산');
+
+INSERT INTO bottari_template_hashtag (bottari_template_id, hashtag_id)
+VALUES (1, 1),
+       (4, 1),
+       (6, 2),
+       (7, 3);
+
 -- 보따리 템플릿 아이템 데이터
 INSERT INTO bottari_template_item (name, bottari_template_id)
 VALUES

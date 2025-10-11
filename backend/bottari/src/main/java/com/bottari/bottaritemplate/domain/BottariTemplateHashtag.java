@@ -31,7 +31,7 @@ public class BottariTemplateHashtag {
     private BottariTemplate bottariTemplate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hashtag")
+    @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
 
     @Column(name = "deleted_at")

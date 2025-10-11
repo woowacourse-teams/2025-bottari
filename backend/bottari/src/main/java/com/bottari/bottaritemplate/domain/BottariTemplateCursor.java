@@ -5,42 +5,35 @@ import com.bottari.error.ErrorCode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import lombok.Getter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-public record BottariTemplateCursor(
-        String query,
-        Long lastId,
-        String lastInfo,
-        int page,
-        int size,
-        String property
-) {
+@Getter
+public abstract class BottariTemplateCursor {
 
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
     private static final int DEFAULT_SIZE = 10;
 
-    public BottariTemplateCursor {
-        query = normalizeQuery(query);
-        size = normalizeSize(size);
-        page = normalizePage(page);
-        lastId = normalizeLastId(lastId);
-        property = normalizeProperty(property);
-        lastInfo = normalizeLastInfo(property, lastInfo);
-    }
+    private final Long lastId;
+    private final String lastInfo;
+    private final int page;
+    private final int size;
+    private final String property;
 
-    private static String normalizeQuery(final String query) {
-        if (query == null || query.isBlank()) {
-            return "";
-        }
-
-        return Arrays.stream(query.trim().split("\\s+"))
-                .filter(word -> !word.isBlank())
-                .map(word -> "+" + word)
-                .collect(Collectors.joining(" "));
+    public BottariTemplateCursor(
+            final Long lastId,
+            final String lastInfo,
+            final int page,
+            final int size,
+            final String property
+    ) {
+        this.size = normalizeSize(size);
+        this.page = normalizePage(page);
+        this.lastId = normalizeLastId(lastId);
+        this.property = normalizeProperty(property);
+        this.lastInfo = normalizeLastInfo(property, lastInfo);
     }
 
     private static int normalizeSize(final int size) {
@@ -83,7 +76,7 @@ public record BottariTemplateCursor(
             return LocalDateTime.now().plusDays(1).format(DATE_TIME_FORMATTER);
         }
         if (SortProperty.TAKEN_COUNT.equalsProperty(property) && (lastInfo == null || lastInfo.isBlank())) {
-            return String.valueOf(Long.MAX_VALUE);
+            return String.valueOf(Integer.MAX_VALUE);
         }
 
         return lastInfo;
@@ -104,9 +97,9 @@ public record BottariTemplateCursor(
         }
     }
 
-    public Long getTakenCount() {
+    public Integer getTakenCount() {
         try {
-            return Long.parseLong(lastInfo);
+            return Integer.parseInt(lastInfo);
         } catch (final NumberFormatException e) {
             throw new BusinessException(ErrorCode.NUMBER_FORMAT_INVALID, "보따리 템플릿의 가져간 횟수는 숫자여야 합니다.");
         }

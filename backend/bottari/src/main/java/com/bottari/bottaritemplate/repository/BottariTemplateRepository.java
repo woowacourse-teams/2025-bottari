@@ -76,7 +76,7 @@ public interface BottariTemplateRepository extends JpaRepository<BottariTemplate
             """, nativeQuery = true)
     List<BottariTemplateProjection> findNextByTakenCount(
             final String query,
-            final Long lastTakenCount,
+            final Integer lastTakenCount,
             final Long lastId,
             final int limit
     );
