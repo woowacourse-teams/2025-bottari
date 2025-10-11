@@ -31,9 +31,10 @@ public interface BottariTemplateHashtagRepository extends JpaRepository<BottariT
     List<BottariTemplateHashtag> findAllByBottariTemplateIds(final List<Long> templateIds);
 
     @Query("""
-            SELECT 
+            SELECT
                    bt.id AS bottariTemplateId,
                    bt.title AS title,
+                   bt.description AS description,
                    bt.takenCount AS takenCount,
                    bt.createdAt AS bottariTemplateCreatedAt,
                    m.id AS memberId,
@@ -59,6 +60,7 @@ public interface BottariTemplateHashtagRepository extends JpaRepository<BottariT
             SELECT
                  bt.id AS bottariTemplateId,
                  bt.title AS title,
+                 bt.description AS description,
                  bt.takenCount AS takenCount,
                  bt.createdAt AS bottariTemplateCreatedAt,
                  m.id AS memberId,
