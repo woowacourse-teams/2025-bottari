@@ -58,9 +58,11 @@ jobs:
 
       - name: Get versionName
         run: |
-          if [ -n "${{ github.event.inputs.versionName }}" ]; then
+          if [ "${{ github.event.inputs.versionName != '' }}" = "true" ]; then
+            echo "✅ versionName provided: '${{ github.event.inputs.versionName }}'"
             VERSION_NAME="${{ github.event.inputs.versionName }}"
           else
+            echo "ℹ️ versionName not provided, using Gradle output..."
             VERSION_NAME=$(./gradlew -q printVersionName)
           fi
           echo "VERSION_NAME=${VERSION_NAME}" >> $GITHUB_ENV
