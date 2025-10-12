@@ -32,6 +32,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
@@ -55,6 +57,7 @@ public class TeamBottariEventListener {
     }
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCreateTeamSharedItemEvent(final CreateTeamSharedItemEvent event) {
         final List<ReadSharedItemResponse> idempotentInfos =
@@ -74,6 +77,7 @@ public class TeamBottariEventListener {
     }
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleDeleteTeamSharedItemEvent(final DeleteTeamSharedItemEvent event) {
         final List<ReadSharedItemResponse> idempotentInfos =
@@ -115,6 +119,7 @@ public class TeamBottariEventListener {
     }
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCreateAssignedItemEvent(final CreateAssignedItemEvent event) {
         final List<ReadAssignedItemResponse> idempotentInfos =
@@ -145,6 +150,7 @@ public class TeamBottariEventListener {
     }
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleDeleteAssignedItemEvent(final DeleteAssignedItemEvent event) {
         final List<ReadAssignedItemResponse> idempotentInfos = teamAssignedItemService.getAllByTeamBottariId(

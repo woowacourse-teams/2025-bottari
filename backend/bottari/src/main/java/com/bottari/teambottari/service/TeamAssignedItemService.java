@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TeamAssignedItemService {
 
     private final TeamAssignedItemRepository teamAssignedItemRepository;

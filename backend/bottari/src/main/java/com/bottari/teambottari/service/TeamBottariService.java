@@ -41,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TeamBottariService {
 
     private final TeamBottariRepository teamBottariRepository;
