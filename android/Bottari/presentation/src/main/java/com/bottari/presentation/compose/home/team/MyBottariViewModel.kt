@@ -16,6 +16,7 @@ import com.bottari.domain.usecase.team.ExitTeamBottariUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.domain.usecase.team.JoinTeamBottariUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
+import com.bottari.presentation.model.bottari.MyBottariUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
 import com.bottari.presentation.util.AlarmScheduler.cancelAlarm
@@ -41,16 +42,7 @@ class MyBottariViewModel(
         launch {
             deleteBottariUseCase(bottariId)
                 .onSuccess {
-                    bottari.alarm?.let { alarm ->
-                        cancelAlarm(
-                            notification =
-                                Notification(
-                                    bottariId = bottari.id,
-                                    bottariTitle = bottari.title,
-                                    alarm = alarm.toDomain(),
-                                ),
-                        )
-                    }
+                    cancelAlarm(bottari)
                     emitEvent(MyBottariUiEvent.DeletePersonalBottariSuccess)
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.DeletePersonalBottariFailure)
@@ -133,6 +125,18 @@ class MyBottariViewModel(
             fetchTeamBottaries()
         }
     }
+
+    private fun cancelAlarm(bottari: MyBottariUiModel) =
+        bottari.alarm?.let { alarm ->
+            cancelAlarm(
+                notification =
+                    Notification(
+                        bottariId = bottari.id,
+                        bottariTitle = bottari.title,
+                        alarm = alarm.toDomain(),
+                    ),
+            )
+        }
 
     private fun fetchTeamBottaries() =
         launch {
