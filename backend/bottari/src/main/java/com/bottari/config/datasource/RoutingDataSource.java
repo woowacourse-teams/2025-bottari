@@ -1,21 +1,20 @@
 package com.bottari.config.datasource;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+@Slf4j
 public class RoutingDataSource extends AbstractRoutingDataSource {
-
-    private static final ThreadLocal<DataSourceType> contextHolder = new ThreadLocal<>();
-
-    public static void setDataSourceType(final DataSourceType type) {
-        contextHolder.set(type);
-    }
-
-    public static void clear() {
-        contextHolder.remove();
-    }
 
     @Override
     protected Object determineCurrentLookupKey() {
-        return contextHolder.get();
+        final boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
+        if (isReadOnly) {
+            log.debug("Routing to DataSource: {}", "replica");
+            return DataSourceType.REPLICA;
+        }
+        log.debug("Routing to DataSource: {}", "master");
+        return DataSourceType.MASTER;
     }
 }
