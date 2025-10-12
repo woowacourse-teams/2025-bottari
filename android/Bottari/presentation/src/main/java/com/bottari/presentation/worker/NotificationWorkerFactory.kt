@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
-import com.bottari.domain.usecase.notification.GetNotificationsUseCase
+import com.bottari.domain.usecase.notification.FetchNotificationsUseCase
 
 class NotificationWorkerFactory(
-    private val getNotificationsUseCase: GetNotificationsUseCase,
+    private val fetchNotificationsUseCase: FetchNotificationsUseCase,
 ) : WorkerFactory() {
     override fun createWorker(
         appContext: Context,
@@ -19,7 +19,7 @@ class NotificationWorkerFactory(
                 NotificationWorker(
                     context = appContext,
                     workerParams = workerParameters,
-                    getNotificationsUseCase = getNotificationsUseCase,
+                    fetchNotificationsUseCase = fetchNotificationsUseCase,
                 )
 
             else -> null

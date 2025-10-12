@@ -7,8 +7,7 @@ import com.bottari.domain.usecase.appConfig.SavePermissionFlagUseCase
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.fcm.SaveFcmTokenUseCase
-import com.bottari.domain.usecase.notification.DeleteNotificationUseCase
-import com.bottari.domain.usecase.notification.GetNotificationsUseCase
+import com.bottari.domain.usecase.notification.FetchNotificationsUseCase
 import com.bottari.domain.usecase.report.ReportTemplateUseCase
 
 object CommonUseCaseProvider {
@@ -21,11 +20,8 @@ object CommonUseCaseProvider {
     val reportTemplateUseCase: ReportTemplateUseCase by lazy {
         ReportTemplateUseCase(RepositoryProvider.reportRepository)
     }
-    val getNotificationsUseCase: GetNotificationsUseCase by lazy {
-        GetNotificationsUseCase(RepositoryProvider.notificationRepository)
-    }
-    val deleteNotificationUseCase: DeleteNotificationUseCase by lazy {
-        DeleteNotificationUseCase(RepositoryProvider.notificationRepository)
+    val fetchNotificationsUseCase: FetchNotificationsUseCase by lazy {
+        FetchNotificationsUseCase(RepositoryProvider.bottariRepository)
     }
     val saveFcmTokenUseCase: SaveFcmTokenUseCase by lazy {
         SaveFcmTokenUseCase(RepositoryProvider.fcmRepository)

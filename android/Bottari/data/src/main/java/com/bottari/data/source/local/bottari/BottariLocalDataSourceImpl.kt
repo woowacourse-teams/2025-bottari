@@ -4,6 +4,7 @@ import androidx.room.withTransaction
 import com.bottari.data.local.bottari.BottariDao
 import com.bottari.data.local.bottari.BottariDatabase
 import com.bottari.data.model.local.bottari.BottariEntity
+import com.bottari.data.model.local.bottari.BottariWithAlarm
 import com.bottari.data.model.local.bottari.BottariWithAlarmAndItems
 import com.bottari.data.model.local.bottari.ItemEntity
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +15,8 @@ class BottariLocalDataSourceImpl(
     private val dao: BottariDao = database.bottariDao()
 
     override fun fetchBottaries(): Flow<List<BottariWithAlarmAndItems>> = dao.fetchBottariesWithAlarmAndItems()
+
+    override suspend fun fetchBottariesWithAlarm(): Result<List<BottariWithAlarm>> = runCatching { dao.fetchBottariesWithAlarm() }
 
     override fun findBottari(id: Long): Flow<BottariWithAlarmAndItems?> = dao.findBottariWithAlarmAndItems(id)
 
