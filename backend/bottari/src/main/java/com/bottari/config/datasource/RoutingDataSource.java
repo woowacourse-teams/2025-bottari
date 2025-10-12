@@ -15,6 +15,7 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
             return DataSourceType.REPLICA;
         }
         log.debug("Routing to DataSource: {}", "master");
+
         return DataSourceType.MASTER;
     }
 }

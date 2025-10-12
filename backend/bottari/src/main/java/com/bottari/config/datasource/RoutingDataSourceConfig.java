@@ -39,10 +39,10 @@ public class RoutingDataSourceConfig {
         final Map<Object, Object> dataSourceMap = new HashMap<>();
         dataSourceMap.put(DataSourceType.MASTER, masterDataSource);
         dataSourceMap.put(DataSourceType.REPLICA, replicaDataSource);
-
         final RoutingDataSource routingDataSource = new RoutingDataSource();
         routingDataSource.setDefaultTargetDataSource(masterDataSource);
         routingDataSource.setTargetDataSources(dataSourceMap);
+
         return routingDataSource;
     }
 
