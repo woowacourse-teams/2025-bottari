@@ -1,6 +1,7 @@
 package com.bottari.data.repository
 
 import com.bottari.data.model.local.bottari.BottariEntity
+import com.bottari.data.model.local.bottari.BottariWithAlarm
 import com.bottari.data.model.local.bottari.BottariWithAlarmAndItems
 import com.bottari.data.source.local.bottari.BottariLocalDataSource
 import com.bottari.domain.model.bottari.personal.PersonalBottari
@@ -20,17 +21,7 @@ class BottariRepositoryImpl(
     override suspend fun fetchNotifications(): Result<List<Notification>> =
         bottariLocalDataSource
             .fetchBottariesWithAlarm()
-            .mapCatching { bottariesWithAlarm ->
-                bottariesWithAlarm.mapNotNull { bottariWithAlarm ->
-                    bottariWithAlarm.alarm?.let { alarm ->
-                        Notification(
-                            bottariId = bottariWithAlarm.bottari.id,
-                            bottariTitle = bottariWithAlarm.bottari.title,
-                            alarm = alarm.toDomain(),
-                        )
-                    }
-                }
-            }
+            .mapCatching(::toNotifications)
 
     override fun findBottari(id: Long): Flow<PersonalBottari?> =
         bottariLocalDataSource
@@ -61,4 +52,15 @@ class BottariRepositoryImpl(
             id,
             title,
         )
+
+    private fun toNotifications(bottariesWithAlarm: List<BottariWithAlarm>): List<Notification> =
+        bottariesWithAlarm.mapNotNull { bottariWithAlarm ->
+            bottariWithAlarm.alarm?.let { alarm ->
+                Notification(
+                    bottariId = bottariWithAlarm.bottari.id,
+                    bottariTitle = bottariWithAlarm.bottari.title,
+                    alarm = alarm.toDomain(),
+                )
+            }
+        }
 }
