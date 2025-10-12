@@ -1,0 +1,37 @@
+services:
+  bottari-master:
+    image: mysql:8.0.42
+    container_name: bottari-master
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: bottari
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./master/data:/var/lib/mysql
+      - ./master/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./master/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-p1234" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+  bottari-replica:
+    image: mysql:8.0.42
+    container_name: bottari-replica
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: bottari
+    ports:
+      - "3308:3306"
+    depends_on:
+      bottari-master:
+        condition: service_healthy
+    volumes:
+      - ./replica/data:/var/lib/mysql
+      - ./replica/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./replica/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: [ "bash", "-c", "sleep 3 && docker-entrypoint.sh mysqld" ]
