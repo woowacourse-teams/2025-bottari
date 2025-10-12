@@ -101,7 +101,7 @@ class PersonalBottariEditViewModel(
                     )
                 }
                 BottariLogger.ui(
-                    if (alarm.isActive) UiEventType.ALARM_ACTIVE else UiEventType.ALARM_INACTIVE,
+                    if (newActiveState) UiEventType.ALARM_ACTIVE else UiEventType.ALARM_INACTIVE,
                     mapOf("alarm_id" to alarm.id!!),
                 )
             }.onFailure {
