@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.bottari.bottari"
-        versionName = libs.versions.versionName.get()
+        versionName = System.getenv("VERSION_NAME") ?: libs.versions.versionName.get()
         versionCode =
             System.getenv("VERSION_CODE")?.toIntOrNull() ?: libs.versions.versionCode
                 .get()
