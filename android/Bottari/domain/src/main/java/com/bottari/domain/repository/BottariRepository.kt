@@ -1,10 +1,13 @@
 package com.bottari.domain.repository
 
 import com.bottari.domain.model.bottari.personal.PersonalBottari
+import com.bottari.domain.model.notification.Notification
 import kotlinx.coroutines.flow.Flow
 
 interface BottariRepository {
     fun fetchBottaries(): Flow<List<PersonalBottari>>
+
+    suspend fun fetchNotifications(): Result<List<Notification>>
 
     fun findBottari(id: Long): Flow<PersonalBottari?>
 

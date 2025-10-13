@@ -3,6 +3,7 @@ package com.bottari.presentation.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.bottari.domain.model.notification.Notification
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.extension.getParcelableCompat
@@ -20,7 +21,7 @@ class AlarmReceiver : BroadcastReceiver() {
     ) {
         val notification = intent.getParcelableCompat<NotificationUiModel>(EXTRA_NOTIFICATION)
         notificationHelper.sendPersonalNotification(notification.bottariId, notification.bottariTitle)
-        scheduleNextAlarm(notification = notification)
+        scheduleNextAlarm(notification = notification.toDomain())
         BottariLogger.ui(
             UiEventType.NOTIFICATION_CREATE,
             mapOf("notification_id" to notification.bottariId, "time" to LocalDateTime.now().toString()),
@@ -32,13 +33,13 @@ class AlarmReceiver : BroadcastReceiver() {
 
         fun newIntent(
             context: Context,
-            notification: NotificationUiModel,
+            notification: Notification,
         ): Intent =
             Intent(
                 context,
                 AlarmReceiver::class.java,
             ).apply {
-                putExtra(EXTRA_NOTIFICATION, notification)
+                putExtra(EXTRA_NOTIFICATION, NotificationUiModel.fromDomain(notification))
             }
     }
 }

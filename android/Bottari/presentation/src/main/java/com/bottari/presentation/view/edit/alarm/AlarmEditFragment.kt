@@ -71,7 +71,7 @@ class AlarmEditFragment :
     private fun setupObserver() {
         collectWithLifecycle(viewModel.uiState) { uiState ->
             toggleLoadingIndicator(uiState.isLoading)
-            handleConfirmButtonState(uiState.isRepeatWithoutDays.not())
+            handleConfirmButtonState(uiState.isSavable)
             uiState.alarm?.let { alarm ->
                 handleAlarmState(alarm)
                 if (alarm.type == AlarmTypeUiModel.NON_REPEAT) {
@@ -124,7 +124,7 @@ class AlarmEditFragment :
     private fun handleAlarmEvent(uiEvent: AlarmUiEvent) {
         when (uiEvent) {
             is AlarmUiEvent.SaveAlarmSuccess -> {
-                scheduleAlarm(notification = uiEvent.notification)
+                scheduleAlarm(notification = uiEvent.notification.toDomain())
                 requireView().showSnackbar(R.string.alarm_edit_save_success_text)
                 parentFragmentManager.popBackStack()
             }
