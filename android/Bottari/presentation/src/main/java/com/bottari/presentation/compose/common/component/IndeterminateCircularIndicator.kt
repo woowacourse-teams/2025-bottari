@@ -22,7 +22,7 @@ fun IndeterminateCircularIndicator() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun IndeterminateCircularIndicatorPreview() {
     IndeterminateCircularIndicator()
