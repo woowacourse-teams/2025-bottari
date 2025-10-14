@@ -84,8 +84,7 @@ fun BottariMenuDropdown(
 @Preview
 @Composable
 private fun BottariMenuDropdownPreview() {
-    Box (modifier = Modifier.padding(150.dp)){
-
+    Box(modifier = Modifier.padding(150.dp)) {
         BottariMenuDropdown(
             expanded = true,
             onDismissRequest = {},
