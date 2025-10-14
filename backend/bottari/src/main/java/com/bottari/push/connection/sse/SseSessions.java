@@ -16,7 +16,7 @@ public class SseSessions {
     public Optional<SseEmitter> findByMemberId(final Long memberId) {
         final SseEmitter emitter = sseEmittersByMemberId.get(memberId);
 
-        return Optional.of(emitter);
+        return Optional.ofNullable(emitter);
     }
 
     public List<SseEmitter> findAllByMemberIds(final List<Long> memberIds) {
