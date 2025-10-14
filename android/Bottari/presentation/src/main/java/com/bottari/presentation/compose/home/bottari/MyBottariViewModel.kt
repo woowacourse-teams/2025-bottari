@@ -118,14 +118,13 @@ class MyBottariViewModel(
             createTeamBottariUseCase(title)
                 .onSuccess { bottariId ->
                     bottariId?.let { id ->
-                        updateState { copy(isLoading = false) }
                         emitEvent(MyBottariUiEvent.CreateTeamBottariSuccess(id))
                         fetchTeamBottaries()
                     }
                 }.onFailure {
-                    updateState { copy(isLoading = false) }
                     emitEvent(MyBottariUiEvent.CreateBottariFailure)
                 }
+            updateState { copy(isLoading = false) }
             closeDialog()
         }
     }
