@@ -12,6 +12,7 @@ kotlin = "2.0.21"
 jvmTarget = "21"
 jetbrainsKotlinJvm = "2.0.21"
 kotlinxCoroutinesCore = "1.10.2"
+ksp = "2.0.21-1.0.28"
 
 # AndroidX
 coreKtx = "1.16.0"
@@ -144,6 +145,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 # --- Code Quality Plugins ---
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
