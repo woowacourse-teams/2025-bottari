@@ -87,6 +87,7 @@ class MyBottariViewModel(
     private fun inputTeamBottariCode(code: String) {
         launch {
             updateState { copy(isLoading = true) }
+            closeDialog()
             joinTeamBottariUseCase(code)
                 .onSuccess {
                     fetchTeamBottaries()
@@ -94,13 +95,13 @@ class MyBottariViewModel(
                     emitEvent(MyBottariUiEvent.JoinTeamBottariFailure)
                 }
             updateState { copy(isLoading = false) }
-            closeDialog()
         }
     }
 
     private fun createPersonalBottari(title: String) {
         launch {
             updateState { copy(isLoading = true) }
+            closeDialog()
             createBottariUseCase(title)
                 .onSuccess { bottariId ->
                     emitEvent(MyBottariUiEvent.CreatePersonalBottariSuccess(bottariId))
@@ -108,13 +109,13 @@ class MyBottariViewModel(
                     emitEvent(MyBottariUiEvent.CreateBottariFailure)
                 }
             updateState { copy(isLoading = false) }
-            closeDialog()
         }
     }
 
     private fun createTeamBottari(title: String) {
         launch {
             updateState { copy(isLoading = true) }
+            closeDialog()
             createTeamBottariUseCase(title)
                 .onSuccess { bottariId ->
                     bottariId?.let { id ->
@@ -125,7 +126,6 @@ class MyBottariViewModel(
                     emitEvent(MyBottariUiEvent.CreateBottariFailure)
                 }
             updateState { copy(isLoading = false) }
-            closeDialog()
         }
     }
 
