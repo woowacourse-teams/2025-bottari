@@ -92,10 +92,10 @@ private fun buildFabMenuItems(
 ): List<FabMenuItem> {
     val personalBottariText = stringResource(R.string.personal_bottari_create_btn_text)
     val teamBottariText = stringResource(R.string.team_bottari_create_btn_text)
-    val joinTeamText = stringResource(R.string.team_bottari_join_btn_text)
+    val joinTeamBottariText = stringResource(R.string.team_bottari_join_btn_text)
 
     return listOf(
-        FabMenuItem(R.drawable.ic_team_invite_code, joinTeamText, onOpenCodeDialog),
+        FabMenuItem(R.drawable.ic_team_invite_code, joinTeamBottariText, onOpenCodeDialog),
         FabMenuItem(R.drawable.ic_people, teamBottariText, onOpenTeamDialog),
         FabMenuItem(R.drawable.ic_person_filled, personalBottariText, onOpenPersonalDialog),
     )
