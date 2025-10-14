@@ -414,6 +414,9 @@ public class TeamAssignedItemService {
             final TeamAssignedItemInfo info,
             final List<Long> uncheckedMemberIds
     ) {
+        if (uncheckedMemberIds.isEmpty()) {
+            return;
+        }
         final PushMessage pushMessage = teamBottariMessageConverter.convert(
                 MessageResourceType.ASSIGNED_ITEM_INFO,
                 MessageEventType.REMIND,
