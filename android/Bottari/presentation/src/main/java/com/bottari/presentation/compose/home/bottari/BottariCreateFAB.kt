@@ -53,7 +53,7 @@ fun BottariCreateFAB(
     val openMenuBtnDescription = stringResource(R.string.bottari_btn_create_description)
     val openStateDescription = stringResource(R.string.common_state_open_description)
     val closeStateDescription = stringResource(R.string.common_state_close_description)
-    val menuCloseLabel = stringResource(R.string.bottari_action_close_label)
+    val menuCloseLabel = stringResource(R.string.bottari_action_close_label_description)
 
     val primaryColor = BottariTheme.colors.primary
     val white = BottariTheme.colors.white

@@ -336,10 +336,10 @@
     <string name="team_status_send_remind_btn_text">보채기</string>
 
     <!-- Description 접근성 -->
-    <string name="bottari_edit_btn_description_text">보따리 수정 버튼</string>
-    <string name="bottari_delete_btn_description_text">보따리 삭제 버튼</string>
+    <string name="bottari_edit_btn_description">보따리 수정 버튼</string>
+    <string name="bottari_delete_btn_description">보따리 삭제 버튼</string>
     <string name="bottari_btn_create_description">보따리 만들기 메뉴 열기 버튼</string>
-    <string name="bottari_action_close_label">보따리 만들기 메뉴 닫기</string>
+    <string name="bottari_action_close_label_description">보따리 만들기 메뉴 닫기</string>
     <string name="bottari_btn_template_delete_description">보따리 템플릿 삭제 버튼</string>
     <string name="bottari_btn_item_add_description">물건 추가 버튼</string>
     <string name="bottari_btn_more_description">더보기 버튼</string>

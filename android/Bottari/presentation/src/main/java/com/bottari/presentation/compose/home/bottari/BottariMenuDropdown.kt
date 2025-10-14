@@ -52,7 +52,7 @@ fun BottariMenuDropdown(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_edit),
-                    contentDescription = stringResource(R.string.bottari_edit_btn_description_text),
+                    contentDescription = stringResource(R.string.bottari_edit_btn_description),
                     modifier = Modifier.size(30.dp),
                 )
             }
@@ -73,7 +73,7 @@ fun BottariMenuDropdown(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_delete),
-                    contentDescription = stringResource(R.string.bottari_delete_btn_description_text),
+                    contentDescription = stringResource(R.string.bottari_delete_btn_description),
                     modifier = Modifier.size(30.dp),
                 )
             }
