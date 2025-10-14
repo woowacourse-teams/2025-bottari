@@ -52,11 +52,6 @@ fun BottariCreateFAB(
     var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
     val items = rememberFabMenuItems(onOpenPersonalDialog, onOpenTeamDialog, onOpenCodeDialog)
 
-    val openMenuBtnDescription = stringResource(R.string.bottari_btn_create_description)
-    val openStateDescription = stringResource(R.string.common_state_open_description)
-    val closeStateDescription = stringResource(R.string.common_state_close_description)
-    val menuCloseLabel = stringResource(R.string.bottari_action_close_label_description)
-
     val primaryColor = BottariTheme.colors.primary
     val whiteColor = BottariTheme.colors.white
 
@@ -71,9 +66,6 @@ fun BottariCreateFAB(
                 containerColor = primaryColor,
                 contentColor = whiteColor,
                 focusRequester = focusRequester,
-                openMenuBtnDescription = openMenuBtnDescription,
-                openStateDescription = openStateDescription,
-                closeStateDescription = closeStateDescription,
             )
         },
     ) {
@@ -86,7 +78,6 @@ fun BottariCreateFAB(
                 containerColor = primaryColor,
                 contentColor = whiteColor,
                 focusRequester = focusRequester,
-                menuCloseLabel = menuCloseLabel,
             )
         }
     }
@@ -117,10 +108,11 @@ private fun BottariCreateToggleFloatingActionButton(
     containerColor: Color,
     contentColor: Color,
     focusRequester: FocusRequester,
-    openMenuBtnDescription: String,
-    openStateDescription: String,
-    closeStateDescription: String,
 ) {
+    val openMenuBtnDescription = stringResource(R.string.bottari_btn_create_description)
+    val openStateDescription = stringResource(R.string.common_state_open_description)
+    val closeStateDescription = stringResource(R.string.common_state_close_description)
+
     ToggleFloatingActionButton(
         checked = fabMenuExpanded,
         onCheckedChange = { onChangeExpandedState(it) },
@@ -160,8 +152,9 @@ private fun FloatingActionButtonMenuScope.BottariFabMenuItem(
     containerColor: Color,
     contentColor: Color,
     focusRequester: FocusRequester,
-    menuCloseLabel: String,
 ) {
+    val menuCloseLabel = stringResource(R.string.bottari_action_close_label_description)
+
     FloatingActionButtonMenuItem(
         onClick = {
             onCloseMenu()
