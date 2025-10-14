@@ -56,7 +56,11 @@ public class TeamBottariEventListener {
                 CreateTeamMemberData.from(event)
         );
         final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
-        pushManager.multicast(pushMessage, memberIds, ChannelType.SSE);
+        pushManager.message(pushMessage)
+                .to(memberIds)
+                .unicast()
+                .viaConnection(ChannelType.SSE)
+                .send();
     }
 
     @Async
@@ -75,8 +79,16 @@ public class TeamBottariEventListener {
                 CreateTeamSharedItemData.from(event)
         );
         final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
-        pushManager.multicast(createSharedItemInfoMessage, memberIds, ChannelType.SSE);
-        pushManager.multicast(createSharedItemMessage, memberIds, ChannelType.SSE);
+        pushManager.message(createSharedItemInfoMessage)
+                .to(memberIds)
+                .multicast()
+                .viaConnection(ChannelType.SSE)
+                .send();
+        pushManager.message(createSharedItemMessage)
+                .to(memberIds)
+                .multicast()
+                .viaConnection(ChannelType.SSE)
+                .send();
     }
 
     @Async
@@ -95,8 +107,16 @@ public class TeamBottariEventListener {
                 DeleteTeamSharedItemData.from(event)
         );
         final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
-        pushManager.multicast(deleteSharedItemInfoMessage, memberIds, ChannelType.SSE);
-        pushManager.multicast(deleteSharedItemMessage, memberIds, ChannelType.SSE);
+        pushManager.message(deleteSharedItemInfoMessage)
+                .to(memberIds)
+                .multicast()
+                .viaConnection(ChannelType.SSE)
+                .send();
+        pushManager.message(deleteSharedItemMessage)
+                .to(memberIds)
+                .multicast()
+                .viaConnection(ChannelType.SSE)
+                .send();
     }
 
     @Async
@@ -108,7 +128,11 @@ public class TeamBottariEventListener {
                 CheckTeamItemData.from(event)
         );
         final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
-        pushManager.multicast(message, memberIds, ChannelType.SSE);
+        pushManager.message(message)
+                .to(memberIds)
+                .multicast()
+                .viaConnection(ChannelType.SSE)
+                .send();
     }
 
     @Async
@@ -120,7 +144,11 @@ public class TeamBottariEventListener {
                 CheckTeamItemData.from(event)
         );
         final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
-        pushManager.multicast(message, memberIds, ChannelType.SSE);
+        pushManager.message(message)
+                .to(memberIds)
+                .multicast()
+                .viaConnection(ChannelType.SSE)
+                .send();
     }
 
     @Async
@@ -139,8 +167,16 @@ public class TeamBottariEventListener {
                 CreateAssignedItemData.from(event)
         );
         final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
-        pushManager.multicast(createAssignedItemInfoMessage, memberIds, ChannelType.SSE);
-        pushManager.multicast(createAssignedItemMessage, memberIds, ChannelType.SSE);
+        pushManager.message(createAssignedItemInfoMessage)
+                .to(memberIds)
+                .multicast()
+                .viaConnection(ChannelType.SSE)
+                .send();
+        pushManager.message(createAssignedItemMessage)
+                .to(memberIds)
+                .multicast()
+                .viaConnection(ChannelType.SSE)
+                .send();
     }
 
     @Async
@@ -152,7 +188,11 @@ public class TeamBottariEventListener {
                 ChangeAssignedItemData.from(event)
         );
         final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
-        pushManager.multicast(message, memberIds, ChannelType.SSE);
+        pushManager.message(message)
+                .to(memberIds)
+                .multicast()
+                .viaConnection(ChannelType.SSE)
+                .send();
     }
 
     @Async
@@ -171,8 +211,16 @@ public class TeamBottariEventListener {
                 DeleteAssignedItemData.from(event)
         );
         final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
-        pushManager.multicast(deleteAssignedItemInfoMessage, memberIds, ChannelType.SSE);
-        pushManager.multicast(deleteAssignedItemMessage, memberIds, ChannelType.SSE);
+        pushManager.message(deleteAssignedItemInfoMessage)
+                .to(memberIds)
+                .multicast()
+                .viaConnection(ChannelType.SSE)
+                .send();
+        pushManager.message(deleteAssignedItemMessage)
+                .to(memberIds)
+                .multicast()
+                .viaConnection(ChannelType.SSE)
+                .send();
     }
 
     @Async
@@ -183,6 +231,10 @@ public class TeamBottariEventListener {
                 MessageEventType.DELETE,
                 ExitTeamMemberData.from(event)
         );
-        pushManager.multicast(message, event.getRemainMemberIds(), ChannelType.FCM, ChannelType.SSE);
+        pushManager.message(message)
+                .to(event.getExitMemberId())
+                .unicast()
+                .viaConnection(ChannelType.SSE)
+                .send();
     }
 }

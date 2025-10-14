@@ -13,8 +13,9 @@ import com.bottari.error.BusinessException;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
-import com.bottari.push.ChannelType;
 import com.bottari.push.PushManager;
+import com.bottari.push.connection.ConnectionChannels;
+import com.bottari.push.notification.NotificationChannels;
 import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
@@ -43,6 +44,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 @Import({
         TeamMemberService.class,
         TeamBottariMessageConverter.class,
+        PushManager.class,
 })
 class TeamMemberServiceTest {
 
@@ -53,7 +55,10 @@ class TeamMemberServiceTest {
     private EntityManager entityManager;
 
     @MockitoBean
-    private PushManager pushManager;
+    private NotificationChannels notificationChannels;
+
+    @MockitoBean
+    private ConnectionChannels connectionChannels;
 
     @Nested
     class GetTeamMemberInfoByTeamBottariIdTest {
@@ -521,7 +526,7 @@ class TeamMemberServiceTest {
             final TeamAssignedItem teamAssignedItem = new TeamAssignedItem(teamAssignedItemInfo, anotherTeamMember);
             entityManager.persist(teamAssignedItem);
 
-            doNothing().when(pushManager).unicast(any(), eq(anotherMember.getId()), eq(ChannelType.FCM));
+            doNothing().when(notificationChannels).unicast(any(), eq(anotherMember.getId()));
 
             // when & then
             assertThatCode(() -> teamMemberService.sendRemindAlarm(
@@ -529,7 +534,8 @@ class TeamMemberServiceTest {
                     anotherMember.getId(),
                     owner.getSsaid())
             ).doesNotThrowAnyException();
-            verify(pushManager).unicast(any(), eq(anotherMember.getId()), eq(ChannelType.FCM));
+
+            verify(notificationChannels).unicast(any(), eq(anotherMember.getId()));
         }
 
         @DisplayName("존재하지 않는 ssaid인 경우, 예외를 던진다.")

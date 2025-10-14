@@ -14,8 +14,9 @@ import com.bottari.error.BusinessException;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
-import com.bottari.push.ChannelType;
 import com.bottari.push.PushManager;
+import com.bottari.push.connection.ConnectionChannels;
+import com.bottari.push.notification.NotificationChannels;
 import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
@@ -41,6 +42,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 @Import({
         TeamAssignedItemService.class,
         TeamBottariMessageConverter.class,
+        PushManager.class,
         JpaAuditingConfig.class,
 })
 class TeamAssignedItemServiceTest {
@@ -49,7 +51,10 @@ class TeamAssignedItemServiceTest {
     private TeamAssignedItemService teamAssignedItemService;
 
     @MockitoBean
-    private PushManager pushManager;
+    private NotificationChannels notificationChannels;
+
+    @MockitoBean
+    private ConnectionChannels connectionChannels;
 
     @Autowired
     private EntityManager entityManager;
@@ -762,13 +767,14 @@ class TeamAssignedItemServiceTest {
                     antherMember.getId()
             );
 
-            doNothing().when(pushManager).multicast(any(), eq(uncheckedMemberIds), eq(ChannelType.FCM));
+            doNothing().when(notificationChannels).multicast(any(), eq(uncheckedMemberIds));
 
             // when & then
             assertThatCode(
                     () -> teamAssignedItemService.sendRemindAlarm(teamAssignedItemInfo.getId(), member.getSsaid()))
                     .doesNotThrowAnyException();
-            verify(pushManager).multicast(any(), eq(uncheckedMemberIds), eq(ChannelType.FCM));
+
+            verify(notificationChannels).multicast(any(), eq(uncheckedMemberIds));
         }
 
         @DisplayName("보채기 알람을 보낼 때, 물품 정보가 존재하지 않는다면 예외를 던진다.")

@@ -16,45 +16,6 @@ public class PushManager {
     private final NotificationChannels notificationChannels;
     private final ConnectionChannels connectionChannels;
 
-    //region 하위호환 메서드
-    public void unicast(
-            final PushMessage message,
-            final Long memberId,
-            final ChannelType... channelTypes
-    ) {
-        message(message)
-                .to(memberId)
-                .unicast()
-                .viaConnection(channelTypes[0])
-                .viaNotification()
-                .send();
-    }
-
-    public void multicast(
-            final PushMessage message,
-            final List<Long> memberIds,
-            final ChannelType... channelTypes
-    ) {
-        message(message)
-                .to(memberIds)
-                .multicast()
-                .viaConnection(channelTypes[0])
-                .viaNotification()
-                .send();
-    }
-
-    public void broadcast(
-            final PushMessage message,
-            final ChannelType... channelTypes
-    ) {
-        message(message)
-                .broadcast()
-                .viaConnection(channelTypes[0])
-                .viaNotification()
-                .send();
-    }
-    //endregion
-
     public StartChain message(final PushMessage message) {
         return new StartChain(message);
     }
@@ -100,7 +61,7 @@ public class PushManager {
         void send();
     }
 
-    public static class ChannelChain implements ActionOrSendStep {
+    public class ChannelChain implements ActionOrSendStep {
 
         private final ChannelExecutor channelExecutor;
         private final PushMessage message;
@@ -130,7 +91,7 @@ public class PushManager {
 
         @Override
         public void send() {
-            new ChainExecutor(actions).execute();
+            new ChainActionsExecutor().execute(actions);
         }
     }
 
@@ -208,21 +169,15 @@ public class PushManager {
         }
     }
 
-    public static final class ChainExecutor implements MultiRunnableExecutor {
-
-        private final List<Runnable> actions;
-
-        public ChainExecutor(final List<Runnable> actions) {
-            this.actions = actions;
-        }
+    public static final class ChainActionsExecutor implements MultiRunnableExecutor {
 
         @Override
-        public void execute() {
+        public void execute(final List<Runnable> actions) {
             actions.forEach(Runnable::run);
         }
 
         @Override
-        public void executeAsync() {
+        public void executeAsync(final List<Runnable> actions) {
             throw new UnsupportedOperationException();
         }
     }

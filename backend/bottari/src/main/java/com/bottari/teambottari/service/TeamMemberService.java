@@ -6,10 +6,10 @@ import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.push.ChannelType;
 import com.bottari.push.PushManager;
-import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.push.message.MessageEventType;
 import com.bottari.push.message.MessageResourceType;
 import com.bottari.push.message.PushMessage;
+import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
@@ -51,9 +51,9 @@ public class TeamMemberService {
 
     @Transactional(readOnly = true)
     public List<Long> getMemberIdsByTeamBottariId(final Long teamBottariId) {
-            return teamMemberRepository.findAllByTeamBottariId(teamBottariId).stream()
-                    .map(teamMember -> teamMember.getMember().getId())
-                    .toList();
+        return teamMemberRepository.findAllByTeamBottariId(teamBottariId).stream()
+                .map(teamMember -> teamMember.getMember().getId())
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -280,6 +280,10 @@ public class TeamMemberService {
                 uncheckedSharedItemInfos,
                 uncheckedAssignedItemsInfos
         );
-        pushManager.unicast(pushMessage, receiver.getId(), ChannelType.FCM);
+        pushManager.message(pushMessage)
+                .to(receiver.getId())
+                .unicast()
+                .viaNotification()
+                .send();
     }
 }

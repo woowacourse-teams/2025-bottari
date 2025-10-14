@@ -23,8 +23,6 @@ public class TeamBottariMessageConverter {
     private static final String TEAM_ITEM_NAME = "teamItemName";
     private static final String TEAM_SHARED_ITEM_NAMES = "teamSharedItemNames";
     private static final String TEAM_ASSIGNED_ITEM_NAMES = "teamAssignedItemNames";
-    private static final String EXIT_MEMBER_ID = "exitMemberId";
-    private static final String EXIT_MEMBER_NAME = "exitMemberName";
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

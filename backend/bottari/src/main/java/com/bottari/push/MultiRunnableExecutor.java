@@ -1,8 +1,10 @@
 package com.bottari.push;
 
+import java.util.List;
+
 public interface MultiRunnableExecutor {
 
-    void execute();
+    void execute(final List<Runnable> actions);
 
-    void executeAsync();
+    void executeAsync(final List<Runnable> actions);
 }

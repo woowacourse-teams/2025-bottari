@@ -5,10 +5,10 @@ import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
 import com.bottari.push.PushManager;
-import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.push.message.MessageEventType;
 import com.bottari.push.message.MessageResourceType;
 import com.bottari.push.message.PushMessage;
+import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
@@ -270,7 +270,11 @@ public class TeamSharedItemService {
                 info.getTeamBottari(),
                 info
         );
-        pushManager.multicast(pushMessage, uncheckedMemberIds);
+        pushManager.message(pushMessage)
+                .to(uncheckedMemberIds)
+                .multicast()
+                .viaNotification()
+                .send();
     }
 
     private void validateOwner(

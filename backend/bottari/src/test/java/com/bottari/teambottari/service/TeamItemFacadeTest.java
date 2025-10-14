@@ -11,6 +11,8 @@ import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
 import com.bottari.push.PushManager;
+import com.bottari.push.connection.ConnectionChannels;
+import com.bottari.push.notification.NotificationChannels;
 import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
@@ -53,6 +55,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
         TeamAssignedItemService.class,
         TeamPersonalItemService.class,
         TeamBottariMessageConverter.class,
+        PushManager.class,
         JpaAuditingConfig.class
 })
 public class TeamItemFacadeTest {
@@ -61,7 +64,10 @@ public class TeamItemFacadeTest {
     private TeamItemFacade teamItemFacade;
 
     @MockitoBean
-    private PushManager pushManager;
+    private NotificationChannels notificationChannels;
+
+    @MockitoBean
+    private ConnectionChannels connectionChannels;
 
     @Autowired
     private EntityManager entityManager;
