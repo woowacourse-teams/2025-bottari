@@ -50,9 +50,6 @@ public class TeamBottariService {
     private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
     private final TeamAssignedItemInfoRepository teamAssignedItemInfoRepository;
 
-    private final PushManager pushManager;
-    private final TeamBottariMessageConverter teamBottariMessageConverter;
-
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional(readOnly = true)
