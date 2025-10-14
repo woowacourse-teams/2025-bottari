@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.team
+package com.bottari.presentation.compose.home.bottari
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

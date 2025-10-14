@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.team
+package com.bottari.presentation.compose.home.bottari
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -19,9 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariTabBar
+import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
@@ -95,6 +95,10 @@ fun MyBottariContent(
                         else -> emptyList()
                     }
 
+                if (currentList.isEmpty()) {
+                    MyBottariEmptyView()
+                }
+
                 BottariList(
                     bottaries = currentList,
                     listState = listState,
@@ -113,14 +117,15 @@ fun MyBottariContent(
             enter = fadeIn(),
             exit = fadeOut(),
         ) {
-            AddBottariButton(
-                buttonSize = 80.dp,
-                isExpanded = isFabExpanded,
-                onExpandClick = { isFabExpanded = !isFabExpanded },
-                onCodeClick = onOpenCodeDialog,
-                onTeamClick = onOpenTeamDialog,
-                onPersonalClick = onOpenPersonalDialog,
+            BottariCreateFAB(
+                onOpenPersonalDialog = onOpenPersonalDialog,
+                onOpenTeamDialog = onOpenTeamDialog,
+                onOpenCodeDialog = onOpenCodeDialog,
             )
+        }
+
+        if (uiState.isLoading) {
+            IndeterminateCircularIndicator()
         }
     }
 }

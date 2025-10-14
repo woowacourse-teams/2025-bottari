@@ -36,6 +36,8 @@ composeBom = "2025.09.00"
 activityCompose = "1.10.1"
 lifecycleViewmodelCompose = "2.9.4"
 runtimeLivedata = "1.9.1"
+material3 = "1.5.0-alpha04"
+materialIconsExtendedAndroid = "1.7.8"
 
 # Network
 retrofit = "3.0.0"
@@ -91,7 +93,8 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+androidx-material-icons-extended-android = { module = "androidx.compose.material:material-icons-extended-android", version.ref = "materialIconsExtendedAndroid" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }

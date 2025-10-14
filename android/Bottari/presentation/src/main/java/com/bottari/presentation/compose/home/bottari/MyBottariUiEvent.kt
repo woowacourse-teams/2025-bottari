@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.team
+package com.bottari.presentation.compose.home.bottari
 
 sealed interface MyBottariUiEvent {
     data object FetchBottariFailure : MyBottariUiEvent

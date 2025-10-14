@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.team
+package com.bottari.presentation.compose.home.bottari
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -74,7 +75,7 @@ fun BottariItem(
                 text = bottari.title,
                 style = BottariTheme.typography.semiBold24.toTextStyle(),
             )
-            Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
+            Spacer(modifier = Modifier.height(BottariTheme.spacing.space2xSmall))
             BottariCheckInfo(
                 checkedQuantity = bottari.checkedQuantity,
                 totalQuantity = bottari.totalQuantity,
@@ -332,5 +333,10 @@ private fun TeamBottariScreenPreview() {
         onCloseMenu = {},
         onBottariDelete = {},
         onBottariEdit = {},
+        modifier =
+            Modifier
+                .padding(
+                    horizontal = BottariTheme.spacing.spaceMedium,
+                ),
     )
 }

@@ -106,6 +106,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.material.icons.extended.android)
 
     implementation(libs.material)
     implementation(libs.cardstackview)

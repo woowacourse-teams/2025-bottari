@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.team
+package com.bottari.presentation.compose.home.bottari
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable

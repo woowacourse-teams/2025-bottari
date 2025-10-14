@@ -14,8 +14,8 @@ import com.bottari.presentation.compose.common.navigation.Navigation
 import com.bottari.presentation.compose.common.navigation.NavigationController
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
+import com.bottari.presentation.compose.home.bottari.MyBottariScreen
 import com.bottari.presentation.compose.home.more.MoreBottariScreen
-import com.bottari.presentation.compose.home.team.MyBottariScreen
 import com.bottari.presentation.compose.home.template.TemplateBottariScreen
 
 @Composable
