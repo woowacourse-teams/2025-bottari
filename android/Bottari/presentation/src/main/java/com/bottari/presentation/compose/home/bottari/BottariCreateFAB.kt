@@ -62,7 +62,7 @@ fun BottariCreateFAB(
         button = {
             BottariCreateToggleFloatingActionButton(
                 fabMenuExpanded = fabMenuExpanded,
-                onChangeExpandedState = { fabMenuExpanded = it },
+                onChangeExpandedState = { expandedState -> fabMenuExpanded = expandedState },
                 containerColor = primaryColor,
                 contentColor = whiteColor,
                 focusRequester = focusRequester,
