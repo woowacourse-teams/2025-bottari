@@ -19,10 +19,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isShiftPressed
@@ -136,7 +136,10 @@ private fun BottariCreateToggleFloatingActionButton(
         Icon(
             painter = painterResource(R.drawable.ic_close),
             contentDescription = null,
-            modifier = Modifier.rotate((1f - checkedProgress) * 45f),
+            modifier =
+                Modifier.graphicsLayer {
+                    rotationZ = (1f - checkedProgress) * 45f
+                },
             tint = contentColor,
         )
     }
