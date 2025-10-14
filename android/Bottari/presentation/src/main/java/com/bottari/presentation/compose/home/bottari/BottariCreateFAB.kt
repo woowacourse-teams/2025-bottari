@@ -39,29 +39,6 @@ import androidx.compose.ui.semantics.traversalIndex
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
-private data class FabMenuItem(
-    @DrawableRes val iconRes: Int,
-    val text: String,
-    val onClick: () -> Unit,
-)
-
-@Composable
-private fun rememberFabMenuItems(
-    onOpenPersonalDialog: () -> Unit,
-    onOpenTeamDialog: () -> Unit,
-    onOpenCodeDialog: () -> Unit,
-): List<FabMenuItem> {
-    val personalBottariText = stringResource(R.string.personal_bottari_create_btn_text)
-    val teamBottariText = stringResource(R.string.team_bottari_create_btn_text)
-    val joinTeamText = stringResource(R.string.team_bottari_join_btn_text)
-
-    return listOf(
-        FabMenuItem(R.drawable.ic_team_invite_code, joinTeamText, onOpenCodeDialog),
-        FabMenuItem(R.drawable.ic_people, teamBottariText, onOpenTeamDialog),
-        FabMenuItem(R.drawable.ic_person_filled, personalBottariText, onOpenPersonalDialog),
-    )
-}
-
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun BottariCreateFAB(
@@ -164,3 +141,26 @@ fun BottariCreateFAB(
         }
     }
 }
+
+@Composable
+private fun rememberFabMenuItems(
+    onOpenPersonalDialog: () -> Unit,
+    onOpenTeamDialog: () -> Unit,
+    onOpenCodeDialog: () -> Unit,
+): List<FabMenuItem> {
+    val personalBottariText = stringResource(R.string.personal_bottari_create_btn_text)
+    val teamBottariText = stringResource(R.string.team_bottari_create_btn_text)
+    val joinTeamText = stringResource(R.string.team_bottari_join_btn_text)
+
+    return listOf(
+        FabMenuItem(R.drawable.ic_team_invite_code, joinTeamText, onOpenCodeDialog),
+        FabMenuItem(R.drawable.ic_people, teamBottariText, onOpenTeamDialog),
+        FabMenuItem(R.drawable.ic_person_filled, personalBottariText, onOpenPersonalDialog),
+    )
+}
+
+private data class FabMenuItem(
+    @DrawableRes val iconRes: Int,
+    val text: String,
+    val onClick: () -> Unit,
+)
