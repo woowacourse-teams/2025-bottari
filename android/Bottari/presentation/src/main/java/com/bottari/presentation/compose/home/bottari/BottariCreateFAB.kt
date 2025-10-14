@@ -50,7 +50,7 @@ fun BottariCreateFAB(
 ) {
     val focusRequester = remember { FocusRequester() }
     var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
-    val items = rememberFabMenuItems(onOpenPersonalDialog, onOpenTeamDialog, onOpenCodeDialog)
+    val items = buildFabMenuItems(onOpenPersonalDialog, onOpenTeamDialog, onOpenCodeDialog)
 
     val primaryColor = BottariTheme.colors.primary
     val whiteColor = BottariTheme.colors.white
@@ -84,7 +84,7 @@ fun BottariCreateFAB(
 }
 
 @Composable
-private fun rememberFabMenuItems(
+private fun buildFabMenuItems(
     onOpenPersonalDialog: () -> Unit,
     onOpenTeamDialog: () -> Unit,
     onOpenCodeDialog: () -> Unit,
