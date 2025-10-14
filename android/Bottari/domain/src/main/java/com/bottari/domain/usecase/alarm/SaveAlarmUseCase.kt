@@ -1,29 +1,14 @@
 package com.bottari.domain.usecase.alarm
 
-import com.bottari.domain.extension.flatMap
 import com.bottari.domain.model.alarm.Alarm
-import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.AlarmRepository
-import com.bottari.domain.repository.NotificationRepository
 
 class SaveAlarmUseCase(
     private val alarmRepository: AlarmRepository,
-    private val notificationRepository: NotificationRepository,
 ) {
     suspend operator fun invoke(
         bottariId: Long,
         bottariTitle: String,
         alarm: Alarm,
-    ): Result<Unit> =
-        alarmRepository
-            .saveAlarm(bottariId, alarm)
-            .flatMap {
-                notificationRepository.saveNotification(
-                    Notification(
-                        bottariId,
-                        bottariTitle,
-                        alarm,
-                    ),
-                )
-            }
+    ): Result<Unit> = alarmRepository.saveAlarm(bottariId, alarm)
 }

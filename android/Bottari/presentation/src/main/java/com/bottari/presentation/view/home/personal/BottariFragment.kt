@@ -8,13 +8,13 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.domain.model.bottari.BottariType
+import com.bottari.domain.model.notification.Notification
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.fadeIn
 import com.bottari.presentation.common.extension.fadeOut
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentBottariBinding
-import com.bottari.presentation.model.alarm.NotificationUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.util.AlarmScheduler.cancelAlarm
 import com.bottari.presentation.view.checklist.personal.ChecklistActivity
@@ -56,7 +56,14 @@ class BottariFragment :
     override fun onBottariDeleteClick(bottari: BottariUiModel) {
         viewModel.deleteBottari(bottari.id)
         if (bottari.alarm == null) return
-        cancelAlarm(notification = NotificationUiModel(bottari.id, bottari.title, bottari.alarm))
+        cancelAlarm(
+            notification =
+                Notification(
+                    bottari.id,
+                    bottari.title,
+                    bottari.alarm.toDomain(),
+                ),
+        )
     }
 
     private fun setupObserver() {

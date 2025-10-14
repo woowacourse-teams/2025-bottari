@@ -17,7 +17,7 @@ class BottariApplication :
                 DelegatingWorkerFactory().apply {
                     addFactory(
                         NotificationWorkerFactory(
-                            getNotificationsUseCase = CommonUseCaseProvider.getNotificationsUseCase,
+                            fetchNotificationsUseCase = CommonUseCaseProvider.fetchNotificationsUseCase,
                         ),
                     )
                 }

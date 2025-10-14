@@ -50,6 +50,12 @@ jobs:
       - name: Grant execute permission
         run: chmod +x gradlew
 
+      - name: Create google-services.json
+        run: echo "$GOOGLE_SERVICES_JSON" > ./app/google-services.json
+
+      - name: Create local.properties
+        run: echo "$LOCAL_PROPERTIES_CONTENTS" > ./local.properties
+
       - name: Calculate versionCode
         run: |
           BUILD_NUMBER=$(printf "%02d" $GITHUB_RUN_NUMBER)
@@ -58,18 +64,14 @@ jobs:
 
       - name: Get versionName
         run: |
-          if [ -n "${{ github.event.inputs.versionName }}" ]; then
+          if [ "${{ github.event.inputs.versionName != '' }}" = "true" ]; then
+            echo "✅ versionName provided: '${{ github.event.inputs.versionName }}'"
             VERSION_NAME="${{ github.event.inputs.versionName }}"
           else
+            echo "ℹ️ versionName not provided, using Gradle output..."
             VERSION_NAME=$(./gradlew -q printVersionName)
           fi
           echo "VERSION_NAME=${VERSION_NAME}" >> $GITHUB_ENV
-
-      - name: Create google-services.json
-        run: echo "$GOOGLE_SERVICES_JSON" > ./app/google-services.json
-
-      - name: Create local.properties
-        run: echo "$LOCAL_PROPERTIES_CONTENTS" > ./local.properties
 
       - name: Assemble Debug APK
         run: ./gradlew assembleDebug

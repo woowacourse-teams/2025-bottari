@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import androidx.room.Transaction
 import com.bottari.data.model.local.bottari.BottariEntity
+import com.bottari.data.model.local.bottari.BottariWithAlarm
 import com.bottari.data.model.local.bottari.BottariWithAlarmAndItems
 import kotlinx.coroutines.flow.Flow
 
@@ -14,6 +15,10 @@ interface BottariDao {
     @Transaction
     @Query("SELECT * FROM Bottaries ORDER BY createdAt DESC")
     fun fetchBottariesWithAlarmAndItems(): Flow<List<BottariWithAlarmAndItems>>
+
+    @Transaction
+    @Query("SELECT * FROM Bottaries")
+    fun fetchBottariesWithAlarm(): List<BottariWithAlarm>
 
     @Transaction
     @Query("SELECT * FROM Bottaries WHERE id = :id")

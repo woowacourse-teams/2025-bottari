@@ -127,6 +127,7 @@ private fun BottariInfo(
                         repeatEveryWeekText = stringResource(R.string.bottari_item_alarm_repeat_everyweek_text),
                         repeatEveryDayText = stringResource(R.string.bottari_item_alarm_repeat_everyday_text),
                     ),
+                color = if (alarm.isActive) BottariTheme.colors.black else BottariTheme.colors.gray400,
             )
         }
 

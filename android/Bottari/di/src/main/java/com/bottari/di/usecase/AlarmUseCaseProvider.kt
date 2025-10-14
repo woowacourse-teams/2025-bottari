@@ -14,13 +14,11 @@ object AlarmUseCaseProvider {
     val saveAlarmUseCase: SaveAlarmUseCase by lazy {
         SaveAlarmUseCase(
             RepositoryProvider.alarmRepository,
-            RepositoryProvider.notificationRepository,
         )
     }
     val updateAlarmActivateUseCase: UpdateAlarmActivateUseCase by lazy {
         UpdateAlarmActivateUseCase(
             RepositoryProvider.alarmRepository,
-            RepositoryProvider.notificationRepository,
         )
     }
 }
