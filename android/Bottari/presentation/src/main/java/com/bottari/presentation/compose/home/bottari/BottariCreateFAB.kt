@@ -8,6 +8,7 @@ import androidx.compose.material3.FloatingActionButtonMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.ToggleFloatingActionButton
+import androidx.compose.material3.ToggleFloatingActionButtonDefaults
 import androidx.compose.material3.animateFloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -76,6 +77,10 @@ fun BottariCreateFAB(
     val openStateDescription = stringResource(R.string.common_state_open_description)
     val closeStateDescription = stringResource(R.string.common_state_close_description)
     val menuCloseLabel = stringResource(R.string.bottari_action_close_label)
+
+    val primaryColor = BottariTheme.colors.primary
+    val white = BottariTheme.colors.white
+
     BackHandler(fabMenuExpanded) { fabMenuExpanded = false }
 
     FloatingActionButtonMenu(
@@ -94,6 +99,11 @@ fun BottariCreateFAB(
                             visible = true,
                             alignment = Alignment.BottomEnd,
                         ).focusRequester(focusRequester),
+                containerColor =
+                    ToggleFloatingActionButtonDefaults.containerColor(
+                        initialColor = primaryColor,
+                        finalColor = primaryColor,
+                    ),
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_close),
@@ -106,6 +116,17 @@ fun BottariCreateFAB(
     ) {
         items.forEachIndexed { index, item ->
             FloatingActionButtonMenuItem(
+                onClick = {
+                    fabMenuExpanded = false
+                    item.onClick()
+                },
+                text = { Text(text = item.text) },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = item.iconRes),
+                        contentDescription = null,
+                    )
+                },
                 modifier =
                     Modifier
                         .semantics {
@@ -137,17 +158,8 @@ fun BottariCreateFAB(
                                 Modifier
                             },
                         ),
-                onClick = {
-                    fabMenuExpanded = false
-                    item.onClick()
-                },
-                icon = {
-                    Icon(
-                        painter = painterResource(id = item.iconRes),
-                        contentDescription = null,
-                    )
-                },
-                text = { Text(text = item.text) },
+                containerColor = primaryColor,
+                contentColor = white,
             )
         }
     }
