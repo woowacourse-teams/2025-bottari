@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -69,6 +70,9 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.bundles.network)
     implementation(libs.bundles.local)
+
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.android)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.installations)
