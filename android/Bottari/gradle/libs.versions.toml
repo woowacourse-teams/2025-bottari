@@ -30,14 +30,14 @@ numberPicker = "2.4.13"
 spinkit = "1.4.0"
 materialCalendarview = "2.0.1"
 threetenabp = "1.4.9"
-material3 = "1.5.0-alpha04"
-materialIconsExtendedAndroid = "1.7.8"
 
 # Compose
 composeBom = "2025.09.00"
 activityCompose = "1.10.1"
 lifecycleViewmodelCompose = "2.9.4"
 runtimeLivedata = "1.9.1"
+material3 = "1.5.0-alpha04"
+materialIconsExtendedAndroid = "1.7.8"
 
 # Network
 retrofit = "3.0.0"
