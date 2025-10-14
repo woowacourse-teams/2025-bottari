@@ -2,14 +2,23 @@ name: deploy-dev-server
 
 on:
   push:
-    branches: be/develop
+    branches:
+      - be/develop
+
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/bottari-app
+  IMAGE_TAG: ${{ github.sha }}
 
 jobs:
   build:
+    name: Build & Push to GHCR
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write  # GHCR push를 위해 필요
 
     steps:
-      - name: Checkout pository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 21
@@ -22,48 +31,47 @@ jobs:
         working-directory: ./backend/bottari
         run: ./gradlew clean build -x test
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
         with:
-          name: bottari-jar
-          path: backend/bottari/build/libs/*SNAPSHOT.jar
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        working-directory: ./backend/bottari
+        run: |
+          docker build -t $IMAGE_NAME:$IMAGE_TAG -t $IMAGE_NAME:latest .
+          docker push $IMAGE_NAME:$IMAGE_TAG
+          docker push $IMAGE_NAME:latest
 
   deploy:
+    name: Deploy to Dev Server
     needs: build
     runs-on: [self-hosted, bottari-dev]
 
     steps:
-      - name: Download Uploaded Artifact
-        uses: actions/download-artifact@v4
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
         with:
-          name: bottari-jar
-          path: ./artifacts
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Kill Existing Server On Port 8080
+      - name: Pull latest image from GHCR
         run: |
-          PID=$(lsof -t -i :8080 || true)
-          if [ -n "$PID" ]; then
-            echo "Killing existing process: $PID"
-            kill -9 $PID
-          fi
+          docker pull $IMAGE_NAME:$IMAGE_TAG
 
-      - name: Run App On Port 8080
+      - name: Deploy using Docker Compose
+        working-directory: /home/ubuntu
         run: |
-          JAR_FILE=$(find ./artifacts -name "*.jar" | head -n 1)
-          echo "Starting server with $JAR_FILE"
-          RUNNER_TRACKING_ID=""
-
+          IMAGE_TAG=$IMAGE_TAG \
           DATABASE_URL='${{ secrets.DATABASE_DEV_URL }}' \
           DATABASE_USERNAME='${{ secrets.DATABASE_DEV_USERNAME }}' \
           DATABASE_PASSWORD='${{ secrets.DATABASE_DEV_PASSWORD }}' \
           FIREBASE_SERVICE_ACCOUNT_JSON='${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}' \
-          SPRING_PROFILES_ACTIVE=dev \
-          nohup java -Duser.timezone=Asia/Seoul \
-          -javaagent:/home/ubuntu/otel-agent/opentelemetry-javaagent.jar \
-          -Dotel.service.name=dev-bottari-app \
-          -Dotel.traces.exporter=otlp \
-          -Dotel.metrics.exporter=none \
-          -Dotel.logs.exporter=none \
-          -Dotel.exporter.otlp.endpoint='${{ secrets.DEV_OTLP_ENDPOINT }}' \
-          -Dmanagement.opentelemetry.instrumentation.logging.enabled=false \
-          -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &
+          DEV_OTLP_ENDPOINT='${{ secrets.DEV_OTLP_ENDPOINT }}' \
+          docker compose -f docker-compose.dev.yml up -d --force-recreate
