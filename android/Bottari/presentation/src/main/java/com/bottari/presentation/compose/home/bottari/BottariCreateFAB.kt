@@ -5,6 +5,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButtonMenu
 import androidx.compose.material3.FloatingActionButtonMenuItem
+import androidx.compose.material3.FloatingActionButtonMenuScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.ToggleFloatingActionButton
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isShiftPressed
@@ -56,87 +58,35 @@ fun BottariCreateFAB(
     val menuCloseLabel = stringResource(R.string.bottari_action_close_label_description)
 
     val primaryColor = BottariTheme.colors.primary
-    val white = BottariTheme.colors.white
+    val whiteColor = BottariTheme.colors.white
 
     BackHandler(fabMenuExpanded) { fabMenuExpanded = false }
 
     FloatingActionButtonMenu(
         expanded = fabMenuExpanded,
         button = {
-            ToggleFloatingActionButton(
-                checked = fabMenuExpanded,
-                onCheckedChange = { fabMenuExpanded = it },
-                modifier =
-                    Modifier
-                        .semantics {
-                            traversalIndex = -1f
-                            contentDescription = openMenuBtnDescription
-                            stateDescription = if (fabMenuExpanded) openStateDescription else closeStateDescription
-                        }.animateFloatingActionButton(
-                            visible = true,
-                            alignment = Alignment.BottomEnd,
-                        ).focusRequester(focusRequester),
-                containerColor =
-                    ToggleFloatingActionButtonDefaults.containerColor(
-                        initialColor = primaryColor,
-                        finalColor = primaryColor,
-                    ),
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_close),
-                    contentDescription = null,
-                    modifier = Modifier.rotate((1f - checkedProgress) * 45f),
-                    tint = BottariTheme.colors.white,
-                )
-            }
+            BottariCreateToggleFloatingActionButton(
+                fabMenuExpanded = fabMenuExpanded,
+                onChangeExpandedState = { fabMenuExpanded = it },
+                containerColor = primaryColor,
+                contentColor = whiteColor,
+                focusRequester = focusRequester,
+                openMenuBtnDescription = openMenuBtnDescription,
+                openStateDescription = openStateDescription,
+                closeStateDescription = closeStateDescription,
+            )
         },
     ) {
         items.forEachIndexed { index, item ->
-            FloatingActionButtonMenuItem(
-                onClick = {
-                    fabMenuExpanded = false
-                    item.onClick()
-                },
-                text = { Text(text = item.text) },
-                icon = {
-                    Icon(
-                        painter = painterResource(id = item.iconRes),
-                        contentDescription = null,
-                    )
-                },
-                modifier =
-                    Modifier
-                        .semantics {
-                            isTraversalGroup = true
-                            if (index == items.lastIndex) {
-                                customActions =
-                                    listOf(
-                                        CustomAccessibilityAction(label = menuCloseLabel) {
-                                            fabMenuExpanded = false
-                                            true
-                                        },
-                                    )
-                            }
-                        }.then(
-                            if (index == 0) {
-                                Modifier.onKeyEvent {
-                                    val isTargetKeyEvent =
-                                        it.type == KeyEventType.KeyDown &&
-                                            (it.key == Key.DirectionUp || (it.isShiftPressed && it.key == Key.Tab))
-
-                                    if (!isTargetKeyEvent) {
-                                        return@onKeyEvent false
-                                    }
-
-                                    focusRequester.requestFocus()
-                                    true
-                                }
-                            } else {
-                                Modifier
-                            },
-                        ),
+            BottariFabMenuItem(
+                item = item,
+                isFirstItem = index == 0,
+                isLastItem = index == items.lastIndex,
+                onCloseMenu = { fabMenuExpanded = false },
                 containerColor = primaryColor,
-                contentColor = white,
+                contentColor = whiteColor,
+                focusRequester = focusRequester,
+                menuCloseLabel = menuCloseLabel,
             )
         }
     }
@@ -156,6 +106,107 @@ private fun rememberFabMenuItems(
         FabMenuItem(R.drawable.ic_team_invite_code, joinTeamText, onOpenCodeDialog),
         FabMenuItem(R.drawable.ic_people, teamBottariText, onOpenTeamDialog),
         FabMenuItem(R.drawable.ic_person_filled, personalBottariText, onOpenPersonalDialog),
+    )
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun BottariCreateToggleFloatingActionButton(
+    fabMenuExpanded: Boolean,
+    onChangeExpandedState: (Boolean) -> Unit,
+    containerColor: Color,
+    contentColor: Color,
+    focusRequester: FocusRequester,
+    openMenuBtnDescription: String,
+    openStateDescription: String,
+    closeStateDescription: String,
+) {
+    ToggleFloatingActionButton(
+        checked = fabMenuExpanded,
+        onCheckedChange = { onChangeExpandedState(it) },
+        modifier =
+            Modifier
+                .semantics {
+                    traversalIndex = -1f
+                    contentDescription = openMenuBtnDescription
+                    stateDescription =
+                        if (fabMenuExpanded) openStateDescription else closeStateDescription
+                }.animateFloatingActionButton(
+                    visible = true,
+                    alignment = Alignment.BottomEnd,
+                ).focusRequester(focusRequester),
+        containerColor =
+            ToggleFloatingActionButtonDefaults.containerColor(
+                initialColor = containerColor,
+                finalColor = containerColor,
+            ),
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_close),
+            contentDescription = null,
+            modifier = Modifier.rotate((1f - checkedProgress) * 45f),
+            tint = contentColor,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun FloatingActionButtonMenuScope.BottariFabMenuItem(
+    item: FabMenuItem,
+    isFirstItem: Boolean,
+    isLastItem: Boolean,
+    onCloseMenu: () -> Unit,
+    containerColor: Color,
+    contentColor: Color,
+    focusRequester: FocusRequester,
+    menuCloseLabel: String,
+) {
+    FloatingActionButtonMenuItem(
+        onClick = {
+            onCloseMenu()
+            item.onClick()
+        },
+        text = { Text(text = item.text) },
+        icon = {
+            Icon(
+                painter = painterResource(id = item.iconRes),
+                contentDescription = null,
+            )
+        },
+        modifier =
+            Modifier
+                .semantics {
+                    isTraversalGroup = true
+                    if (isLastItem) {
+                        customActions =
+                            listOf(
+                                CustomAccessibilityAction(label = menuCloseLabel) {
+                                    onCloseMenu()
+                                    true
+                                },
+                            )
+                    }
+                }.then(
+                    if (isFirstItem) {
+                        Modifier.onKeyEvent {
+                            val isTargetKeyEvent =
+                                it.type == KeyEventType.KeyDown &&
+                                    (it.key == Key.DirectionUp || (it.isShiftPressed && it.key == Key.Tab))
+
+                            if (!isTargetKeyEvent) {
+                                return@onKeyEvent false
+                            }
+
+                            focusRequester.requestFocus()
+                            true
+                        }
+                    } else {
+                        Modifier
+                    },
+                ),
+        containerColor = containerColor,
+        contentColor = contentColor,
     )
 }
 
