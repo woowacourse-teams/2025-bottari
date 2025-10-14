@@ -38,6 +38,7 @@ import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.traversalIndex
+import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
@@ -211,3 +212,13 @@ private data class FabMenuItem(
     val text: String,
     val onClick: () -> Unit,
 )
+
+@Preview
+@Composable
+private fun BottariCreateFABPreview() {
+    BottariCreateFAB(
+        onOpenPersonalDialog = {},
+        onOpenTeamDialog = {},
+        onOpenCodeDialog = {},
+    )
+}
