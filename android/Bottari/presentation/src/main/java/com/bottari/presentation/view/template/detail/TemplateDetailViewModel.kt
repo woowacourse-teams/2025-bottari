@@ -1,19 +1,17 @@
 package com.bottari.presentation.view.template.detail
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
 import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.template.BottariTemplateItemUiModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class TemplateDetailViewModel(
+@HiltViewModel
+class TemplateDetailViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchBottariTemplateDetailUseCase: FetchBottariTemplateDetailUseCase,
     private val takeBottariTemplateDetailUseCase: TakeBottariTemplateDetailUseCase,
@@ -74,20 +72,7 @@ class TemplateDetailViewModel(
     }
 
     companion object {
-        private const val KEY_TEMPLATE_ID = "KEY_BOTTARI_ID"
+        const val KEY_TEMPLATE_ID = "KEY_TEMPLATE_ID"
         private const val ERROR_REQUIRE_TEMPLATE_ID = "[ERROR] 템플릿 ID가 존재하지 않습니다"
-
-        fun Factory(templateId: Long): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val savedStateHandle = this.createSavedStateHandle()
-                    savedStateHandle[KEY_TEMPLATE_ID] = templateId
-                    TemplateDetailViewModel(
-                        stateHandle = savedStateHandle,
-                        fetchBottariTemplateDetailUseCase = BottariTemplateUseCaseProvider.fetchBottariTemplateDetailUseCase,
-                        takeBottariTemplateDetailUseCase = BottariTemplateUseCaseProvider.takeBottariTemplateDetailUseCase,
-                    )
-                }
-            }
     }
 }

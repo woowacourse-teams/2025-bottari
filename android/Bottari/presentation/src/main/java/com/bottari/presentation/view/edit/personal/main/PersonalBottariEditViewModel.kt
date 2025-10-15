@@ -1,14 +1,7 @@
 package com.bottari.presentation.view.edit.personal.main
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.AlarmUseCaseProvider
-import com.bottari.di.usecase.BottariTemplateUseCaseProvider
-import com.bottari.di.usecase.BottariUseCaseProvider
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.usecase.alarm.UpdateAlarmActivateUseCase
 import com.bottari.domain.usecase.bottari.FindBottariUseCase
@@ -17,21 +10,24 @@ import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
-import com.bottari.presentation.util.AlarmScheduler.cancelAlarm
-import com.bottari.presentation.util.AlarmScheduler.scheduleAlarm
+import com.bottari.presentation.util.AlarmScheduler
 import com.bottari.presentation.util.debounce
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class PersonalBottariEditViewModel(
+@HiltViewModel
+class PersonalBottariEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val findBottariUseCase: FindBottariUseCase,
     private val updateAlarmActivateUseCase: UpdateAlarmActivateUseCase,
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
+    private val alarmScheduler: AlarmScheduler,
 ) : FlowBaseViewModel<PersonalBottariEditUiState, PersonalBottariEditUiEvent>(
         PersonalBottariEditUiState(
-            bottariId = savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID_MISSING),
+            bottariId = savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID),
         ),
     ) {
     private val debouncedAlarmState: ((Boolean) -> Unit) =
@@ -127,10 +123,10 @@ class PersonalBottariEditViewModel(
     private fun handleAlarm(alarm: AlarmUiModel) {
         val notification = createNotification(alarm)
         if (alarm.isActive) {
-            scheduleAlarm(notification = notification)
+            alarmScheduler.scheduleAlarm(notification)
             return
         }
-        cancelAlarm(notification = notification)
+        alarmScheduler.cancelAlarm(notification)
     }
 
     private fun createNotification(alarm: AlarmUiModel): Notification =
@@ -141,23 +137,8 @@ class PersonalBottariEditViewModel(
         )
 
     companion object {
-        private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
-        private const val ERROR_BOTTARI_ID_MISSING = "[ERROR] 보따리 ID가 없습니다"
+        const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
+        private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 없습니다"
         private const val DEBOUNCE_DELAY = 700L
-
-        fun Factory(bottariId: Long): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_BOTTARI_ID] = bottariId
-
-                    PersonalBottariEditViewModel(
-                        stateHandle,
-                        BottariUseCaseProvider.findBottariUseCase,
-                        AlarmUseCaseProvider.updateAlarmActivateUseCase,
-                        BottariTemplateUseCaseProvider.createBottariTemplateUseCase,
-                    )
-                }
-            }
     }
 }

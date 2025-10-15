@@ -1,17 +1,16 @@
 package com.bottari.presentation.view.template.my
 
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class MyTemplateViewModel(
+@HiltViewModel
+class MyTemplateViewModel @Inject constructor(
     private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
     private val deleteMyBottariTemplateUseCase: DeleteMyBottariTemplateUseCase,
 ) : BaseViewModel<MyTemplateUiState, MyTemplateUiEvent>(MyTemplateUiState()) {
@@ -54,17 +53,5 @@ class MyTemplateViewModel(
 
             updateState { copy(isLoading = false, isFetched = true) }
         }
-    }
-
-    companion object {
-        fun Factory(): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    MyTemplateViewModel(
-                        BottariTemplateUseCaseProvider.fetchMyBottariTemplatesUseCase,
-                        BottariTemplateUseCaseProvider.deleteMyBottariTemplateUseCase,
-                    )
-                }
-            }
     }
 }

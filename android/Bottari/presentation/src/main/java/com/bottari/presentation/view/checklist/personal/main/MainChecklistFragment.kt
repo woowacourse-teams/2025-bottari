@@ -14,7 +14,9 @@ import com.bottari.presentation.view.checklist.personal.ChecklistUiEvent
 import com.bottari.presentation.view.checklist.personal.ChecklistViewModel
 import com.bottari.presentation.view.checklist.personal.main.adapter.MainChecklistAdapter
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainChecklistFragment : BaseFragment<FragmentChecklistBinding>(FragmentChecklistBinding::inflate) {
     private val bottariId: Long by lazy { requireArguments().getLong(ARG_BOTTARI_ID) }
     private val viewModel: ChecklistViewModel by activityViewModels()

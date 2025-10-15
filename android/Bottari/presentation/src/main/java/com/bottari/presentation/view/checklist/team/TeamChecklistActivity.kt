@@ -10,10 +10,10 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
+import com.bottari.presentation.compose.home.ComposeHomeActivity
 import com.bottari.presentation.databinding.ActivityTeamChecklistBinding
 import com.bottari.presentation.view.checklist.team.main.TeamChecklistMainFragment
 import com.bottari.presentation.view.checklist.team.swipe.TeamSwipeChecklistFragment
-import com.bottari.presentation.view.home.HomeActivity
 
 class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(ActivityTeamChecklistBinding::inflate) {
     private val bottariId: Long by lazy {
@@ -72,7 +72,7 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     }
 
     private fun navigateToHome() {
-        val intent = HomeActivity.newIntent(this)
+        val intent = ComposeHomeActivity.newIntent(this)
         startActivity(intent)
         finish()
     }

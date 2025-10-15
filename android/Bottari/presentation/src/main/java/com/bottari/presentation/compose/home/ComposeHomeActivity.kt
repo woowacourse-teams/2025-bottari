@@ -14,7 +14,9 @@ import com.bottari.presentation.view.checklist.team.TeamChecklistActivity
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.edit.team.TeamBottariEditActivity
 import com.bottari.presentation.view.template.TemplateActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ComposeHomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

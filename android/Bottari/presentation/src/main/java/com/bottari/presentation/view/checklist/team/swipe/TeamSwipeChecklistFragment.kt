@@ -22,15 +22,49 @@ import com.yuyakaido.android.cardstackview.Direction
 import com.yuyakaido.android.cardstackview.Duration
 import com.yuyakaido.android.cardstackview.StackFrom
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting
+import dagger.hilt.android.AndroidEntryPoint
 
-class TeamSwipeChecklistFragment :
-    BaseFragment<FragmentSwipeChecklistBinding>(FragmentSwipeChecklistBinding::inflate),
-    CardStackListener {
-    private val viewModel: TeamChecklistViewModel by activityViewModels {
-        TeamChecklistViewModel.Factory(requireArguments().getLong(ARG_BOTTARI_ID))
-    }
+@AndroidEntryPoint
+class TeamSwipeChecklistFragment : BaseFragment<FragmentSwipeChecklistBinding>(FragmentSwipeChecklistBinding::inflate) {
+    private val viewModel: TeamChecklistViewModel by activityViewModels()
     private val adapter: TeamSwipeChecklistAdapter by lazy { TeamSwipeChecklistAdapter() }
     private lateinit var cardStackLayoutManager: CardStackLayoutManager
+    private val cardStackListener =
+        object : CardStackListener {
+            override fun onCardSwiped(direction: Direction?) {
+                val index = cardStackLayoutManager.topPosition - INDEX_OFFSET
+                val currentItem = adapter.currentList.getOrNull(index) ?: return
+                if (direction == Direction.Right) {
+                    viewModel.toggleItemChecked(
+                        currentItem.id,
+                        currentItem.type,
+                    )
+                }
+                viewModel.addSwipedItem(currentItem)
+            }
+
+            override fun onCardAppeared(
+                view: View?,
+                position: Int,
+            ) {
+            }
+
+            override fun onCardCanceled() {}
+
+            override fun onCardDisappeared(
+                view: View?,
+                position: Int,
+            ) {
+            }
+
+            override fun onCardDragging(
+                direction: Direction?,
+                ratio: Float,
+            ) {
+            }
+
+            override fun onCardRewound() {}
+        }
 
     override fun onViewCreated(
         view: View,
@@ -40,42 +74,6 @@ class TeamSwipeChecklistFragment :
         setupObserver()
         setupUI()
         setupListener()
-    }
-
-    override fun onCardAppeared(
-        view: View?,
-        position: Int,
-    ) {
-    }
-
-    override fun onCardCanceled() {
-    }
-
-    override fun onCardDisappeared(
-        view: View?,
-        position: Int,
-    ) {
-    }
-
-    override fun onCardDragging(
-        direction: Direction?,
-        ratio: Float,
-    ) {
-    }
-
-    override fun onCardRewound() {
-    }
-
-    override fun onCardSwiped(direction: Direction?) {
-        val index = cardStackLayoutManager.topPosition - INDEX_OFFSET
-        val currentItem = adapter.currentList.getOrNull(index) ?: return
-        if (direction == Direction.Right) {
-            viewModel.toggleItemChecked(
-                currentItem.id,
-                currentItem.type,
-            )
-        }
-        viewModel.addSwipedItem(currentItem)
     }
 
     private fun setupObserver() {
@@ -165,7 +163,7 @@ class TeamSwipeChecklistFragment :
     private fun setupCardStackView() {
         viewModel.resetSwipeState()
         cardStackLayoutManager =
-            CardStackLayoutManager(requireContext(), this).apply {
+            CardStackLayoutManager(requireContext(), cardStackListener).apply {
                 setStackFrom(StackFrom.Top)
                 setCanScrollVertical(false)
                 setCanScrollHorizontal(true)
@@ -188,12 +186,11 @@ class TeamSwipeChecklistFragment :
     }
 
     companion object {
-        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
         private const val INDEX_OFFSET = 1
 
         fun newInstance(bottariId: Long): TeamSwipeChecklistFragment =
             TeamSwipeChecklistFragment().apply {
-                arguments = bundleOf(ARG_BOTTARI_ID to bottariId)
+                arguments = bundleOf(TeamChecklistViewModel.KEY_BOTTARI_ID to bottariId)
             }
     }
 }

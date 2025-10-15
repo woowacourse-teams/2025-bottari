@@ -30,15 +30,13 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.format.TextStyle
 import java.util.Locale
 
+@AndroidEntryPoint
 class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBinding>(FragmentPersonalBottariEditBinding::inflate) {
-    private val viewModel: PersonalBottariEditViewModel by viewModels {
-        val bottariId = requireArguments().getLong(ARG_BOTTARI_ID)
-        PersonalBottariEditViewModel.Factory(bottariId)
-    }
-
+    private val viewModel: PersonalBottariEditViewModel by viewModels()
     private lateinit var popupMenu: PopupMenu
     private val itemAdapter by lazy { PersonalBottariEditItemAdapter() }
     private val permissionLauncher = registerPermissionLauncher()
@@ -266,11 +264,9 @@ class PersonalBottariEditFragment : BaseFragment<FragmentPersonalBottariEditBind
     }
 
     companion object {
-        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
-
         fun newBundle(bottariId: Long) =
             Bundle().apply {
-                putLong(ARG_BOTTARI_ID, bottariId)
+                putLong(PersonalBottariEditViewModel.KEY_BOTTARI_ID, bottariId)
             }
     }
 }

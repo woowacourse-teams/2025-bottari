@@ -11,13 +11,13 @@ import com.bottari.presentation.databinding.FragmentMyTemplateBinding
 import com.bottari.presentation.view.template.TemplateNavigator
 import com.bottari.presentation.view.template.my.adapter.MyTemplateAdapter
 import com.bottari.presentation.view.template.my.listener.MyBottariTemplateEventListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyTemplateFragment :
     BaseFragment<FragmentMyTemplateBinding>(FragmentMyTemplateBinding::inflate),
     MyBottariTemplateEventListener {
-    private val viewModel: MyTemplateViewModel by viewModels {
-        MyTemplateViewModel.Factory()
-    }
+    private val viewModel: MyTemplateViewModel by viewModels()
     private val adapter: MyTemplateAdapter by lazy { MyTemplateAdapter(this) }
 
     override fun onViewCreated(

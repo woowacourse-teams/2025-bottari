@@ -12,15 +12,15 @@ import com.bottari.presentation.databinding.FragmentTeamMembersStatusBinding
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import com.bottari.presentation.view.checklist.team.main.member.adapter.TeamMemberStatusAdapter
 import com.bottari.presentation.view.checklist.team.main.member.adapter.TeamMemberStatusViewHolder
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TeamMembersStatusFragment :
     BaseFragment<FragmentTeamMembersStatusBinding>(
         FragmentTeamMembersStatusBinding::inflate,
     ),
     TeamMemberStatusViewHolder.MemberStatusClickListener {
-    private val viewModel: TeamMembersStatusViewModel by viewModels {
-        TeamMembersStatusViewModel.Factory(requireArguments().getLong(ARG_TEAM_BOTTARI_ID))
-    }
+    private val viewModel: TeamMembersStatusViewModel by viewModels()
     private val adapter: TeamMemberStatusAdapter by lazy { TeamMemberStatusAdapter(this) }
 
     override fun onViewCreated(
@@ -73,12 +73,10 @@ class TeamMembersStatusFragment :
     }
 
     companion object {
-        private const val ARG_TEAM_BOTTARI_ID = "ARG_TEAM_BOTTARI_ID"
-
         @JvmStatic
         fun newInstance(id: Long) =
             TeamMembersStatusFragment().apply {
-                arguments = bundleOf(ARG_TEAM_BOTTARI_ID to id)
+                arguments = bundleOf(TeamMembersStatusViewModel.KEY_BOTTARI_ID to id)
             }
     }
 }

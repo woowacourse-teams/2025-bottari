@@ -1,13 +1,7 @@
 package com.bottari.presentation.view.checklist.team.main.status
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.CommonUseCaseProvider
-import com.bottari.di.usecase.TeamBottariItemsUseCaseProvider
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.bottari.TeamBottariStatus
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
@@ -20,6 +14,7 @@ import com.bottari.presentation.model.bottari.team.TeamBottariProductStatusUiMod
 import com.bottari.presentation.model.bottari.team.TeamChecklistTypeUiModel
 import com.bottari.presentation.model.bottari.team.TeamProductStatusItem
 import com.bottari.presentation.util.debounce
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -29,8 +24,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TeamBottariStatusViewModel(
+@HiltViewModel
+class TeamBottariStatusViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamStatusUseCase: FetchTeamStatusUseCase,
     private val sendRemindByItemUseCase: SendRemindByItemUseCase,
@@ -40,7 +37,7 @@ class TeamBottariStatusViewModel(
         TeamBottariStatusUiState(),
     ) {
     private val teamBottariId: Long =
-        stateHandle[KEY_ITEM_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
+        stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
     val debouncedSendRemindByItem: (Unit) -> Unit =
         debounce(
@@ -149,23 +146,8 @@ class TeamBottariStatusViewModel(
     }
 
     companion object {
-        private const val KEY_ITEM_BOTTARI_ID = "KEY_ITEM_BOTTARI_ID"
+        const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
         private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
         private const val DEBOUNCE_DELAY = 300L
-
-        fun Factory(bottariId: Long): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_ITEM_BOTTARI_ID] = bottariId
-                    TeamBottariStatusViewModel(
-                        stateHandle,
-                        TeamBottariItemsUseCaseProvider.fetchTeamStatusUseCase,
-                        TeamBottariItemsUseCaseProvider.sendRemindByItemUseCase,
-                        CommonUseCaseProvider.connectTeamEventUseCase,
-                        CommonUseCaseProvider.disconnectTeamEventUseCase,
-                    )
-                }
-            }
     }
 }

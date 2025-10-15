@@ -1,17 +1,15 @@
 package com.bottari.presentation.view.common.report
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.domain.usecase.report.ReportTemplateUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ReportViewModel(
+@HiltViewModel
+class ReportViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val reportTemplateUseCase: ReportTemplateUseCase,
 ) : BaseViewModel<ReportUiState, ReportUiEvent>(ReportUiState()) {
@@ -39,16 +37,7 @@ class ReportViewModel(
     }
 
     companion object {
-        private const val KEY_TEMPLATE_ID = "KEY_TEMPLATE_ID"
+        const val KEY_TEMPLATE_ID = "KEY_TEMPLATE_ID"
         private const val ERROR_TEMPLATE_ID_EMPTY = "[ERROR] TemplateId를 확인할 수 없습니다"
-
-        fun Factory(templateId: Long): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_TEMPLATE_ID] = templateId
-                    ReportViewModel(stateHandle, CommonUseCaseProvider.reportTemplateUseCase)
-                }
-            }
     }
 }

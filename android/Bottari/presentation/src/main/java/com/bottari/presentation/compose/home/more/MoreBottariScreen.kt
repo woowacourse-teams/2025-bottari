@@ -21,17 +21,12 @@ import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.home.more.component.NicknameBox
-import com.bottari.presentation.view.home.more.MoreUiState
-import com.bottari.presentation.view.home.more.MoreViewModel
 
 @Composable
 fun MoreBottariScreen(
     onNavigateToBrowser: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MoreViewModel =
-        viewModel(
-            factory = MoreViewModel.Factory(),
-        ),
+    viewModel: MoreViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.observeAsState().value ?: MoreUiState()
 

@@ -1,13 +1,12 @@
 package com.bottari.presentation.view.invite
 
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.usecase.team.JoinTeamBottariUseCase
 import com.bottari.presentation.common.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class InviteViewModel(
+@HiltViewModel
+class InviteViewModel @Inject constructor(
     private val joinTeamBottariUseCase: JoinTeamBottariUseCase,
 ) : BaseViewModel<InviteUiState, InviteUiEvent>(InviteUiState()) {
     fun joinTeamBottari(inviteCode: String) {
@@ -18,14 +17,5 @@ class InviteViewModel(
                 .onFailure { emitEvent(InviteUiEvent.JoinTeamBottariFailure) }
             updateState { copy(isLoading = false) }
         }
-    }
-
-    companion object {
-        fun Factory(): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    InviteViewModel(TeamMemberUseCaseProvider.joinTeamBottariUseCase)
-                }
-            }
     }
 }

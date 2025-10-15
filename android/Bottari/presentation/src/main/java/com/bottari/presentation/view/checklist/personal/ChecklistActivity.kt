@@ -13,6 +13,7 @@ import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
+import com.bottari.presentation.compose.home.ComposeHomeActivity
 import com.bottari.presentation.databinding.ActivityChecklistBinding
 import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 import com.bottari.presentation.view.checklist.personal.main.MainChecklistFragment
@@ -20,16 +21,15 @@ import com.bottari.presentation.view.checklist.personal.swipe.SwipeChecklistFrag
 import com.bottari.presentation.view.common.alert.CustomAlertDialog
 import com.bottari.presentation.view.common.alert.DialogListener
 import com.bottari.presentation.view.common.alert.DialogPresetType
-import com.bottari.presentation.view.home.HomeActivity
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 
+@AndroidEntryPoint
 class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityChecklistBinding::inflate) {
-    private val viewModel: ChecklistViewModel by viewModels {
-        ChecklistViewModel.Factory(bottariId)
-    }
+    private val viewModel: ChecklistViewModel by viewModels()
     private val bottariId: Long by lazy {
         intent.getLongExtra(
-            EXTRA_BOTTARI_ID,
+            ChecklistViewModel.KEY_BOTTARI_ID,
             INVALID_BOTTARI_ID,
         )
     }
@@ -112,7 +112,7 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
     }
 
     private fun navigateToHome() {
-        val intent = HomeActivity.newIntent(this@ChecklistActivity)
+        val intent = ComposeHomeActivity.newIntent(this@ChecklistActivity)
         startActivity(intent)
         finish()
     }
@@ -163,7 +163,6 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
 
     companion object {
         private const val INVALID_BOTTARI_ID = -1L
-        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
         private const val EXTRA_BOTTARI_TITLE = "EXTRA_BOTTARI_TITLE"
         private const val EXTRA_NOTIFICATION_FLAG = "EXTRA_FLAG"
 
@@ -173,7 +172,7 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
             bottariTitle: String,
         ): Intent =
             Intent(context, ChecklistActivity::class.java).apply {
-                putExtra(EXTRA_BOTTARI_ID, bottariId)
+                putExtra(ChecklistViewModel.KEY_BOTTARI_ID, bottariId)
                 putExtra(EXTRA_BOTTARI_TITLE, bottariTitle)
             }
 
@@ -183,7 +182,7 @@ class ChecklistActivity : BaseActivity<ActivityChecklistBinding>(ActivityCheckli
             bottariTitle: String,
         ): Intent =
             Intent(context, ChecklistActivity::class.java).apply {
-                putExtra(EXTRA_BOTTARI_ID, bottariId)
+                putExtra(ChecklistViewModel.KEY_BOTTARI_ID, bottariId)
                 putExtra(EXTRA_BOTTARI_TITLE, bottariTitle)
                 putExtra(EXTRA_NOTIFICATION_FLAG, true)
             }

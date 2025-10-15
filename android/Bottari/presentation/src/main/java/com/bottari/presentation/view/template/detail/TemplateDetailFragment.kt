@@ -15,14 +15,11 @@ import com.bottari.presentation.databinding.FragmentTemplateDetailBinding
 import com.bottari.presentation.view.common.report.ReportDialog
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.template.detail.adapter.TemplateDetailAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(FragmentTemplateDetailBinding::inflate) {
-    private val viewModel: TemplateDetailViewModel by viewModels {
-        TemplateDetailViewModel.Factory(
-            templateId = requireArguments().getLong(ARG_TEMPLATE_ID, INVALID_BOTTARI_ID),
-        )
-    }
-
+    private val viewModel: TemplateDetailViewModel by viewModels()
     private val isMyTemplate: Boolean by lazy {
         requireArguments().getBoolean(
             ARG_IS_MY_TEMPLATE,
@@ -136,16 +133,14 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
     }
 
     companion object {
-        private const val ARG_TEMPLATE_ID = "ARG_BOTTARI_ID"
         private const val ARG_IS_MY_TEMPLATE = "ARG_IS_MY_TEMPLATE"
-        private const val INVALID_BOTTARI_ID = -1L
 
         fun newBundle(
-            bottariId: Long,
+            templateId: Long,
             isMyTemplate: Boolean,
         ): Bundle =
             Bundle().apply {
-                putLong(ARG_TEMPLATE_ID, bottariId)
+                putLong(TemplateDetailViewModel.KEY_TEMPLATE_ID, templateId)
                 putBoolean(ARG_IS_MY_TEMPLATE, isMyTemplate)
             }
     }

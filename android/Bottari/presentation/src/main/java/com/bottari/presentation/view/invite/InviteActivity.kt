@@ -10,10 +10,11 @@ import com.bottari.presentation.common.extension.SnackBarDuration
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.ActivityInviteBinding
 import com.bottari.presentation.view.common.LoadingDialog
-import com.bottari.presentation.view.home.HomeActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class InviteActivity : BaseActivity<ActivityInviteBinding>(ActivityInviteBinding::inflate) {
-    private val viewModel: InviteViewModel by viewModels { InviteViewModel.Factory() }
+    private val viewModel: InviteViewModel by viewModels()
     private var loadingDialog: LoadingDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,16 +72,17 @@ class InviteActivity : BaseActivity<ActivityInviteBinding>(ActivityInviteBinding
         if (dialog.isShowing) dialog.dismiss()
     }
 
+    // ComposeHomeActivity에서 별도의 처리 필요
     private fun navigateToHome(isJoinSuccess: Boolean) {
-        val intent = createIntent(isJoinSuccess)
-        startActivity(intent)
-        finish()
+//        val intent = createIntent(isJoinSuccess)
+//        startActivity(intent)
+//        finish()
     }
 
-    private fun createIntent(isJoinSuccess: Boolean): Intent {
-        if (isJoinSuccess) return HomeActivity.newIntentForDeeplink(this)
-        return HomeActivity.newIntent(this)
-    }
+//    private fun createIntent(isJoinSuccess: Boolean): Intent {
+//        if (isJoinSuccess) return HomeActivity.newIntentForDeeplink(this)
+//        return HomeActivity.newIntent(this)
+//    }
 
     companion object {
         private const val KEY_INVITE_CODE = "KEY_INVITE_CODE"

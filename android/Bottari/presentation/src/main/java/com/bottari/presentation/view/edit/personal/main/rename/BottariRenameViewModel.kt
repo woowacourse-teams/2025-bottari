@@ -1,17 +1,15 @@
+package com.bottari.presentation.view.edit.personal.main.rename
+
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.BottariUseCaseProvider
 import com.bottari.domain.usecase.bottari.SaveBottariTitleUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
-import com.bottari.presentation.view.edit.personal.main.rename.BottariRenameUiEvent
-import com.bottari.presentation.view.edit.personal.main.rename.BottariRenameUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class BottariRenameViewModel(
+@HiltViewModel
+class BottariRenameViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val saveBottariTitleUseCase: SaveBottariTitleUseCase,
 ) : BaseViewModel<BottariRenameUiState, BottariRenameUiEvent>(
@@ -51,26 +49,9 @@ class BottariRenameViewModel(
     }
 
     companion object {
-        private const val KEY_INITIAL_TITLE = "KEY_INITIAL_TITLE"
-        private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
+        const val KEY_INITIAL_TITLE = "KEY_INITIAL_TITLE"
+        const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
         private const val ERROR_REQUIRE_OLD_TITLE = "[ERROR] 보따리 이름이 없습니다"
         private const val ERROR_REQUIRE_NEW_TITLE = "[ERROR] 보따리 ID가 없습니다"
-
-        fun Factory(
-            bottariId: Long,
-            initialTitle: String,
-        ): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val handle = createSavedStateHandle()
-                    handle[KEY_INITIAL_TITLE] = initialTitle
-                    handle[KEY_BOTTARI_ID] = bottariId
-
-                    BottariRenameViewModel(
-                        handle,
-                        BottariUseCaseProvider.saveBottariTitleUseCase,
-                    )
-                }
-            }
     }
 }

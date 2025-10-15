@@ -1,12 +1,6 @@
 package com.bottari.presentation.view.edit.team.item.shared
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.CommonUseCaseProvider
-import com.bottari.di.usecase.TeamBottariItemsUseCaseProvider
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
@@ -16,6 +10,7 @@ import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamSharedItemsUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.bottari.BottariItemUiModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance
@@ -23,8 +18,10 @@ import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class TeamSharedItemEditViewModel(
+@HiltViewModel
+class TeamSharedItemEditViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamSharedItemsUseCase: FetchTeamSharedItemsUseCase,
     private val createTeamSharedItemUseCase: CreateTeamSharedItemUseCase,
@@ -33,7 +30,7 @@ class TeamSharedItemEditViewModel(
 ) : BaseViewModel<TeamSharedItemEditUiState, TeamSharedItemEditEvent>(
         TeamSharedItemEditUiState(),
     ) {
-    private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID)
+    private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
     init {
         fetchPersonalItems()
@@ -110,23 +107,8 @@ class TeamSharedItemEditViewModel(
         }
 
     companion object {
-        private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
-        private const val ERROR_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다"
+        const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
+        private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다"
         private const val DEBOUNCE_DELAY = 300L
-
-        fun Factory(bottariId: Long): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_BOTTARI_ID] = bottariId
-                    TeamSharedItemEditViewModel(
-                        stateHandle,
-                        TeamBottariItemsUseCaseProvider.fetchTeamSharedItemsUseCase,
-                        TeamBottariItemsUseCaseProvider.createTeamSharedItemUseCase,
-                        TeamBottariItemsUseCaseProvider.deleteTeamBottariItemUseCase,
-                        CommonUseCaseProvider.connectTeamEventUseCase,
-                    )
-                }
-            }
     }
 }

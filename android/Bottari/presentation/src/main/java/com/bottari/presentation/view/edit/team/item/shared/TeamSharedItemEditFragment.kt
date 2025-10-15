@@ -15,18 +15,16 @@ import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiEvent
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiState
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditViewModel
 import com.bottari.presentation.view.edit.team.item.shared.adapter.TeamSharedItemEditAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TeamSharedItemEditFragment :
     BaseFragment<FragmentTeamSharedItemEditBinding>(FragmentTeamSharedItemEditBinding::inflate),
     TeamSharedItemEditAdapter.TeamSharedItemEditEventListener {
     private val parentViewModel: TeamItemEditViewModel by viewModels(
         ownerProducer = { requireParentFragment() },
     )
-    private val viewModel: TeamSharedItemEditViewModel by viewModels {
-        TeamSharedItemEditViewModel.Factory(
-            requireArguments().getLong(ARG_BOTTARI_ID),
-        )
-    }
+    private val viewModel: TeamSharedItemEditViewModel by viewModels()
     private val adapter: TeamSharedItemEditAdapter by lazy { TeamSharedItemEditAdapter(this) }
 
     override fun onViewCreated(
@@ -89,12 +87,11 @@ class TeamSharedItemEditFragment :
     }
 
     companion object {
-        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
         private const val RESET_INPUT_TEXT = ""
 
         fun newInstance(bottariId: Long): TeamSharedItemEditFragment =
             TeamSharedItemEditFragment().apply {
-                arguments = bundleOf(ARG_BOTTARI_ID to bottariId)
+                arguments = bundleOf(TeamSharedItemEditViewModel.KEY_BOTTARI_ID to bottariId)
             }
     }
 }

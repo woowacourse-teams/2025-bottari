@@ -1,25 +1,23 @@
 package com.bottari.presentation.view.checklist.personal
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.BottariItemUseCaseProvider
 import com.bottari.domain.usecase.item.FetchItemsUseCase
 import com.bottari.domain.usecase.item.ResetItemsCheckStateUseCase
 import com.bottari.domain.usecase.item.UpdateItemCheckStateUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 import com.bottari.presentation.util.debounce
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class ChecklistViewModel(
+@HiltViewModel
+class ChecklistViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchItemsUseCase: FetchItemsUseCase,
     private val updateItemCheckStateUseCase: UpdateItemCheckStateUseCase,
@@ -149,22 +147,8 @@ class ChecklistViewModel(
     }
 
     companion object {
-        private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
+        const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
         private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
         private const val DEBOUNCE_DELAY = 250L
-
-        fun Factory(bottariId: Long): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_BOTTARI_ID] = bottariId
-                    ChecklistViewModel(
-                        stateHandle,
-                        BottariItemUseCaseProvider.fetchItemsUseCase,
-                        BottariItemUseCaseProvider.updateItemCheckStateUseCase,
-                        BottariItemUseCaseProvider.resetItemsCheckStateUseCase,
-                    )
-                }
-            }
     }
 }
