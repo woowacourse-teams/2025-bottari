@@ -1,9 +1,9 @@
 package com.bottari.bottaritemplate.dto;
 
-import com.bottari.bottaritemplate.domain.BottariTemplateCursor;
+import com.bottari.bottaritemplate.domain.BottariTemplateHashtagCursor;
 
-public record ReadNextBottariTemplateRequest(
-        String query,
+public record ReadNextBottariTemplateByHashtagRequest(
+        Long hashtagId,
         Long lastId,
         String lastInfo,
         int page,
@@ -11,9 +11,9 @@ public record ReadNextBottariTemplateRequest(
         String property
 ) {
 
-    public BottariTemplateCursor toCursor() {
-        return new BottariTemplateCursor(
-                query,
+    public BottariTemplateHashtagCursor toCursor() {
+        return new BottariTemplateHashtagCursor(
+                hashtagId,
                 lastId,
                 lastInfo,
                 page,

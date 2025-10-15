@@ -4,6 +4,8 @@ import java.util.List;
 
 public record CreateBottariTemplateRequest(
         String title,
-        List<String> bottariTemplateItems
+        String description,
+        List<String> bottariTemplateItems,
+        List<String> hashtagNames
 ) {
 }
