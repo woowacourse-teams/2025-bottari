@@ -115,6 +115,7 @@ dependencies {
     implementation(libs.spinkit)
     implementation(libs.material.calendarview)
     implementation(libs.threetenabp)
+    implementation(libs.compose.swipeable.cards)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)
