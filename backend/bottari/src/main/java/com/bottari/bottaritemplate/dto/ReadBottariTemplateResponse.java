@@ -10,6 +10,7 @@ import java.util.List;
 public record ReadBottariTemplateResponse(
         Long id,
         String title,
+        String description,
         List<BottariTemplateItemResponse> items,
         String author,
         LocalDateTime createdAt,
@@ -29,6 +30,7 @@ public record ReadBottariTemplateResponse(
         return new ReadBottariTemplateResponse(
                 bottariTemplate.getId(),
                 bottariTemplate.getTitle(),
+                bottariTemplate.getDescription(),
                 items,
                 bottariTemplate.getMember().getName(),
                 bottariTemplate.getCreatedAt(),
@@ -49,6 +51,7 @@ public record ReadBottariTemplateResponse(
         return new ReadBottariTemplateResponse(
                 projection.getBottariTemplateId(),
                 projection.getTitle(),
+                projection.getDescription(),
                 items,
                 projection.getMemberName(),
                 projection.getBottariTemplateCreatedAt(),

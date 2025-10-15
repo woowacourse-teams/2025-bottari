@@ -37,19 +37,15 @@ public class Hashtag {
         if (name == null || name.isBlank()) {
             throw new BusinessException(ErrorCode.HASHTAG_NAME_BLANK);
         }
-
         if (name.contains(" ") || name.contains("\t") || name.contains("\n")) {
             throw new BusinessException(ErrorCode.HASHTAG_NAME_CONTAINS_WHITESPACE);
         }
-
         if (name.length() < MIN_NAME_LENGTH) {
             throw new BusinessException(ErrorCode.HASHTAG_NAME_TOO_SHORT, "최소 " + MIN_NAME_LENGTH + "자 이상 입력 가능합니다.");
         }
-
         if (name.length() > MAX_NAME_LENGTH) {
             throw new BusinessException(ErrorCode.HASHTAG_NAME_TOO_LONG, "최대 " + MAX_NAME_LENGTH + "자까지 입력 가능합니다.");
         }
-
         if (!VALID_NAME_PATTERN.matcher(name).matches()) {
             throw new BusinessException(ErrorCode.HASHTAG_NAME_INVALID_CHARACTER);
         }
