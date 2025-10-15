@@ -52,6 +52,7 @@ class BottariTemplateControllerTest {
         final ReadBottariTemplateResponse response = new ReadBottariTemplateResponse(
                 1L,
                 "title_1",
+                "description_1",
                 List.of(
                         new BottariTemplateItemResponse(1L, "item_1"),
                         new BottariTemplateItemResponse(2L, "item_2")
@@ -82,6 +83,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         1L,
                         "title_1",
+                        "description_1",
                         List.of(
                                 new BottariTemplateItemResponse(1L, "item_1"),
                                 new BottariTemplateItemResponse(2L, "item_2")
@@ -97,6 +99,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         2L,
                         "title_2",
+                        "description_2",
                         List.of(
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
@@ -127,6 +130,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         1L,
                         "title_1",
+                        "description_1",
                         List.of(
                                 new BottariTemplateItemResponse(1L, "item_1"),
                                 new BottariTemplateItemResponse(2L, "item_2")
@@ -142,6 +146,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         2L,
                         "title_2",
+                        "description_2",
                         List.of(
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
@@ -171,6 +176,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         1L,
                         "여행용 체크리스트",
+                        "여행용",
                         List.of(
                                 new BottariTemplateItemResponse(1L, "여권"),
                                 new BottariTemplateItemResponse(2L, "항공권")
@@ -186,6 +192,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         2L,
                         "캠핑 준비물",
+                        "캠핑용",
                         List.of(
                                 new BottariTemplateItemResponse(3L, "텐트")
                         ),
@@ -209,12 +216,73 @@ class BottariTemplateControllerTest {
                 2L,
                 "2024-12-20T10:30:00Z"
         );
-        given(bottariTemplateService.getNextAll(any()))
+        given(bottariTemplateService.getNextAllByTitle(any()))
                 .willReturn(response);
 
         // when & then
-        mockMvc.perform(get("/templates/cursor")
+        mockMvc.perform(get("/templates/title")
                         .param("query", "")
+                        .param("page", "0")
+                        .param("size", "2")
+                        .param("property", "createdAt"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
+    }
+
+    @DisplayName("특정 해쉬태그를 가진 보따리 템플릿 목록을 페이징하여 조회한다.")
+    @Test
+    void readNextAllByHashtag() throws Exception {
+        // given
+        final List<ReadBottariTemplateResponse> contents = List.of(
+                new ReadBottariTemplateResponse(
+                        1L,
+                        "여행용 체크리스트",
+                        "여행용",
+                        List.of(
+                                new BottariTemplateItemResponse(1L, "여권"),
+                                new BottariTemplateItemResponse(2L, "항공권")
+                        ),
+                        "author_1",
+                        LocalDateTime.now().minusDays(2),
+                        5,
+                        List.of(
+                                new HashtagResponse(1L, "호떡짱짱"),
+                                new HashtagResponse(2L, "혼자여행")
+                        )
+                ),
+                new ReadBottariTemplateResponse(
+                        2L,
+                        "캠핑 준비물",
+                        "캠핑용",
+                        List.of(
+                                new BottariTemplateItemResponse(3L, "텐트")
+                        ),
+                        "author_2",
+                        LocalDateTime.now().minusDays(1),
+                        3,
+                        List.of(
+                                new HashtagResponse(3L, "캠핑"),
+                                new HashtagResponse(4L, "가족나들이")
+                        )
+                )
+        );
+        final ReadNextBottariTemplateResponse response = new ReadNextBottariTemplateResponse(
+                contents,
+                0,
+                2,
+                true,
+                true,
+                false,
+                SortProperty.CREATED_AT.getProperty(),
+                2L,
+                "2024-12-20T10:30:00Z"
+        );
+        given(bottariTemplateService.getNextAllByHashTag(any()))
+                .willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/templates/hashtag")
+                        .param("hashtagId", "1")
                         .param("page", "0")
                         .param("size", "2")
                         .param("property", "createdAt"))
@@ -230,6 +298,7 @@ class BottariTemplateControllerTest {
         final List<String> bottariTemplateItems = List.of("item1", "item2");
         final CreateBottariTemplateRequest request = new CreateBottariTemplateRequest(
                 "title",
+                "description",
                 bottariTemplateItems,
                 List.of("hashtag1", "hashtag2")
         );
