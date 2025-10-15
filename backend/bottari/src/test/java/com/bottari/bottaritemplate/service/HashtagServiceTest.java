@@ -51,10 +51,10 @@ class HashtagServiceTest {
             entityManager.persist(hashtag2);
             entityManager.persist(hashtag3);
 
-            final BottariTemplate template1 = new BottariTemplate("title1", member);
-            final BottariTemplate template2 = new BottariTemplate("title2", member);
-            final BottariTemplate template3 = new BottariTemplate("title3", member);
-            final BottariTemplate template4 = new BottariTemplate("title4", member);
+            final BottariTemplate template1 = new BottariTemplate("title1", "description1", member);
+            final BottariTemplate template2 = new BottariTemplate("title2", "description2", member);
+            final BottariTemplate template3 = new BottariTemplate("title3", "description3", member);
+            final BottariTemplate template4 = new BottariTemplate("title4", "description4", member);
             entityManager.persist(template1);
             entityManager.persist(template2);
             entityManager.persist(template3);
@@ -100,8 +100,8 @@ class HashtagServiceTest {
             entityManager.persist(hashtag1);
             entityManager.persist(hashtag2);
 
-            final BottariTemplate template1 = new BottariTemplate("title1", member);
-            final BottariTemplate template2 = new BottariTemplate("title2", member);
+            final BottariTemplate template1 = new BottariTemplate("title1", "description1", member);
+            final BottariTemplate template2 = new BottariTemplate("title2", "description2", member);
             entityManager.persist(template1);
             entityManager.persist(template2);
 
@@ -130,8 +130,8 @@ class HashtagServiceTest {
             final Hashtag hashtag = new Hashtag("여행");
             entityManager.persist(hashtag);
 
-            final BottariTemplate template1 = new BottariTemplate("title1", member);
-            final BottariTemplate template2 = new BottariTemplate("title2", member);
+            final BottariTemplate template1 = new BottariTemplate("title1", "description1", member);
+            final BottariTemplate template2 = new BottariTemplate("title2", "description2", member);
             entityManager.persist(template1);
             entityManager.persist(template2);
 

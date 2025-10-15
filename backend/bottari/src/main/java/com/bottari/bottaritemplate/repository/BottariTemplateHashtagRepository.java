@@ -2,8 +2,8 @@ package com.bottari.bottaritemplate.repository;
 
 import com.bottari.bottaritemplate.domain.BottariTemplate;
 import com.bottari.bottaritemplate.domain.BottariTemplateHashtag;
-import com.bottari.bottaritemplate.repository.dto.HashtagPopularityProjection;
 import com.bottari.bottaritemplate.repository.dto.BottariTemplateProjection;
+import com.bottari.bottaritemplate.repository.dto.HashtagPopularityProjection;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -90,7 +90,7 @@ public interface BottariTemplateHashtagRepository extends JpaRepository<BottariT
                 h.name AS hashtagName,
                 COUNT(bth.id) AS usageCount
             FROM hashtag h
-            INNER JOIN bottari_template_hashtag bth ON bth.hashtag = h.id
+            INNER JOIN bottari_template_hashtag bth ON bth.hashtag_id = h.id
             WHERE bth.deleted_at IS NULL
             GROUP BY h.id, h.name
             ORDER BY usageCount DESC, h.id ASC
