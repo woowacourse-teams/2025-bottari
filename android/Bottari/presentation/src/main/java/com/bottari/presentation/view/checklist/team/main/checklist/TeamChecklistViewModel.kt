@@ -48,6 +48,7 @@ class TeamChecklistViewModel(
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
 ) : BaseViewModel<TeamChecklistUiState, TeamChecklistUiEvent>(TeamChecklistUiState()) {
     private val teamBottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
+    private var memberId: Long = -1
 
     private val pendingCheckStatusMap =
         mutableMapOf<Pair<Long, BottariItemTypeUiModel>, TeamChecklistProductUiModel>()
@@ -60,6 +61,7 @@ class TeamChecklistViewModel(
 
     init {
         fetchTeamCheckList()
+        fetchMemberId()
         handleEvent()
     }
 
@@ -120,6 +122,12 @@ class TeamChecklistViewModel(
         updateState { copy(swipedItems = this.swipedItems + item) }
     }
 
+    private fun fetchMemberId() {
+        launch {
+            memberId = getMemberIdUseCase().getOrDefault(-1)
+        }
+    }
+
     private fun List<TeamChecklistItem>.toggleItemInList(item: TeamChecklistProductUiModel): List<TeamChecklistItem> =
         this.map { listItem ->
             if (listItem.isSameItem(item).not()) return@map listItem
@@ -157,9 +165,9 @@ class TeamChecklistViewModel(
 
     private fun EventData.shouldIgnore(): Boolean =
         when (this) {
-            is EventData.AssignedItemInfoCreate,
-            is EventData.AssignedItemInfoDelete,
-            is EventData.AssignedItemInfoChange,
+            is EventData.AssignedItemInfoCreate -> containMember(memberId).not()
+            is EventData.AssignedItemInfoDelete -> containMember(memberId).not()
+            is EventData.AssignedItemInfoChange -> containMember(memberId).not()
             is EventData.SharedItemInfoCreate,
             is EventData.SharedItemInfoDelete,
             -> false
