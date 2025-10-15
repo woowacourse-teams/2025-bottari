@@ -91,8 +91,18 @@ class TeamSharedItemEditViewModel(
 
         launch {
             fetchTeamSharedItemsUseCase(bottariId)
-                .onSuccess { items -> updateState { copy(sharedItems = items.map { BottariItemUiModel.fromDomain(it) }) } }
-                .onFailure { emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure) }
+                .onSuccess { items ->
+                    updateState {
+                        copy(
+                            sharedItems =
+                                items.map {
+                                    BottariItemUiModel.fromDomain(
+                                        it,
+                                    )
+                                },
+                        )
+                    }
+                }.onFailure { emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure) }
 
             updateState { copy(isLoading = false, isFetched = true) }
         }
@@ -100,9 +110,10 @@ class TeamSharedItemEditViewModel(
 
     private fun EventData.shouldIgnore(): Boolean =
         when (this) {
-            is EventData.SharedItemChange,
             is EventData.SharedItemInfoCreate,
             is EventData.SharedItemInfoDelete,
+            is EventData.TeamMemberCreate,
+            is EventData.TeamMemberDelete,
             -> false
 
             else -> true

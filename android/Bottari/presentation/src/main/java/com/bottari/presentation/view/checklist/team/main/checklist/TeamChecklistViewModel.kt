@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.di.usecase.CommonUseCaseProvider
+import com.bottari.di.usecase.MemberUseCaseProvider
 import com.bottari.di.usecase.TeamBottariItemsUseCaseProvider
 import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.model.event.EventData
@@ -14,6 +15,7 @@ import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.bottari.TeamBottariCheckList
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
+import com.bottari.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.UncheckTeamBottariItemUseCase
@@ -29,8 +31,8 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -41,6 +43,7 @@ class TeamChecklistViewModel(
     private val fetchTeamBottariChecklistUseCase: FetchTeamChecklistUseCase,
     private val checkTeamBottariItemUseCase: CheckTeamBottariItemUseCase,
     private val unCheckTeamBottariItemUseCase: UncheckTeamBottariItemUseCase,
+    private val getMemberIdUseCase: GetMemberIdUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
 ) : BaseViewModel<TeamChecklistUiState, TeamChecklistUiEvent>(TeamChecklistUiState()) {
@@ -145,21 +148,24 @@ class TeamChecklistViewModel(
             connectTeamEventUseCase(teamBottariId)
                 .filterIsInstance<EventState.OnEvent>()
                 .map { event -> event.data }
-                .filter { eventData ->
-                    when (eventData) {
-                        is EventData.TeamMemberCreate,
-                        is EventData.TeamMemberDelete,
-                        is EventData.SharedItemCheck,
-                        is EventData.AssignedItemCheck,
-                        -> false
-
-                        else -> true
-                    }
-                }.debounce(DEBOUNCE_DELAY)
+                .filterNot { eventData -> eventData.shouldIgnore() }
+                .debounce(DEBOUNCE_DELAY)
                 .onEach { fetchTeamCheckList() }
                 .launchIn(this)
         }
     }
+
+    private fun EventData.shouldIgnore(): Boolean =
+        when (this) {
+            is EventData.AssignedItemInfoCreate,
+            is EventData.AssignedItemInfoDelete,
+            is EventData.AssignedItemInfoChange,
+            is EventData.SharedItemInfoCreate,
+            is EventData.SharedItemInfoDelete,
+            -> false
+
+            else -> true
+        }
 
     private fun setTeamCheckList(checklistData: TeamBottariCheckList) {
         val newItems = checklistData.toUIModel()
@@ -321,6 +327,7 @@ class TeamChecklistViewModel(
                         TeamBottariItemsUseCaseProvider.fetchTeamChecklistUseCase,
                         TeamBottariItemsUseCaseProvider.checkTeamBottariItemUseCase,
                         TeamBottariItemsUseCaseProvider.uncheckTeamBottariItemUseCase,
+                        MemberUseCaseProvider.getMemberIdUseCase,
                         CommonUseCaseProvider.connectTeamEventUseCase,
                         CommonUseCaseProvider.disconnectTeamEventUseCase,
                     )
