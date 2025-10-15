@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: bottari
+  jpa:
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+    open-in-view: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Asia/Seoul
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: never
+
+management:
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.9, 0.95, 0.99
+  tracing:
+    # Spring Boot 3.x부터 Micrometer Tracing을 통해 내장된 트레이싱 기능을 활성화/비활성화합니다.
+    # 이 프로젝트에서는 OpenTelemetry Java Agent를 사용하여 애플리케이션을 계측하므로,
+    # Spring Boot의 내장 트레이싱 기능은 false로 비활성화되어 있습니다.
+    # 중복 계측을 피하고 OpenTelemetry Agent에 의한 자동 계측에 의존하기 위함입니다.
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    prometheus:
+      access: unrestricted
+firebase:
+  service:
+    key-path: ${FIREBASE_SERVICE_ACCOUNT_JSON}

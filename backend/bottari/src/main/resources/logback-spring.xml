@@ -13,7 +13,7 @@
         </root>
     </springProfile>
 
-    <springProfile name="dev,prod">
+    <springProfile name="dev,dev1,prod">
         <include resource="appender/console-appender.xml"/>
         <include resource="appender/file-business-exception-log-appender.xml"/>
         <include resource="appender/file-exception-log-appender.xml"/>
