@@ -1,36 +1,29 @@
 package com.bottari.bottari
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-import androidx.work.DelegatingWorkerFactory
-import com.bottari.di.ApplicationContextProvider
-import com.bottari.di.usecase.CommonUseCaseProvider
 import com.bottari.logger.BottariLogger
-import com.bottari.presentation.worker.NotificationWorkerFactory
+import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
+@HiltAndroidApp
 class BottariApplication :
     Application(),
     Configuration.Provider {
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
     override val workManagerConfiguration: Configuration
-        get() {
-            val workerFactory =
-                DelegatingWorkerFactory().apply {
-                    addFactory(
-                        NotificationWorkerFactory(
-                            fetchNotificationsUseCase = CommonUseCaseProvider.fetchNotificationsUseCase,
-                        ),
-                    )
-                }
-            return Configuration
+        get() =
+            Configuration
                 .Builder()
                 .setWorkerFactory(workerFactory)
                 .build()
-        }
 
     override fun onCreate() {
         super.onCreate()
         BottariLogger.init(this)
-        ApplicationContextProvider.init(this)
         BottariLogger.global(APPLICATION_INIT_MESSAGE)
     }
 
