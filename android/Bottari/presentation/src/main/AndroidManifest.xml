@@ -26,11 +26,11 @@
                 <data android:pathPrefix="/team" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.home.HomeActivity"
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustNothing" />
+<!--        <activity-->
+<!--            android:name=".view.home.HomeActivity"-->
+<!--            android:exported="false"-->
+<!--            android:launchMode="singleTask"-->
+<!--            android:windowSoftInputMode="adjustNothing" />-->
         <activity
             android:name=".view.checklist.personal.ChecklistActivity"
             android:exported="false" />
