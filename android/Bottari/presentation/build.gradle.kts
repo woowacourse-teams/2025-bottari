@@ -123,8 +123,8 @@ dependencies {
     implementation(libs.material.calendarview)
     implementation(libs.threetenabp)
 
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.messaging)
+    api(platform(libs.firebase.bom))
+    api(libs.firebase.messaging)
 
     testImplementation(libs.bundles.test)
     androidTestImplementation(platform(libs.androidx.compose.bom))
