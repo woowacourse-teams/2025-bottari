@@ -68,10 +68,7 @@ jobs:
       - name: Deploy using Docker Compose
         working-directory: /home/ubuntu
         run: |
+          IMAGE_NAME=$IMAGE_NAME \
           IMAGE_TAG=$IMAGE_TAG \
-          DATABASE_URL='${{ secrets.DATABASE_DEV_URL }}' \
-          DATABASE_USERNAME='${{ secrets.DATABASE_DEV_USERNAME }}' \
-          DATABASE_PASSWORD='${{ secrets.DATABASE_DEV_PASSWORD }}' \
           FIREBASE_SERVICE_ACCOUNT_JSON='${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}' \
-          DEV_OTLP_ENDPOINT='${{ secrets.DEV_OTLP_ENDPOINT }}' \
           docker compose -f docker-compose.dev.yml up -d --force-recreate
