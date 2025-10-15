@@ -2,36 +2,116 @@ package com.bottari.presentation.service.fcm
 
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.R
+import com.bottari.presentation.service.fcm.FcmMessage.Companion.KEY_EVENT
+import com.bottari.presentation.service.fcm.FcmMessage.Companion.KEY_RESOURCE
 import com.bottari.presentation.util.NotificationHelper
+import org.json.JSONObject
 
 sealed class FcmMessage {
     abstract fun sendNotification(notificationHelper: NotificationHelper)
 
-    data class TeamItemChanged(
+    data class TeamMemberDelete(
+        val bottariId: Long,
+        val bottariName: String,
+        val exitMemberId: Long,
+        val exitMemberName: String,
+        val publishedAt: String,
+    ) : FcmMessage() {
+        override fun sendNotification(notificationHelper: NotificationHelper) {
+            notificationHelper.sendTeamMessage(
+                bottariId,
+                bottariName,
+                R.string.notification_team_bottari_notification_exit_message,
+                exitMemberName,
+                bottariName,
+            )
+        }
+
+        companion object {
+            const val TYPE = "TEAM_MEMBER_DELETE"
+            private const val KEY_BOTTARI_ID = "bottariId"
+            private const val KEY_BOTTARI_NAME = "bottariName"
+            private const val KEY_EXIT_MEMBER_ID = "exitMemberId"
+            private const val KEY_EXIT_MEMBER_NAME = "exitMemberName"
+            private const val KEY_PUBLISHED_AT = "publishedAt"
+
+            fun fromData(data: JSONObject): TeamMemberDelete =
+                TeamMemberDelete(
+                    data.getLong(KEY_BOTTARI_ID),
+                    data.getString(KEY_BOTTARI_NAME),
+                    data.getLong(KEY_EXIT_MEMBER_ID),
+                    data.getString(KEY_EXIT_MEMBER_NAME),
+                    data.getString(KEY_PUBLISHED_AT),
+                )
+        }
+    }
+
+    data class SharedItemInfoRemind(
         val teamBottariId: Long,
         val teamBottariTitle: String,
+        val teamItemName: String,
     ) : FcmMessage() {
         override fun sendNotification(notificationHelper: NotificationHelper) {
             notificationHelper.sendTeamMessage(
                 teamBottariId,
                 teamBottariTitle,
-                R.string.notification_team_bottari_item_changed_message,
+                R.string.notification_team_bottari_remind_by_item_message,
+                teamItemName,
             )
         }
 
         companion object {
-            const val TYPE = "TEAM_ITEM_CHANGED"
+            const val TYPE = "SHARED_ITEM_INFO_REMIND"
+            private const val KEY_TEAM_ID = "teamBottariId"
+            private const val KEY_TEAM_TITLE = "teamBottariTitle"
+            private const val KEY_ITEM_NAME = "teamItemName"
 
-            fun fromData(data: Map<String, String>) =
-                data.getLong(KEY_TEAM_ID)?.let { id ->
-                    TeamItemChanged(id, data.getString(KEY_TEAM_TITLE))
-                }
+            fun fromData(data: JSONObject): SharedItemInfoRemind =
+                SharedItemInfoRemind(
+                    data.getLong(KEY_TEAM_ID),
+                    data.getString(KEY_TEAM_TITLE),
+                    data.getString(KEY_ITEM_NAME),
+                )
         }
     }
 
-    data class RemindByMember(
+    data class AssignedItemInfoRemind(
         val teamBottariId: Long,
         val teamBottariTitle: String,
+        val teamItemName: String,
+        val publishedAt: String,
+    ) : FcmMessage() {
+        override fun sendNotification(notificationHelper: NotificationHelper) {
+            notificationHelper.sendTeamMessage(
+                teamBottariId,
+                teamBottariTitle,
+                R.string.notification_team_bottari_remind_by_item_message,
+                teamItemName,
+            )
+        }
+
+        companion object {
+            const val TYPE = "ASSIGNED_ITEM_INFO_REMIND"
+            private const val KEY_TEAM_ID = "teamBottariId"
+            private const val KEY_TEAM_TITLE = "teamBottariTitle"
+            private const val KEY_ITEM_NAME = "teamItemName"
+            private const val KEY_PUBLISHED_AT = "publishedAt"
+
+            fun fromData(data: JSONObject): AssignedItemInfoRemind =
+                AssignedItemInfoRemind(
+                    data.getLong(KEY_TEAM_ID),
+                    data.getString(KEY_TEAM_TITLE),
+                    data.getString(KEY_ITEM_NAME),
+                    data.getString(KEY_PUBLISHED_AT),
+                )
+        }
+    }
+
+    data class TeamMemberRemind(
+        val teamBottariId: Long,
+        val teamBottariTitle: String,
+        val teamSharedItemNames: List<String>,
+        val teamAssignedItemNames: List<String>,
     ) : FcmMessage() {
         override fun sendNotification(notificationHelper: NotificationHelper) {
             notificationHelper.sendTeamMessage(
@@ -42,72 +122,17 @@ sealed class FcmMessage {
         }
 
         companion object {
-            const val TYPE = "REMIND_BY_TEAM_MEMBER"
+            const val TYPE = "TEAM_MEMBER_REMIND"
+            private const val KEY_TEAM_ID = "teamBottariId"
+            private const val KEY_TEAM_TITLE = "teamBottariTitle"
 
-            fun fromData(data: Map<String, String>) =
-                data.getLong(KEY_TEAM_ID)?.let { id ->
-                    RemindByMember(id, data.getString(KEY_TEAM_TITLE))
-                }
-        }
-    }
-
-    data class RemindByItem(
-        val teamBottariId: Long,
-        val teamBottariTitle: String,
-        val itemName: String,
-    ) : FcmMessage() {
-        override fun sendNotification(notificationHelper: NotificationHelper) {
-            notificationHelper.sendTeamMessage(
-                teamBottariId,
-                teamBottariTitle,
-                R.string.notification_team_bottari_remind_by_item_message,
-                itemName,
-                teamBottariTitle,
-            )
-        }
-
-        companion object {
-            const val TYPE = "REMIND_BY_ITEM"
-            private const val KEY_ITEM_NAME = "teamItemName"
-
-            fun fromData(data: Map<String, String>) =
-                data.getLong(KEY_TEAM_ID)?.let { id ->
-                    RemindByItem(
-                        id,
-                        data.getString(KEY_TEAM_TITLE),
-                        data.getString(KEY_ITEM_NAME),
-                    )
-                }
-        }
-    }
-
-    data class ExitTeam(
-        val teamBottariId: Long,
-        val teamBottariTitle: String,
-        val memberName: String,
-    ) : FcmMessage() {
-        override fun sendNotification(notificationHelper: NotificationHelper) {
-            notificationHelper.sendTeamMessage(
-                teamBottariId,
-                teamBottariTitle,
-                R.string.notification_team_bottari_notification_exit_message,
-                memberName,
-                teamBottariTitle,
-            )
-        }
-
-        companion object {
-            const val TYPE = "EXIT_TEAM_BOTTARI"
-            private const val KEY_MEMBER_NAME = "exitMemberName"
-
-            fun fromData(data: Map<String, String>) =
-                data.getLong(KEY_TEAM_ID)?.let { id ->
-                    ExitTeam(
-                        id,
-                        data.getString(KEY_TEAM_TITLE),
-                        data.getString(KEY_MEMBER_NAME),
-                    )
-                }
+            fun fromData(data: JSONObject): TeamMemberRemind =
+                TeamMemberRemind(
+                    data.getLong(KEY_TEAM_ID),
+                    data.getString(KEY_TEAM_TITLE),
+                    data.getString("teamSharedItemNames").split(","),
+                    data.getString("teamAssignedItemNames").split(","),
+                )
         }
     }
 
@@ -115,31 +140,33 @@ sealed class FcmMessage {
         val rawData: Map<String, String>,
     ) : FcmMessage() {
         override fun sendNotification(notificationHelper: NotificationHelper) {
-            val type = rawData[KEY_TYPE].orEmpty()
+            val eventType = rawData.getType()
             val dataSummary = rawData.entries.joinToString(", ") { "${it.key}=${it.value}" }
-            BottariLogger.error("[FCM] Unknown type: $type, data: $dataSummary")
+            BottariLogger.error("[FCM] Unknown type: $eventType, data: $dataSummary")
         }
     }
 
     companion object {
-        const val KEY_TYPE = "type"
-        const val KEY_TEAM_ID = "teamBottariId"
-        const val KEY_TEAM_TITLE = "teamBottariTitle"
+        const val KEY_RESOURCE = "resource"
+        const val KEY_EVENT = "event"
+        const val KEY_DATA = "data"
 
-        fun fromData(data: Map<String, String>): FcmMessage =
-            when (data[KEY_TYPE]) {
-                TeamItemChanged.TYPE -> TeamItemChanged.fromData(data) ?: Unknown(data)
-                RemindByMember.TYPE -> RemindByMember.fromData(data) ?: Unknown(data)
-                RemindByItem.TYPE -> RemindByItem.fromData(data) ?: Unknown(data)
-                ExitTeam.TYPE -> ExitTeam.fromData(data) ?: Unknown(data)
+        fun fromData(data: Map<String, String>): FcmMessage {
+            val eventData = data.getData() ?: return Unknown(data)
+            return when (data.getType()) {
+                TeamMemberDelete.TYPE -> TeamMemberDelete.fromData(eventData)
+                AssignedItemInfoRemind.TYPE -> AssignedItemInfoRemind.fromData(eventData)
+                SharedItemInfoRemind.TYPE -> SharedItemInfoRemind.fromData(eventData)
+                TeamMemberRemind.TYPE -> TeamMemberRemind.fromData(eventData)
                 else -> Unknown(data)
             }
+        }
     }
 }
 
-private fun Map<String, String>.getLong(key: String): Long? = this[key]?.toLongOrNull()
+private fun Map<String, String>.getType(): String = this[KEY_RESOURCE] + "_" + this[KEY_EVENT]
 
-private fun Map<String, String>.getString(key: String): String = this[key].orEmpty()
+private fun Map<String, String>.getData(key: String = FcmMessage.KEY_DATA): JSONObject? = this[key]?.let { JSONObject(it) }
 
 private fun NotificationHelper.sendTeamMessage(
     teamId: Long,
