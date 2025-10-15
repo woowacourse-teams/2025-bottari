@@ -25,4 +25,5 @@ configurations.all {
 dependencies {
     testImplementation(libs.bundles.test)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.javax.inject)
 }

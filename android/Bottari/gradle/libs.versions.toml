@@ -43,6 +43,7 @@ materialIconsExtendedAndroid = "1.7.8"
 # Hilt
 hilt = "2.57.2"
 androidx-hilt = "1.3.0"
+javax = "1"
 
 # Network
 retrofit = "3.0.0"
@@ -112,6 +113,7 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "androidx-hilt" }
 androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "androidx-hilt" }
+javax-inject = { module = "javax.inject:javax.inject", version.ref = "javax" }
 
 # --- Network ---
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
