@@ -11,8 +11,9 @@ import com.bottari.domain.repository.MemberRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MemberRepositoryImpl(
+class MemberRepositoryImpl @Inject constructor(
     private val memberRemoteDataSource: MemberRemoteDataSource,
     private val memberIdentifierLocalDataSource: MemberIdentifierLocalDataSource,
     private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,

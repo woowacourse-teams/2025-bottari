@@ -6,8 +6,9 @@ import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.repository.BottariItemRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class BottariItemRepositoryImpl(
+class BottariItemRepositoryImpl @Inject constructor(
     private val itemLocalDataSource: ItemLocalDataSource,
 ) : BottariItemRepository {
     override fun fetchItems(bottariId: Long): Flow<List<ChecklistItem>> =

@@ -6,8 +6,9 @@ import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.repository.AlarmRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class AlarmRepositoryImpl(
+class AlarmRepositoryImpl @Inject constructor(
     private val alarmLocalDataSource: AlarmLocalDataSource,
 ) : AlarmRepository {
     override fun findAlarm(bottariId: Long): Flow<Alarm?> =

@@ -9,8 +9,9 @@ import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.repository.BottariRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class BottariRepositoryImpl(
+class BottariRepositoryImpl @Inject constructor(
     private val bottariLocalDataSource: BottariLocalDataSource,
 ) : BottariRepository {
     override fun fetchBottaries(): Flow<List<PersonalBottari>> =
