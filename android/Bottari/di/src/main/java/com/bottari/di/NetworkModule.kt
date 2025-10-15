@@ -5,6 +5,8 @@ import com.bottari.data.network.RetrofitClient
 import com.bottari.data.network.SSEClient
 import com.bottari.data.network.SSEClientImpl
 import com.bottari.data.network.interceptor.AuthInterceptor
+import com.bottari.data.remote.FirebaseRemoteConfigImpl
+import com.bottari.data.remote.RemoteConfig
 import com.bottari.data.service.BottariTemplateService
 import com.bottari.data.service.FcmService
 import com.bottari.data.service.MemberService
@@ -60,7 +62,7 @@ object NetworkModule {
     @Provides
     @Singleton
     @SSEClientType
-    fun provideSSEClient(authInterceptor: AuthInterceptor): OkHttpClient =
+    fun provideOkHttpSSEClient(authInterceptor: AuthInterceptor): OkHttpClient =
         OkHttpClient
             .Builder()
             .addInterceptor(authInterceptor)
@@ -114,4 +116,8 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideFcmService(retrofit: Retrofit): FcmService = retrofit.create(FcmService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideRemoteConfig(): RemoteConfig = FirebaseRemoteConfigImpl()
 }

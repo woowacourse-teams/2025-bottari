@@ -1,31 +1,31 @@
 package com.bottari.di
 
-import com.bottari.data.local.AppConfigDataStore
-import com.bottari.data.local.MemberInfoDataStore
-import com.bottari.data.local.bottari.AlarmDao
-import com.bottari.data.local.bottari.ItemDao
-import com.bottari.data.network.SSEClient
-import com.bottari.data.remote.RemoteConfig
-import com.bottari.data.service.BottariTemplateService
-import com.bottari.data.service.FcmService
-import com.bottari.data.service.MemberService
-import com.bottari.data.service.ReportService
-import com.bottari.data.service.TeamBottariItemsService
-import com.bottari.data.service.TeamBottariService
-import com.bottari.data.service.TeamMemberService
 import com.bottari.data.source.local.AppConfigDataSource
+import com.bottari.data.source.local.AppConfigLocalDataSourceImpl
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
+import com.bottari.data.source.local.MemberIdentifierLocalDataSourceImpl
 import com.bottari.data.source.local.bottari.AlarmLocalDataSource
+import com.bottari.data.source.local.bottari.AlarmLocalDataSourceImpl
 import com.bottari.data.source.local.bottari.ItemLocalDataSource
+import com.bottari.data.source.local.bottari.ItemLocalDataSourceImpl
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
+import com.bottari.data.source.remote.BottariTemplateRemoteDataSourceImpl
 import com.bottari.data.source.remote.EventRemoteDataSource
+import com.bottari.data.source.remote.EventRemoteDataSourceImpl
 import com.bottari.data.source.remote.FcmRemoteDataSource
+import com.bottari.data.source.remote.FcmRemoteDataSourceImpl
 import com.bottari.data.source.remote.MemberRemoteDataSource
+import com.bottari.data.source.remote.MemberRemoteDataSourceImpl
 import com.bottari.data.source.remote.RemoteConfigRemoteDataSource
+import com.bottari.data.source.remote.RemoteConfigRemoteDataSourceImpl
 import com.bottari.data.source.remote.ReportRemoteDataSource
+import com.bottari.data.source.remote.ReportRemoteDataSourceImpl
 import com.bottari.data.source.remote.TeamBottariItemsRemoteDataSource
+import com.bottari.data.source.remote.TeamBottariItemsRemoteDataSourceImpl
 import com.bottari.data.source.remote.TeamBottariRemoteDataSource
+import com.bottari.data.source.remote.TeamBottariRemoteDataSourceImpl
 import com.bottari.data.source.remote.TeamMemberRemoteDataSource
+import com.bottari.data.source.remote.TeamMemberRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -37,53 +37,53 @@ import javax.inject.Singleton
 abstract class DataSourceModule {
     @Binds
     @Singleton
-    abstract fun bindMemberRemoteDataSource(service: MemberService): MemberRemoteDataSource
+    abstract fun bindMemberRemoteDataSource(impl: MemberRemoteDataSourceImpl): MemberRemoteDataSource
 
     @Binds
     @Singleton
-    abstract fun bindAlarmLocalDataSource(dao: AlarmDao): AlarmLocalDataSource
+    abstract fun bindAlarmLocalDataSource(impl: AlarmLocalDataSourceImpl): AlarmLocalDataSource
 
     @Binds
     @Singleton
-    abstract fun bindItemLocalDataSource(dao: ItemDao): ItemLocalDataSource
+    abstract fun bindItemLocalDataSource(impl: ItemLocalDataSourceImpl): ItemLocalDataSource
 
     @Binds
     @Singleton
-    abstract fun bindBottariTemplateRemoteDataSource(service: BottariTemplateService): BottariTemplateRemoteDataSource
+    abstract fun bindBottariTemplateRemoteDataSource(impl: BottariTemplateRemoteDataSourceImpl): BottariTemplateRemoteDataSource
 
     @Binds
     @Singleton
-    abstract fun bindAppConfigDataSource(dataStore: AppConfigDataStore): AppConfigDataSource
+    abstract fun bindAppConfigDataSource(impl: AppConfigLocalDataSourceImpl): AppConfigDataSource
 
     @Binds
     @Singleton
-    abstract fun bindReportRemoteDataSource(service: ReportService): ReportRemoteDataSource
+    abstract fun bindReportRemoteDataSource(impl: ReportRemoteDataSourceImpl): ReportRemoteDataSource
 
     @Binds
     @Singleton
-    abstract fun bindMemberIdentifierLocalDataSource(dataStore: MemberInfoDataStore): MemberIdentifierLocalDataSource
+    abstract fun bindMemberIdentifierLocalDataSource(impl: MemberIdentifierLocalDataSourceImpl): MemberIdentifierLocalDataSource
 
     @Binds
     @Singleton
-    abstract fun bindTeamBottariRemoteDataSource(service: TeamBottariService): TeamBottariRemoteDataSource
+    abstract fun bindTeamBottariRemoteDataSource(impl: TeamBottariRemoteDataSourceImpl): TeamBottariRemoteDataSource
 
     @Binds
     @Singleton
-    abstract fun bindTeamMemberRemoteDataSource(service: TeamMemberService): TeamMemberRemoteDataSource
+    abstract fun bindTeamMemberRemoteDataSource(impl: TeamMemberRemoteDataSourceImpl): TeamMemberRemoteDataSource
 
     @Binds
     @Singleton
-    abstract fun bindTeamBottariItemsRemoteDataSource(service: TeamBottariItemsService): TeamBottariItemsRemoteDataSource
+    abstract fun bindTeamBottariItemsRemoteDataSource(impl: TeamBottariItemsRemoteDataSourceImpl): TeamBottariItemsRemoteDataSource
 
     @Binds
     @Singleton
-    abstract fun bindFcmRemoteDataSource(service: FcmService): FcmRemoteDataSource
+    abstract fun bindFcmRemoteDataSource(impl: FcmRemoteDataSourceImpl): FcmRemoteDataSource
 
     @Binds
     @Singleton
-    abstract fun bindRemoteConfigRemoteDataSource(config: RemoteConfig): RemoteConfigRemoteDataSource
+    abstract fun bindRemoteConfigRemoteDataSource(impl: RemoteConfigRemoteDataSourceImpl): RemoteConfigRemoteDataSource
 
     @Binds
     @Singleton
-    abstract fun bindEventRemoteDataSource(client: SSEClient): EventRemoteDataSource
+    abstract fun bindEventRemoteDataSource(impl: EventRemoteDataSourceImpl): EventRemoteDataSource
 }

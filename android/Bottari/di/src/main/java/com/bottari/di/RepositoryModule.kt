@@ -1,19 +1,18 @@
 package com.bottari.di
 
-import com.bottari.data.source.local.AppConfigDataSource
-import com.bottari.data.source.local.MemberIdentifierLocalDataSource
-import com.bottari.data.source.local.bottari.AlarmLocalDataSource
-import com.bottari.data.source.local.bottari.BottariLocalDataSource
-import com.bottari.data.source.local.bottari.ItemLocalDataSource
-import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
-import com.bottari.data.source.remote.EventRemoteDataSource
-import com.bottari.data.source.remote.FcmRemoteDataSource
-import com.bottari.data.source.remote.MemberRemoteDataSource
-import com.bottari.data.source.remote.RemoteConfigRemoteDataSource
-import com.bottari.data.source.remote.ReportRemoteDataSource
-import com.bottari.data.source.remote.TeamBottariItemsRemoteDataSource
-import com.bottari.data.source.remote.TeamBottariRemoteDataSource
-import com.bottari.data.source.remote.TeamMemberRemoteDataSource
+import com.bottari.data.repository.AlarmRepositoryImpl
+import com.bottari.data.repository.AppConfigRepositoryImpl
+import com.bottari.data.repository.BottariItemRepositoryImpl
+import com.bottari.data.repository.BottariRepositoryImpl
+import com.bottari.data.repository.BottariTemplateRepositoryImpl
+import com.bottari.data.repository.EventRepositoryImpl
+import com.bottari.data.repository.FcmRepositoryImpl
+import com.bottari.data.repository.MemberRepositoryImpl
+import com.bottari.data.repository.RemoteConfigRepositoryImpl
+import com.bottari.data.repository.ReportRepositoryImpl
+import com.bottari.data.repository.TeamBottariItemsRepositoryImpl
+import com.bottari.data.repository.TeamBottariRepositoryImpl
+import com.bottari.data.repository.TeamMemberRepositoryImpl
 import com.bottari.domain.repository.AlarmRepository
 import com.bottari.domain.repository.AppConfigRepository
 import com.bottari.domain.repository.BottariItemRepository
@@ -38,59 +37,53 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindMemberRepository(
-        memberDataSource: MemberRemoteDataSource,
-        memberIdentifierDataSource: MemberIdentifierLocalDataSource,
-    ): MemberRepository
+    abstract fun bindMemberRepository(impl: MemberRepositoryImpl): MemberRepository
 
     @Binds
     @Singleton
-    abstract fun bindBottariRepository(dataSource: BottariLocalDataSource): BottariRepository
+    abstract fun bindBottariRepository(impl: BottariRepositoryImpl): BottariRepository
 
     @Binds
     @Singleton
-    abstract fun bindAlarmRepository(dataSource: AlarmLocalDataSource): AlarmRepository
+    abstract fun bindAlarmRepository(impl: AlarmRepositoryImpl): AlarmRepository
 
     @Binds
     @Singleton
-    abstract fun bindBottariItemRepository(dataSource: ItemLocalDataSource): BottariItemRepository
+    abstract fun bindBottariItemRepository(impl: BottariItemRepositoryImpl): BottariItemRepository
 
     @Binds
     @Singleton
-    abstract fun bindBottariTemplateRepository(dataSource: BottariTemplateRemoteDataSource): BottariTemplateRepository
+    abstract fun bindBottariTemplateRepository(impl: BottariTemplateRepositoryImpl): BottariTemplateRepository
 
     @Binds
     @Singleton
-    abstract fun bindAppConfigRepository(dataSource: AppConfigDataSource): AppConfigRepository
+    abstract fun bindAppConfigRepository(impl: AppConfigRepositoryImpl): AppConfigRepository
 
     @Binds
     @Singleton
-    abstract fun bindReportRepository(dataSource: ReportRemoteDataSource): ReportRepository
+    abstract fun bindReportRepository(impl: ReportRepositoryImpl): ReportRepository
 
     @Binds
     @Singleton
-    abstract fun bindTeamBottariRepository(dataSource: TeamBottariRemoteDataSource): TeamBottariRepository
+    abstract fun bindTeamBottariRepository(impl: TeamBottariRepositoryImpl): TeamBottariRepository
 
     @Binds
     @Singleton
-    abstract fun bindTeamMemberRepository(dataSource: TeamMemberRemoteDataSource): TeamMemberRepository
+    abstract fun bindTeamMemberRepository(impl: TeamMemberRepositoryImpl): TeamMemberRepository
 
     @Binds
     @Singleton
-    abstract fun bindTeamBottariItemsRepository(dataSource: TeamBottariItemsRemoteDataSource): TeamBottariItemsRepository
+    abstract fun bindTeamBottariItemsRepository(impl: TeamBottariItemsRepositoryImpl): TeamBottariItemsRepository
 
     @Binds
     @Singleton
-    abstract fun bindFcmRepository(
-        fcmDataSource: FcmRemoteDataSource,
-        memberIdentifierDataSource: MemberIdentifierLocalDataSource,
-    ): FcmRepository
+    abstract fun bindFcmRepository(impl: FcmRepositoryImpl): FcmRepository
 
     @Binds
     @Singleton
-    abstract fun bindRemoteConfigRepository(dataSource: RemoteConfigRemoteDataSource): RemoteConfigRepository
+    abstract fun bindRemoteConfigRepository(impl: RemoteConfigRepositoryImpl): RemoteConfigRepository
 
     @Binds
     @Singleton
-    abstract fun bindEventRepository(dataSource: EventRemoteDataSource): EventRepository
+    abstract fun bindEventRepository(impl: EventRepositoryImpl): EventRepository
 }
