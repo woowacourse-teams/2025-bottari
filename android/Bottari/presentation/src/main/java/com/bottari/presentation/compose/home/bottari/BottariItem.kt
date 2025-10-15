@@ -8,15 +8,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.formatWithPattern
 import com.bottari.presentation.compose.common.component.BottariBox
+import com.bottari.presentation.compose.common.component.BottariCheckIndicator
+import com.bottari.presentation.compose.common.component.chooseBottariStateColor
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.alarm.AlarmTypeUiModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
@@ -190,16 +187,6 @@ private fun BottariTypeLabel(
     }
 }
 
-@Composable
-private fun chooseBottariStateColor(
-    checkedQuantity: Int,
-    totalQuantity: Int,
-): Color {
-    if (checkedQuantity == 0) return BottariTheme.colors.gray400
-    if (checkedQuantity == totalQuantity) return BottariTheme.colors.primary
-    return Color.Red
-}
-
 private fun dateText(
     alarmUiModel: AlarmUiModel,
     dateFormat: String,
@@ -272,40 +259,6 @@ private fun BottariCheckInfo(
             style = BottariTheme.typography.medium14.toTextStyle(),
         )
     }
-}
-
-@Composable
-private fun BottariCheckIndicator(
-    checkedQuantity: Int,
-    totalQuantity: Int,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .clip(shape = RoundedCornerShape(16.dp))
-                .background(BottariTheme.colors.gray400),
-        contentAlignment = Alignment.CenterStart,
-    ) {
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxWidth(generateIndicatorSize(checkedQuantity, totalQuantity))
-                    .fillMaxHeight()
-                    .clip(shape = RoundedCornerShape(16.dp))
-                    .background(chooseBottariStateColor(checkedQuantity, totalQuantity)),
-        )
-    }
-}
-
-private fun generateIndicatorSize(
-    checkedQuantity: Int,
-    totalQuantity: Int,
-): Float {
-    if (totalQuantity <= 0) return 0F
-    val safeChecked = checkedQuantity.coerceIn(0, totalQuantity)
-    return safeChecked.toFloat() / totalQuantity.toFloat()
 }
 
 @Preview
