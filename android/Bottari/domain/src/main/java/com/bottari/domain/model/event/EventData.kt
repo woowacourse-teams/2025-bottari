@@ -78,6 +78,11 @@ sealed interface EventData {
                 val name: String,
             )
         }
+
+        fun containMember(memberId: Long): Boolean =
+            infos.any { info ->
+                info.assignees.any { assignee -> assignee.memberId == memberId }
+            }
     }
 
     data class AssignedItemCreate(
@@ -90,7 +95,9 @@ sealed interface EventData {
         val infoId: Long,
         val name: String,
         val memberIds: List<Long>,
-    ) : EventData
+    ) : EventData {
+        fun containMember(memberId: Long): Boolean = memberIds.contains(memberId)
+    }
 
     data class AssignedItemInfoDelete(
         val publishedAt: LocalDateTime,
@@ -107,6 +114,11 @@ sealed interface EventData {
                 val name: String,
             )
         }
+
+        fun containMember(memberId: Long): Boolean =
+            infos.any { info ->
+                info.assignees.any { assignee -> assignee.memberId == memberId }
+            }
     }
 
     data class AssignedItemDelete(
