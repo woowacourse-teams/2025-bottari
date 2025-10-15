@@ -2,7 +2,6 @@ package com.bottari.presentation.view.checklist.team.main.checklist
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bottari.presentation.R
@@ -10,7 +9,6 @@ import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamChecklistBinding
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
-import com.bottari.presentation.view.checklist.team.main.checklist.TeamChecklistViewModel.Companion.KEY_BOTTARI_ID
 import com.bottari.presentation.view.checklist.team.main.checklist.adapter.TeamChecklistItemAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -62,9 +60,6 @@ class TeamChecklistFragment :
     }
 
     companion object {
-        fun newInstance(bottariId: Long): TeamChecklistFragment =
-            TeamChecklistFragment().apply {
-                arguments = bundleOf(KEY_BOTTARI_ID to bottariId)
-            }
+        fun newInstance(): TeamChecklistFragment = TeamChecklistFragment()
     }
 }

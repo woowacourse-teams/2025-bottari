@@ -4,7 +4,6 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.bottari.presentation.R
@@ -188,9 +187,6 @@ class TeamSwipeChecklistFragment : BaseFragment<FragmentSwipeChecklistBinding>(F
     companion object {
         private const val INDEX_OFFSET = 1
 
-        fun newInstance(bottariId: Long): TeamSwipeChecklistFragment =
-            TeamSwipeChecklistFragment().apply {
-                arguments = bundleOf(TeamChecklistViewModel.KEY_BOTTARI_ID to bottariId)
-            }
+        fun newInstance(): TeamSwipeChecklistFragment = TeamSwipeChecklistFragment()
     }
 }

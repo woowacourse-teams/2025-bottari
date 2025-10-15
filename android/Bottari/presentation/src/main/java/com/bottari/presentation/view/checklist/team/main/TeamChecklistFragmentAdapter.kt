@@ -20,7 +20,7 @@ class TeamChecklistFragmentAdapter(
 
     override fun createFragment(position: Int): Fragment =
         when (Page.entries.getOrNull(position)) {
-            Page.CHECKLIST -> TeamChecklistFragment.newInstance(bottariId)
+            Page.CHECKLIST -> TeamChecklistFragment.newInstance()
             Page.BOTTARI_STATUS -> TeamBottariStatusFragment.newInstance(bottariId)
             Page.MEMBERS_STATUS -> TeamMembersStatusFragment.newInstance(bottariId)
             null -> throw IllegalArgumentException(ERROR_UNKNOWN_FRAGMENT)

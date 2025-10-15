@@ -13,12 +13,15 @@ import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.compose.home.ComposeHomeActivity
 import com.bottari.presentation.databinding.ActivityTeamChecklistBinding
 import com.bottari.presentation.view.checklist.team.main.TeamChecklistMainFragment
+import com.bottari.presentation.view.checklist.team.main.checklist.TeamChecklistViewModel
 import com.bottari.presentation.view.checklist.team.swipe.TeamSwipeChecklistFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(ActivityTeamChecklistBinding::inflate) {
     private val bottariId: Long by lazy {
         intent.getLongExtra(
-            EXTRA_BOTTARI_ID,
+            TeamChecklistViewModel.KEY_BOTTARI_ID,
             INVALID_BOTTARI_ID,
         )
     }
@@ -87,7 +90,7 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
     private fun navigateToSwipeChecklist() {
         val current = supportFragmentManager.findFragmentById(R.id.fcv_team_checklist)
         if (current is TeamSwipeChecklistFragment) return
-        val fragment = TeamSwipeChecklistFragment.newInstance(bottariId)
+        val fragment = TeamSwipeChecklistFragment.newInstance()
         replaceChecklistFragment(fragment, true)
     }
 
@@ -124,7 +127,7 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
             bottariTitle: String,
         ): Intent =
             Intent(context, TeamChecklistActivity::class.java).apply {
-                putExtra(EXTRA_BOTTARI_ID, bottariId)
+                putExtra(TeamChecklistViewModel.KEY_BOTTARI_ID, bottariId)
                 putExtra(EXTRA_BOTTARI_TITLE, bottariTitle)
             }
 
@@ -134,7 +137,7 @@ class TeamChecklistActivity : BaseActivity<ActivityTeamChecklistBinding>(Activit
             bottariTitle: String,
         ): Intent =
             Intent(context, TeamChecklistActivity::class.java).apply {
-                putExtra(EXTRA_BOTTARI_ID, bottariId)
+                putExtra(TeamChecklistViewModel.KEY_BOTTARI_ID, bottariId)
                 putExtra(EXTRA_BOTTARI_TITLE, bottariTitle)
                 putExtra(EXTRA_NOTIFICATION_FLAG, true)
             }
