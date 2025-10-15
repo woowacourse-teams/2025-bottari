@@ -1,6 +1,7 @@
 package com.bottari.presentation.compose.home.bottari
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,9 +67,17 @@ fun BottariList(
                 },
                 modifier =
                     Modifier
-                        .padding(
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication =
+                                ripple(
+                                    bounded = true,
+                                    color = BottariTheme.colors.primary,
+                                ),
+                            onClick = { onBottariClick(bottari) },
+                        ).padding(
                             horizontal = BottariTheme.spacing.spaceMedium,
-                        ).clickable { onBottariClick(bottari) },
+                        ),
             )
         }
     }
