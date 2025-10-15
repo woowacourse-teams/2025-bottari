@@ -6,6 +6,8 @@ import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.local.MemberIdentifierLocalDataSourceImpl
 import com.bottari.data.source.local.bottari.AlarmLocalDataSource
 import com.bottari.data.source.local.bottari.AlarmLocalDataSourceImpl
+import com.bottari.data.source.local.bottari.BottariLocalDataSource
+import com.bottari.data.source.local.bottari.BottariLocalDataSourceImpl
 import com.bottari.data.source.local.bottari.ItemLocalDataSource
 import com.bottari.data.source.local.bottari.ItemLocalDataSourceImpl
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
@@ -38,6 +40,10 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindMemberRemoteDataSource(impl: MemberRemoteDataSourceImpl): MemberRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindBottariLocalDataSource(impl: BottariLocalDataSourceImpl): BottariLocalDataSource
 
     @Binds
     @Singleton
