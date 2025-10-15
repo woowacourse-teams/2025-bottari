@@ -4,8 +4,9 @@ import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.remote.team.bottari.TeamBottariJoinRequest
 import com.bottari.data.model.remote.team.member.TeamMemberFetchResponse
 import com.bottari.data.service.TeamMemberService
+import javax.inject.Inject
 
-class TeamMemberRemoteDataSourceImpl(
+class TeamMemberRemoteDataSourceImpl @Inject constructor(
     private val teamMemberService: TeamMemberService,
 ) : TeamMemberRemoteDataSource {
     override suspend fun fetchTeamMembers(id: Long): Result<TeamMemberFetchResponse> =

@@ -3,8 +3,9 @@ package com.bottari.data.source.local.bottari
 import com.bottari.data.local.bottari.AlarmDao
 import com.bottari.data.model.local.bottari.AlarmEntity
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class AlarmLocalDataSourceImpl(
+class AlarmLocalDataSourceImpl @Inject constructor(
     private val dao: AlarmDao,
 ) : AlarmLocalDataSource {
     override fun findAlarm(bottariId: Long): Flow<AlarmEntity?> = dao.findAlarm(bottariId)
