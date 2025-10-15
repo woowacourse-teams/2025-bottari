@@ -52,6 +52,7 @@ class BottariTemplateControllerTest {
         final ReadBottariTemplateResponse response = new ReadBottariTemplateResponse(
                 1L,
                 "title_1",
+                "description_1",
                 List.of(
                         new BottariTemplateItemResponse(1L, "item_1"),
                         new BottariTemplateItemResponse(2L, "item_2")
@@ -82,6 +83,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         1L,
                         "title_1",
+                        "description_1",
                         List.of(
                                 new BottariTemplateItemResponse(1L, "item_1"),
                                 new BottariTemplateItemResponse(2L, "item_2")
@@ -97,6 +99,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         2L,
                         "title_2",
+                        "description_2",
                         List.of(
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
@@ -114,7 +117,7 @@ class BottariTemplateControllerTest {
 
         // when & then
         mockMvc.perform(get("/templates/me")
-                                .header("ssaid", ssaid))
+                        .header("ssaid", ssaid))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(responses)));
     }
@@ -127,6 +130,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         1L,
                         "title_1",
+                        "description_1",
                         List.of(
                                 new BottariTemplateItemResponse(1L, "item_1"),
                                 new BottariTemplateItemResponse(2L, "item_2")
@@ -142,6 +146,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         2L,
                         "title_2",
+                        "description_2",
                         List.of(
                                 new BottariTemplateItemResponse(3L, "item_3")
                         ),
@@ -171,6 +176,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         1L,
                         "여행용 체크리스트",
+                        "여행용",
                         List.of(
                                 new BottariTemplateItemResponse(1L, "여권"),
                                 new BottariTemplateItemResponse(2L, "항공권")
@@ -186,6 +192,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         2L,
                         "캠핑 준비물",
+                        "캠핑용",
                         List.of(
                                 new BottariTemplateItemResponse(3L, "텐트")
                         ),
@@ -214,10 +221,10 @@ class BottariTemplateControllerTest {
 
         // when & then
         mockMvc.perform(get("/templates/title")
-                                .param("query", "")
-                                .param("page", "0")
-                                .param("size", "2")
-                                .param("property", "createdAt"))
+                        .param("query", "")
+                        .param("page", "0")
+                        .param("size", "2")
+                        .param("property", "createdAt"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(response)));
     }
@@ -230,6 +237,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         1L,
                         "여행용 체크리스트",
+                        "여행용",
                         List.of(
                                 new BottariTemplateItemResponse(1L, "여권"),
                                 new BottariTemplateItemResponse(2L, "항공권")
@@ -245,6 +253,7 @@ class BottariTemplateControllerTest {
                 new ReadBottariTemplateResponse(
                         2L,
                         "캠핑 준비물",
+                        "캠핑용",
                         List.of(
                                 new BottariTemplateItemResponse(3L, "텐트")
                         ),
@@ -273,10 +282,10 @@ class BottariTemplateControllerTest {
 
         // when & then
         mockMvc.perform(get("/templates/hashtag")
-                                .param("hashtagId", "1")
-                                .param("page", "0")
-                                .param("size", "2")
-                                .param("property", "createdAt"))
+                        .param("hashtagId", "1")
+                        .param("page", "0")
+                        .param("size", "2")
+                        .param("property", "createdAt"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(response)));
     }
@@ -289,16 +298,18 @@ class BottariTemplateControllerTest {
         final List<String> bottariTemplateItems = List.of("item1", "item2");
         final CreateBottariTemplateRequest request = new CreateBottariTemplateRequest(
                 "title",
-                bottariTemplateItems
+                "description",
+                bottariTemplateItems,
+                List.of("hashtag1", "hashtag2")
         );
         given(bottariTemplateService.create(ssaid, request))
                 .willReturn(1L);
 
         // when & then
         mockMvc.perform(post("/templates")
-                                .header("ssaid", ssaid)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(request)))
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(header().string(HttpHeaders.LOCATION, "/templates/1"));
     }
@@ -314,8 +325,8 @@ class BottariTemplateControllerTest {
 
         // when & then
         mockMvc.perform(post("/templates/" + id + "/create-bottari")
-                                .header("ssaid", ssaid)
-                                .contentType(MediaType.APPLICATION_JSON))
+                        .header("ssaid", ssaid)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(header().string(HttpHeaders.LOCATION, "/bottaries/1"));
     }
@@ -331,7 +342,7 @@ class BottariTemplateControllerTest {
 
         // when & then
         mockMvc.perform(MockMvcRequestBuilders.delete("/templates/" + id)
-                                .header("ssaid", ssaid))
+                        .header("ssaid", ssaid))
                 .andExpect(status().isNoContent());
     }
 }

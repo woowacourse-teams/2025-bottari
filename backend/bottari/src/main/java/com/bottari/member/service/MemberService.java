@@ -2,8 +2,8 @@ package com.bottari.member.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.fcm.domain.FcmToken;
-import com.bottari.fcm.repository.FcmTokenRepository;
+import com.bottari.push.notification.fcm.domain.FcmToken;
+import com.bottari.push.notification.fcm.repository.FcmTokenRepository;
 import com.bottari.member.domain.Member;
 import com.bottari.member.dto.CheckRegistrationResponse;
 import com.bottari.member.dto.CreateMemberRequest;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
 
@@ -27,6 +28,13 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final FcmTokenRepository fcmTokenRepository;
+
+    public Long getIdBySsaid(final String ssaid) {
+        final Member member = memberRepository.findBySsaid(ssaid)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
+
+        return member.getId();
+    }
 
     @Transactional
     public Long create(final CreateMemberRequest request) {

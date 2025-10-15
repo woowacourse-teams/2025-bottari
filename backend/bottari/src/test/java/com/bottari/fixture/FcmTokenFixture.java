@@ -1,6 +1,6 @@
 package com.bottari.fixture;
 
-import com.bottari.fcm.domain.FcmToken;
+import com.bottari.push.notification.fcm.domain.FcmToken;
 import com.bottari.member.domain.Member;
 
 public enum FcmTokenFixture {

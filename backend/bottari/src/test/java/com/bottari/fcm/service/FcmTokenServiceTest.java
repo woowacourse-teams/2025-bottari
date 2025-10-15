@@ -5,11 +5,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.error.BusinessException;
-import com.bottari.fcm.domain.FcmToken;
-import com.bottari.fcm.dto.UpdateFcmRequest;
+import com.bottari.push.notification.fcm.domain.FcmToken;
+import com.bottari.push.notification.fcm.dto.UpdateFcmRequest;
 import com.bottari.fixture.FcmTokenFixture;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.member.domain.Member;
+import com.bottari.push.notification.fcm.service.FcmTokenService;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

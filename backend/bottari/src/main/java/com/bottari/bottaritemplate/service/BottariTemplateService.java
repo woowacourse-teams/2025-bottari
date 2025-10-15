@@ -23,6 +23,7 @@ import com.bottari.bottaritemplate.repository.BottariTemplateHashtagRepository;
 import com.bottari.bottaritemplate.repository.BottariTemplateHistoryRepository;
 import com.bottari.bottaritemplate.repository.BottariTemplateItemRepository;
 import com.bottari.bottaritemplate.repository.BottariTemplateRepository;
+import com.bottari.bottaritemplate.repository.HashtagRepository;
 import com.bottari.bottaritemplate.repository.dto.BottariTemplateProjection;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
@@ -34,6 +35,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +45,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BottariTemplateService {
 
@@ -50,6 +53,7 @@ public class BottariTemplateService {
     private final BottariTemplateItemRepository bottariTemplateItemRepository;
     private final BottariTemplateHashtagRepository bottariTemplateHashtagRepository;
     private final BottariTemplateHistoryRepository bottariTemplateHistoryRepository;
+    private final HashtagRepository hashtagRepository;
     private final BottariRepository bottariRepository;
     private final BottariItemRepository bottariItemRepository;
     private final MemberRepository memberRepository;
@@ -107,13 +111,15 @@ public class BottariTemplateService {
     ) {
         final Member member = memberRepository.findBySsaid(ssaid)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND, "등록되지 않은 ssaid입니다."));
-        final BottariTemplate bottariTemplate = new BottariTemplate(request.title(), member);
+        final BottariTemplate bottariTemplate = new BottariTemplate(request.title(), request.description(), member);
         final BottariTemplate savedBottariTemplate = bottariTemplateRepository.save(bottariTemplate);
         validateDuplicateItemNames(request.bottariTemplateItems());
-        final List<BottariTemplateItem> bottariTemplateItems = request.bottariTemplateItems().stream()
+        final List<BottariTemplateItem> bottariTemplateItems = request.bottariTemplateItems()
+                .stream()
                 .map(name -> new BottariTemplateItem(name, savedBottariTemplate))
                 .toList();
         bottariTemplateItemRepository.saveAll(bottariTemplateItems);
+        saveHashtagsIfPresent(request, savedBottariTemplate);
 
         return savedBottariTemplate.getId();
     }
@@ -331,6 +337,60 @@ public class BottariTemplateService {
                 throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_ITEM_DUPLICATE_IN_REQUEST);
             }
         }
+    }
+
+    private void saveHashtagsIfPresent(
+            final CreateBottariTemplateRequest request,
+            final BottariTemplate savedBottariTemplate
+    ) {
+        if (request.hashtagNames() != null && !request.hashtagNames().isEmpty()) {
+            saveHashtags(request.hashtagNames(), savedBottariTemplate);
+        }
+    }
+
+    private void saveHashtags(
+            final List<String> hashtagNames,
+            final BottariTemplate bottariTemplate
+    ) {
+        validateDuplicateHashtagNames(hashtagNames);
+        validateHashtagCount(hashtagNames);
+        final List<Hashtag> allHashtags = findOrCreateHashtags(hashtagNames);
+        final List<BottariTemplateHashtag> templateHashtags = allHashtags.stream()
+                .map(hashtag -> new BottariTemplateHashtag(bottariTemplate, hashtag))
+                .toList();
+        bottariTemplateHashtagRepository.saveAll(templateHashtags);
+    }
+
+    private void validateDuplicateHashtagNames(final List<String> hashtagNames) {
+        final Set<String> uniqueHashtagNames = new HashSet<>(hashtagNames);
+        if (uniqueHashtagNames.size() != hashtagNames.size()) {
+            throw new BusinessException(ErrorCode.HASHTAG_DUPLICATE_IN_REQUEST);
+        }
+    }
+
+    private void validateHashtagCount(final List<String> hashtagNames) {
+        final int maxHashtagCount = 10;
+        if (hashtagNames.size() > maxHashtagCount) {
+            throw new BusinessException(ErrorCode.HASHTAG_TOO_MANY, "최대 %d개까지 입력 가능합니다.".formatted(maxHashtagCount));
+        }
+    }
+
+    private List<Hashtag> findOrCreateHashtags(final List<String> hashtagNames) {
+        final List<Hashtag> existingHashtags = hashtagRepository.findAllByNameIn(hashtagNames);
+        final Set<String> existingHashtagNames = existingHashtags.stream()
+                .map(Hashtag::getName)
+                .collect(Collectors.toSet());
+        final List<Hashtag> newHashtags = hashtagNames.stream()
+                .filter(name -> !existingHashtagNames.contains(name))
+                .map(Hashtag::new)
+                .toList();
+        if (!newHashtags.isEmpty()) {
+            hashtagRepository.saveAll(newHashtags);
+        }
+        final List<Hashtag> allHashtagsToAssociate = new ArrayList<>(existingHashtags);
+        allHashtagsToAssociate.addAll(newHashtags);
+
+        return allHashtagsToAssociate;
     }
 
     private void validateOwner(

@@ -80,9 +80,12 @@ jobs:
           echo "Starting server with $JAR_FILE"
           RUNNER_TRACKING_ID=""
 
-          DATABASE_URL='${{ secrets.DATABASE_PROD_URL }}' \
-          DATABASE_USERNAME='${{ secrets.DATABASE_PROD_USERNAME }}' \
-          DATABASE_PASSWORD='${{ secrets.DATABASE_PROD_PASSWORD }}' \
+          WRITE_DATABASE_URL='${{ secrets.WRITE_DATABASE_PROD_URL }}' \
+          WRITE_DATABASE_USERNAME='${{ secrets.WRITE_DATABASE_PROD_USERNAME }}' \
+          WRITE_DATABASE_PASSWORD='${{ secrets.WRITE_DATABASE_PROD_PASSWORD }}' \
+          READ_DATABASE_URL='${{ secrets.READ_DATABASE_PROD_URL }}' \
+          READ_DATABASE_USERNAME='${{ secrets.READ_DATABASE_PROD_USERNAME }}' \
+          READ_DATABASE_PASSWORD='${{ secrets.READ_DATABASE_PROD_PASSWORD }}' \
           FIREBASE_SERVICE_ACCOUNT_JSON='${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}' \
           SPRING_PROFILES_ACTIVE=prod \
           nohup java -Duser.timezone=Asia/Seoul -jar "$JAR_FILE" --server.port=8080 > app.log 2>&1 &

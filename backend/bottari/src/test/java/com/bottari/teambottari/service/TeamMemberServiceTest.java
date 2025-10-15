@@ -10,11 +10,13 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
 import com.bottari.error.BusinessException;
-import com.bottari.fcm.FcmMessageConverter;
-import com.bottari.fcm.FcmMessageSender;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
+import com.bottari.push.PushManager;
+import com.bottari.push.connection.ConnectionChannels;
+import com.bottari.push.notification.NotificationChannels;
+import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
@@ -41,7 +43,8 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({
         TeamMemberService.class,
-        FcmMessageConverter.class,
+        TeamBottariMessageConverter.class,
+        PushManager.class,
 })
 class TeamMemberServiceTest {
 
@@ -52,7 +55,10 @@ class TeamMemberServiceTest {
     private EntityManager entityManager;
 
     @MockitoBean
-    private FcmMessageSender fcmMessageSender;
+    private NotificationChannels notificationChannels;
+
+    @MockitoBean
+    private ConnectionChannels connectionChannels;
 
     @Nested
     class GetTeamMemberInfoByTeamBottariIdTest {
@@ -520,7 +526,7 @@ class TeamMemberServiceTest {
             final TeamAssignedItem teamAssignedItem = new TeamAssignedItem(teamAssignedItemInfo, anotherTeamMember);
             entityManager.persist(teamAssignedItem);
 
-            doNothing().when(fcmMessageSender).sendMessageToMember(eq(anotherMember.getId()), any());
+            doNothing().when(notificationChannels).unicast(any(), eq(anotherMember.getId()));
 
             // when & then
             assertThatCode(() -> teamMemberService.sendRemindAlarm(
@@ -528,7 +534,8 @@ class TeamMemberServiceTest {
                     anotherMember.getId(),
                     owner.getSsaid())
             ).doesNotThrowAnyException();
-            verify(fcmMessageSender).sendMessageToMember(eq(anotherMember.getId()), any());
+
+            verify(notificationChannels).unicast(any(), eq(anotherMember.getId()));
         }
 
         @DisplayName("존재하지 않는 ssaid인 경우, 예외를 던진다.")

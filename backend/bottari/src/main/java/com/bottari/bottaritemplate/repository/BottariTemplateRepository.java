@@ -33,18 +33,19 @@ public interface BottariTemplateRepository extends JpaRepository<BottariTemplate
                 SELECT STRAIGHT_JOIN
                            bt.id AS bottariTemplateId,
                            bt.title AS title,
+                           bt.description AS description,
                            bt.taken_count AS takenCount,
                            bt.created_at AS bottariTemplateCreatedAt,
                            m.id AS memberId,
                            m.name AS memberName
                 FROM bottari_template bt
-                JOIN member m ON m.id = bt.member_id 
+                JOIN member m ON m.id = bt.member_id
                 WHERE (:query = '' OR MATCH(bt.title) AGAINST(:query IN BOOLEAN MODE))
                     AND(
                             bt.created_at < :lastCreatedAt
                                 OR (bt.created_at = :lastCreatedAt AND bt.id < :lastId)
                             )
-                ORDER BY bt.created_at DESC, bt.id DESC 
+                ORDER BY bt.created_at DESC, bt.id DESC
                 LIMIT :limit
             """, nativeQuery = true)
     List<BottariTemplateProjection> findNextByCreatedAt(
@@ -58,6 +59,7 @@ public interface BottariTemplateRepository extends JpaRepository<BottariTemplate
             SELECT STRAIGHT_JOIN
                   bt.id AS bottariTemplateId,
                   bt.title AS title,
+                  bt.description AS description,
                   bt.taken_count AS takenCount,
                   bt.created_at AS bottariTemplateCreatedAt,
                   m.id AS memberId,
