@@ -231,10 +231,12 @@ public class TeamBottariEventListener {
                 MessageEventType.DELETE,
                 ExitTeamMemberData.from(event)
         );
+        final List<Long> memberIds = teamMemberService.getMemberIdsByTeamBottariId(event.getTeamBottariId());
         pushManager.message(message)
-                .to(event.getExitMemberId())
-                .unicast()
+                .to(memberIds)
+                .multicast()
                 .viaConnection(ChannelType.SSE)
+                .viaNotification()
                 .send();
     }
 }

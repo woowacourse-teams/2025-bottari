@@ -5,6 +5,7 @@ import com.bottari.push.connection.ConnectionChannel;
 import com.bottari.push.message.PushMessage;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,20 @@ public final class SseChannel implements ConnectionChannel {
             final PushMessage message,
             final Long memberId
     ) {
-        throw new UnsupportedOperationException();
+        final Optional<SseEmitter> sseEmitterOptional = sseSessions.findByMemberId(memberId);
+        if (sseEmitterOptional.isEmpty()) {
+            return;
+        }
+        try {
+            sseEmitterOptional.get().send(message, MediaType.APPLICATION_JSON);
+        } catch (final IOException ignore) {
+                /*
+                 클라이언트와의 연결이 끊기거나 타임아웃된 Emitter.send()를 시도할 때 IOException 발생 가능성 있음
+                 register() 시점에 등록된 onCompletion, onTimeout, onError 콜백에서
+                 이미 저장소(sseRepository)에서 제거되었거나 곧 제거될 예정이므로,
+                 해당 예외는 자연스러운 상황으로 간주하고 무시(ignore)함.
+                 */
+        }
     }
 
     @Override
