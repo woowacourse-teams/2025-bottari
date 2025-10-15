@@ -1,8 +1,9 @@
 package com.bottari.domain.usecase.alarm
 
 import com.bottari.domain.repository.AlarmRepository
+import javax.inject.Inject
 
-class UpdateAlarmActivateUseCase(
+class UpdateAlarmActivateUseCase @Inject constructor(
     private val alarmRepository: AlarmRepository,
 ) {
     suspend operator fun invoke(
