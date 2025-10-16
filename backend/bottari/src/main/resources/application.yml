@@ -20,6 +20,11 @@ spring:
     init:
       mode: always
       data-locations: classpath:init.sql
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
 firebase:
   service:
     key-path: ${FIREBASE_SERVICE_ACCOUNT_JSON}
