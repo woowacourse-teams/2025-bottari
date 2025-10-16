@@ -3,10 +3,6 @@ package com.bottari.presentation.view.edit.team.item.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel

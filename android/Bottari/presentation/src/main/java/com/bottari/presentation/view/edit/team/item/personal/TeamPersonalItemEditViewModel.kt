@@ -7,7 +7,6 @@ import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamPersonalItemsUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.bottari.BottariItemUiModel
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
