@@ -7,15 +7,13 @@ import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 
 sealed interface EventDataResponse {
-    val publishedAt: LocalDateTime
-
     fun toDomain(): EventData
 
     @Serializable
     data class TeamMemberCreateResponse(
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)
-        override val publishedAt: LocalDateTime,
+        val publishedAt: LocalDateTime,
         @SerialName("memberId")
         val memberId: Long,
         @SerialName("name")
@@ -30,61 +28,168 @@ sealed interface EventDataResponse {
     data class TeamMemberDeleteResponse(
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)
-        override val publishedAt: LocalDateTime,
-        @SerialName("exitMemberId")
-        val exitMemberId: Long,
+        val publishedAt: LocalDateTime,
         @SerialName("bottariId")
         val bottariId: String,
+        @SerialName("bottariName")
+        val bottariName: String,
+        @SerialName("exitMemberId")
+        val exitMemberId: Long,
+        @SerialName("exitMemberName")
+        val exitMemberName: String,
     ) : EventDataResponse {
-        override fun toDomain(): EventData = EventData.TeamMemberDelete(publishedAt, exitMemberId, bottariId)
+        override fun toDomain(): EventData =
+            EventData.TeamMemberDelete(
+                publishedAt,
+                bottariId,
+                bottariName,
+                exitMemberId,
+                exitMemberName,
+            )
     }
 
     @Serializable
     data class SharedItemInfoCreateResponse(
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)
-        override val publishedAt: LocalDateTime,
-        @SerialName("infoId")
-        val infoId: Long,
-        @SerialName("name")
-        val name: String,
+        val publishedAt: LocalDateTime,
+        @SerialName("teamBottariId")
+        val teamBottariId: Long,
+        @SerialName("infos")
+        val infos: List<Info>,
     ) : EventDataResponse {
-        override fun toDomain(): EventData = EventData.SharedItemInfoCreate(publishedAt, infoId, name)
+        @Serializable
+        data class Info(
+            @SerialName("id")
+            val id: Long,
+            @SerialName("name")
+            val name: String,
+        )
+
+        override fun toDomain(): EventData = EventData.SharedItemInfoCreate(publishedAt, teamBottariId, infos.toDomainInfos())
+
+        private fun List<Info>.toDomainInfos(): List<EventData.SharedItemInfoCreate.Info> =
+            map { info -> EventData.SharedItemInfoCreate.Info(info.id, info.name) }
+    }
+
+    @Serializable
+    data class SharedItemCreateResponse(
+        @SerialName("publishedAt")
+        @Serializable(with = LocalDateTimeSerializer::class)
+        val publishedAt: LocalDateTime,
+        @SerialName("teamBottariId")
+        val teamBottariId: Long,
+    ) : EventDataResponse {
+        override fun toDomain(): EventData = EventData.SharedItemCreate(publishedAt, teamBottariId)
     }
 
     @Serializable
     data class SharedItemInfoDeleteResponse(
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)
-        override val publishedAt: LocalDateTime,
+        val publishedAt: LocalDateTime,
+        @SerialName("teamBottariId")
+        val teamBottariId: Long,
+        @SerialName("infos")
+        val infos: List<Info>,
+    ) : EventDataResponse {
+        @Serializable
+        data class Info(
+            @SerialName("id")
+            val id: Long,
+            @SerialName("name")
+            val name: String,
+        )
+
+        override fun toDomain(): EventData = EventData.SharedItemInfoDelete(publishedAt, teamBottariId, infos.toDomainInfos())
+
+        private fun List<Info>.toDomainInfos(): List<EventData.SharedItemInfoDelete.Info> =
+            map { info -> EventData.SharedItemInfoDelete.Info(info.id, info.name) }
+    }
+
+    @Serializable
+    data class SharedItemDeleteResponse(
+        @SerialName("publishedAt")
+        @Serializable(with = LocalDateTimeSerializer::class)
+        val publishedAt: LocalDateTime,
+        @SerialName("teamBottariId")
+        val teamBottariId: Long,
+    ) : EventDataResponse {
+        override fun toDomain(): EventData = EventData.SharedItemDelete(publishedAt, teamBottariId)
+    }
+
+    @Serializable
+    data class SharedItemCheckResponse(
+        @SerialName("publishedAt")
+        @Serializable(with = LocalDateTimeSerializer::class)
+        val publishedAt: LocalDateTime,
         @SerialName("infoId")
         val infoId: Long,
-        @SerialName("name")
-        val name: String,
+        @SerialName("memberId")
+        val memberId: Long,
+        @SerialName("isChecked")
+        val isChecked: Boolean,
     ) : EventDataResponse {
-        override fun toDomain(): EventData = EventData.SharedItemInfoDelete(publishedAt, infoId, name)
+        override fun toDomain(): EventData = EventData.SharedItemCheck(publishedAt, infoId, memberId, isChecked)
     }
 
     @Serializable
     data class AssignedItemInfoCreateResponse(
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)
-        override val publishedAt: LocalDateTime,
-        @SerialName("infoId")
-        val infoId: Long,
-        @SerialName("name")
-        val name: String,
-        @SerialName("memberIds")
-        val memberIds: List<Long>,
+        val publishedAt: LocalDateTime,
+        @SerialName("teamBottariId")
+        val teamBottariId: Long,
+        @SerialName("infos")
+        val infos: List<Info>,
     ) : EventDataResponse {
-        override fun toDomain(): EventData = EventData.AssignedItemInfoCreate(publishedAt, infoId, name, memberIds)
+        @Serializable
+        data class Info(
+            @SerialName("id")
+            val id: Long,
+            @SerialName("name")
+            val name: String,
+            @SerialName("assignees")
+            val assignees: List<Assignee>,
+        ) {
+            @Serializable
+            data class Assignee(
+                @SerialName("memberId")
+                val memberId: Long,
+                @SerialName("name")
+                val name: String,
+            )
+        }
+
+        override fun toDomain(): EventData = EventData.AssignedItemInfoCreate(publishedAt, teamBottariId, infos.toDomainInfos())
+
+        private fun List<Info>.toDomainInfos(): List<EventData.AssignedItemInfoCreate.Info> =
+            map { info ->
+                EventData.AssignedItemInfoCreate.Info(info.id, info.name, info.assignees.toDomainAssignees())
+            }
+
+        private fun List<Info.Assignee>.toDomainAssignees(): List<EventData.AssignedItemInfoCreate.Info.Assignee> =
+            map { assignee ->
+                EventData.AssignedItemInfoCreate.Info.Assignee(assignee.memberId, assignee.name)
+            }
+    }
+
+    @Serializable
+    data class AssignedItemCreateResponse(
+        @SerialName("publishedAt")
+        @Serializable(with = LocalDateTimeSerializer::class)
+        val publishedAt: LocalDateTime,
+        @SerialName("teamBottariId")
+        val teamBottariId: Long,
+    ) : EventDataResponse {
+        override fun toDomain(): EventData = EventData.AssignedItemCreate(publishedAt, teamBottariId)
     }
 
     @Serializable
     data class AssignedItemInfoChangeResponse(
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)
-        override val publishedAt: LocalDateTime,
+        val publishedAt: LocalDateTime,
         @SerialName("infoId")
         val infoId: Long,
         @SerialName("name")
@@ -99,65 +204,59 @@ sealed interface EventDataResponse {
     data class AssignedItemInfoDeleteResponse(
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)
-        override val publishedAt: LocalDateTime,
-        @SerialName("infoId")
-        val infoId: Long,
-        @SerialName("name")
-        val name: String,
+        val publishedAt: LocalDateTime,
+        @SerialName("teamBottariId")
+        val teamBottariId: Long,
+        @SerialName("infos")
+        val infos: List<Info>,
     ) : EventDataResponse {
-        override fun toDomain(): EventData = EventData.AssignedItemInfoDelete(publishedAt, infoId, name)
+        @Serializable
+        data class Info(
+            @SerialName("id")
+            val id: Long,
+            @SerialName("name")
+            val name: String,
+            @SerialName("assignees")
+            val assignees: List<Assignee>,
+        ) {
+            @Serializable
+            data class Assignee(
+                @SerialName("memberId")
+                val memberId: Long,
+                @SerialName("name")
+                val name: String,
+            )
+        }
+
+        override fun toDomain(): EventData = EventData.AssignedItemInfoDelete(publishedAt, teamBottariId, infos.toDomainInfos())
+
+        private fun List<Info>.toDomainInfos(): List<EventData.AssignedItemInfoDelete.Info> =
+            map { info ->
+                EventData.AssignedItemInfoDelete.Info(info.id, info.name, info.assignees.toDomainAssignees())
+            }
+
+        private fun List<Info.Assignee>.toDomainAssignees(): List<EventData.AssignedItemInfoDelete.Info.Assignee> =
+            map { assignee ->
+                EventData.AssignedItemInfoDelete.Info.Assignee(assignee.memberId, assignee.name)
+            }
     }
 
     @Serializable
-    data class SharedItemChangeResponse(
+    data class AssignedItemDeleteResponse(
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)
-        override val publishedAt: LocalDateTime,
-        @SerialName("infoId")
-        val infoId: Long,
-        @SerialName("memberId")
-        val memberId: Long,
-        @SerialName("isChecked")
-        val isChecked: Boolean,
+        val publishedAt: LocalDateTime,
+        @SerialName("teamBottariId")
+        val teamBottariId: Long,
     ) : EventDataResponse {
-        override fun toDomain(): EventData = EventData.SharedItemChange(publishedAt, infoId, memberId, isChecked)
-    }
-
-    @Serializable
-    data class SharedItemCheckResponse(
-        @SerialName("publishedAt")
-        @Serializable(with = LocalDateTimeSerializer::class)
-        override val publishedAt: LocalDateTime,
-        @SerialName("infoId")
-        val infoId: Long,
-        @SerialName("memberId")
-        val memberId: Long,
-        @SerialName("isChecked")
-        val isChecked: Boolean,
-    ) : EventDataResponse {
-        override fun toDomain(): EventData = EventData.SharedItemCheck(publishedAt, infoId, memberId, isChecked)
-    }
-
-    @Serializable
-    data class AssignedItemChangeResponse(
-        @SerialName("publishedAt")
-        @Serializable(with = LocalDateTimeSerializer::class)
-        override val publishedAt: LocalDateTime,
-        @SerialName("infoId")
-        val infoId: Long,
-        @SerialName("memberId")
-        val memberId: Long,
-        @SerialName("isChecked")
-        val isChecked: Boolean,
-    ) : EventDataResponse {
-        override fun toDomain(): EventData = EventData.AssignedItemChange(publishedAt, infoId, memberId, isChecked)
+        override fun toDomain(): EventData = EventData.AssignedItemDelete(publishedAt, teamBottariId)
     }
 
     @Serializable
     data class AssignedItemCheckResponse(
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)
-        override val publishedAt: LocalDateTime,
+        val publishedAt: LocalDateTime,
         @SerialName("infoId")
         val infoId: Long,
         @SerialName("memberId")

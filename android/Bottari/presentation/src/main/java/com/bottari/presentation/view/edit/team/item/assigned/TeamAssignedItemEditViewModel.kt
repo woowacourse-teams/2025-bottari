@@ -240,12 +240,14 @@ class TeamAssignedItemEditViewModel(
 
     private fun EventData.shouldIgnore(): Boolean =
         when (this) {
-            is EventData.SharedItemChange,
-            is EventData.SharedItemInfoCreate,
-            is EventData.SharedItemInfoDelete,
-            -> true
+            is EventData.AssignedItemInfoCreate,
+            is EventData.AssignedItemInfoDelete,
+            is EventData.AssignedItemInfoChange,
+            is EventData.TeamMemberCreate,
+            is EventData.TeamMemberDelete,
+            -> false
 
-            else -> false
+            else -> true
         }
 
     companion object {
