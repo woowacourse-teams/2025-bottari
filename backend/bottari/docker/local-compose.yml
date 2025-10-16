@@ -10,7 +10,7 @@ services:
     command: ["--ngram_token_size=1"]
   redis:
     container_name: bottari-redis
-    image: redis:7.8
+    image: redis:7.4
     ports:
       - "6379:6379"
     environment:
