@@ -1,4 +1,4 @@
-package com.bottari.sse.inmemory;
+package com.bottari.sse.sse;
 
 import java.util.List;
 import java.util.Map;
