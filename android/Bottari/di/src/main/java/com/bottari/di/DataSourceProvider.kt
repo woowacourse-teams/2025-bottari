@@ -11,6 +11,8 @@ import com.bottari.data.source.local.bottari.BottariLocalDataSource
 import com.bottari.data.source.local.bottari.BottariLocalDataSourceImpl
 import com.bottari.data.source.local.bottari.ItemLocalDataSource
 import com.bottari.data.source.local.bottari.ItemLocalDataSourceImpl
+import com.bottari.data.source.local.tooltip.TooltipLocalDataSource
+import com.bottari.data.source.local.tooltip.TooltipLocalDataSourceImpl
 import com.bottari.data.source.remote.AlarmRemoteDataSource
 import com.bottari.data.source.remote.AlarmRemoteDataSourceImpl
 import com.bottari.data.source.remote.BottariItemRemoteDataSource
@@ -114,5 +116,9 @@ object DataSourceProvider {
     }
     val eventRemoteDataSource: EventRemoteDataSource by lazy {
         EventRemoteDataSourceImpl(NetworkProvider.sseClient)
+    }
+
+    val tooltipLocalDataSource: TooltipLocalDataSource by lazy {
+        TooltipLocalDataSourceImpl(DatabaseProvider.tooltipDatabase)
     }
 }
