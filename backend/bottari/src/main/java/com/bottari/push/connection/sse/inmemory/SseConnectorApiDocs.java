@@ -1,4 +1,4 @@
-package com.bottari.push.connection.sse;
+package com.bottari.push.connection.sse.inmemory;
 
 import com.bottari.error.ApiErrorCodes;
 import io.swagger.v3.oas.annotations.Operation;
