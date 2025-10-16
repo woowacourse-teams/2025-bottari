@@ -10,11 +10,24 @@ import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
 class ComposePersonalChecklistActivity : AppCompatActivity() {
+
+    private val bottariId: Long by lazy {
+        intent.getLongExtra(
+            EXTRA_BOTTARI_ID,
+            INVALID_BOTTARI_ID,
+        )
+    }
+
+    private val bottariTitle: String by lazy {
+        intent.getStringExtra(EXTRA_BOTTARI_TITLE) ?: ""
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(BottariStatusBarStyle)
         setContent {
             BottariTheme {
+                PersonalBottariScreen(bottariId, bottariTitle)
             }
         }
     }
