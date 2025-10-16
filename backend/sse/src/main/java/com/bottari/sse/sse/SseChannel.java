@@ -1,4 +1,4 @@
-package com.bottari.sse.inmemory;
+package com.bottari.sse.sse;
 
 import java.io.IOException;
 import java.lang.String;
