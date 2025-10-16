@@ -12,7 +12,7 @@ env:
 jobs:
   build:
     name: Build & Push to GHCR
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     permissions:
       contents: read
       packages: write  # GHCR push를 위해 필요
@@ -26,6 +26,16 @@ jobs:
         with:
           java-version: "21"
           distribution: "temurin"
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Build Jar
         working-directory: ./backend/bottari
@@ -41,14 +51,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Docker Image (ARM64)
-        working-directory: ./backend/bottari
-        run: |
-          docker buildx build \
-            --platform linux/arm64 \
-            -t $IMAGE_NAME:$IMAGE_TAG \
-            -t $IMAGE_NAME:latest \
-            --push .
+      - name: Build and Push Docker Image (with cache)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend/bottari
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            ${{ env.IMAGE_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   deploy:
     name: Deploy to Dev Server
