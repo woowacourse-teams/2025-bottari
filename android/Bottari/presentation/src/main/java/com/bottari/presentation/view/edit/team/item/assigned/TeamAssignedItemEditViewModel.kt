@@ -1,13 +1,6 @@
 package com.bottari.presentation.view.edit.team.item.assigned
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.CommonUseCaseProvider
-import com.bottari.di.usecase.TeamBottariItemsUseCaseProvider
-import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.model.bottari.item.BottariItem
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
@@ -23,6 +16,7 @@ import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.model.bottari.personal.SelectableItemUiModel
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.debounce
@@ -31,8 +25,10 @@ import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class TeamAssignedItemEditViewModel(
+@HiltViewModel
+class TeamAssignedItemEditViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamAssignedItemsUseCase: FetchTeamAssignedItemsUseCase,
     private val createTeamAssignedItemUseCase: CreateTeamAssignedItemUseCase,
@@ -251,25 +247,8 @@ class TeamAssignedItemEditViewModel(
         }
 
     companion object {
-        private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
+        const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
         private const val ERROR_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다"
         private const val DEBOUNCE_DELAY = 300L
-
-        fun Factory(bottariId: Long): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_BOTTARI_ID] = bottariId
-                    TeamAssignedItemEditViewModel(
-                        stateHandle,
-                        TeamBottariItemsUseCaseProvider.fetchTeamAssignedItemsUseCase,
-                        TeamBottariItemsUseCaseProvider.createTeamAssignedItemUseCase,
-                        TeamBottariItemsUseCaseProvider.deleteTeamBottariItemUseCase,
-                        TeamMemberUseCaseProvider.fetchTeamBottariMembersUseCase,
-                        TeamBottariItemsUseCaseProvider.saveTeamBottariAssignedItemUseCase,
-                        CommonUseCaseProvider.connectTeamEventUseCase,
-                    )
-                }
-            }
     }
 }

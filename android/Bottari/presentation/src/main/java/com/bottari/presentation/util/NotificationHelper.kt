@@ -8,13 +8,14 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
-import com.bottari.di.ApplicationContextProvider
 import com.bottari.presentation.R
 import com.bottari.presentation.view.checklist.personal.ChecklistActivity
 import com.bottari.presentation.view.checklist.team.TeamChecklistActivity
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class NotificationHelper(
-    private val context: Context = ApplicationContextProvider.applicationContext,
+class NotificationHelper @Inject constructor(
+    @ApplicationContext private val context: Context,
 ) {
     private val manager: NotificationManager =
         context.getSystemService(NotificationManager::class.java)

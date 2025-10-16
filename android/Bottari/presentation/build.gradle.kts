@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
     id("kotlin-parcelize")
 }
 
@@ -108,6 +110,11 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.material.icons.extended.android)
 
+    ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.work)
+
     implementation(libs.material)
     implementation(libs.cardstackview)
     implementation(libs.flexbox)
@@ -116,8 +123,8 @@ dependencies {
     implementation(libs.material.calendarview)
     implementation(libs.threetenabp)
 
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.messaging)
+    api(platform(libs.firebase.bom))
+    api(libs.firebase.messaging)
 
     testImplementation(libs.bundles.test)
     androidTestImplementation(platform(libs.androidx.compose.bom))

@@ -3,14 +3,13 @@ package com.bottari.presentation.view.edit.team.item.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class TeamItemEditViewModel(
+@HiltViewModel
+class TeamItemEditViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
 ) : BaseViewModel<TeamItemEditUiState, TeamItemEditUiEvent>(
         TeamItemEditUiState(
@@ -56,17 +55,8 @@ class TeamItemEditViewModel(
     }
 
     companion object {
-        private const val KEY_TAB_TYPE = "KEY_TAB_TYPE"
+        const val KEY_TAB_TYPE = "KEY_TAB_TYPE"
         private const val ERROR_TYPE_NULL = "[ERROR] type이 null입니다"
         private const val EMPTY_INPUT = ""
-
-        fun Factory(initialTabType: BottariItemTypeUiModel): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_TAB_TYPE] = initialTabType
-                    TeamItemEditViewModel(stateHandle)
-                }
-            }
     }
 }

@@ -6,8 +6,9 @@ import com.bottari.domain.model.team.member.TeamMember
 import com.bottari.domain.model.team.member.TeamMemberStatus
 import com.bottari.domain.model.team.member.TeamStatus
 import com.bottari.domain.repository.TeamMemberRepository
+import javax.inject.Inject
 
-class TeamMemberRepositoryImpl(
+class TeamMemberRepositoryImpl @Inject constructor(
     val teamBottariRemoteDataSource: TeamMemberRemoteDataSource,
 ) : TeamMemberRepository {
     override suspend fun fetchTeamMembers(id: Long): Result<TeamStatus> =

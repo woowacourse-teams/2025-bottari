@@ -12,28 +12,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
-import com.bottari.presentation.common.extension.safeArgument
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentAlarmEditBinding
 import com.bottari.presentation.model.alarm.AlarmTypeUiModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
-import com.bottari.presentation.util.AlarmScheduler.scheduleAlarm
 import com.bottari.presentation.view.common.decoration.ItemSpacingDecoration
 import com.bottari.presentation.view.edit.alarm.adapter.RepeatDayAdapter
 import com.bottari.presentation.view.edit.alarm.listener.OnDateClickListener
 import com.shawnlin.numberpicker.NumberPicker
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalTime
 
+@AndroidEntryPoint
 class AlarmEditFragment :
     BaseFragment<FragmentAlarmEditBinding>(FragmentAlarmEditBinding::inflate),
     OnDateClickListener {
-    private val viewModel: AlarmEditViewModel by viewModels {
-        AlarmEditViewModel.Factory(
-            bottariId = safeArgument { getLong(ARG_BOTTARI_ID) },
-            bottariTitle = safeArgument { getString(ARG_BOTTARI_TITLE) },
-        )
-    }
+    private val viewModel: AlarmEditViewModel by viewModels()
     private val adapter: RepeatDayAdapter by lazy { RepeatDayAdapter(viewModel::updateDaysOfWeek) }
     private val hourPickers: List<NumberPicker> by lazy {
         listOf(
@@ -124,7 +119,6 @@ class AlarmEditFragment :
     private fun handleAlarmEvent(uiEvent: AlarmUiEvent) {
         when (uiEvent) {
             is AlarmUiEvent.SaveAlarmSuccess -> {
-                scheduleAlarm(notification = uiEvent.notification.toDomain())
                 requireView().showSnackbar(R.string.alarm_edit_save_success_text)
                 parentFragmentManager.popBackStack()
             }
@@ -218,15 +212,12 @@ class AlarmEditFragment :
     }
 
     companion object {
-        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
-        private const val ARG_BOTTARI_TITLE = "ARG_BOTTARI_TITLE"
-
         fun newBundle(
             bottariId: Long,
             bottariTitle: String,
         ) = Bundle().apply {
-            putLong(ARG_BOTTARI_ID, bottariId)
-            putString(ARG_BOTTARI_TITLE, bottariTitle)
+            putLong(AlarmEditViewModel.KEY_BOTTARI_ID, bottariId)
+            putString(AlarmEditViewModel.KEY_BOTTARI_TITLE, bottariTitle)
         }
     }
 }

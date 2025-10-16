@@ -1,8 +1,9 @@
 package com.bottari.domain.usecase.team
 
 import com.bottari.domain.repository.TeamBottariItemsRepository
+import javax.inject.Inject
 
-class SendRemindByItemUseCase(
+class SendRemindByItemUseCase @Inject constructor(
     private val teamBottariItemsRepository: TeamBottariItemsRepository,
 ) {
     suspend operator fun invoke(

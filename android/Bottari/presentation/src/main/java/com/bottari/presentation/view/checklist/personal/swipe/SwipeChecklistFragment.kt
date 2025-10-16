@@ -21,13 +21,44 @@ import com.yuyakaido.android.cardstackview.Direction
 import com.yuyakaido.android.cardstackview.Duration
 import com.yuyakaido.android.cardstackview.StackFrom
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting
+import dagger.hilt.android.AndroidEntryPoint
 
-class SwipeChecklistFragment :
-    BaseFragment<FragmentSwipeChecklistBinding>(FragmentSwipeChecklistBinding::inflate),
-    CardStackListener {
+@AndroidEntryPoint
+class SwipeChecklistFragment : BaseFragment<FragmentSwipeChecklistBinding>(FragmentSwipeChecklistBinding::inflate) {
     private val viewModel: ChecklistViewModel by activityViewModels()
     private val adapter: SwipeCheckListAdapter by lazy { SwipeCheckListAdapter() }
     private lateinit var cardStackLayoutManager: CardStackLayoutManager
+    private val cardStackListener =
+        object : CardStackListener {
+            override fun onCardSwiped(direction: Direction?) {
+                val index = cardStackLayoutManager.topPosition - INDEX_OFFSET
+                val currentItem = adapter.currentList.getOrNull(index) ?: return
+                if (direction == Direction.Right) viewModel.toggleItemChecked(currentItem.id)
+                viewModel.addSwipedItem(currentItem.id)
+            }
+
+            override fun onCardAppeared(
+                view: View?,
+                position: Int,
+            ) {
+            }
+
+            override fun onCardCanceled() {}
+
+            override fun onCardDisappeared(
+                view: View?,
+                position: Int,
+            ) {
+            }
+
+            override fun onCardDragging(
+                direction: Direction?,
+                ratio: Float,
+            ) {
+            }
+
+            override fun onCardRewound() {}
+        }
 
     override fun onViewCreated(
         view: View,
@@ -38,35 +69,6 @@ class SwipeChecklistFragment :
         setupUI()
         setupListener()
     }
-
-    override fun onCardSwiped(direction: Direction?) {
-        val index = cardStackLayoutManager.topPosition - INDEX_OFFSET
-        val currentItem = adapter.currentList.getOrNull(index) ?: return
-        if (direction == Direction.Right) viewModel.toggleItemChecked(currentItem.id)
-        viewModel.addSwipedItem(currentItem.id)
-    }
-
-    override fun onCardAppeared(
-        view: View?,
-        position: Int,
-    ) {
-    }
-
-    override fun onCardCanceled() {}
-
-    override fun onCardDisappeared(
-        view: View?,
-        position: Int,
-    ) {
-    }
-
-    override fun onCardDragging(
-        direction: Direction?,
-        ratio: Float,
-    ) {
-    }
-
-    override fun onCardRewound() {}
 
     private fun setupObserver() {
         collectWithLifecycle(viewModel.uiState) { uiState ->
@@ -140,7 +142,7 @@ class SwipeChecklistFragment :
     private fun setupCardStackView() {
         viewModel.resetSwipeState()
         cardStackLayoutManager =
-            CardStackLayoutManager(requireContext(), this).apply {
+            CardStackLayoutManager(requireContext(), cardStackListener).apply {
                 setStackFrom(StackFrom.Top)
                 setCanScrollVertical(false)
                 setCanScrollHorizontal(true)

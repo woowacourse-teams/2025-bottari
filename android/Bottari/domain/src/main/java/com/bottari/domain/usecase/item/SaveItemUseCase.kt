@@ -1,8 +1,9 @@
 package com.bottari.domain.usecase.item
 
 import com.bottari.domain.repository.BottariItemRepository
+import javax.inject.Inject
 
-class SaveItemUseCase(
+class SaveItemUseCase @Inject constructor(
     private val bottariItemRepository: BottariItemRepository,
 ) {
     suspend operator fun invoke(

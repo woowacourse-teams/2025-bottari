@@ -1,14 +1,7 @@
 package com.bottari.presentation.view.checklist.team.main.checklist
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.CommonUseCaseProvider
-import com.bottari.di.usecase.MemberUseCaseProvider
-import com.bottari.di.usecase.TeamBottariItemsUseCaseProvider
 import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
@@ -25,6 +18,7 @@ import com.bottari.presentation.model.bottari.team.TeamChecklistExpandableTypeUi
 import com.bottari.presentation.model.bottari.team.TeamChecklistItem
 import com.bottari.presentation.model.bottari.team.TeamChecklistProductUiModel
 import com.bottari.presentation.util.debounce
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -37,8 +31,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TeamChecklistViewModel(
+@HiltViewModel
+class TeamChecklistViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamBottariChecklistUseCase: FetchTeamChecklistUseCase,
     private val checkTeamBottariItemUseCase: CheckTeamBottariItemUseCase,
@@ -322,24 +318,7 @@ class TeamChecklistViewModel(
 
     companion object {
         const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
-        const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
+        private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
         private const val DEBOUNCE_DELAY = 300L
-
-        fun Factory(bottariId: Long): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_BOTTARI_ID] = bottariId
-                    TeamChecklistViewModel(
-                        stateHandle,
-                        TeamBottariItemsUseCaseProvider.fetchTeamChecklistUseCase,
-                        TeamBottariItemsUseCaseProvider.checkTeamBottariItemUseCase,
-                        TeamBottariItemsUseCaseProvider.uncheckTeamBottariItemUseCase,
-                        MemberUseCaseProvider.getMemberIdUseCase,
-                        CommonUseCaseProvider.connectTeamEventUseCase,
-                        CommonUseCaseProvider.disconnectTeamEventUseCase,
-                    )
-                }
-            }
     }
 }

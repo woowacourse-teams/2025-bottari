@@ -1,17 +1,22 @@
 package com.bottari.presentation.worker
 
 import android.content.Context
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.usecase.notification.FetchNotificationsUseCase
 import com.bottari.logger.BottariLogger
-import com.bottari.presentation.util.AlarmScheduler.scheduleAlarm
+import com.bottari.presentation.util.AlarmScheduler
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 
-class NotificationWorker(
-    context: Context,
-    workerParams: WorkerParameters,
+@HiltWorker
+class NotificationWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted workerParams: WorkerParameters,
     private val fetchNotificationsUseCase: FetchNotificationsUseCase,
+    private val alarmScheduler: AlarmScheduler,
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result =
         fetchNotificationsUseCase()
@@ -24,6 +29,5 @@ class NotificationWorker(
                 },
             )
 
-    private fun scheduleAlarms(notifications: List<Notification>) =
-        notifications.forEach { notification -> scheduleAlarm(notification = notification) }
+    private fun scheduleAlarms(notifications: List<Notification>) = notifications.forEach(alarmScheduler::scheduleAlarm)
 }

@@ -18,13 +18,13 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TeamBottariStatusFragment :
     BaseFragment<FragmentTeamStatusBinding>(FragmentTeamStatusBinding::inflate),
     TeamBottariProductStatusViewHolder.OnTeamProductStatusItemClickListener {
-    private val viewModel: TeamBottariStatusViewModel by viewModels {
-        TeamBottariStatusViewModel.Factory(requireArguments().getLong(ARG_BOTTARI_ID))
-    }
+    private val viewModel: TeamBottariStatusViewModel by viewModels()
 
     private val teamBottariProductStatusDetailAdapter: TeamBottariProductStatusDetailAdapter by lazy {
         TeamBottariProductStatusDetailAdapter()
@@ -91,11 +91,9 @@ class TeamBottariStatusFragment :
     }
 
     companion object {
-        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
-
         fun newInstance(bottariId: Long): TeamBottariStatusFragment =
             TeamBottariStatusFragment().apply {
-                arguments = bundleOf(ARG_BOTTARI_ID to bottariId)
+                arguments = bundleOf(TeamBottariStatusViewModel.KEY_BOTTARI_ID to bottariId)
             }
     }
 

@@ -14,9 +14,16 @@ import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody.Companion.toResponseBody
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -26,21 +33,30 @@ import retrofit2.Response
 class MemberRepositoryImplTest {
     private lateinit var remoteDataSource: MemberRemoteDataSource
     private lateinit var userInfoLocalDataSource: MemberIdentifierLocalDataSource
+    private val testDispatcher: TestDispatcher = StandardTestDispatcher()
     private lateinit var repository: MemberRepository
     private val errorResponseBody =
         """{"message":"잘못된 요청입니다."}""".toResponseBody("application/json".toMediaType())
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeEach
     fun setUp() {
+        Dispatchers.setMain(testDispatcher)
         remoteDataSource = mockk<MemberRemoteDataSource>()
         userInfoLocalDataSource = mockk<MemberIdentifierLocalDataSource>()
-        repository = MemberRepositoryImpl(remoteDataSource, userInfoLocalDataSource)
+        repository = MemberRepositoryImpl(remoteDataSource, userInfoLocalDataSource, testDispatcher)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @AfterEach
+    fun tearDown() {
+        Dispatchers.resetMain()
     }
 
     @DisplayName("회원 등록에 성공하면 Success를 반환한다")
     @Test
     fun registerMemberSuccessReturnsSuccess() =
-        runTest {
+        runTest(testDispatcher) {
             // given
             val request = MemberRegisterRequest("ssaid", "token")
             coEvery { remoteDataSource.registerMember(request) } returns Result.success(1)
@@ -60,7 +76,7 @@ class MemberRepositoryImplTest {
     @DisplayName("회원 등록에 실패하면 Failure를 반환한다")
     @Test
     fun registerMemberFailsReturnsFailure() =
-        runTest {
+        runTest(testDispatcher) {
             // given
             val request = MemberRegisterRequest("ssaid", "token")
             val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
@@ -80,7 +96,7 @@ class MemberRepositoryImplTest {
     @DisplayName("닉네임 갱신에 성공하면 Success를 반환한다")
     @Test
     fun saveMemberNicknameSuccess() =
-        runTest {
+        runTest(testDispatcher) {
             // given
             val newNickname = Nickname("nickname")
             val request = MemberNicknameSaveRequest("nickname")
@@ -99,7 +115,7 @@ class MemberRepositoryImplTest {
     @DisplayName("닉네임 갱신에 실패하면 Failure를 반환한다")
     @Test
     fun saveMemberNicknameFailsReturnsFailure() =
-        runTest {
+        runTest(testDispatcher) {
             // given
             val newNickname = Nickname("nickname")
             val request = MemberNicknameSaveRequest("nickname")
@@ -120,7 +136,7 @@ class MemberRepositoryImplTest {
     @DisplayName("회원가입된 상태에서 회원가입 여부 확인에 성공하면 Success를 반환한다")
     @Test
     fun checkRegisteredMemberSuccess() =
-        runTest {
+        runTest(testDispatcher) {
             // given
             val response = MemberRegisterCheckResponse(true, 1, "test")
             coEvery { remoteDataSource.checkRegisteredMember() } returns Result.success(response)
@@ -144,7 +160,7 @@ class MemberRepositoryImplTest {
     @DisplayName("회원가입이 되지 않은 상태에서 회원가입 여부 확인에 성공하면 Success를 반환한다")
     @Test
     fun checkRegisteredMemberFailsReturnsFailure() =
-        runTest {
+        runTest(testDispatcher) {
             // given
             val response = MemberRegisterCheckResponse(false, 1, "test")
             coEvery { remoteDataSource.checkRegisteredMember() } returns Result.success(response)
@@ -167,7 +183,7 @@ class MemberRepositoryImplTest {
     @DisplayName("사용자 식별자 조회를 성공하면 Success를 반환한다")
     @Test
     fun getInstallationIdReturnsSuccess() =
-        runTest {
+        runTest(testDispatcher) {
             // given
             val memberId = "test_member_id"
             coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.success(memberId)
@@ -188,7 +204,7 @@ class MemberRepositoryImplTest {
     @DisplayName("사용자 식별자 조회를 실패하면 Failure를 반환한다")
     @Test
     fun getInstallationIdReturnsFailure() =
-        runTest {
+        runTest(testDispatcher) {
             // given
             val exception = Exception()
             coEvery { userInfoLocalDataSource.getInstallationId() } returns Result.failure(exception)

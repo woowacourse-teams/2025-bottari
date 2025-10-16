@@ -15,8 +15,9 @@ import com.bottari.data.model.remote.team.bottari.item.response.PersonalItemsFet
 import com.bottari.data.model.remote.team.bottari.item.response.SharedItemsFetchResponse
 import com.bottari.data.model.remote.team.bottari.item.response.TeamBottariItemChecklistFetchResponse
 import com.bottari.data.service.TeamBottariItemsService
+import javax.inject.Inject
 
-class TeamBottariItemsRemoteDataSourceImpl(
+class TeamBottariItemsRemoteDataSourceImpl @Inject constructor(
     val teamBottariItemsService: TeamBottariItemsService,
 ) : TeamBottariItemsRemoteDataSource {
     override suspend fun fetchTeamBottari(teamBottariId: Long): Result<TeamBottariItemChecklistFetchResponse> =

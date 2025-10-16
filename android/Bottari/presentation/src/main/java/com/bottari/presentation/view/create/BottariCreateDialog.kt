@@ -20,16 +20,13 @@ import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.DialogBottariCreateBinding
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.edit.team.TeamBottariEditActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BottariCreateDialog :
     DialogFragment(),
     TextWatcher {
-    private val viewModel: BottariCreateViewModel by viewModels {
-        BottariCreateViewModel.Factory(
-            type = requireArguments().getString(ARG_BOTTARI_TYPE) ?: error(ERROR_BOTTARI_TYPE),
-            defaultTitle = getString(R.string.bottari_create_default_title_text),
-        )
-    }
+    private val viewModel: BottariCreateViewModel by viewModels()
     private var _binding: DialogBottariCreateBinding? = null
     val binding: DialogBottariCreateBinding get() = _binding!!
 
@@ -96,8 +93,16 @@ class BottariCreateDialog :
 
         viewModel.uiEvent.observe(viewLifecycleOwner) { uiEvent ->
             when (uiEvent) {
-                is BottariCreateUiEvent.CreatePersonalBottariSuccess -> navigateToPersonalEdit(uiEvent.bottariId)
-                is BottariCreateUiEvent.CreateTeamBottariSuccess -> navigateToTeamBottariEdit(uiEvent.bottariId)
+                is BottariCreateUiEvent.CreatePersonalBottariSuccess ->
+                    navigateToPersonalEdit(
+                        uiEvent.bottariId,
+                    )
+
+                is BottariCreateUiEvent.CreateTeamBottariSuccess ->
+                    navigateToTeamBottariEdit(
+                        uiEvent.bottariId,
+                    )
+
                 BottariCreateUiEvent.CreateBottariFailure -> showSnackbar(R.string.bottari_create_failure_text)
             }
         }
@@ -161,12 +166,13 @@ class BottariCreateDialog :
         private const val DISABLED_ALPHA_VALUE = 0.4f
         private const val ENABLED_ALPHA_VALUE = 1f
 
-        private const val ARG_BOTTARI_TYPE = "ARG_BOTTARI_TYPE"
-        private const val ERROR_BOTTARI_TYPE = "[ERROR] 보따리 타입을 찾을 수 없습니다"
-
         fun newInstance(type: BottariType): BottariCreateDialog =
             BottariCreateDialog().apply {
-                arguments = bundleOf(ARG_BOTTARI_TYPE to type.name)
+                arguments =
+                    bundleOf(
+                        BottariCreateViewModel.KEY_BOTTARI_TYPE to type.name,
+                        BottariCreateViewModel.KEY_BOTTARI_TITLE to getString(R.string.bottari_create_default_title_text),
+                    )
             }
     }
 }

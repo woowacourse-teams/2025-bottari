@@ -14,8 +14,9 @@ import com.bottari.domain.model.team.bottari.TeamBottariCheckList
 import com.bottari.domain.model.team.bottari.TeamBottariStatus
 import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 import com.bottari.domain.repository.TeamBottariItemsRepository
+import javax.inject.Inject
 
-class TeamBottariItemsRepositoryImpl(
+class TeamBottariItemsRepositoryImpl @Inject constructor(
     val teamBottariRemoteDataSource: TeamBottariItemsRemoteDataSource,
 ) : TeamBottariItemsRepository {
     override suspend fun fetchTeamBottari(teamBottariId: Long): Result<TeamBottariCheckList> =

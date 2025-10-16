@@ -1,10 +1,6 @@
 package com.bottari.presentation.compose.home.template
 
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.BottariTemplateUseCaseProvider
 import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.model.common.Pageable
 import com.bottari.domain.usecase.template.FetchBottariTemplatesUseCase
@@ -12,8 +8,11 @@ import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
 import com.bottari.presentation.util.debounce
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class TemplateViewModel(
+@HiltViewModel
+class TemplateViewModel @Inject constructor(
     private val fetchBottariTemplatesUseCase: FetchBottariTemplatesUseCase,
     private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
 ) : BaseViewModel<TemplateUiState, TemplateUiEvent>(TemplateUiState()) {
@@ -89,15 +88,5 @@ class TemplateViewModel(
 
     companion object {
         private const val DEBOUNCE_DELAY = 300L
-
-        fun Factory(): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    TemplateViewModel(
-                        BottariTemplateUseCaseProvider.fetchBottariTemplatesUseCase,
-                        BottariTemplateUseCaseProvider.fetchMyBottariTemplatesUseCase,
-                    )
-                }
-            }
     }
 }

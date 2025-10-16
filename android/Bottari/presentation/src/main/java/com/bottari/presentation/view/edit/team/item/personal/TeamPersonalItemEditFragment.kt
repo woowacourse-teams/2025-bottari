@@ -22,11 +22,7 @@ class TeamPersonalItemEditFragment :
     private val parentViewModel: TeamItemEditViewModel by viewModels(
         ownerProducer = { requireParentFragment() },
     )
-    private val viewModel: TeamPersonalItemEditViewModel by viewModels {
-        TeamPersonalItemEditViewModel.Factory(
-            requireArguments().getLong(ARG_BOTTARI_ID),
-        )
-    }
+    private val viewModel: TeamPersonalItemEditViewModel by viewModels()
     private val adapter: TeamPersonalItemEditAdapter by lazy { TeamPersonalItemEditAdapter(this) }
 
     override fun onViewCreated(
@@ -89,12 +85,11 @@ class TeamPersonalItemEditFragment :
     }
 
     companion object {
-        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
         private const val RESET_INPUT_TEXT = ""
 
         fun newInstance(bottariId: Long): TeamPersonalItemEditFragment =
             TeamPersonalItemEditFragment().apply {
-                arguments = bundleOf(ARG_BOTTARI_ID to bottariId)
+                arguments = bundleOf(TeamPersonalItemEditViewModel.KEY_BOTTARI_ID to bottariId)
             }
     }
 }

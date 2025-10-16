@@ -3,8 +3,9 @@ package com.bottari.data.source.local.bottari
 import com.bottari.data.local.bottari.ItemDao
 import com.bottari.data.model.local.bottari.ItemEntity
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ItemLocalDataSourceImpl(
+class ItemLocalDataSourceImpl @Inject constructor(
     private val dao: ItemDao,
 ) : ItemLocalDataSource {
     override fun fetchItems(bottariId: Long): Flow<List<ItemEntity>> = dao.fetchItems(bottariId)

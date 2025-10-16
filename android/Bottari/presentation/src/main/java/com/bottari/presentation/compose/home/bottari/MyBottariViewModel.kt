@@ -1,12 +1,6 @@
 package com.bottari.presentation.compose.home.bottari
 
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.BottariUseCaseProvider
-import com.bottari.di.usecase.TeamBottariUseCaseProvider
-import com.bottari.di.usecase.TeamMemberUseCaseProvider
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.domain.usecase.bottari.DeleteBottariUseCase
@@ -19,12 +13,15 @@ import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
-import com.bottari.presentation.util.AlarmScheduler.cancelAlarm
+import com.bottari.presentation.util.AlarmScheduler
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class MyBottariViewModel(
+@HiltViewModel
+class MyBottariViewModel @Inject constructor(
     private val fetchBottariesUseCase: FetchBottariesUseCase,
     private val fetchTeamBottariesUseCase: FetchTeamBottariesUseCase,
     private val createBottariUseCase: CreateBottariUseCase,
@@ -32,6 +29,7 @@ class MyBottariViewModel(
     private val deleteBottariUseCase: DeleteBottariUseCase,
     private val deleteTeamBottariUseCase: ExitTeamBottariUseCase,
     private val joinTeamBottariUseCase: JoinTeamBottariUseCase,
+    private val alarmScheduler: AlarmScheduler,
 ) : FlowBaseViewModel<MyBottariUiState, MyBottariUiEvent>(MyBottariUiState()) {
     init {
         fetchMyBottaries()
@@ -138,7 +136,7 @@ class MyBottariViewModel(
 
     private fun cancelAlarm(bottari: MyBottariUiModel) =
         bottari.alarm?.let { alarm ->
-            cancelAlarm(
+            alarmScheduler.cancelAlarm(
                 notification =
                     Notification(
                         bottariId = bottari.id,
@@ -182,21 +180,4 @@ class MyBottariViewModel(
             }.catch {
                 emitEvent(MyBottariUiEvent.FetchBottariFailure)
             }.launchIn(viewModelScope)
-
-    companion object {
-        fun Factory(): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    MyBottariViewModel(
-                        fetchBottariesUseCase = BottariUseCaseProvider.fetchBottariesUseCase,
-                        fetchTeamBottariesUseCase = TeamBottariUseCaseProvider.fetchTeamBottariesUseCase,
-                        createBottariUseCase = BottariUseCaseProvider.createBottariUseCase,
-                        createTeamBottariUseCase = TeamBottariUseCaseProvider.createTeamBottariUseCase,
-                        deleteBottariUseCase = BottariUseCaseProvider.deleteBottariUseCase,
-                        deleteTeamBottariUseCase = TeamBottariUseCaseProvider.exitTeamBottariUseCase,
-                        joinTeamBottariUseCase = TeamMemberUseCaseProvider.joinTeamBottariUseCase,
-                    )
-                }
-            }
-    }
 }

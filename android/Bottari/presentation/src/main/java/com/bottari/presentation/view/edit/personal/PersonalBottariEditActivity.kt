@@ -9,7 +9,9 @@ import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.databinding.ActivityPersonalBottariEditBinding
 import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditFragment
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PersonalBottariEditActivity : BaseActivity<ActivityPersonalBottariEditBinding>(ActivityPersonalBottariEditBinding::inflate) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
