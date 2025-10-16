@@ -189,6 +189,9 @@
     <string name="setting_unknown_version_text">알 수 없음</string>
 
     <!-- Checklist -->
+    <string name="checklist_tooltip_title_text">개인 보따리</string>
+    <string name="checklist_tooltip_description_text">오른쪽 상단 버튼을 통해,\n스와이프 화면으로 이동할 수 있어요.</string>
+    <string name="checklist_current_status_items_count_text">%d / %d</string>
     <string name="checklist_fetch_failure_text">체크리스트를 불러오지 못했어요</string>
     <string name="checklist_reset_failure_text">체크리스트를 초기화하지 못했어요</string>
     <string name="checklist_check_failure_text">체크에 실패했어요</string>
