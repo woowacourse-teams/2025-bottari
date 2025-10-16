@@ -91,18 +91,8 @@ class TeamSharedItemEditViewModel(
 
         launch {
             fetchTeamSharedItemsUseCase(bottariId)
-                .onSuccess { items ->
-                    updateState {
-                        copy(
-                            sharedItems =
-                                items.map {
-                                    BottariItemUiModel.fromDomain(
-                                        it,
-                                    )
-                                },
-                        )
-                    }
-                }.onFailure { emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure) }
+                .onSuccess { items -> updateState { copy(sharedItems = items.map(BottariItemUiModel::fromDomain)) } }
+                .onFailure { emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure) }
 
             updateState { copy(isLoading = false, isFetched = true) }
         }

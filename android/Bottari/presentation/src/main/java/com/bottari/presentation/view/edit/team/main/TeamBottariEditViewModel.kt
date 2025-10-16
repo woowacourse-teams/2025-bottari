@@ -85,19 +85,9 @@ class TeamBottariEditViewModel(
         updateState {
             copy(
                 bottariTitle = teamBottariDetail.bottari.title,
-                personalItems =
-                    teamBottariDetail.personalItems.map {
-                        BottariItemUiModel.fromDomain(
-                            it,
-                        )
-                    },
-                assignedItems =
-                    teamBottariDetail.assignedItems.map {
-                        BottariItemUiModel.fromDomain(
-                            it,
-                        )
-                    },
-                sharedItems = teamBottariDetail.sharedItems.map { BottariItemUiModel.fromDomain(it) },
+                personalItems = teamBottariDetail.personalItems.map(BottariItemUiModel::fromDomain),
+                assignedItems = teamBottariDetail.assignedItems.map(BottariItemUiModel::fromDomain),
+                sharedItems = teamBottariDetail.sharedItems.map(BottariItemUiModel::fromDomain),
                 alarm = alarmUi,
                 alarmSwitchState = alarmUi?.isActive ?: false,
             )
