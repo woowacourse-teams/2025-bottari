@@ -21,10 +21,11 @@ public class SseMessageListener implements MessageListener {
             final Message message,
             final byte[] pattern
     ) {
-        final RedisTopic topic = new RedisTopic(new String(message.getChannel()));
+        final MemberChannelTopic topic = new MemberChannelTopic(new String(message.getChannel()));
         try {
             final PushMessage pushMessage = objectMapper.readValue(message.getBody(), PushMessage.class);
-            sseChannel.unicast(pushMessage, topic.extractMemberId());
+            final Long memberId = topic.extractMemberId();
+            sseChannel.unicast(pushMessage, memberId);
         } catch (IOException e) {
             throw new BusinessException(ErrorCode.INVALID_MESSAGE_FORMAT);
         }
