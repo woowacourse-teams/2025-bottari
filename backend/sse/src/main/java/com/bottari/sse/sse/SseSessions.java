@@ -26,10 +26,17 @@ public class SseSessions {
                 .toList();
     }
 
-    public void save(
+    public List<SseEmitter> findAll() {
+        return sseEmittersByMemberId.values().stream().toList();
+    }
+
+    public synchronized void save(
             final Long memberId,
             final SseEmitter sseEmitter
     ) {
+        if (sseEmittersByMemberId.containsKey(memberId)) {
+            sseEmittersByMemberId.get(memberId).complete();
+        }
         sseEmittersByMemberId.put(memberId, sseEmitter);
     }
 
