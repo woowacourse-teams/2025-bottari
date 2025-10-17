@@ -64,7 +64,7 @@ class BottariItemControllerTest {
     void create() throws Exception {
         // given
         final Long bottariId = 1L;
-        final CreateBottariItemRequest request = new CreateBottariItemRequest("name");
+        final CreateBottariItemRequest request = new CreateBottariItemRequest("value");
         given(bottariItemService.create(bottariId, request))
                 .willReturn(1L);
 

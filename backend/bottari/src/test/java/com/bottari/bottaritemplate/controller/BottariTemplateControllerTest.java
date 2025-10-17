@@ -297,7 +297,7 @@ class BottariTemplateControllerTest {
         final String ssaid = "ssaid";
         final List<String> bottariTemplateItems = List.of("item1", "item2");
         final CreateBottariTemplateRequest request = new CreateBottariTemplateRequest(
-                "title",
+                "value",
                 "description",
                 bottariTemplateItems,
                 List.of("hashtag1", "hashtag2")

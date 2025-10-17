@@ -19,9 +19,9 @@ class BottariItemTest {
     @Test
     void check() {
         // given
-        final Member member = new Member("ssaid", "name");
-        final Bottari bottari = new Bottari("title", member);
-        final BottariItem bottariItem = new BottariItem("name", bottari);
+        final Member member = new Member("ssaid", "value");
+        final Bottari bottari = new Bottari("value", member);
+        final BottariItem bottariItem = new BottariItem("value", bottari);
 
         // when
         bottariItem.check();
@@ -34,9 +34,9 @@ class BottariItemTest {
     @Test
     void check_Exception_AlreadyCheck() {
         // given
-        final Member member = new Member("ssaid", "name");
-        final Bottari bottari = new Bottari("title", member);
-        final BottariItem bottariItem = new BottariItem("name", bottari);
+        final Member member = new Member("ssaid", "value");
+        final Bottari bottari = new Bottari("value", member);
+        final BottariItem bottariItem = new BottariItem("value", bottari);
         bottariItem.check();
 
         // when & then
@@ -49,9 +49,9 @@ class BottariItemTest {
     @Test
     void uncheck() {
         // given
-        final Member member = new Member("ssaid", "name");
-        final Bottari bottari = new Bottari("title", member);
-        final BottariItem bottariItem = new BottariItem("name", bottari);
+        final Member member = new Member("ssaid", "value");
+        final Bottari bottari = new Bottari("value", member);
+        final BottariItem bottariItem = new BottariItem("value", bottari);
         bottariItem.check();
 
         // when
@@ -65,9 +65,9 @@ class BottariItemTest {
     @Test
     void uncheck_Exception_AlreadyUncheck() {
         // given
-        final Member member = new Member("ssaid", "name");
-        final Bottari bottari = new Bottari("title", member);
-        final BottariItem bottariItem = new BottariItem("name", bottari);
+        final Member member = new Member("ssaid", "value");
+        final Bottari bottari = new Bottari("value", member);
+        final BottariItem bottariItem = new BottariItem("value", bottari);
 
         // when & then
         assertThatThrownBy(bottariItem::uncheck)
@@ -86,7 +86,7 @@ class BottariItemTest {
             final boolean expected
     ) {
         // given
-        final Member member = new Member("same_ssaid", "name");
+        final Member member = new Member("same_ssaid", "value");
         final Bottari bottari = BottariFixture.BOTTARI.get(member);
         final BottariItem bottariItem = BottariItemFixture.BOTTARI_ITEM_1.get(bottari);
 

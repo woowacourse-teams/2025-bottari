@@ -19,7 +19,7 @@ public interface TeamAssignedItemInfoRepository extends JpaRepository<TeamAssign
             SELECT COUNT(taii) > 0
             FROM TeamAssignedItemInfo taii
             WHERE taii.teamBottari.id = :teamBottariId
-              AND taii.name.name = :name
+              AND taii.name.value = :name
             """)
     boolean existsByTeamBottariIdAndName(
             final Long teamBottariId,

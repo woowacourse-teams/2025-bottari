@@ -110,7 +110,7 @@ public class ErrorCodeOperationCustomizer implements OperationCustomizer {
                 .summary(code.name())
                 .value(Map.of(
                         "type", "about:blank",
-                        "title", code.name(),
+                        "value", code.name(),
                         "status", code.getStatus().value(),
                         "detail", code.getMessage(),
                         "instance", "요청 URI"

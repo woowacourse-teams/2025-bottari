@@ -7,13 +7,13 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record BottariTitle(
-        String title
+        String value
 ) {
 
     private static final int MAX_TITLE_LENGTH = 15;
 
     public BottariTitle {
-        validateTitle(title);
+        validateTitle(value);
     }
 
     private void validateTitle(final String title) {

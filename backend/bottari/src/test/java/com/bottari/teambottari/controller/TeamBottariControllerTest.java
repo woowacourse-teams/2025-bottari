@@ -43,8 +43,8 @@ class TeamBottariControllerTest {
         // given
         final String ssaid = "ssaid";
         final List<ReadTeamBottariPreviewResponse> response = List.of(
-                new ReadTeamBottariPreviewResponse(1L, "title", 5, 3, 2, null),
-                new ReadTeamBottariPreviewResponse(2L, "another title", 10, 7, 3, null)
+                new ReadTeamBottariPreviewResponse(1L, "value", 5, 3, 2, null),
+                new ReadTeamBottariPreviewResponse(2L, "another value", 10, 7, 3, null)
         );
         given(teamBottariService.getAllBySsaid(ssaid))
                 .willReturn(response);
@@ -65,7 +65,7 @@ class TeamBottariControllerTest {
         final Long teamBottariId = 1L;
         final ReadTeamBottariResponse response = new ReadTeamBottariResponse(
                 teamBottariId,
-                "title",
+                "value",
                 List.of(),
                 List.of(),
                 List.of(),
@@ -87,7 +87,7 @@ class TeamBottariControllerTest {
     void create() throws Exception {
         // given
         final String ssaid = "ssaid";
-        final CreateTeamBottariRequest request = new CreateTeamBottariRequest("title");
+        final CreateTeamBottariRequest request = new CreateTeamBottariRequest("value");
         given(teamBottariService.create(ssaid, request))
                 .willReturn(1L);
 

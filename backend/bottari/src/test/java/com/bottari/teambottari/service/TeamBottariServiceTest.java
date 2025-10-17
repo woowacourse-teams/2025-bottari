@@ -256,7 +256,7 @@ class TeamBottariServiceTest {
             final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final CreateTeamBottariRequest request = new CreateTeamBottariRequest("title");
+            final CreateTeamBottariRequest request = new CreateTeamBottariRequest("value");
 
             // when
             final Long teamBottariId = teamBottariService.create(member.getSsaid(), request);
@@ -272,7 +272,7 @@ class TeamBottariServiceTest {
             final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final CreateTeamBottariRequest request = new CreateTeamBottariRequest("title");
+            final CreateTeamBottariRequest request = new CreateTeamBottariRequest("value");
 
             // when
             final Long teamBottariId = teamBottariService.create(member.getSsaid(), request);
@@ -290,7 +290,7 @@ class TeamBottariServiceTest {
             final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final CreateTeamBottariRequest request = new CreateTeamBottariRequest("title");
+            final CreateTeamBottariRequest request = new CreateTeamBottariRequest("value");
 
             // when
             final Long teamBottariId = teamBottariService.create(member.getSsaid(), request);
@@ -307,7 +307,7 @@ class TeamBottariServiceTest {
             final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
-            final CreateTeamBottariRequest request = new CreateTeamBottariRequest("title");
+            final CreateTeamBottariRequest request = new CreateTeamBottariRequest("value");
 
             // when
             final Long teamBottariId = teamBottariService.create(member.getSsaid(), request);
@@ -326,7 +326,7 @@ class TeamBottariServiceTest {
         void create_Exception_WhenNonExistentUser() {
             // given
             final String nonExistentSsaid = "non-existent-ssaid";
-            final CreateTeamBottariRequest request = new CreateTeamBottariRequest("title");
+            final CreateTeamBottariRequest request = new CreateTeamBottariRequest("value");
 
             // when & then
             assertThatThrownBy(() -> teamBottariService.create(nonExistentSsaid, request))

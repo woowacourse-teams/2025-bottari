@@ -323,7 +323,7 @@ class BottariItemServiceTest {
             entityManager.persist(bottari);
 
             for (int i = 0; i < 198; i++) {
-                final BottariItem bottariItem = new BottariItem("name" + i, bottari);
+                final BottariItem bottariItem = new BottariItem("value" + i, bottari);
                 entityManager.persist(bottariItem);
             }
 

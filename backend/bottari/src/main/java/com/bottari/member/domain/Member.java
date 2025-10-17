@@ -22,7 +22,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Table(
         uniqueConstraints = {
                 @UniqueConstraint(name = "UK_member_ssaid_active", columnNames = {"ssaid", "deleted_at"}),
-                @UniqueConstraint(name = "UK_member_name_active", columnNames = {"name", "deleted_at"})
+                @UniqueConstraint(name = "UK_member_name_active", columnNames = {"value", "deleted_at"})
         }
 )
 @SQLDelete(sql = "UPDATE member SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")

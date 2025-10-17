@@ -21,7 +21,7 @@ class BottariTemplateTest {
         @ValueSource(strings = {"", "   "})
         void validateTitle_Blank(final String title) {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = new Member("ssaid", "value");
 
             // when & then
             assertThatThrownBy(() -> new BottariTemplate(title, "description", member))
@@ -34,7 +34,7 @@ class BottariTemplateTest {
         @ValueSource(strings = {"열다섯글자가넘는보따리템플릿이름입니다", "열다섯글자가넘는보따리템플릿이름입니다!"})
         void validateTitle_TooLong(final String title) {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = new Member("ssaid", "value");
 
             // when & then
             assertThatThrownBy(() -> new BottariTemplate(title, "description", member))
@@ -47,7 +47,7 @@ class BottariTemplateTest {
         @ValueSource(strings = {"씨발이네", "씨@발 안녕하세요", "병1신이세요?", "ㅅㅂ입니다."})
         void validateTitle_BadWord(final String title) {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = new Member("ssaid", "value");
 
             // when & then
             assertThatThrownBy(() -> new BottariTemplate(title, "description", member))
@@ -64,10 +64,10 @@ class BottariTemplateTest {
         @ValueSource(strings = {"", "   "})
         void validateDescription_Blank(final String description) {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = new Member("ssaid", "value");
 
             // when & then
-            assertThatThrownBy(() -> new BottariTemplate("title", description, member))
+            assertThatThrownBy(() -> new BottariTemplate("value", description, member))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리 템플릿 설명은 공백일 수 없습니다.");
         }
@@ -77,10 +77,10 @@ class BottariTemplateTest {
         @ValueSource(strings = {"일이삼사오육칠팔구십일이삼사오육칠팔구십일이삼사오육칠팔구십일", "서른한글자서른한글자서른한글자서른한글자서른한글자서른한글자!"})
         void validateDescription_TooLong(final String description) {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = new Member("ssaid", "value");
 
             // when & then
-            assertThatThrownBy(() -> new BottariTemplate("title", description, member))
+            assertThatThrownBy(() -> new BottariTemplate("value", description, member))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리 템플릿 설명이 너무 깁니다. - 최대 30자까지 입력 가능합니다.");
         }
@@ -90,10 +90,10 @@ class BottariTemplateTest {
         @ValueSource(strings = {"씨발이네", "씨@발 안녕하세요", "병1신이세요?", "ㅅㅂ입니다."})
         void validateDescription_BadWord(final String description) {
             // given
-            final Member member = new Member("ssaid", "name");
+            final Member member = new Member("ssaid", "value");
 
             // when & then
-            assertThatThrownBy(() -> new BottariTemplate("title", description, member))
+            assertThatThrownBy(() -> new BottariTemplate("value", description, member))
                     .isInstanceOf(BusinessException.class)
                     .hasMessage("보따리 템플릿 설명에 비속어를 입력할 수 없습니다.");
         }
@@ -110,8 +110,8 @@ class BottariTemplateTest {
             final boolean expected
     ) {
         // given
-        final Member member = new Member("same_ssaid", "name");
-        final BottariTemplate bottariTemplate = new BottariTemplate("title", "description", member);
+        final Member member = new Member("same_ssaid", "value");
+        final BottariTemplate bottariTemplate = new BottariTemplate("value", "description", member);
 
         // when
         final boolean actual = bottariTemplate.isOwner(ssaid);

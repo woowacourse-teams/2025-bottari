@@ -189,7 +189,7 @@ class BottariServiceTest {
         @Test
         void create() {
             // given
-            final CreateBottariRequest request = new CreateBottariRequest("title");
+            final CreateBottariRequest request = new CreateBottariRequest("value");
             final Member member = MemberFixture.MEMBER.get();
             entityManager.persist(member);
 
@@ -204,7 +204,7 @@ class BottariServiceTest {
         @Test
         void create_Exception_NotExistsSsaid() {
             // given
-            final CreateBottariRequest request = new CreateBottariRequest("title");
+            final CreateBottariRequest request = new CreateBottariRequest("value");
             final String ssaid = "ssaid";
 
             // when & then
@@ -280,7 +280,7 @@ class BottariServiceTest {
         void deleteById() {
             // given
             final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "name");
+            final Member member = new Member(ssaid, "value");
             entityManager.persist(member);
 
             final Bottari delete_bottari = BottariFixture.BOTTARI.get(member);

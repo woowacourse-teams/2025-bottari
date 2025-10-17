@@ -78,10 +78,10 @@ class HashtagTest {
 
         @DisplayName("해시태그에 특수문자(언더스코어 제외)가 포함된 경우, 예외를 던진다.")
         @ParameterizedTest
-        @ValueSource(strings = {"여행!", "캠핑@준비", "travel#tag", "test$name", "tag%ing", "name^tag",
-                "tag&name", "test*tag", "tag()", "tag[]", "tag{}", "tag|name", "tag\\name",
-                "tag:name", "tag;name", "tag'name", "tag\"name", "tag<name", "tag>name",
-                "tag?name", "tag/name", "tag+name", "tag=name", "tag~name", "tag`name", "tag.name", "tag,name"})
+        @ValueSource(strings = {"여행!", "캠핑@준비", "travel#tag", "test$value", "tag%ing", "value^tag",
+                "tag&value", "test*tag", "tag()", "tag[]", "tag{}", "tag|value", "tag\\value",
+                "tag:value", "tag;value", "tag'value", "tag\"value", "tag<value", "tag>value",
+                "tag?value", "tag/value", "tag+value", "tag=value", "tag~value", "tag`value", "tag.value", "tag,value"})
         void create_Exception_InvalidCharacter(final String name) {
             // when & then
             assertThatThrownBy(() -> new Hashtag(name))

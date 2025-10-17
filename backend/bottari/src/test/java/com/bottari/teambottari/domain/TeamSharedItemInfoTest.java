@@ -19,7 +19,7 @@ class TeamSharedItemInfoTest {
     @Test
     void check() {
         // given
-        final Member member = new Member("ssaid", "name");
+        final Member member = new Member("ssaid", "value");
         final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
         final TeamMember teamMember = new TeamMember(teamBottari, member);
         final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo(member.getName(), teamBottari);
@@ -36,7 +36,7 @@ class TeamSharedItemInfoTest {
     @Test
     void check_Exception_AlreadyCheck() {
         // given
-        final Member member = new Member("ssaid", "name");
+        final Member member = new Member("ssaid", "value");
         final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
         final TeamMember teamMember = new TeamMember(teamBottari, member);
         final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo(member.getName(), teamBottari);
@@ -53,7 +53,7 @@ class TeamSharedItemInfoTest {
     @Test
     void uncheck() {
         // given
-        final Member member = new Member("ssaid", "name");
+        final Member member = new Member("ssaid", "value");
         final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
         final TeamMember teamMember = new TeamMember(teamBottari, member);
         final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo(member.getName(), teamBottari);
@@ -71,7 +71,7 @@ class TeamSharedItemInfoTest {
     @Test
     void uncheck_Exception_AlreadyUncheck() {
         // given
-        final Member member = new Member("ssaid", "name");
+        final Member member = new Member("ssaid", "value");
         final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
         final TeamMember teamMember = new TeamMember(teamBottari, member);
         final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo(member.getName(), teamBottari);
@@ -94,7 +94,7 @@ class TeamSharedItemInfoTest {
             final boolean expected
     ) {
         // given
-        final Member member = new Member("same_ssaid", "name");
+        final Member member = new Member("same_ssaid", "value");
         final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
         final TeamMember teamMember = new TeamMember(teamBottari, member);
         final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo(member.getName(), teamBottari);
