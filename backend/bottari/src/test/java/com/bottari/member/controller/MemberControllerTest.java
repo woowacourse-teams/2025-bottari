@@ -61,7 +61,7 @@ class MemberControllerTest {
         final CheckRegistrationResponse response = new CheckRegistrationResponse(
                 true,
                 1L,
-                "value"
+                "name"
         );
         given(memberService.checkRegistration(ssaid))
                 .willReturn(response);

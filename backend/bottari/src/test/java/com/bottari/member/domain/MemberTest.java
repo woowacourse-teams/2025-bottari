@@ -53,7 +53,7 @@ class MemberTest {
             final boolean expected
     ) {
         // given
-        final Member member = new Member("same_ssaid", "value");
+        final Member member = new Member("same_ssaid", "name");
 
         // when
         final boolean actual = member.isSameBySsaid(ssaid);
@@ -66,7 +66,7 @@ class MemberTest {
     @Test
     void updateName() {
         // given
-        final Member member = new Member("ssaid", "value");
+        final Member member = new Member("ssaid", "name");
 
         // when
         member.updateName("new_name");
@@ -79,10 +79,10 @@ class MemberTest {
     @Test
     void updateName_Exception_SameName() {
         // given
-        final Member member = new Member("ssaid", "value");
+        final Member member = new Member("ssaid", "name");
 
         // when & then
-        assertThatThrownBy(() -> member.updateName("value"))
+        assertThatThrownBy(() -> member.updateName("name"))
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("기존의 사용자 이름과 동일한 이름으로는 변경할 수 없습니다.");
     }

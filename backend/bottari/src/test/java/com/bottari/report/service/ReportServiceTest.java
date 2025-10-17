@@ -42,9 +42,9 @@ class ReportServiceTest {
             final Member reporter = new Member("reporter_ssaid", "reporter");
             entityManager.persist(reporter);
 
-            final BottariTemplate bottariTemplateToReport = new BottariTemplate("value", "description", owner);
+            final BottariTemplate bottariTemplateToReport = new BottariTemplate("title", "description", owner);
             entityManager.persist(bottariTemplateToReport);
-            final BottariTemplate AnotherBottariTemplate = new BottariTemplate("value", "description", owner);
+            final BottariTemplate AnotherBottariTemplate = new BottariTemplate("title", "description", owner);
             entityManager.persist(AnotherBottariTemplate);
 
             final String reportReason = "reason";
@@ -76,10 +76,10 @@ class ReportServiceTest {
         @Test
         void reportBottariTemplate_Exception_NotExistReporter() {
             // given
-            final Member owner = new Member("ssaid", "value");
+            final Member owner = new Member("ssaid", "name");
             entityManager.persist(owner);
 
-            final BottariTemplate bottariTemplate = new BottariTemplate("value", "description", owner);
+            final BottariTemplate bottariTemplate = new BottariTemplate("title", "description", owner);
             entityManager.persist(bottariTemplate);
 
             final String invalidSSsaid = "invalid_ssaid";
@@ -96,7 +96,7 @@ class ReportServiceTest {
         @Test
         void reportBottariTemplate_Exception_NotExistBottariTemplate() {
             // given
-            final Member reporter = new Member("ssaid", "value");
+            final Member reporter = new Member("ssaid", "name");
             entityManager.persist(reporter);
 
             final Long invalidBottariTemplateId = 1L;
@@ -119,7 +119,7 @@ class ReportServiceTest {
             final Member reporter = new Member("reporter_ssaid", "reporter");
             entityManager.persist(reporter);
 
-            final BottariTemplate bottariTemplate = new BottariTemplate("value", "description", owner);
+            final BottariTemplate bottariTemplate = new BottariTemplate("title", "description", owner);
             entityManager.persist(bottariTemplate);
 
             final Report report = new Report(bottariTemplate, reporter, "reason");

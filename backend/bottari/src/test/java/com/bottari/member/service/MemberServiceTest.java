@@ -87,7 +87,7 @@ class MemberServiceTest {
         void create_Exception_DuplicateSsaid() {
             // given
             final String duplicateSsaid = "duplicateSsaid";
-            entityManager.persist(new Member(duplicateSsaid, "value"));
+            entityManager.persist(new Member(duplicateSsaid, "name"));
             final CreateMemberRequest request = new CreateMemberRequest(duplicateSsaid, "token");
 
             // when & then
@@ -105,7 +105,7 @@ class MemberServiceTest {
         void checkRegistration() {
             // given
             final String ssaid = "ssaid";
-            final String name = "value";
+            final String name = "name";
             final Member member = new Member(ssaid, name);
             entityManager.persist(member);
 
@@ -146,7 +146,7 @@ class MemberServiceTest {
         void updateName() {
             // given
             final String ssaid = "ssaid";
-            final Member member = new Member(ssaid, "value");
+            final Member member = new Member(ssaid, "name");
             entityManager.persist(member);
 
             final UpdateMemberRequest request = new UpdateMemberRequest("new_name");

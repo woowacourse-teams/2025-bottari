@@ -19,8 +19,8 @@ class AlarmTest {
     void validateLocationAlarm() {
         // given
         final LocationAlarm locationAlarm = new LocationAlarm(false, 1.23, 1.23, 100);
-        final Member member = new Member("ssaid", "value");
-        final Bottari bottari = new Bottari("value", member);
+        final Member member = new Member("ssaid", "name");
+        final Bottari bottari = new Bottari("title", member);
 
         // when & then
         assertThatThrownBy(() -> new Alarm(false, null, locationAlarm, bottari))
@@ -32,8 +32,8 @@ class AlarmTest {
     @Test
     void update_Exception_LocationAlarm() {
         // given
-        final Member member = new Member("ssaid", "value");
-        final Bottari bottari = new Bottari("value", member);
+        final Member member = new Member("ssaid", "name");
+        final Bottari bottari = new Bottari("title", member);
         final RoutineAlarm routineAlarm = new RoutineAlarm(
                 LocalTime.NOON,
                 RepeatType.NON_REPEAT,
@@ -53,8 +53,8 @@ class AlarmTest {
     @Test
     void active() {
         // given
-        final Member member = new Member("ssaid", "value");
-        final Bottari bottari = new Bottari("value", member);
+        final Member member = new Member("ssaid", "name");
+        final Bottari bottari = new Bottari("title", member);
         final RoutineAlarm routineAlarm = new RoutineAlarm(
                 LocalTime.NOON,
                 RepeatType.NON_REPEAT,
@@ -75,8 +75,8 @@ class AlarmTest {
     @Test
     void active_Exception_AlreadyActive() {
         // given
-        final Member member = new Member("ssaid", "value");
-        final Bottari bottari = new Bottari("value", member);
+        final Member member = new Member("ssaid", "name");
+        final Bottari bottari = new Bottari("title", member);
         final RoutineAlarm routineAlarm = new RoutineAlarm(
                 LocalTime.NOON,
                 RepeatType.NON_REPEAT,
@@ -96,8 +96,8 @@ class AlarmTest {
     @Test
     void inactive() {
         // given
-        final Member member = new Member("ssaid", "value");
-        final Bottari bottari = new Bottari("value", member);
+        final Member member = new Member("ssaid", "name");
+        final Bottari bottari = new Bottari("title", member);
         final RoutineAlarm routineAlarm = new RoutineAlarm(
                 LocalTime.NOON,
                 RepeatType.NON_REPEAT,
@@ -118,8 +118,8 @@ class AlarmTest {
     @Test
     void inactive_Exception_AlreadyInactive() {
         // given
-        final Member member = new Member("ssaid", "value");
-        final Bottari bottari = new Bottari("value", member);
+        final Member member = new Member("ssaid", "name");
+        final Bottari bottari = new Bottari("title", member);
         final RoutineAlarm routineAlarm = new RoutineAlarm(
                 LocalTime.NOON,
                 RepeatType.NON_REPEAT,

@@ -24,8 +24,8 @@ class BottariTest {
             final boolean expected
     ) {
         // given
-        final Member member = new Member("same_ssaid", "value");
-        final Bottari bottari = new Bottari("value", member);
+        final Member member = new Member("same_ssaid", "name");
+        final Bottari bottari = new Bottari("title", member);
 
         // when
         final boolean actual = bottari.isOwner(ssaid);
@@ -38,7 +38,7 @@ class BottariTest {
     @Test
     void updateTitle() {
         // given
-        final Member member = new Member("ssaid", "value");
+        final Member member = new Member("ssaid", "name");
         final Bottari bottari = new Bottari("original_title", member);
         final String newTitle = "updated_title";
 
@@ -53,11 +53,11 @@ class BottariTest {
     @Test
     void updateTitle_Exception_SameTitle() {
         // given
-        final Member member = new Member("ssaid", "value");
-        final Bottari bottari = new Bottari("value", member);
+        final Member member = new Member("ssaid", "name");
+        final Bottari bottari = new Bottari("title", member);
 
         // when & then
-        assertThatThrownBy(() -> bottari.updateTitle("value"))
+        assertThatThrownBy(() -> bottari.updateTitle("title"))
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("기존의 보따리 이름과 동일한 이름으로는 변경할 수 없습니다.");
     }
@@ -67,8 +67,8 @@ class BottariTest {
     @ValueSource(strings = {"", "   "})
     void updateTitle_Exception_Blank(final String invalidTitle) {
         // given
-        final Member member = new Member("ssaid", "value");
-        final Bottari bottari = new Bottari("value", member);
+        final Member member = new Member("ssaid", "name");
+        final Bottari bottari = new Bottari("title", member);
 
         // when & then
         assertThatThrownBy(() -> bottari.updateTitle(invalidTitle))
@@ -81,8 +81,8 @@ class BottariTest {
     @ValueSource(strings = {"열다섯글자가넘는보따리이름입니다", "열다섯글자가넘는보따리이름입니다!"})
     void updateTitle_Exception_TooLongTitle(final String tooLongTitle) {
         // given
-        final Member member = new Member("ssaid", "value");
-        final Bottari bottari = new Bottari("value", member);
+        final Member member = new Member("ssaid", "name");
+        final Bottari bottari = new Bottari("title", member);
 
         // when & then
         assertThatThrownBy(() -> bottari.updateTitle(tooLongTitle))

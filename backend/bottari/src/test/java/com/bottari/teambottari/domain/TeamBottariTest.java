@@ -51,7 +51,7 @@ class TeamBottariTest {
             final boolean expected
     ) {
         // given
-        final TeamBottari teamBottari = new TeamBottari("value", owner, "inviteCode");
+        final TeamBottari teamBottari = new TeamBottari("title", owner, "inviteCode");
 
         // when
         final boolean actual = teamBottari.isOwner(member);
@@ -62,8 +62,8 @@ class TeamBottariTest {
 
     private static Stream<Arguments> isOwner() {
         return Stream.of(
-                Arguments.of(new Member("ssaid", "value"), new Member("ssaid", "value"), true),
-                Arguments.of(new Member("ssaid", "value"), new Member("ssaid2", "name2"), false)
+                Arguments.of(new Member("ssaid", "name"), new Member("ssaid", "name"), true),
+                Arguments.of(new Member("ssaid", "name"), new Member("ssaid2", "name2"), false)
         );
     }
 
@@ -74,7 +74,7 @@ class TeamBottariTest {
         final Member beforeOwner = new Member("ssaid", "exOwner");
         final Member afterOwner = new Member("ssaid2", "afterOwner");
 
-        final TeamBottari teamBottari = new TeamBottari("value", beforeOwner, "inviteCode");
+        final TeamBottari teamBottari = new TeamBottari("title", beforeOwner, "inviteCode");
 
         // when
         teamBottari.changeOwner(afterOwner);

@@ -46,7 +46,7 @@ class BottariControllerTest {
     void read() throws Exception {
         // given
         final String ssaid = "ssaid";
-        final ReadBottariResponse response = new ReadBottariResponse(1L, "value", List.of(), null);
+        final ReadBottariResponse response = new ReadBottariResponse(1L, "title", List.of(), null);
         given(bottariService.getById(ssaid, 1L))
                 .willReturn(response);
 
@@ -81,7 +81,7 @@ class BottariControllerTest {
     void create() throws Exception {
         // given
         final String ssaid = "ssaid";
-        final CreateBottariRequest request = new CreateBottariRequest("value");
+        final CreateBottariRequest request = new CreateBottariRequest("title");
         given(bottariService.create(ssaid, request))
                 .willReturn(1L);
 

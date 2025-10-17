@@ -4,14 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.bottari.error.BusinessException;
-import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 class TeamAssignedItemInfoTest {
 
@@ -19,7 +17,7 @@ class TeamAssignedItemInfoTest {
     @Test
     void check() {
         // given
-        final Member member = new Member("ssaid", "value");
+        final Member member = new Member("ssaid", "name");
         final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
         final TeamMember teamMember = new TeamMember(teamBottari, member);
         final TeamSharedItemInfo teamSharedItemInfo = new TeamSharedItemInfo(member.getName(), teamBottari);
@@ -36,7 +34,7 @@ class TeamAssignedItemInfoTest {
     @Test
     void check_Exception_AlreadyCheck() {
         // given
-        final Member member = new Member("ssaid", "value");
+        final Member member = new Member("ssaid", "name");
         final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
         final TeamMember teamMember = new TeamMember(teamBottari, member);
         final TeamAssignedItemInfo teamSharedItemInfo = new TeamAssignedItemInfo(member.getName(), teamBottari);
@@ -53,7 +51,7 @@ class TeamAssignedItemInfoTest {
     @Test
     void uncheck() {
         // given
-        final Member member = new Member("ssaid", "value");
+        final Member member = new Member("ssaid", "name");
         final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
         final TeamMember teamMember = new TeamMember(teamBottari, member);
         final TeamAssignedItemInfo teamAssignedItemInfo = new TeamAssignedItemInfo(member.getName(), teamBottari);
@@ -71,7 +69,7 @@ class TeamAssignedItemInfoTest {
     @Test
     void uncheck_Exception_AlreadyUncheck() {
         // given
-        final Member member = new Member("ssaid", "value");
+        final Member member = new Member("ssaid", "name");
         final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
         final TeamMember teamMember = new TeamMember(teamBottari, member);
         final TeamAssignedItemInfo teamAssignedItemInfo = new TeamAssignedItemInfo(member.getName(), teamBottari);
@@ -94,7 +92,7 @@ class TeamAssignedItemInfoTest {
             final boolean expected
     ) {
         // given
-        final Member member = new Member("same_ssaid", "value");
+        final Member member = new Member("same_ssaid", "name");
         final TeamBottari teamBottari = TeamBottariFixture.TEAM_BOTTARI.get(member);
         final TeamMember teamMember = new TeamMember(teamBottari, member);
         final TeamAssignedItemInfo teamAssignedItemInfo = new TeamAssignedItemInfo(member.getName(), teamBottari);

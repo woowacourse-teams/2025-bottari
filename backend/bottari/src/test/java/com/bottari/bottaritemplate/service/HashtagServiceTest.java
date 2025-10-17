@@ -41,7 +41,7 @@ class HashtagServiceTest {
         @Test
         void getTopHashtagsByUsageCount() {
             // given
-            final Member member = new Member("ssaid", "value");
+            final Member member = new Member("ssaid", "name");
             entityManager.persist(member);
 
             final Hashtag hashtag1 = new Hashtag("여행");
@@ -92,7 +92,7 @@ class HashtagServiceTest {
         @Test
         void getTopHashtagsByUsageCount_SameUsageCount_OrderById() {
             // given
-            final Member member = new Member("ssaid", "value");
+            final Member member = new Member("ssaid", "name");
             entityManager.persist(member);
 
             final Hashtag hashtag1 = new Hashtag("가나다");
@@ -124,7 +124,7 @@ class HashtagServiceTest {
         @Test
         void getTopHashtagsByUsageCount_ExcludeDeleted() {
             // given
-            final Member member = new Member("ssaid", "value");
+            final Member member = new Member("ssaid", "name");
             entityManager.persist(member);
 
             final Hashtag hashtag = new Hashtag("여행");
