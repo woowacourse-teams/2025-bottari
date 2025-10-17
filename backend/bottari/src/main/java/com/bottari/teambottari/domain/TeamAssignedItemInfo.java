@@ -1,9 +1,9 @@
 package com.bottari.teambottari.domain;
 
+import com.bottari.support.BaseTimeEntity;
 import com.bottari.vo.ItemName;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,15 +15,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @SQLRestriction("deleted_at IS NULL")
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class TeamAssignedItemInfo {
+public class TeamAssignedItemInfo extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +31,6 @@ public class TeamAssignedItemInfo {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_bottari_id")
     private TeamBottari teamBottari;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
