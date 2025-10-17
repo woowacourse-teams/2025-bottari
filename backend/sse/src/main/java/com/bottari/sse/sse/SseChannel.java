@@ -1,7 +1,6 @@
 package com.bottari.sse.sse;
 
 import java.io.IOException;
-import java.lang.String;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,7 @@ public final class SseChannel {
     private final SseSessions sseSessions;
 
     public void unicast(
-            final String message,
+            final PushMessage message,
             final Long memberId
     ) {
         final Optional<SseEmitter> sseEmitterOptional = sseSessions.findByMemberId(memberId);
@@ -36,7 +35,7 @@ public final class SseChannel {
     }
 
     public void multicast(
-            final String message,
+            final PushMessage message,
             final List<Long> memberIds
     ) {
         final List<SseEmitter> sseEmitters = sseSessions.findAllByMemberIds(memberIds);
@@ -54,7 +53,7 @@ public final class SseChannel {
         }
     }
 
-    public void broadcast(final String message) {
+    public void broadcast(final PushMessage message) {
         throw new UnsupportedOperationException();
     }
 }

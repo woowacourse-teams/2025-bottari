@@ -17,8 +17,8 @@ public class RedisSseChannel implements SseChannel {
             final PushMessage message,
             final Long memberId
     ) {
-        final String channel = createChannelName(memberId);
-        redisTemplate.convertAndSend(channel, message);
+        final RedisTopic topic = RedisTopic.from(memberId);
+        redisTemplate.convertAndSend(topic.name(), message);
     }
 
     @Override
@@ -26,10 +26,7 @@ public class RedisSseChannel implements SseChannel {
             final PushMessage message,
             final List<Long> memberIds
     ) {
-        for (final Long memberId : memberIds) {
-            final String channel = createChannelName(memberId);
-            redisTemplate.convertAndSend(channel, message);
-        }
+        memberIds.forEach(memberId -> unicast(message, memberId));
     }
 
     @Override
@@ -40,9 +37,5 @@ public class RedisSseChannel implements SseChannel {
     @Override
     public ChannelType channelType() {
         return ChannelType.SSE;
-    }
-
-    private String createChannelName(final Long memberId) {
-        return "member:" + memberId;
     }
 }
