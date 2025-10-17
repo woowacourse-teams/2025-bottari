@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: sse
+  data:
+    redis:
+      host: ${REDIS_DEV_HOST}
+      port: ${REDIS_DEV_PORT}
+      password: ${REDIS_DEV_PASSWORD}
