@@ -1,5 +1,9 @@
 package com.bottari.sse.sse;
 
+import static com.bottari.sse.error.ErrorCode.SSE_CONNECTION_FAILED;
+
+import com.bottari.sse.error.BusinessException;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +25,12 @@ public class SseConnector implements SseConnectorApiDocs {
         final long timeout = 60 * 60 * 1000L;
         final SseEmitter sseEmitter = new SseEmitter(timeout);
         sseService.register(memberId, sseEmitter);
+        try {
+            sseEmitter.send(":connected");
+        } catch (IOException e) {
+            sseEmitter.completeWithError(e);
+            throw new BusinessException(SSE_CONNECTION_FAILED);
+        }
 
         return sseEmitter;
     }
