@@ -4,7 +4,6 @@ import com.bottari.push.connection.sse.SseChannel;
 import com.bottari.push.connection.sse.external.RedisSseChannel;
 import com.bottari.push.connection.sse.inmemory.InMemorySseChannel;
 import com.bottari.push.connection.sse.inmemory.SseSessions;
-import com.bottari.push.message.PushMessage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -25,13 +24,13 @@ public class SseConfig {
 
     @Profile({"!dev1", "!dev2"})
     @Bean
-    public SseChannel sseChannel(final RedisTemplate<String, PushMessage> redisTemplate) {
+    public SseChannel redisSseChannel(final RedisTemplate<String, Object> redisTemplate) {
         return new RedisSseChannel(redisTemplate);
     }
 
     @Profile({"dev1", "dev2"})
     @Bean
-    public SseChannel sseChannel(final SseSessions sseSessions) {
+    public SseChannel inMemorySseChannel(final SseSessions sseSessions) {
         return new InMemorySseChannel(sseSessions);
     }
 }

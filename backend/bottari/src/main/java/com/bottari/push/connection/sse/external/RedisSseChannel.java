@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 @RequiredArgsConstructor
 public class RedisSseChannel implements SseChannel {
 
-    private final RedisTemplate<String, PushMessage> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public void unicast(
