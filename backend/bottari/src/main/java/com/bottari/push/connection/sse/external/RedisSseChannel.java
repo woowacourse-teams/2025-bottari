@@ -17,8 +17,8 @@ public class RedisSseChannel implements SseChannel {
             final PushMessage message,
             final Long memberId
     ) {
-        final RedisTopic topic = RedisTopic.from(memberId);
-        redisTemplate.convertAndSend(topic.name(), message);
+        final MemberChannelTopic topic = MemberChannelTopic.from(memberId);
+        redisTemplate.convertAndSend(topic.getTopic(), message);
     }
 
     @Override

@@ -9,14 +9,26 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class SseService {
 
     private final SseSessions sseSessions;
+    private final RedisSubscribeManager subscribeManager;
 
     public void register(
             final Long memberId,
             final SseEmitter sseEmitter
     ) {
-        sseEmitter.onCompletion(() -> sseSessions.remove(memberId));
-        sseEmitter.onTimeout(() -> sseSessions.remove(memberId));
-        sseEmitter.onError(throwable -> sseSessions.remove(memberId));
+        final MemberChannelTopic topic = MemberChannelTopic.from(memberId);
+        sseEmitter.onCompletion(() -> {
+            subscribeManager.unsubscribe(topic);
+            sseSessions.remove(memberId);
+        });
+        sseEmitter.onTimeout(() -> {
+            subscribeManager.unsubscribe(topic);
+            sseSessions.remove(memberId);
+        });
+        sseEmitter.onError(throwable -> {
+            subscribeManager.unsubscribe(topic);
+            sseSessions.remove(memberId);
+        });
+        subscribeManager.subscribe(topic);
         sseSessions.save(memberId, sseEmitter);
     }
 }
