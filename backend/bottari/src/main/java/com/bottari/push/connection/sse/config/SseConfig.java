@@ -22,13 +22,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 @Configuration
 public class SseConfig {
 
-    @Profile({"!dev1", "!dev2"})
+    @Profile("!(dev1 | dev2)")
     @Bean
     public SseChannel redisSseChannel(final RedisTemplate<String, Object> redisTemplate) {
         return new RedisSseChannel(redisTemplate);
     }
 
-    @Profile({"dev1", "dev2"})
+    @Profile("dev1 | dev2")
     @Bean
     public SseChannel inMemorySseChannel(final SseSessions sseSessions) {
         return new InMemorySseChannel(sseSessions);
