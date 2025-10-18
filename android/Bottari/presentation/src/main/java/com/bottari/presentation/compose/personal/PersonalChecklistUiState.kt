@@ -13,6 +13,6 @@ data class PersonalChecklistUiState(
         bottariItems.filterNot { it.isChecked }
     val totalQuantity: Int = bottariItems.size
     val checkedQuantity: Int = bottariItems.count { it.isChecked }
-    val isCompleted : Boolean = checkedQuantity == totalQuantity
+    val isCompleted: Boolean = checkedQuantity == totalQuantity
     val isAnyChecked: Boolean = bottariItems.any { it.isChecked }
 }

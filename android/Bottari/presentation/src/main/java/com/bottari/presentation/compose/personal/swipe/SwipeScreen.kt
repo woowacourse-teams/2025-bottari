@@ -18,10 +18,10 @@ fun SwipeScreen(
     items: List<ChecklistItemUiModel>,
     checkedQuantity: Int,
     totalQuantity: Int,
-    isComplete : Boolean,
+    isComplete: Boolean,
     onLeftSwipe: (Long) -> Unit,
     onRightSwipe: (Long) -> Unit,
-    onClickCompleteButton : () -> Unit,
+    onClickCompleteButton: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val rememberableItems = remember { items }
