@@ -4,9 +4,10 @@ import com.bottari.data.model.local.tooltip.TooltipEntity
 import com.bottari.data.source.local.tooltip.TooltipLocalDataSource
 import com.bottari.domain.model.tooltip.TooltipType
 import com.bottari.domain.repository.TooltipRepository
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
-class TooltipRepositoryImpl(
+class TooltipRepositoryImpl @Inject constructor(
     private val tooltipLocalDataSource: TooltipLocalDataSource,
 ) : TooltipRepository {
     override suspend fun updateStatus(type: TooltipType): Result<Unit> =

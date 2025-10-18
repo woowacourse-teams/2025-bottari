@@ -14,7 +14,7 @@ import com.bottari.data.model.local.tooltip.TooltipEntity
     exportSchema = false,
 )
 abstract class TooltipDatabase : RoomDatabase() {
-    abstract fun tooltipDao(): TooltipDismissalDao
+    abstract fun tooltipDismissalDao(): TooltipDismissalDao
 
     companion object {
         private const val DATABASE_NAME = "tooltip"

@@ -10,6 +10,8 @@ import com.bottari.data.source.local.bottari.BottariLocalDataSource
 import com.bottari.data.source.local.bottari.BottariLocalDataSourceImpl
 import com.bottari.data.source.local.bottari.ItemLocalDataSource
 import com.bottari.data.source.local.bottari.ItemLocalDataSourceImpl
+import com.bottari.data.source.local.tooltip.TooltipLocalDataSource
+import com.bottari.data.source.local.tooltip.TooltipLocalDataSourceImpl
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSourceImpl
 import com.bottari.data.source.remote.EventRemoteDataSource
@@ -92,4 +94,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindEventRemoteDataSource(impl: EventRemoteDataSourceImpl): EventRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindTooltipLocalDataSource(impl: TooltipLocalDataSourceImpl): TooltipLocalDataSource
 }

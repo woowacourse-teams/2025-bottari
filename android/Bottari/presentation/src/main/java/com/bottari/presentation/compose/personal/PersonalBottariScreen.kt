@@ -29,9 +29,7 @@ fun PersonalBottariScreen(
     bottariTitle: String,
     notificationFlag: Boolean,
     viewModel: PersonalChecklistViewModel =
-        viewModel(
-            factory = PersonalChecklistViewModel.Companion.Factory(bottariId),
-        ),
+        viewModel(),
 ) {
     val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
