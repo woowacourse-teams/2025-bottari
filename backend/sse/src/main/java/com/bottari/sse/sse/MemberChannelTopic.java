@@ -21,6 +21,10 @@ public final class MemberChannelTopic extends ChannelTopic {
         if (!topic.startsWith(TOPIC_NAME_PREFIX)) {
             throw new BusinessException(ErrorCode.INVALID_TOPIC_NAME, "member");
         }
-        return Long.valueOf(getTopic().substring(TOPIC_NAME_PREFIX.length()));
+        try {
+            return Long.valueOf(getTopic().substring(TOPIC_NAME_PREFIX.length()));
+        } catch (NumberFormatException e) {
+            throw new BusinessException(ErrorCode.INVALID_TOPIC_NAME, "member");
+        }
     }
 }

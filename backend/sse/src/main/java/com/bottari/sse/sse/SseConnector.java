@@ -26,7 +26,9 @@ public class SseConnector implements SseConnectorApiDocs {
         final SseEmitter sseEmitter = new SseEmitter(timeout);
         sseService.register(memberId, sseEmitter);
         try {
-            sseEmitter.send(":connected");
+            sseEmitter.send(
+                    SseEmitter.event().comment(":connected")
+            );
         } catch (IOException | IllegalStateException e) {
             sseEmitter.completeWithError(e);
             throw new BusinessException(SSE_CONNECTION_FAILED);

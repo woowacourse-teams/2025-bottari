@@ -22,7 +22,9 @@ public class SseHeartbeatScheduler {
 
         for (final SseEmitter emitter : emitters) {
             try {
-                emitter.send(":hb");
+                emitter.send(
+                        SseEmitter.event().comment(":hb")
+                );
             } catch (IOException | IllegalStateException e) {
                 emitter.completeWithError(e);
             }
