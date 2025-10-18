@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
@@ -40,7 +41,7 @@ fun ChecklistTopBar(
         navigationIcon = {
             Icon(
                 painter = painterResource(R.drawable.ic_previous),
-                contentDescription = "Back",
+                contentDescription = stringResource(R.string.common_previous_btn_description),
                 modifier =
                     Modifier
                         .size(24.dp)
@@ -50,7 +51,7 @@ fun ChecklistTopBar(
         actions = {
             Icon(
                 painter = painterResource(R.drawable.ic_reset),
-                contentDescription = "Reset",
+                contentDescription = stringResource(R.string.checklist_btn_reset_description),
                 modifier =
                     Modifier
                         .alpha(if (isResetIconVisible) 1f else 0f)
@@ -63,7 +64,7 @@ fun ChecklistTopBar(
             Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceXSmall))
             Icon(
                 painter = painterResource(R.drawable.ic_swipe),
-                contentDescription = "Swipe",
+                contentDescription = stringResource(R.string.checklist_btn_swipe_description),
                 modifier =
                     Modifier
                         .alpha(if (isSwipeIconVisible) 1f else 0f)

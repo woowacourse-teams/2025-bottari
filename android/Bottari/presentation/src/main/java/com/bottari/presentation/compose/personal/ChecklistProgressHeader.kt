@@ -37,7 +37,10 @@ fun ChecklistProgressHeader(
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text(text = "완료된 항목", style = BottariTheme.typography.medium20.toTextStyle())
+                Text(
+                    text = stringResource(R.string.checklist_progress_header_title_text),
+                    style = BottariTheme.typography.medium20.toTextStyle(),
+                )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text =

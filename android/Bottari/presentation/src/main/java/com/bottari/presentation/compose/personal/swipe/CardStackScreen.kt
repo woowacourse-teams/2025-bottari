@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -103,7 +104,7 @@ private fun BottariCard(item: ChecklistItemUiModel) {
             )
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceMedium))
             Text(
-                text = "챙기셨나요?",
+                text = stringResource(R.string.checklist_swipe_sub_title_text),
                 modifier = Modifier.fillMaxWidth(),
                 style = BottariTheme.typography.medium16.toTextStyle(),
                 textAlign = TextAlign.Center,
@@ -131,7 +132,10 @@ private fun BottariCard(item: ChecklistItemUiModel) {
                         tint = BottariTheme.colors.red,
                     )
                     Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceMedium))
-                    Text("아직이에요", color = BottariTheme.colors.red)
+                    Text(
+                        stringResource(R.string.checklist_swipe_no_overlay_view_text),
+                        color = BottariTheme.colors.red,
+                    )
                 }
                 VerticalDivider(thickness = 2.dp, color = BottariTheme.colors.gray200)
                 Row(
@@ -142,7 +146,10 @@ private fun BottariCard(item: ChecklistItemUiModel) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start,
                 ) {
-                    Text("챙겼어요", color = BottariTheme.colors.primary)
+                    Text(
+                        stringResource(R.string.checklist_swipe_yes_overlay_view_text),
+                        color = BottariTheme.colors.primary,
+                    )
                     Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceMedium))
                     Icon(
                         painter = painterResource(R.drawable.ic_previous),
@@ -154,7 +161,7 @@ private fun BottariCard(item: ChecklistItemUiModel) {
             }
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceMedium))
             Text(
-                text = "좌우로 스와이프하거나 아래 버튼을 눌러주세요",
+                text = stringResource(R.string.checklist_swipe_description_text),
                 modifier = Modifier.fillMaxWidth(),
                 style = BottariTheme.typography.medium14.toTextStyle(),
                 textAlign = TextAlign.Center,
@@ -184,7 +191,7 @@ private fun SwipeButtons(
                     }),
         ) {
             Text(
-                text = "아직이에요",
+                text = stringResource(R.string.checklist_swipe_not_btn_text),
                 modifier = Modifier.align(Alignment.Center),
                 style = BottariTheme.typography.medium20.toTextStyle(),
             )
@@ -203,7 +210,7 @@ private fun SwipeButtons(
                     }),
         ) {
             Text(
-                text = "챙겼어요",
+                text = stringResource(R.string.checklist_swipe_yes_btn_text),
                 modifier = Modifier.align(Alignment.Center),
                 style = BottariTheme.typography.medium20.toTextStyle(),
                 color = BottariTheme.colors.white,
