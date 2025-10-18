@@ -55,6 +55,13 @@ data class BottariTextStyle(
 
 @Immutable
 data class BottariTypography(
+    val bold40: BottariTextStyle =
+        BottariTextStyle(
+            fontFamily = Pretendard,
+            fontWeight = FontWeight.W700,
+            lineHeight = 40.dp,
+            fontSize = 40.dp,
+        ),
     val bold32: BottariTextStyle =
         BottariTextStyle(
             fontFamily = Pretendard,
