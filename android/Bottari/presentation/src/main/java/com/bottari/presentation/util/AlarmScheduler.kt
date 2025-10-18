@@ -4,65 +4,53 @@ import android.app.AlarmManager
 import android.app.AlarmManager.AlarmClockInfo
 import android.app.PendingIntent
 import android.content.Context
-import com.bottari.di.ApplicationContextProvider
 import com.bottari.domain.model.alarm.AlarmType
 import com.bottari.domain.model.notification.Notification
 import com.bottari.presentation.receiver.AlarmReceiver
 import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import javax.inject.Inject
 
-object AlarmScheduler {
-    private val manager: AlarmManager =
-        ApplicationContextProvider.applicationContext.getSystemService(AlarmManager::class.java)
-    private const val DAYS_IN_WEEK = 7
+class AlarmScheduler @Inject constructor(
+    @ApplicationContext private val context: Context,
+) {
+    private val manager: AlarmManager = context.getSystemService(AlarmManager::class.java)
 
-    fun scheduleAlarm(
-        context: Context = ApplicationContextProvider.applicationContext,
-        notification: Notification,
-    ) {
+    fun scheduleAlarm(notification: Notification) {
         if (notification.alarm.isActive.not()) return
 
         if (notification.alarm.alarmType is AlarmType.NonRepeat) {
-            scheduleNonRepeatAlarm(context, notification)
+            scheduleNonRepeatAlarm(notification)
             return
         }
-        scheduleRepeatAlarm(context, notification)
+        scheduleRepeatAlarm(notification)
     }
 
-    fun scheduleNextAlarm(
-        context: Context = ApplicationContextProvider.applicationContext,
-        notification: Notification,
-    ) {
+    fun scheduleNextAlarm(notification: Notification) {
         if (notification.alarm.isActive.not()) return
 
         val alarm = notification.alarm
         if (alarm.alarmType is AlarmType.NonRepeat) return
         val triggerTime = getNextTriggerTime(notification = notification)
-        scheduleAlarmInternal(context, notification, triggerTime)
+        scheduleAlarmInternal(notification, triggerTime)
     }
 
-    fun cancelAlarm(
-        context: Context = ApplicationContextProvider.applicationContext,
-        notification: Notification,
-    ) {
-        val pendingIntent = createPendingIntent(context, notification)
+    fun cancelAlarm(notification: Notification) {
+        val pendingIntent = createPendingIntent(notification)
         manager.cancel(pendingIntent)
     }
 
-    private fun scheduleRepeatAlarm(
-        context: Context,
-        notification: Notification,
-    ) {
+    private fun scheduleRepeatAlarm(notification: Notification) {
         val triggerTime = getNextTriggerTime(notification = notification)
-        scheduleAlarmInternal(context, notification, triggerTime)
+        scheduleAlarmInternal(notification, triggerTime)
     }
 
     private fun scheduleNonRepeatAlarm(
-        context: Context,
         notification: Notification,
         now: LocalDateTime = LocalDateTime.now(),
     ) {
@@ -72,7 +60,7 @@ object AlarmScheduler {
         if (alarmDateTime.isBefore(now)) return
         val triggerTime =
             LocalDateTime.of(alarmType.date, notification.alarm.time).toTimeMillis()
-        scheduleAlarmInternal(context, notification, triggerTime)
+        scheduleAlarmInternal(notification, triggerTime)
     }
 
     private fun getNextTriggerTime(
@@ -98,20 +86,16 @@ object AlarmScheduler {
     }
 
     private fun scheduleAlarmInternal(
-        context: Context,
         notification: Notification,
         triggerTime: Long,
     ) {
-        val editPendingIntent = createEditPendingIntent(context, notification)
-        val pendingIntent = createPendingIntent(context, notification)
+        val editPendingIntent = createEditPendingIntent(notification)
+        val pendingIntent = createPendingIntent(notification)
         val alarmClockInfo = AlarmClockInfo(triggerTime, editPendingIntent)
         manager.setAlarmClock(alarmClockInfo, pendingIntent)
     }
 
-    private fun createEditPendingIntent(
-        context: Context,
-        notification: Notification,
-    ): PendingIntent {
+    private fun createEditPendingIntent(notification: Notification): PendingIntent {
         val intent =
             PersonalBottariEditActivity.newIntent(
                 context,
@@ -126,10 +110,7 @@ object AlarmScheduler {
         )
     }
 
-    private fun createPendingIntent(
-        context: Context,
-        notification: Notification,
-    ): PendingIntent =
+    private fun createPendingIntent(notification: Notification): PendingIntent =
         PendingIntent.getBroadcast(
             context,
             notification.bottariId.toInt(),
@@ -142,4 +123,8 @@ object AlarmScheduler {
             .atZone(ZoneId.systemDefault())
             .toInstant()
             .toEpochMilli()
+
+    companion object {
+        private const val DAYS_IN_WEEK = 7
+    }
 }

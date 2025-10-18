@@ -8,8 +8,9 @@ import com.bottari.data.model.local.bottari.BottariWithAlarm
 import com.bottari.data.model.local.bottari.BottariWithAlarmAndItems
 import com.bottari.data.model.local.bottari.ItemEntity
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class BottariLocalDataSourceImpl(
+class BottariLocalDataSourceImpl @Inject constructor(
     private val database: BottariDatabase,
 ) : BottariLocalDataSource {
     private val dao: BottariDao = database.bottariDao()

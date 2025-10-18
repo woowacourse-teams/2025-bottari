@@ -1,19 +1,14 @@
 package com.bottari.presentation.view.checklist.team.main.checklist
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.CommonUseCaseProvider
-import com.bottari.di.usecase.TeamBottariItemsUseCaseProvider
 import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.bottari.TeamBottariCheckList
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
+import com.bottari.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.UncheckTeamBottariItemUseCase
@@ -23,28 +18,33 @@ import com.bottari.presentation.model.bottari.team.TeamChecklistExpandableTypeUi
 import com.bottari.presentation.model.bottari.team.TeamChecklistItem
 import com.bottari.presentation.model.bottari.team.TeamChecklistProductUiModel
 import com.bottari.presentation.util.debounce
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TeamChecklistViewModel(
+@HiltViewModel
+class TeamChecklistViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamBottariChecklistUseCase: FetchTeamChecklistUseCase,
     private val checkTeamBottariItemUseCase: CheckTeamBottariItemUseCase,
     private val unCheckTeamBottariItemUseCase: UncheckTeamBottariItemUseCase,
+    private val getMemberIdUseCase: GetMemberIdUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
 ) : BaseViewModel<TeamChecklistUiState, TeamChecklistUiEvent>(TeamChecklistUiState()) {
     private val teamBottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
+    private var memberId: Long = -1
 
     private val pendingCheckStatusMap =
         mutableMapOf<Pair<Long, BottariItemTypeUiModel>, TeamChecklistProductUiModel>()
@@ -57,6 +57,7 @@ class TeamChecklistViewModel(
 
     init {
         fetchTeamCheckList()
+        fetchMemberId()
         handleEvent()
     }
 
@@ -117,6 +118,12 @@ class TeamChecklistViewModel(
         updateState { copy(swipedItems = this.swipedItems + item) }
     }
 
+    private fun fetchMemberId() {
+        launch {
+            memberId = getMemberIdUseCase().getOrDefault(-1)
+        }
+    }
+
     private fun List<TeamChecklistItem>.toggleItemInList(item: TeamChecklistProductUiModel): List<TeamChecklistItem> =
         this.map { listItem ->
             if (listItem.isSameItem(item).not()) return@map listItem
@@ -145,21 +152,24 @@ class TeamChecklistViewModel(
             connectTeamEventUseCase(teamBottariId)
                 .filterIsInstance<EventState.OnEvent>()
                 .map { event -> event.data }
-                .filter { eventData ->
-                    when (eventData) {
-                        is EventData.TeamMemberCreate,
-                        is EventData.TeamMemberDelete,
-                        is EventData.SharedItemCheck,
-                        is EventData.AssignedItemCheck,
-                        -> false
-
-                        else -> true
-                    }
-                }.debounce(DEBOUNCE_DELAY)
+                .filterNot { eventData -> eventData.shouldIgnore() }
+                .debounce(DEBOUNCE_DELAY)
                 .onEach { fetchTeamCheckList() }
                 .launchIn(this)
         }
     }
+
+    private fun EventData.shouldIgnore(): Boolean =
+        when (this) {
+            is EventData.AssignedItemInfoCreate -> containMember(memberId).not()
+            is EventData.AssignedItemInfoDelete -> containMember(memberId).not()
+            is EventData.AssignedItemInfoChange -> containMember(memberId).not()
+            is EventData.SharedItemInfoCreate,
+            is EventData.SharedItemInfoDelete,
+            -> false
+
+            else -> true
+        }
 
     private fun setTeamCheckList(checklistData: TeamBottariCheckList) {
         val newItems = checklistData.toUIModel()
@@ -308,23 +318,7 @@ class TeamChecklistViewModel(
 
     companion object {
         const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
-        const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
+        private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
         private const val DEBOUNCE_DELAY = 300L
-
-        fun Factory(bottariId: Long): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_BOTTARI_ID] = bottariId
-                    TeamChecklistViewModel(
-                        stateHandle,
-                        TeamBottariItemsUseCaseProvider.fetchTeamChecklistUseCase,
-                        TeamBottariItemsUseCaseProvider.checkTeamBottariItemUseCase,
-                        TeamBottariItemsUseCaseProvider.uncheckTeamBottariItemUseCase,
-                        CommonUseCaseProvider.connectTeamEventUseCase,
-                        CommonUseCaseProvider.disconnectTeamEventUseCase,
-                    )
-                }
-            }
     }
 }

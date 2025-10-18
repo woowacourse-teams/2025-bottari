@@ -55,7 +55,7 @@ fun TemplateBottariScreen(
     navigateToTemplateDetail: (Long) -> Unit,
     navigateToTemplateCreate: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: TemplateViewModel = viewModel(factory = TemplateViewModel.Factory()),
+    viewModel: TemplateViewModel = viewModel(),
 ) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current

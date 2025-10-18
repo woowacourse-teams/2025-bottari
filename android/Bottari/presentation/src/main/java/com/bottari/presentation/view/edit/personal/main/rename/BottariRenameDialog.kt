@@ -1,6 +1,5 @@
 package com.bottari.presentation.view.edit.personal.main.rename
 
-import BottariRenameViewModel
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
@@ -16,14 +15,13 @@ import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.DialogBottariRenameBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BottariRenameDialog :
     DialogFragment(),
     TextWatcher {
-    private val viewModel: BottariRenameViewModel by viewModels {
-        val initialTitle = requireArguments().getString(EXTRA_INITIAL_TITLE).orEmpty()
-        BottariRenameViewModel.Factory(requireArguments().getLong(EXTRA_BOTTARI_ID), initialTitle)
-    }
+    private val viewModel: BottariRenameViewModel by viewModels()
 
     private var _binding: DialogBottariRenameBinding? = null
     val binding: DialogBottariRenameBinding get() = _binding!!
@@ -125,8 +123,6 @@ class BottariRenameDialog :
         private const val WIDTH_RATIO = 0.9
         private const val DISABLED_ALPHA_VALUE = 0.4f
         private const val ENABLED_ALPHA_VALUE = 1f
-        private const val EXTRA_BOTTARI_ID = "EXTRA_BOTTARI_ID"
-        private const val EXTRA_INITIAL_TITLE = "EXTRA_INITIAL_TITLE"
 
         fun newInstance(
             bottariId: Long,
@@ -135,8 +131,8 @@ class BottariRenameDialog :
             BottariRenameDialog().apply {
                 arguments =
                     Bundle().apply {
-                        putLong(EXTRA_BOTTARI_ID, bottariId)
-                        putString(EXTRA_INITIAL_TITLE, initialTitle)
+                        putLong(BottariRenameViewModel.KEY_BOTTARI_ID, bottariId)
+                        putString(BottariRenameViewModel.KEY_INITIAL_TITLE, initialTitle)
                     }
             }
     }

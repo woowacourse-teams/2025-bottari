@@ -6,8 +6,9 @@ import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
 import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.model.common.Pageable
 import com.bottari.domain.repository.BottariTemplateRepository
+import javax.inject.Inject
 
-class BottariTemplateRepositoryImpl(
+class BottariTemplateRepositoryImpl @Inject constructor(
     private val bottariTemplateRemoteDataSource: BottariTemplateRemoteDataSource,
 ) : BottariTemplateRepository {
     override suspend fun fetchBottariTemplates(

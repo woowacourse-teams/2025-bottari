@@ -35,12 +35,6 @@ fun OnEventRaw.toEvent(json: Json): EventStateResponse.OnEventResponse {
                     data,
                 )
 
-            ResourceResponse.SHARED_ITEM to EventResponse.CHANGE ->
-                json.decodeFromJsonElement(
-                    EventDataResponse.SharedItemChangeResponse.serializer(),
-                    data,
-                )
-
             ResourceResponse.SHARED_ITEM_INFO to EventResponse.CREATE ->
                 json.decodeFromJsonElement(
                     EventDataResponse.SharedItemInfoCreateResponse.serializer(),
@@ -53,9 +47,21 @@ fun OnEventRaw.toEvent(json: Json): EventStateResponse.OnEventResponse {
                     data,
                 )
 
-            ResourceResponse.ASSIGNED_ITEM to EventResponse.CHANGE ->
+            ResourceResponse.SHARED_ITEM to EventResponse.CREATE ->
                 json.decodeFromJsonElement(
-                    EventDataResponse.AssignedItemChangeResponse.serializer(),
+                    EventDataResponse.SharedItemCreateResponse.serializer(),
+                    data,
+                )
+
+            ResourceResponse.SHARED_ITEM to EventResponse.DELETE ->
+                json.decodeFromJsonElement(
+                    EventDataResponse.SharedItemDeleteResponse.serializer(),
+                    data,
+                )
+
+            ResourceResponse.SHARED_ITEM_INFO to EventResponse.CHECK ->
+                json.decodeFromJsonElement(
+                    EventDataResponse.SharedItemCheckResponse.serializer(),
                     data,
                 )
 
@@ -77,13 +83,19 @@ fun OnEventRaw.toEvent(json: Json): EventStateResponse.OnEventResponse {
                     data,
                 )
 
-            ResourceResponse.SHARED_ITEM to EventResponse.CHECK ->
+            ResourceResponse.ASSIGNED_ITEM to EventResponse.CREATE ->
                 json.decodeFromJsonElement(
-                    EventDataResponse.SharedItemCheckResponse.serializer(),
+                    EventDataResponse.AssignedItemCreateResponse.serializer(),
                     data,
                 )
 
-            ResourceResponse.ASSIGNED_ITEM to EventResponse.CHECK ->
+            ResourceResponse.ASSIGNED_ITEM to EventResponse.DELETE ->
+                json.decodeFromJsonElement(
+                    EventDataResponse.AssignedItemDeleteResponse.serializer(),
+                    data,
+                )
+
+            ResourceResponse.ASSIGNED_ITEM_INFO to EventResponse.CHECK ->
                 json.decodeFromJsonElement(
                     EventDataResponse.AssignedItemCheckResponse.serializer(),
                     data,

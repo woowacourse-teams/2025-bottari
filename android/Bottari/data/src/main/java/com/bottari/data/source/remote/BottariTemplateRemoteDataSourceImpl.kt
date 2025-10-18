@@ -8,8 +8,9 @@ import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchRespon
 import com.bottari.data.model.remote.common.PageableRequest
 import com.bottari.data.model.remote.common.PageableResponse
 import com.bottari.data.service.BottariTemplateService
+import javax.inject.Inject
 
-class BottariTemplateRemoteDataSourceImpl(
+class BottariTemplateRemoteDataSourceImpl @Inject constructor(
     private val bottariTemplateService: BottariTemplateService,
 ) : BottariTemplateRemoteDataSource {
     override suspend fun fetchBottariTemplates(

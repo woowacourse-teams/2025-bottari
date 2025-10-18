@@ -1,19 +1,17 @@
 package com.bottari.presentation.view.edit.team.item.personal
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.TeamBottariItemsUseCaseProvider
 import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
 import com.bottari.domain.usecase.team.CreateTeamPersonalItemUseCase
 import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamPersonalItemsUseCase
 import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.bottari.BottariItemUiModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class TeamPersonalItemEditViewModel(
+@HiltViewModel
+class TeamPersonalItemEditViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamPersonalItemsUseCase: FetchTeamPersonalItemsUseCase,
     private val createTeamPersonalItemUseCase: CreateTeamPersonalItemUseCase,
@@ -21,7 +19,7 @@ class TeamPersonalItemEditViewModel(
 ) : BaseViewModel<TeamPersonalItemEditUiState, TeamPersonalItemEditEvent>(
         TeamPersonalItemEditUiState(),
     ) {
-    private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID)
+    private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
     init {
         fetchPersonalItems()
@@ -73,21 +71,7 @@ class TeamPersonalItemEditViewModel(
     }
 
     companion object {
-        private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
-        private const val ERROR_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다"
-
-        fun Factory(bottariId: Long): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val stateHandle = createSavedStateHandle()
-                    stateHandle[KEY_BOTTARI_ID] = bottariId
-                    TeamPersonalItemEditViewModel(
-                        stateHandle,
-                        TeamBottariItemsUseCaseProvider.fetchTeamPersonalItemsUseCase,
-                        TeamBottariItemsUseCaseProvider.createTeamPersonalItemUseCase,
-                        TeamBottariItemsUseCaseProvider.deleteTeamBottariItemUseCase,
-                    )
-                }
-            }
+        const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
+        private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다"
     }
 }

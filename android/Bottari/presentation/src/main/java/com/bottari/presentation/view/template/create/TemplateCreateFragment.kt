@@ -14,11 +14,11 @@ import com.bottari.presentation.databinding.FragmentTemplateCreateBinding
 import com.bottari.presentation.view.common.decoration.SideSpaceItemDecoration
 import com.bottari.presentation.view.template.create.adapter.TemplateCreateMyBottariAdapter
 import com.bottari.presentation.view.template.create.adapter.TemplateCreateMyBottariItemAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TemplateCreateFragment : BaseFragment<FragmentTemplateCreateBinding>(FragmentTemplateCreateBinding::inflate) {
-    private val viewModel: TemplateCreateViewModel by viewModels {
-        TemplateCreateViewModel.Factory()
-    }
+    private val viewModel: TemplateCreateViewModel by viewModels()
     private val snapHelper by lazy { LinearSnapHelper() }
     private val itemAdapter by lazy { TemplateCreateMyBottariItemAdapter() }
     private val bottariAdapter by lazy {

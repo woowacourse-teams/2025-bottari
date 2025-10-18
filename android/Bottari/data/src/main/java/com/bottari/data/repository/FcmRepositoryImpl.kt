@@ -5,8 +5,9 @@ import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.FcmRemoteDataSource
 import com.bottari.domain.extension.flatMapCatching
 import com.bottari.domain.repository.FcmRepository
+import javax.inject.Inject
 
-class FcmRepositoryImpl(
+class FcmRepositoryImpl @Inject constructor(
     private val fcmRemoteDataSource: FcmRemoteDataSource,
     private val memberIdentifierLocalDataSource: MemberIdentifierLocalDataSource,
 ) : FcmRepository {

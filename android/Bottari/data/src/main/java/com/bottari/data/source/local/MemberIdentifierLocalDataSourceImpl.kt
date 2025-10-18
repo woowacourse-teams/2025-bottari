@@ -4,8 +4,9 @@ import com.bottari.data.local.MemberInfoDataStore
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.installations.FirebaseInstallations
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class MemberIdentifierLocalDataSourceImpl(
+class MemberIdentifierLocalDataSourceImpl @Inject constructor(
     private val memberInfoDataStore: MemberInfoDataStore,
 ) : MemberIdentifierLocalDataSource {
     private var cachedInstallationId: String? = null

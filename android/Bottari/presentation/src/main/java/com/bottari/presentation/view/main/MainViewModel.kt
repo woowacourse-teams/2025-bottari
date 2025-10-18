@@ -1,10 +1,5 @@
 package com.bottari.presentation.view.main
 
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.CommonUseCaseProvider
-import com.bottari.di.usecase.MemberUseCaseProvider
 import com.bottari.domain.model.member.RegisteredMember
 import com.bottari.domain.usecase.appConfig.CheckForceUpdateUseCase
 import com.bottari.domain.usecase.appConfig.GetPermissionFlagUseCase
@@ -16,9 +11,12 @@ import com.bottari.logger.BottariLogger
 import com.bottari.presentation.BuildConfig
 import com.bottari.presentation.common.base.BaseViewModel
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val registerMemberUseCase: RegisterMemberUseCase,
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
     private val savePermissionFlagUseCase: SavePermissionFlagUseCase,
@@ -106,21 +104,5 @@ class MainViewModel(
 
             updateState { copy(isLoading = false) }
         }
-    }
-
-    companion object {
-        fun Factory(): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    MainViewModel(
-                        MemberUseCaseProvider.registerMemberUseCase,
-                        MemberUseCaseProvider.checkRegisteredMemberUseCase,
-                        CommonUseCaseProvider.savePermissionFlagUseCase,
-                        CommonUseCaseProvider.saveFcmTokenUseCase,
-                        CommonUseCaseProvider.getPermissionFlagUseCase,
-                        CommonUseCaseProvider.checkForceUpdateUseCase,
-                    )
-                }
-            }
     }
 }

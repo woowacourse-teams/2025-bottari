@@ -5,8 +5,9 @@ import com.bottari.domain.model.event.EventState
 import com.bottari.domain.repository.EventRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class EventRepositoryImpl(
+class EventRepositoryImpl @Inject constructor(
     private val eventRemoteDataSource: EventRemoteDataSource,
 ) : EventRepository {
     override suspend fun connectEvent(teamBottariId: Long): Flow<EventState> =

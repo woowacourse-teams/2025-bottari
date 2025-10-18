@@ -18,17 +18,13 @@ import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
 import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 import com.bottari.presentation.view.edit.personal.item.adapter.PersonalItemEditAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PersonalItemEditFragment :
     BaseFragment<FragmentPersonalItemEditBinding>(FragmentPersonalItemEditBinding::inflate),
     TextWatcher {
-    private val viewModel: PersonalItemEditViewModel by viewModels {
-        val arguments = requireArguments()
-        PersonalItemEditViewModel.Factory(
-            bottariId = arguments.getLong(ARG_EXTRA_BOTTARI_ID),
-            title = arguments.getString(ARG_BOTTARI_TITLE) ?: "",
-        )
-    }
+    private val viewModel: PersonalItemEditViewModel by viewModels()
 
     private val adapter by lazy {
         PersonalItemEditAdapter(viewModel::deleteItem)
@@ -142,9 +138,6 @@ class PersonalItemEditFragment :
     }
 
     companion object {
-        private const val ARG_EXTRA_BOTTARI_ID = "ARG_EXTRA_BOTTARI_ID"
-        private const val ARG_BOTTARI_TITLE = "ARG_BOTTARI_TITLE"
-
         private const val DUPLICATE_BORDER_WIDTH_DP = 2
         private const val DISABLED_ALPHA = 0.3f
         private const val ENABLED_ALPHA = 1f
@@ -153,8 +146,8 @@ class PersonalItemEditFragment :
             id: Long,
             title: String,
         ) = Bundle().apply {
-            putLong(ARG_EXTRA_BOTTARI_ID, id)
-            putString(ARG_BOTTARI_TITLE, title)
+            putLong(PersonalItemEditViewModel.KEY_BOTTARI_ID, id)
+            putString(PersonalItemEditViewModel.KEY_BOTTARI_TITLE, title)
         }
     }
 }

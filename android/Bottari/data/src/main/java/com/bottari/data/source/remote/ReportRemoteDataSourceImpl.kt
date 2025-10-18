@@ -3,8 +3,9 @@ package com.bottari.data.source.remote
 import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.remote.report.TemplateReportRequest
 import com.bottari.data.service.ReportService
+import javax.inject.Inject
 
-class ReportRemoteDataSourceImpl(
+class ReportRemoteDataSourceImpl @Inject constructor(
     private val reportService: ReportService,
 ) : ReportRemoteDataSource {
     override suspend fun reportTemplate(

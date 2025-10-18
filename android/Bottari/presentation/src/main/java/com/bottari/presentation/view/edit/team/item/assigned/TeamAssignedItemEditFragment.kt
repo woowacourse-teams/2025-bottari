@@ -18,7 +18,9 @@ import com.bottari.presentation.view.edit.team.item.assigned.adapter.TeamAssigne
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiEvent
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiState
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TeamAssignedItemEditFragment :
     BaseFragment<FragmentTeamAssignedItemEditBinding>(FragmentTeamAssignedItemEditBinding::inflate),
     TeamAssignedItemEditAdapter.TeamAssignedItemEditEventListener,
@@ -26,11 +28,7 @@ class TeamAssignedItemEditFragment :
     private val parentViewModel: TeamItemEditViewModel by viewModels(
         ownerProducer = { requireParentFragment() },
     )
-    private val viewModel: TeamAssignedItemEditViewModel by viewModels {
-        TeamAssignedItemEditViewModel.Factory(
-            requireArguments().getLong(ARG_BOTTARI_ID),
-        )
-    }
+    private val viewModel: TeamAssignedItemEditViewModel by viewModels()
     private val itemAdapter: TeamAssignedItemEditAdapter by lazy { TeamAssignedItemEditAdapter(this) }
     private val memberAdapter: TeamAssignedItemEditMemberAdapter by lazy {
         TeamAssignedItemEditMemberAdapter(this)
@@ -132,13 +130,12 @@ class TeamAssignedItemEditFragment :
     }
 
     companion object {
-        private const val ARG_BOTTARI_ID = "ARG_BOTTARI_ID"
         private const val RESET_INPUT_TEXT = ""
         private const val ITEM_SPACING_VALUE = 8
 
         fun newInstance(bottariId: Long): TeamAssignedItemEditFragment =
             TeamAssignedItemEditFragment().apply {
-                arguments = bundleOf(ARG_BOTTARI_ID to bottariId)
+                arguments = bundleOf(TeamAssignedItemEditViewModel.KEY_BOTTARI_ID to bottariId)
             }
     }
 }

@@ -4,8 +4,9 @@ import com.bottari.data.source.remote.TeamBottariRemoteDataSource
 import com.bottari.domain.model.team.bottari.TeamBottari
 import com.bottari.domain.model.team.bottari.TeamBottariDetail
 import com.bottari.domain.repository.TeamBottariRepository
+import javax.inject.Inject
 
-class TeamBottariRepositoryImpl(
+class TeamBottariRepositoryImpl @Inject constructor(
     private val teamBottariRemoteDataSource: TeamBottariRemoteDataSource,
 ) : TeamBottariRepository {
     override suspend fun createTeamBottari(title: String): Result<Long?> =

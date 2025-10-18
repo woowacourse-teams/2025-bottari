@@ -21,10 +21,7 @@ fun MyBottariScreen(
     onNavigateToTeamEdit: (Long, Boolean) -> Unit,
     onNavigateToPersonalChecklist: (Long, String) -> Unit,
     onNavigateToTeamChecklist: (Long, String) -> Unit,
-    viewModel: MyBottariViewModel =
-        viewModel(
-            factory = MyBottariViewModel.Factory(),
-        ),
+    viewModel: MyBottariViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)

@@ -8,8 +8,6 @@ import com.bottari.logger.BottariLogger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.json.Json
-import okhttp3.HttpUrl
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -83,7 +81,7 @@ class SSEClientImpl(
     override fun connect(teamBottariId: Long): Flow<EventStateResponse> {
         if (eventSource != null) return eventFlow
         id = teamBottariId
-        val request = createRequest(teamBottariId)
+        val request = createRequest()
         eventSource = createEventSource(request)
         BottariLogger.network("[Event] Team Bottari $id stream connect")
         return eventFlow
@@ -97,10 +95,10 @@ class SSEClientImpl(
         id = null
     }
 
-    private fun createRequest(teamBottariId: Long): Request =
+    private fun createRequest(): Request =
         Request
             .Builder()
-            .url(getUrl(teamBottariId))
+            .url(BuildConfig.BASE_URL + SSE_URL)
             .get()
             .build()
 
@@ -109,17 +107,7 @@ class SSEClientImpl(
             .createFactory(client)
             .newEventSource(request, this)
 
-    private fun getUrl(teamBottariId: Long): HttpUrl =
-        BuildConfig.BASE_URL
-            .toHttpUrl()
-            .newBuilder()
-            .addPathSegment(PATH_TEAM_BOTTARIES)
-            .addPathSegment(teamBottariId.toString())
-            .addPathSegment(PATH_SSE)
-            .build()
-
     companion object {
-        private const val PATH_TEAM_BOTTARIES = "team-bottaries"
-        private const val PATH_SSE = "sse"
+        private const val SSE_URL = "/connect/sse"
     }
 }

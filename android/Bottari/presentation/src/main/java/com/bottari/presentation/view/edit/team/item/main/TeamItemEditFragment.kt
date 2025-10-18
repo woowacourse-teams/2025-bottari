@@ -22,16 +22,14 @@ import com.bottari.presentation.view.edit.team.TeamBottariEditNavigator
 import com.bottari.presentation.view.edit.team.item.main.adapter.TeamItemEditFragmentAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TeamItemEditFragment :
     BaseFragment<FragmentTeamBottariItemEditBinding>(
         FragmentTeamBottariItemEditBinding::inflate,
     ) {
-    private val viewModel: TeamItemEditViewModel by viewModels {
-        TeamItemEditViewModel.Factory(
-            requireArguments().getParcelableCompat(ARG_KEY_TAB_TYPE),
-        )
-    }
+    private val viewModel: TeamItemEditViewModel by viewModels()
     private val adapter: TeamItemEditFragmentAdapter by lazy {
         TeamItemEditFragmentAdapter(this, requireArguments().getLong(ARG_KEY_BOTTARI_ID))
     }
@@ -150,7 +148,7 @@ class TeamItemEditFragment :
                 arguments =
                     bundleOf(
                         ARG_KEY_BOTTARI_ID to bottariId,
-                        ARG_KEY_TAB_TYPE to requireTabType,
+                        TeamItemEditViewModel.KEY_TAB_TYPE to requireTabType,
                     )
             }
     }

@@ -1,11 +1,6 @@
 package com.bottari.presentation.view.template.create
 
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.BottariTemplateUseCaseProvider
-import com.bottari.di.usecase.BottariUseCaseProvider
 import com.bottari.domain.model.bottari.personal.PersonalBottari
 import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
 import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
@@ -13,11 +8,14 @@ import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.template.SelectableBottariUiModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class TemplateCreateViewModel(
+@HiltViewModel
+class TemplateCreateViewModel @Inject constructor(
     private val fetchBottariesUseCase: FetchBottariesUseCase,
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
 ) : FlowBaseViewModel<TemplateCreateUiState, TemplateCreateUiEvent>(TemplateCreateUiState()) {
@@ -87,16 +85,4 @@ class TemplateCreateViewModel(
 
     private fun List<SelectableBottariUiModel>.updateBottariSelectedState(bottariId: Long?): List<SelectableBottariUiModel> =
         this.map { if (it.id == bottariId) it.copy(isSelected = true) else it.copy(isSelected = false) }
-
-    companion object {
-        fun Factory(): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    TemplateCreateViewModel(
-                        BottariUseCaseProvider.fetchBottariesUseCase,
-                        BottariTemplateUseCaseProvider.createBottariTemplateUseCase,
-                    )
-                }
-            }
-    }
 }

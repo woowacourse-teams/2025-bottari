@@ -12,16 +12,14 @@ import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentTeamManagementBinding
 import com.bottari.presentation.util.DeeplinkHelper.createDeeplink
 import com.bottari.presentation.view.edit.team.management.adapter.TeamMemberAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TeamManagementFragment :
     BaseFragment<FragmentTeamManagementBinding>(
         FragmentTeamManagementBinding::inflate,
     ) {
-    private val viewModel: TeamManagementViewModel by viewModels {
-        TeamManagementViewModel.Factory(
-            requireArguments().getLong(ARG_TEAM_BOTTARI_ID),
-        )
-    }
+    private val viewModel: TeamManagementViewModel by viewModels()
     private val adapter: TeamMemberAdapter by lazy { TeamMemberAdapter() }
 
     override fun onViewCreated(
@@ -92,7 +90,7 @@ class TeamManagementFragment :
     }
 
     private fun generateShareMessage(inviteCode: String): String {
-        val bottariName = requireArguments().getString(ARG_TEAM_BOTTARI_NAME)
+        val bottariName = requireArguments().getString(ARG_TEAM_BOTTARI_TITLE)
         val inviteLink = createDeeplink(inviteCode)
         return getString(
             R.string.team_management_share_template_text,
@@ -103,16 +101,18 @@ class TeamManagementFragment :
     }
 
     companion object {
-        private const val ARG_TEAM_BOTTARI_ID = "ARG_TEAM_BOTTARI_ID"
-        private const val ARG_TEAM_BOTTARI_NAME = "ARG_TEAM_BOTTARI_NAME"
+        private const val ARG_TEAM_BOTTARI_TITLE = "ARG_TEAM_BOTTARI_TITLE"
 
         @JvmStatic
         fun newInstance(
             id: Long,
-            teamBottariName: String,
+            title: String,
         ) = TeamManagementFragment().apply {
             arguments =
-                bundleOf(ARG_TEAM_BOTTARI_ID to id, ARG_TEAM_BOTTARI_NAME to teamBottariName)
+                bundleOf(
+                    TeamManagementViewModel.KEY_BOTTARI_ID to id,
+                    ARG_TEAM_BOTTARI_TITLE to title,
+                )
         }
     }
 }

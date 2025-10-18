@@ -6,8 +6,9 @@ import com.bottari.data.model.remote.common.ErrorResponse
 import com.bottari.data.model.remote.team.bottari.TeamBottariDetailFetchResponse
 import com.bottari.data.model.remote.team.bottari.TeamBottariFetchResponse
 import com.bottari.data.service.TeamBottariService
+import javax.inject.Inject
 
-class TeamBottariRemoteDataSourceImpl(
+class TeamBottariRemoteDataSourceImpl @Inject constructor(
     private val teamBottariService: TeamBottariService,
 ) : TeamBottariRemoteDataSource {
     override suspend fun createBottari(request: com.bottari.data.model.remote.team.bottari.TeamBottariCreateRequest): Result<Long?> =

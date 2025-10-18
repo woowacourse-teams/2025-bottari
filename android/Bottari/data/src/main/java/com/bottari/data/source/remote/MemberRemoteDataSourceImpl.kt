@@ -6,8 +6,9 @@ import com.bottari.data.model.remote.member.MemberNicknameSaveRequest
 import com.bottari.data.model.remote.member.MemberRegisterCheckResponse
 import com.bottari.data.model.remote.member.MemberRegisterRequest
 import com.bottari.data.service.MemberService
+import javax.inject.Inject
 
-class MemberRemoteDataSourceImpl(
+class MemberRemoteDataSourceImpl @Inject constructor(
     private val memberService: MemberService,
 ) : MemberRemoteDataSource {
     override suspend fun registerMember(request: MemberRegisterRequest): Result<Long?> =

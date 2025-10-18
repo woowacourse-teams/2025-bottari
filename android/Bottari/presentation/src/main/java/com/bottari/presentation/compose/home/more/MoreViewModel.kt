@@ -1,16 +1,15 @@
-package com.bottari.presentation.view.home.more
+package com.bottari.presentation.compose.home.more
 
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.bottari.di.usecase.MemberUseCaseProvider
 import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class MoreViewModel(
+@HiltViewModel
+class MoreViewModel @Inject constructor(
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
     private val saveMemberNicknameUseCase: SaveMemberNicknameUseCase,
 ) : BaseViewModel<MoreUiState, MoreUiEvent>(MoreUiState()) {
@@ -68,17 +67,5 @@ class MoreViewModel(
 
             updateState { copy(isLoading = false) }
         }
-    }
-
-    companion object {
-        fun Factory(): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    MoreViewModel(
-                        MemberUseCaseProvider.checkRegisteredMemberUseCase,
-                        MemberUseCaseProvider.saveMemberNicknameUseCase,
-                    )
-                }
-            }
     }
 }
