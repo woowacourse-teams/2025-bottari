@@ -1,5 +1,7 @@
 package com.bottari.push.connection.sse.external;
 
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import org.springframework.data.redis.listener.ChannelTopic;
 
 public final class MemberChannelTopic extends ChannelTopic {
@@ -15,6 +17,10 @@ public final class MemberChannelTopic extends ChannelTopic {
     }
 
     public Long extractMemberId() {
+        final String topic = getTopic();
+        if (!topic.startsWith(TOPIC_NAME_PREFIX)) {
+            throw new BusinessException(ErrorCode.INVALID_TOPIC_NAME, "member");
+        }
         return Long.valueOf(getTopic().substring(TOPIC_NAME_PREFIX.length()));
     }
 }
