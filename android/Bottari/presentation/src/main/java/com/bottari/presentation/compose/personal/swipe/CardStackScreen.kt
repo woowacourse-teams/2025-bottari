@@ -33,6 +33,7 @@ import com.spartapps.swipeablecards.ui.SwipeableCardDirection
 import com.spartapps.swipeablecards.ui.SwipeableCardsProperties
 import com.spartapps.swipeablecards.ui.lazy.LazySwipeableCards
 import com.spartapps.swipeablecards.ui.lazy.items
+import kotlin.math.min
 
 @Composable
 fun CardStackScreen(
@@ -186,8 +187,8 @@ private fun SwipeButtons(
                     .height(70.dp)
                     .weight(1f)
                     .clickable(onClick = {
-                        onLeftSwipe(items[state.currentCardIndex].id)
                         state.swipe(SwipeableCardDirection.Left)
+                        onLeftSwipe(items[min(state.currentCardIndex, items.size - 1)].id)
                     }),
         ) {
             Text(
@@ -205,8 +206,8 @@ private fun SwipeButtons(
                     .weight(1f)
                     .background(BottariTheme.colors.primary)
                     .clickable(onClick = {
-                        onRightSwipe(items[state.currentCardIndex].id)
                         state.swipe(SwipeableCardDirection.Right)
+                        onRightSwipe(items[min(state.currentCardIndex, items.size - 1)].id)
                     }),
         ) {
             Text(
