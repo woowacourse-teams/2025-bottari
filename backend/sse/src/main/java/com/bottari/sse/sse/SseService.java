@@ -16,19 +16,21 @@ public class SseService {
             final SseEmitter sseEmitter
     ) {
         final MemberChannelTopic topic = MemberChannelTopic.from(memberId);
-        sseEmitter.onCompletion(() -> {
-            subscribeManager.unsubscribe(topic);
-            sseSessions.remove(memberId);
-        });
-        sseEmitter.onTimeout(() -> {
-            subscribeManager.unsubscribe(topic);
-            sseSessions.remove(memberId);
-        });
-        sseEmitter.onError(throwable -> {
-            subscribeManager.unsubscribe(topic);
-            sseSessions.remove(memberId);
-        });
-        subscribeManager.subscribe(topic);
+        sseEmitter.onCompletion(() -> cleanup(topic, memberId));
+        sseEmitter.onTimeout(() -> cleanup(topic, memberId));
+        sseEmitter.onError(t -> cleanup(topic, memberId));
         sseSessions.save(memberId, sseEmitter);
+        subscribeManager.subscribe(topic);
+    }
+
+    private void cleanup(
+            final MemberChannelTopic topic,
+            final Long memberId
+    ) {
+        try {
+            subscribeManager.unsubscribe(topic);
+        } finally {
+            sseSessions.remove(memberId);
+        }
     }
 }
