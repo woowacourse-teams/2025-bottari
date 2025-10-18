@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.personal.checklist
+package com.bottari.presentation.compose.personal.swipe
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,15 +26,15 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 @Composable
 fun CardStackEndScreen(
     modifier: Modifier = Modifier,
-    isComplete: Boolean,
+    isCompleted: Boolean,
     onClickButton: () -> Unit,
 ) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.weight(1f))
-        if (isComplete) {
-            SwipeComplete()
+        if (isCompleted) {
+            SwipeCompletedView()
         } else {
-            SwipeNotComplete()
+            SwipeNotCompletedView()
         }
         Spacer(modifier = Modifier.weight(1f))
         BottariBox(
@@ -56,7 +56,7 @@ fun CardStackEndScreen(
 }
 
 @Composable
-fun SwipeComplete(modifier: Modifier = Modifier) {
+fun SwipeCompletedView(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -80,7 +80,7 @@ fun SwipeComplete(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SwipeNotComplete(modifier: Modifier = Modifier) {
+fun SwipeNotCompletedView(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -105,10 +105,20 @@ fun SwipeNotComplete(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun CardStackEndScreenPreview() {
+private fun CardStackEndScreenCompletedPreview() {
     CardStackEndScreen(
         modifier = Modifier.fillMaxSize().padding(BottariTheme.spacing.spaceXSmall),
-        isComplete = true,
+        isCompleted = true,
+        onClickButton = {},
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CardStackEndScreenNotCompletedPreview() {
+    CardStackEndScreen(
+        modifier = Modifier.fillMaxSize().padding(BottariTheme.spacing.spaceXSmall),
+        isCompleted = false,
         onClickButton = {},
     )
 }

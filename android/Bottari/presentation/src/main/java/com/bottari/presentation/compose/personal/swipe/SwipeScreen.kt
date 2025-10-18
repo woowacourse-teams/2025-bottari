@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.personal.checklist
+package com.bottari.presentation.compose.personal.swipe
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -58,7 +58,7 @@ fun SwipeScreen(
                 Modifier
                     .padding(BottariTheme.spacing.spaceXSmall)
                     .weight(1f),
-            isComplete = isComplete,
+            isCompleted = isComplete,
             onClickButton = onClickCompleteButton,
         )
     }

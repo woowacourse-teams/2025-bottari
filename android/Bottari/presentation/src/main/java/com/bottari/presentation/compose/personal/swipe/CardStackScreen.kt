@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.personal.checklist
+package com.bottari.presentation.compose.personal.swipe
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,11 +15,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
@@ -33,11 +35,11 @@ import com.spartapps.swipeablecards.ui.lazy.items
 
 @Composable
 fun CardStackScreen(
-    modifier: Modifier = Modifier,
     state: SwipeableCardsState,
     items: List<ChecklistItemUiModel>,
     onLeftSwipe: (Long) -> Unit,
     onRightSwipe: (Long) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         LazySwipeableCards(
@@ -62,7 +64,10 @@ fun CardStackScreen(
                     stackedCardsOffset = 15.dp, // Offset between cards
                     draggingAcceleration = 1.5f, // Drag sensitivity
                 ),
-            modifier = Modifier.weight(1f).fillMaxWidth(),
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
         ) {
             items(items) { profile, _, _ ->
                 BottariCard(
@@ -205,4 +210,95 @@ private fun SwipeButtons(
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun CardStackScreenPreview() {
+    val items =
+        listOf(
+            ChecklistItemUiModel(
+                id = 1,
+                name = "눈누난나아무튼엄청긴글자",
+                isChecked = false,
+            ),
+            ChecklistItemUiModel(
+                id = 2,
+                name = "눈누난나아무튼엄청긴글자",
+                isChecked = false,
+            ),
+            ChecklistItemUiModel(
+                id = 3,
+                name = "눈누난나아무튼엄청긴글자",
+                isChecked = false,
+            ),
+            ChecklistItemUiModel(
+                id = 4,
+                name = "눈누난나아무튼엄청긴글자",
+                isChecked = false,
+            ),
+        )
+    val state =
+        remember(items) {
+            SwipeableCardsState(
+                initialCardIndex = 0,
+                itemCount = { items.size },
+            )
+        }
+
+    CardStackScreen(state, items, onLeftSwipe = {}, onRightSwipe = {})
+}
+
+@Preview
+@Composable
+private fun BottariCardPreview() {
+    BottariCard(
+        ChecklistItemUiModel(
+            id = 4,
+            name = "눈누난나아무튼엄청긴글자",
+            isChecked = false,
+        ),
+    )
+}
+
+@Preview
+@Composable
+private fun SwipeButtonsPreview() {
+    val items =
+        listOf(
+            ChecklistItemUiModel(
+                id = 1,
+                name = "눈누난나아무튼엄청긴글자",
+                isChecked = false,
+            ),
+            ChecklistItemUiModel(
+                id = 2,
+                name = "눈누난나아무튼엄청긴글자",
+                isChecked = false,
+            ),
+            ChecklistItemUiModel(
+                id = 3,
+                name = "눈누난나아무튼엄청긴글자",
+                isChecked = false,
+            ),
+            ChecklistItemUiModel(
+                id = 4,
+                name = "눈누난나아무튼엄청긴글자",
+                isChecked = false,
+            ),
+        )
+    val state =
+        remember(items) {
+            SwipeableCardsState(
+                initialCardIndex = 0,
+                itemCount = { items.size },
+            )
+        }
+
+    SwipeButtons(
+        items,
+        state,
+        {},
+        {},
+    )
 }

@@ -18,8 +18,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
-import com.bottari.presentation.compose.personal.checklist.SwipeScreen
-import com.bottari.presentation.compose.personal.swipe.PersonalChecklistScreen
+import com.bottari.presentation.compose.personal.checklist.PersonalChecklistScreen
+import com.bottari.presentation.compose.personal.swipe.SwipeScreen
 import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 
 @Composable

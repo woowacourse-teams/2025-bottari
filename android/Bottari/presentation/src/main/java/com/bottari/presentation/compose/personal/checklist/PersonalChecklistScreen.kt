@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.personal.swipe
+package com.bottari.presentation.compose.personal.checklist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -82,13 +82,6 @@ fun PersonalChecklistTooltip(onCloseToolTip: () -> Unit) {
         closeAction = onCloseToolTip,
     )
 }
-
-@Preview
-@Composable
-private fun PersonalChecklistTooltipPreview() {
-    PersonalChecklistTooltip({})
-}
-
 
 @Composable
 fun PersonalChecklistLazyColumn(
@@ -178,6 +171,12 @@ private fun BottariCheckedBox() {
 
 @Preview
 @Composable
+private fun PersonalChecklistTooltipPreview() {
+    PersonalChecklistTooltip({})
+}
+
+@Preview
+@Composable
 private fun PersonalChecklistItemPreview() {
     PersonalChecklistItem(
         bottariItem = ChecklistItemUiModel(1, "테스트", true),
@@ -189,7 +188,7 @@ private fun PersonalChecklistItemPreview() {
 @Composable
 private fun PersonalChecklistScreenPreview() {
     PersonalChecklistScreen(
-        true,
+        false,
         {},
         listOf(
             ChecklistItemUiModel(1, "테스트", false),
@@ -201,5 +200,3 @@ private fun PersonalChecklistScreenPreview() {
         3,
     )
 }
-
-
