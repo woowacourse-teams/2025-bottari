@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: be/develop
     paths: backend/bottari/**
-    types: [opened, synchronize, reopened] # 머지/닫힘 이벤트 제외  
+    types: [opened, synchronize, reopened] # 머지/닫힘 이벤트 제외
 
 jobs:
   ci-and-pr-notification:
@@ -55,9 +55,9 @@ jobs:
           DATABASE_USERNAME: ${{ secrets.TEST_DATABASE_USERNAME }}
           DATABASE_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
           FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
-          REDIS_HOST: localhost  
-          REDIS_PORT: 6379  
-          REDIS_PASSWORD: ${{ secrets.TEST_REDIS_PASSWORD }} 
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          REDIS_PASSWORD: ${{ secrets.TEST_REDIS_PASSWORD }}
         run: ./gradlew clean build --no-daemon
 
       # 이후 Discord 알림 (성공/실패)
@@ -135,4 +135,3 @@ jobs:
         working-directory: ./backend
         if: always()
         run: docker compose -f ci-compose.yml down -v
-        
