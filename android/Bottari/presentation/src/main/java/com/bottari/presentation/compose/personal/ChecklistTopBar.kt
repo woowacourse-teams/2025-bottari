@@ -1,18 +1,19 @@
 package com.bottari.presentation.compose.personal
 
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.theme.BottariTheme
@@ -23,32 +24,54 @@ fun ChecklistTopBar(
     title: String,
     onBackClick: () -> Unit,
     onSwipeClick: () -> Unit,
+    onResetClick: () -> Unit,
+    isSwipeIconVisible: Boolean,
+    isResetIconVisible: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    TopAppBar(
+    CenterAlignedTopAppBar(
         modifier = modifier,
         title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_previous),
-                    contentDescription = null,
-                    modifier = Modifier.noRippleClickable(onClick = onBackClick),
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = title,
-                    style = BottariTheme.typography.bold20.toTextStyle(),
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Icon(
-                    painter = painterResource(R.drawable.ic_swipe),
-                    contentDescription = null,
-                    modifier = Modifier.noRippleClickable(onClick = onSwipeClick),
-                )
-                Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceMedium))
-            }
+            Text(
+                text = title,
+                style = BottariTheme.typography.bold20.toTextStyle(),
+            )
+        },
+        navigationIcon = {
+            Icon(
+                painter = painterResource(R.drawable.ic_previous),
+                contentDescription = "Back",
+                modifier =
+                    Modifier
+                        .size(24.dp)
+                        .noRippleClickable(onClick = onBackClick),
+            )
+        },
+        actions = {
+            Icon(
+                painter = painterResource(R.drawable.ic_reset),
+                contentDescription = "Reset",
+                modifier =
+                    Modifier
+                        .alpha(if (isResetIconVisible) 1f else 0f)
+                        .size(24.dp)
+                        .noRippleClickable(
+                            onClick = onResetClick,
+                            enabled = isResetIconVisible,
+                        ),
+            )
+            Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceXSmall))
+            Icon(
+                painter = painterResource(R.drawable.ic_swipe),
+                contentDescription = "Swipe",
+                modifier =
+                    Modifier
+                        .alpha(if (isSwipeIconVisible) 1f else 0f)
+                        .noRippleClickable(
+                            onClick = onSwipeClick,
+                            enabled = isSwipeIconVisible,
+                        ),
+            )
         },
         colors =
             TopAppBarDefaults.topAppBarColors(
@@ -62,6 +85,6 @@ fun ChecklistTopBar(
 @Composable
 private fun HomeTopAppBarPreview() {
     BottariTheme {
-        ChecklistTopBar(title = "보따리", {}, {})
+        ChecklistTopBar(title = "보따리", {}, {}, {}, true, true)
     }
 }

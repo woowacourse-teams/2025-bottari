@@ -9,15 +9,10 @@ data class PersonalChecklistUiState(
     val swipedItemIds: Set<Long> = emptySet(),
     val isTooltipClosed: Boolean = true,
 ) {
-    private val nonCheckedItems: List<ChecklistItemUiModel> =
+    val nonCheckedItems: List<ChecklistItemUiModel> =
         bottariItems.filterNot { it.isChecked }
     val totalQuantity: Int = bottariItems.size
     val checkedQuantity: Int = bottariItems.count { it.isChecked }
-    val nonSwipedItems: List<ChecklistItemUiModel> =
-        nonCheckedItems.filterNot { it.id in swipedItemIds }
-    val isItemsEmpty: Boolean = bottariItems.isEmpty()
-    val isAllChecked: Boolean = bottariItems.isNotEmpty() && nonCheckedItems.isEmpty()
-    val isAllSwiped: Boolean = bottariItems.isNotEmpty() && nonSwipedItems.isEmpty()
-    val isDone: Boolean = isAllSwiped || isItemsEmpty
+    val isCompleted : Boolean = checkedQuantity == totalQuantity
     val isAnyChecked: Boolean = bottariItems.any { it.isChecked }
 }

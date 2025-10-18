@@ -4,18 +4,22 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
+import com.bottari.presentation.compose.personal.checklist.SwipeScreen
+import com.bottari.presentation.compose.personal.swipe.PersonalChecklistScreen
 import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 
 @Composable
@@ -24,7 +28,7 @@ fun PersonalBottariScreen(
     bottariTitle: String,
     viewModel: PersonalChecklistViewModel =
         viewModel(
-            factory = PersonalChecklistViewModel.Factory(bottariId),
+            factory = PersonalChecklistViewModel.Companion.Factory(bottariId),
         ),
 ) {
     val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -32,12 +36,19 @@ fun PersonalBottariScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
 
-    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
     var isSwipeScreen by remember { mutableStateOf(false) }
 
     BackHandler(enabled = isSwipeScreen) {
         isSwipeScreen = false
+    }
+
+    LaunchedEffect(uiEvent.value) {
+        when (val event = uiEvent.value ?: return@LaunchedEffect) {
+            PersonalChecklistUiEvent.FetchChecklistFailure -> {}
+            PersonalChecklistUiEvent.ResetCheckStateFailure -> {}
+        }
     }
 
     Scaffold(
@@ -52,9 +63,14 @@ fun PersonalBottariScreen(
                     }
                 },
                 onSwipeClick = { isSwipeScreen = true },
+                onResetClick = viewModel::resetItemsCheckState,
+                isResetIconVisible = (!isSwipeScreen && uiState.value.isAnyChecked),
+                isSwipeIconVisible = (!isSwipeScreen && !uiState.value.isCompleted),
+                modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceMedium),
             )
         },
         containerColor = LocalBottariBgColor.current,
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
         if (!isSwipeScreen) {
             PersonalChecklistScreen(
@@ -68,7 +84,18 @@ fun PersonalBottariScreen(
             )
             return@Scaffold
         }
-        SwipeScreen()
+        SwipeScreen(
+            items = uiState.value.nonCheckedItems,
+            checkedQuantity = uiState.value.checkedQuantity,
+            totalQuantity = uiState.value.totalQuantity,
+            isComplete = uiState.value.isCompleted,
+            onLeftSwipe = viewModel::addSwipedItem,
+            onRightSwipe = viewModel::toggleItemChecked,
+            onClickCompleteButton = {
+                isSwipeScreen = false
+            },
+            modifier = Modifier.padding(innerPadding),
+        )
     }
 }
 
@@ -77,13 +104,16 @@ private fun PersonalBottariScreen(
     bottariTitle: String,
     uiState: PersonalChecklistUiState,
 ) {
-    val isSwipeScreen = false
+    val isSwipeScreen = true
     Scaffold(
         topBar = {
             ChecklistTopBar(
                 title = bottariTitle,
                 onBackClick = {},
                 onSwipeClick = {},
+                onResetClick = {},
+                isSwipeIconVisible = true,
+                isResetIconVisible = true,
             )
         },
         containerColor = LocalBottariBgColor.current,
@@ -100,7 +130,16 @@ private fun PersonalBottariScreen(
             )
             return@Scaffold
         }
-        SwipeScreen()
+        SwipeScreen(
+            uiState.nonCheckedItems,
+            3,
+            7,
+            false,
+            {},
+            {},
+            {},
+            modifier = Modifier.padding(innerPadding),
+        )
     }
 }
 
