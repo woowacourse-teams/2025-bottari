@@ -1,6 +1,7 @@
 package com.bottari.sse.sse;
 
 import com.bottari.sse.error.ApiErrorCodes;
+import com.bottari.sse.error.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -30,6 +31,7 @@ public interface SseConnectorApiDocs {
             @ApiResponse(responseCode = "200", description = "SSE 연결 성공(스트림 시작)"),
     })
     @ApiErrorCodes({
+            ErrorCode.SSE_CONNECTION_FAILED
     })
     SseEmitter connect(
             final Long memberId
