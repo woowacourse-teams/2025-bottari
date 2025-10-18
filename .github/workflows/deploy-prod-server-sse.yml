@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout pository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 21
@@ -27,8 +27,8 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: bottari-jar
-          path: backend/bottari/build/libs/*SNAPSHOT.jar
+          name: sse-jar
+          path: backend/sse/build/libs/*SNAPSHOT.jar
 
   deploy:
     needs: build
@@ -53,7 +53,7 @@ jobs:
       - name: Download Uploaded Artifact
         uses: actions/download-artifact@v4
         with:
-          name: bottari-jar
+          name: sse-jar
           path: ./artifacts
 
       # 3) 다운로드된 파일에 timestamp 붙여 리네이밍
