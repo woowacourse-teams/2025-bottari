@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.personal.checklist.PersonalChecklistScreen
@@ -26,6 +27,7 @@ import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 fun PersonalBottariScreen(
     bottariId: Long,
     bottariTitle: String,
+    notificationFlag: Boolean,
     viewModel: PersonalChecklistViewModel =
         viewModel(
             factory = PersonalChecklistViewModel.Companion.Factory(bottariId),
@@ -38,7 +40,7 @@ fun PersonalBottariScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    var isSwipeScreen by remember { mutableStateOf(false) }
+    var isSwipeScreen by remember { mutableStateOf(notificationFlag) }
 
     BackHandler(enabled = isSwipeScreen) {
         isSwipeScreen = false
@@ -72,6 +74,10 @@ fun PersonalBottariScreen(
         containerColor = LocalBottariBgColor.current,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
+        if (uiState.value.isLoading) {
+            IndeterminateCircularIndicator()
+            return@Scaffold
+        }
         if (!isSwipeScreen) {
             PersonalChecklistScreen(
                 isToolTipClosed = uiState.value.isTooltipClosed,

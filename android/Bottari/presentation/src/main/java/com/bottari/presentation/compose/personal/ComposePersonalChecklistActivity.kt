@@ -10,7 +10,6 @@ import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
 class ComposePersonalChecklistActivity : AppCompatActivity() {
-
     private val bottariId: Long by lazy {
         intent.getLongExtra(
             EXTRA_BOTTARI_ID,
@@ -22,12 +21,20 @@ class ComposePersonalChecklistActivity : AppCompatActivity() {
         intent.getStringExtra(EXTRA_BOTTARI_TITLE) ?: ""
     }
 
+    private val notificationFlag: Boolean by lazy {
+        intent.getBooleanExtra(EXTRA_NOTIFICATION_FLAG, false)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(BottariStatusBarStyle)
         setContent {
             BottariTheme {
-                PersonalBottariScreen(bottariId, bottariTitle)
+                PersonalBottariScreen(
+                    bottariId = bottariId,
+                    bottariTitle = bottariTitle,
+                    notificationFlag = notificationFlag,
+                )
             }
         }
     }
