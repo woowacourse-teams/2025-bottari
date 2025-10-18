@@ -23,10 +23,21 @@ jobs:
       - name: Grant Execute Permission for Gradlew
         run: chmod +x ./backend/bottari/gradlew
 
-      - name: Create MySQL Custom Config for ngram
+      # Docker Compose용 환경변수 주입: .env 파일 생성
+      # compose는 .env의 값을 ${VAR}로 치환해서 사용한다.
+      - name: Prepare .env for docker compose
+        working-directory: ./backend
         run: |
-          echo "[mysqld]" > custom-mysql.cnf
-          echo "ngram_token_size=${{ secrets.TEST_NGRAM_TOKEN_SIZE }}" >> custom-mysql.cnf
+          cat > .env <<EOF
+          TEST_DATABASE_NAME=${{ secrets.TEST_DATABASE_NAME }}
+          TEST_DATABASE_PASSWORD=${{ secrets.TEST_DATABASE_PASSWORD }}
+          TEST_NGRAM_TOKEN_SIZE=${{ secrets.TEST_NGRAM_TOKEN_SIZE }}
+          EOF
+
+      # docker compose로 MySQL 기동
+      - name: Start MySQL via docker compose
+        working-directory: ./backend
+        run: docker compose -f ci-compose.yml up -d
 
       - name: Start MySQL with custom image
         run: |
@@ -135,5 +146,6 @@ jobs:
 
       # 항상 DB 컨테이너 정리
       - name: Cleanup MySQL
+        working-directory: ./backend
         if: always()
         run: docker rm -f test-mysql || true
