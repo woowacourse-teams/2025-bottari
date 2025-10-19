@@ -56,7 +56,7 @@ fun CardStackEndScreen(
 }
 
 @Composable
-fun SwipeCompletedView(modifier: Modifier = Modifier) {
+private fun SwipeCompletedView(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -80,7 +80,7 @@ fun SwipeCompletedView(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SwipeNotCompletedView(modifier: Modifier = Modifier) {
+private fun SwipeNotCompletedView(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
