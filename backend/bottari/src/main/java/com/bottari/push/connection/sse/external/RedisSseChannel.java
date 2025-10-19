@@ -3,7 +3,13 @@ package com.bottari.push.connection.sse.external;
 import com.bottari.push.ChannelType;
 import com.bottari.push.connection.sse.SseChannel;
 import com.bottari.push.message.PushMessage;
+import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.context.Context;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -18,7 +24,7 @@ public class RedisSseChannel implements SseChannel {
             final Long memberId
     ) {
         final MemberChannelTopic topic = MemberChannelTopic.from(memberId);
-        redisTemplate.convertAndSend(topic.getTopic(), message);
+        publish(message, topic);
     }
 
     @Override
@@ -37,5 +43,17 @@ public class RedisSseChannel implements SseChannel {
     @Override
     public ChannelType channelType() {
         return ChannelType.SSE;
+    }
+
+    @WithSpan(value = "redis publish", kind = SpanKind.PRODUCER)
+    private void publish(
+            final PushMessage message,
+            final MemberChannelTopic topic
+    ) {
+        final Map<String, String> headers = new HashMap<>();
+        GlobalOpenTelemetry.getPropagators().getTextMapPropagator()
+                .inject(Context.current(), headers, Map::put);
+        final PubSubEnvelope envelope = new PubSubEnvelope(headers, message);
+        redisTemplate.convertAndSend(topic.getTopic(), envelope);
     }
 }
