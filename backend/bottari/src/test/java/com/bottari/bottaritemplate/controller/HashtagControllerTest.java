@@ -40,7 +40,7 @@ class HashtagControllerTest {
                 new ReadHashtagWithUsageCountResponse(2L, "캠핑", 35),
                 new ReadHashtagWithUsageCountResponse(3L, "등산", 28)
         );
-        given(hashtagService.getTopHashtagsByUsageCount(10))
+        given(hashtagService.getPopularHashtags(10))
                 .willReturn(responses);
 
         // when & then
@@ -57,7 +57,7 @@ class HashtagControllerTest {
         final List<ReadHashtagWithUsageCountResponse> responses = List.of(
                 new ReadHashtagWithUsageCountResponse(1L, "여행", 42)
         );
-        given(hashtagService.getTopHashtagsByUsageCount(10))
+        given(hashtagService.getPopularHashtags(10))
                 .willReturn(responses);
 
         // when & then
@@ -74,7 +74,7 @@ class HashtagControllerTest {
                 new ReadHashtagWithUsageCountResponse(1L, "여행", 42),
                 new ReadHashtagWithUsageCountResponse(2L, "캠핑", 35)
         );
-        given(hashtagService.getTopHashtagsByUsageCount(2))
+        given(hashtagService.getPopularHashtags(2))
                 .willReturn(responses);
 
         // when & then

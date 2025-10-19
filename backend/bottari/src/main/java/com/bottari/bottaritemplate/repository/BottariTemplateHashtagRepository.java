@@ -92,9 +92,13 @@ public interface BottariTemplateHashtagRepository extends JpaRepository<BottariT
             FROM hashtag h
             INNER JOIN bottari_template_hashtag bth ON bth.hashtag_id = h.id
             WHERE bth.deleted_at IS NULL
+              AND bth.created_at >= :since
             GROUP BY h.id, h.name
-            ORDER BY usageCount DESC, h.id ASC
+            ORDER BY usageCount DESC, h.id DESC
             LIMIT :limit
             """, nativeQuery = true)
-    List<HashtagPopularityProjection> findTopNByUsageCount(final int limit);
+    List<HashtagPopularityProjection> findTopNByUsageCountSince(
+            final LocalDateTime since,
+            final int limit
+    );
 }
