@@ -1,6 +1,5 @@
 package com.bottari.presentation.compose.personal
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bottari.domain.model.tooltip.TooltipType

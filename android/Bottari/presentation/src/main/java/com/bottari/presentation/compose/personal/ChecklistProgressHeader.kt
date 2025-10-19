@@ -1,6 +1,5 @@
 package com.bottari.presentation.compose.personal
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -34,7 +33,7 @@ fun ChecklistProgressHeader(
             ),
     ) {
         Column {
-            Row() {
+            Row {
                 Text(
                     text = stringResource(R.string.checklist_progress_header_title_text),
                     style = BottariTheme.typography.medium20.toTextStyle(),
