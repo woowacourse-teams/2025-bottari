@@ -1,21 +1,17 @@
 package com.bottari.data.source.local.tooltip
 
-import com.bottari.data.local.tooltip.TooltipDatabase
-import com.bottari.data.local.tooltip.TooltipDismissalDao
-import com.bottari.data.model.local.tooltip.TooltipEntity
+import com.bottari.data.local.tooltip.TooltipDataStore
 import com.bottari.domain.model.tooltip.TooltipType
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class TooltipLocalDataSourceImpl @Inject constructor(
-    database: TooltipDatabase,
+    private val dataStore: TooltipDataStore,
 ) : TooltipLocalDataSource {
-    private val dao: TooltipDismissalDao = database.tooltipDismissalDao()
-
-    override suspend fun updateStatus(tooltipEntity: TooltipEntity): Result<Unit> =
+    override suspend fun updateStatus(tooltipType: TooltipType): Result<Unit> =
         runCatching {
-            dao.insert(tooltipEntity)
+            dataStore.setTooltipDismissed(tooltipType)
         }
 
-    override fun isTooltipDismissed(type: TooltipType): Flow<Boolean> = dao.isTooltipDismissed(type)
+    override fun isTooltipDismissed(type: TooltipType): Flow<Boolean> = dataStore.isTooltipDismissed(type)
 }
