@@ -25,7 +25,6 @@ import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 
 @Composable
 fun PersonalBottariScreen(
-    bottariId: Long,
     bottariTitle: String,
     notificationFlag: Boolean,
     viewModel: PersonalChecklistViewModel =

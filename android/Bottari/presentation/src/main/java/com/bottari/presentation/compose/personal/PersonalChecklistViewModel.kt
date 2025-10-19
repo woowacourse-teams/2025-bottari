@@ -22,14 +22,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PersonalChecklistViewModel @Inject constructor(
-    stateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val fetchItemsUseCase: FetchItemsUseCase,
     private val fetchTooltipStatusUseCase: FetchTooltipStatusUseCase,
     private val updateTooltipStatusUseCase: UpdateTooltipStatusUseCase,
     private val updateItemCheckStateUseCase: UpdateItemCheckStateUseCase,
     private val resetItemsCheckStateUseCase: ResetItemsCheckStateUseCase,
 ) : FlowBaseViewModel<PersonalChecklistUiState, PersonalChecklistUiEvent>(PersonalChecklistUiState()) {
-    private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
+    private val bottariId: Long = savedStateHandle[KEY_BOTTARI_ID] ?: INVALID_BOTTARI_ID
+
     private val pendingCheckStatusMap = mutableMapOf<Long, ChecklistItemUiModel>()
 
     private val debouncedCheck: (List<ChecklistItemUiModel>) -> Unit =
@@ -170,8 +171,8 @@ class PersonalChecklistViewModel @Inject constructor(
     }
 
     companion object {
-        private const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
-        private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
+        private const val INVALID_BOTTARI_ID = -1L
+        private const val KEY_BOTTARI_ID = "EXTRA_BOTTARI_ID"
         private const val DEBOUNCE_DELAY = 250L
     }
 }
