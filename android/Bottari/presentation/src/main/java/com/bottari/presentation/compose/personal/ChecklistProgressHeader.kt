@@ -34,9 +34,7 @@ fun ChecklistProgressHeader(
             ),
     ) {
         Column {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
+            Row() {
                 Text(
                     text = stringResource(R.string.checklist_progress_header_title_text),
                     style = BottariTheme.typography.medium20.toTextStyle(),
