@@ -30,14 +30,16 @@ public class SseSessions {
         return sseEmittersByMemberId.values().stream().toList();
     }
 
-    public synchronized void save(
+    public void save(
             final Long memberId,
             final SseEmitter sseEmitter
     ) {
-        if (sseEmittersByMemberId.containsKey(memberId)) {
-            sseEmittersByMemberId.get(memberId).complete();
-        }
-        sseEmittersByMemberId.put(memberId, sseEmitter);
+        sseEmittersByMemberId.compute(memberId, (id, existingSseEmitter) -> {
+            if (existingSseEmitter != null) {
+                existingSseEmitter.complete();
+            }
+            return sseEmitter;
+        });
     }
 
     public void remove(final Long memberId) {
