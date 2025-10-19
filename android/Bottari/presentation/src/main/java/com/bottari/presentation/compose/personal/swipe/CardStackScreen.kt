@@ -59,12 +59,12 @@ fun CardStackScreen(
             },
             properties =
                 SwipeableCardsProperties(
-                    padding = 20.dp, // Stack padding
-                    swipeThreshold = 50.dp, // Swipe distance threshold
-                    lockBelowCardDragging = true, // Lock cards below top card
-                    enableRotation = true, // Enable rotation animation
-                    stackedCardsOffset = 15.dp, // Offset between cards
-                    draggingAcceleration = 1.5f, // Drag sensitivity
+                    padding = 20.dp,
+                    swipeThreshold = 50.dp,
+                    lockBelowCardDragging = true,
+                    enableRotation = true,
+                    stackedCardsOffset = 15.dp,
+                    draggingAcceleration = 1.5f,
                 ),
             modifier =
                 Modifier
@@ -304,9 +304,9 @@ private fun SwipeButtonsPreview() {
         }
 
     SwipeButtons(
-        items,
-        state,
-        {},
-        {},
+        items = items,
+        state = state,
+        onLeftSwipe = {},
+        onRightSwipe = {},
     )
 }
