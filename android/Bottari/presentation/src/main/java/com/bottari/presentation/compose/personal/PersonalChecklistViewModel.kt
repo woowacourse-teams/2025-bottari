@@ -91,9 +91,6 @@ class PersonalChecklistViewModel @Inject constructor(
     fun closeTooltip() {
         launch {
             updateTooltipStatusUseCase(TooltipType.PERSONAL)
-                .onSuccess {
-                    Log.d("test", "ok")
-                }.onFailure { error -> Log.d("test", error.message.toString()) }
             updateState { copy(isTooltipClosed = true) }
         }
     }
