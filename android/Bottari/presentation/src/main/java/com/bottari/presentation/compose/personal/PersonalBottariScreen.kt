@@ -13,9 +13,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
@@ -36,10 +38,17 @@ fun PersonalBottariScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     var isSwipeScreen by remember { mutableStateOf(notificationFlag) }
 
+    val checklistFetchFailureText = stringResource(R.string.checklist_fetch_failure_text)
+    val checklistResetCheckStateFailureText = stringResource(R.string.checklist_reset_failure_text)
     LaunchedEffect(uiEvent) {
         when (uiEvent ?: return@LaunchedEffect) {
-            PersonalChecklistUiEvent.FetchChecklistFailure -> {}
-            PersonalChecklistUiEvent.ResetCheckStateFailure -> {}
+            PersonalChecklistUiEvent.FetchChecklistFailure -> {
+                snackbarHostState.showSnackbar(message = checklistFetchFailureText)
+            }
+
+            PersonalChecklistUiEvent.ResetCheckStateFailure -> {
+                snackbarHostState.showSnackbar(message = checklistResetCheckStateFailureText)
+            }
         }
     }
 
@@ -60,7 +69,7 @@ fun PersonalBottariScreen(
         onCloseToolTip = viewModel::closeTooltip,
         onClickItem = viewModel::toggleItemChecked,
         onSwipeRight = viewModel::toggleItemChecked,
-        onClickCompleteButton = { isSwipeScreen = false }
+        onClickCompleteButton = { isSwipeScreen = false },
     )
 }
 
@@ -130,19 +139,21 @@ private fun PersonalBottariContent(
 @Composable
 private fun PersonalBottariContentPreview() {
     BottariTheme {
-        val previewItems = listOf(
-            ChecklistItemUiModel(1, "양말", false),
-            ChecklistItemUiModel(2, "충전기", true),
-            ChecklistItemUiModel(3, "여권", true),
-            ChecklistItemUiModel(4, "세면도구", false)
-        )
+        val previewItems =
+            listOf(
+                ChecklistItemUiModel(1, "양말", false),
+                ChecklistItemUiModel(2, "충전기", true),
+                ChecklistItemUiModel(3, "여권", true),
+                ChecklistItemUiModel(4, "세면도구", false),
+            )
         PersonalBottariContent(
-            uiState = PersonalChecklistUiState(
-                bottariItems = previewItems,
-                initialItems = previewItems,
-                isLoading = false,
-                isTooltipClosed = true
-            ),
+            uiState =
+                PersonalChecklistUiState(
+                    bottariItems = previewItems,
+                    initialItems = previewItems,
+                    isLoading = false,
+                    isTooltipClosed = true,
+                ),
             bottariTitle = "미리보기 타이틀",
             isSwipeScreen = false,
             snackbarHostState = remember { SnackbarHostState() },
@@ -152,7 +163,7 @@ private fun PersonalBottariContentPreview() {
             onCloseToolTip = {},
             onClickItem = {},
             onSwipeRight = {},
-            onClickCompleteButton = {}
+            onClickCompleteButton = {},
         )
     }
 }
