@@ -101,7 +101,6 @@ class PersonalChecklistViewModel @Inject constructor(
                 updateState { copy(isTooltipClosed = state) }
             }.catch {
                 emitEvent(PersonalChecklistUiEvent.FetchChecklistFailure)
-                updateState { copy(isLoading = true) }
             }.launchIn(viewModelScope)
     }
 
