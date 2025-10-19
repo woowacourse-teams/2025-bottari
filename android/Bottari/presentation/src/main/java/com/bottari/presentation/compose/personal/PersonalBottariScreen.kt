@@ -39,9 +39,7 @@ fun PersonalBottariScreen(
 
     var isSwipeScreen by remember { mutableStateOf(notificationFlag) }
 
-    BackHandler(enabled = isSwipeScreen) {
-        isSwipeScreen = false
-    }
+    BackHandler(enabled = isSwipeScreen) { isSwipeScreen = false }
 
     LaunchedEffect(uiEvent.value) {
         when (val event = uiEvent.value ?: return@LaunchedEffect) {
@@ -54,12 +52,12 @@ fun PersonalBottariScreen(
         topBar = {
             ChecklistTopBar(
                 title = bottariTitle,
-                onBackClick = {
+                onBackClick = onBackClick@{
                     if (isSwipeScreen) {
                         isSwipeScreen = false
-                    } else {
-                        backPressedDispatcher?.onBackPressed()
+                        return@onBackClick
                     }
+                    backPressedDispatcher?.onBackPressed()
                 },
                 onSwipeClick = { isSwipeScreen = true },
                 onResetClick = viewModel::resetItemsCheckState,
@@ -94,9 +92,7 @@ fun PersonalBottariScreen(
             isComplete = uiState.value.isCompleted,
             onLeftSwipe = {},
             onRightSwipe = viewModel::toggleItemChecked,
-            onClickCompleteButton = {
-                isSwipeScreen = false
-            },
+            onClickCompleteButton = { isSwipeScreen = false },
             modifier = Modifier.padding(innerPadding),
         )
     }
@@ -134,13 +130,13 @@ private fun PersonalBottariScreen(
             return@Scaffold
         }
         SwipeScreen(
-            uiState.nonCheckedItems,
-            3,
-            7,
-            false,
-            {},
-            {},
-            {},
+            items = uiState.nonCheckedItems,
+            checkedQuantity = 3,
+            totalQuantity = 7,
+            isComplete = false,
+            onLeftSwipe = {},
+            onRightSwipe = {},
+            onClickCompleteButton = {},
             modifier = Modifier.padding(innerPadding),
         )
     }
