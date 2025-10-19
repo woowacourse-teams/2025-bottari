@@ -172,7 +172,7 @@ private fun BottariCheckedBox() {
 @Preview
 @Composable
 private fun PersonalChecklistTooltipPreview() {
-    PersonalChecklistTooltip({})
+    PersonalChecklistTooltip {}
 }
 
 @Preview
