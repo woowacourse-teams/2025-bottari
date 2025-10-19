@@ -80,7 +80,7 @@ fun ChecklistToolTip(
 
 @Preview
 @Composable
-fun ChecklistToolTipPreview() {
+private fun ChecklistToolTipPreview() {
     ChecklistToolTip(
         icon = {
             Icon(
