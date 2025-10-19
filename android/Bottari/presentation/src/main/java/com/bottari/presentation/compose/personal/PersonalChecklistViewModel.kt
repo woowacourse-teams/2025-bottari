@@ -69,10 +69,6 @@ class PersonalChecklistViewModel @Inject constructor(
         }
     }
 
-    fun addSwipedItem(itemId: Long) {
-        updateState { copy(swipedItemIds = this.swipedItemIds + itemId) }
-    }
-
     fun toggleItemChecked(itemId: Long) {
         val originalItem = currentState.bottariItems.find { it.id == itemId } ?: return
         val newItem = originalItem.copy(isChecked = !originalItem.isChecked)

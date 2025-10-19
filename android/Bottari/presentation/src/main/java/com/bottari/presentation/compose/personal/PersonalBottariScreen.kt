@@ -92,7 +92,7 @@ fun PersonalBottariScreen(
             checkedQuantity = uiState.value.checkedQuantity,
             totalQuantity = uiState.value.totalQuantity,
             isComplete = uiState.value.isCompleted,
-            onLeftSwipe = viewModel::addSwipedItem,
+            onLeftSwipe = {},
             onRightSwipe = viewModel::toggleItemChecked,
             onClickCompleteButton = {
                 isSwipeScreen = false
