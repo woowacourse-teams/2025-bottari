@@ -11,5 +11,5 @@ fun chooseBottariStateColor(
 ): Color {
     if (checkedQuantity == 0) return BottariTheme.colors.gray400
     if (checkedQuantity == totalQuantity) return BottariTheme.colors.primary
-    return Color.Red
+    return BottariTheme.colors.red
 }
