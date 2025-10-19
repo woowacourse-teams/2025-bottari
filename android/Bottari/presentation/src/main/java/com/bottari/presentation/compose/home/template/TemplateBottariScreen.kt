@@ -184,13 +184,16 @@ private fun AllTemplateContent(
         BottariSearchBar(
             query = query,
             onQueryChange = onQueryChange,
-            placeholderText = "검색어를 입력하세요",
+            placeholderText = "제목이나 해시태그를 입력하세요",
+            textStyle = BottariTheme.typography.medium16.toTextStyle(),
             onSearch = {},
             modifier =
-                Modifier.padding(
-                    vertical = BottariTheme.spacing.spaceSmall,
-                    horizontal = BottariTheme.spacing.spaceLarge,
-                ),
+                Modifier
+                    .padding(horizontal = BottariTheme.spacing.spaceLarge)
+                    .padding(
+                        top = BottariTheme.spacing.spaceXSmall,
+                        bottom = BottariTheme.spacing.space2xSmall,
+                    ),
         )
 
         TemplateLazyColumn(
