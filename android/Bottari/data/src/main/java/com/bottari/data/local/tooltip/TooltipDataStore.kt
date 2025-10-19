@@ -7,9 +7,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.bottari.domain.model.tooltip.TooltipType
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "tooltip_dismissals")
 
