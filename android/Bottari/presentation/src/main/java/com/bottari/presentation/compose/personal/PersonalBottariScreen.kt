@@ -27,135 +27,132 @@ import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 fun PersonalBottariScreen(
     bottariTitle: String,
     notificationFlag: Boolean,
-    viewModel: PersonalChecklistViewModel =
-        viewModel(),
+    viewModel: PersonalChecklistViewModel = viewModel(),
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
+
     val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
-
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
-
     val snackbarHostState = remember { SnackbarHostState() }
-
     var isSwipeScreen by remember { mutableStateOf(notificationFlag) }
 
-    BackHandler(enabled = isSwipeScreen) { isSwipeScreen = false }
-
-    LaunchedEffect(uiEvent.value) {
-        when (val event = uiEvent.value ?: return@LaunchedEffect) {
+    LaunchedEffect(uiEvent) {
+        when (uiEvent ?: return@LaunchedEffect) {
             PersonalChecklistUiEvent.FetchChecklistFailure -> {}
             PersonalChecklistUiEvent.ResetCheckStateFailure -> {}
         }
     }
 
+    PersonalBottariContent(
+        uiState = uiState,
+        bottariTitle = bottariTitle,
+        isSwipeScreen = isSwipeScreen,
+        snackbarHostState = snackbarHostState,
+        onBackClick = onBackClick@{
+            if (isSwipeScreen) {
+                isSwipeScreen = false
+                return@onBackClick
+            }
+            backPressedDispatcher?.onBackPressed()
+        },
+        onSwipeClick = { isSwipeScreen = true },
+        onResetClick = viewModel::resetItemsCheckState,
+        onCloseToolTip = viewModel::closeTooltip,
+        onClickItem = viewModel::toggleItemChecked,
+        onSwipeRight = viewModel::toggleItemChecked,
+        onClickCompleteButton = { isSwipeScreen = false }
+    )
+}
+
+@Composable
+private fun PersonalBottariContent(
+    uiState: PersonalChecklistUiState,
+    bottariTitle: String,
+    isSwipeScreen: Boolean,
+    snackbarHostState: SnackbarHostState,
+    onBackClick: () -> Unit,
+    onSwipeClick: () -> Unit,
+    onResetClick: () -> Unit,
+    onCloseToolTip: () -> Unit,
+    onClickItem: (Long) -> Unit,
+    onSwipeRight: (Long) -> Unit,
+    onClickCompleteButton: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    BackHandler(enabled = isSwipeScreen, onBack = onBackClick)
+
     Scaffold(
+        modifier = modifier,
         topBar = {
             ChecklistTopBar(
                 title = bottariTitle,
-                onBackClick = onBackClick@{
-                    if (isSwipeScreen) {
-                        isSwipeScreen = false
-                        return@onBackClick
-                    }
-                    backPressedDispatcher?.onBackPressed()
-                },
-                onSwipeClick = { isSwipeScreen = true },
-                onResetClick = viewModel::resetItemsCheckState,
-                isResetIconVisible = (!isSwipeScreen && uiState.value.isAnyChecked),
-                isSwipeIconVisible = (!isSwipeScreen && !uiState.value.isCompleted),
+                onBackClick = onBackClick,
+                onSwipeClick = onSwipeClick,
+                onResetClick = onResetClick,
+                isResetIconVisible = (!isSwipeScreen && uiState.isAnyChecked),
+                isSwipeIconVisible = (!isSwipeScreen && !uiState.isCompleted),
                 modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceMedium),
             )
         },
         containerColor = LocalBottariBgColor.current,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
-        if (uiState.value.isLoading) {
+        if (uiState.isLoading) {
             IndeterminateCircularIndicator()
             return@Scaffold
         }
         if (!isSwipeScreen) {
             PersonalChecklistScreen(
-                isToolTipClosed = uiState.value.isTooltipClosed,
-                onCloseToolTip = viewModel::closeTooltip,
-                checklistItems = uiState.value.bottariItems,
-                onClickItem = viewModel::toggleItemChecked,
-                totalQuantity = uiState.value.totalQuantity,
-                checkedQuantity = uiState.value.checkedQuantity,
-                modifier = Modifier.padding(innerPadding),
-            )
-            return@Scaffold
-        }
-        SwipeScreen(
-            items = uiState.value.nonCheckedItems,
-            checkedQuantity = uiState.value.checkedQuantity,
-            totalQuantity = uiState.value.totalQuantity,
-            isComplete = uiState.value.isCompleted,
-            onLeftSwipe = {},
-            onRightSwipe = viewModel::toggleItemChecked,
-            onClickCompleteButton = { isSwipeScreen = false },
-            modifier = Modifier.padding(innerPadding),
-        )
-    }
-}
-
-@Composable
-private fun PersonalBottariScreen(
-    bottariTitle: String,
-    uiState: PersonalChecklistUiState,
-) {
-    val isSwipeScreen = true
-    Scaffold(
-        topBar = {
-            ChecklistTopBar(
-                title = bottariTitle,
-                onBackClick = {},
-                onSwipeClick = {},
-                onResetClick = {},
-                isSwipeIconVisible = true,
-                isResetIconVisible = true,
-            )
-        },
-        containerColor = LocalBottariBgColor.current,
-    ) { innerPadding ->
-        if (!isSwipeScreen) {
-            PersonalChecklistScreen(
-                modifier = Modifier.padding(innerPadding),
+                isToolTipClosed = uiState.isTooltipClosed,
+                onCloseToolTip = onCloseToolTip,
                 checklistItems = uiState.bottariItems,
-                onClickItem = {},
+                onClickItem = onClickItem,
                 totalQuantity = uiState.totalQuantity,
                 checkedQuantity = uiState.checkedQuantity,
-                isToolTipClosed = uiState.isTooltipClosed,
-                onCloseToolTip = {},
+                modifier = Modifier.padding(innerPadding),
             )
-            return@Scaffold
+        } else {
+            SwipeScreen(
+                items = uiState.nonCheckedItems,
+                checkedQuantity = uiState.checkedQuantity,
+                totalQuantity = uiState.totalQuantity,
+                isComplete = uiState.isCompleted,
+                onLeftSwipe = {},
+                onRightSwipe = onSwipeRight,
+                onClickCompleteButton = onClickCompleteButton,
+                modifier = Modifier.padding(innerPadding),
+            )
         }
-        SwipeScreen(
-            items = uiState.nonCheckedItems,
-            checkedQuantity = 3,
-            totalQuantity = 7,
-            isComplete = false,
-            onLeftSwipe = {},
-            onRightSwipe = {},
-            onClickCompleteButton = {},
-            modifier = Modifier.padding(innerPadding),
-        )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun PersonalBottariScreenPreview() {
+private fun PersonalBottariContentPreview() {
     BottariTheme {
-        PersonalBottariScreen(
-            "테스트",
-            PersonalChecklistUiState(
-                bottariItems =
-                    listOf(
-                        ChecklistItemUiModel(1, "테스트", false),
-                        ChecklistItemUiModel(2, "테스트", true),
-                        ChecklistItemUiModel(3, "테스트", true),
-                    ),
+        val previewItems = listOf(
+            ChecklistItemUiModel(1, "양말", false),
+            ChecklistItemUiModel(2, "충전기", true),
+            ChecklistItemUiModel(3, "여권", true),
+            ChecklistItemUiModel(4, "세면도구", false)
+        )
+        PersonalBottariContent(
+            uiState = PersonalChecklistUiState(
+                bottariItems = previewItems,
+                initialItems = previewItems,
+                isLoading = false,
+                isTooltipClosed = true
             ),
+            bottariTitle = "미리보기 타이틀",
+            isSwipeScreen = false,
+            snackbarHostState = remember { SnackbarHostState() },
+            onBackClick = {},
+            onSwipeClick = {},
+            onResetClick = {},
+            onCloseToolTip = {},
+            onClickItem = {},
+            onSwipeRight = {},
+            onClickCompleteButton = {}
         )
     }
 }
