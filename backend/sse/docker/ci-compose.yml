@@ -1,0 +1,15 @@
+services:
+  redis:
+    container_name: bottari-redis
+    image: ${TEST_REDIS_IMAGE}
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_PASSWORD: ${TEST_REDIS_PASSWORD}
+    command: ["redis-server", "--requirepass", "${TEST_REDIS_PASSWORD}"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${TEST_REDIS_PASSWORD}", "ping"]
+      interval: 5s
+      timeout: 2s
+      retries: 36
+      start_period: 5s

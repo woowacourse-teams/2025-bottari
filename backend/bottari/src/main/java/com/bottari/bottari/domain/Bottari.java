@@ -3,10 +3,10 @@ package com.bottari.bottari.domain;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
+import com.bottari.support.BaseTimeEntity;
 import com.bottari.vo.BottariTitle;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,16 +20,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @SQLDelete(sql = "UPDATE bottari SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Bottari {
+public class Bottari extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,9 +37,6 @@ public class Bottari {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
@@ -60,14 +54,14 @@ public class Bottari {
     }
 
     public void updateTitle(final String newTitle) {
-        if (title.title().equals(newTitle)) {
+        if (title.value().equals(newTitle)) {
             throw new BusinessException(ErrorCode.BOTTARI_TITLE_UNCHANGED);
         }
         this.title = new BottariTitle(newTitle);
     }
 
     public String getTitle() {
-        return title.title();
+        return title.value();
     }
 
     @Override

@@ -1,9 +1,9 @@
-name: BE PR CI & Review Request Notification
+name: BE PR CI & Review Request Notification - SSE
 
 on:
   pull_request:
-    branches:
-      - be/develop
+    branches: be/develop
+    paths: backend/sse/**
     types: [opened, synchronize, reopened] # 머지/닫힘 이벤트 제외  
 
 jobs:
@@ -21,12 +21,12 @@ jobs:
           distribution: "temurin"
 
       - name: Grant Execute Permission for Gradlew
-        run: chmod +x ./backend/bottari/gradlew
+        run: chmod +x ./backend/sse/gradlew
 
       # Docker Compose용 환경변수 주입: .env 파일 생성
       # compose는 .env의 값을 ${VAR}로 치환해서 사용한다.
       - name: Prepare .env for docker compose
-        working-directory: ./backend
+        working-directory: ./backend/sse/docker
         run: |
           cat > .env <<EOF
           TEST_DATABASE_NAME=${{ secrets.TEST_DATABASE_NAME }}
@@ -37,40 +37,10 @@ jobs:
           TEST_REDIS_PASSWORD=${{ secrets.TEST_REDIS_PASSWORD }}  
           EOF
 
-      # docker compose로 MySQL 기동
-      - name: Start MySQL via docker compose
-        working-directory: ./backend
-        run: docker compose -f ci-compose.yml up -d
-
-      # 헬스체크 기다리기 — MySQL      
-      - name: Wait for MySQL (extra safety)  
-        run: |  
-          for i in {1..36}; do  
-            if docker exec bottari-mysql mysqladmin ping -h 127.0.0.1 -uroot -p${{ secrets.TEST_DATABASE_PASSWORD }} --silent; then  
-              echo "MySQL is up!"  
-              exit 0  
-            fi  
-            echo "Waiting for MySQL... ($i/36)"  
-            sleep 5  
-          done  
-          echo "MySQL did not start within 3 minutes."  
-          exit 1  
-  
-      # 헬스체크 기다리기 — Redis      
-      - name: Wait for Redis (extra safety)  
-        run: |  
-          for i in {1..36}; do  
-            if docker exec bottari-redis redis-cli -a ${{  
-              secrets.TEST_REDIS_PASSWORD  
-            }} ping | grep -q PONG; then  
-              echo "Redis is up!"  
-              exit 0  
-            fi  
-            echo "Waiting for Redis... ($i/36)"  
-            sleep 5  
-          done  
-          echo "Redis did not start within 3 minutes."  
-          exit 1 
+      # docker compose 실행
+      - name: Start Docker Compose
+        working-directory: ./backend/sse/docker
+        run: docker compose -f ci-compose.yml up -d --wait --wait-timeout 120
 
       # Webhook 설정
       - name: Determine Webhook
@@ -79,12 +49,8 @@ jobs:
       # Build & Test
       - name: Build and Test
         id: test
-        working-directory: ./backend/bottari
+        working-directory: ./backend/sse
         env:
-          DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
-          DATABASE_USERNAME: ${{ secrets.TEST_DATABASE_USERNAME }}
-          DATABASE_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
-          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
           REDIS_HOST: localhost  
           REDIS_PORT: 6379  
           REDIS_PASSWORD: ${{ secrets.TEST_REDIS_PASSWORD }} 
@@ -162,7 +128,7 @@ jobs:
 
       # 항상 정리
       - name: Cleanup docker compose
-        working-directory: ./backend
+        working-directory: ./backend/sse/docker
         if: always()
         run: docker compose -f ci-compose.yml down -v
         

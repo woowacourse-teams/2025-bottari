@@ -67,6 +67,6 @@ public class TeamPersonalItem {
     }
 
     public String getName() {
-        return name.name();
+        return name.value();
     }
 }

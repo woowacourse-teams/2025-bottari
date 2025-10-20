@@ -1,7 +1,6 @@
 package com.bottari.bottaritemplate.service;
 
 import com.bottari.bottaritemplate.dto.ReadHashtagWithUsageCountResponse;
-import com.bottari.bottaritemplate.repository.BottariTemplateHashtagRepository;
 import com.bottari.bottaritemplate.repository.dto.HashtagPopularityProjection;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
@@ -14,15 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class HashtagService {
 
-    private final BottariTemplateHashtagRepository bottariTemplateHashtagRepository;
+    private final TrendingHashtagProvider trendingHashtagProvider;
 
     @Transactional(readOnly = true)
-    public List<ReadHashtagWithUsageCountResponse> getTopHashtagsByUsageCount(final int limit) {
+    public List<ReadHashtagWithUsageCountResponse> getPopularHashtags(final int limit) {
         validateLimit(limit);
-        final List<HashtagPopularityProjection> projections =
-                bottariTemplateHashtagRepository.findTopNByUsageCount(limit);
+        final List<HashtagPopularityProjection> popularHashtags = trendingHashtagProvider.getPopularHashtags(limit);
 
-        return projections.stream()
+        return popularHashtags.stream()
                 .map(ReadHashtagWithUsageCountResponse::of)
                 .toList();
     }

@@ -7,13 +7,13 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record ItemName(
-        String name
+        String value
 ) {
 
     private static final int MAX_NAME_LENGTH = 20;
 
     public ItemName {
-        validateName(name);
+        validateName(value);
     }
 
     private void validateName(final String name) {

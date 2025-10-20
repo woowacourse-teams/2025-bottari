@@ -1,10 +1,10 @@
 package com.bottari.teambottari.domain;
 
 import com.bottari.member.domain.Member;
+import com.bottari.support.BaseTimeEntity;
 import com.bottari.vo.BottariTitle;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,16 +17,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @SQLDelete(sql = "UPDATE team_bottari SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class TeamBottari {
+public class TeamBottari extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,9 +37,6 @@ public class TeamBottari {
 
     @Column(unique = true)
     private String inviteCode;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
@@ -66,6 +60,6 @@ public class TeamBottari {
     }
 
     public String getTitle() {
-        return title.title();
+        return title.value();
     }
 }

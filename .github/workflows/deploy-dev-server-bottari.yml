@@ -1,9 +1,9 @@
-name: deploy-dev-server
+name: deploy-dev-server-bottari
 
 on:
   push:
-    branches:
-      - be/develop
+    branches: be/develop
+    paths: backend/bottari/**
 
 env:
   IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/bottari-app

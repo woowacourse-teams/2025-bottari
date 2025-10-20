@@ -153,7 +153,7 @@ class TeamMemberServiceTest {
             entityManager.persist(member2InTeamA);
             entityManager.persist(member3InTeamB);
 
-            final TeamBottari teamBottariA = new TeamBottari("title", member1InTeamA, "inviteCode1");
+            final TeamBottari teamBottariA = new TeamBottari("title1", member1InTeamA, "inviteCode1");
             final TeamBottari teamBottariB = new TeamBottari("title2", member3InTeamB, "inviteCode2");
             entityManager.persist(teamBottariA);
             entityManager.persist(teamBottariB);
@@ -209,7 +209,7 @@ class TeamMemberServiceTest {
             entityManager.persist(member1InTeamA);
             entityManager.persist(member2InTeamB);
 
-            final TeamBottari teamBottariA = new TeamBottari("title", member1InTeamA, "inviteCode1");
+            final TeamBottari teamBottariA = new TeamBottari("title1", member1InTeamA, "inviteCode1");
             final TeamBottari teamBottariB = new TeamBottari("title2", member2InTeamB, "inviteCode2");
             entityManager.persist(teamBottariA);
             entityManager.persist(teamBottariB);
