@@ -10,11 +10,11 @@ import com.bottari.domain.model.tooltip.TooltipType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "tooltip_dismissals")
-
 class TooltipDataStore(
     private val context: Context,
 ) {
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "tooltip_dismissals")
+
     private val tooltipDismissalsKey = stringSetPreferencesKey("tooltip_dismissals")
 
     fun isTooltipDismissed(tooltipType: TooltipType): Flow<Boolean> =
