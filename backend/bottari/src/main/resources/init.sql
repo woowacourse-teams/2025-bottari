@@ -221,11 +221,11 @@ VALUES ('여행'),
        ('운동'),
        ('등산');
 
-INSERT INTO bottari_template_hashtag (bottari_template_id, hashtag_id)
-VALUES (1, 1),
-       (4, 1),
-       (6, 2),
-       (7, 3);
+INSERT INTO bottari_template_hashtag (bottari_template_id, hashtag_id, created_at)
+VALUES (1, 1, '2025-09-19 10:05:00'),
+       (4, 1, '2025-09-19 16:50:00'),
+       (6, 2, '2025-10-19 08:05:00'),
+       (7, 3, '2025-10-19 13:15:00');
 
 -- 보따리 템플릿 아이템 데이터
 INSERT INTO bottari_template_item (name, bottari_template_id)

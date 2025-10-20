@@ -22,7 +22,7 @@ public class HashtagController implements HashtagApiDocs {
     public ResponseEntity<List<ReadHashtagWithUsageCountResponse>> readPopularHashtags(
             @RequestParam(defaultValue = "10") final int limit
     ) {
-        final List<ReadHashtagWithUsageCountResponse> responses = hashtagService.getTopHashtagsByUsageCount(limit);
+        final List<ReadHashtagWithUsageCountResponse> responses = hashtagService.getPopularHashtags(limit);
 
         return ResponseEntity.ok(responses);
     }
