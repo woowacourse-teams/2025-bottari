@@ -43,6 +43,7 @@ fun TemplateItem(
     template: BottariTemplateUiModel,
     onClickHashtag: (BottariTemplateHashtagUiModel) -> Unit,
     modifier: Modifier = Modifier,
+    iconButton: @Composable () -> Unit,
 ) {
     val hasTags = remember { template.hashtags.isNotEmpty() }
     val hashTagSectionPadding = if (hasTags) BottariTheme.spacing.spaceMedium else 0.dp
@@ -55,6 +56,7 @@ fun TemplateItem(
             TemplateItemHeader(
                 title = template.title,
                 description = template.description,
+                iconButton = iconButton,
             )
 
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
@@ -80,6 +82,7 @@ private fun TemplateItemHeader(
     title: String,
     description: String,
     modifier: Modifier = Modifier,
+    iconButton: @Composable () -> Unit,
 ) {
     Row(
         modifier =
@@ -87,7 +90,7 @@ private fun TemplateItemHeader(
                 .fillMaxWidth()
                 .wrapContentHeight(),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
@@ -102,6 +105,10 @@ private fun TemplateItemHeader(
                 color = BottariTheme.colors.gray500,
             )
         }
+
+        Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceSmall))
+
+        iconButton()
     }
 }
 
@@ -128,8 +135,7 @@ private fun TemplateHashtagSection(
                         .background(
                             color = Color(0xFFEFF6FF),
                             shape = chipShape,
-                        )
-                        .clickable(
+                        ).clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = ripple(color = BottariTheme.colors.primary),
                         ) { onClickHashtag(hashtag) }
@@ -158,9 +164,10 @@ private fun TemplateItemFooter(
     val contentColor = BottariTheme.colors.gray600
 
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(20.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom,
     ) {
@@ -222,11 +229,39 @@ private fun TemplateItemPreview() {
         )
 
     BottariTheme {
-        Box(modifier = Modifier.padding(12.dp)) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
             TemplateItem(
                 template = template,
                 onClickHashtag = {},
-            )
+            ) {
+                TemplateItemIconButton(
+                    type = TemplateItemType.MyTemplate,
+                    onClick = {},
+                )
+            }
+
+            TemplateItem(
+                template = template,
+                onClickHashtag = {},
+            ) {
+                TemplateItemIconButton(
+                    type = TemplateItemType.Bookmark(true),
+                    onClick = {},
+                )
+            }
+
+            TemplateItem(
+                template = template,
+                onClickHashtag = {},
+            ) {
+                TemplateItemIconButton(
+                    type = TemplateItemType.Bookmark(false),
+                    onClick = {},
+                )
+            }
         }
     }
 }

@@ -45,6 +45,8 @@ import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.home.template.component.TemplateItem
+import com.bottari.presentation.compose.home.template.component.TemplateItemIconButton
+import com.bottari.presentation.compose.home.template.component.TemplateItemType
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateItemUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
@@ -85,6 +87,8 @@ fun TemplateBottariScreen(
         onChipChange = viewModel::searchByChip,
         onLoadNextPage = viewModel::fetchTemplates,
         onClickAdd = navigateToTemplateCreate,
+        onClickDelete = {},
+        onClickBookmark = {},
         modifier = modifier.noRippleClickable { focusManager.clearFocus() },
     )
 }
@@ -99,6 +103,8 @@ private fun TemplateBottariScreen(
     onChipChange: (List<BottariTemplateHashtagUiModel>) -> Unit,
     onLoadNextPage: () -> Unit,
     onClickAdd: () -> Unit,
+    onClickDelete: (Long) -> Unit,
+    onClickBookmark: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isScrolledToEnd by listState.rememberScrolledToEnd(5)
@@ -129,14 +135,15 @@ private fun TemplateBottariScreen(
                         chips = uiState.chips,
                         onChipsChange = onChipChange,
                         onClickDetail = onClickDetail,
+                        onClickBookmark = onClickBookmark,
                     )
 
                 1 ->
-                    TemplateLazyColumn(
-                        templates = uiState.myTemplates,
+                    MyTemplateContent(
+                        myTemplates = uiState.myTemplates,
                         listState = myListState,
                         onClickDetail = onClickDetail,
-                        onClickHashtag = {},
+                        onClickDelete = onClickDelete,
                     )
             }
         }
@@ -178,15 +185,14 @@ private fun AllTemplateContent(
     chips: List<BottariTemplateHashtagUiModel>,
     onChipsChange: (List<BottariTemplateHashtagUiModel>) -> Unit,
     onClickDetail: (Long) -> Unit,
+    onClickBookmark: (Long) -> Unit,
 ) {
     Column {
         BottariHashChipSearchBar(
             query = query,
             onQueryChange = onQueryChange,
             chips = chips.map { chip -> "#${chip.name}" },
-            onChipsChange = { new ->
-                if (new.isEmpty()) onChipsChange(emptyList())
-            },
+            onChipsChange = { new -> if (new.isEmpty()) onChipsChange(emptyList()) },
             placeholderText = "제목이나 해시태그를 입력하세요",
             onSearch = {},
             modifier =
@@ -199,19 +205,43 @@ private fun AllTemplateContent(
         )
 
         TemplateLazyColumn(
+            type = TemplateItemType.Bookmark(false),
             templates = templates,
             listState = listState,
             onClickDetail = onClickDetail,
+            onClickDelete = {},
+            onClickBookmark = onClickBookmark,
             onClickHashtag = { tag -> onChipsChange(listOf(tag)) },
         )
     }
 }
 
 @Composable
+private fun MyTemplateContent(
+    myTemplates: List<BottariTemplateUiModel>,
+    listState: LazyListState,
+    onClickDetail: (Long) -> Unit,
+    onClickDelete: (Long) -> Unit,
+) {
+    TemplateLazyColumn(
+        type = TemplateItemType.MyTemplate,
+        templates = myTemplates,
+        listState = listState,
+        onClickDetail = onClickDetail,
+        onClickDelete = onClickDelete,
+        onClickBookmark = {},
+        onClickHashtag = {},
+    )
+}
+
+@Composable
 private fun TemplateLazyColumn(
+    type: TemplateItemType,
     templates: List<BottariTemplateUiModel>,
     listState: LazyListState,
     onClickDetail: (Long) -> Unit,
+    onClickDelete: (Long) -> Unit,
+    onClickBookmark: (Long) -> Unit,
     onClickHashtag: (BottariTemplateHashtagUiModel) -> Unit,
 ) {
     LazyColumn(
@@ -238,6 +268,38 @@ private fun TemplateLazyColumn(
                 template = template,
                 onClickHashtag = onClickHashtag,
                 modifier = Modifier.noRippleClickable { onClickDetail(template.id) },
+                iconButton = {
+                    TemplateItemIconButtonByTemplateItemType(
+                        type = type,
+                        template = template,
+                        onClickDelete = onClickDelete,
+                        onClickBookmark = onClickBookmark,
+                    )
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun TemplateItemIconButtonByTemplateItemType(
+    type: TemplateItemType,
+    template: BottariTemplateUiModel,
+    onClickDelete: (Long) -> Unit,
+    onClickBookmark: (Long) -> Unit,
+) {
+    when (type) {
+        is TemplateItemType.MyTemplate -> {
+            TemplateItemIconButton(
+                type = type,
+                onClick = { onClickDelete(template.id) },
+            )
+        }
+
+        is TemplateItemType.Bookmark -> {
+            TemplateItemIconButton(
+                type = type,
+                onClick = { onClickBookmark(template.id) },
             )
         }
     }
@@ -320,6 +382,8 @@ private fun TemplateBottariScreenPreview() {
             onQueryChange = {},
             onChipChange = {},
             onLoadNextPage = {},
+            onClickDelete = {},
+            onClickBookmark = {},
             onClickAdd = {},
         )
     }
