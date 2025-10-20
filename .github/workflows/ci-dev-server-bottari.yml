@@ -26,7 +26,7 @@ jobs:
       # Docker Compose용 환경변수 주입: .env 파일 생성
       # compose는 .env의 값을 ${VAR}로 치환해서 사용한다.
       - name: Prepare .env for docker compose
-        working-directory: ./backend
+        working-directory: ./backend/bottari/docker
         run: |
           cat > .env <<EOF
           TEST_DATABASE_NAME=${{ secrets.TEST_DATABASE_NAME }}
@@ -39,8 +39,8 @@ jobs:
 
       # docker compose 실행
       - name: Start Docker Compose
-        working-directory: ./backend
-        run: docker compose -f ci-compose.yml up -d
+        working-directory: ./backend/bottari/docker
+        run: docker compose -f ci-compose.yml up -d --wait --wait-timeout 120
 
       # Webhook 설정
       - name: Determine Webhook
@@ -132,6 +132,6 @@ jobs:
 
       # 항상 정리
       - name: Cleanup docker compose
-        working-directory: ./backend
+        working-directory: ./backend/bottari/docker
         if: always()
         run: docker compose -f ci-compose.yml down -v
