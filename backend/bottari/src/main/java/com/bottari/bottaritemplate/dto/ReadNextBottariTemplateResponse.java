@@ -1,6 +1,7 @@
 package com.bottari.bottaritemplate.dto;
 
 import com.bottari.bottaritemplate.domain.SortProperty;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.data.domain.Slice;
 
@@ -16,6 +17,8 @@ public record ReadNextBottariTemplateResponse(
         String lastInfo
 ) {
 
+    private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
+
     public static ReadNextBottariTemplateResponse of(
             final Slice<ReadBottariTemplateResponse> slice,
             final String property
@@ -27,7 +30,9 @@ public record ReadNextBottariTemplateResponse(
         }
         final Long lastId = content.getLast().id();
         final String lastInfo = switch (sortProperty) {
-            case CREATED_AT -> content.getLast().createdAt().toString();
+            case CREATED_AT -> content.getLast()
+                    .createdAt()
+                    .format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
             case TAKEN_COUNT -> String.valueOf(content.getLast().takenCount());
         };
 
