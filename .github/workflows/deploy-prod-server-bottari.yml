@@ -1,9 +1,9 @@
-name: deploy-prod-server
+name: deploy-prod-server-bottari
 
 on:
   push:
     branches: main
-    paths: backend/**
+    paths: backend/bottari/**
   workflow_dispatch: {}
 
 jobs:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout pository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 21

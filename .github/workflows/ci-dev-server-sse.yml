@@ -1,10 +1,10 @@
-name: BE PR CI & Review Request Notification
+name: BE PR CI & Review Request Notification - SSE
 
 on:
   pull_request:
-    branches:
-      - be/develop
-    types: [opened, synchronize, reopened]
+    branches: be/develop
+    paths: backend/sse/**
+    types: [opened, synchronize, reopened] # 머지/닫힘 이벤트 제외  
 
 jobs:
   ci-and-pr-notification:
@@ -21,7 +21,7 @@ jobs:
           distribution: "temurin"
 
       - name: Grant Execute Permission for Gradlew
-        run: chmod +x ./backend/bottari/gradlew
+        run: chmod +x ./backend/sse/gradlew
 
       # Docker Compose용 환경변수 주입: .env 파일 생성
       # compose는 .env의 값을 ${VAR}로 치환해서 사용한다.
@@ -33,26 +33,14 @@ jobs:
           TEST_DATABASE_PASSWORD=${{ secrets.TEST_DATABASE_PASSWORD }}
           TEST_NGRAM_TOKEN_SIZE=${{ secrets.TEST_NGRAM_TOKEN_SIZE }}
           TEST_DATABASE_IMAGE=${{ secrets.TEST_DATABASE_IMAGE }}
+          TEST_REDIS_IMAGE=${{ secrets.TEST_REDIS_IMAGE }}  
+          TEST_REDIS_PASSWORD=${{ secrets.TEST_REDIS_PASSWORD }}  
           EOF
 
-      # docker compose로 MySQL 기동
-      - name: Start MySQL via docker compose
+      # docker compose 실행
+      - name: Start Docker Compose
         working-directory: ./backend
         run: docker compose -f ci-compose.yml up -d
-
-      # 헬스체크 기다리기 — compose healthcheck를 신뢰해도 되지만, 한 번 더 안전하게 확인
-      - name: Wait for MySQL (extra safety)
-        run: |
-          for i in {1..36}; do
-            if docker exec bottari-mysql mysqladmin ping -h 127.0.0.1 -uroot -p${{ secrets.TEST_DATABASE_PASSWORD }} --silent; then
-              echo "MySQL is up!"
-              exit 0
-            fi
-            echo "Waiting for MySQL... ($i/36)"
-            sleep 5
-          done
-          echo "MySQL did not start within 3 minutes."
-          exit 1
 
       # Webhook 설정
       - name: Determine Webhook
@@ -61,12 +49,11 @@ jobs:
       # Build & Test
       - name: Build and Test
         id: test
-        working-directory: ./backend/bottari
+        working-directory: ./backend/sse
         env:
-          DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
-          DATABASE_USERNAME: ${{ secrets.TEST_DATABASE_USERNAME }}
-          DATABASE_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
-          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          REDIS_HOST: localhost  
+          REDIS_PORT: 6379  
+          REDIS_PASSWORD: ${{ secrets.TEST_REDIS_PASSWORD }} 
         run: ./gradlew clean build --no-daemon
 
       # 이후 Discord 알림 (성공/실패)
