@@ -37,7 +37,7 @@ jobs:
           TEST_REDIS_PASSWORD=${{ secrets.TEST_REDIS_PASSWORD }}  
           EOF
 
-      # docker compose 가동
+      # docker compose 실행
       - name: Start Docker Compose
         working-directory: ./backend
         run: docker compose -f ci-compose.yml up -d
