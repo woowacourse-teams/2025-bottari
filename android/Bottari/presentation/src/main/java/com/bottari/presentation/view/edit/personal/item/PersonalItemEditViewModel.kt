@@ -40,20 +40,30 @@ class PersonalItemEditViewModel @Inject constructor(
         }
     }
 
-    fun saveItem(itemName: String) {
-        if (itemName.isBlank() || isDuplicateItem(itemName)) return
+    fun saveItem() {
+        val itemName = currentState.itemName
+        if (itemName.isBlank()) return
         launch {
             saveItemUseCase(
                 bottariId = currentState.bottariId,
                 itemName = itemName,
             ).onSuccess {
                 val newItem = generateNewItemUiModel(itemName)
-                updateState { copy(items = currentState.items + newItem) }
+                updateState {
+                    copy(
+                        items = currentState.items + newItem,
+                        itemName = "",
+                    )
+                }
                 logSaveChanges()
             }.onFailure {
                 emitEvent(PersonalItemEditUiEvent.SaveBottariItemFailure)
             }
         }
+    }
+
+    fun updateItemName(itemName: String) {
+        updateState { copy(itemName = itemName) }
     }
 
     private fun fetchItems() {
@@ -77,8 +87,6 @@ class PersonalItemEditViewModel @Inject constructor(
                 updateState { copy(isLoading = false) }
             }.launchIn(viewModelScope)
     }
-
-    private fun isDuplicateItem(name: String): Boolean = currentState.items.any { item -> item.name == name }
 
     private fun generateNewItemUiModel(name: String): ChecklistItemUiModel =
         ChecklistItemUiModel(
