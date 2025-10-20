@@ -5,15 +5,15 @@ import com.bottari.domain.model.common.Pageable
 import com.bottari.domain.repository.BottariTemplateRepository
 import javax.inject.Inject
 
-class FetchBottariTemplatesUseCase @Inject constructor(
+class SearchTemplatesByHashtagUseCase @Inject constructor(
     private val bottariTemplateRepository: BottariTemplateRepository,
 ) {
     suspend operator fun invoke(
-        query: String,
+        hashtagId: Long,
         pageable: Pageable<BottariTemplate>,
     ): Result<Pageable<BottariTemplate>> =
-        bottariTemplateRepository.fetchBottariTemplates(
-            query = query.ifEmpty { null },
+        bottariTemplateRepository.searchTemplatesByHashtag(
+            hashtagId = hashtagId,
             pageable = pageable,
         )
 }
