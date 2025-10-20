@@ -18,6 +18,13 @@ repositories {
     mavenCentral()
 }
 
+bootJar {
+    enabled = true
+}
+jar {
+    enabled = false
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
@@ -30,6 +37,11 @@ dependencies {
         // Micrometer Tracing 관련 모듈을 명시적으로 제외합니다.
         exclude group: 'io.micrometer', module: 'micrometer-tracing-bridge-brave'
     }
+
+    implementation 'io.opentelemetry:opentelemetry-api:1.45.0'
+    implementation 'io.opentelemetry:opentelemetry-context:1.45.0'
+    implementation 'io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:2.9.0' // @WithSpan, @SpanAttribute
+
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
