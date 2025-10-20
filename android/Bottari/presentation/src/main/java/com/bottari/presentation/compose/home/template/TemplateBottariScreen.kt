@@ -75,6 +75,12 @@ fun TemplateBottariScreen(
             is TemplateUiEvent.SearchTemplateSuccess -> mainListState.scrollToItem(0)
             is TemplateUiEvent.FetchBottariTemplatesFailure ->
                 snackbarState.showSnackbar(context.getString(R.string.template_fetch_template_failure_text))
+
+            is TemplateUiEvent.DeleteBottariTemplateSuccess ->
+                snackbarState.showSnackbar(context.getString(R.string.template_my_template_delete_success_text))
+
+            is TemplateUiEvent.DeleteBottariTemplateFailure ->
+                snackbarState.showSnackbar(context.getString(R.string.template_my_template_delete_failure_text))
         }
     }
 
@@ -87,7 +93,7 @@ fun TemplateBottariScreen(
         onChipChange = viewModel::searchByChip,
         onLoadNextPage = viewModel::fetchTemplates,
         onClickAdd = navigateToTemplateCreate,
-        onClickDelete = {},
+        onClickDelete = viewModel::deleteTemplate,
         onClickBookmark = {},
         modifier = modifier.noRippleClickable { focusManager.clearFocus() },
     )

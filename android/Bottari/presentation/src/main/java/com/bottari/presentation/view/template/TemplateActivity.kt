@@ -9,7 +9,9 @@ import com.bottari.presentation.databinding.ActivityTemplateBinding
 import com.bottari.presentation.view.template.create.TemplateCreateFragment
 import com.bottari.presentation.view.template.detail.TemplateDetailFragment
 import com.bottari.presentation.view.template.my.MyTemplateFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TemplateActivity :
     BaseActivity<ActivityTemplateBinding>(ActivityTemplateBinding::inflate),
     TemplateNavigator {

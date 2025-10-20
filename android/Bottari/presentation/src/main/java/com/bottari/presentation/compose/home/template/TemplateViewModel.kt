@@ -3,6 +3,7 @@ package com.bottari.presentation.compose.home.template
 import androidx.lifecycle.viewModelScope
 import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.model.common.Pageable
+import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.SearchTemplatesByHashtagUseCase
 import com.bottari.domain.usecase.template.SearchTemplatesByTitleUseCase
@@ -18,6 +19,7 @@ class TemplateViewModel @Inject constructor(
     private val searchTemplatesByTitleUseCase: SearchTemplatesByTitleUseCase,
     private val searchTemplatesByHashtagUseCase: SearchTemplatesByHashtagUseCase,
     private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
+    private val deleteMyBottariTemplateUseCase: DeleteMyBottariTemplateUseCase,
 ) : BaseViewModel<TemplateUiState, TemplateUiEvent>(TemplateUiState()) {
     private val debouncedSearch: (Unit) -> Unit
 
@@ -81,9 +83,25 @@ class TemplateViewModel @Inject constructor(
             }.onFailure {
                 emitEvent(TemplateUiEvent.FetchBottariTemplatesFailure)
             }
-        }
 
-        updateState { copy(isLoading = false) }
+            updateState { copy(isLoading = false) }
+        }
+    }
+
+    fun deleteTemplate(templateId: Long) {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            deleteMyBottariTemplateUseCase(templateId)
+                .onSuccess {
+                    updateState { copy(myTemplates = myTemplates.filterNot { it.id == templateId }) }
+                    emitEvent(TemplateUiEvent.DeleteBottariTemplateSuccess)
+                }.onFailure {
+                    emitEvent(TemplateUiEvent.DeleteBottariTemplateFailure)
+                }
+
+            updateState { copy(isLoading = false) }
+        }
     }
 
     private fun handleSearchTemplatesSuccess(pageable: Pageable<BottariTemplate>) {
