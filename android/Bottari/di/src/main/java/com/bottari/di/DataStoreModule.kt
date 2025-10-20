@@ -31,5 +31,4 @@ object DataStoreModule {
     fun provideTooltipDataStore(
         @ApplicationContext context: Context,
     ): TooltipDataStore = TooltipDataStore(context)
-
 }
