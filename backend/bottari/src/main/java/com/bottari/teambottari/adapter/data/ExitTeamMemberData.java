@@ -4,8 +4,8 @@ import com.bottari.teambottari.event.ExitTeamMemberEvent;
 import java.time.LocalDateTime;
 
 public record ExitTeamMemberData(
-        Long bottariId,
-        String bottariName,
+        Long teamBottariId,
+        String teamBottariName,
         Long exitMemberId,
         String exitMemberName,
         LocalDateTime publishedAt

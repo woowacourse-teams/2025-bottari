@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record ChangeAssignedItemData(
+        Long teamBottariId,
         Long infoId,
         String name,
         List<Long> memberIds,
@@ -13,6 +14,7 @@ public record ChangeAssignedItemData(
 
     public static ChangeAssignedItemData from(final ChangeTeamAssignedItemEvent event) {
         return new ChangeAssignedItemData(
+                event.getTeamBottariId(),
                 event.getInfoId(),
                 event.getName(),
                 event.getMemberIds(),
