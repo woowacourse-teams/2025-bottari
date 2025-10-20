@@ -7,7 +7,15 @@ import com.bottari.data.model.remote.common.PageableRequest
 import com.bottari.data.model.remote.common.PageableResponse
 
 interface BottariTemplateRemoteDataSource {
-    suspend fun fetchBottariTemplates(pageableRequest: PageableRequest): Result<PageableResponse<BottariTemplateCursorFetchResponse>>
+    suspend fun searchTemplatesByTitle(
+        title: String,
+        pageableRequest: PageableRequest,
+    ): Result<PageableResponse<BottariTemplateCursorFetchResponse>>
+
+    suspend fun searchTemplatesByHashtag(
+        hashtagId: Long,
+        pageableRequest: PageableRequest,
+    ): Result<PageableResponse<BottariTemplateCursorFetchResponse>>
 
     suspend fun createBottariTemplate(bottariTemplateCreateRequest: BottariTemplateCreateRequest): Result<Long?>
 

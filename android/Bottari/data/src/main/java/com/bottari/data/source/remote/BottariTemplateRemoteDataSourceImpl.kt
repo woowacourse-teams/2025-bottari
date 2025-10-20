@@ -1,5 +1,6 @@
 package com.bottari.data.source.remote
 
+import android.adservices.adid.AdId
 import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
@@ -13,11 +14,24 @@ import javax.inject.Inject
 class BottariTemplateRemoteDataSourceImpl @Inject constructor(
     private val bottariTemplateService: BottariTemplateService,
 ) : BottariTemplateRemoteDataSource {
-    override suspend fun fetchBottariTemplates(
+    override suspend fun searchTemplatesByTitle(
+        title: String,
         pageableRequest: PageableRequest,
     ): Result<PageableResponse<BottariTemplateCursorFetchResponse>> =
         safeApiCall {
-            bottariTemplateService.fetchBottariTemplates(pageableRequest.toQueryMap())
+            val pageableParams = pageableRequest.toQueryMap().toMutableMap()
+            pageableParams["query"] = title
+            bottariTemplateService.searchTemplatesByTitle(pageableParams)
+        }
+
+    override suspend fun searchTemplatesByHashtag(
+        hashtagId: Long,
+        pageableRequest: PageableRequest,
+    ): Result<PageableResponse<BottariTemplateCursorFetchResponse>> =
+        safeApiCall {
+            val pageableParams = pageableRequest.toQueryMap().toMutableMap()
+            pageableParams["hashtagId"] = hashtagId.toString()
+            bottariTemplateService.searchTemplatesByHashtag(pageableParams)
         }
 
     override suspend fun createBottariTemplate(bottariTemplateCreateRequest: BottariTemplateCreateRequest): Result<Long?> =

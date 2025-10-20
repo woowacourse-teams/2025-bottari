@@ -11,12 +11,20 @@ import javax.inject.Inject
 class BottariTemplateRepositoryImpl @Inject constructor(
     private val bottariTemplateRemoteDataSource: BottariTemplateRemoteDataSource,
 ) : BottariTemplateRepository {
-    override suspend fun fetchBottariTemplates(
-        query: String?,
+    override suspend fun searchTemplatesByTitle(
+        title: String,
         pageable: Pageable<BottariTemplate>,
     ): Result<Pageable<BottariTemplate>> =
         bottariTemplateRemoteDataSource
-            .fetchBottariTemplates(PageableRequest.of(query, pageable))
+            .searchTemplatesByTitle(title, PageableRequest.of(pageable))
+            .mapCatching { response -> response.toDomain { contents -> contents.toDomain() } }
+
+    override suspend fun searchTemplatesByHashtag(
+        hashtagId: Long,
+        pageable: Pageable<BottariTemplate>,
+    ): Result<Pageable<BottariTemplate>> =
+        bottariTemplateRemoteDataSource
+            .searchTemplatesByHashtag(hashtagId, PageableRequest.of(pageable))
             .mapCatching { response -> response.toDomain { contents -> contents.toDomain() } }
 
     override suspend fun createBottariTemplate(
