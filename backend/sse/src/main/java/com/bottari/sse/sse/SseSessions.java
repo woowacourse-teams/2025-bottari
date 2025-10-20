@@ -1,4 +1,4 @@
-package com.bottari.push.connection.sse;
+package com.bottari.sse.sse;
 
 import java.util.List;
 import java.util.Map;
@@ -26,11 +26,20 @@ public class SseSessions {
                 .toList();
     }
 
+    public List<SseEmitter> findAll() {
+        return sseEmittersByMemberId.values().stream().toList();
+    }
+
     public void save(
             final Long memberId,
             final SseEmitter sseEmitter
     ) {
-        sseEmittersByMemberId.put(memberId, sseEmitter);
+        sseEmittersByMemberId.compute(memberId, (id, existingSseEmitter) -> {
+            if (existingSseEmitter != null) {
+                existingSseEmitter.complete();
+            }
+            return sseEmitter;
+        });
     }
 
     public void remove(final Long memberId) {

@@ -23,3 +23,8 @@ spring:
     init:
       mode: always
       schema-locations: classpath:schema.sql
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}

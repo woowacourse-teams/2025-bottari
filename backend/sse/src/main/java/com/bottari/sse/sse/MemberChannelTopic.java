@@ -1,0 +1,30 @@
+package com.bottari.sse.sse;
+
+import com.bottari.sse.error.BusinessException;
+import com.bottari.sse.error.ErrorCode;
+import org.springframework.data.redis.listener.ChannelTopic;
+
+public final class MemberChannelTopic extends ChannelTopic {
+
+    private static final String TOPIC_NAME_PREFIX = "member:";
+
+    public MemberChannelTopic(final String name) {
+        super(name);
+    }
+
+    public static MemberChannelTopic from(final Long memberId) {
+        return new MemberChannelTopic(TOPIC_NAME_PREFIX + memberId);
+    }
+
+    public Long extractMemberId() {
+        final String topic = getTopic();
+        if (!topic.startsWith(TOPIC_NAME_PREFIX)) {
+            throw new BusinessException(ErrorCode.INVALID_TOPIC_NAME, "member");
+        }
+        try {
+            return Long.valueOf(getTopic().substring(TOPIC_NAME_PREFIX.length()));
+        } catch (NumberFormatException e) {
+            throw new BusinessException(ErrorCode.INVALID_TOPIC_NAME, "member");
+        }
+    }
+}

@@ -4,26 +4,13 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'com'
+group = 'com.bottari'
 version = '0.0.1-SNAPSHOT'
+description = 'sse'
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
-bootJar {
-    enabled = true
-}
-
-jar {
-    enabled = false
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
     }
 }
 
@@ -32,15 +19,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-metrics:3.4.0'
     implementation "ch.qos.logback:logback-classic:1.5.18"
-    implementation 'com.google.firebase:firebase-admin:9.5.0'
-    implementation 'io.github.vaneproject:badwordfiltering:1.0.0'
     implementation('org.springframework.boot:spring-boot-starter-actuator') {
         // Actuator가 자체적으로 Trace를 생성하는 것을 막기 위해
         exclude group: 'io.micrometer', module: 'micrometer-tracing'
@@ -49,7 +32,6 @@ dependencies {
     }
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
