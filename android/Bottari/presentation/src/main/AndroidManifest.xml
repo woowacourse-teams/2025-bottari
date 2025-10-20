@@ -54,6 +54,10 @@
             android:name=".compose.home.ComposeHomeActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".compose.personal.ComposePersonalChecklistActivity"
+            android:exported="false" />
+
         <receiver android:name=".receiver.AlarmReceiver" />
         <receiver
             android:name=".receiver.BootReceiver"

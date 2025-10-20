@@ -3,6 +3,7 @@ package com.bottari.di
 import android.content.Context
 import com.bottari.data.local.AppConfigDataStore
 import com.bottari.data.local.MemberInfoDataStore
+import com.bottari.data.local.tooltip.TooltipDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,4 +25,10 @@ object DataStoreModule {
     fun provideMemberInfoDataStore(
         @ApplicationContext context: Context,
     ): MemberInfoDataStore = MemberInfoDataStore(context)
+
+    @Provides
+    @Singleton
+    fun provideTooltipDataStore(
+        @ApplicationContext context: Context,
+    ): TooltipDataStore = TooltipDataStore(context)
 }

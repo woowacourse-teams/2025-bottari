@@ -9,7 +9,7 @@ import android.media.AudioAttributes
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import com.bottari.presentation.R
-import com.bottari.presentation.view.checklist.personal.ChecklistActivity
+import com.bottari.presentation.compose.personal.ComposePersonalChecklistActivity
 import com.bottari.presentation.view.checklist.team.TeamChecklistActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -62,7 +62,7 @@ class NotificationHelper @Inject constructor(
         bottariTitle: String,
     ): PendingIntent {
         val intent =
-            ChecklistActivity.newIntentForNotification(
+            ComposePersonalChecklistActivity.newIntentForNotification(
                 context,
                 bottariId,
                 bottariTitle,

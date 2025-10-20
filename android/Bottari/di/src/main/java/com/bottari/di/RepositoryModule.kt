@@ -13,6 +13,7 @@ import com.bottari.data.repository.ReportRepositoryImpl
 import com.bottari.data.repository.TeamBottariItemsRepositoryImpl
 import com.bottari.data.repository.TeamBottariRepositoryImpl
 import com.bottari.data.repository.TeamMemberRepositoryImpl
+import com.bottari.data.repository.TooltipRepositoryImpl
 import com.bottari.domain.repository.AlarmRepository
 import com.bottari.domain.repository.AppConfigRepository
 import com.bottari.domain.repository.BottariItemRepository
@@ -26,6 +27,7 @@ import com.bottari.domain.repository.ReportRepository
 import com.bottari.domain.repository.TeamBottariItemsRepository
 import com.bottari.domain.repository.TeamBottariRepository
 import com.bottari.domain.repository.TeamMemberRepository
+import com.bottari.domain.repository.TooltipRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -86,4 +88,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindEventRepository(impl: EventRepositoryImpl): EventRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindTooltipRepository(impl: TooltipRepositoryImpl): TooltipRepository
 }

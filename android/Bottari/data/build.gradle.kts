@@ -66,7 +66,6 @@ dependencies {
     implementation(project(":logger"))
 
     ksp(libs.androidx.room.compiler)
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.bundles.network)
     implementation(libs.bundles.local)
