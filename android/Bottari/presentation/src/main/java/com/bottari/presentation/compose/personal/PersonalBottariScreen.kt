@@ -115,7 +115,10 @@ private fun PersonalBottariScreen(
             return@Scaffold
         }
         if (uiState.isItemsEmpty) {
-            PersonalChecklistEmptyView(onClickEdit = navigateToEdit,modifier = Modifier.fillMaxSize())
+            PersonalChecklistEmptyView(
+                onClickEdit = navigateToEdit,
+                modifier = Modifier.fillMaxSize(),
+            )
             return@Scaffold
         }
         if (!isSwipeScreen) {
@@ -128,18 +131,18 @@ private fun PersonalBottariScreen(
                 checkedQuantity = uiState.checkedQuantity,
                 modifier = Modifier.padding(innerPadding),
             )
-        } else {
-            SwipeScreen(
-                items = uiState.nonCheckedItems,
-                checkedQuantity = uiState.checkedQuantity,
-                totalQuantity = uiState.totalQuantity,
-                isComplete = uiState.isCompleted,
-                onLeftSwipe = {},
-                onRightSwipe = onSwipeRight,
-                onClickCompleteButton = onClickCompleteButton,
-                modifier = Modifier.padding(innerPadding),
-            )
+            return@Scaffold
         }
+        SwipeScreen(
+            items = uiState.nonCheckedItems,
+            checkedQuantity = uiState.checkedQuantity,
+            totalQuantity = uiState.totalQuantity,
+            isComplete = uiState.isCompleted,
+            onLeftSwipe = {},
+            onRightSwipe = onSwipeRight,
+            onClickCompleteButton = onClickCompleteButton,
+            modifier = Modifier.padding(innerPadding),
+        )
     }
 }
 
