@@ -9,10 +9,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.presentation.compose.common.navigation.Navigation
 import com.bottari.presentation.compose.common.navigation.NavigationController
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.home.bottari.MyBottariScreen
 import com.bottari.presentation.compose.home.more.MoreBottariScreen
@@ -29,16 +27,10 @@ fun HomeScreen(
     navigateToTemplateCreate: () -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-
     val navController =
-        rememberSaveable(saver = NavigationController.saver) {
-            NavigationController(HomeScreenRoute.Bottari)
-        }
-
+        rememberSaveable(saver = NavigationController.saver) { NavigationController(HomeScreenRoute.Bottari) }
     val currentScreen =
-        remember(navController.currentScreen) {
-            navController.currentScreen as HomeScreenRoute
-        }
+        remember(navController.currentScreen) { navController.currentScreen as HomeScreenRoute }
 
     Scaffold(
         topBar = { HomeTopAppBar(title = stringResource(currentScreen.labelResId())) },
@@ -87,6 +79,7 @@ private fun HomeScreenRouter(
         when (screen) {
             HomeScreenRoute.Template ->
                 TemplateBottariScreen(
+                    snackbarState = snackbarState,
                     navigateToTemplateDetail = navigateToTemplateDetail,
                     navigateToTemplateCreate = navigateToTemplateCreate,
                 )
@@ -105,21 +98,5 @@ private fun HomeScreenRouter(
                     onNavigateToBrowser = navigateToBrowser,
                 )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun HomeScreenPreview() {
-    BottariTheme {
-        HomeScreen(
-            navigateToPersonalBottariEdit = { _, _ -> },
-            navigateToTeamBottariEdit = { _, _ -> },
-            navigateToPersonalBottariChecklist = { _, _ -> },
-            navigateToTeamBottariChecklist = { _, _ -> },
-            navigateToBrowser = {},
-            navigateToTemplateDetail = {},
-            navigateToTemplateCreate = {},
-        )
     }
 }

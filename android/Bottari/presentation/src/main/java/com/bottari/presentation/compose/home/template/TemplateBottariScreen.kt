@@ -1,6 +1,5 @@
 package com.bottari.presentation.compose.home.template
 
-import android.widget.Toast
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,13 +38,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariSearchBar
+import com.bottari.presentation.compose.common.component.BottariHashChipSearchBar
 import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.compose.common.extension.rememberScrolledToEnd
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.home.template.component.TemplateItem
+import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateItemUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -52,6 +53,7 @@ import kotlinx.coroutines.flow.filter
 
 @Composable
 fun TemplateBottariScreen(
+    snackbarState: SnackbarHostState,
     navigateToTemplateDetail: (Long) -> Unit,
     navigateToTemplateCreate: () -> Unit,
     modifier: Modifier = Modifier,
@@ -70,12 +72,7 @@ fun TemplateBottariScreen(
         when (uiEvent) {
             is TemplateUiEvent.SearchTemplateSuccess -> mainListState.scrollToItem(0)
             is TemplateUiEvent.FetchBottariTemplatesFailure ->
-                Toast
-                    .makeText(
-                        context,
-                        R.string.template_fetch_template_failure_text,
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                snackbarState.showSnackbar(context.getString(R.string.template_fetch_template_failure_text))
         }
     }
 
@@ -85,12 +82,10 @@ fun TemplateBottariScreen(
         myListState = myListState,
         onClickDetail = navigateToTemplateDetail,
         onQueryChange = viewModel::updateSearchWord,
+        onChipChange = viewModel::searchByChip,
         onLoadNextPage = viewModel::fetchTemplates,
         onClickAdd = navigateToTemplateCreate,
-        modifier =
-            modifier.noRippleClickable {
-                focusManager.clearFocus()
-            },
+        modifier = modifier.noRippleClickable { focusManager.clearFocus() },
     )
 }
 
@@ -101,6 +96,7 @@ private fun TemplateBottariScreen(
     myListState: LazyListState,
     onClickDetail: (Long) -> Unit,
     onQueryChange: (String) -> Unit,
+    onChipChange: (List<BottariTemplateHashtagUiModel>) -> Unit,
     onLoadNextPage: () -> Unit,
     onClickAdd: () -> Unit,
     modifier: Modifier = Modifier,
@@ -130,6 +126,8 @@ private fun TemplateBottariScreen(
                         listState = listState,
                         query = uiState.searchWord,
                         onQueryChange = onQueryChange,
+                        chips = uiState.chips,
+                        onChipsChange = onChipChange,
                         onClickDetail = onClickDetail,
                     )
 
@@ -138,6 +136,7 @@ private fun TemplateBottariScreen(
                         templates = uiState.myTemplates,
                         listState = myListState,
                         onClickDetail = onClickDetail,
+                        onClickHashtag = {},
                     )
             }
         }
@@ -160,9 +159,7 @@ private fun TemplateBottariScreen(
                     .padding(16.dp)
                     .alpha(fabAlpha),
         ) {
-            Box(
-                modifier = Modifier.padding(horizontal = 8.dp),
-            ) {
+            Box(modifier = Modifier.padding(horizontal = 8.dp)) {
                 Text(
                     text = "보따리 등록하기",
                     style = BottariTheme.typography.semiBold16.toTextStyle(),
@@ -178,14 +175,19 @@ private fun AllTemplateContent(
     listState: LazyListState,
     query: String,
     onQueryChange: (String) -> Unit,
+    chips: List<BottariTemplateHashtagUiModel>,
+    onChipsChange: (List<BottariTemplateHashtagUiModel>) -> Unit,
     onClickDetail: (Long) -> Unit,
 ) {
     Column {
-        BottariSearchBar(
+        BottariHashChipSearchBar(
             query = query,
             onQueryChange = onQueryChange,
+            chips = chips.map { chip -> "#${chip.name}" },
+            onChipsChange = { new ->
+                if (new.isEmpty()) onChipsChange(emptyList())
+            },
             placeholderText = "제목이나 해시태그를 입력하세요",
-            textStyle = BottariTheme.typography.medium16.toTextStyle(),
             onSearch = {},
             modifier =
                 Modifier
@@ -200,6 +202,7 @@ private fun AllTemplateContent(
             templates = templates,
             listState = listState,
             onClickDetail = onClickDetail,
+            onClickHashtag = { tag -> onChipsChange(listOf(tag)) },
         )
     }
 }
@@ -209,6 +212,7 @@ private fun TemplateLazyColumn(
     templates: List<BottariTemplateUiModel>,
     listState: LazyListState,
     onClickDetail: (Long) -> Unit,
+    onClickHashtag: (BottariTemplateHashtagUiModel) -> Unit,
 ) {
     LazyColumn(
         state = listState,
@@ -232,6 +236,7 @@ private fun TemplateLazyColumn(
         items(templates, key = { template -> template.id }) { template ->
             TemplateItem(
                 template = template,
+                onClickHashtag = onClickHashtag,
                 modifier = Modifier.noRippleClickable { onClickDetail(template.id) },
             )
         }
@@ -257,7 +262,7 @@ private fun TemplatePager(
 }
 
 @Composable
-fun TemplateMyEmptyView(
+private fun TemplateMyEmptyView(
     text: String,
     modifier: Modifier = Modifier,
 ) {
@@ -298,9 +303,11 @@ private fun TemplateBottariScreenPreview() {
             BottariTemplateUiModel(
                 id = index.toLong(),
                 title = "우테코출근보따리글자수열다섯자 $index",
+                description = "우테코출근보따리글자수열다섯자 $index",
                 author = "다이스",
                 takenCount = 100_024 + index,
                 items = items,
+                hashtags = List(3) { BottariTemplateHashtagUiModel(it.toLong(), "해시태그 $it") },
             )
         }
 
@@ -311,8 +318,17 @@ private fun TemplateBottariScreenPreview() {
             myListState = rememberLazyListState(),
             onClickDetail = {},
             onQueryChange = {},
+            onChipChange = {},
             onLoadNextPage = {},
             onClickAdd = {},
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TemplateMyEmptyViewPreview() {
+    BottariTheme {
+        TemplateMyEmptyView(text = "항목이 존재하지 않습니다")
     }
 }
