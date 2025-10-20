@@ -2,6 +2,7 @@ package com.bottari.presentation.compose.personal
 
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -29,6 +30,7 @@ import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 fun PersonalBottariScreen(
     bottariTitle: String,
     notificationFlag: Boolean,
+    navigateToEdit: () -> Unit,
     viewModel: PersonalChecklistViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -70,6 +72,7 @@ fun PersonalBottariScreen(
         onClickItem = viewModel::toggleItemChecked,
         onSwipeRight = viewModel::toggleItemChecked,
         onClickCompleteButton = { isSwipeScreen = false },
+        navigateToEdit = navigateToEdit,
     )
 }
 
@@ -86,6 +89,7 @@ private fun PersonalBottariScreen(
     onClickItem: (Long) -> Unit,
     onSwipeRight: (Long) -> Unit,
     onClickCompleteButton: () -> Unit,
+    navigateToEdit: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BackHandler(enabled = isSwipeScreen, onBack = onBackClick)
@@ -108,6 +112,10 @@ private fun PersonalBottariScreen(
     ) { innerPadding ->
         if (uiState.isLoading) {
             IndeterminateCircularIndicator()
+            return@Scaffold
+        }
+        if (uiState.isItemsEmpty) {
+            PersonalChecklistEmptyView(onClickEdit = navigateToEdit,modifier = Modifier.fillMaxSize())
             return@Scaffold
         }
         if (!isSwipeScreen) {
@@ -164,6 +172,7 @@ private fun PersonalBottariScreenPreview() {
             onClickItem = {},
             onSwipeRight = {},
             onClickCompleteButton = {},
+            navigateToEdit = {},
         )
     }
 }

@@ -14,4 +14,5 @@ data class PersonalChecklistUiState(
     val checkedQuantity: Int = bottariItems.count { it.isChecked }
     val isCompleted: Boolean = checkedQuantity == totalQuantity
     val isAnyChecked: Boolean = bottariItems.any { it.isChecked }
+    val isItemsEmpty: Boolean = bottariItems.isEmpty()
 }

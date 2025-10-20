@@ -8,10 +8,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
 import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ComposePersonalChecklistActivity : AppCompatActivity() {
+    private val bottariId: Long by lazy {
+        intent.getLongExtra(EXTRA_BOTTARI_ID, -1)
+    }
+
     private val bottariTitle: String by lazy {
         intent.getStringExtra(EXTRA_BOTTARI_TITLE) ?: ""
     }
@@ -28,9 +33,15 @@ class ComposePersonalChecklistActivity : AppCompatActivity() {
                 PersonalBottariScreen(
                     bottariTitle = bottariTitle,
                     notificationFlag = notificationFlag,
+                    navigateToEdit = { navigateToEdit(bottariId) },
                 )
             }
         }
+    }
+
+    private fun navigateToEdit(id: Long) {
+        val intent = PersonalBottariEditActivity.newIntent(this, id, false)
+        startActivity(intent)
     }
 
     companion object {
