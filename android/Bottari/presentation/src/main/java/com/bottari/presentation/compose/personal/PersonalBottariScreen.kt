@@ -52,7 +52,7 @@ fun PersonalBottariScreen(
         }
     }
 
-    PersonalBottariContent(
+    PersonalBottariScreen(
         uiState = uiState,
         bottariTitle = bottariTitle,
         isSwipeScreen = isSwipeScreen,
@@ -74,7 +74,7 @@ fun PersonalBottariScreen(
 }
 
 @Composable
-private fun PersonalBottariContent(
+private fun PersonalBottariScreen(
     uiState: PersonalChecklistUiState,
     bottariTitle: String,
     isSwipeScreen: Boolean,
@@ -137,7 +137,7 @@ private fun PersonalBottariContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun PersonalBottariContentPreview() {
+private fun PersonalBottariScreenPreview() {
     BottariTheme {
         val previewItems =
             listOf(
@@ -146,7 +146,7 @@ private fun PersonalBottariContentPreview() {
                 ChecklistItemUiModel(3, "여권", true),
                 ChecklistItemUiModel(4, "세면도구", false),
             )
-        PersonalBottariContent(
+        PersonalBottariScreen(
             uiState =
                 PersonalChecklistUiState(
                     bottariItems = previewItems,

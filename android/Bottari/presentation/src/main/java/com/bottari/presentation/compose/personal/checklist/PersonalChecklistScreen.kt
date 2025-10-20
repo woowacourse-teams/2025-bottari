@@ -7,6 +7,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,8 +51,7 @@ fun PersonalChecklistScreen(
 ) {
     Column(
         modifier
-            .padding(horizontal = BottariTheme.spacing.spaceMedium)
-            .padding(top = BottariTheme.spacing.spaceMedium),
+            .padding(horizontal = BottariTheme.spacing.spaceMedium),
         verticalArrangement =
             Arrangement.spacedBy(
                 BottariTheme.spacing.spaceLarge,
@@ -89,6 +89,7 @@ fun PersonalChecklistLazyColumn(
     onClickItem: (Long) -> Unit,
 ) {
     LazyColumn(
+        contentPadding = PaddingValues(bottom = BottariTheme.spacing.spaceLarge),
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
     ) {
         items(

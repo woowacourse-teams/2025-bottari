@@ -1,8 +1,6 @@
 package com.bottari.presentation.compose.personal
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -50,28 +48,31 @@ fun ChecklistTopBar(
             }
         },
         actions = {
-            IconButton(
-                onClick = onResetClick,
-                enabled = isResetIconVisible,
-                modifier = Modifier.size(48.dp),
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_reset),
-                    contentDescription = stringResource(R.string.checklist_btn_reset_description),
-                    modifier = Modifier.size(24.dp),
-                )
+            if (isResetIconVisible) {
+                IconButton(
+                    onClick = onResetClick,
+                    enabled = isResetIconVisible,
+                    modifier = Modifier.size(48.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_reset),
+                        contentDescription = stringResource(R.string.checklist_btn_reset_description),
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
             }
-            Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceXSmall))
-            IconButton(
-                onClick = onSwipeClick,
-                enabled = isSwipeIconVisible,
-                modifier = Modifier.size(48.dp),
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_swipe),
-                    contentDescription = stringResource(R.string.checklist_btn_swipe_description),
-                    modifier = Modifier.size(24.dp),
-                )
+            if (isSwipeIconVisible) {
+                IconButton(
+                    onClick = onSwipeClick,
+                    enabled = isSwipeIconVisible,
+                    modifier = Modifier.size(48.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_swipe),
+                        contentDescription = stringResource(R.string.checklist_btn_swipe_description),
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
             }
         },
         colors =
@@ -86,6 +87,6 @@ fun ChecklistTopBar(
 @Composable
 private fun HomeTopAppBarPreview() {
     BottariTheme {
-        ChecklistTopBar(title = "보따리", {}, {}, {}, true, true)
+        ChecklistTopBar(title = "보따리보따리보따리보따리보따리", {}, {}, {}, true, true)
     }
 }
