@@ -40,7 +40,8 @@ public interface BottariTemplateRepository extends JpaRepository<BottariTemplate
                            m.name AS memberName
                 FROM bottari_template bt
                 JOIN member m ON m.id = bt.member_id
-                WHERE (:query = '' OR MATCH(bt.title) AGAINST(:query IN BOOLEAN MODE))
+                WHERE bt.deleted_at IS NULL 
+                    AND (:query = '' OR MATCH(bt.title) AGAINST(:query IN BOOLEAN MODE))
                     AND(
                             bt.created_at < :lastCreatedAt
                                 OR (bt.created_at = :lastCreatedAt AND bt.id < :lastId)
@@ -66,7 +67,8 @@ public interface BottariTemplateRepository extends JpaRepository<BottariTemplate
                   m.name AS memberName
             FROM bottari_template bt
             JOIN member m ON m.id = bt.member_id
-            WHERE (:query = '' OR MATCH(bt.title) AGAINST(:query IN BOOLEAN MODE))
+            WHERE bt.deleted_at IS NULL
+                AND (:query = '' OR MATCH(bt.title) AGAINST(:query IN BOOLEAN MODE))
                 AND (
                     bt.taken_count < :lastTakenCount
                         OR (bt.taken_count = :lastTakenCount AND bt.id < :lastId)
