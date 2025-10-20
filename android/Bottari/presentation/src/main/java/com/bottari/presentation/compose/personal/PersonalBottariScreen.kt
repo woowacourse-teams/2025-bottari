@@ -104,7 +104,6 @@ private fun PersonalBottariScreen(
                 onResetClick = onResetClick,
                 isResetIconVisible = (!isSwipeScreen && uiState.isAnyChecked),
                 isSwipeIconVisible = (!isSwipeScreen && !uiState.isCompleted),
-                modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceMedium),
             )
         },
         containerColor = LocalBottariBgColor.current,
