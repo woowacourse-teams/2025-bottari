@@ -60,14 +60,14 @@ public class Bottari {
     }
 
     public void updateTitle(final String newTitle) {
-        if (title.title().equals(newTitle)) {
+        if (title.value().equals(newTitle)) {
             throw new BusinessException(ErrorCode.BOTTARI_TITLE_UNCHANGED);
         }
         this.title = new BottariTitle(newTitle);
     }
 
     public String getTitle() {
-        return title.title();
+        return title.value();
     }
 
     @Override

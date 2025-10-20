@@ -19,7 +19,7 @@ public interface TeamSharedItemInfoRepository extends JpaRepository<TeamSharedIt
              SELECT COUNT(tsii) > 0
              FROM TeamSharedItemInfo tsii
              WHERE tsii.teamBottari.id = :teamBottariId
-               AND tsii.name.name = :name
+               AND tsii.name.value = :name
             """)
     boolean existsByTeamBottariIdAndName(
             final Long teamBottariId,

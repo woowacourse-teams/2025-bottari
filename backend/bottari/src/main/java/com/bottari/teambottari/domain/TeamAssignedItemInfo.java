@@ -54,13 +54,13 @@ public class TeamAssignedItemInfo {
     }
 
     public void updateName(final String updatedName) {
-        if (name.name().equals(updatedName)) {
+        if (name.value().equals(updatedName)) {
             return;
         }
         this.name = new ItemName(updatedName);
     }
 
     public String getName() {
-        return name.name();
+        return name.value();
     }
 }

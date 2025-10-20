@@ -17,7 +17,7 @@ public interface TeamPersonalItemRepository extends JpaRepository<TeamPersonalIt
             SELECT COUNT(tpi) > 0
             FROM TeamPersonalItem tpi
             WHERE tpi.teamMember.id = :teamMemberId
-              AND tpi.name.name = :name
+              AND tpi.name.value = :name
             """)
     boolean existsByTeamMemberIdAndName(
             final Long teamMemberId,
