@@ -3,9 +3,11 @@ package com.bottari.presentation.compose.home.template
 import androidx.lifecycle.viewModelScope
 import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.model.common.Pageable
-import com.bottari.domain.usecase.template.FetchBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
+import com.bottari.domain.usecase.template.SearchTemplatesByHashtagUseCase
+import com.bottari.domain.usecase.template.SearchTemplatesByTitleUseCase
 import com.bottari.presentation.common.base.BaseViewModel
+import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
 import com.bottari.presentation.util.debounce
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TemplateViewModel @Inject constructor(
-    private val fetchBottariTemplatesUseCase: FetchBottariTemplatesUseCase,
+    private val searchTemplatesByTitleUseCase: SearchTemplatesByTitleUseCase,
+    private val searchTemplatesByHashtagUseCase: SearchTemplatesByHashtagUseCase,
     private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
 ) : BaseViewModel<TemplateUiState, TemplateUiEvent>(TemplateUiState()) {
     private val debouncedSearch: (Unit) -> Unit
@@ -28,6 +31,8 @@ class TemplateViewModel @Inject constructor(
     }
 
     fun updateSearchWord(searchWord: String) {
+        if (currentState.chips.isNotEmpty()) return
+
         debouncedSearch(Unit)
         updateState { copy(searchWord = searchWord) }
     }
@@ -39,7 +44,7 @@ class TemplateViewModel @Inject constructor(
         updateState { copy(isLoading = true) }
 
         launch {
-            fetchBottariTemplatesUseCase(
+            searchTemplatesByTitleUseCase(
                 query = currentState.searchWord,
                 pageable = currentPageable.nextRequest(),
             ).onSuccess { pageable ->
@@ -54,6 +59,31 @@ class TemplateViewModel @Inject constructor(
 
             updateState { copy(isLoading = false, isFetched = true) }
         }
+    }
+
+    fun searchByChip(chips: List<BottariTemplateHashtagUiModel>) {
+        if (chips.isEmpty()) {
+            searchPageable = Pageable()
+            val uiModels = mainPageable.contents.map { BottariTemplateUiModel.fromDomain(it) }
+            updateState { copy(templates = uiModels, chips = emptyList()) }
+            return
+        }
+
+        if (currentState.chips == chips) return
+
+        updateState { copy(searchWord = "", chips = chips, isLoading = true) }
+        launch {
+            searchTemplatesByHashtagUseCase(
+                hashtagId = chips.first().id,
+                pageable = searchPageable.nextRequest(),
+            ).onSuccess { pageable ->
+                handleSearchTemplatesSuccess(pageable)
+            }.onFailure {
+                emitEvent(TemplateUiEvent.FetchBottariTemplatesFailure)
+            }
+        }
+
+        updateState { copy(isLoading = false) }
     }
 
     private fun handleSearchTemplatesSuccess(pageable: Pageable<BottariTemplate>) {
