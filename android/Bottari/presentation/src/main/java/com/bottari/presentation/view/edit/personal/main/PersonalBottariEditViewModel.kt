@@ -79,6 +79,10 @@ class PersonalBottariEditViewModel @Inject constructor(
         debouncedAlarmState(isActive)
     }
 
+    fun changeBottariRenameDialogState(shouldShow: Boolean) {
+        updateState { copy(showBottariRenameDialog = shouldShow) }
+    }
+
     private fun toggleAlarmState(newActiveState: Boolean) {
         val alarm = currentState.alarm ?: return
         if (alarm.isActive == newActiveState) return

@@ -149,7 +149,6 @@
     <string name="personal_bottari_text">개인</string>
     <string name="all_bottari_text">전체</string>
 
-
     <!-- Personal Bottari -->
     <string name="bottari_home_fetch_failure_text">보따리 목록을 불러오지 못했어요</string>
     <string name="bottari_home_fetch_bottari_failure_text">보따리를 불러오지 못했어요</string>
@@ -223,6 +222,8 @@
     <string name="bottari_edit_create_template_success_text">모두의 보따리에 등록했어요</string>
     <string name="bottari_edit_create_template_failure_text">모두의 보따리에 등록하지 못했어요</string>
     <string name="bottari_edit_toggle_alarm_state_failure_text">알람 상태를 변경하지 못했어요</string>
+    <string name="bottari_edit_item_text">물건 편집</string>
+    <string name="bottari_edit_alarm_text">알람 설정</string>
     <string name="bottari_edit_personal_items_title_text">개인 물건</string>
     <string name="bottari_edit_assigned_items_title_text">담당 물건</string>
     <string name="bottari_edit_shared_items_title_text">공통 물건</string>

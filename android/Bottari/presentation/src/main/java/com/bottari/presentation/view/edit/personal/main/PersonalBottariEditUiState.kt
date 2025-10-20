@@ -12,6 +12,7 @@ data class PersonalBottariEditUiState(
     val alarm: AlarmUiModel? = null,
     val items: List<ChecklistItemUiModel> = emptyList(),
     val isAlarmActive: Boolean = false,
+    val showBottariRenameDialog: Boolean = false,
 ) {
     val isEmpty: Boolean = isFetched && items.isEmpty()
     val isShowAlarm: Boolean = isAlarmActive && alarm != null
