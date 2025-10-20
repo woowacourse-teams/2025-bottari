@@ -3,10 +3,12 @@ package com.bottari.vo;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.support.BadWordValidator;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record ItemName(
+        @Column(name = "name")
         String value
 ) {
 

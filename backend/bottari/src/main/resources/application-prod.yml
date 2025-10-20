@@ -5,7 +5,7 @@ spring:
     hibernate:
       ddl-auto: validate
     defer-datasource-initialization: true
-    open-in-view: true
+    open-in-view: false
     database-platform: org.hibernate.dialect.MySQLDialect
   datasource:
     master:
