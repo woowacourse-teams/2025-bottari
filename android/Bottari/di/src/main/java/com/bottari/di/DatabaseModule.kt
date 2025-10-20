@@ -4,7 +4,6 @@ import android.content.Context
 import com.bottari.data.local.bottari.AlarmDao
 import com.bottari.data.local.bottari.BottariDatabase
 import com.bottari.data.local.bottari.ItemDao
-import com.bottari.data.local.tooltip.TooltipDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,10 +27,4 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideItemDao(database: BottariDatabase): ItemDao = database.itemDao()
-
-    @Provides
-    @Singleton
-    fun provideTooltipDataStore(
-        @ApplicationContext context: Context,
-    ): TooltipDataStore = TooltipDataStore(context)
 }
