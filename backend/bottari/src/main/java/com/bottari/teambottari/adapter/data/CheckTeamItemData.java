@@ -5,6 +5,7 @@ import com.bottari.teambottari.event.CheckTeamSharedItemEvent;
 import java.time.LocalDateTime;
 
 public record CheckTeamItemData(
+        Long teamBottariId,
         Long infoId,
         Long memberId,
         boolean isChecked,
@@ -13,6 +14,7 @@ public record CheckTeamItemData(
 
     public static CheckTeamItemData from(final CheckTeamSharedItemEvent event) {
         return new CheckTeamItemData(
+                event.getTeamBottariId(),
                 event.getInfoId(),
                 event.getMemberId(),
                 event.isChecked(),
@@ -22,6 +24,7 @@ public record CheckTeamItemData(
 
     public static CheckTeamItemData from(final CheckTeamAssignedItemEvent event) {
         return new CheckTeamItemData(
+                event.getTeamBottariId(),
                 event.getInfoId(),
                 event.getMemberId(),
                 event.isChecked(),

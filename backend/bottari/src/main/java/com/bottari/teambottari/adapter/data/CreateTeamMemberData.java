@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 public record CreateTeamMemberData(
         LocalDateTime publishedAt,
+        Long teamBottariId,
         Long memberId,
         String name,
         boolean isOwner
@@ -13,6 +14,7 @@ public record CreateTeamMemberData(
     public static CreateTeamMemberData from(final CreateTeamMemberEvent event) {
         return new CreateTeamMemberData(
                 event.getPublishedAt(),
+                event.getTeamBottariId(),
                 event.getMemberId(),
                 event.getName(),
                 event.isOwner()
