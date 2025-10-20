@@ -37,40 +37,10 @@ jobs:
           TEST_REDIS_PASSWORD=${{ secrets.TEST_REDIS_PASSWORD }}  
           EOF
 
-      # docker compose로 MySQL 기동
-      - name: Start MySQL via docker compose
+      # docker compose 가동
+      - name: Start Docker Compose
         working-directory: ./backend
         run: docker compose -f ci-compose.yml up -d
-
-      # 헬스체크 기다리기 — MySQL      
-      - name: Wait for MySQL (extra safety)  
-        run: |  
-          for i in {1..36}; do  
-            if docker exec bottari-mysql mysqladmin ping -h 127.0.0.1 -uroot -p${{ secrets.TEST_DATABASE_PASSWORD }} --silent; then  
-              echo "MySQL is up!"  
-              exit 0  
-            fi  
-            echo "Waiting for MySQL... ($i/36)"  
-            sleep 5  
-          done  
-          echo "MySQL did not start within 3 minutes."  
-          exit 1  
-  
-      # 헬스체크 기다리기 — Redis      
-      - name: Wait for Redis (extra safety)  
-        run: |  
-          for i in {1..36}; do  
-            if docker exec bottari-redis redis-cli -a ${{  
-              secrets.TEST_REDIS_PASSWORD  
-            }} ping | grep -q PONG; then  
-              echo "Redis is up!"  
-              exit 0  
-            fi  
-            echo "Waiting for Redis... ($i/36)"  
-            sleep 5  
-          done  
-          echo "Redis did not start within 3 minutes."  
-          exit 1 
 
       # Webhook 설정
       - name: Determine Webhook
