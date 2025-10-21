@@ -1,6 +1,7 @@
 package com.bottari.config.datasource;
 
 import javax.sql.DataSource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+@Slf4j
 @Profile("default")
 @Configuration
 @EnableTransactionManagement
@@ -29,6 +31,8 @@ public class LocalDataSourceConfig {
     @Bean
     @Primary
     public DataSource dataSource(final DataSource localDataSource) {
+        log.info("[datasource] mode = SINGLE");
+
         return new LazyConnectionDataSourceProxy(localDataSource);
     }
 }

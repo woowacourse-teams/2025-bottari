@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import java.util.HashMap;
 import java.util.Map;
 import javax.sql.DataSource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+@Slf4j
 @Profile({"dev", "prod"})
 @Configuration
 @EnableTransactionManagement
@@ -49,6 +51,8 @@ public class RoutingDataSourceConfig {
     @Bean
     @Primary
     public DataSource dataSource(final DataSource routingDataSource) {
+        log.info("[datasource] mode = ROUTING (MASTER + REPLICA)");
+
         return new LazyConnectionDataSourceProxy(routingDataSource);
     }
 }
