@@ -1,6 +1,5 @@
-package com.bottari.presentation.compose.edit.personal.component
+package com.bottari.presentation.compose.edit.personal.rename
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
@@ -17,6 +15,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,8 +32,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.edit.personal.rename.BottariRenameUiEvent
-import com.bottari.presentation.compose.edit.personal.rename.BottariRenameViewModel
+import com.bottari.presentation.compose.edit.personal.rename.component.BottariRenameButton
+import com.bottari.presentation.compose.edit.personal.rename.component.BottariRenameTextField
 
 @Composable
 fun ComposeBottariRenameDialog(
@@ -62,6 +64,25 @@ fun ComposeBottariRenameDialog(
         }
     }
 
+    ComposeBottariRenameDialog(
+        bottariTitle = uiState.value.title,
+        onDismissRequest = onDismissRequest,
+        onTitleChange = viewModel::cacheTitleInput,
+        onTitleSave = viewModel::saveBottariTitle,
+        isSavable = uiState.value.isSaveEnabled,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun ComposeBottariRenameDialog(
+    bottariTitle: String,
+    onDismissRequest: () -> Unit,
+    onTitleChange: (String) -> Unit,
+    onTitleSave: () -> Unit,
+    isSavable: Boolean,
+    modifier: Modifier = Modifier,
+) {
     Dialog(
         onDismissRequest = onDismissRequest,
         properties = DialogProperties(usePlatformDefaultWidth = true),
@@ -93,8 +114,8 @@ fun ComposeBottariRenameDialog(
                     }
                 }
                 BottariRenameTextField(
-                    title = uiState.value.title,
-                    onTitleChange = viewModel::cacheTitleInput,
+                    title = bottariTitle,
+                    onTitleChange = onTitleChange,
                     modifier =
                         Modifier
                             .fillMaxWidth()
@@ -102,8 +123,8 @@ fun ComposeBottariRenameDialog(
                             .padding(horizontal = BottariTheme.spacing.spaceLarge),
                 )
                 BottariRenameButton(
-                    onClick = viewModel::saveBottariTitle,
-                    isClickable = uiState.value.isSaveEnabled,
+                    onClick = onTitleSave,
+                    isClickable = isSavable,
                     modifier =
                         Modifier
                             .fillMaxWidth()
@@ -117,68 +138,18 @@ fun ComposeBottariRenameDialog(
     }
 }
 
-@Composable
-private fun ComposeBottariRenameDialog(
-    modifier: Modifier = Modifier,
-    onDismissRequest: () -> Unit = {},
-    title: String = "",
-    onTitleChange: (String) -> Unit = {},
-    onClick: () -> Unit = {},
-    isClickable: Boolean = true,
-) {
-    Dialog(
-        onDismissRequest = onDismissRequest,
-        properties = DialogProperties(usePlatformDefaultWidth = true),
-    ) {
-        BottariBox(
-            modifier = modifier,
-            contentPadding =
-                PaddingValues(
-                    vertical = BottariTheme.spacing.spaceMedium,
-                    horizontal = BottariTheme.spacing.spaceLarge,
-                ),
-        ) {
-            Column {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = stringResource(R.string.bottari_rename_dialog_title_text),
-                        style = BottariTheme.typography.medium16.toTextStyle(),
-                        modifier = Modifier.weight(1f),
-                    )
-                    IconButton(onClick = onDismissRequest) {
-                        Icon(
-                            imageVector = Icons.Default.Clear,
-                            contentDescription = stringResource(R.string.common_close_btn_description),
-                        )
-                    }
-                }
-                BottariRenameTextField(
-                    title = title,
-                    onTitleChange = onTitleChange,
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .background(color = BottariTheme.colors.gray200)
-                            .padding(top = BottariTheme.spacing.spaceSmall),
-                )
-                BottariRenameButton(
-                    onClick = onClick,
-                    isClickable = isClickable,
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = BottariTheme.spacing.spaceMedium),
-                )
-            }
-        }
-    }
-}
-
 @Preview
 @Composable
 private fun ComposeBottariRenameDialogPreview() {
+    var title by remember { mutableStateOf("보따리") }
+
     BottariTheme {
-        ComposeBottariRenameDialog()
+        ComposeBottariRenameDialog(
+            bottariTitle = title,
+            onDismissRequest = {},
+            onTitleChange = { title = it },
+            onTitleSave = {},
+            isSavable = true,
+        )
     }
 }

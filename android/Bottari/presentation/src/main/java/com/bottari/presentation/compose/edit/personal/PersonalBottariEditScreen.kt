@@ -22,8 +22,8 @@ import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
-import com.bottari.presentation.compose.edit.personal.component.ComposeBottariRenameDialog
-import com.bottari.presentation.compose.edit.personal.component.ItemEditContent
+import com.bottari.presentation.compose.edit.personal.rename.ComposeBottariRenameDialog
+import com.bottari.presentation.compose.edit.personal.item.PersonalItemEditScreen
 import com.bottari.presentation.compose.edit.personal.component.PersonalBottariEditTopAppBar
 
 @Composable
@@ -121,7 +121,7 @@ private fun PersonalBottariEditPager(
             pagerState = pagerState,
         ) { page ->
             when (page) {
-                0 -> ItemEditContent(snackbarHostState = snackbarHostState)
+                0 -> PersonalItemEditScreen(snackbarHostState = snackbarHostState)
                 1 -> AlarmEditContent()
             }
         }

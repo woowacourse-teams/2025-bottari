@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.edit.personal.component
+package com.bottari.presentation.compose.edit.personal.item.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues

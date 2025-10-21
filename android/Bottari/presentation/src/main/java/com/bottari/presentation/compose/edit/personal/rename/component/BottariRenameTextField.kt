@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.edit.personal.component
+package com.bottari.presentation.compose.edit.personal.rename.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth

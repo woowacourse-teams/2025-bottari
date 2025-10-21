@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.edit.personal.component
+package com.bottari.presentation.compose.edit.personal.item.component
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
