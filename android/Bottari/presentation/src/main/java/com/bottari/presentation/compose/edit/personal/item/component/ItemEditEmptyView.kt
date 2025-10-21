@@ -33,18 +33,14 @@ fun ItemEditEmptyView(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
         Text(
             text = stringResource(R.string.bottari_personal_item_empty_view_title),
-            style =
-                BottariTheme.typography.bold20
-                    .copy(color = BottariTheme.colors.gray500)
-                    .toTextStyle(),
+            color = BottariTheme.colors.gray500,
+            style = BottariTheme.typography.bold20.toTextStyle(),
         )
         Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
         Text(
             text = stringResource(R.string.bottari_personal_item_empty_view_text),
-            style =
-                BottariTheme.typography.medium16
-                    .copy(color = BottariTheme.colors.gray500)
-                    .toTextStyle(),
+            color = BottariTheme.colors.gray500,
+            style = BottariTheme.typography.medium16.toTextStyle(),
         )
     }
 }
