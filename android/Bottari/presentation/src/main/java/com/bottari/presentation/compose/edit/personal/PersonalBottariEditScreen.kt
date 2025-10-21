@@ -9,7 +9,11 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -36,6 +40,7 @@ fun PersonalBottariEditScreen(
     val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+    var showDialog by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(uiEvent.value) {
         when (uiEvent.value ?: return@LaunchedEffect) {
@@ -63,22 +68,41 @@ fun PersonalBottariEditScreen(
         }
     }
 
-    if (uiState.value.showBottariRenameDialog) {
+    if (showDialog) {
         ComposeBottariRenameDialog(
             bottariTitle = uiState.value.bottariTitle,
-            onDismissRequest = { viewModel.changeBottariRenameDialogState(false) },
+            onDismissRequest = { showDialog = false },
             snackbarHostState = snackbarHostState,
         )
     }
 
+    PersonalBottariEditScreen(
+        bottariTitle = uiState.value.bottariTitle,
+        snackbarHostState = snackbarHostState,
+        onBackClick = onBackClick,
+        onCreateTemplateClick = viewModel::createBottariTemplate,
+        onBottariRenameClick = { showDialog = true },
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun PersonalBottariEditScreen(
+    bottariTitle: String,
+    snackbarHostState: SnackbarHostState,
+    onBackClick: () -> Unit,
+    onCreateTemplateClick: () -> Unit,
+    onBottariRenameClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Scaffold(
         modifier = modifier,
         topBar = {
             PersonalBottariEditTopAppBar(
-                bottariTitle = uiState.value.bottariTitle,
+                bottariTitle = bottariTitle,
                 onBackClick = onBackClick,
-                onBottariRenameClick = { viewModel.changeBottariRenameDialogState(true) },
-                onCreateTemplateClick = viewModel::createBottariTemplate,
+                onBottariRenameClick = onBottariRenameClick,
+                onCreateTemplateClick = onCreateTemplateClick,
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -136,6 +160,12 @@ fun AlarmEditContent(modifier: Modifier = Modifier) {
 @Composable
 private fun PersonalBottariEditScreenPreview() {
     BottariTheme {
-        PersonalBottariEditScreen(onBackClick = {})
+        PersonalBottariEditScreen(
+            bottariTitle = "보따리",
+            snackbarHostState = remember { SnackbarHostState() },
+            onBackClick = {},
+            onCreateTemplateClick = {},
+            onBottariRenameClick = {},
+        )
     }
 }
