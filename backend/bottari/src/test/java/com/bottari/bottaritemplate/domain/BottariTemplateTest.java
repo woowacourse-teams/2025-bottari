@@ -69,7 +69,7 @@ class BottariTemplateTest {
             // when & then
             assertThatThrownBy(() -> new BottariTemplate("title", null, member))
                     .isInstanceOf(BusinessException.class)
-                    .hasMessage("보따리 템플릿 설명은 공백일 수 없습니다.");
+                    .hasMessage("보따리 템플릿 설명은 null일 수 없습니다.");
         }
 
         @DisplayName("보따리 템플릿 설명이 30자를 초과하는 경우, 예외를 던진다.")
