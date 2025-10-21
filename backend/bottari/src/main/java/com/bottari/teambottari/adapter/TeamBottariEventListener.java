@@ -35,6 +35,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
@@ -48,6 +50,7 @@ public class TeamBottariEventListener {
     private final TeamAssignedItemService teamAssignedItemService;
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCreateTeamMemberEvent(final CreateTeamMemberEvent event) {
         final PushMessage pushMessage = new PushMessage(
@@ -64,6 +67,7 @@ public class TeamBottariEventListener {
     }
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCreateTeamSharedItemEvent(final CreateTeamSharedItemEvent event) {
         final List<ReadSharedItemResponse> idempotentInfos =
@@ -92,6 +96,7 @@ public class TeamBottariEventListener {
     }
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleDeleteTeamSharedItemEvent(final DeleteTeamSharedItemEvent event) {
         final List<ReadSharedItemResponse> idempotentInfos =
@@ -120,6 +125,7 @@ public class TeamBottariEventListener {
     }
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCheckTeamSharedItemEvent(final CheckTeamSharedItemEvent event) {
         final PushMessage message = new PushMessage(
@@ -136,6 +142,7 @@ public class TeamBottariEventListener {
     }
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCheckTeamAssignedItemEvent(final CheckTeamAssignedItemEvent event) {
         final PushMessage message = new PushMessage(
@@ -152,6 +159,7 @@ public class TeamBottariEventListener {
     }
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleCreateAssignedItemEvent(final CreateAssignedItemEvent event) {
         final List<ReadAssignedItemResponse> idempotentInfos =
@@ -180,6 +188,7 @@ public class TeamBottariEventListener {
     }
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleChangeAssignedItemEvent(final ChangeTeamAssignedItemEvent event) {
         final PushMessage message = new PushMessage(
@@ -196,6 +205,7 @@ public class TeamBottariEventListener {
     }
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleDeleteAssignedItemEvent(final DeleteAssignedItemEvent event) {
         final List<ReadAssignedItemResponse> idempotentInfos = teamAssignedItemService.getAllByTeamBottariId(
@@ -224,6 +234,7 @@ public class TeamBottariEventListener {
     }
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleExitTeamMemberEvent(final ExitTeamMemberEvent event) {
         final PushMessage message = new PushMessage(
