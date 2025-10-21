@@ -13,5 +13,5 @@ data class PersonalItemEditUiState(
     val items: List<ChecklistItemUiModel> = emptyList(),
 ) {
     val isEmpty: Boolean = !isLoading && isFetched && items.isEmpty()
-    val isDuplicate: Boolean = isEmpty.not() && items.any { item -> item.name == itemName }
+    val isDuplicate: Boolean = isEmpty.not() && items.any { item -> item.name == itemName.trim() }
 }

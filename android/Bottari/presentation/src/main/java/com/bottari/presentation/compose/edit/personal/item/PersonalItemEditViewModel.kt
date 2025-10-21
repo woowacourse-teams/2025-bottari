@@ -41,7 +41,7 @@ class PersonalItemEditViewModel @Inject constructor(
     }
 
     fun saveItem() {
-        val itemName = currentState.itemName
+        val itemName = currentState.itemName.trim()
         if (itemName.isBlank()) return
         launch {
             saveItemUseCase(
