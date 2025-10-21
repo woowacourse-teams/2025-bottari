@@ -48,7 +48,6 @@ class BottariRenameViewModel @Inject constructor(
     }
 
     companion object {
-        const val KEY_INITIAL_TITLE = "KEY_INITIAL_TITLE"
         const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
         private const val ERROR_REQUIRE_NEW_TITLE = "[ERROR] 보따리 ID가 없습니다"
     }
