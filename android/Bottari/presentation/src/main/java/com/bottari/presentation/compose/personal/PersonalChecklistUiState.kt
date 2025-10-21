@@ -1,14 +1,14 @@
 package com.bottari.presentation.compose.personal
 
-import com.bottari.presentation.model.bottari.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 
 data class PersonalChecklistUiState(
     val isLoading: Boolean = false,
-    val initialItems: List<ChecklistItemUiModel> = emptyList(),
-    val bottariItems: List<ChecklistItemUiModel> = emptyList(),
+    val initialItems: List<PersonalChecklistItemUiModel> = emptyList(),
+    val bottariItems: List<PersonalChecklistItemUiModel> = emptyList(),
     val isTooltipClosed: Boolean = true,
 ) {
-    val nonCheckedItems: List<ChecklistItemUiModel> =
+    val nonCheckedItems: List<PersonalChecklistItemUiModel> =
         bottariItems.filterNot { it.isChecked }
     val totalQuantity: Int = bottariItems.size
     val checkedQuantity: Int = bottariItems.count { it.isChecked }

@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.databinding.ItemChipBinding
-import com.bottari.presentation.model.bottari.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 
 class PersonalBottariEditItemViewHolder private constructor(
     private val binding: ItemChipBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: ChecklistItemUiModel) {
+    fun bind(item: PersonalChecklistItemUiModel) {
         binding.tvChecklistItemMiniTitle.text = item.name
     }
 

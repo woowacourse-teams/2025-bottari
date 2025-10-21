@@ -7,12 +7,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.ItemChipBinding
-import com.bottari.presentation.model.bottari.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 
 class SharedItemViewHolder(
     private val binding: ItemChipBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: ChecklistItemUiModel) {
+    fun bind(item: PersonalChecklistItemUiModel) {
         binding.tvChecklistItemMiniTitle.text = item.name
         val bgColorRes = if (item.isChecked) R.color.primary else R.color.gray_500
         val bgColor = ContextCompat.getColor(itemView.context, bgColorRes)

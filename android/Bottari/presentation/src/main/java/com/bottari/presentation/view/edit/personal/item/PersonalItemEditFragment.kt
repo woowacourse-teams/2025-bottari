@@ -16,7 +16,7 @@ import com.bottari.presentation.common.extension.applyImeBottomPadding
 import com.bottari.presentation.common.extension.dpToPx
 import com.bottari.presentation.common.extension.showSnackbar
 import com.bottari.presentation.databinding.FragmentPersonalItemEditBinding
-import com.bottari.presentation.model.bottari.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 import com.bottari.presentation.view.edit.personal.item.adapter.PersonalItemEditAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -129,7 +129,7 @@ class PersonalItemEditFragment :
         binding.tvBottariTitle.text = title
     }
 
-    private fun handleItemState(items: List<ChecklistItemUiModel>) {
+    private fun handleItemState(items: List<PersonalChecklistItemUiModel>) {
         adapter.submitList(items)
     }
 

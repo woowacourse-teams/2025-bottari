@@ -10,7 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.personal.ChecklistProgressHeader
-import com.bottari.presentation.model.bottari.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
+import com.bottari.presentation.model.bottari.team.ChecklistItemUiModel
 import com.spartapps.swipeablecards.state.SwipeableCardsState
 
 @Composable
@@ -19,8 +20,8 @@ fun SwipeScreen(
     checkedQuantity: Int,
     totalQuantity: Int,
     isComplete: Boolean,
-    onLeftSwipe: (Long) -> Unit,
-    onRightSwipe: (Long) -> Unit,
+    onLeftSwipe: (ChecklistItemUiModel) -> Unit,
+    onRightSwipe: (ChecklistItemUiModel) -> Unit,
     onClickCompleteButton: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -69,11 +70,11 @@ fun SwipeScreen(
 private fun SwipeScreenPreview() {
     SwipeScreen(
         listOf(
-            ChecklistItemUiModel(1, "눈누난나아무튼엄청긴글자", false),
-            ChecklistItemUiModel(1, "테스트", false),
-            ChecklistItemUiModel(1, "테스트", false),
-            ChecklistItemUiModel(1, "테스트", false),
-            ChecklistItemUiModel(1, "테스트", false),
+            PersonalChecklistItemUiModel(1, "눈누난나아무튼엄청긴글자", false),
+            PersonalChecklistItemUiModel(1, "테스트", false),
+            PersonalChecklistItemUiModel(1, "테스트", false),
+            PersonalChecklistItemUiModel(1, "테스트", false),
+            PersonalChecklistItemUiModel(1, "테스트", false),
         ),
         3,
         7,

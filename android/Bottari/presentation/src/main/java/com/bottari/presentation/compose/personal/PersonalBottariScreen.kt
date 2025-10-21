@@ -24,7 +24,8 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.personal.checklist.PersonalChecklistScreen
 import com.bottari.presentation.compose.personal.swipe.SwipeScreen
-import com.bottari.presentation.model.bottari.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
+import com.bottari.presentation.model.bottari.team.ChecklistItemUiModel
 
 @Composable
 fun PersonalBottariScreen(
@@ -70,7 +71,7 @@ fun PersonalBottariScreen(
         onResetClick = viewModel::resetItemsCheckState,
         onCloseToolTip = viewModel::closeTooltip,
         onClickItem = viewModel::toggleItemChecked,
-        onSwipeRight = viewModel::toggleItemChecked,
+        onSwipeRight = {item -> viewModel.toggleItemChecked(item.id)},
         onClickCompleteButton = { isSwipeScreen = false },
         navigateToEdit = navigateToEdit,
     )
@@ -87,7 +88,7 @@ private fun PersonalBottariScreen(
     onResetClick: () -> Unit,
     onCloseToolTip: () -> Unit,
     onClickItem: (Long) -> Unit,
-    onSwipeRight: (Long) -> Unit,
+    onSwipeRight: (ChecklistItemUiModel) -> Unit,
     onClickCompleteButton: () -> Unit,
     navigateToEdit: () -> Unit,
     modifier: Modifier = Modifier,
@@ -151,10 +152,10 @@ private fun PersonalBottariScreenPreview() {
     BottariTheme {
         val previewItems =
             listOf(
-                ChecklistItemUiModel(1, "양말", false),
-                ChecklistItemUiModel(2, "충전기", true),
-                ChecklistItemUiModel(3, "여권", true),
-                ChecklistItemUiModel(4, "세면도구", false),
+                PersonalChecklistItemUiModel(1, "양말", false),
+                PersonalChecklistItemUiModel(2, "충전기", true),
+                PersonalChecklistItemUiModel(3, "여권", true),
+                PersonalChecklistItemUiModel(4, "세면도구", false),
             )
         PersonalBottariScreen(
             uiState =
