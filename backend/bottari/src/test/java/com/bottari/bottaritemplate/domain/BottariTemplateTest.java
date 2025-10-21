@@ -7,6 +7,7 @@ import com.bottari.error.BusinessException;
 import com.bottari.member.domain.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -59,17 +60,16 @@ class BottariTemplateTest {
     @Nested
     class ValidateDescriptionTest {
 
-        @DisplayName("보따리 템플릿 설명이 공백인 경우, 예외를 던진다.")
-        @ParameterizedTest
-        @ValueSource(strings = {"", "   "})
-        void validateDescription_Blank(final String description) {
+        @DisplayName("보따리 템플릿 설명이 null인 경우, 예외를 던진다.")
+        @Test
+        void validateDescription_Null() {
             // given
             final Member member = new Member("ssaid", "name");
 
             // when & then
-            assertThatThrownBy(() -> new BottariTemplate("title", description, member))
+            assertThatThrownBy(() -> new BottariTemplate("title", null, member))
                     .isInstanceOf(BusinessException.class)
-                    .hasMessage("보따리 템플릿 설명은 공백일 수 없습니다.");
+                    .hasMessage("보따리 템플릿 설명은 null일 수 없습니다.");
         }
 
         @DisplayName("보따리 템플릿 설명이 30자를 초과하는 경우, 예외를 던진다.")

@@ -74,8 +74,8 @@ public class BottariTemplate extends BaseTimeEntity {
     }
 
     private void validateDescription(final String description) {
-        if (description.isBlank()) {
-            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_DESCRIPTION_BLANK);
+        if (description == null) {
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_DESCRIPTION_NULL);
         }
         if (description.length() > 30) {
             throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_DESCRIPTION_TOO_LONG, "최대 30자까지 입력 가능합니다.");
