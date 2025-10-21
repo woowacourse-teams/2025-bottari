@@ -19,6 +19,7 @@ import com.bottari.presentation.common.extension.showKeyboard
 import com.bottari.presentation.databinding.FragmentTeamBottariItemEditBinding
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.view.edit.team.TeamBottariEditNavigator
+import com.bottari.presentation.view.edit.team.item.main.TeamItemEditViewModel.Companion.KEY_TAB_TYPE
 import com.bottari.presentation.view.edit.team.item.main.adapter.TeamItemEditFragmentAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -102,7 +103,7 @@ class TeamItemEditFragment :
     }
 
     private fun selectInitialTab() {
-        val type = requireArguments().getParcelableCompat<BottariItemTypeUiModel>(ARG_KEY_TAB_TYPE)
+        val type = requireArguments().getParcelableCompat<BottariItemTypeUiModel>(KEY_TAB_TYPE)
         binding.vpTeamBottariItemEdit
             .setCurrentItem(TeamItemEditFragmentAdapter.positionFromType(type), false)
     }
@@ -135,7 +136,6 @@ class TeamItemEditFragment :
 
     companion object {
         private const val ARG_KEY_BOTTARI_ID = "ARG_KEY_BOTTARI_ID"
-        private const val ARG_KEY_TAB_TYPE = "ARG_KEY_TAB_TYPE"
         private const val DUPLICATE_BORDER_WIDTH_DP = 2
         private const val SEND_BUTTON_ENABLED_ALPHA = 1f
         private const val SEND_BUTTON_DISABLED_ALPHA = 0.5f
@@ -148,7 +148,7 @@ class TeamItemEditFragment :
                 arguments =
                     bundleOf(
                         ARG_KEY_BOTTARI_ID to bottariId,
-                        TeamItemEditViewModel.KEY_TAB_TYPE to requireTabType,
+                        KEY_TAB_TYPE to requireTabType,
                     )
             }
     }
