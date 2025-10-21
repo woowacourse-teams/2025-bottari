@@ -8,7 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
 import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
+import com.bottari.presentation.compose.edit.personal.ComposePersonalBottariEditActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,7 +40,7 @@ class ComposePersonalChecklistActivity : AppCompatActivity() {
     }
 
     private fun navigateToEdit(id: Long) {
-        val intent = PersonalBottariEditActivity.newIntent(this, id, false)
+        val intent = ComposePersonalBottariEditActivity.newIntent(this, id, false)
         startActivity(intent)
     }
 

@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.edit.personal.item
+package com.bottari.presentation.compose.edit.personal.item
 
 sealed interface PersonalItemEditUiEvent {
     data object SaveBottariItemFailure : PersonalItemEditUiEvent

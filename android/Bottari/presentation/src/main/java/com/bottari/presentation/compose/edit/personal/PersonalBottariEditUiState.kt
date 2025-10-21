@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.edit.personal.main
+package com.bottari.presentation.compose.edit.personal
 
 import com.bottari.domain.model.bottari.personal.PersonalBottari
 import com.bottari.presentation.model.alarm.AlarmUiModel
