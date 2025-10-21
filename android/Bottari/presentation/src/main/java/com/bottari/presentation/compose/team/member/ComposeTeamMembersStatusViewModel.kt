@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.checklist.team.main.member
+package com.bottari.presentation.compose.team.member
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -9,7 +9,7 @@ import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByMemberMessageUseCase
-import com.bottari.presentation.common.base.BaseViewModel
+import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.team.member.TeamMemberStatusUiModel
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import com.bottari.presentation.util.debounce
@@ -26,15 +26,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TeamMembersStatusViewModel @Inject constructor(
+class ComposeTeamMembersStatusViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamMembersStatusUseCase: FetchTeamMembersStatusUseCase,
     private val sendRemindByMemberMessageUseCase: SendRemindByMemberMessageUseCase,
     private val getMemberIdUseCase: GetMemberIdUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
-) : BaseViewModel<TeamMembersStatusUiState, TeamMembersStatusUiEvent>(
-        TeamMembersStatusUiState(),
+) : FlowBaseViewModel<ComposeTeamMembersStatusUiState, ComposeTeamMembersStatusUiEvent>(
+        ComposeTeamMembersStatusUiState(),
     ) {
     private val teamBottariId: Long =
         stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_TEAM_BOTTARI_ID)
@@ -67,18 +67,18 @@ class TeamMembersStatusViewModel @Inject constructor(
     private fun sendRemindMessage(member: TeamMemberUiModel) {
         val memberId =
             member.id ?: run {
-                emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure)
+                emitEvent(ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure)
                 return
             }
         launch {
             sendRemindByMemberMessageUseCase(teamBottariId, memberId)
                 .onSuccess {
                     emitEvent(
-                        TeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess(
+                        ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess(
                             member.nickname,
                         ),
                     )
-                }.onFailure { emitEvent(TeamMembersStatusUiEvent.SendRemindByMemberMessageFailure) }
+                }.onFailure { emitEvent(ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure) }
         }
     }
 
@@ -88,7 +88,7 @@ class TeamMembersStatusViewModel @Inject constructor(
                 .onSuccess { id ->
                     updateState { copy(myId = id) }
                     fetchTeamMembersStatus()
-                }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMemberIdFailure) }
+                }.onFailure { emitEvent(ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure) }
         }
     }
 
@@ -104,7 +104,7 @@ class TeamMembersStatusViewModel @Inject constructor(
                             membersStatus = updated,
                         )
                     }
-                }.onFailure { emitEvent(TeamMembersStatusUiEvent.FetchMembersStatusFailure) }
+                }.onFailure { emitEvent(ComposeTeamMembersStatusUiEvent.FetchMembersStatusFailure) }
             updateState { copy(isLoading = false) }
         }
     }
