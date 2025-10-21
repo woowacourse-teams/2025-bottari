@@ -1,7 +1,6 @@
 package com.bottari.presentation.view.edit.alarm
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.usecase.alarm.FindAlarmUseCase
@@ -11,13 +10,12 @@ import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.alarm.AlarmTypeUiModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
-import com.bottari.presentation.model.alarm.AlarmUiModel.Companion.DEFAULT_ALARM_UI_MODEL
 import com.bottari.presentation.model.alarm.RepeatDayUiModel
 import com.bottari.presentation.util.AlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.onCompletion
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
@@ -38,31 +36,36 @@ class AlarmEditViewModel @Inject constructor(
     }
 
     fun updateAlarm() {
-        val alarm = currentState.alarm?.toDomain() ?: return
+        val alarm = currentState.alarm.toDomain()
         saveAlarm(alarm)
     }
 
     fun updateAlarmType(alarmTypeUiModel: AlarmTypeUiModel) {
-        val alarm = currentState.alarm ?: return
+        val alarm = currentState.alarm
         updateState { copy(alarm = alarm.copy(type = alarmTypeUiModel)) }
     }
 
+    fun updateAlarmActivate(isActive: Boolean) {
+        val alarm = currentState.alarm
+        updateState { copy(alarm = alarm.copy(isActive = isActive)) }
+    }
+
     fun updateAlarmTime(time: LocalTime) {
-        val alarm = currentState.alarm ?: return
+        val alarm = currentState.alarm
         updateState { copy(alarm = alarm.copy(time = time)) }
     }
 
     fun updateAlarmDate(date: LocalDate) {
-        val alarm = currentState.alarm ?: return
+        val alarm = currentState.alarm
         if (alarm.type != AlarmTypeUiModel.NON_REPEAT) return
         updateState { copy(alarm = alarm.copy(date = date)) }
     }
 
-    fun updateDaysOfWeek(dayOfWeek: RepeatDayUiModel) {
-        val alarm = currentState.alarm ?: return
+    fun updateRepeatDays(repeatDay: RepeatDayUiModel) {
+        val alarm = currentState.alarm
         val newRepeatDays =
             alarm.repeatDays.map {
-                if (it.dayOfWeek != dayOfWeek.dayOfWeek) return@map it
+                if (it.dayOfWeek != repeatDay.dayOfWeek) return@map it
                 it.copy(isChecked = !it.isChecked)
             }
         val newAlarm = alarm.copy(repeatDays = newRepeatDays)
@@ -71,18 +74,16 @@ class AlarmEditViewModel @Inject constructor(
 
     private fun fetchAlarm() {
         updateState { copy(isLoading = true) }
-        findAlarmUseCase(bottariId)
-            .onEach { alarm ->
-                updateState {
-                    copy(
-                        isLoading = false,
-                        alarm = alarm?.let(AlarmUiModel::fromDomain) ?: DEFAULT_ALARM_UI_MODEL,
-                    )
-                }
-            }.catch {
-                updateState { copy(isLoading = false) }
-                emitEvent(AlarmUiEvent.FetchAlarmFailure)
-            }.launchIn(viewModelScope)
+        launch {
+            val alarm =
+                findAlarmUseCase(bottariId)
+                    .catch {
+                        emitEvent(AlarmUiEvent.FetchAlarmFailure)
+                    }.onCompletion {
+                        updateState { copy(isLoading = false) }
+                    }.firstOrNull() ?: return@launch
+            updateState { copy(alarm = AlarmUiModel.fromDomain(alarm)) }
+        }
     }
 
     private fun saveAlarm(alarm: Alarm) {
