@@ -10,7 +10,7 @@ data class PersonalItemEditUiState(
     val bottariId: Long = 0,
     val title: String = "",
     val itemName: String = "",
-    var items: List<ChecklistItemUiModel> = emptyList(),
+    val items: List<ChecklistItemUiModel> = emptyList(),
 ) {
     val isEmpty: Boolean = !isLoading && isFetched && items.isEmpty()
     val isDuplicate: Boolean = isEmpty.not() && items.any { item -> item.name == itemName }
