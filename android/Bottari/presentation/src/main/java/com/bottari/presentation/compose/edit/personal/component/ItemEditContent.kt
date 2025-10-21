@@ -122,7 +122,7 @@ fun ItemEditContent(
                 itemName = uiState.value.itemName,
                 onNameChange = viewModel::updateItemName,
                 onSaveItem = viewModel::saveItem,
-                isDuplicate = uiState.value.isDuplicate,
+                isError = uiState.value.isInvalidateItem,
                 modifier =
                     Modifier
                         .height(48.dp)
@@ -130,8 +130,8 @@ fun ItemEditContent(
                         .padding(start = BottariTheme.spacing.spaceSmall),
             )
             IconButton(
-                onClick = { viewModel.saveItem() },
-                enabled = uiState.value.isDuplicate.not(),
+                onClick = viewModel::saveItem,
+                enabled = uiState.value.isSavable,
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Send,
@@ -181,7 +181,7 @@ private fun ItemEditContent(
     items: List<ChecklistItemUiModel>,
     itemName: String,
     onItemNameChange: (String) -> Unit,
-    isDuplicate: Boolean,
+    isError: Boolean,
     onSaveClick: () -> Unit,
     onDeleteClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
@@ -222,7 +222,7 @@ private fun ItemEditContent(
                 itemName = itemName,
                 onNameChange = onItemNameChange,
                 onSaveItem = {},
-                isDuplicate = isDuplicate,
+                isError = isError,
                 modifier =
                     Modifier
                         .height(48.dp)
@@ -239,7 +239,7 @@ private fun ItemEditContent(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun ItemEditContentPreview() {
     ItemEditContent(
@@ -248,7 +248,7 @@ private fun ItemEditContentPreview() {
         items = listOf(ChecklistItemUiModel(id = 1L, name = "물건", isChecked = false)),
         itemName = "",
         onItemNameChange = {},
-        isDuplicate = false,
+        isError = false,
         onSaveClick = {},
         onDeleteClick = {},
     )

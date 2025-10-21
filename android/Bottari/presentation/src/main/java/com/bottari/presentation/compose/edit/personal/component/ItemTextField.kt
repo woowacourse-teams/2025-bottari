@@ -25,7 +25,7 @@ fun ItemTextField(
     itemName: String,
     onNameChange: (String) -> Unit,
     onSaveItem: () -> Unit,
-    isDuplicate: Boolean,
+    isError: Boolean,
     modifier: Modifier = Modifier,
 ) {
     OutlinedTextField(
@@ -39,7 +39,7 @@ fun ItemTextField(
                 style = BottariTheme.typography.regular14.toTextStyle(),
             )
         },
-        isError = isDuplicate,
+        isError = isError,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
         keyboardActions = KeyboardActions(onSend = { onSaveItem() }),
         singleLine = true,
@@ -68,7 +68,7 @@ private fun ItemTextFieldPreview() {
             itemName = item,
             onNameChange = { item = it },
             onSaveItem = {},
-            isDuplicate = false,
+            isError = false,
         )
     }
 }

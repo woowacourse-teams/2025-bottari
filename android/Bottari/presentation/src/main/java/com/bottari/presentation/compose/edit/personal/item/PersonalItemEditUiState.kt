@@ -13,5 +13,13 @@ data class PersonalItemEditUiState(
     val items: List<ChecklistItemUiModel> = emptyList(),
 ) {
     val isEmpty: Boolean = !isLoading && isFetched && items.isEmpty()
-    val isDuplicate: Boolean = isEmpty.not() && items.any { item -> item.name == itemName.trim() }
+    private val isDuplicate: Boolean =
+        isEmpty.not() && items.any { item -> item.name == itemName.trim() }
+    private val isExceed: Boolean = itemName.length > MAX_ITEM_NAME_LENGTH
+    val isInvalidateItem: Boolean = isDuplicate || isExceed
+    val isSavable: Boolean = itemName.isNotBlank() && isInvalidateItem.not()
+
+    companion object {
+        private const val MAX_ITEM_NAME_LENGTH = 20
+    }
 }

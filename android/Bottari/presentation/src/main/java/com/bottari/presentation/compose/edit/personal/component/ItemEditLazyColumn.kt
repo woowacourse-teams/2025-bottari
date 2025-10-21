@@ -79,6 +79,7 @@ private fun BottariItem(
                 Modifier
                     .align(Alignment.CenterStart)
                     .padding(start = BottariTheme.spacing.space2xLarge),
+            maxLines = 1,
             style = BottariTheme.typography.medium16.toTextStyle(),
         )
         IconButton(

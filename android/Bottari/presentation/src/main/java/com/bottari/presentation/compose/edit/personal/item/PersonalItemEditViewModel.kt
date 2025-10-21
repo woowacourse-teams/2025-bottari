@@ -42,7 +42,7 @@ class PersonalItemEditViewModel @Inject constructor(
 
     fun saveItem() {
         val itemName = currentState.itemName.trim()
-        if (itemName.isBlank()) return
+        if (currentState.isSavable.not()) return
         launch {
             saveItemUseCase(
                 bottariId = currentState.bottariId,
