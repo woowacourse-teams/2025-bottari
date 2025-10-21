@@ -32,9 +32,6 @@
 <!--            android:launchMode="singleTask"-->
 <!--            android:windowSoftInputMode="adjustNothing" />-->
         <activity
-            android:name=".view.checklist.personal.ChecklistActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.edit.personal.PersonalBottariEditActivity"
             android:exported="false" />
         <activity
@@ -42,9 +39,6 @@
             android:exported="false" />
         <activity
             android:name=".view.edit.team.TeamBottariEditActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.checklist.team.TeamChecklistActivity"
             android:exported="false" />
         <activity
             android:name=".view.invite.InviteActivity"
