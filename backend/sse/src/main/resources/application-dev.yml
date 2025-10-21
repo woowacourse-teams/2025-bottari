@@ -1,3 +1,15 @@
+server:
+  tomcat:
+    threads:
+      max: ${TOMCAT_THREADS_MAX:200}
+      min-spare: ${TOMCAT_THREADS_MIN_SPARE:10}
+
+    max-connections: ${TOMCAT_MAX_CONNECTIONS:8192}
+    accept-count: ${TOMCAT_ACCEPT_COUNT:100}
+
+    connection-timeout: ${TOMCAT_CONNECTION_TIMEOUT:60s}
+    keep-alive-timeout: ${TOMCAT_KEEP_ALIVE_TIMEOUT:60s}
+
 spring:
   application:
     name: sse
