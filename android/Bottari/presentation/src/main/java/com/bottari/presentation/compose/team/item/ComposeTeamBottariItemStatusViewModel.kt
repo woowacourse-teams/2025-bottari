@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.checklist.team.main.status
+package com.bottari.presentation.compose.team.item
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -8,11 +8,11 @@ import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.FetchTeamStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByItemUseCase
-import com.bottari.presentation.common.base.BaseViewModel
+import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
-import com.bottari.presentation.model.bottari.team.TeamBottariProductStatusUiModel
-import com.bottari.presentation.model.bottari.team.TeamChecklistTypeUiModel
-import com.bottari.presentation.model.bottari.team.TeamProductStatusItem
+import com.bottari.presentation.model.bottari.team.TeamBottariUiModelStatus
+import com.bottari.presentation.model.bottari.team.TeamChecklistTypeUiModelStatus
+import com.bottari.presentation.model.bottari.team.TeamItemStatus
 import com.bottari.presentation.util.debounce
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -27,14 +27,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TeamBottariStatusViewModel @Inject constructor(
+class ComposeTeamBottariItemStatusViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamStatusUseCase: FetchTeamStatusUseCase,
     private val sendRemindByItemUseCase: SendRemindByItemUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
-) : BaseViewModel<TeamBottariStatusUiState, TeamBottariStatusUiEvent>(
-        TeamBottariStatusUiState(),
+) : FlowBaseViewModel<ComposeTeamBottariItemStatusUiState, ComposeTeamBottariItemStatusUiEvent>(
+        ComposeTeamBottariItemStatusUiState(),
     ) {
     private val teamBottariId: Long =
         stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
@@ -55,22 +55,22 @@ class TeamBottariStatusViewModel @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch { disconnectTeamEventUseCase() }
     }
 
-    fun selectItem(item: TeamBottariProductStatusUiModel) {
+    fun selectItem(item: TeamBottariUiModelStatus) {
         updateState { copy(selectedProduct = item) }
     }
 
     private fun sendRemindByItem() {
         val selectedProduct =
             currentState.selectedProduct ?: return emitEvent(
-                TeamBottariStatusUiEvent.SendRemindFailure,
+                ComposeTeamBottariItemStatusUiEvent.SendRemindFailure,
             )
         val itemId = selectedProduct.id
         val itemType = selectedProduct.type.toTypeString()
 
         launch {
             sendRemindByItemUseCase(itemId, itemType)
-                .onSuccess { emitEvent(TeamBottariStatusUiEvent.SendRemindSuccess) }
-                .onFailure { emitEvent(TeamBottariStatusUiEvent.SendRemindFailure) }
+                .onSuccess { emitEvent(ComposeTeamBottariItemStatusUiEvent.SendRemindSuccess) }
+                .onFailure { emitEvent(ComposeTeamBottariItemStatusUiEvent.SendRemindFailure) }
         }
     }
 
@@ -80,7 +80,7 @@ class TeamBottariStatusViewModel @Inject constructor(
         launch {
             fetchTeamStatusUseCase(teamBottariId)
                 .onSuccess { teamBottariStatus -> handleFetchTeamStatusSuccess(teamBottariStatus) }
-                .onFailure { emitEvent(TeamBottariStatusUiEvent.FetchTeamBottariStatusFailure) }
+                .onFailure { emitEvent(ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure) }
 
             updateState { copy(isLoading = false) }
         }
@@ -99,16 +99,16 @@ class TeamBottariStatusViewModel @Inject constructor(
     }
 
     private fun generateTeamItemsList(
-        sharedItems: List<TeamBottariProductStatusUiModel>,
-        assignedItems: List<TeamBottariProductStatusUiModel>,
-    ): List<TeamProductStatusItem> =
+        sharedItems: List<TeamBottariUiModelStatus>,
+        assignedItems: List<TeamBottariUiModelStatus>,
+    ): List<TeamItemStatus> =
         buildList {
             if (sharedItems.isNotEmpty()) {
-                add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.SHARED))
+                add(TeamChecklistTypeUiModelStatus(BottariItemTypeUiModel.SHARED))
                 addAll(sharedItems)
             }
             if (assignedItems.isNotEmpty()) {
-                add(TeamChecklistTypeUiModel(BottariItemTypeUiModel.ASSIGNED()))
+                add(TeamChecklistTypeUiModelStatus(BottariItemTypeUiModel.ASSIGNED()))
                 addAll(assignedItems)
             }
         }
@@ -116,30 +116,21 @@ class TeamBottariStatusViewModel @Inject constructor(
     private fun handleFetchTeamStatusSuccess(teamBottariStatus: TeamBottariStatus) {
         val sharedItems =
             teamBottariStatus.sharedItems.map {
-                TeamBottariProductStatusUiModel.fromDomain(
+                TeamBottariUiModelStatus.fromDomain(
                     it,
                     BottariItemTypeUiModel.SHARED,
                 )
             }
         val assignedItems =
             teamBottariStatus.assignedItems.map {
-                TeamBottariProductStatusUiModel.fromDomain(
+                TeamBottariUiModelStatus.fromDomain(
                     it,
                     BottariItemTypeUiModel.ASSIGNED(),
                 )
             }
-        val teamStatusListItems = generateTeamItemsList(sharedItems, assignedItems)
-        val allProductItems =
-            teamStatusListItems.filterIsInstance<TeamBottariProductStatusUiModel>()
-        val selectedProduct =
-            allProductItems.find { it.id == currentState.selectedProduct?.id }
-                ?: allProductItems.firstOrNull()
 
         updateState {
             copy(
-                sharedItems = sharedItems,
-                assignedItems = assignedItems,
-                teamChecklistItems = teamStatusListItems,
                 selectedProduct = selectedProduct,
             )
         }
