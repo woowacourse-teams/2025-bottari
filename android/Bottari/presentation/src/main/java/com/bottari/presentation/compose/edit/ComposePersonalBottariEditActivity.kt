@@ -20,7 +20,6 @@ class ComposePersonalBottariEditActivity : AppCompatActivity() {
             BottariTheme {
                 PersonalBottariEditScreen(
                     onBackClick = { finish() },
-                    isNewBottari = intent.getBooleanExtra(EXTRA_IS_NEW_BOTTARI, false),
                 )
             }
         }

@@ -29,7 +29,6 @@ import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditViewM
 @Composable
 fun PersonalBottariEditScreen(
     onBackClick: () -> Unit,
-    isNewBottari: Boolean,
     modifier: Modifier = Modifier,
     viewModel: PersonalBottariEditViewModel = viewModel(),
 ) {
@@ -37,12 +36,6 @@ fun PersonalBottariEditScreen(
     val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
-
-    LaunchedEffect(Unit) {
-        if (isNewBottari) {
-            snackbarHostState.showSnackbar(context.getString(R.string.bottari_create_success_text))
-        }
-    }
 
     LaunchedEffect(uiEvent.value) {
         when (uiEvent.value ?: return@LaunchedEffect) {
@@ -134,9 +127,6 @@ fun AlarmEditContent(modifier: Modifier = Modifier) {
 @Composable
 private fun PersonalBottariEditScreenPreview() {
     BottariTheme {
-        PersonalBottariEditScreen(
-            onBackClick = {},
-            isNewBottari = false,
-        )
+        PersonalBottariEditScreen(onBackClick = {})
     }
 }
