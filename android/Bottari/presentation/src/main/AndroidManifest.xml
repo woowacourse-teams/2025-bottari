@@ -27,11 +27,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.checklist.personal.ChecklistActivity"
-            android:exported="false" />
-        <activity
             android:name=".compose.edit.ComposePersonalBottariEditActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".view.template.TemplateActivity"
             android:exported="false" />
