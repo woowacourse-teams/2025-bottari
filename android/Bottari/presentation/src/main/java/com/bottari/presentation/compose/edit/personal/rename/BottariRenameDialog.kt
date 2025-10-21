@@ -36,7 +36,7 @@ import com.bottari.presentation.compose.edit.personal.rename.component.BottariRe
 import com.bottari.presentation.compose.edit.personal.rename.component.BottariRenameTextField
 
 @Composable
-fun ComposeBottariRenameDialog(
+fun BottariRenameDialog(
     bottariTitle: String,
     onDismissRequest: () -> Unit,
     snackbarHostState: SnackbarHostState,
@@ -64,7 +64,7 @@ fun ComposeBottariRenameDialog(
         }
     }
 
-    ComposeBottariRenameDialog(
+    BottariRenameDialog(
         bottariTitle = uiState.value.title,
         onDismissRequest = onDismissRequest,
         onTitleChange = viewModel::cacheTitleInput,
@@ -75,7 +75,7 @@ fun ComposeBottariRenameDialog(
 }
 
 @Composable
-private fun ComposeBottariRenameDialog(
+private fun BottariRenameDialog(
     bottariTitle: String,
     onDismissRequest: () -> Unit,
     onTitleChange: (String) -> Unit,
@@ -140,11 +140,11 @@ private fun ComposeBottariRenameDialog(
 
 @Preview
 @Composable
-private fun ComposeBottariRenameDialogPreview() {
+private fun BottariRenameDialogPreview() {
     var title by remember { mutableStateOf("보따리") }
 
     BottariTheme {
-        ComposeBottariRenameDialog(
+        BottariRenameDialog(
             bottariTitle = title,
             onDismissRequest = {},
             onTitleChange = { title = it },
