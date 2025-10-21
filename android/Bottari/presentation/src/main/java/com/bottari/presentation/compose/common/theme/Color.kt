@@ -14,6 +14,7 @@ data class BottariColorSystem(
     val red: Color = Color(0xFFFF0000),
     val redSoft: Color = Color(0xFFFF3B30),
     val green: Color = Color(0xFF22C55E),
+    val purple: Color = Color(0xFFA855F7),
     val gray50: Color = Color(0xFFF8F8F8),
     val gray100: Color = Color(0xFFF2F2F5),
     val gray200: Color = Color(0xFFEEEEEE),
