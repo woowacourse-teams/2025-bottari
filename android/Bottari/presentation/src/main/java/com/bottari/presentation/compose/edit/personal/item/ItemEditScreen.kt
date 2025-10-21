@@ -36,6 +36,7 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditEmptyView
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditLazyColumn
 import com.bottari.presentation.compose.edit.personal.item.component.ItemTextField
+import com.bottari.presentation.model.bottari.ChecklistItemUiModel
 
 @Composable
 fun PersonalItemEditScreen(
@@ -105,47 +106,83 @@ private fun ItemEditContent(
             return@Column
         }
 
-        Box(modifier = Modifier.weight(1f)) {
-            if (state.isEmpty) {
-                ItemEditEmptyView(modifier = Modifier.fillMaxSize())
-            } else {
-                ItemEditLazyColumn(
-                    items = state.items,
-                    onDeleteClick = onDeleteItem,
-                    listState = listState,
-                    modifier = Modifier.fillMaxSize(),
-                )
-            }
-        }
+        ItemEditBody(
+            isEmpty = state.isEmpty,
+            items = state.items,
+            listState = listState,
+            onDeleteClick = onDeleteItem,
+            modifier = Modifier.weight(1f),
+        )
 
-        Row(
+        ItemEditInputBar(
+            itemName = state.itemName,
+            isInvalidItem = state.isInvalidItem,
+            isSavable = state.isSavable,
+            onNameChange = onNameChange,
+            onSaveItem = onSaveItem,
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            ItemTextField(
-                itemName = state.itemName,
-                onNameChange = onNameChange,
-                onSaveItem = onSaveItem,
-                isError = state.isInvalidateItem,
-                modifier =
-                    Modifier
-                        .height(48.dp)
-                        .weight(1f)
-                        .padding(start = BottariTheme.spacing.spaceSmall),
+        )
+    }
+}
+
+@Composable
+private fun ItemEditBody(
+    isEmpty: Boolean,
+    items: List<ChecklistItemUiModel>,
+    listState: LazyListState,
+    onDeleteClick: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier) {
+        if (isEmpty) {
+            ItemEditEmptyView(modifier = Modifier.fillMaxSize())
+        } else {
+            ItemEditLazyColumn(
+                items = items,
+                onDeleteClick = onDeleteClick,
+                listState = listState,
+                modifier = Modifier.fillMaxSize(),
             )
-            IconButton(
-                onClick = onSaveItem,
-                enabled = state.isSavable,
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Send,
-                    contentDescription = stringResource(R.string.bottari_btn_item_add_description),
-                )
-            }
+        }
+    }
+}
+
+@Composable
+private fun ItemEditInputBar(
+    itemName: String,
+    isInvalidItem: Boolean,
+    isSavable: Boolean,
+    onNameChange: (String) -> Unit,
+    onSaveItem: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        ItemTextField(
+            itemName = itemName,
+            onNameChange = onNameChange,
+            onSaveItem = onSaveItem,
+            isError = isInvalidItem,
+            modifier =
+                Modifier
+                    .height(48.dp)
+                    .weight(1f)
+                    .padding(start = BottariTheme.spacing.spaceSmall),
+        )
+        IconButton(
+            onClick = onSaveItem,
+            enabled = isSavable,
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.Send,
+                contentDescription = stringResource(R.string.bottari_btn_item_add_description),
+            )
         }
     }
 }

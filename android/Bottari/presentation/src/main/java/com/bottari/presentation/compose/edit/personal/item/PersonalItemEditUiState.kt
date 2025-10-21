@@ -15,8 +15,8 @@ data class PersonalItemEditUiState(
     private val isDuplicate: Boolean =
         isEmpty.not() && items.any { item -> item.name == itemName.trim() }
     private val isExceed: Boolean = itemName.length > MAX_ITEM_NAME_LENGTH
-    val isInvalidateItem: Boolean = isDuplicate || isExceed
-    val isSavable: Boolean = itemName.isNotBlank() && isInvalidateItem.not()
+    val isInvalidItem: Boolean = isDuplicate || isExceed
+    val isSavable: Boolean = itemName.isNotBlank() && isInvalidItem.not()
 
     companion object {
         private const val MAX_ITEM_NAME_LENGTH = 20
