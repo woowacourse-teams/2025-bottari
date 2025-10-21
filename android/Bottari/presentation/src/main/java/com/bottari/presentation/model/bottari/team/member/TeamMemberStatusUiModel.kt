@@ -1,18 +1,25 @@
 package com.bottari.presentation.model.bottari.team.member
 
 import com.bottari.domain.model.team.member.TeamMemberStatus
-import com.bottari.presentation.model.bottari.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 
 data class TeamMemberStatusUiModel(
     val member: TeamMemberUiModel,
     val totalItemsCount: Int,
     val checkedItemsCount: Int,
-    val sharedItems: List<ChecklistItemUiModel>,
-    val assignedItems: List<ChecklistItemUiModel>,
+    val sharedItems: List<PersonalChecklistItemUiModel>,
+    val assignedItems: List<PersonalChecklistItemUiModel>,
     val isMe: Boolean,
     val isExpanded: Boolean = false,
 ) {
-    private val isAllChecked: Boolean = checkedItemsCount == totalItemsCount
+    val unCheckedItems =
+        assignedItems.filter { it.isChecked.not() } + sharedItems.filter { it.isChecked.not() }
+
+    val checkedItems = assignedItems.filter { it.isChecked } + sharedItems.filter { it.isChecked }
+
+    val isAllChecked: Boolean = checkedItemsCount == totalItemsCount
+
+    val checkedProgress = ((checkedItemsCount.toFloat() / totalItemsCount.toFloat()) * 100).toInt()
 
     val isItemsEmpty: Boolean = sharedItems.isEmpty() && assignedItems.isEmpty()
 
@@ -29,13 +36,13 @@ data class TeamMemberStatusUiModel(
                 checkedItemsCount = teamMemberStatus.itemCount.checkedQuantity,
                 sharedItems =
                     teamMemberStatus.sharedItems.map { sharedItem ->
-                        ChecklistItemUiModel.fromDomain(
+                        PersonalChecklistItemUiModel.fromDomain(
                             sharedItem,
                         )
                     },
                 assignedItems =
                     teamMemberStatus.assignedItems.map { assignedItem ->
-                        ChecklistItemUiModel.fromDomain(
+                        PersonalChecklistItemUiModel.fromDomain(
                             assignedItem,
                         )
                     },
