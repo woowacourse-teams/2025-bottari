@@ -70,7 +70,7 @@ private fun BottariItem(
         modifier = modifier.fillMaxWidth(),
         contentPadding =
             PaddingValues(
-                vertical = BottariTheme.spacing.spaceSmall,
+                vertical = BottariTheme.spacing.spaceXSmall,
             ),
     ) {
         Text(
@@ -92,12 +92,14 @@ private fun BottariItem(
             Icon(
                 painter = painterResource(R.drawable.ic_delete),
                 contentDescription = stringResource(R.string.common_btn_item_delete_description),
+                modifier = Modifier.padding(8.dp),
+                tint = BottariTheme.colors.gray600,
             )
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun ItemEditLazyColumnPreview() {
     BottariTheme {
