@@ -14,6 +14,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties.Tomcat;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -25,11 +26,13 @@ public class ApplicationSettingLogger implements ApplicationRunner {
     private final SseChannel sseChannel;
     private final ServerProperties serverProperties;
     private final ApplicationContext applicationContext;
+    private final Environment environment;
 
     @Override
     public void run(final ApplicationArguments args) throws Exception {
         final StringBuilder sb = new StringBuilder();
         sb.append("\n==================== APPLICATION SETTING ====================\n");
+        appendProfile(sb);
         appendDataSourceSetting(sb);
         appendSseChannelSetting(sb);
         appendTomcatSetting(sb);
@@ -37,6 +40,17 @@ public class ApplicationSettingLogger implements ApplicationRunner {
         sb.append("=============================================================\n\n");
 
         log.info(sb.toString());
+    }
+
+    private void appendProfile(final StringBuilder sb) {
+        final String[] activeProfiles = environment.getActiveProfiles();
+        if (activeProfiles.length == 0) {
+            sb.append("[profile] active = default\n");
+            return;
+        }
+        sb.append("[profile] active = ")
+                .append(String.join(", ", activeProfiles))
+                .append("\n");
     }
 
     private void appendDataSourceSetting(final StringBuilder sb) {
