@@ -1,14 +1,10 @@
 package com.bottari.presentation.compose.edit
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -94,9 +90,9 @@ fun PersonalBottariEditScreen(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = LocalBottariBgColor.current,
-        contentWindowInsets = ScaffoldDefaults.contentWindowInsets.exclude(WindowInsets.ime),
     ) { paddingValues ->
         PersonalBottariEditPager(
+            snackbarHostState = snackbarHostState,
             modifier =
                 Modifier
                     .fillMaxSize()
@@ -106,7 +102,10 @@ fun PersonalBottariEditScreen(
 }
 
 @Composable
-private fun PersonalBottariEditPager(modifier: Modifier = Modifier) {
+private fun PersonalBottariEditPager(
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
+) {
     val pageTitles =
         listOf(
             stringResource(R.string.bottari_edit_item_text),
@@ -120,7 +119,7 @@ private fun PersonalBottariEditPager(modifier: Modifier = Modifier) {
             pagerState = pagerState,
         ) { page ->
             when (page) {
-                0 -> ItemEditContent()
+                0 -> ItemEditContent(snackbarHostState = snackbarHostState)
                 1 -> AlarmEditContent()
             }
         }

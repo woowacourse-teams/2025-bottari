@@ -17,18 +17,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bottari.logger.BottariLogger
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
@@ -38,18 +39,35 @@ import com.bottari.presentation.view.edit.personal.item.PersonalItemEditViewMode
 
 @Composable
 fun ItemEditContent(
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: PersonalItemEditViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val listState = rememberLazyListState()
+    val context = LocalContext.current
 
     LaunchedEffect(uiEvent.value) {
         when (uiEvent.value ?: return@LaunchedEffect) {
-            PersonalItemEditUiEvent.DeleteItemFailure -> Unit
-            PersonalItemEditUiEvent.FetchBottariItemsFailure -> Unit
-            PersonalItemEditUiEvent.SaveBottariItemFailure -> Unit
+            PersonalItemEditUiEvent.DeleteItemFailure ->
+                snackbarHostState.showSnackbar(
+                    context.getString(
+                        R.string.bottari_personal_item_delete_failure_text,
+                    ),
+                )
+
+            PersonalItemEditUiEvent.FetchBottariItemsFailure ->
+                snackbarHostState.showSnackbar(
+                    context.getString(R.string.bottari_personal_item_fetch_failure_text),
+                )
+
+            PersonalItemEditUiEvent.SaveBottariItemFailure ->
+                snackbarHostState.showSnackbar(
+                    context.getString(
+                        R.string.common_save_failure_text,
+                    ),
+                )
         }
     }
 
@@ -91,7 +109,6 @@ fun ItemEditContent(
                         .weight(1f)
                         .padding(start = BottariTheme.spacing.spaceSmall),
             )
-            BottariLogger.debug(uiState.value.isDuplicate.toString())
             IconButton(
                 onClick = { viewModel.saveItem() },
                 enabled = uiState.value.isDuplicate.not(),
