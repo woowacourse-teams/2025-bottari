@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.edit.component
+package com.bottari.presentation.compose.edit.personal.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -34,9 +34,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.compose.edit.personal.item.PersonalItemEditUiEvent
+import com.bottari.presentation.compose.edit.personal.item.PersonalItemEditViewModel
 import com.bottari.presentation.model.bottari.ChecklistItemUiModel
-import com.bottari.presentation.view.edit.personal.item.PersonalItemEditUiEvent
-import com.bottari.presentation.view.edit.personal.item.PersonalItemEditViewModel
 
 @Composable
 fun ItemEditContent(

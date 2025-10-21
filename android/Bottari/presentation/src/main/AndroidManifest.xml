@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".compose.edit.ComposePersonalBottariEditActivity"
+            android:name=".compose.edit.personal.ComposePersonalBottariEditActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
         <activity

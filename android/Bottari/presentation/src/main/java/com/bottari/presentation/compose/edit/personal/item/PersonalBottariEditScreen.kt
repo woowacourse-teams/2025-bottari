@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.edit
+package com.bottari.presentation.compose.edit.personal.item
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,9 +20,9 @@ import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
-import com.bottari.presentation.compose.edit.component.ComposeBottariRenameDialog
-import com.bottari.presentation.compose.edit.component.ItemEditContent
-import com.bottari.presentation.compose.edit.component.PersonalBottariEditTopAppBar
+import com.bottari.presentation.compose.edit.personal.component.ComposeBottariRenameDialog
+import com.bottari.presentation.compose.edit.personal.component.ItemEditContent
+import com.bottari.presentation.compose.edit.personal.component.PersonalBottariEditTopAppBar
 import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditUiEvent
 import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditViewModel
 

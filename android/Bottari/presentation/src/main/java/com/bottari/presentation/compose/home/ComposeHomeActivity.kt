@@ -9,10 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
 import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.compose.edit.personal.ComposePersonalBottariEditActivity
 import com.bottari.presentation.compose.personal.ComposePersonalChecklistActivity
-import com.bottari.presentation.compose.edit.ComposePersonalBottariEditActivity
 import com.bottari.presentation.view.checklist.team.TeamChecklistActivity
-import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.edit.team.TeamBottariEditActivity
 import com.bottari.presentation.view.template.TemplateActivity
 import dagger.hilt.android.AndroidEntryPoint
