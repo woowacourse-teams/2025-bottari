@@ -22,9 +22,9 @@ import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
-import com.bottari.presentation.compose.edit.personal.rename.ComposeBottariRenameDialog
-import com.bottari.presentation.compose.edit.personal.item.PersonalItemEditScreen
 import com.bottari.presentation.compose.edit.personal.component.PersonalBottariEditTopAppBar
+import com.bottari.presentation.compose.edit.personal.item.PersonalItemEditScreen
+import com.bottari.presentation.compose.edit.personal.rename.ComposeBottariRenameDialog
 
 @Composable
 fun PersonalBottariEditScreen(
