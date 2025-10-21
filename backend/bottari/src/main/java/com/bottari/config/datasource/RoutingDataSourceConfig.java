@@ -51,8 +51,6 @@ public class RoutingDataSourceConfig {
     @Bean
     @Primary
     public DataSource dataSource(final DataSource routingDataSource) {
-        log.info("[datasource] mode = ROUTING (MASTER + REPLICA)");
-
         return new LazyConnectionDataSourceProxy(routingDataSource);
     }
 }

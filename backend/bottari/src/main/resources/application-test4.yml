@@ -27,6 +27,12 @@ spring:
         username: ${WRITE_DATABASE_USERNAME}
         password: ${WRITE_DATABASE_PASSWORD}
         driver-class-name: com.mysql.cj.jdbc.Driver
+
+        maximum-pool-size: ${HIKARI_MASTER_MAX_POOL_SIZE:10}
+        minimum-idle: ${HIKARI_MASTER_MIN_IDLE:10}
+        connection-timeout: ${HIKARI_MASTER_CONNECTION_TIMEOUT:30000}
+        max-lifetime: ${HIKARI_MASTER_MAX_LIFETIME:1800000}
+
     replica:
       hikari:
         pool-name: HIKARI-REPLICA
@@ -34,6 +40,11 @@ spring:
         username: ${READ_DATABASE_USERNAME}
         password: ${READ_DATABASE_PASSWORD}
         driver-class-name: com.mysql.cj.jdbc.Driver
+
+        maximum-pool-size: ${HIKARI_REPLICA_MAX_POOL_SIZE:10}
+        minimum-idle: ${HIKARI_REPLICA_MIN_IDLE:10}
+        connection-timeout: ${HIKARI_REPLICA_CONNECTION_TIMEOUT:30000}
+        max-lifetime: ${HIKARI_REPLICA_MAX_LIFETIME:1800000}
   sql:
     init:
       mode: never
