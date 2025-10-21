@@ -92,27 +92,10 @@ private fun BottariRenameDialog(
             contentPadding = PaddingValues(0.dp),
         ) {
             Column {
-                Row(
+                BottariRenameDialogHeader(
+                    onDismissRequest = onDismissRequest,
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = stringResource(R.string.bottari_rename_dialog_title_text),
-                        modifier =
-                            Modifier.padding(
-                                vertical = BottariTheme.spacing.spaceMedium,
-                                horizontal = BottariTheme.spacing.spaceLarge,
-                            ),
-                        style = BottariTheme.typography.medium16.toTextStyle(),
-                    )
-                    IconButton(onClick = onDismissRequest) {
-                        Icon(
-                            imageVector = Icons.Default.Clear,
-                            contentDescription = stringResource(R.string.common_close_btn_description),
-                        )
-                    }
-                }
+                )
                 BottariRenameTextField(
                     title = bottariTitle,
                     onTitleChange = onTitleChange,
@@ -134,6 +117,34 @@ private fun BottariRenameDialog(
                             ),
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun BottariRenameDialogHeader(
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(
+            text = stringResource(R.string.bottari_rename_dialog_title_text),
+            modifier =
+                Modifier.padding(
+                    vertical = BottariTheme.spacing.spaceMedium,
+                    horizontal = BottariTheme.spacing.spaceLarge,
+                ),
+            style = BottariTheme.typography.medium16.toTextStyle(),
+        )
+        IconButton(onClick = onDismissRequest) {
+            Icon(
+                imageVector = Icons.Default.Clear,
+                contentDescription = stringResource(R.string.common_close_btn_description),
+            )
         }
     }
 }
