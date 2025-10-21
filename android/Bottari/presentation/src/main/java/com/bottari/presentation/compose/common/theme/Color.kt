@@ -13,6 +13,7 @@ data class BottariColorSystem(
     val primary: Color = Color(0xFF0064FF),
     val red: Color = Color(0xFFFF0000),
     val redSoft: Color = Color(0xFFFF3B30),
+    val green: Color = Color(0xFF22C55E),
     val gray50: Color = Color(0xFFF8F8F8),
     val gray100: Color = Color(0xFFF2F2F5),
     val gray200: Color = Color(0xFFEEEEEE),
@@ -22,8 +23,8 @@ data class BottariColorSystem(
     val gray600: Color = Color(0xFF999999),
     val gray700: Color = Color(0xFF787878),
     val productTypePersonal: Color = Color(0xFF0064FF),
-    val productTypeShared: Color = Color(0xFF6EBA76),
-    val productTypeAssigned: Color = Color(0xFF00AEFF),
+    val productTypeShared: Color = Color(0xFF22C55E),
+    val productTypeAssigned: Color = Color(0xFFA855F7),
 )
 
 private val lightColorScheme = BottariColorSystem()
