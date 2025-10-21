@@ -24,7 +24,6 @@ class PersonalItemEditViewModel @Inject constructor(
 ) : FlowBaseViewModel<PersonalItemEditUiState, PersonalItemEditUiEvent>(
         PersonalItemEditUiState(
             bottariId = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID),
-            title = stateHandle[KEY_BOTTARI_TITLE] ?: "",
         ),
     ) {
     init {
@@ -109,7 +108,6 @@ class PersonalItemEditViewModel @Inject constructor(
 
     companion object {
         const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
-        const val KEY_BOTTARI_TITLE = "KEY_BOTTARI_TITLE"
         private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 없습니다"
         private const val DEFAULT_ITEM_ID = 0L
         private const val ITEM_ID_INCREMENT = 1L

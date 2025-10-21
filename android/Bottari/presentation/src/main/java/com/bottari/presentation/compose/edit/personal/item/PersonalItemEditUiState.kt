@@ -8,7 +8,6 @@ data class PersonalItemEditUiState(
     val isLoading: Boolean = false,
     val isFetched: Boolean = false,
     val bottariId: Long = 0,
-    val title: String = "",
     val itemName: String = "",
     val items: List<ChecklistItemUiModel> = emptyList(),
 ) {
