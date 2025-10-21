@@ -8,8 +8,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
 import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.edit.personal.item.PersonalBottariEditScreen
-import com.bottari.presentation.view.edit.personal.main.PersonalBottariEditViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -30,8 +30,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.view.edit.personal.main.rename.BottariRenameUiEvent
-import com.bottari.presentation.view.edit.personal.main.rename.BottariRenameViewModel
+import com.bottari.presentation.compose.edit.personal.rename.BottariRenameUiEvent
+import com.bottari.presentation.compose.edit.personal.rename.BottariRenameViewModel
 
 @Composable
 fun ComposeBottariRenameDialog(

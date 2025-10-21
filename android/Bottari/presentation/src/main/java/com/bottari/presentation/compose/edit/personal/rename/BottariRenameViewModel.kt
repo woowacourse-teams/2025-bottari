@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.edit.personal.main.rename
+package com.bottari.presentation.compose.edit.personal.rename
 
 import androidx.lifecycle.SavedStateHandle
 import com.bottari.domain.usecase.bottari.SaveBottariTitleUseCase
