@@ -40,6 +40,7 @@ class TemplateViewModel @Inject constructor(
     }
 
     fun fetchTemplates() {
+        if (currentState.chips.isNotEmpty()) return
         val isSearched = currentState.searchWord.isNotEmpty()
         val currentPageable = if (isSearched) searchPageable else mainPageable
 
