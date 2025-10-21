@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.autoconfigure.web.ServerProperties.Tomcat;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -17,6 +19,7 @@ public class ApplicationSettingLogger implements ApplicationRunner {
 
     private final DataSource dataSource;
     private final SseChannel sseChannel;
+    private final ServerProperties serverProperties;
 
     @Override
     public void run(final ApplicationArguments args) throws Exception {
@@ -24,7 +27,8 @@ public class ApplicationSettingLogger implements ApplicationRunner {
         sb.append("\n==================== APPLICATION SETTING ====================\n");
         appendDataSourceSetting(sb);
         appendSseChannelSetting(sb);
-        sb.append("\n=============================================================\n\n");
+        appendTomcatSetting(sb);
+        sb.append("=============================================================\n\n");
 
         log.info(sb.toString());
     }
@@ -45,5 +49,16 @@ public class ApplicationSettingLogger implements ApplicationRunner {
             sb.append("[SSE] mode = IN_MEMORY");
         }
         sb.append("\n");
+    }
+
+    private void appendTomcatSetting(final StringBuilder sb) {
+        final Tomcat tomcat = serverProperties.getTomcat();
+        sb.append("[tomcat]\n");
+        sb.append("  threads.max = ").append(tomcat.getThreads().getMax()).append("\n");
+        sb.append("  threads.min-spare = ").append(tomcat.getThreads().getMinSpare()).append("\n");
+        sb.append("  max-connections = ").append(tomcat.getMaxConnections()).append("\n");
+        sb.append("  accept-count = ").append(tomcat.getAcceptCount()).append("\n");
+        sb.append("  connection-timeout = ").append(tomcat.getConnectionTimeout()).append("\n");
+        sb.append("  keep-alive-timeout = ").append(tomcat.getKeepAliveTimeout()).append("\n");
     }
 }
