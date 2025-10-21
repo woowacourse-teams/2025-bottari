@@ -130,9 +130,9 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
         bottariId ?: return
         startActivity(
             ComposePersonalBottariEditActivity.newIntent(
-                requireContext(),
-                bottariId,
-                true,
+                context = requireContext(),
+                bottariId = bottariId,
+                isNewBottari = true,
             ),
         )
         requireActivity().finish()
