@@ -51,6 +51,7 @@ dependencies {
     implementation 'io.opentelemetry:opentelemetry-api:1.45.0'
     implementation 'io.opentelemetry:opentelemetry-context:1.45.0'
     implementation 'io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:2.9.0' // @WithSpan, @SpanAttribute
+    implementation 'io.micrometer:context-propagation:1.1.2'
 
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     compileOnly 'org.projectlombok:lombok'
