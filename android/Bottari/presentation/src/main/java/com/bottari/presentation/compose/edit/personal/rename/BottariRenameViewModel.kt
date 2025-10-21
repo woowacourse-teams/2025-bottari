@@ -13,7 +13,7 @@ class BottariRenameViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val saveBottariTitleUseCase: SaveBottariTitleUseCase,
 ) : FlowBaseViewModel<BottariRenameUiState, BottariRenameUiEvent>(BottariRenameUiState()) {
-    private val bottariId: Long = savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_NEW_TITLE)
+    private val bottariId: Long = savedStateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
     fun setInitialTitle(title: String) {
         updateState { copy(initialTitle = title, title = title) }
@@ -49,6 +49,6 @@ class BottariRenameViewModel @Inject constructor(
 
     companion object {
         const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
-        private const val ERROR_REQUIRE_NEW_TITLE = "[ERROR] 보따리 ID가 없습니다"
+        private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 없습니다"
     }
 }
