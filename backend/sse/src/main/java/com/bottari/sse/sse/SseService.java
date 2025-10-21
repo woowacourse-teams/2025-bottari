@@ -16,21 +16,23 @@ public class SseService {
             final SseEmitter sseEmitter
     ) {
         final MemberChannelTopic topic = MemberChannelTopic.from(memberId);
-        sseEmitter.onCompletion(() -> cleanup(topic, memberId));
-        sseEmitter.onTimeout(() -> cleanup(topic, memberId));
-        sseEmitter.onError(t -> cleanup(topic, memberId));
+
+        sseEmitter.onCompletion(() -> cleanUpIfSame(topic, memberId, sseEmitter));
+        sseEmitter.onTimeout(() -> cleanUpIfSame(topic, memberId, sseEmitter));
+        sseEmitter.onError(t -> cleanUpIfSame(topic, memberId, sseEmitter));
+
         sseSessions.save(memberId, sseEmitter);
         subscribeManager.subscribe(topic);
     }
 
-    private void cleanup(
+    private void cleanUpIfSame(
             final MemberChannelTopic topic,
-            final Long memberId
+            final Long memberId,
+            final SseEmitter targetEmitter
     ) {
-        try {
+        final boolean removed = sseSessions.removeIfSame(memberId, targetEmitter);
+        if (removed && sseSessions.findByMemberId(memberId).isEmpty()) {
             subscribeManager.unsubscribe(topic);
-        } finally {
-            sseSessions.remove(memberId);
         }
     }
 }
