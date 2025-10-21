@@ -10,7 +10,7 @@ import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.personal.ComposePersonalChecklistActivity
-import com.bottari.presentation.view.checklist.team.TeamChecklistActivity
+import com.bottari.presentation.compose.team.ComposeTeamChecklistActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -95,7 +95,7 @@ class NotificationHelper @Inject constructor(
         teamBottariTitle: String,
     ): PendingIntent {
         val intent =
-            TeamChecklistActivity.newIntentForNotification(
+            ComposeTeamChecklistActivity.newIntentForNotification(
                 context,
                 teamBottariId,
                 teamBottariTitle,
