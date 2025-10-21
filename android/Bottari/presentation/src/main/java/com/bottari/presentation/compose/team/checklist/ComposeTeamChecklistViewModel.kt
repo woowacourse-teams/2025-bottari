@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.checklist.team.main.checklist
+package com.bottari.presentation.compose.team.checklist
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -12,11 +12,9 @@ import com.bottari.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.UncheckTeamBottariItemUseCase
-import com.bottari.presentation.common.base.BaseViewModel
+import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
-import com.bottari.presentation.model.bottari.team.TeamChecklistExpandableTypeUiModel
-import com.bottari.presentation.model.bottari.team.TeamChecklistItem
-import com.bottari.presentation.model.bottari.team.TeamChecklistProductUiModel
+import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
 import com.bottari.presentation.util.debounce
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +32,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TeamChecklistViewModel @Inject constructor(
+class ComposeTeamChecklistViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamBottariChecklistUseCase: FetchTeamChecklistUseCase,
     private val checkTeamBottariItemUseCase: CheckTeamBottariItemUseCase,
@@ -42,14 +40,18 @@ class TeamChecklistViewModel @Inject constructor(
     private val getMemberIdUseCase: GetMemberIdUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
-) : BaseViewModel<TeamChecklistUiState, TeamChecklistUiEvent>(TeamChecklistUiState()) {
+//    private val fetchTooltipStatusUseCase: FetchTooltipStatusUseCase,
+//    private val updateTooltipStatusUseCase: UpdateTooltipStatusUseCase,
+) : FlowBaseViewModel<ComposeTeamChecklistUiState, ComposeTeamChecklistUiEvent>(
+        ComposeTeamChecklistUiState(),
+    ) {
     private val teamBottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
     private var memberId: Long = -1
 
     private val pendingCheckStatusMap =
-        mutableMapOf<Pair<Long, BottariItemTypeUiModel>, TeamChecklistProductUiModel>()
+        mutableMapOf<Pair<Long, BottariItemTypeUiModel>, TeamChecklistItemUiModel>()
 
-    private val debouncedCheck: (List<TeamChecklistProductUiModel>) -> Unit =
+    private val debouncedCheck: (List<TeamChecklistItemUiModel>) -> Unit =
         debounce(
             timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
@@ -66,22 +68,22 @@ class TeamChecklistViewModel @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch { disconnectTeamEventUseCase() }
     }
 
-    fun toggleParentExpanded(type: BottariItemTypeUiModel) {
-        val updatedExpandableItems =
-            currentState.expandableItems.map { item ->
-                if (item is TeamChecklistExpandableTypeUiModel && item.type == type) {
-                    val reverseExpandType = item.copy(isExpanded = !item.isExpanded)
-                    return@map reverseExpandType
-                }
-                item
-            }
+    fun toggleTypeExpanded(type: BottariItemTypeUiModel) {
+        val currentSections = currentState.sections
 
-        val newExpandableList =
-            generateExpandableTypeList(updatedExpandableItems, currentState.bottariItems)
-        updateState {
-            copy(expandableItems = newExpandableList)
-        }
+        val updatedSections =
+            currentSections +
+                mapOf(
+                    type to !currentSections.getOrDefault(type, false),
+                )
+
+        updateState { copy(sections = updatedSections) }
     }
+
+    fun getItemsByType(type: BottariItemTypeUiModel) =
+        currentState.bottariItems
+            .filterIsInstance<TeamChecklistItemUiModel>()
+            .filter { it.type == type }
 
     fun toggleItemChecked(
         itemId: Long,
@@ -96,12 +98,9 @@ class TeamChecklistViewModel @Inject constructor(
                     if (toggledItem.isSameItem(checklistItem)) return@map toggledItem
                     checklistItem
                 }
-            val newExpandableList =
-                currentState.expandableItems.toggleItemInList(toggledItem)
             updateState {
                 copy(
                     bottariItems = newItems,
-                    expandableItems = newExpandableList,
                 )
             }
 
@@ -110,12 +109,20 @@ class TeamChecklistViewModel @Inject constructor(
         }
     }
 
-    fun resetSwipeState() {
-        updateState { copy(swipedItems = emptyList()) }
+    fun closeTooltip() {
+//        launch {
+//            updateTooltipStatusUseCase(TooltipType.TEAM)
+//            updateState { copy(isTooltipClosed = true) }
+//        }
     }
 
-    fun addSwipedItem(item: TeamChecklistItem) {
-        updateState { copy(swipedItems = this.swipedItems + item) }
+    private fun checkIfTooltipWasDismissed() {
+//        fetchTooltipStatusUseCase(TooltipType.TEAM)
+//            .onEach { state ->
+//                updateState { copy(isTooltipClosed = state) }
+//            }.catch {
+//                emitEvent(PersonalChecklistUiEvent.FetchChecklistFailure)
+//            }.launchIn(viewModelScope)
     }
 
     private fun fetchMemberId() {
@@ -124,13 +131,7 @@ class TeamChecklistViewModel @Inject constructor(
         }
     }
 
-    private fun List<TeamChecklistItem>.toggleItemInList(item: TeamChecklistProductUiModel): List<TeamChecklistItem> =
-        this.map { listItem ->
-            if (listItem.isSameItem(item).not()) return@map listItem
-            item
-        }
-
-    private fun TeamChecklistProductUiModel.toggle(): TeamChecklistProductUiModel = this.copy(isChecked = !this.isChecked)
+    private fun TeamChecklistItemUiModel.toggle(): TeamChecklistItemUiModel = this.copy(isChecked = !this.isChecked)
 
     private fun fetchTeamCheckList() {
         launch {
@@ -140,7 +141,7 @@ class TeamChecklistViewModel @Inject constructor(
                 .onSuccess { checklistData ->
                     setTeamCheckList(checklistData)
                 }.onFailure {
-                    emitEvent(TeamChecklistUiEvent.FetchChecklistFailure)
+                    emitEvent(ComposeTeamChecklistUiEvent.FetchChecklistFailure)
                 }
             updateState { copy(isLoading = false) }
         }
@@ -173,13 +174,10 @@ class TeamChecklistViewModel @Inject constructor(
 
     private fun setTeamCheckList(checklistData: TeamBottariCheckList) {
         val newItems = checklistData.toUIModel()
-        val newExpandableList =
-            generateExpandableTypeList(currentState.expandableItems, newItems)
         updateState {
             copy(
                 bottariItems = newItems,
                 originalBottariItems = newItems,
-                expandableItems = newExpandableList,
             )
         }
     }
@@ -198,82 +196,35 @@ class TeamChecklistViewModel @Inject constructor(
             }
 
     private fun ChecklistItem.toTeamUiModel(type: BottariItemTypeUiModel) =
-        TeamChecklistProductUiModel(
+        TeamChecklistItemUiModel(
             id = id,
             name = name,
             isChecked = isChecked,
             type = type,
         )
 
-    private fun generateExpandableTypeList(
-        expandableItems: List<TeamChecklistItem>,
-        items: List<TeamChecklistProductUiModel>,
-    ) = generateExpandableList(
-        currentExpandableItems = expandableItems,
-        typeItems =
-            mapOf(
-                BottariItemTypeUiModel.SHARED to items.filter { it.type == BottariItemTypeUiModel.SHARED },
-                BottariItemTypeUiModel.ASSIGNED() to items.filter { it.type == BottariItemTypeUiModel.ASSIGNED() },
-                BottariItemTypeUiModel.PERSONAL to items.filter { it.type == BottariItemTypeUiModel.PERSONAL },
-            ),
-    )
-
-    private fun generateExpandableList(
-        currentExpandableItems: List<TeamChecklistItem>,
-        typeItems: Map<BottariItemTypeUiModel, List<TeamChecklistProductUiModel>>,
-    ): List<TeamChecklistItem> {
-        val newExpandableList = mutableListOf<TeamChecklistItem>()
-        val typeList =
-            listOf(
-                BottariItemTypeUiModel.SHARED,
-                BottariItemTypeUiModel.ASSIGNED(),
-                BottariItemTypeUiModel.PERSONAL,
-            )
-        typeList.forEach { type ->
-            val typePageData =
-                findItemsByType(currentExpandableItems, type)
-
-            val newParent =
-                (typePageData ?: TeamChecklistExpandableTypeUiModel(type, emptyList()))
-                    .copy(teamChecklistItems = typeItems[type] ?: emptyList())
-
-            newExpandableList.add(newParent)
-            if (newParent.isExpanded) {
-                newExpandableList.addAll(newParent.teamChecklistItems)
-            }
-        }
-        return newExpandableList
-    }
-
-    private fun findItemsByType(
-        currentExpandableItems: List<TeamChecklistItem>,
-        type: BottariItemTypeUiModel,
-    ) = currentExpandableItems
-        .filterIsInstance<TeamChecklistExpandableTypeUiModel>()
-        .firstOrNull { item -> item.type == type }
-
     private fun findItemToToggle(
         itemId: Long,
         type: BottariItemTypeUiModel,
-    ) = currentState.expandableItems.find { item ->
+    ) = currentState.bottariItems.find { item ->
         item.isSameItem(
             itemId,
             type,
         )
-    } as? TeamChecklistProductUiModel
+    }
 
-    private fun TeamChecklistItem.isSameItem(other: TeamChecklistProductUiModel): Boolean =
-        this is TeamChecklistProductUiModel && this.id == other.id && this.type == other.type
+    private fun TeamChecklistItemUiModel.isSameItem(other: TeamChecklistItemUiModel): Boolean =
+        this.id == other.id && this.type == other.type
 
-    private fun TeamChecklistItem.isSameItem(
+    private fun TeamChecklistItemUiModel.isSameItem(
         itemId: Long,
         type: BottariItemTypeUiModel,
-    ): Boolean = this is TeamChecklistProductUiModel && this.id == itemId && this.type == type
+    ): Boolean = this.id == itemId && this.type == type
 
-    private fun performItemCheck(items: List<TeamChecklistProductUiModel>) {
+    private fun performItemCheck(items: List<TeamChecklistItemUiModel>) {
         launch {
             val originalItems = currentState.originalBottariItems
-            val itemsToUpdate = mutableListOf<TeamChecklistProductUiModel>()
+            val itemsToUpdate = mutableListOf<TeamChecklistItemUiModel>()
 
             val jobs =
                 items.mapNotNull { pendingItem ->
@@ -290,7 +241,7 @@ class TeamChecklistViewModel @Inject constructor(
         }
     }
 
-    private fun updateOriginalItem(updatedItem: TeamChecklistProductUiModel) {
+    private fun updateOriginalItem(updatedItem: TeamChecklistItemUiModel) {
         val currentOriginals = currentState.originalBottariItems.toMutableList()
         val index = currentOriginals.indexOfFirst { it.isSameItem(updatedItem) }
         if (index != -1) {
@@ -300,16 +251,16 @@ class TeamChecklistViewModel @Inject constructor(
         updateState { copy(originalBottariItems = currentOriginals) }
     }
 
-    private suspend fun processItemCheck(item: TeamChecklistProductUiModel) {
+    private suspend fun processItemCheck(item: TeamChecklistItemUiModel) {
         executeCheckUseCase(item)
             .onSuccess {
                 updateOriginalItem(item)
             }.onFailure {
-                emitEvent(TeamChecklistUiEvent.CheckItemFailure)
+                emitEvent(ComposeTeamChecklistUiEvent.CheckItemFailure)
             }
     }
 
-    private suspend fun executeCheckUseCase(item: TeamChecklistProductUiModel) =
+    private suspend fun executeCheckUseCase(item: TeamChecklistItemUiModel) =
         if (item.isChecked) {
             checkTeamBottariItemUseCase(item.id, item.type.toTypeString())
         } else {
