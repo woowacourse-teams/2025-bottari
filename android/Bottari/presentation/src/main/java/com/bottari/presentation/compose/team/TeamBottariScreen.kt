@@ -1,10 +1,10 @@
 package com.bottari.presentation.compose.team
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,66 +13,102 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariTabBar
+import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.personal.ChecklistTopBar
+import com.bottari.presentation.compose.personal.swipe.SwipeScreen
+import com.bottari.presentation.compose.team.checklist.ComposeTeamChecklistViewModel
 import com.bottari.presentation.compose.team.checklist.TeamBottariChecklistScreen
 import com.bottari.presentation.compose.team.item.TeamItemStateScreen
 import com.bottari.presentation.compose.team.member.TeamMemberStateScreen
+import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
 
 @Composable
 fun TeamBottariScreen(
     bottariTitle: String,
     notificationFlag: Boolean,
+    viewModel: ComposeTeamChecklistViewModel = viewModel(),
 ) {
     val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val snackbarHostState = remember { SnackbarHostState() }
     var isSwipeScreen by remember { mutableStateOf(notificationFlag) }
+    var isChecklistCompleted by remember { mutableStateOf(false) }
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
+
+    val pageTitles =
+        listOf(
+            stringResource(R.string.team_checklist_tap_checklist_text),
+            stringResource(R.string.team_checklist_tap_team_current_text),
+            stringResource(R.string.team_checklist_tap_member_checklist_text),
+        )
+    val pagerState = rememberPagerState(initialPage = 0) { pageTitles.size }
     Scaffold(
         topBar = {
             ChecklistTopBar(
                 title = bottariTitle,
-                onBackClick = {},
-                onSwipeClick = {},
+                onBackClick = {
+                    if (isSwipeScreen) {
+                        isSwipeScreen = false
+                        return@ChecklistTopBar
+                    }
+                    backPressedDispatcher?.onBackPressed()
+                },
+                onSwipeClick = { isSwipeScreen = !isSwipeScreen },
                 onResetClick = {},
-                isResetIconVisible = true,
-                isSwipeIconVisible = true,
+                isResetIconVisible = false,
+                isSwipeIconVisible = !isChecklistCompleted && !isSwipeScreen,
             )
         },
         containerColor = LocalBottariBgColor.current,
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        snackbarHost = { pagerState },
     ) { innerPadding ->
-
-        val pageTitles =
-            listOf(
-                stringResource(R.string.team_checklist_tap_checklist_text),
-                stringResource(R.string.team_checklist_tap_team_current_text),
-                stringResource(R.string.team_checklist_tap_member_checklist_text),
+        if (isSwipeScreen) {
+            SwipeScreen(
+                items = uiState.nonCheckedItems,
+                checkedQuantity = uiState.checkedQuantity,
+                totalQuantity = uiState.totalQuantity,
+                isComplete = uiState.isAllChecked,
+                onLeftSwipe = {},
+                onRightSwipe = { item ->
+                    if (item is TeamChecklistItemUiModel) {
+                        viewModel.toggleItemChecked(item.id, item.type)
+                    }
+                },
+                onClickCompleteButton = { isSwipeScreen = false },
+                modifier = Modifier.padding(innerPadding).padding(BottariTheme.spacing.spaceMedium),
             )
+            return@Scaffold
+        }
 
-        BottariTabBar(
-            pageTitles = pageTitles,
-            pagerState = rememberPagerState(initialPage = 0) { pageTitles.size },
-        ) { page ->
-            when (page) {
-                0 ->
-                    TeamBottariChecklistScreen(
-                        snackbarHostState = snackbarHostState,
-                        modifier = Modifier.padding(innerPadding),
-                    )
+        Column(
+            modifier = Modifier.padding(innerPadding),
+        ) {
+            BottariTabBar(
+                pageTitles = pageTitles,
+                pagerState = rememberPagerState(initialPage = 0) { pageTitles.size },
+            ) { page ->
+                when (page) {
+                    0 ->
+                        TeamBottariChecklistScreen(
+                            uiState = uiState,
+                            isTooltipClose = uiState.isTooltipClosed,
+                            onClickSection = viewModel::toggleTypeExpanded,
+                            onCloseToolTip = viewModel::closeTooltip,
+                            onToggleItem = viewModel::toggleItemChecked,
+                        )
 
-                1 ->
-                    TeamItemStateScreen(
-                        snackbarHostState = snackbarHostState,
-                        modifier = Modifier.padding(innerPadding),
-                    )
+                    1 ->
+                        TeamItemStateScreen()
 
-                2 -> {
-                    TeamMemberStateScreen(
-                        snackbarHostState = snackbarHostState,
-                        modifier = Modifier.padding(innerPadding),
-                    )
+                    2 -> {
+                        TeamMemberStateScreen()
+                    }
                 }
             }
         }

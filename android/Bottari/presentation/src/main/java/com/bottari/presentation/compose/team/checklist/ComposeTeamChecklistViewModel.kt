@@ -6,12 +6,15 @@ import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.bottari.TeamBottariCheckList
+import com.bottari.domain.model.tooltip.TooltipType
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.domain.usecase.team.CheckTeamBottariItemUseCase
 import com.bottari.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.domain.usecase.team.UncheckTeamBottariItemUseCase
+import com.bottari.domain.usecase.tooltip.FetchTooltipStatusUseCase
+import com.bottari.domain.usecase.tooltip.UpdateTooltipStatusUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
@@ -40,8 +43,8 @@ class ComposeTeamChecklistViewModel @Inject constructor(
     private val getMemberIdUseCase: GetMemberIdUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
-//    private val fetchTooltipStatusUseCase: FetchTooltipStatusUseCase,
-//    private val updateTooltipStatusUseCase: UpdateTooltipStatusUseCase,
+    private val fetchTooltipStatusUseCase: FetchTooltipStatusUseCase,
+    private val updateTooltipStatusUseCase: UpdateTooltipStatusUseCase,
 ) : FlowBaseViewModel<ComposeTeamChecklistUiState, ComposeTeamChecklistUiEvent>(
         ComposeTeamChecklistUiState(),
     ) {
@@ -61,6 +64,7 @@ class ComposeTeamChecklistViewModel @Inject constructor(
         fetchTeamCheckList()
         fetchMemberId()
         handleEvent()
+        checkIfTooltipWasDismissed()
     }
 
     override fun onCleared() {
@@ -110,19 +114,17 @@ class ComposeTeamChecklistViewModel @Inject constructor(
     }
 
     fun closeTooltip() {
-//        launch {
-//            updateTooltipStatusUseCase(TooltipType.TEAM)
-//            updateState { copy(isTooltipClosed = true) }
-//        }
+        launch {
+            updateTooltipStatusUseCase(TooltipType.TEAM)
+            updateState { copy(isTooltipClosed = true) }
+        }
     }
 
     private fun checkIfTooltipWasDismissed() {
-//        fetchTooltipStatusUseCase(TooltipType.TEAM)
-//            .onEach { state ->
-//                updateState { copy(isTooltipClosed = state) }
-//            }.catch {
-//                emitEvent(PersonalChecklistUiEvent.FetchChecklistFailure)
-//            }.launchIn(viewModelScope)
+        fetchTooltipStatusUseCase(TooltipType.TEAM)
+            .onEach { state ->
+                updateState { copy(isTooltipClosed = state) }
+            }.launchIn(viewModelScope)
     }
 
     private fun fetchMemberId() {

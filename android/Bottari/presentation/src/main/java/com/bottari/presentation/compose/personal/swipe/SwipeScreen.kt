@@ -35,7 +35,7 @@ fun SwipeScreen(
             )
         }
 
-    Column(modifier = modifier.padding(BottariTheme.spacing.spaceMedium)) {
+    Column(modifier = modifier.padding(vertical = BottariTheme.spacing.spaceMedium)) {
         ChecklistProgressHeader(
             checkedQuantity = checkedQuantity,
             totalQuantity = totalQuantity,

@@ -71,7 +71,7 @@ fun PersonalBottariScreen(
         onResetClick = viewModel::resetItemsCheckState,
         onCloseToolTip = viewModel::closeTooltip,
         onClickItem = viewModel::toggleItemChecked,
-        onSwipeRight = {item -> viewModel.toggleItemChecked(item.id)},
+        onSwipeRight = { item -> viewModel.toggleItemChecked(item.id) },
         onClickCompleteButton = { isSwipeScreen = false },
         navigateToEdit = navigateToEdit,
     )
@@ -96,7 +96,7 @@ private fun PersonalBottariScreen(
     BackHandler(enabled = isSwipeScreen, onBack = onBackClick)
 
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.padding(horizontal = BottariTheme.spacing.spaceMedium),
         topBar = {
             ChecklistTopBar(
                 title = bottariTitle,

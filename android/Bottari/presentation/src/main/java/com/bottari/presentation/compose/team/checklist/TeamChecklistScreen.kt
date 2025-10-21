@@ -34,6 +34,7 @@ import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
 @Composable
 fun TeamChecklistScreen(
     uiState: ComposeTeamChecklistUiState,
+    isToolTipClosed: Boolean,
     onCloseToolTip: () -> Unit,
     onClickSection: (BottariItemTypeUiModel) -> Unit,
     onClickItem: (Long, BottariItemTypeUiModel) -> Unit,
@@ -41,19 +42,21 @@ fun TeamChecklistScreen(
 ) {
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.Top) {
         item {
-            ChecklistToolTip(
-                icon = {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_shared),
-                        contentDescription = null,
-                        tint = BottariTheme.colors.white,
-                    )
-                },
-                title = "팀 보따리",
-                text = "공통은 모두가, 담당은 지정된 사람이,\n개인은 나만 볼 수 있는 체크리스트예요.",
-                closeAction = onCloseToolTip,
-            )
-            Spacer(Modifier.height(BottariTheme.spacing.spaceMedium))
+            if (!isToolTipClosed) {
+                ChecklistToolTip(
+                    icon = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_shared),
+                            contentDescription = null,
+                            tint = BottariTheme.colors.white,
+                        )
+                    },
+                    title = "팀 보따리",
+                    text = "공통은 모두가, 담당은 지정된 사람이,\n개인은 나만 볼 수 있는 체크리스트예요.",
+                    closeAction = onCloseToolTip,
+                )
+                Spacer(Modifier.height(BottariTheme.spacing.spaceMedium))
+            }
         }
 
         item {
@@ -65,6 +68,7 @@ fun TeamChecklistScreen(
             nodes = uiState.sections,
             items = uiState.bottariItems,
             toggleExpanded = onClickSection,
+            onClickItem = onClickItem,
         )
     }
 }
@@ -73,6 +77,7 @@ fun LazyListScope.teamChecklistNodes(
     nodes: Map<BottariItemTypeUiModel, Boolean>,
     items: List<TeamChecklistItemUiModel>,
     toggleExpanded: (BottariItemTypeUiModel) -> Unit,
+    onClickItem: (Long, BottariItemTypeUiModel) -> Unit,
 ) {
     nodes.forEach { node ->
         val selectedItems = items.filter { item -> item.type == node.key }
@@ -81,6 +86,7 @@ fun LazyListScope.teamChecklistNodes(
                 node = node,
                 items = selectedItems,
                 toggleExpanded = toggleExpanded,
+                onClickItem = onClickItem,
             )
             Spacer(Modifier.height(BottariTheme.spacing.spaceMedium))
         }
@@ -92,6 +98,7 @@ fun TeamChecklistNode(
     node: Map.Entry<BottariItemTypeUiModel, Boolean>,
     items: List<TeamChecklistItemUiModel>,
     toggleExpanded: (BottariItemTypeUiModel) -> Unit,
+    onClickItem: (Long, BottariItemTypeUiModel) -> Unit,
 ) {
     val sectionType = node.key
     val isOpened = node.value
@@ -104,15 +111,17 @@ fun TeamChecklistNode(
                 itemCount = items.size,
                 onToggle = toggleExpanded,
             )
-            Spacer(Modifier.height(height = BottariTheme.spacing.spaceMedium))
-
-            HorizontalDivider(color = BottariTheme.colors.gray400)
-
-            Spacer(Modifier.height(height = BottariTheme.spacing.spaceMedium))
-
             if (isOpened) {
+                Spacer(Modifier.height(height = BottariTheme.spacing.spaceMedium))
+                HorizontalDivider(color = BottariTheme.colors.gray400)
+
+                Spacer(Modifier.height(height = BottariTheme.spacing.spaceMedium))
+
                 items.forEach { bottariItem ->
-                    PersonalChecklistItem(bottariItem = bottariItem) {}
+                    PersonalChecklistItem(
+                        bottariItem = bottariItem,
+                        onClick = { onClickItem(bottariItem.id, bottariItem.type) },
+                    )
                     Spacer(Modifier.height(height = BottariTheme.spacing.spaceSmall))
                 }
             }
@@ -194,6 +203,7 @@ private fun SectionHeader(
 private fun TeamChecklistScreenPreview() {
     TeamChecklistScreen(
         uiState = dummyUiState,
+        isToolTipClosed = false,
         onCloseToolTip = {},
         onClickSection = {},
         onClickItem = { _, _ -> },

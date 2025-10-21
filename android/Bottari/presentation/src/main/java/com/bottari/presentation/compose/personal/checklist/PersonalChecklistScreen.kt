@@ -38,8 +38,7 @@ fun PersonalChecklistScreen(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier
-            .padding(horizontal = BottariTheme.spacing.spaceMedium),
+        modifier = modifier,
         verticalArrangement =
             Arrangement.spacedBy(
                 BottariTheme.spacing.spaceLarge,
@@ -84,7 +83,7 @@ fun PersonalChecklistLazyColumn(
             items = bottariItems,
             key = { bottariItem -> bottariItem.id to bottariItem::class.java.simpleName },
         ) {
-            PersonalChecklistItem(bottariItem = it, onClickItem = onClickItem)
+            PersonalChecklistItem(bottariItem = it, onClick = { onClickItem(it.id) })
         }
     }
 }
@@ -121,7 +120,9 @@ private fun BottariCheckedBox() {
         Icon(
             painter = painterResource(R.drawable.ic_check),
             contentDescription = null,
-            modifier = Modifier.padding(5.dp).fillMaxSize(),
+            modifier = Modifier
+                .padding(5.dp)
+                .fillMaxSize(),
             tint = Color.White,
         )
     }

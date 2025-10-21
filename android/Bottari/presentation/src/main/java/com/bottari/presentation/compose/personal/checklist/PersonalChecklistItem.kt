@@ -27,7 +27,7 @@ import com.bottari.presentation.model.bottari.team.ChecklistItemUiModel
 @Composable
 fun PersonalChecklistItem(
     bottariItem: ChecklistItemUiModel,
-    onClickItem: (Long) -> Unit,
+    onClick: () -> Unit,
 ) {
     BottariBox(
         modifier =
@@ -36,7 +36,7 @@ fun PersonalChecklistItem(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(bounded = true, color = BottariTheme.colors.primary),
-                    onClick = { onClickItem(bottariItem.id) },
+                    onClick = { onClick() },
                 ),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -60,6 +60,6 @@ fun PersonalChecklistItem(
 private fun PersonalChecklistItemPreview() {
     PersonalChecklistItem(
         bottariItem = PersonalChecklistItemUiModel(1, "테스트", true),
-        onClickItem = {},
+        onClick = {},
     )
 }
