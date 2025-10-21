@@ -15,8 +15,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@Slf4j
-@Profile({"dev", "prod"})
+@Profile({"dev", "prod", "test3", "test4"})
 @Configuration
 @EnableTransactionManagement
 public class RoutingDataSourceConfig {
