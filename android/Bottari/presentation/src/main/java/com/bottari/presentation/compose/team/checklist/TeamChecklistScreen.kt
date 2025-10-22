@@ -127,11 +127,10 @@ private fun TeamChecklistNode(
                 enter = expandVertically() + fadeIn(animationSpec = tween(durationMillis = 50)),
                 exit = shrinkVertically() + fadeOut(animationSpec = tween(durationMillis = 50)),
             ) {
-                Column {
-                    Spacer(Modifier.height(height = BottariTheme.spacing.spaceMedium))
+                Column(verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall)) {
+                    Spacer(Modifier.height(height = BottariTheme.spacing.spaceXSmall))
                     HorizontalDivider(color = BottariTheme.colors.gray400)
 
-                    Spacer(Modifier.height(height = BottariTheme.spacing.spaceMedium))
                     if (items.isEmpty()) {
                         TeamChecklistEmptyView(modifier = Modifier.fillMaxWidth())
                     } else {
@@ -140,7 +139,6 @@ private fun TeamChecklistNode(
                                 bottariItem = bottariItem,
                                 onClick = { onClickItem(bottariItem.id, bottariItem.type) },
                             )
-                            Spacer(Modifier.height(height = BottariTheme.spacing.spaceSmall))
                         }
                     }
                 }
