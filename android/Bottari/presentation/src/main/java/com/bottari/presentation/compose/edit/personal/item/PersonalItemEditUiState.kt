@@ -1,7 +1,7 @@
 package com.bottari.presentation.compose.edit.personal.item
 
 import androidx.compose.runtime.Immutable
-import com.bottari.presentation.model.bottari.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 
 @Immutable
 data class PersonalItemEditUiState(
@@ -9,7 +9,7 @@ data class PersonalItemEditUiState(
     val isFetched: Boolean = false,
     val bottariId: Long = 0,
     val itemName: String = "",
-    val items: List<ChecklistItemUiModel> = emptyList(),
+    val items: List<PersonalChecklistItemUiModel> = emptyList(),
 ) {
     val isEmpty: Boolean = !isLoading && isFetched && items.isEmpty()
     private val isDuplicate: Boolean =

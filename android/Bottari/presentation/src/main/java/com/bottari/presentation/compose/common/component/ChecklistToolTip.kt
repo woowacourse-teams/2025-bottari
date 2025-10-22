@@ -40,7 +40,12 @@ fun ChecklistToolTip(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = BottariTheme.colors.primary)
-                .padding(16.dp),
+                .padding(
+                    top = BottariTheme.spacing.spaceXSmall,
+                    start = BottariTheme.spacing.spaceMedium,
+                    end = BottariTheme.spacing.spaceMedium,
+                    bottom = BottariTheme.spacing.spaceMedium,
+                ),
     ) {
         Row(modifier = Modifier, verticalAlignment = Alignment.CenterVertically) {
             Box(
@@ -71,7 +76,7 @@ fun ChecklistToolTip(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
+        Spacer(modifier = Modifier.height(BottariTheme.spacing.space2xSmall))
         Text(
             text = text,
             style =

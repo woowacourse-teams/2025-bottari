@@ -9,7 +9,7 @@ import com.bottari.domain.usecase.item.UpdateItemCheckStateUseCase
 import com.bottari.domain.usecase.tooltip.FetchTooltipStatusUseCase
 import com.bottari.domain.usecase.tooltip.UpdateTooltipStatusUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
-import com.bottari.presentation.model.bottari.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -36,7 +36,7 @@ class PersonalChecklistViewModel @Inject constructor(
         updateState { copy(isLoading = true) }
         fetchItemsUseCase(bottariId)
             .onEach { items ->
-                val itemUiModels = items.map(ChecklistItemUiModel::fromDomain)
+                val itemUiModels = items.map(PersonalChecklistItemUiModel::fromDomain)
                 updateState {
                     copy(
                         isLoading = false,

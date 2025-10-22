@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.databinding.ItemTemplateDetailItemBinding
-import com.bottari.presentation.model.bottari.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 
 class TemplateCreateMyBottariItemViewHolder private constructor(
     private val binding: ItemTemplateDetailItemBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: ChecklistItemUiModel) {
+    fun bind(item: PersonalChecklistItemUiModel) {
         binding.tvPersonalItemName.text = item.name
     }
 

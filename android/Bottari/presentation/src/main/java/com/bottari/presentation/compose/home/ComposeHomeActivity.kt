@@ -11,7 +11,7 @@ import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.personal.ComposePersonalBottariEditActivity
 import com.bottari.presentation.compose.personal.ComposePersonalChecklistActivity
-import com.bottari.presentation.view.checklist.team.TeamChecklistActivity
+import com.bottari.presentation.compose.team.ComposeTeamChecklistActivity
 import com.bottari.presentation.view.edit.team.TeamBottariEditActivity
 import com.bottari.presentation.view.template.TemplateActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -79,7 +79,7 @@ class ComposeHomeActivity : AppCompatActivity() {
         bottariId: Long,
         bottariTitle: String,
     ) {
-        val intent = TeamChecklistActivity.newIntent(this, bottariId, bottariTitle)
+        val intent = ComposeTeamChecklistActivity.newIntent(this, bottariId, bottariTitle)
         startActivity(intent)
     }
 

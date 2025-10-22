@@ -15,7 +15,9 @@ import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiEvent
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditUiState
 import com.bottari.presentation.view.edit.team.item.main.TeamItemEditViewModel
 import com.bottari.presentation.view.edit.team.item.personal.adapter.TeamPersonalItemEditAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TeamPersonalItemEditFragment :
     BaseFragment<FragmentTeamPersonalItemEditBinding>(FragmentTeamPersonalItemEditBinding::inflate),
     TeamPersonalItemEditAdapter.TeamPersonalItemEditEventListener {

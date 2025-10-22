@@ -35,6 +35,13 @@ class MyBottariViewModel @Inject constructor(
         fetchMyBottaries()
     }
 
+    fun fetchMyBottaries() {
+        launch {
+            fetchPersonalBottaries()
+            fetchTeamBottaries()
+        }
+    }
+
     fun deletePersonalBottari(bottariId: Long) {
         val bottari = currentState.myBottaries.find { bottari -> bottari.id == bottariId } ?: return
         launch {
@@ -124,13 +131,6 @@ class MyBottariViewModel @Inject constructor(
                     emitEvent(MyBottariUiEvent.CreateBottariFailure)
                 }
             updateState { copy(isLoading = false) }
-        }
-    }
-
-    private fun fetchMyBottaries() {
-        launch {
-            fetchPersonalBottaries()
-            fetchTeamBottaries()
         }
     }
 
