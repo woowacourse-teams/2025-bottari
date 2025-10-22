@@ -46,14 +46,15 @@ data class AlarmUiModel(
     companion object {
         private const val DAYS_IN_WEEK = 7
 
-        val DEFAULT_ALARM_UI_MODEL =
-            AlarmUiModel(
-                type = AlarmTypeUiModel.NON_REPEAT,
-                isActive = false,
-                time = LocalTime.now().plusMinutes(1),
-                date = LocalDate.now(),
-                repeatDays = RepeatDayUiModel.DEFAULT_WEEK,
-            )
+        val DEFAULT_ALARM_UI_MODEL: AlarmUiModel
+            get() =
+                AlarmUiModel(
+                    type = AlarmTypeUiModel.NON_REPEAT,
+                    isActive = false,
+                    time = LocalTime.now().plusMinutes(1),
+                    date = LocalDate.now(),
+                    repeatDays = RepeatDayUiModel.DEFAULT_WEEK,
+                )
 
         fun fromDomain(alarm: Alarm): AlarmUiModel =
             AlarmUiModel(
