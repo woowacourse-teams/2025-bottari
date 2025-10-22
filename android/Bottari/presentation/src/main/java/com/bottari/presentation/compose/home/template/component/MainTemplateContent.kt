@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bottari.logger.BottariLogger
+import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.presentation.compose.common.component.BottariHashChipSearchBar
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
@@ -21,6 +21,7 @@ fun MainTemplateContent(
     onChipsChange: (List<BottariTemplateHashtagUiModel>) -> Unit,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
+    showLoadingBlock: Boolean,
     onClickDetail: (Long) -> Unit,
     onClickBookmark: (Long) -> Unit,
 ) {
@@ -45,12 +46,47 @@ fun MainTemplateContent(
             type = TemplateItemType.Bookmark(false),
             templates = templates,
             listState = listState,
+            emptyViewText = "아직 공유된 보따리가 없어요",
+            showLoadingBlock = showLoadingBlock,
             isRefreshing = isRefreshing,
             onRefresh = onRefresh,
             onClickDetail = onClickDetail,
             onClickBookmark = onClickBookmark,
             onClickDelete = {},
             onClickHashtag = { hashtag -> onChipsChange(listOf(hashtag)) },
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MainTemplateContentPreview() {
+    val myTemplates =
+        List(10) {
+            BottariTemplateUiModel(
+                id = it.toLong(),
+                title = "보따리 템플릿 $it",
+                description = "보따리 템플릿 설명 $it",
+                items = emptyList(),
+                author = "작성자 $it",
+                takenCount = it * 10,
+                hashtags = emptyList(),
+            )
+        }
+
+    BottariTheme {
+        MainTemplateContent(
+            templates = myTemplates,
+            listState = LazyListState(),
+            query = "",
+            onQueryChange = {},
+            chips = emptyList(),
+            onChipsChange = {},
+            isRefreshing = false,
+            onRefresh = {},
+            showLoadingBlock = false,
+            onClickDetail = {},
+            onClickBookmark = {},
         )
     }
 }

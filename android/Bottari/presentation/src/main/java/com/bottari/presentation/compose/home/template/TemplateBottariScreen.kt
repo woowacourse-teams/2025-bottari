@@ -144,6 +144,7 @@ private fun TemplateBottariScreen(
                         onClickBookmark = onClickBookmark,
                         isRefreshing = uiState.isRefreshingMain,
                         onRefresh = { onRefresh(true) },
+                        showLoadingBlock = uiState.showLoading,
                     )
 
                 1 ->
@@ -154,6 +155,7 @@ private fun TemplateBottariScreen(
                         onClickDelete = onClickDelete,
                         isRefreshing = uiState.isRefreshingMy,
                         onRefresh = { onRefresh(false) },
+                        showLoadingBlock = uiState.showLoading,
                     )
             }
         }
@@ -169,8 +171,6 @@ private fun TemplateBottariScreen(
         ) {
             CreateTemplateFAB(onClickAdd)
         }
-
-        if (uiState.showLoading) IndeterminateCircularIndicator()
     }
 }
 

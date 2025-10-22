@@ -12,6 +12,7 @@ fun MyTemplateContent(
     listState: LazyListState,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
+    showLoadingBlock: Boolean,
     onClickDetail: (Long) -> Unit,
     onClickDelete: (Long) -> Unit,
 ) {
@@ -19,6 +20,8 @@ fun MyTemplateContent(
         type = TemplateItemType.MyTemplate,
         templates = myTemplates,
         listState = listState,
+        emptyViewText = "아직 공유한 보따리가 없어요",
+        showLoadingBlock = showLoadingBlock,
         isRefreshing = isRefreshing,
         onRefresh = onRefresh,
         onClickDetail = onClickDetail,
@@ -28,7 +31,7 @@ fun MyTemplateContent(
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun MyTemplateContentPreview() {
     val myTemplates =
@@ -49,6 +52,7 @@ private fun MyTemplateContentPreview() {
         listState = rememberLazyListState(),
         isRefreshing = false,
         onRefresh = {},
+        showLoadingBlock = false,
         onClickDetail = {},
         onClickDelete = {},
     )
