@@ -36,7 +36,7 @@ fun TeamStateListBox(
     Box(
         modifier =
             modifier
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
                 .background(BottariTheme.colors.white)
                 .background(color.copy(0.1f))
                 .fillMaxWidth()
@@ -62,13 +62,13 @@ fun TeamStateListBox(
                 items.forEach { item ->
                     Text(
                         text = item,
-                        style = BottariTheme.typography.regular12.toTextStyle(),
+                        style = BottariTheme.typography.medium12.toTextStyle(),
                         modifier =
                             Modifier
                                 .padding(2.dp)
-                                .clip(RoundedCornerShape(4.dp))
+                                .clip(RoundedCornerShape(16.dp))
                                 .background(BottariTheme.colors.white)
-                                .padding(horizontal = 6.dp, vertical = 3.dp),
+                                .padding(horizontal = 8.dp, vertical = 4.dp),
                     )
                 }
             }
