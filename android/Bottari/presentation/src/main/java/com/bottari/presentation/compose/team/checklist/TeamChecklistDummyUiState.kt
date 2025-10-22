@@ -9,10 +9,20 @@ val teamChecklistDummyUiState =
         isLoading = false,
         bottariItems =
             createDummyProductList(
-                10,
-                BottariItemTypeUiModel.SHARED,
-            ) + createDummyProductList(10, BottariItemTypeUiModel.PERSONAL) +
-                createDummyProductList(10, BottariItemTypeUiModel.ASSIGNED()),
+                count = 10,
+                type = BottariItemTypeUiModel.SHARED,
+                idStartIndex = 0,
+            ) +
+                createDummyProductList(
+                    count = 10,
+                    type = BottariItemTypeUiModel.PERSONAL,
+                    idStartIndex = 10,
+                ) +
+                createDummyProductList(
+                    count = 10,
+                    type = BottariItemTypeUiModel.ASSIGNED(),
+                    idStartIndex = 20,
+                ),
         sections =
             mapOf(
                 BottariItemTypeUiModel.SHARED to true,
