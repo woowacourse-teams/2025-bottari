@@ -78,7 +78,7 @@ private fun TeamMemberStateScreen(
             .fillMaxSize()
             .padding(BottariTheme.spacing.spaceMedium),
     ) {
-        if(uiState.isLoading) IndeterminateCircularIndicator()
+        if (uiState.isLoading) IndeterminateCircularIndicator()
         Column(verticalArrangement = Arrangement.Top) {
             Row {
                 TeamStateCard(
