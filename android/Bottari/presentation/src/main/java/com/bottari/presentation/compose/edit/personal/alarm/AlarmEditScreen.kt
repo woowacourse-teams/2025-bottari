@@ -1,5 +1,10 @@
 package com.bottari.presentation.compose.edit.personal.alarm
 
+import android.app.Activity
+import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,14 +50,17 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.edit.personal.alarm.component.DatePickerModal
 import com.bottari.presentation.compose.edit.personal.alarm.component.DateSelector
+import com.bottari.presentation.compose.edit.personal.alarm.component.PermissionSettingDialog
 import com.bottari.presentation.compose.edit.personal.alarm.component.RepeatDaySelector
 import com.bottari.presentation.model.alarm.AlarmUiModel
 import com.bottari.presentation.model.alarm.RepeatDayUiModel
+import com.bottari.presentation.util.PermissionUtil
 import com.bottari.presentation.view.edit.alarm.AlarmEditViewModel
 import com.bottari.presentation.view.edit.alarm.AlarmUiEvent
 import com.bottari.presentation.view.edit.alarm.AlarmUiState
 import com.commandiron.wheel_picker_compose.WheelTimePicker
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
+import kotlinx.coroutines.launch
 import java.time.LocalTime
 
 @Composable
@@ -64,8 +73,20 @@ fun AlarmEditScreen(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
-    var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
+    val activity = LocalActivity.current ?: return
+    var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
+    var showRuntimePermissionSettingDialog by rememberSaveable { mutableStateOf(false) }
+    var showSpecialPermissionSettingDialog by rememberSaveable { mutableStateOf(false) }
+
+    val permissionLauncher =
+        rememberPermissionLauncher(
+            activity = activity,
+            snackbarHostState = snackbarHostState,
+            onGranted = { viewModel.updateAlarmActivate(true) },
+            onRequireRuntimePermission = { showRuntimePermissionSettingDialog = true },
+            onRequireSpecialPermission = { showSpecialPermissionSettingDialog = true },
+        )
 
     LaunchedEffect(Unit) {
         viewModel.setBottariInfo(bottariId, bottariTitle)
@@ -90,6 +111,24 @@ fun AlarmEditScreen(
         }
     }
 
+    if (showRuntimePermissionSettingDialog) {
+        PermissionSettingDialog(
+            onNavigateClick = { PermissionUtil.openAppSettings(context) },
+            onDismiss = { showRuntimePermissionSettingDialog = false },
+            title = "권한 안내",
+            description = "알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동하시겠어요?",
+        )
+    }
+
+    if (showSpecialPermissionSettingDialog) {
+        PermissionSettingDialog(
+            onNavigateClick = { PermissionUtil.requestExactAlarmPermission(context) },
+            onDismiss = { showSpecialPermissionSettingDialog = false },
+            title = "특별 권한 안내",
+            description = "알림을 설정하려면 알람 및 리마인더 권한이 필요해요.\n설정 화면으로 이동하시겠어요?",
+        )
+    }
+
     if (showDatePickerDialog) {
         DatePickerModal(
             selectedDate = uiState.value.alarm.date,
@@ -103,7 +142,13 @@ fun AlarmEditScreen(
 
     AlarmEditScreen(
         state = uiState.value,
-        onSwitchAlarmActivate = viewModel::updateAlarmActivate,
+        onSwitchAlarmActivate = onSwitch@{ isActive ->
+            if (isActive.not()) {
+                viewModel.updateAlarmActivate(isActive)
+                return@onSwitch
+            }
+            permissionLauncher.launch(PermissionUtil.requiredPermissions)
+        },
         onTimeChange = viewModel::updateAlarmTime,
         onCalendarClick = { showDatePickerDialog = true },
         onRepeatDaysChange = viewModel::updateRepeatDays,
@@ -272,6 +317,37 @@ private fun AlarmEditBody(
                     .fillMaxWidth()
                     .padding(horizontal = BottariTheme.spacing.space2xSmall),
         )
+    }
+}
+
+@Composable
+private fun rememberPermissionLauncher(
+    activity: Activity,
+    snackbarHostState: SnackbarHostState,
+    onGranted: () -> Unit,
+    onRequireRuntimePermission: () -> Unit,
+    onRequireSpecialPermission: () -> Unit,
+): ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>> {
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    return rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        val allGranted = permissions.all { it.value }
+        when {
+            allGranted -> {
+                if (PermissionUtil.hasExactAlarmPermission(context)) {
+                    onGranted()
+                } else {
+                    onRequireSpecialPermission()
+                }
+            }
+
+            PermissionUtil.isPermanentlyDenied(activity) -> onRequireRuntimePermission()
+            else ->
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar("권한 요청에 실패했어요")
+                }
+        }
     }
 }
 
