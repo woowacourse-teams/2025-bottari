@@ -26,7 +26,7 @@ abstract class FlowBaseViewModel<UiState, UiEvent>(
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent: Flow<UiEvent> get() = _uiEvent.receiveAsFlow()
 
-    private val exceptionHandler =
+    protected val exceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
             handleError(throwable)
         }
