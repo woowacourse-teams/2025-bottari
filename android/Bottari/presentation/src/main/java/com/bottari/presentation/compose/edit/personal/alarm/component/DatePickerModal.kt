@@ -1,6 +1,7 @@
 package com.bottari.presentation.compose.edit.personal.alarm.component
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -113,6 +114,16 @@ private fun DatePickerTextButton(
             ButtonDefaults.buttonColors(
                 containerColor = BottariTheme.colors.primary,
                 contentColor = Color.White,
+            ),
+        elevation =
+            ButtonDefaults.buttonElevation(
+                defaultElevation = 2.dp,
+                pressedElevation = 0.dp,
+            ),
+        contentPadding =
+            PaddingValues(
+                vertical = BottariTheme.spacing.spaceSmall,
+                horizontal = BottariTheme.spacing.space2xLarge,
             ),
     ) {
         Text(
