@@ -84,15 +84,14 @@ fun TeamBottariScreen(
     ) { innerPadding ->
         if (isSwipeScreen) {
             SwipeScreen(
-                items = uiState.nonCheckedItems,
+                items = uiState.nonCheckedItems.filterIsInstance<TeamChecklistItemUiModel>(),
                 checkedQuantity = uiState.checkedQuantity,
                 totalQuantity = uiState.totalQuantity,
                 isComplete = uiState.isAllChecked,
                 onLeftSwipe = {},
                 onRightSwipe = { item ->
-                    if (item is TeamChecklistItemUiModel) {
-                        viewModel.toggleItemChecked(item.id, item.type)
-                    }
+                    val teamItem = item as TeamChecklistItemUiModel
+                    viewModel.toggleItemChecked(teamItem.id, teamItem.type)
                 },
                 onClickCompleteButton = { isSwipeScreen = false },
                 modifier =
