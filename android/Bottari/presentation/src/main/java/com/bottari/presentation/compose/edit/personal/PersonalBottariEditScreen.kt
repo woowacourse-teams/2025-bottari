@@ -26,6 +26,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
+import com.bottari.presentation.compose.edit.personal.alarm.AlarmEditScreen
 import com.bottari.presentation.compose.edit.personal.component.PersonalBottariEditTopAppBar
 import com.bottari.presentation.compose.edit.personal.item.PersonalItemEditScreen
 import com.bottari.presentation.compose.edit.personal.rename.BottariRenameDialog
@@ -77,6 +78,7 @@ fun PersonalBottariEditScreen(
     }
 
     PersonalBottariEditScreen(
+        bottariId = uiState.value.bottariId,
         bottariTitle = uiState.value.bottariTitle,
         snackbarHostState = snackbarHostState,
         onBackClick = onBackClick,
@@ -88,6 +90,7 @@ fun PersonalBottariEditScreen(
 
 @Composable
 private fun PersonalBottariEditScreen(
+    bottariId: Long,
     bottariTitle: String,
     snackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit,
@@ -109,6 +112,8 @@ private fun PersonalBottariEditScreen(
         containerColor = LocalBottariBgColor.current,
     ) { paddingValues ->
         PersonalBottariEditPager(
+            bottariId = bottariId,
+            bottariTitle = bottariTitle,
             snackbarHostState = snackbarHostState,
             modifier =
                 Modifier
@@ -120,6 +125,8 @@ private fun PersonalBottariEditScreen(
 
 @Composable
 private fun PersonalBottariEditPager(
+    bottariId: Long,
+    bottariTitle: String,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
@@ -146,14 +153,15 @@ private fun PersonalBottariEditPager(
         ) { page ->
             when (page) {
                 0 -> PersonalItemEditScreen(snackbarHostState = snackbarHostState)
-                1 -> AlarmEditContent()
+                1 ->
+                    AlarmEditScreen(
+                        bottariId = bottariId,
+                        bottariTitle = bottariTitle,
+                        snackbarHostState = snackbarHostState,
+                    )
             }
         }
     }
-}
-
-@Composable
-fun AlarmEditContent(modifier: Modifier = Modifier) {
 }
 
 @Preview
@@ -161,6 +169,7 @@ fun AlarmEditContent(modifier: Modifier = Modifier) {
 private fun PersonalBottariEditScreenPreview() {
     BottariTheme {
         PersonalBottariEditScreen(
+            bottariId = 0,
             bottariTitle = "보따리",
             snackbarHostState = remember { SnackbarHostState() },
             onBackClick = {},
