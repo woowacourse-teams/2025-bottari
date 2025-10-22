@@ -11,19 +11,5 @@ class SearchTemplatesByTitleUseCase @Inject constructor(
     suspend operator fun invoke(
         query: String,
         pageable: Pageable<BottariTemplate>,
-    ): Result<Pageable<BottariTemplate>> {
-        println(
-            """
-            ---
-            SearchTemplatesByTitleUseCase
-            query: $query
-            pageable: $pageable
-                        ---
-            """.trimIndent(),
-        )
-        return bottariTemplateRepository.searchTemplatesByTitle(
-            title = query,
-            pageable = pageable,
-        )
-    }
+    ): Result<Pageable<BottariTemplate>> = bottariTemplateRepository.searchTemplatesByTitle(title = query, pageable = pageable)
 }
