@@ -1,10 +1,12 @@
-package com.bottari.presentation.compose.home.template.component
+package com.bottari.presentation.compose.home.template.my
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.bottari.presentation.compose.home.template.component.PullToRefreshTemplateColumn
+import com.bottari.presentation.compose.home.template.component.TemplateItemType
 import com.bottari.presentation.model.template.BottariTemplateUiModel
 
 @Composable

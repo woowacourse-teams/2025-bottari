@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.template.component
+package com.bottari.presentation.compose.home.template.main
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -8,6 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.presentation.compose.common.component.BottariHashChipSearchBar
 import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.compose.home.template.component.PullToRefreshTemplateColumn
+import com.bottari.presentation.compose.home.template.component.TemplateItemType
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
 

@@ -32,8 +32,8 @@ import com.bottari.presentation.compose.common.extension.rememberScrolledToEnd
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.home.template.component.CreateTemplateFAB
-import com.bottari.presentation.compose.home.template.component.MainTemplateContent
-import com.bottari.presentation.compose.home.template.component.MyTemplateContent
+import com.bottari.presentation.compose.home.template.main.MainTemplateContent
+import com.bottari.presentation.compose.home.template.my.MyTemplateContent
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateItemUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
