@@ -102,6 +102,7 @@ private fun HomeScreenRouter(
 
             HomeScreenRoute.More ->
                 MoreBottariScreen(
+                    snackbarState = snackbarState,
                     onNavigateToBrowser = navigateToBrowser,
                 )
         }
