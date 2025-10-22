@@ -27,7 +27,11 @@ class ComposeTeamChecklistActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(BottariStatusBarStyle)
         setContent {
-            TeamBottariScreen(bottariTitle = bottariTitle, notificationFlag = notificationFlag)
+            TeamBottariScreen(
+                bottariTitle = bottariTitle,
+                notificationFlag = notificationFlag,
+                navigateBack = ::finish,
+            )
         }
     }
 

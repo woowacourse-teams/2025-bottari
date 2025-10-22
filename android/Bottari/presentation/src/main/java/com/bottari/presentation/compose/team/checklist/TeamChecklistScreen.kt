@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.component.ChecklistToolTip
+import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.personal.ChecklistProgressHeader
@@ -46,6 +47,10 @@ fun TeamChecklistScreen(
     onClickItem: (Long, BottariItemTypeUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    if(uiState.isLoading){
+        IndeterminateCircularIndicator()
+        return
+    }
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.Top) {
         item {
             if (!isToolTipClosed) {

@@ -1,7 +1,6 @@
 package com.bottari.presentation.compose.team
 
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
@@ -13,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,7 +26,7 @@ import com.bottari.presentation.compose.personal.ChecklistTopBar
 import com.bottari.presentation.compose.personal.swipe.SwipeScreen
 import com.bottari.presentation.compose.team.checklist.ComposeTeamChecklistUiEvent
 import com.bottari.presentation.compose.team.checklist.ComposeTeamChecklistViewModel
-import com.bottari.presentation.compose.team.checklist.TeamBottariChecklistScreen
+import com.bottari.presentation.compose.team.checklist.TeamChecklistScreen
 import com.bottari.presentation.compose.team.item.TeamItemStateScreen
 import com.bottari.presentation.compose.team.member.TeamMemberStateScreen
 import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
@@ -35,12 +35,11 @@ import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
 fun TeamBottariScreen(
     bottariTitle: String,
     notificationFlag: Boolean,
+    navigateBack: () -> Unit,
     viewModel: ComposeTeamChecklistViewModel = viewModel(),
 ) {
-    val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val snackbarHostState = remember { SnackbarHostState() }
-    var isSwipeScreen by remember { mutableStateOf(notificationFlag) }
-    var isChecklistCompleted by remember { mutableStateOf(false) }
+    var isSwipeScreen by rememberSaveable { mutableStateOf(notificationFlag) }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
@@ -53,10 +52,6 @@ fun TeamBottariScreen(
     val pagerState = rememberPagerState(initialPage = 0) { pageTitles.size }
     BackHandler(enabled = isSwipeScreen, onBack = { isSwipeScreen = false })
 
-    LaunchedEffect(uiState) {
-        isChecklistCompleted = uiState.isAllChecked
-    }
-
     LaunchedEffect(uiEvent) {
         when (uiEvent ?: return@LaunchedEffect) {
             ComposeTeamChecklistUiEvent.CheckItemFailure -> snackbarHostState.showSnackbar("아이템 체크에 실패했습니다")
@@ -68,17 +63,11 @@ fun TeamBottariScreen(
         topBar = {
             ChecklistTopBar(
                 title = bottariTitle,
-                onBackClick = {
-                    if (isSwipeScreen) {
-                        isSwipeScreen = false
-                        return@ChecklistTopBar
-                    }
-                    backPressedDispatcher?.onBackPressed()
-                },
+                onBackClick = { if (isSwipeScreen) isSwipeScreen = false else navigateBack() },
                 onSwipeClick = { isSwipeScreen = !isSwipeScreen },
                 onResetClick = {},
                 isResetIconVisible = false,
-                isSwipeIconVisible = !isChecklistCompleted && !isSwipeScreen && (pagerState.currentPage == 0),
+                isSwipeIconVisible = !uiState.isAllChecked && !isSwipeScreen && (pagerState.currentPage == 0),
             )
         },
         containerColor = LocalBottariBgColor.current,
@@ -86,7 +75,7 @@ fun TeamBottariScreen(
     ) { innerPadding ->
         if (isSwipeScreen) {
             SwipeScreen(
-                items = uiState.nonCheckedItems.filterIsInstance<TeamChecklistItemUiModel>(),
+                items = uiState.nonCheckedItems,
                 checkedQuantity = uiState.checkedQuantity,
                 totalQuantity = uiState.totalQuantity,
                 isComplete = uiState.isAllChecked,
@@ -104,21 +93,19 @@ fun TeamBottariScreen(
             return@Scaffold
         }
 
-        Column(
-            modifier = Modifier.padding(innerPadding),
-        ) {
+        Column(modifier = Modifier.padding(innerPadding)) {
             BottariTabBar(
                 pageTitles = pageTitles,
                 pagerState = pagerState,
             ) { page ->
                 when (page) {
                     0 ->
-                        TeamBottariChecklistScreen(
+                        TeamChecklistScreen(
                             uiState = uiState,
-                            isTooltipClose = uiState.isTooltipClosed,
                             onClickSection = viewModel::toggleTypeExpanded,
                             onCloseToolTip = viewModel::closeTooltip,
-                            onToggleItem = viewModel::toggleItemChecked,
+                            isToolTipClosed = uiState.isTooltipClosed,
+                            onClickItem = viewModel::toggleItemChecked,
                         )
 
                     1 -> TeamItemStateScreen(snackbarHostState = snackbarHostState)

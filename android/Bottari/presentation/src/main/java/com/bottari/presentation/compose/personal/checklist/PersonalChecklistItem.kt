@@ -48,8 +48,12 @@ fun PersonalChecklistItem(
                         .background(BottariTheme.colors.black),
             )
             Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceMedium))
-            Text(bottariItem.name, style = BottariTheme.typography.medium20.toTextStyle())
-            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = bottariItem.name,
+                style = BottariTheme.typography.medium20.toTextStyle(),
+                modifier = Modifier.weight(1f),
+            )
+            Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceMedium))
             BottariCheckBox(bottariItem.isChecked)
         }
     }

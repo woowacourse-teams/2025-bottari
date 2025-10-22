@@ -1,7 +1,5 @@
 package com.bottari.presentation.compose.team
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,6 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun TeamSendRemindDialog(
     title: String,
@@ -36,10 +38,7 @@ fun TeamSendRemindDialog(
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties =
-            DialogProperties(
-                usePlatformDefaultWidth = false,
-            ),
+        properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         BottariBox(
             modifier = modifier.fillMaxWidth(0.85f),
@@ -52,18 +51,20 @@ fun TeamSendRemindDialog(
                 content()
                 if (isRemindable) {
                     Spacer(Modifier.height(BottariTheme.spacing.spaceMedium))
-                    BottariBox(
+                    Button(
+                        onClick = onClickRemind,
                         shape = RoundedCornerShape(16.dp),
-                        modifier =
-                            Modifier
-                                .background(BottariTheme.colors.primary)
-                                .fillMaxWidth()
-                                .clickable(onClick = onClickRemind),
+                        colors =
+                            ButtonColors(
+                                BottariTheme.colors.primary,
+                                contentColor = BottariTheme.colors.white,
+                                disabledContainerColor = BottariTheme.colors.primary,
+                                disabledContentColor = BottariTheme.colors.white,
+                            ),
+                        contentPadding = PaddingValues(BottariTheme.spacing.spaceMedium),
                     ) {
                         Row(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {

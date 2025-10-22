@@ -176,7 +176,7 @@ private fun TeamProductStateCard(
                     ),
                 interactionSource = remember { MutableInteractionSource() },
             ),
-        contentPadding = PaddingValues(21.dp),
+        contentPadding = PaddingValues(BottariTheme.spacing.spaceLarge),
     ) {
         Column {
             Row {
