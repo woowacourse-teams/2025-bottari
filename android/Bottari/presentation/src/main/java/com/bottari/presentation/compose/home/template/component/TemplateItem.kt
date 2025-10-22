@@ -156,8 +156,7 @@ private fun HashtagChip(
                 .background(
                     color = Color(0xFFEFF6FF),
                     shape = chipShape,
-                )
-                .clickable(
+                ).clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(color = BottariTheme.colors.primary),
                 ) { onClickHashtag(hashtag) }
