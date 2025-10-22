@@ -118,10 +118,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.cardstackview)
     implementation(libs.flexbox)
-    implementation(libs.number.picker)
     implementation(libs.spinkit)
-    implementation(libs.material.calendarview)
-    implementation(libs.threetenabp)
     implementation(libs.compose.swipeable.cards)
     implementation(libs.wheelpickercompose)
 
