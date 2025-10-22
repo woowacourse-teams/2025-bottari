@@ -34,15 +34,16 @@ public class SseSessions {
             final Long memberId,
             final SseEmitter sseEmitter
     ) {
-        sseEmittersByMemberId.compute(memberId, (id, existingSseEmitter) -> {
-            if (existingSseEmitter != null) {
-                existingSseEmitter.complete();
-            }
-            return sseEmitter;
-        });
+        final SseEmitter prevSseEmitter = sseEmittersByMemberId.put(memberId, sseEmitter);
+        if (prevSseEmitter != null) {
+            prevSseEmitter.complete();
+        }
     }
 
-    public void remove(final Long memberId) {
-        sseEmittersByMemberId.remove(memberId);
+    public boolean removeIfSame(
+            final Long memberId,
+            final SseEmitter sseEmitter
+    ) {
+        return sseEmittersByMemberId.remove(memberId, sseEmitter);
     }
 }
