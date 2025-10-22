@@ -106,9 +106,7 @@ class PersonalBottariEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleCreateTemplateSuccess(createdTemplateId: Long?) {
-        if (createdTemplateId == null) return
-
+    private fun handleCreateTemplateSuccess(createdTemplateId: Long) {
         val itemNames = currentState.items.map { it.name }
         BottariLogger.ui(
             UiEventType.TEMPLATE_UPLOAD,
