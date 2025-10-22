@@ -1,7 +1,8 @@
 package com.bottari.presentation.compose.home.template
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,9 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -28,11 +26,13 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -46,16 +46,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariHashChipSearchBar
 import com.bottari.presentation.compose.common.component.BottariTabBar
+import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.extension.rememberScrolledToEnd
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
 import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.compose.home.template.component.CreateTemplateFAB
 import com.bottari.presentation.compose.home.template.component.TemplateItem
 import com.bottari.presentation.compose.home.template.component.TemplateItemIconButton
 import com.bottari.presentation.compose.home.template.component.TemplateItemType
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateItemUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 
@@ -131,10 +134,18 @@ private fun TemplateBottariScreen(
     modifier: Modifier = Modifier,
 ) {
     val isScrolledToEnd by listState.rememberScrolledToEnd(5)
-    val fabAlpha by animateFloatAsState(
-        targetValue = if (listState.isScrollInProgress) 0f else 1f,
-        animationSpec = tween(durationMillis = 300),
-    )
+    var isFabExpanded by remember { mutableStateOf(false) }
+    var isFabVisible by remember { mutableStateOf(true) }
+
+    LaunchedEffect(listState.isScrollInProgress) {
+        if (listState.isScrollInProgress) {
+            isFabVisible = false
+            isFabExpanded = false
+            return@LaunchedEffect
+        }
+        delay(500)
+        isFabVisible = true
+    }
 
     LaunchedEffect(Unit) {
         snapshotFlow { isScrolledToEnd }
@@ -142,6 +153,8 @@ private fun TemplateBottariScreen(
             .filter { it }
             .collect { onLoadNextPage() }
     }
+
+    if (uiState.isLoading) IndeterminateCircularIndicator()
 
     Box(modifier = modifier) {
         TemplatePager(
@@ -170,31 +183,16 @@ private fun TemplateBottariScreen(
                     )
             }
         }
-
-        FloatingActionButton(
-            onClick = onClickAdd,
-            shape = RoundedCornerShape(12.dp),
-            containerColor = BottariTheme.colors.primary,
-            contentColor = BottariTheme.colors.white,
-            elevation =
-                FloatingActionButtonDefaults.elevation(
-                    defaultElevation = 2.dp,
-                    pressedElevation = 0.dp,
-                    hoveredElevation = 0.dp,
-                    focusedElevation = 0.dp,
-                ),
+        AnimatedVisibility(
+            visible = isFabVisible,
             modifier =
                 Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-                    .alpha(fabAlpha),
+                    .padding(BottariTheme.spacing.spaceMedium),
+            enter = fadeIn(),
+            exit = fadeOut(),
         ) {
-            Box(modifier = Modifier.padding(horizontal = 8.dp)) {
-                Text(
-                    text = "보따리 등록하기",
-                    style = BottariTheme.typography.semiBold16.toTextStyle(),
-                )
-            }
+            CreateTemplateFAB(onClickAdd)
         }
     }
 }
