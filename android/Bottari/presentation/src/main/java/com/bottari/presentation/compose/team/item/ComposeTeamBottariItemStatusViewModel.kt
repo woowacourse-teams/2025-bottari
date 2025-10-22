@@ -39,11 +39,11 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
     private val teamBottariId: Long =
         stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
-    val debouncedSendRemindByItem: (Unit) -> Unit =
+    val debouncedSendRemindByItem: (TeamBottariUiModelStatus) -> Unit =
         debounce(
             timeMillis = DEBOUNCE_DELAY,
             coroutineScope = viewModelScope,
-        ) { sendRemindByItem() }
+        ) { item -> sendRemindByItem(item) }
 
     init {
         fetchTeamStatus()
@@ -55,15 +55,11 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch { disconnectTeamEventUseCase() }
     }
 
-    fun selectItem(item: TeamBottariUiModelStatus) {
+    fun selectItem(item: TeamBottariUiModelStatus?) {
         updateState { copy(selectedProduct = item) }
     }
 
-    private fun sendRemindByItem() {
-        val selectedProduct =
-            currentState.selectedProduct ?: return emitEvent(
-                ComposeTeamBottariItemStatusUiEvent.SendRemindFailure,
-            )
+    private fun sendRemindByItem(selectedProduct: TeamBottariUiModelStatus) {
         val itemId = selectedProduct.id
         val itemType = selectedProduct.type.toTypeString()
 

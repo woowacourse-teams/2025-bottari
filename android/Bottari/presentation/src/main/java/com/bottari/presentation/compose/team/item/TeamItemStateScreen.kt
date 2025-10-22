@@ -1,5 +1,6 @@
 package com.bottari.presentation.compose.team.item
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,7 +25,9 @@ import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.component.BottariCheckIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.compose.team.TeamSendRemindDialog
 import com.bottari.presentation.compose.team.TeamStateCard
+import com.bottari.presentation.compose.team.TeamStateListBox
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModelStatus
 import com.bottari.presentation.model.bottari.team.member.MemberCheckStatusUiModel
@@ -38,15 +41,25 @@ fun TeamItemStateScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(initialValue = null)
 
-    TeamItemStateScreen(uiState = uiState.value, modifier = modifier)
+    TeamItemStateScreen(
+        uiState = uiState.value,
+        onSelectProduct = viewModel::selectItem,
+        onSendRemind = { item -> viewModel.debouncedSendRemindByItem(item) },
+        modifier = modifier,
+    )
 }
 
 @Composable
 fun TeamItemStateScreen(
     uiState: ComposeTeamBottariItemStatusUiState,
+    onSelectProduct: (TeamBottariUiModelStatus?) -> Unit,
+    onSendRemind: (TeamBottariUiModelStatus) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.fillMaxSize().padding(BottariTheme.spacing.spaceMedium), verticalArrangement = Arrangement.Top) {
+    Column(
+        modifier = modifier.fillMaxSize().padding(BottariTheme.spacing.spaceMedium),
+        verticalArrangement = Arrangement.Top,
+    ) {
         Row {
             TeamStateCard(
                 title =
@@ -83,7 +96,34 @@ fun TeamItemStateScreen(
         ) {
             uiState.items.forEach { item ->
                 item {
-                    TeamProductStateCard(product = item)
+                    TeamProductStateCard(product = item, onClick = onSelectProduct)
+                }
+            }
+        }
+    }
+    uiState.selectedProduct?.let { product ->
+        TeamSendRemindDialog(
+            title = product.name,
+            isRemindable = (!product.isAllChecked),
+            onDismissRequest = { onSelectProduct(null) },
+            onClickRemind = { onSendRemind(product) },
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall)) {
+                if (product.checkedMember.isNotEmpty()) {
+                    TeamStateListBox(
+                        text = "해당 물건을 챙겼습니다",
+                        painter = painterResource(id = R.drawable.ic_bottari_item_empty_view),
+                        color = BottariTheme.colors.primary,
+                        items = product.checkedMember,
+                    )
+                }
+                if (product.uncheckedMember.isNotEmpty()) {
+                    TeamStateListBox(
+                        text = "해당 물건을 챙기지 않았습니다.",
+                        painter = painterResource(id = R.drawable.ic_bottari_item_empty_view),
+                        color = BottariTheme.colors.red,
+                        items = product.uncheckedMember,
+                    )
                 }
             }
         }
@@ -94,6 +134,7 @@ fun TeamItemStateScreen(
 private fun TeamProductStateCard(
     product: TeamBottariUiModelStatus,
     modifier: Modifier = Modifier,
+    onClick: (TeamBottariUiModelStatus) -> Unit = {},
 ) {
     val type =
         when (product.type) {
@@ -101,7 +142,10 @@ private fun TeamProductStateCard(
             BottariItemTypeUiModel.PERSONAL -> stringResource(R.string.bottari_item_type_personal_text)
             BottariItemTypeUiModel.SHARED -> stringResource(R.string.bottari_item_type_shared_text)
         }
-    BottariBox(modifier = modifier, contentPadding = PaddingValues(21.dp)) {
+    BottariBox(
+        modifier = modifier.clickable(onClick = { onClick(product) }),
+        contentPadding = PaddingValues(21.dp),
+    ) {
         Column {
             Row {
                 Text(
@@ -156,6 +200,8 @@ private fun TeamProductStateCard(
 fun TeamItemStateScreenPreview() {
     TeamItemStateScreen(
         uiState = dummyUiState,
+        onSelectProduct = {},
+        onSendRemind = {},
     )
 }
 

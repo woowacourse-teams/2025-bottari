@@ -67,7 +67,7 @@ private fun createDummyProductList(
         )
     }
 
-val dummyUiState =
+private val dummyUiState =
     ComposeTeamChecklistUiState(
         isLoading = false,
         bottariItems =
