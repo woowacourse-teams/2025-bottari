@@ -38,7 +38,13 @@ fun HomeScreen(
             HomeBottomNavigationBar(
                 screens = HomeScreenRoute.entries,
                 selectedTab = currentScreen,
-                onTabSelected = { tab -> navController.navigate(tab) },
+                onTabSelected = { tab ->
+                    if (tab == HomeScreenRoute.Template) {
+                        navController.navigateOrReset(HomeScreenRoute.Template)
+                        return@HomeBottomNavigationBar
+                    }
+                    navController.navigate(tab)
+                },
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -77,12 +83,13 @@ private fun HomeScreenRouter(
         modifier = modifier,
     ) { screen, nav ->
         when (screen) {
-            HomeScreenRoute.Template ->
+            HomeScreenRoute.Template -> {
                 TemplateBottariScreen(
                     snackbarState = snackbarState,
                     navigateToTemplateDetail = navigateToTemplateDetail,
                     navigateToTemplateCreate = navigateToTemplateCreate,
                 )
+            }
 
             HomeScreenRoute.Bottari ->
                 MyBottariScreen(

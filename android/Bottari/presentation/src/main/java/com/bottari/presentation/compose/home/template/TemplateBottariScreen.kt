@@ -22,13 +22,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -38,9 +35,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
@@ -73,21 +67,9 @@ fun TemplateBottariScreen(
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsState(null)
+    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val mainListState = rememberLazyListState()
     val myListState = rememberLazyListState()
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val refreshLatest by rememberUpdatedState(newValue = { viewModel.refresh() })
-
-    DisposableEffect(lifecycleOwner) {
-        val observer =
-            LifecycleEventObserver { _, event ->
-                if (event == Lifecycle.Event.ON_RESUME) refreshLatest()
-            }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
-    }
 
     LaunchedEffect(uiEvent.value) {
         when (uiEvent.value ?: return@LaunchedEffect) {
@@ -111,7 +93,7 @@ fun TemplateBottariScreen(
         onClickDetail = navigateToTemplateDetail,
         onQueryChange = viewModel::updateSearchWord,
         onChipChange = viewModel::searchByChip,
-        onLoadNextPage = viewModel::fetchTemplates,
+        onLoadNextPage = viewModel::loadNextPage,
         onClickAdd = navigateToTemplateCreate,
         onClickDelete = viewModel::deleteTemplate,
         onClickBookmark = {},
