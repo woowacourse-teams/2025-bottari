@@ -116,7 +116,7 @@ private fun TeamChecklistNode(
                 HorizontalDivider(color = BottariTheme.colors.gray400)
 
                 Spacer(Modifier.height(height = BottariTheme.spacing.spaceMedium))
-                if(items.isEmpty()){
+                if (items.isEmpty()) {
                     TeamChecklistEmptyView(modifier = Modifier.fillMaxWidth())
                     return@Column
                 }
@@ -183,7 +183,7 @@ private fun SectionHeader(
                 color = BottariTheme.colors.gray700,
             )
         }
-        Spacer(modifier.weight(1f))
+        Spacer(Modifier.weight(1f))
         if (isOpened) {
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_up),
