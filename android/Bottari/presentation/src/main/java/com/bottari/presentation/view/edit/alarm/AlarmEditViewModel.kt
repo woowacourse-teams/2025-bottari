@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.edit.alarm
 
-import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.notification.Notification
 import com.bottari.domain.usecase.alarm.FindAlarmUseCase
@@ -12,69 +12,107 @@ import com.bottari.presentation.model.alarm.AlarmTypeUiModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
 import com.bottari.presentation.model.alarm.RepeatDayUiModel
 import com.bottari.presentation.util.AlarmScheduler
+import com.bottari.presentation.util.debounce
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onCompletion
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
 class AlarmEditViewModel @Inject constructor(
-    stateHandle: SavedStateHandle,
     private val findAlarmUseCase: FindAlarmUseCase,
     private val saveAlarmUseCase: SaveAlarmUseCase,
     private val alarmScheduler: AlarmScheduler,
 ) : FlowBaseViewModel<AlarmUiState, AlarmUiEvent>(AlarmUiState()) {
-    private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
-    private val bottariTitle: String =
-        stateHandle[KEY_BOTTARI_TITLE] ?: error(ERROR_REQUIRE_BOTTARI_TITLE)
+    private var bottariId: Long = 0L
+    private var bottariTitle: String = ""
+    private val debouncedAlarmSave: (Unit) -> Unit
 
     init {
+        debouncedAlarmSave = viewModelScope.debounce { saveAlarm() }
+    }
+
+    fun setBottariInfo(
+        bottariId: Long,
+        bottariTitle: String,
+    ) {
+        if (currentState.isFetched) return
+
+        this.bottariId = bottariId
+        this.bottariTitle = bottariTitle
         fetchAlarm()
     }
 
     fun updateAlarm() {
-        val alarm = currentState.alarm.toDomain()
-        saveAlarm(alarm)
+//        val alarm = currentState.alarm.toDomain()
+//        saveAlarm(alarm)
     }
 
     fun updateAlarmType(alarmTypeUiModel: AlarmTypeUiModel) {
-        val alarm = currentState.alarm
-        updateState { copy(alarm = alarm.copy(type = alarmTypeUiModel)) }
+//        val alarm = currentState.alarm
+//        updateState { copy(alarm = alarm.copy(type = alarmTypeUiModel)) }
     }
 
     fun updateAlarmActivate(isActive: Boolean) {
         val alarm = currentState.alarm
         updateState { copy(alarm = alarm.copy(isActive = isActive)) }
+        debouncedAlarmSave(Unit)
     }
 
     fun updateAlarmTime(time: LocalTime) {
         val alarm = currentState.alarm
-        updateState { copy(alarm = alarm.copy(time = time)) }
+
+        val shouldDelayToNextDay =
+            alarm.type == AlarmTypeUiModel.NON_REPEAT &&
+                LocalDateTime.of(alarm.date, time).isBefore(LocalDateTime.now())
+
+        val updatedAlarm =
+            alarm.copy(
+                date = if (shouldDelayToNextDay) alarm.date.plusDays(1) else alarm.date,
+                time = time,
+            )
+        updateState { copy(alarm = updatedAlarm) }
+        debouncedAlarmSave(Unit)
     }
 
     fun updateAlarmDate(date: LocalDate) {
         val alarm = currentState.alarm
-        if (alarm.type != AlarmTypeUiModel.NON_REPEAT) return
-        updateState { copy(alarm = alarm.copy(date = date)) }
+        val updatedAlarm =
+            alarm.copy(
+                type = AlarmTypeUiModel.NON_REPEAT,
+                date = date,
+                repeatDays = RepeatDayUiModel.DEFAULT_WEEK,
+            )
+        updateState { copy(alarm = updatedAlarm) }
+        debouncedAlarmSave(Unit)
     }
 
     fun updateRepeatDays(repeatDay: RepeatDayUiModel) {
         val alarm = currentState.alarm
-        val newRepeatDays =
-            alarm.repeatDays.map {
-                if (it.dayOfWeek != repeatDay.dayOfWeek) return@map it
-                it.copy(isChecked = !it.isChecked)
+
+        val updatedRepeatDays =
+            alarm.repeatDays.map { day ->
+                if (day.dayOfWeek != repeatDay.dayOfWeek) return@map day
+                day.copy(isChecked = !day.isChecked)
             }
-        val newAlarm = alarm.copy(repeatDays = newRepeatDays)
-        updateState { copy(alarm = newAlarm) }
+        val hasCheckedDay = updatedRepeatDays.any { day -> day.isChecked }
+        val updatedAlarm =
+            alarm.copy(
+                type = if (hasCheckedDay) AlarmTypeUiModel.REPEAT else AlarmTypeUiModel.NON_REPEAT,
+                repeatDays = updatedRepeatDays,
+            )
+
+        updateState { copy(alarm = updatedAlarm) }
+        debouncedAlarmSave(Unit)
     }
 
     private fun fetchAlarm() {
-        updateState { copy(isLoading = true) }
         launch {
+            updateState { copy(isLoading = true) }
             val alarm =
                 findAlarmUseCase(bottariId)
                     .catch {
@@ -82,12 +120,13 @@ class AlarmEditViewModel @Inject constructor(
                     }.onCompletion {
                         updateState { copy(isLoading = false) }
                     }.firstOrNull() ?: return@launch
-            updateState { copy(alarm = AlarmUiModel.fromDomain(alarm)) }
+            updateState { copy(isFetched = true, alarm = AlarmUiModel.fromDomain(alarm)) }
         }
     }
 
-    private fun saveAlarm(alarm: Alarm) {
-        updateState { copy(isLoading = true) }
+    private fun saveAlarm() {
+        if (currentState.isSavable.not()) return
+        val alarm = currentState.alarm.toDomain()
         launch {
             saveAlarmUseCase(bottariId, bottariTitle, alarm)
                 .onSuccess {
@@ -100,12 +139,21 @@ class AlarmEditViewModel @Inject constructor(
                         ),
                     )
                     emitEvent(AlarmUiEvent.SaveAlarmSuccess)
-                    alarmScheduler.scheduleAlarm(createNotification(alarm))
+                    handleAlarm(alarm)
                 }.onFailure {
+                    BottariLogger.error(it.stackTraceToString())
                     emitEvent(AlarmUiEvent.SaveAlarmFailure)
                 }
         }
-        updateState { copy(isLoading = false) }
+    }
+
+    private fun handleAlarm(alarm: Alarm) {
+        val notification = createNotification(alarm)
+        if (alarm.isActive.not()) {
+            alarmScheduler.cancelAlarm(notification)
+            return
+        }
+        alarmScheduler.scheduleAlarm(notification)
     }
 
     private fun createNotification(alarm: Alarm): Notification =

@@ -1,11 +1,14 @@
 package com.bottari.presentation.view.edit.alarm
 
+import androidx.compose.runtime.Immutable
 import com.bottari.presentation.model.alarm.AlarmTypeUiModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
 import java.time.LocalDateTime
 
+@Immutable
 data class AlarmUiState(
     val isLoading: Boolean = false,
+    val isFetched: Boolean = false,
     val alarm: AlarmUiModel = AlarmUiModel.DEFAULT_ALARM_UI_MODEL,
 ) {
     private val isRepeatWithoutDays: Boolean =
