@@ -37,12 +37,22 @@ fun NicknameBox(
     modifier: Modifier = Modifier,
 ) {
     var isEditing by rememberSaveable { mutableStateOf(false) }
-    var textFieldValue by remember(nickname) {
+    var textFieldValue by remember {
         mutableStateOf(TextFieldValue(text = nickname, selection = TextRange(nickname.length)))
     }
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(nickname) {
+        if (!isEditing) {
+            textFieldValue =
+                TextFieldValue(
+                    text = nickname,
+                    selection = TextRange(nickname.length),
+                )
+        }
+    }
 
     LaunchedEffect(isEditing) {
         if (isEditing) {
