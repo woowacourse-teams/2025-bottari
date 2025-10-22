@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.logger.BottariLogger
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
 import com.bottari.presentation.compose.common.theme.BottariTheme
@@ -45,6 +46,11 @@ fun TemplateColumn(
         contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceSmall),
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
     ) {
+        BottariLogger.debug("""
+            empty: $emptyViewText,
+            type: $type,
+            templates: $templates,
+        """.trimIndent())
         if (emptyViewText.isNotBlank() && templates.isEmpty()) {
             item {
                 TemplateEmptyView(

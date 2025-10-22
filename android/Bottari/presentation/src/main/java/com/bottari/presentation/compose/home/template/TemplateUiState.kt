@@ -15,6 +15,7 @@ data class TemplateUiState(
     val searchWord: String = "",
     val chips: List<BottariTemplateHashtagUiModel> = emptyList(),
 ) {
-    val isEmpty: Boolean = isFetched && templates.isEmpty()
+    val isMainTemplatesEmpty: Boolean = isFetched && templates.isEmpty()
+    val isMyTemplatesEmpty: Boolean = isFetched && myTemplates.isEmpty()
     val showLoading: Boolean = isLoading && isRefreshingMy.not() && isRefreshingMain.not()
 }

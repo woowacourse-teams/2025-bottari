@@ -28,7 +28,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariTabBar
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.extension.rememberScrolledToEnd
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.theme.BottariTheme
@@ -136,7 +135,7 @@ private fun TemplateBottariScreen(
                     MainTemplateContent(
                         templates = uiState.templates,
                         listState = listState,
-                        emptyViewText = if (uiState.isEmpty) "아직 공유된 보따리가 없어요" else "",
+                        emptyViewText = if (uiState.isMainTemplatesEmpty) "아직 공유된 보따리가 없어요" else "",
                         query = uiState.searchWord,
                         onQueryChange = onQueryChange,
                         chips = uiState.chips,
@@ -152,7 +151,7 @@ private fun TemplateBottariScreen(
                     MyTemplateContent(
                         myTemplates = uiState.myTemplates,
                         listState = myListState,
-                        emptyViewText = if (uiState.isEmpty) "아직 공유한 보따리가 없어요" else "",
+                        emptyViewText = if (uiState.isMyTemplatesEmpty) "아직 공유한 보따리가 없어요" else "",
                         onClickDetail = onClickDetail,
                         onClickDelete = onClickDelete,
                         isRefreshing = uiState.isRefreshingMy,
