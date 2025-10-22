@@ -13,9 +13,20 @@ class NavigationController(
     var currentScreen by mutableStateOf(initialScreen)
         private set
 
+    internal var onResetRequest: ((Screen) -> Unit)? = null
+
     fun navigate(screen: Screen) {
         backStack.add(currentScreen)
         currentScreen = screen
+    }
+
+    fun navigateOrReset(screen: Screen) {
+        if (screen == currentScreen) {
+            onResetRequest?.invoke(screen)
+            return
+        }
+
+        navigate(screen)
     }
 
     fun popBackStack(): Boolean {
