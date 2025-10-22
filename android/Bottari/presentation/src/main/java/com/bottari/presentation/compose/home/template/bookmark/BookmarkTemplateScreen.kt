@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -27,6 +28,7 @@ import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 
 @Composable
 fun BookmarkTemplateScreen(
+    snackbarHostState: SnackbarHostState,
     navigateToDetail: (templateId: Long) -> Unit,
     viewModel: BookmarkTemplateViewModel = viewModel(),
 ) {
@@ -35,10 +37,14 @@ fun BookmarkTemplateScreen(
 
     LaunchedEffect(uiEvent) {
         when (uiEvent.value ?: return@LaunchedEffect) {
-            is BookmarkTemplateEvent.FetchBookmarkTemplateSuccess -> {}
-            is BookmarkTemplateEvent.FetchBookmarkTemplateFailure -> {}
-            is BookmarkTemplateEvent.DeleteBookmarkTemplateSuccess -> {}
-            is BookmarkTemplateEvent.DeleteBookmarkTemplateFailure -> {}
+            is BookmarkTemplateEvent.FetchBookmarkTemplateFailure ->
+                snackbarHostState.showSnackbar("북마크한 보따리를 불러오지 못했어요")
+
+            is BookmarkTemplateEvent.DeleteBookmarkTemplateSuccess ->
+                snackbarHostState.showSnackbar("보따리의 북마크를 해제했어요")
+
+            is BookmarkTemplateEvent.DeleteBookmarkTemplateFailure ->
+                snackbarHostState.showSnackbar("보따리의 북마크 해제에 실패했어요")
         }
     }
 
