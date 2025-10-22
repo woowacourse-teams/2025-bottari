@@ -50,7 +50,7 @@ data class BottariTemplateFetchResponse(
         fun toDomain(): BottariTemplateHashtag =
             BottariTemplateHashtag(
                 id = id,
-                name = HashtagName.create(name).getOrThrow(),
+                name = HashtagName.create(name).getOrDefault(HashtagName.UNKNOWN_HASHTAG_NAME),
             )
     }
 
