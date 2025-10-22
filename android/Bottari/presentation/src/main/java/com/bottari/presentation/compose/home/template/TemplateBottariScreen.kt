@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.filter
 @Composable
 fun TemplateBottariScreen(
     snackbarState: SnackbarHostState,
-    navigateToTemplateDetail: (Long) -> Unit,
+    navigateToTemplateDetail: (templateId: Long, isMyTemplate: Boolean) -> Unit,
     navigateToTemplateCreate: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TemplateViewModel = viewModel(),
@@ -94,7 +94,7 @@ private fun TemplateBottariScreen(
     uiState: TemplateUiState,
     listState: LazyListState,
     myListState: LazyListState,
-    onClickDetail: (Long) -> Unit,
+    onClickDetail: (templateId: Long, isMyTemplate: Boolean) -> Unit,
     onQueryChange: (String) -> Unit,
     onChipChange: (List<BottariTemplateHashtagUiModel>) -> Unit,
     onLoadNextPage: () -> Unit,
@@ -140,7 +140,11 @@ private fun TemplateBottariScreen(
                         onQueryChange = onQueryChange,
                         chips = uiState.chips,
                         onChipsChange = onChipChange,
-                        onClickDetail = onClickDetail,
+                        onClickDetail = { id ->
+                            uiState.myTemplates
+                                .any { template -> template.id == id }
+                                .let { isMyTemplate -> onClickDetail(id, isMyTemplate) }
+                        },
                         onClickBookmark = onClickBookmark,
                         isRefreshing = uiState.isRefreshingMain,
                         onRefresh = { onRefresh(true) },
@@ -152,7 +156,7 @@ private fun TemplateBottariScreen(
                         myTemplates = uiState.myTemplates,
                         listState = myListState,
                         emptyViewText = if (uiState.isMyTemplatesEmpty) "아직 공유한 보따리가 없어요" else "",
-                        onClickDetail = onClickDetail,
+                        onClickDetail = { id -> onClickDetail(id, true) },
                         onClickDelete = onClickDelete,
                         isRefreshing = uiState.isRefreshingMy,
                         onRefresh = { onRefresh(false) },
@@ -221,7 +225,7 @@ private fun TemplateBottariScreenPreview() {
             uiState = TemplateUiState(templates = templates),
             listState = rememberLazyListState(),
             myListState = rememberLazyListState(),
-            onClickDetail = {},
+            onClickDetail = { _, _ -> },
             onQueryChange = {},
             onChipChange = {},
             onLoadNextPage = {},

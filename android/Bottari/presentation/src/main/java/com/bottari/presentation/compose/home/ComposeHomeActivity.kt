@@ -42,8 +42,11 @@ class ComposeHomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun navigateToTemplateDetail(templateId: Long) {
-        val intent = TemplateActivity.newIntentForDetail(this, templateId)
+    private fun navigateToTemplateDetail(
+        templateId: Long,
+        isMyTemplate: Boolean,
+    ) {
+        val intent = TemplateActivity.newIntentForDetail(this, templateId, isMyTemplate)
         startActivity(intent)
     }
 

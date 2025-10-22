@@ -46,11 +46,6 @@ fun TemplateColumn(
         contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceSmall),
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
     ) {
-        BottariLogger.debug("""
-            empty: $emptyViewText,
-            type: $type,
-            templates: $templates,
-        """.trimIndent())
         if (emptyViewText.isNotBlank() && templates.isEmpty()) {
             item {
                 TemplateEmptyView(

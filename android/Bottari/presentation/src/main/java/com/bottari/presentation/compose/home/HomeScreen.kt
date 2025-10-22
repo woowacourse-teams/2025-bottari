@@ -23,7 +23,7 @@ fun HomeScreen(
     navigateToPersonalBottariChecklist: (Long, String) -> Unit,
     navigateToTeamBottariChecklist: (Long, String) -> Unit,
     navigateToBrowser: (String) -> Unit,
-    navigateToTemplateDetail: (Long) -> Unit,
+    navigateToTemplateDetail: (templateId: Long, isMyTemplate: Boolean) -> Unit,
     navigateToTemplateCreate: () -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -69,7 +69,7 @@ fun HomeScreen(
 private fun HomeScreenRouter(
     navController: NavigationController,
     navigateToBrowser: (String) -> Unit,
-    navigateToTemplateDetail: (Long) -> Unit,
+    navigateToTemplateDetail: (templateId: Long, isMyTemplate: Boolean) -> Unit,
     navigateToTemplateCreate: () -> Unit,
     navigateToPersonalBottariEdit: (Long, Boolean) -> Unit,
     navigateToTeamBottariEdit: (Long, Boolean) -> Unit,
