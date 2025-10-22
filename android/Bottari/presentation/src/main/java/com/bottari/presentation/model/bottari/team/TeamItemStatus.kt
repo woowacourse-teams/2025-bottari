@@ -46,7 +46,3 @@ data class TeamBottariUiModelStatus(
             )
     }
 }
-
-data class TeamChecklistTypeUiModelStatus(
-    val type: BottariItemTypeUiModel,
-) : TeamItemStatus
