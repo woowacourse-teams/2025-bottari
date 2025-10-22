@@ -17,7 +17,7 @@ interface BottariTemplateRemoteDataSource {
         pageableRequest: PageableRequest,
     ): Result<PageableResponse<BottariTemplateCursorFetchResponse>>
 
-    suspend fun createBottariTemplate(bottariTemplateCreateRequest: BottariTemplateCreateRequest): Result<Long?>
+    suspend fun createBottariTemplate(bottariTemplateCreateRequest: BottariTemplateCreateRequest): Result<Long>
 
     suspend fun fetchBottariTemplateDetail(bottariId: Long): Result<BottariTemplateFetchResponse>
 

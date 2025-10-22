@@ -3,6 +3,7 @@ package com.bottari.data.model.remote.bottari.template
 import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.model.bottari.template.BottariTemplateHashtag
 import com.bottari.domain.model.bottari.template.BottariTemplateItem
+import com.bottari.domain.model.bottari.template.HashtagName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -49,7 +50,7 @@ data class BottariTemplateCursorFetchResponse(
         fun toDomain(): BottariTemplateHashtag =
             BottariTemplateHashtag(
                 id = id,
-                name = name,
+                name = HashtagName.create(name).getOrThrow(),
             )
     }
 

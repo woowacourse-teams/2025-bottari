@@ -10,7 +10,7 @@ data class BottariTemplateHashtagUiModel(
         fun fromDomain(bottariTemplateHashtag: BottariTemplateHashtag): BottariTemplateHashtagUiModel =
             BottariTemplateHashtagUiModel(
                 id = bottariTemplateHashtag.id,
-                name = bottariTemplateHashtag.name,
+                name = bottariTemplateHashtag.name.value,
             )
     }
 }

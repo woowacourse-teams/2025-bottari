@@ -29,15 +29,19 @@ class BottariTemplateRepositoryImpl @Inject constructor(
 
     override suspend fun createBottariTemplate(
         title: String,
+        description: String,
         items: List<String>,
-    ): Result<Long?> =
-        bottariTemplateRemoteDataSource
-            .createBottariTemplate(
-                BottariTemplateCreateRequest(
-                    items,
-                    title,
-                ),
+        hashtag: List<String>,
+    ): Result<Long> {
+        val request =
+            BottariTemplateCreateRequest(
+                title = title,
+                description = description,
+                bottariTemplateItems = items,
+                hashtagNames = hashtag,
             )
+        return bottariTemplateRemoteDataSource.createBottariTemplate(request)
+    }
 
     override suspend fun fetchBottariTemplate(bottariId: Long): Result<BottariTemplate> =
         bottariTemplateRemoteDataSource

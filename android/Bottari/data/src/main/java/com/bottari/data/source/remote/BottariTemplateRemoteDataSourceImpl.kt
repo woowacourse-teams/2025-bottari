@@ -34,11 +34,10 @@ class BottariTemplateRemoteDataSourceImpl @Inject constructor(
             bottariTemplateService.searchTemplatesByHashtag(pageableParams)
         }
 
-    override suspend fun createBottariTemplate(bottariTemplateCreateRequest: BottariTemplateCreateRequest): Result<Long?> =
+    override suspend fun createBottariTemplate(bottariTemplateCreateRequest: BottariTemplateCreateRequest): Result<Long> =
         runCatching {
-            val response =
-                bottariTemplateService.createBottariTemplate(bottariTemplateCreateRequest)
-            response.extractIdFromHeader(HEADER_TEMPLATE_ID_PREFIX)
+            val response = bottariTemplateService.createBottariTemplate(bottariTemplateCreateRequest)
+            response.extractIdFromHeader(HEADER_TEMPLATE_ID_PREFIX) ?: -1
         }
 
     override suspend fun fetchBottariTemplateDetail(bottariId: Long): Result<BottariTemplateFetchResponse> =

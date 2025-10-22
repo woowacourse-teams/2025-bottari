@@ -16,8 +16,10 @@ interface BottariTemplateRepository {
 
     suspend fun createBottariTemplate(
         title: String,
+        description: String,
         items: List<String>,
-    ): Result<Long?>
+        hashtag: List<String>,
+    ): Result<Long>
 
     suspend fun fetchBottariTemplate(bottariId: Long): Result<BottariTemplate>
 
