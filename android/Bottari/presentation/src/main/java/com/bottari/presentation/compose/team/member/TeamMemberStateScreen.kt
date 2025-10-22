@@ -1,5 +1,6 @@
 package com.bottari.presentation.compose.team.member
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,14 +31,32 @@ import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 
 @Composable
 fun TeamMemberStateScreen(
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: ComposeTeamMembersStatusViewModel = viewModel(),
 ) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(initialValue = null)
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
+
+    LaunchedEffect(uiEvent) {
+        when (uiEvent ?: return@LaunchedEffect) {
+            ComposeTeamMembersStatusUiEvent.FetchMembersStatusFailure ->
+                snackbarHostState.showSnackbar("보따리 불러오기에 실패했습니다")
+            is ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess ->
+                snackbarHostState.showSnackbar("보채기에 성공했어요")
+            ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
+            {
+                Log.d("test","failed")
+                snackbarHostState.showSnackbar("보채기에 실패했어요")
+
+            }
+            ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure ->
+                snackbarHostState.showSnackbar("내 id를 불러오지 못했어요")
+        }
+    }
 
     TeamMemberStateScreen(
-        uiState = uiState.value,
+        uiState = uiState,
         modifier = modifier,
         onSelectMember = viewModel::selectMember,
         onSendRemind = { member -> viewModel.debouncedSendRemindMessage(member) },

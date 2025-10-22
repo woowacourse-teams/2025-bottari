@@ -1,6 +1,6 @@
 package com.bottari.presentation.compose.team.member
 
-interface ComposeTeamMembersStatusUiEvent {
+sealed interface ComposeTeamMembersStatusUiEvent {
     data object FetchMembersStatusFailure : ComposeTeamMembersStatusUiEvent
 
     data class SendRemindByMemberMessageSuccess(

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,6 +23,7 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.personal.ChecklistTopBar
 import com.bottari.presentation.compose.personal.swipe.SwipeScreen
+import com.bottari.presentation.compose.team.checklist.ComposeTeamChecklistUiEvent
 import com.bottari.presentation.compose.team.checklist.ComposeTeamChecklistViewModel
 import com.bottari.presentation.compose.team.checklist.TeamBottariChecklistScreen
 import com.bottari.presentation.compose.team.item.TeamItemStateScreen
@@ -54,6 +56,10 @@ fun TeamBottariScreen(
     }
 
     LaunchedEffect(uiEvent) {
+        when (uiEvent ?: return@LaunchedEffect) {
+            ComposeTeamChecklistUiEvent.CheckItemFailure -> snackbarHostState.showSnackbar("아이템 체크에 실패했습니다")
+            ComposeTeamChecklistUiEvent.FetchChecklistFailure -> snackbarHostState.showSnackbar("보따리를 불러오지 못했습니다")
+        }
     }
 
     Scaffold(
@@ -70,11 +76,11 @@ fun TeamBottariScreen(
                 onSwipeClick = { isSwipeScreen = !isSwipeScreen },
                 onResetClick = {},
                 isResetIconVisible = false,
-                isSwipeIconVisible = !isChecklistCompleted && !isSwipeScreen,
+                isSwipeIconVisible = !isChecklistCompleted && !isSwipeScreen && (pagerState.currentPage == 0),
             )
         },
         containerColor = LocalBottariBgColor.current,
-        snackbarHost = { pagerState },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
         if (isSwipeScreen) {
             SwipeScreen(
@@ -89,7 +95,10 @@ fun TeamBottariScreen(
                     }
                 },
                 onClickCompleteButton = { isSwipeScreen = false },
-                modifier = Modifier.padding(innerPadding).padding(BottariTheme.spacing.spaceMedium),
+                modifier =
+                    Modifier
+                        .padding(innerPadding)
+                        .padding(BottariTheme.spacing.spaceMedium),
             )
             return@Scaffold
         }
@@ -99,7 +108,7 @@ fun TeamBottariScreen(
         ) {
             BottariTabBar(
                 pageTitles = pageTitles,
-                pagerState = rememberPagerState(initialPage = 0) { pageTitles.size },
+                pagerState = pagerState,
             ) { page ->
                 when (page) {
                     0 ->
@@ -111,12 +120,9 @@ fun TeamBottariScreen(
                             onToggleItem = viewModel::toggleItemChecked,
                         )
 
-                    1 ->
-                        TeamItemStateScreen()
+                    1 -> TeamItemStateScreen(snackbarHostState = snackbarHostState)
 
-                    2 -> {
-                        TeamMemberStateScreen()
-                    }
+                    2 -> TeamMemberStateScreen(snackbarHostState = snackbarHostState)
                 }
             }
         }

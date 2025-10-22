@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,14 +38,28 @@ import kotlin.random.Random
 
 @Composable
 fun TeamItemStateScreen(
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: ComposeTeamBottariItemStatusViewModel = viewModel(),
 ) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(initialValue = null)
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
+
+    LaunchedEffect(uiEvent) {
+        when (uiEvent ?: return@LaunchedEffect) {
+            ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure ->
+                snackbarHostState.showSnackbar("보따리 불러오기에 실패했습니다")
+
+            ComposeTeamBottariItemStatusUiEvent.SendRemindFailure ->
+                snackbarHostState.showSnackbar("보채기에 실패했어요")
+
+            ComposeTeamBottariItemStatusUiEvent.SendRemindSuccess ->
+                snackbarHostState.showSnackbar("보채기에 성공했어요")
+        }
+    }
 
     TeamItemStateScreen(
-        uiState = uiState.value,
+        uiState = uiState,
         onSelectProduct = viewModel::selectItem,
         onSendRemind = { item -> viewModel.debouncedSendRemindByItem(item) },
         modifier = modifier,

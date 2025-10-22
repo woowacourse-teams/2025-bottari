@@ -164,6 +164,12 @@
     <string name="team_checklist_tap_team_current_text">물건 현황</string>
     <string name="team_checklist_tap_member_checklist_text">멤버 현황</string>
     <string name="team_checklist_empty_view_title_text">이곳은 아직 비어있어요.</string>
+    <string name="team_checklist_current_items_status_percent_title">전체 완료율</string>
+    <string name="team_checklist_current_items_status_percent_text">%1$d%%</string>
+    <string name="team_checklist_current_items_status_count_title">완료 항목</string>
+    <string name="team_checklist_current_items_status_progress_text">%d/%d</string>
+    <string name="team_checklist_current_items_count_text">%d개 항목</string>
+    <string name="team_checklist_current_item_status_percent_text">%1$d%% 완료</string>
 
     <!-- Bottari Fab -->
     <string name="personal_bottari_create_btn_text">개인 보따리 생성</string>

@@ -11,8 +11,6 @@ import com.bottari.domain.usecase.team.SendRemindByItemUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModelStatus
-import com.bottari.presentation.model.bottari.team.TeamChecklistTypeUiModelStatus
-import com.bottari.presentation.model.bottari.team.TeamItemStatus
 import com.bottari.presentation.util.debounce
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -65,8 +63,13 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
 
         launch {
             sendRemindByItemUseCase(itemId, itemType)
-                .onSuccess { emitEvent(ComposeTeamBottariItemStatusUiEvent.SendRemindSuccess) }
-                .onFailure { emitEvent(ComposeTeamBottariItemStatusUiEvent.SendRemindFailure) }
+                .onSuccess {
+                    updateState { copy(selectedProduct = null) }
+                    emitEvent(ComposeTeamBottariItemStatusUiEvent.SendRemindSuccess)
+                }.onFailure {
+                    updateState { copy(selectedProduct = null) }
+                    emitEvent(ComposeTeamBottariItemStatusUiEvent.SendRemindFailure,)
+                }
         }
     }
 
@@ -93,21 +96,6 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
                 .launchIn(this)
         }
     }
-
-    private fun generateTeamItemsList(
-        sharedItems: List<TeamBottariUiModelStatus>,
-        assignedItems: List<TeamBottariUiModelStatus>,
-    ): List<TeamItemStatus> =
-        buildList {
-            if (sharedItems.isNotEmpty()) {
-                add(TeamChecklistTypeUiModelStatus(BottariItemTypeUiModel.SHARED))
-                addAll(sharedItems)
-            }
-            if (assignedItems.isNotEmpty()) {
-                add(TeamChecklistTypeUiModelStatus(BottariItemTypeUiModel.ASSIGNED()))
-                addAll(assignedItems)
-            }
-        }
 
     private fun handleFetchTeamStatusSuccess(teamBottariStatus: TeamBottariStatus) {
         val sharedItems =

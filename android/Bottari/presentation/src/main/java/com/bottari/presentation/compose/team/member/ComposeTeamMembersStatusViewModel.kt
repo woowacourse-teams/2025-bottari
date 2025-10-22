@@ -70,12 +70,16 @@ class ComposeTeamMembersStatusViewModel @Inject constructor(
         launch {
             sendRemindByMemberMessageUseCase(teamBottariId, memberId)
                 .onSuccess {
+                    updateState { copy(selectedMember = null) }
                     emitEvent(
                         ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess(
                             member.nickname,
                         ),
                     )
-                }.onFailure { emitEvent(ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure) }
+                }.onFailure {
+                    updateState { copy(selectedMember = null) }
+                    emitEvent(ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure)
+                }
         }
     }
 
