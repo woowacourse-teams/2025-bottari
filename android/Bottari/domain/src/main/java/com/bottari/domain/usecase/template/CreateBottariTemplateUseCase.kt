@@ -11,5 +11,5 @@ class CreateBottariTemplateUseCase @Inject constructor(
         description: String,
         items: List<String>,
         hashtag: List<String>,
-    ): Result<Long?> = bottariTemplateRepository.createBottariTemplate(title, description, items, hashtag)
+    ): Result<Long> = bottariTemplateRepository.createBottariTemplate(title, description, items, hashtag)
 }
