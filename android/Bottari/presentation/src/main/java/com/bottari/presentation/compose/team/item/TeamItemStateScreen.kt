@@ -72,7 +72,10 @@ private fun TeamItemStateScreen(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxSize().padding(BottariTheme.spacing.spaceMedium),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(BottariTheme.spacing.spaceMedium),
         verticalArrangement = Arrangement.Top,
     ) {
         Row {
@@ -101,7 +104,10 @@ private fun TeamItemStateScreen(
             )
         }
         Spacer(modifier = Modifier.height(BottariTheme.spacing.space2xLarge))
-
+        if (uiState.items.isEmpty()) {
+            TeamBottariItemStatusEmptyView(modifier = Modifier.fillMaxSize())
+            return
+        }
         LazyColumn(
             contentPadding = PaddingValues(bottom = BottariTheme.spacing.spaceMedium),
             verticalArrangement =

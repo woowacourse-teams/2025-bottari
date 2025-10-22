@@ -116,7 +116,10 @@ private fun TeamChecklistNode(
                 HorizontalDivider(color = BottariTheme.colors.gray400)
 
                 Spacer(Modifier.height(height = BottariTheme.spacing.spaceMedium))
-
+                if(items.isEmpty()){
+                    TeamChecklistEmptyView(modifier = Modifier.fillMaxWidth())
+                    return@Column
+                }
                 items.forEach { bottariItem ->
                     PersonalChecklistItem(
                         bottariItem = bottariItem,
