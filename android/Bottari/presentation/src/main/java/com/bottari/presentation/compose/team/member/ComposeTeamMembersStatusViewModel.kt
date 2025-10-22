@@ -55,13 +55,10 @@ class ComposeTeamMembersStatusViewModel @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch { disconnectTeamEventUseCase() }
     }
 
-    fun updateExpandState(id: Long) {
-        val newMembersStatus =
-            currentState.membersStatus.map { memberStatus ->
-                if (memberStatus.member.id == id) return@map memberStatus.copy(isExpanded = !memberStatus.isExpanded)
-                memberStatus
-            }
-        updateState { copy(membersStatus = newMembersStatus) }
+    fun selectMember(member: TeamMemberStatusUiModel?) {
+        updateState {
+            copy(selectedMember = member)
+        }
     }
 
     private fun sendRemindMessage(member: TeamMemberUiModel) {

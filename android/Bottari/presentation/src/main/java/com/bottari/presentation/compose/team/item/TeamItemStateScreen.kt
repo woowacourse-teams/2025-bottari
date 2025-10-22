@@ -106,7 +106,7 @@ private fun TeamProductStateCard(
             Row {
                 Text(
                     text = product.name,
-                    style = BottariTheme.typography.semiBold16.toTextStyle(),
+                    style = BottariTheme.typography.semiBold20.toTextStyle(),
                     color = BottariTheme.colors.black,
                 )
                 Spacer(modifier = Modifier.weight(1f))

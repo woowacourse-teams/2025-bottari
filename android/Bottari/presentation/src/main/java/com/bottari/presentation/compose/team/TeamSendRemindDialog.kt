@@ -1,8 +1,10 @@
 package com.bottari.presentation.compose.team
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,39 +25,46 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 @Composable
 fun TeamSendRemindDialog(
     title: String,
+    isRemindable: Boolean,
     onDismissRequest: () -> Unit,
+    onClickRemind: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
-        BottariBox(modifier = modifier.fillMaxWidth()) {
+        BottariBox(modifier = modifier.fillMaxWidth(), contentPadding = PaddingValues(BottariTheme.spacing.spaceXLarge)) {
             Column {
                 Text(text = title, style = BottariTheme.typography.semiBold20.toTextStyle())
                 Spacer(Modifier.height(BottariTheme.spacing.spaceMedium))
                 content()
                 Spacer(Modifier.height(BottariTheme.spacing.spaceMedium))
-                BottariBox(
-                    modifier =
-                        Modifier
-                            .background(BottariTheme.colors.primary)
-                            .fillMaxWidth(),
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
+                if (isRemindable) {
+                    BottariBox(
+                        modifier =
+                            Modifier
+                                .background(BottariTheme.colors.primary)
+                                .fillMaxWidth()
+                                .clickable(onClick = onClickRemind),
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.iv_notification),
-                            contentDescription = null,
-                            tint = BottariTheme.colors.white,
-                        )
-                        Spacer(Modifier.width(BottariTheme.spacing.space2xSmall))
-                        Text(
-                            text = "지금 보채기",
-                            style = BottariTheme.typography.semiBold16.toTextStyle(),
-                            color = BottariTheme.colors.white,
-                        )
+                        Row(
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.iv_notification),
+                                contentDescription = null,
+                                tint = BottariTheme.colors.white,
+                            )
+                            Spacer(Modifier.width(BottariTheme.spacing.space2xSmall))
+                            Text(
+                                text = "지금 보채기",
+                                style = BottariTheme.typography.semiBold16.toTextStyle(),
+                                color = BottariTheme.colors.white,
+                            )
+                        }
                     }
                 }
             }
@@ -66,7 +75,7 @@ fun TeamSendRemindDialog(
 @Preview
 @Composable
 private fun TeamSendRemindDialogPreview() {
-    TeamSendRemindDialog(title = "시아", {}) {
+    TeamSendRemindDialog(title = "시아", true,{}, {}) {
         TeamStateListBox(
             text = "해당 물건을 챙겼습니다",
             painter = painterResource(id = R.drawable.ic_bottari_item_empty_view),

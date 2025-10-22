@@ -22,6 +22,8 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.team.TeamSendRemindDialog
 import com.bottari.presentation.compose.team.TeamStateCard
 import com.bottari.presentation.compose.team.TeamStateListBox
+import com.bottari.presentation.model.bottari.team.member.TeamMemberStatusUiModel
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 
 @Composable
 fun TeamMemberStateScreen(
@@ -31,15 +33,26 @@ fun TeamMemberStateScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(initialValue = null)
 
-    TeamMemberStateScreen(uiState = uiState.value, modifier = modifier)
+    TeamMemberStateScreen(
+        uiState = uiState.value,
+        modifier = modifier,
+        onSelectMember = viewModel::selectMember,
+        onSendRemind = { member -> viewModel.debouncedSendRemindMessage(member) },
+    )
 }
 
 @Composable
 fun TeamMemberStateScreen(
     uiState: ComposeTeamMembersStatusUiState,
+    onSelectMember: (TeamMemberStatusUiModel?) -> Unit,
+    onSendRemind: (TeamMemberUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier.fillMaxSize().padding(BottariTheme.spacing.spaceMedium)) {
+    Box(
+        modifier
+            .fillMaxSize()
+            .padding(BottariTheme.spacing.spaceMedium),
+    ) {
         Column(verticalArrangement = Arrangement.Top) {
             Row {
                 TeamStateCard(
@@ -70,26 +83,39 @@ fun TeamMemberStateScreen(
             ) {
                 uiState.membersStatus.forEach { member ->
                     item {
-                        TeamMemberStateCard(memberStatus = member)
+                        TeamMemberStateCard(
+                            memberStatus = member,
+                            onClick = { onSelectMember(member) },
+                        )
                     }
                 }
             }
         }
         uiState.selectedMember?.let { member ->
-            TeamSendRemindDialog(title = member.member.nickname, onDismissRequest = {}) {
-                TeamStateListBox(
-                    text = "해당 물건을 챙겼습니다",
-                    painter = painterResource(id = R.drawable.ic_bottari_item_empty_view),
-                    color = BottariTheme.colors.primary,
-                    items = member.checkedItems.map { item -> item.name },
-                )
-                Spacer(Modifier.height(BottariTheme.spacing.spaceXSmall))
-                TeamStateListBox(
-                    text = "해당 물건을 챙기지 않았습니다.",
-                    painter = painterResource(id = R.drawable.ic_bottari_item_empty_view),
-                    color = BottariTheme.colors.red,
-                    items = member.unCheckedItems.map { item -> item.name },
-                )
+            TeamSendRemindDialog(
+                title = member.member.nickname,
+                isRemindable = (!member.isMe && !member.isAllChecked),
+                onDismissRequest = { onSelectMember(null) },
+                onClickRemind = { onSendRemind(member.member) },
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall)) {
+                    if (member.checkedItems.isNotEmpty()) {
+                        TeamStateListBox(
+                            text = "해당 물건을 챙겼습니다",
+                            painter = painterResource(id = R.drawable.ic_bottari_item_empty_view),
+                            color = BottariTheme.colors.primary,
+                            items = member.checkedItems.map { item -> item.name },
+                        )
+                    }
+                    if (member.unCheckedItems.isNotEmpty()) {
+                        TeamStateListBox(
+                            text = "해당 물건을 챙기지 않았습니다.",
+                            painter = painterResource(id = R.drawable.ic_bottari_item_empty_view),
+                            color = BottariTheme.colors.red,
+                            items = member.unCheckedItems.map { item -> item.name },
+                        )
+                    }
+                }
             }
         }
     }
@@ -98,7 +124,7 @@ fun TeamMemberStateScreen(
 @Preview(showBackground = true)
 @Composable
 private fun TeamMemberStateScreenPreview() {
-    TeamMemberStateScreen(uiState = dummy)
+    TeamMemberStateScreen(uiState = dummy, onSelectMember = {}, onSendRemind = {})
 }
 
 private val dummy =

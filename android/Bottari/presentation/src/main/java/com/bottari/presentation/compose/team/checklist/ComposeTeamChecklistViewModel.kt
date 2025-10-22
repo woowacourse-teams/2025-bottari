@@ -84,11 +84,6 @@ class ComposeTeamChecklistViewModel @Inject constructor(
         updateState { copy(sections = updatedSections) }
     }
 
-    fun getItemsByType(type: BottariItemTypeUiModel) =
-        currentState.bottariItems
-            .filterIsInstance<TeamChecklistItemUiModel>()
-            .filter { it.type == type }
-
     fun toggleItemChecked(
         itemId: Long,
         type: BottariItemTypeUiModel,

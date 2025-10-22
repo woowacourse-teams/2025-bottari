@@ -1,5 +1,6 @@
 package com.bottari.presentation.compose.team.member
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -24,10 +25,11 @@ import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 @Composable
 fun TeamMemberStateCard(
     memberStatus: TeamMemberStatusUiModel,
+    onClick : () -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
-    BottariBox(modifier = modifier, contentPadding = PaddingValues(21.dp)) {
+    BottariBox(modifier = modifier.clickable(onClick = onClick), contentPadding = PaddingValues(21.dp)) {
         Column {
             Row (verticalAlignment = Alignment.CenterVertically){
 
@@ -75,7 +77,8 @@ fun TeamMemberStateCard(
 @Composable
 private fun TeamProductStateCardPreview(){
     TeamMemberStateCard(
-        memberStatus = dummyData[0]
+        memberStatus = dummyData[0],
+        onClick = {}
     )
 }
 

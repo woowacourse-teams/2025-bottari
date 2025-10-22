@@ -132,6 +132,7 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
         updateState {
             copy(
                 selectedProduct = selectedProduct,
+                items = sharedItems + assignedItems,
             )
         }
     }
