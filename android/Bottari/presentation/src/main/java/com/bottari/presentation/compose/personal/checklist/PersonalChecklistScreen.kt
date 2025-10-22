@@ -120,9 +120,10 @@ private fun BottariCheckedBox() {
         Icon(
             painter = painterResource(R.drawable.ic_check),
             contentDescription = null,
-            modifier = Modifier
-                .padding(5.dp)
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(5.dp)
+                    .fillMaxSize(),
             tint = Color.White,
         )
     }

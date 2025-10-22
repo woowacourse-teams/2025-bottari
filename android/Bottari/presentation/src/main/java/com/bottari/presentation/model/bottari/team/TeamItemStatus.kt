@@ -19,7 +19,7 @@ data class TeamBottariUiModelStatus(
         memberCheckStatus.isNotEmpty() && memberCheckStatus.all { it.checked }
 
     val checkedMember: List<String> = memberCheckStatus.filter { it.checked }.map { it.name }
-    val uncheckedMember : List<String> = memberCheckStatus.filter { !it.checked }.map { it.name }
+    val uncheckedMember: List<String> = memberCheckStatus.filter { !it.checked }.map { it.name }
 
     val checkedProgress: Int =
         if (totalItemsCount > 0) {

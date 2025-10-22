@@ -68,7 +68,7 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
                     emitEvent(ComposeTeamBottariItemStatusUiEvent.SendRemindSuccess)
                 }.onFailure {
                     updateState { copy(selectedProduct = null) }
-                    emitEvent(ComposeTeamBottariItemStatusUiEvent.SendRemindFailure,)
+                    emitEvent(ComposeTeamBottariItemStatusUiEvent.SendRemindFailure)
                 }
         }
     }

@@ -7,7 +7,7 @@ data class ComposeTeamMembersStatusUiState(
     val membersStatus: List<TeamMemberStatusUiModel> = emptyList(),
     val myId: Long = -1L,
     val selectedMember: TeamMemberStatusUiModel? = null,
-){
+) {
     val checkedMembers: List<TeamMemberStatusUiModel> = membersStatus.filter { it.isAllChecked }
     val uncheckedMembers: List<TeamMemberStatusUiModel> = membersStatus.filter { it.isAllChecked.not() }
 }

@@ -7,7 +7,7 @@ data class PersonalChecklistItemUiModel(
     override val id: Long,
     override val name: String,
     override val isChecked: Boolean,
-): ChecklistItemUiModel {
+) : ChecklistItemUiModel {
     companion object {
         fun fromDomain(checklistItem: ChecklistItem): PersonalChecklistItemUiModel =
             PersonalChecklistItemUiModel(

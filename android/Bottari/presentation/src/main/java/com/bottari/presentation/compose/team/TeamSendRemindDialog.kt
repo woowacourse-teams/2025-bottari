@@ -75,7 +75,7 @@ fun TeamSendRemindDialog(
 @Preview
 @Composable
 private fun TeamSendRemindDialogPreview() {
-    TeamSendRemindDialog(title = "시아", true,{}, {}) {
+    TeamSendRemindDialog(title = "시아", true, {}, {}) {
         TeamStateListBox(
             text = "해당 물건을 챙겼습니다",
             painter = painterResource(id = R.drawable.ic_bottari_item_empty_view),
