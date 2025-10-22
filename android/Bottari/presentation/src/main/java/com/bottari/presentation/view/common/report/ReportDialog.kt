@@ -15,7 +15,9 @@ import androidx.fragment.app.viewModels
 import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.DialogReportBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReportDialog : DialogFragment() {
     private var _binding: DialogReportBinding? = null
     val binding: DialogReportBinding get() = _binding!!
