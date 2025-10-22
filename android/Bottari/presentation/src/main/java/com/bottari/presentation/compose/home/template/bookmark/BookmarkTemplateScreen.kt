@@ -27,7 +27,7 @@ import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 
 @Composable
 fun BookmarkTemplateScreen(
-    navigateToDetail: (bookmarkId: Long) -> Unit,
+    navigateToDetail: (templateId: Long) -> Unit,
     viewModel: BookmarkTemplateViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -52,7 +52,7 @@ fun BookmarkTemplateScreen(
 @Composable
 private fun BookmarkTemplateScreen(
     uiState: BookmarkTemplateUiState,
-    onClickDetail: (bookmarkId: Long) -> Unit,
+    onClickDetail: (templateId: Long) -> Unit,
     onClickDelete: (bookmarkId: Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -73,7 +73,7 @@ private fun BookmarkTemplateScreen(
 @Composable
 private fun BookmarkTemplateColumn(
     templates: List<BookmarkedTemplateUiModel>,
-    onClickDetail: (bookmarkId: Long) -> Unit,
+    onClickDetail: (templateId: Long) -> Unit,
     onClickDelete: (bookmarkId: Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -99,7 +99,7 @@ private fun BookmarkTemplateColumn(
                         BottariTemplateHashtagUiModel(index.toLong(), hashtag)
                     },
                 onClickHashtag = {},
-                modifier = Modifier.noRippleClickable { onClickDetail(template.id) },
+                modifier = Modifier.noRippleClickable { onClickDetail(template.templateId) },
                 iconButton = {
                     TemplateItemIconButton(
                         type = TemplateItemType.Bookmark(true),

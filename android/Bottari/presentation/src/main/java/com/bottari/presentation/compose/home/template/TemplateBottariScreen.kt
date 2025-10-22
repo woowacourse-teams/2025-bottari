@@ -166,7 +166,7 @@ private fun TemplateBottariScreen(
 
                 2 ->
                     BookmarkTemplateScreen(
-                        navigateToDetail = { id -> onClickDetail(id, false) },
+                        navigateToDetail = { id -> onClickDetail(id, true) },
                     )
             }
         }
