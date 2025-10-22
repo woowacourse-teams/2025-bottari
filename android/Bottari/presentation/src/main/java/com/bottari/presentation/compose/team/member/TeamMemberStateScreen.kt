@@ -111,7 +111,7 @@ private fun TeamMemberStateScreen(
         uiState.selectedMember?.let { member ->
             TeamSendRemindDialog(
                 title = member.member.nickname,
-                isRemindable = (!member.isMe && !member.isAllChecked),
+                isRemindable = member.shouldHurryUp,
                 onDismissRequest = { onSelectMember(null) },
                 onClickRemind = { onSendRemind(member.member) },
             ) {
