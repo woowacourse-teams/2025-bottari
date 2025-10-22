@@ -35,8 +35,12 @@ class BottariTemplateRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun createBottariTemplate(bottariTemplateCreateRequest: BottariTemplateCreateRequest): Result<Long> =
         runCatching {
-            val response = bottariTemplateService.createBottariTemplate(bottariTemplateCreateRequest)
-            response.extractIdFromHeader(HEADER_TEMPLATE_ID_PREFIX) ?: -1
+            bottariTemplateService
+                .createBottariTemplate(bottariTemplateCreateRequest)
+                .let { response ->
+                    response.extractIdFromHeader(HEADER_TEMPLATE_ID_PREFIX)
+                        ?: throw IllegalStateException("응답 헤더에서 템플릿 ID를 찾을 수 없습니다.")
+                }
         }
 
     override suspend fun fetchBottariTemplateDetail(bottariId: Long): Result<BottariTemplateFetchResponse> =
