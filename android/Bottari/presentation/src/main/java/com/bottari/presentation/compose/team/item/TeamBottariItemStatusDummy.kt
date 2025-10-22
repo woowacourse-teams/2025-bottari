@@ -3,42 +3,72 @@ package com.bottari.presentation.compose.team.item
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModelStatus
 import com.bottari.presentation.model.bottari.team.member.MemberCheckStatusUiModel
-import kotlin.random.Random
 
-val teamBottariItemStatusDummyUiState =
+val teamBottariItemStatusDummyUiState: ComposeTeamBottariItemStatusUiState =
     run {
-        val dummySharedItems = createDummyProductList(10, BottariItemTypeUiModel.SHARED)
-        val dummyAssignedItems = createDummyProductList(5, BottariItemTypeUiModel.ASSIGNED())
+        val dummyItems = listOf(
+            TeamBottariUiModelStatus(
+                id = 1L,
+                name = "공용 물품 1 (수건)",
+                memberCheckStatus = listOf(
+                    MemberCheckStatusUiModel(name = "멤버 A", checked = true),
+                    MemberCheckStatusUiModel(name = "멤버 B", checked = false),
+                    MemberCheckStatusUiModel(name = "멤버 C", checked = true)
+                ),
+                checkItemsCount = 2,
+                totalItemsCount = 3,
+                type = BottariItemTypeUiModel.SHARED
+            ),
+            TeamBottariUiModelStatus(
+                id = 2L,
+                name = "개인 할당 물품 (여권)",
+                memberCheckStatus = listOf(
+                    MemberCheckStatusUiModel(name = "멤버 B", checked = true)
+                ),
+                checkItemsCount = 1,
+                totalItemsCount = 1,
+                type = BottariItemTypeUiModel.ASSIGNED()
+            ),
+            TeamBottariUiModelStatus(
+                id = 3L,
+                name = "공용 물품 2 (상비약)",
+                memberCheckStatus = listOf(
+                    MemberCheckStatusUiModel(name = "멤버 A", checked = false),
+                    MemberCheckStatusUiModel(name = "멤버 B", checked = false),
+                    MemberCheckStatusUiModel(name = "멤버 C", checked = false)
+                ),
+                checkItemsCount = 0,
+                totalItemsCount = 3,
+                type = BottariItemTypeUiModel.SHARED
+            ),
+            TeamBottariUiModelStatus(
+                id = 4L,
+                name = "공용 물품 3 (충전기)",
+                memberCheckStatus = listOf(
+                    MemberCheckStatusUiModel(name = "멤버 A", checked = true),
+                    MemberCheckStatusUiModel(name = "멤버 C", checked = true)
+                ),
+                checkItemsCount = 2,
+                totalItemsCount = 2,
+                type = BottariItemTypeUiModel.SHARED
+            ),
+            TeamBottariUiModelStatus(
+                id = 5L,
+                name = "모두 챙긴 물품",
+                memberCheckStatus = listOf(
+                    MemberCheckStatusUiModel(name = "멤버 A", checked = true),
+                    MemberCheckStatusUiModel(name = "멤버 B", checked = true),
+                    MemberCheckStatusUiModel(name = "멤버 C", checked = true)
+                ),
+                checkItemsCount = 3,
+                totalItemsCount = 3,
+                type = BottariItemTypeUiModel.SHARED
+            )
+        )
 
         ComposeTeamBottariItemStatusUiState(
             isLoading = false,
-            items = dummySharedItems + dummyAssignedItems,
-            selectedProduct = dummySharedItems.firstOrNull(),
-        )
-    }
-
-private fun createDummyProductList(
-    count: Int,
-    type: BottariItemTypeUiModel,
-    idStartIndex: Long = 0,
-): List<TeamBottariUiModelStatus> =
-    List(count) { index ->
-        val memberCount = Random.nextInt(2, 6)
-        val memberCheckStatus =
-            List(memberCount) { memberIndex ->
-                MemberCheckStatusUiModel(
-                    name = "멤버 ${'A' + memberIndex}",
-                    checked = Random.nextBoolean(),
-                )
-            }
-        val checkedCount = memberCheckStatus.count { it.checked }
-
-        TeamBottariUiModelStatus(
-            id = idStartIndex + index,
-            name = "더미 아이템 ${idStartIndex + index + 1}",
-            memberCheckStatus = memberCheckStatus,
-            checkItemsCount = checkedCount,
-            totalItemsCount = memberCheckStatus.size,
-            type = type,
+            items = dummyItems,
+            selectedProduct = dummyItems.firstOrNull()
         )
     }

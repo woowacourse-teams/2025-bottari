@@ -33,6 +33,6 @@ fun TeamChecklistEmptyView(modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-fun TeamChecklistEmptyViewPreview() {
+private fun TeamChecklistEmptyViewPreview() {
     TeamChecklistEmptyView()
 }

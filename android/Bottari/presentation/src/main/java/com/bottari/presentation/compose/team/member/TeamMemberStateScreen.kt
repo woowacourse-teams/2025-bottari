@@ -30,6 +30,7 @@ import com.bottari.presentation.compose.team.TeamStateListBox
 import com.bottari.presentation.compose.team.checklist.TeamChecklistEmptyView
 import com.bottari.presentation.model.bottari.team.member.TeamMemberStatusUiModel
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
+import teamMemberStatusDummyUiState
 
 @Composable
 fun TeamMemberStateScreen(

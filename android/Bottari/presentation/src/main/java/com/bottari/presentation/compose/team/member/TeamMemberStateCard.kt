@@ -22,6 +22,7 @@ import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.component.BottariCheckIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.bottari.team.member.TeamMemberStatusUiModel
+import dummyMembers
 
 @Composable
 fun TeamMemberStateCard(
@@ -89,7 +90,7 @@ fun TeamMemberStateCard(
 @Composable
 private fun TeamProductStateCardPreview() {
     TeamMemberStateCard(
-        memberStatus = teamMemberStatusDummyList[0],
+        memberStatus = dummyMembers[0],
         onClick = {},
     )
 }
