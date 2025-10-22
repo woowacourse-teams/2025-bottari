@@ -45,11 +45,10 @@ fun TeamMemberStateScreen(
             is ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess ->
                 snackbarHostState.showSnackbar("보채기에 성공했어요")
             ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
-            {
-                Log.d("test","failed")
-                snackbarHostState.showSnackbar("보채기에 실패했어요")
-
-            }
+                {
+                    Log.d("test", "failed")
+                    snackbarHostState.showSnackbar("보채기에 실패했어요")
+                }
             ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure ->
                 snackbarHostState.showSnackbar("내 id를 불러오지 못했어요")
         }
@@ -64,7 +63,7 @@ fun TeamMemberStateScreen(
 }
 
 @Composable
-fun TeamMemberStateScreen(
+private fun TeamMemberStateScreen(
     uiState: ComposeTeamMembersStatusUiState,
     onSelectMember: (TeamMemberStatusUiModel?) -> Unit,
     onSendRemind: (TeamMemberUiModel) -> Unit,
@@ -146,12 +145,5 @@ fun TeamMemberStateScreen(
 @Preview(showBackground = true)
 @Composable
 private fun TeamMemberStateScreenPreview() {
-    TeamMemberStateScreen(uiState = dummy, onSelectMember = {}, onSendRemind = {})
+    TeamMemberStateScreen(uiState = teamMemberStatusDummyUiState, onSelectMember = {}, onSendRemind = {})
 }
-
-private val dummy =
-    ComposeTeamMembersStatusUiState(
-        membersStatus = dummyData,
-        myId = 2,
-        selectedMember = dummyData[0],
-    )

@@ -10,8 +10,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
-import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
-import kotlin.random.Random
 
 @Composable
 fun TeamBottariChecklistScreen(
@@ -46,40 +44,9 @@ fun TeamBottariChecklistScreen(
 private fun TeamBottariChecklistScreenPreview() {
     TeamBottariChecklistScreen(
         isTooltipClose = false,
-        uiState = dummyUiState,
+        uiState = teamChecklistDummyUiState,
         onClickSection = {},
         onCloseToolTip = {},
         onToggleItem = { _, _ -> },
     )
 }
-
-private fun createDummyProductList(
-    count: Int,
-    type: BottariItemTypeUiModel,
-    idStartIndex: Long = 0,
-): List<TeamChecklistItemUiModel> =
-    List(count) { index ->
-        TeamChecklistItemUiModel(
-            id = idStartIndex + index,
-            name = "더미 아이템 ${idStartIndex + index + 1}",
-            isChecked = Random.nextBoolean(),
-            type = type,
-        )
-    }
-
-private val dummyUiState =
-    ComposeTeamChecklistUiState(
-        isLoading = false,
-        bottariItems =
-            createDummyProductList(
-                10,
-                BottariItemTypeUiModel.SHARED,
-            ) + createDummyProductList(10, BottariItemTypeUiModel.PERSONAL) +
-                createDummyProductList(10, BottariItemTypeUiModel.ASSIGNED()),
-        sections =
-            mapOf(
-                BottariItemTypeUiModel.SHARED to true,
-                BottariItemTypeUiModel.ASSIGNED() to true,
-                BottariItemTypeUiModel.PERSONAL to true,
-            ),
-    )

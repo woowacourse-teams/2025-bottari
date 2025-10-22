@@ -33,8 +33,6 @@ import com.bottari.presentation.compose.team.TeamStateCard
 import com.bottari.presentation.compose.team.TeamStateListBox
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModelStatus
-import com.bottari.presentation.model.bottari.team.member.MemberCheckStatusUiModel
-import kotlin.random.Random
 
 @Composable
 fun TeamItemStateScreen(
@@ -67,7 +65,7 @@ fun TeamItemStateScreen(
 }
 
 @Composable
-fun TeamItemStateScreen(
+private fun TeamItemStateScreen(
     uiState: ComposeTeamBottariItemStatusUiState,
     onSelectProduct: (TeamBottariUiModelStatus?) -> Unit,
     onSendRemind: (TeamBottariUiModelStatus) -> Unit,
@@ -214,9 +212,9 @@ private fun TeamProductStateCard(
 
 @Preview(showBackground = true)
 @Composable
-fun TeamItemStateScreenPreview() {
+private fun TeamItemStateScreenPreview() {
     TeamItemStateScreen(
-        uiState = dummyUiState,
+        uiState = teamBottariItemStatusDummyUiState,
         onSelectProduct = {},
         onSendRemind = {},
     )
@@ -224,44 +222,6 @@ fun TeamItemStateScreenPreview() {
 
 @Preview
 @Composable
-fun TeamProductStateCardPreview() {
-    TeamProductStateCard(dummyUiState.items.first())
+private fun TeamProductStateCardPreview() {
+    TeamProductStateCard(teamBottariItemStatusDummyUiState.items.first())
 }
-
-private fun createDummyProductList(
-    count: Int,
-    type: BottariItemTypeUiModel,
-    idStartIndex: Long = 0,
-): List<TeamBottariUiModelStatus> =
-    List(count) { index ->
-        val memberCount = Random.nextInt(2, 6)
-        val memberCheckStatus =
-            List(memberCount) { memberIndex ->
-                MemberCheckStatusUiModel(
-                    name = "멤버 ${'A' + memberIndex}",
-                    checked = Random.nextBoolean(),
-                )
-            }
-        val checkedCount = memberCheckStatus.count { it.checked }
-
-        TeamBottariUiModelStatus(
-            id = idStartIndex + index,
-            name = "더미 아이템 ${idStartIndex + index + 1}",
-            memberCheckStatus = memberCheckStatus,
-            checkItemsCount = checkedCount,
-            totalItemsCount = memberCheckStatus.size,
-            type = type,
-        )
-    }
-
-private val dummyUiState =
-    run {
-        val dummySharedItems = createDummyProductList(10, BottariItemTypeUiModel.SHARED)
-        val dummyAssignedItems = createDummyProductList(5, BottariItemTypeUiModel.ASSIGNED())
-
-        ComposeTeamBottariItemStatusUiState(
-            isLoading = false,
-            items = dummySharedItems + dummyAssignedItems,
-            selectedProduct = dummySharedItems.firstOrNull(), // 첫 번째 공유 아이템을 선택된 상태로 설정
-        )
-    }
