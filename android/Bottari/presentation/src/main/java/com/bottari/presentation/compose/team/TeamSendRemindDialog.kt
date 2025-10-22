@@ -43,7 +43,8 @@ fun TeamSendRemindDialog(
     ) {
         BottariBox(
             modifier = modifier.fillMaxWidth(0.85f),
-            contentPadding = PaddingValues(BottariTheme.spacing.spaceXLarge),
+            shape = RoundedCornerShape(16.dp),
+            contentPadding = PaddingValues(BottariTheme.spacing.spaceLarge),
         ) {
             Column {
                 Text(text = title, style = BottariTheme.typography.bold20.toTextStyle())
