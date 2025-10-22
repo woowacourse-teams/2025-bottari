@@ -4,7 +4,7 @@ import com.bottari.data.model.remote.sse.EventStateResponse
 import kotlinx.coroutines.flow.Flow
 
 interface SSEClient {
-    fun connect(teamBottariId: Long): Flow<EventStateResponse>
+    fun connect(memberId: Long): Flow<EventStateResponse>
 
     fun disconnect()
 }

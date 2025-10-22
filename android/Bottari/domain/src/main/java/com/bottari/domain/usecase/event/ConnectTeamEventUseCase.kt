@@ -8,5 +8,5 @@ import javax.inject.Inject
 class ConnectTeamEventUseCase @Inject constructor(
     private val eventRepository: EventRepository,
 ) {
-    suspend operator fun invoke(teamBottariId: Long): Flow<EventState> = eventRepository.connectEvent(teamBottariId)
+    suspend operator fun invoke(memberId: Long): Flow<EventState> = eventRepository.connectEvent(memberId)
 }

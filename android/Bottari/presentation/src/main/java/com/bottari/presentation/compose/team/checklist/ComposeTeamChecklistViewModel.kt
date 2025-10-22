@@ -60,7 +60,6 @@ class ComposeTeamChecklistViewModel @Inject constructor(
     init {
         fetchTeamCheckList()
         fetchMemberId()
-        handleEvent()
         checkIfTooltipWasDismissed()
     }
 
@@ -118,6 +117,7 @@ class ComposeTeamChecklistViewModel @Inject constructor(
     private fun fetchMemberId() {
         launch {
             memberId = getMemberIdUseCase().getOrDefault(-1)
+            handleEvent()
         }
     }
 
@@ -140,7 +140,7 @@ class ComposeTeamChecklistViewModel @Inject constructor(
     @OptIn(FlowPreview::class)
     private fun handleEvent() {
         launch {
-            connectTeamEventUseCase(teamBottariId)
+            connectTeamEventUseCase(memberId)
                 .filterIsInstance<EventState.OnEvent>()
                 .map { event -> event.data }
                 .filterNot { eventData -> eventData.shouldIgnore() }
