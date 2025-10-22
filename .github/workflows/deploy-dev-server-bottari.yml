@@ -80,9 +80,9 @@ jobs:
           docker pull $IMAGE_NAME:$IMAGE_TAG
 
       - name: Run Blue-Green Deploy
+        working-directory: /home/ubuntu/deploy/scripts
         run: |
           export DEPLOY_FETCH_MODE=pull
           export DEPLOY_IMAGE_TAG=${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           export FIREBASE_SERVICE_ACCOUNT_JSON='${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}'
-          cd /home/ubuntu/deploy/scripts
           ./deploy.sh
