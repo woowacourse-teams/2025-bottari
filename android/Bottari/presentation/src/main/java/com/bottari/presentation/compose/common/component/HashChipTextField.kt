@@ -199,7 +199,7 @@ private fun extractCompletedTags(input: String): Pair<List<String>, String> {
 
 @Preview
 @Composable
-private fun HashChipTextFiledPreview() {
+private fun HashChipTextFieldPreview() {
     var text by rememberSaveable { mutableStateOf("") }
     val chips = remember { mutableStateListOf<String>() }
     var isFocused by rememberSaveable { mutableStateOf(false) }
