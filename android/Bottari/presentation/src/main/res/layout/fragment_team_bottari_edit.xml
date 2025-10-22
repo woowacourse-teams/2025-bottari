@@ -54,7 +54,7 @@
             android:orientation="vertical">
 
             <include
-                android:id="@+id/view_team_personal_item_edit"
+                android:id="@+id/view_team_shared_item_edit"
                 layout="@layout/view_bottari_item_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                 android:layout_marginTop="@dimen/space_median" />
 
             <include
-                android:id="@+id/view_team_shared_item_edit"
+                android:id="@+id/view_team_personal_item_edit"
                 layout="@layout/view_bottari_item_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
