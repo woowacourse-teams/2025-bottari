@@ -47,16 +47,6 @@ class AlarmEditViewModel @Inject constructor(
         fetchAlarm()
     }
 
-    fun updateAlarm() {
-//        val alarm = currentState.alarm.toDomain()
-//        saveAlarm(alarm)
-    }
-
-    fun updateAlarmType(alarmTypeUiModel: AlarmTypeUiModel) {
-//        val alarm = currentState.alarm
-//        updateState { copy(alarm = alarm.copy(type = alarmTypeUiModel)) }
-    }
-
     fun updateAlarmActivate(isActive: Boolean) {
         val alarm = currentState.alarm
         updateState { copy(alarm = alarm.copy(isActive = isActive)) }
