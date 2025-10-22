@@ -19,11 +19,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.source.NoRippleInteractionSource
+import com.bottari.presentation.compose.common.theme.BottariColorSystem
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
@@ -55,7 +57,7 @@ fun DeletableChip(
 @Composable
 private fun defaultDeletableChipColors(): SelectableChipColors =
     InputChipDefaults.inputChipColors(
-        containerColor = BottariTheme.colors.transparent,
+        containerColor = BottariTheme.colors.primarySoft,
         labelColor = BottariTheme.colors.primary,
         trailingIconColor = BottariTheme.colors.gray500,
     )
