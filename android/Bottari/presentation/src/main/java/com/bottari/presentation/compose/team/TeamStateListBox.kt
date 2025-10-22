@@ -68,7 +68,7 @@ fun TeamStateListBox(
                                 .padding(2.dp)
                                 .clip(RoundedCornerShape(16.dp))
                                 .background(BottariTheme.colors.white)
-                                .padding(horizontal = 8.dp, vertical = 4.dp),
+                                .padding(horizontal = BottariTheme.spacing.spaceXSmall, vertical = BottariTheme.spacing.space2xSmall),
                     )
                 }
             }

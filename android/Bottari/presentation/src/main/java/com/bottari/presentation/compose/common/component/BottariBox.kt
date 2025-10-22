@@ -43,7 +43,7 @@ fun BottariBox(
 private fun CardBoxPreview() {
     BottariTheme {
         Box(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(BottariTheme.spacing.spaceMedium),
         ) {
             BottariBox(
                 content = {
