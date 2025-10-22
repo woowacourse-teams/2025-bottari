@@ -31,6 +31,7 @@ import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.compose.common.extension.rememberScrolledToEnd
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.compose.home.template.bookmark.BookmarkTemplateScreen
 import com.bottari.presentation.compose.home.template.component.CreateTemplateFAB
 import com.bottari.presentation.compose.home.template.main.MainTemplateContent
 import com.bottari.presentation.compose.home.template.my.MyTemplateContent
@@ -127,7 +128,7 @@ private fun TemplateBottariScreen(
 
     Box(modifier = modifier.fillMaxSize()) {
         TemplatePager(
-            pageTitles = listOf("전체 템플릿", "나의 템플릿"),
+            pageTitles = listOf("전체 템플릿", "나의 템플릿", "북마크"),
             modifier = Modifier,
         ) { page ->
             when (page) {
@@ -162,6 +163,10 @@ private fun TemplateBottariScreen(
                         onRefresh = { onRefresh(false) },
                         showLoadingBlock = uiState.showLoading,
                     )
+
+                2 -> BookmarkTemplateScreen(
+                    navigateToDetail = { id -> onClickDetail(id, false) },
+                )
             }
         }
 
