@@ -96,7 +96,6 @@ private fun PersonalBottariScreen(
     BackHandler(enabled = isSwipeScreen, onBack = onBackClick)
 
     Scaffold(
-        modifier = modifier.padding(horizontal = BottariTheme.spacing.spaceMedium),
         topBar = {
             ChecklistTopBar(
                 title = bottariTitle,
@@ -109,6 +108,7 @@ private fun PersonalBottariScreen(
         },
         containerColor = LocalBottariBgColor.current,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        modifier = modifier
     ) { innerPadding ->
         if (uiState.isLoading) {
             IndeterminateCircularIndicator()
@@ -129,7 +129,10 @@ private fun PersonalBottariScreen(
                 onClickItem = onClickItem,
                 totalQuantity = uiState.totalQuantity,
                 checkedQuantity = uiState.checkedQuantity,
-                modifier = Modifier.padding(innerPadding),
+                modifier =
+                    Modifier
+                        .padding(innerPadding)
+                        .padding(horizontal = BottariTheme.spacing.spaceMedium),
             )
             return@Scaffold
         }
@@ -141,7 +144,10 @@ private fun PersonalBottariScreen(
             onLeftSwipe = {},
             onRightSwipe = onSwipeRight,
             onClickCompleteButton = onClickCompleteButton,
-            modifier = Modifier.padding(innerPadding),
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .padding(horizontal = BottariTheme.spacing.spaceMedium),
         )
     }
 }
