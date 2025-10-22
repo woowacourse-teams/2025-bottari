@@ -1,6 +1,5 @@
 package com.bottari.data.source.remote
 
-import android.adservices.adid.AdId
 import com.bottari.data.common.extension.extractIdFromHeader
 import com.bottari.data.common.util.safeApiCall
 import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest

@@ -36,7 +36,7 @@ fun TemplateDescriptionSection(
             Text(
                 text = "보따리에 대한 설명을 작성해주세요",
                 style = BottariTheme.typography.medium12.toTextStyle(),
-                color = BottariTheme.colors.gray500
+                color = BottariTheme.colors.gray500,
             )
 
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceMedium))
@@ -84,7 +84,7 @@ private fun DescriptionInputContent(
 
 @Preview
 @Composable
-private fun  TemplateDescriptionSectionPreview(){
+private fun TemplateDescriptionSectionPreview() {
     BottariTheme {
         Column(
             modifier = Modifier.padding(12.dp),

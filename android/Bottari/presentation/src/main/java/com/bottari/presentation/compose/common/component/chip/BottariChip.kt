@@ -34,8 +34,7 @@ fun BottariChip(
                 .background(
                     color = containerColor,
                     shape = chipShape,
-                )
-                .padding(
+                ).padding(
                     vertical = BottariTheme.spacing.space2xSmall,
                     horizontal = BottariTheme.spacing.spaceXSmall,
                 ),

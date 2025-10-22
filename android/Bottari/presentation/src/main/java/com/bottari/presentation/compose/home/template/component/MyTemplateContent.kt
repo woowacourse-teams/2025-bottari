@@ -17,7 +17,7 @@ fun MyTemplateContent(
     showLoadingBlock: Boolean,
     onClickDetail: (Long) -> Unit,
     onClickDelete: (Long) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     PullToRefreshTemplateColumn(
         type = TemplateItemType.MyTemplate,
@@ -31,7 +31,7 @@ fun MyTemplateContent(
         onClickDelete = onClickDelete,
         onClickBookmark = {},
         onClickHashtag = {},
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
