@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,10 +44,13 @@ fun TeamMemberStateScreen(
         when (uiEvent ?: return@LaunchedEffect) {
             ComposeTeamMembersStatusUiEvent.FetchMembersStatusFailure ->
                 snackbarHostState.showSnackbar("보따리 불러오기에 실패했습니다")
+
             is ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess ->
                 snackbarHostState.showSnackbar("보채기에 성공했어요")
+
             ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
                 snackbarHostState.showSnackbar("보채기에 실패했어요")
+
             ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure ->
                 snackbarHostState.showSnackbar("내 id를 불러오지 못했어요")
         }
@@ -100,13 +104,14 @@ private fun TeamMemberStateScreen(
                         BottariTheme.spacing.spaceXSmall,
                     ),
             ) {
-                uiState.membersStatus.forEach { member ->
-                    item {
-                        TeamMemberStateCard(
-                            memberStatus = member,
-                            onClick = { onSelectMember(member) },
-                        )
-                    }
+                items(
+                    items = uiState.membersStatus,
+                    key = { "${it.member.id} ${it.member.nickname}" },
+                ) { member ->
+                    TeamMemberStateCard(
+                        memberStatus = member,
+                        onClick = { onSelectMember(member) },
+                    )
                 }
             }
         }
@@ -147,5 +152,9 @@ private fun TeamMemberStateScreen(
 @Preview(showBackground = true)
 @Composable
 private fun TeamMemberStateScreenPreview() {
-    TeamMemberStateScreen(uiState = teamMemberStatusDummyUiState, onSelectMember = {}, onSendRemind = {})
+    TeamMemberStateScreen(
+        uiState = teamMemberStatusDummyUiState,
+        onSelectMember = {},
+        onSendRemind = {},
+    )
 }
