@@ -46,8 +46,8 @@ fun TemplateItem(
     modifier: Modifier = Modifier,
     iconButton: @Composable () -> Unit,
 ) {
-    val hasTags = remember { template.hashtags.isNotEmpty() }
-    val hashTagSectionPadding = if (hasTags) BottariTheme.spacing.spaceMedium else 0.dp
+    val hashTagSectionPadding =
+        if (template.hashtags.isNotEmpty()) BottariTheme.spacing.spaceMedium else 0.dp
 
     BottariBox(
         modifier = modifier,
@@ -156,7 +156,8 @@ private fun HashtagChip(
                 .background(
                     color = Color(0xFFEFF6FF),
                     shape = chipShape,
-                ).clickable(
+                )
+                .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(color = BottariTheme.colors.primary),
                 ) { onClickHashtag(hashtag) }
