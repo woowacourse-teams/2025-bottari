@@ -14,11 +14,11 @@ interface BookmarkDao {
     @Query("DELETE FROM bookmark WHERE templateId = :templateId")
     suspend fun deleteBookmarkByTemplateId(templateId: Long)
 
-    @Query("SELECT * FROM bookmark ORDER BY createdAt DESC")
+    @Query("SELECT * FROM bookmark ORDER BY createdAt ASC")
     fun observeAllBookmarks(): Flow<List<BookmarkEntity>>
 
-    @Query("SELECT * FROM bookmark WHERE id = :id LIMIT 1")
-    suspend fun getBookmarkById(id: Long): BookmarkEntity?
+    @Query("SELECT * FROM bookmark WHERE templateId = :templateId LIMIT 1")
+    suspend fun getBookmarkByTemplateId(templateId: Long): BookmarkEntity?
 
     @Query("SELECT EXISTS(SELECT 1 FROM bookmark WHERE templateId = :templateId)")
     suspend fun existsByTemplateId(templateId: Long): Boolean

@@ -14,8 +14,8 @@ data class BookmarkEntity(
     val templateId: Long,
     val title: String,
     val description: String,
-    val items: String,
-    val hashtags: String,
+    val items: List<String>,
+    val hashtags: List<String>,
     val createdAt: Long = System.currentTimeMillis(),
 ) {
     fun toBookmarkTemplate(): BookmarkTemplate =
@@ -24,21 +24,21 @@ data class BookmarkEntity(
             templateId = templateId,
             title = title,
             description = description,
-            items = items.split(","),
-            hashtags = hashtags.split(","),
+            items = items,
+            hashtags = hashtags,
             createdAt = createdAt,
         )
 
     companion object {
-        fun fromBookmarkTemplate(bookmarkTemplate: BookmarkTemplate): BookmarkEntity =
+        fun fromBookmarkTemplate(src: BookmarkTemplate): BookmarkEntity =
             BookmarkEntity(
-                id = bookmarkTemplate.id,
-                templateId = bookmarkTemplate.templateId,
-                title = bookmarkTemplate.title,
-                description = bookmarkTemplate.description,
-                items = bookmarkTemplate.items.joinToString(","),
-                hashtags = bookmarkTemplate.hashtags.joinToString(","),
-                createdAt = bookmarkTemplate.createdAt ?: System.currentTimeMillis(),
+                id = src.id,
+                templateId = src.templateId,
+                title = src.title,
+                description = src.description,
+                items = src.items,
+                hashtags = src.hashtags,
+                createdAt = src.createdAt ?: System.currentTimeMillis(),
             )
     }
 }
