@@ -11,6 +11,7 @@ value class HashtagName private constructor(
     companion object {
         private const val MIN_LENGTH = 2
         private const val MAX_LENGTH = 8
+        val UNKNOWN_HASHTAG_NAME = HashtagName("unknown")
 
         fun create(raw: String): Result<HashtagName> {
             val error = validate(raw)
