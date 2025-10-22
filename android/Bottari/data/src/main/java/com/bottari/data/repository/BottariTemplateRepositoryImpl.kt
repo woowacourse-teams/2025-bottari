@@ -11,25 +11,37 @@ import javax.inject.Inject
 class BottariTemplateRepositoryImpl @Inject constructor(
     private val bottariTemplateRemoteDataSource: BottariTemplateRemoteDataSource,
 ) : BottariTemplateRepository {
-    override suspend fun fetchBottariTemplates(
-        query: String?,
+    override suspend fun searchTemplatesByTitle(
+        title: String,
         pageable: Pageable<BottariTemplate>,
     ): Result<Pageable<BottariTemplate>> =
         bottariTemplateRemoteDataSource
-            .fetchBottariTemplates(PageableRequest.of(query, pageable))
+            .searchTemplatesByTitle(title, PageableRequest.of(pageable))
+            .mapCatching { response -> response.toDomain { contents -> contents.toDomain() } }
+
+    override suspend fun searchTemplatesByHashtag(
+        hashtagId: Long,
+        pageable: Pageable<BottariTemplate>,
+    ): Result<Pageable<BottariTemplate>> =
+        bottariTemplateRemoteDataSource
+            .searchTemplatesByHashtag(hashtagId, PageableRequest.of(pageable))
             .mapCatching { response -> response.toDomain { contents -> contents.toDomain() } }
 
     override suspend fun createBottariTemplate(
         title: String,
+        description: String,
         items: List<String>,
-    ): Result<Long?> =
-        bottariTemplateRemoteDataSource
-            .createBottariTemplate(
-                BottariTemplateCreateRequest(
-                    items,
-                    title,
-                ),
+        hashtag: List<String>,
+    ): Result<Long> {
+        val request =
+            BottariTemplateCreateRequest(
+                title = title,
+                description = description,
+                bottariTemplateItems = items,
+                hashtagNames = hashtag,
             )
+        return bottariTemplateRemoteDataSource.createBottariTemplate(request)
+    }
 
     override suspend fun fetchBottariTemplate(bottariId: Long): Result<BottariTemplate> =
         bottariTemplateRemoteDataSource

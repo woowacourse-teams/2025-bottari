@@ -9,10 +9,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.presentation.compose.common.navigation.Navigation
 import com.bottari.presentation.compose.common.navigation.NavigationController
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.home.bottari.MyBottariScreen
 import com.bottari.presentation.compose.home.more.MoreBottariScreen
@@ -25,20 +23,14 @@ fun HomeScreen(
     navigateToPersonalBottariChecklist: (Long, String) -> Unit,
     navigateToTeamBottariChecklist: (Long, String) -> Unit,
     navigateToBrowser: (String) -> Unit,
-    navigateToTemplateDetail: (Long) -> Unit,
+    navigateToTemplateDetail: (templateId: Long, isMyTemplate: Boolean) -> Unit,
     navigateToTemplateCreate: () -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-
     val navController =
-        rememberSaveable(saver = NavigationController.saver) {
-            NavigationController(HomeScreenRoute.Bottari)
-        }
-
+        rememberSaveable(saver = NavigationController.saver) { NavigationController(HomeScreenRoute.Bottari) }
     val currentScreen =
-        remember(navController.currentScreen) {
-            navController.currentScreen as HomeScreenRoute
-        }
+        remember(navController.currentScreen) { navController.currentScreen as HomeScreenRoute }
 
     Scaffold(
         topBar = { HomeTopAppBar(title = stringResource(currentScreen.labelResId())) },
@@ -46,7 +38,13 @@ fun HomeScreen(
             HomeBottomNavigationBar(
                 screens = HomeScreenRoute.entries,
                 selectedTab = currentScreen,
-                onTabSelected = { tab -> navController.navigate(tab) },
+                onTabSelected = { tab ->
+                    if (tab == HomeScreenRoute.Template) {
+                        navController.navigateOrReset(HomeScreenRoute.Template)
+                        return@HomeBottomNavigationBar
+                    }
+                    navController.navigate(tab)
+                },
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -71,7 +69,7 @@ fun HomeScreen(
 private fun HomeScreenRouter(
     navController: NavigationController,
     navigateToBrowser: (String) -> Unit,
-    navigateToTemplateDetail: (Long) -> Unit,
+    navigateToTemplateDetail: (templateId: Long, isMyTemplate: Boolean) -> Unit,
     navigateToTemplateCreate: () -> Unit,
     navigateToPersonalBottariEdit: (Long, Boolean) -> Unit,
     navigateToTeamBottariEdit: (Long, Boolean) -> Unit,
@@ -85,11 +83,13 @@ private fun HomeScreenRouter(
         modifier = modifier,
     ) { screen, nav ->
         when (screen) {
-            HomeScreenRoute.Template ->
+            HomeScreenRoute.Template -> {
                 TemplateBottariScreen(
+                    snackbarState = snackbarState,
                     navigateToTemplateDetail = navigateToTemplateDetail,
                     navigateToTemplateCreate = navigateToTemplateCreate,
                 )
+            }
 
             HomeScreenRoute.Bottari ->
                 MyBottariScreen(
@@ -105,21 +105,5 @@ private fun HomeScreenRouter(
                     onNavigateToBrowser = navigateToBrowser,
                 )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun HomeScreenPreview() {
-    BottariTheme {
-        HomeScreen(
-            navigateToPersonalBottariEdit = { _, _ -> },
-            navigateToTeamBottariEdit = { _, _ -> },
-            navigateToPersonalBottariChecklist = { _, _ -> },
-            navigateToTeamBottariChecklist = { _, _ -> },
-            navigateToBrowser = {},
-            navigateToTemplateDetail = {},
-            navigateToTemplateCreate = {},
-        )
     }
 }

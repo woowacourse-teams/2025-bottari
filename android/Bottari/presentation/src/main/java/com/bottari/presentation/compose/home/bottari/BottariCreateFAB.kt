@@ -2,6 +2,7 @@ package com.bottari.presentation.compose.home.bottari
 
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButtonMenu
 import androidx.compose.material3.FloatingActionButtonMenuItem
@@ -10,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.ToggleFloatingActionButton
 import androidx.compose.material3.ToggleFloatingActionButtonDefaults
+import androidx.compose.material3.ToggleFloatingActionButtonDefaults.containerCornerRadius
 import androidx.compose.material3.animateFloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,6 +41,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
@@ -117,6 +120,7 @@ private fun BottariCreateToggleFloatingActionButton(
     ToggleFloatingActionButton(
         checked = fabMenuExpanded,
         onCheckedChange = { onChangeExpandedState(it) },
+        containerCornerRadius = containerCornerRadius(12.dp),
         modifier =
             Modifier
                 .semantics {
@@ -135,13 +139,13 @@ private fun BottariCreateToggleFloatingActionButton(
             ),
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_close),
+            painter = painterResource(R.drawable.ic_plus),
             contentDescription = null,
-            modifier =
-                Modifier.graphicsLayer {
-                    rotationZ = (1f - checkedProgress) * 45f
-                },
             tint = contentColor,
+            modifier =
+                Modifier
+                    .size(20.dp)
+                    .graphicsLayer { rotationZ = checkedProgress * 45f },
         )
     }
 }

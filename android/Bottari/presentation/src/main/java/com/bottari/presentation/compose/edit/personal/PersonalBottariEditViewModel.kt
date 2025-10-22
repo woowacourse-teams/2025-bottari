@@ -61,7 +61,7 @@ class PersonalBottariEditViewModel @Inject constructor(
 
         val items = currentState.items.map { it.name }
         launch {
-            createBottariTemplateUseCase(currentState.bottariTitle, items)
+            createBottariTemplateUseCase(currentState.bottariTitle, "", items, emptyList())
                 .onSuccess { createdTemplateId ->
                     handleCreateTemplateSuccess(createdTemplateId)
                     emitEvent(PersonalBottariEditUiEvent.CreateTemplateSuccess)
@@ -106,9 +106,7 @@ class PersonalBottariEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleCreateTemplateSuccess(createdTemplateId: Long?) {
-        if (createdTemplateId == null) return
-
+    private fun handleCreateTemplateSuccess(createdTemplateId: Long) {
         val itemNames = currentState.items.map { it.name }
         BottariLogger.ui(
             UiEventType.TEMPLATE_UPLOAD,

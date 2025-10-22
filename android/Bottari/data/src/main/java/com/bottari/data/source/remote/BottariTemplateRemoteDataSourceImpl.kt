@@ -13,18 +13,34 @@ import javax.inject.Inject
 class BottariTemplateRemoteDataSourceImpl @Inject constructor(
     private val bottariTemplateService: BottariTemplateService,
 ) : BottariTemplateRemoteDataSource {
-    override suspend fun fetchBottariTemplates(
+    override suspend fun searchTemplatesByTitle(
+        title: String,
         pageableRequest: PageableRequest,
     ): Result<PageableResponse<BottariTemplateCursorFetchResponse>> =
         safeApiCall {
-            bottariTemplateService.fetchBottariTemplates(pageableRequest.toQueryMap())
+            val pageableParams = pageableRequest.toQueryMap().toMutableMap()
+            pageableParams["query"] = title
+            bottariTemplateService.searchTemplatesByTitle(pageableParams)
         }
 
-    override suspend fun createBottariTemplate(bottariTemplateCreateRequest: BottariTemplateCreateRequest): Result<Long?> =
+    override suspend fun searchTemplatesByHashtag(
+        hashtagId: Long,
+        pageableRequest: PageableRequest,
+    ): Result<PageableResponse<BottariTemplateCursorFetchResponse>> =
+        safeApiCall {
+            val pageableParams = pageableRequest.toQueryMap().toMutableMap()
+            pageableParams["hashtagId"] = hashtagId.toString()
+            bottariTemplateService.searchTemplatesByHashtag(pageableParams)
+        }
+
+    override suspend fun createBottariTemplate(bottariTemplateCreateRequest: BottariTemplateCreateRequest): Result<Long> =
         runCatching {
-            val response =
-                bottariTemplateService.createBottariTemplate(bottariTemplateCreateRequest)
-            response.extractIdFromHeader(HEADER_TEMPLATE_ID_PREFIX)
+            bottariTemplateService
+                .createBottariTemplate(bottariTemplateCreateRequest)
+                .let { response ->
+                    response.extractIdFromHeader(HEADER_TEMPLATE_ID_PREFIX)
+                        ?: throw IllegalStateException("응답 헤더에서 템플릿 ID를 찾을 수 없습니다.")
+                }
         }
 
     override suspend fun fetchBottariTemplateDetail(bottariId: Long): Result<BottariTemplateFetchResponse> =
