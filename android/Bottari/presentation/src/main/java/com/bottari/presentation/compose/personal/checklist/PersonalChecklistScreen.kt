@@ -47,8 +47,17 @@ fun PersonalChecklistScreen(
         if (!isToolTipClosed) {
             PersonalChecklistTooltip(onCloseToolTip)
         }
-        ChecklistProgressHeader(checkedQuantity = checkedQuantity, totalQuantity = totalQuantity)
-        PersonalChecklistLazyColumn(bottariItems = checklistItems, onClickItem = onClickItem)
+        Box(modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceMedium)) {
+            ChecklistProgressHeader(
+                checkedQuantity = checkedQuantity,
+                totalQuantity = totalQuantity,
+            )
+        }
+        PersonalChecklistLazyColumn(
+            bottariItems = checklistItems,
+            onClickItem = onClickItem,
+            modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceMedium),
+        )
     }
 }
 
@@ -74,8 +83,10 @@ fun PersonalChecklistTooltip(onCloseToolTip: () -> Unit) {
 fun PersonalChecklistLazyColumn(
     bottariItems: List<PersonalChecklistItemUiModel>,
     onClickItem: (Long) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
+        modifier = modifier,
         contentPadding = PaddingValues(bottom = BottariTheme.spacing.spaceLarge),
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
     ) {
@@ -139,7 +150,7 @@ private fun PersonalChecklistTooltipPreview() {
 @Composable
 private fun PersonalChecklistScreenPreview() {
     PersonalChecklistScreen(
-        false,
+        true,
         {},
         listOf(
             PersonalChecklistItemUiModel(1, "테스트", false),

@@ -20,12 +20,14 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 fun ChecklistProgressHeader(
     checkedQuantity: Int,
     totalQuantity: Int,
+    modifier : Modifier = Modifier,
 ) {
     val format =
         stringResource(
             R.string.checklist_current_status_items_count_text,
         )
     BottariBox(
+        modifier = modifier,
         contentPadding =
             PaddingValues(
                 vertical = BottariTheme.spacing.spaceXLarge,
