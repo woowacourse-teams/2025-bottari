@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -25,6 +26,7 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.team.TeamSendRemindDialog
 import com.bottari.presentation.compose.team.TeamStateCard
 import com.bottari.presentation.compose.team.TeamStateListBox
+import com.bottari.presentation.compose.team.checklist.TeamChecklistEmptyView
 import com.bottari.presentation.model.bottari.team.member.TeamMemberStatusUiModel
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 
@@ -115,6 +117,10 @@ private fun TeamMemberStateScreen(
                 onDismissRequest = { onSelectMember(null) },
                 onClickRemind = { onSendRemind(member.member) },
             ) {
+                if (member.isItemsEmpty) {
+                    TeamChecklistEmptyView(modifier = Modifier.fillMaxWidth())
+                    return@TeamSendRemindDialog
+                }
                 Column(verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall)) {
                     if (member.checkedItems.isNotEmpty()) {
                         TeamStateListBox(
