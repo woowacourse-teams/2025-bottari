@@ -14,5 +14,10 @@ data class ComposeTeamBottariItemStatusUiState(
 
     val completedItems =
         items.count { it.checkItemsCount == it.totalItemsCount }
-    val checkedProgress = ((checkedCount.toFloat() / totalCount.toFloat()) * 100).toInt()
+    val checkedProgress =
+        if (totalCount > 0) {
+            ((checkedCount.toFloat() / totalCount.toFloat()) * 100).toInt()
+        } else {
+            0
+        }
 }
