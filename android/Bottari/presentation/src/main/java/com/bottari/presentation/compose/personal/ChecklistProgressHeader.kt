@@ -20,7 +20,7 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 fun ChecklistProgressHeader(
     checkedQuantity: Int,
     totalQuantity: Int,
-    modifier : Modifier = Modifier,
+    modifier: Modifier = Modifier,
 ) {
     val format =
         stringResource(

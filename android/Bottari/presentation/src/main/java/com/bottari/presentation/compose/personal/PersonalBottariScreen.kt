@@ -129,8 +129,9 @@ private fun PersonalBottariScreen(
                 onClickItem = onClickItem,
                 totalQuantity = uiState.totalQuantity,
                 checkedQuantity = uiState.checkedQuantity,
-                modifier = Modifier
-                    .padding(innerPadding),
+                modifier =
+                    Modifier
+                        .padding(innerPadding),
             )
             return@Scaffold
         }
