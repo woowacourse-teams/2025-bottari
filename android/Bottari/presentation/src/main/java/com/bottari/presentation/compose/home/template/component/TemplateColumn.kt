@@ -96,7 +96,7 @@ private fun TemplateItemIconButtonByTemplateItemType(
 
         is TemplateItemType.Bookmark -> {
             TemplateItemIconButton(
-                type = type,
+                type = type.copy(isBookmarked = template.isMarked),
                 onClick = { onClickBookmark(template.id) },
             )
         }

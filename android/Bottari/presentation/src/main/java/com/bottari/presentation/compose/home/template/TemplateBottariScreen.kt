@@ -84,7 +84,7 @@ fun TemplateBottariScreen(
         onLoadNextPage = viewModel::loadNextPage,
         onClickAdd = navigateToTemplateCreate,
         onClickDelete = viewModel::deleteTemplate,
-        onClickBookmark = {},
+        onClickBookmark = viewModel::toggleBookmark,
         onRefresh = viewModel::refresh,
         modifier = modifier.noRippleClickable { focusManager.clearFocus() },
     )
@@ -164,9 +164,10 @@ private fun TemplateBottariScreen(
                         showLoadingBlock = uiState.showLoading,
                     )
 
-                2 -> BookmarkTemplateScreen(
-                    navigateToDetail = { id -> onClickDetail(id, false) },
-                )
+                2 ->
+                    BookmarkTemplateScreen(
+                        navigateToDetail = { id -> onClickDetail(id, false) },
+                    )
             }
         }
 
@@ -221,6 +222,7 @@ private fun TemplateBottariScreenPreview() {
                 author = "다이스",
                 takenCount = 100_024 + index,
                 items = items,
+                isMarked = index % 2 == 0,
                 hashtags = List(3) { BottariTemplateHashtagUiModel(it.toLong(), "해시태그 $it") },
             )
         }

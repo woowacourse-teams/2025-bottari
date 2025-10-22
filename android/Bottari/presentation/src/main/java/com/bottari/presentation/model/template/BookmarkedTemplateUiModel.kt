@@ -1,5 +1,7 @@
 package com.bottari.presentation.model.template
 
+import com.bottari.domain.model.bottari.template.BookmarkTemplate
+
 data class BookmarkedTemplateUiModel(
     val id: Long,
     val templateId: Long,
@@ -7,5 +9,16 @@ data class BookmarkedTemplateUiModel(
     val description: String,
     val items: List<String>,
     val hashtags: List<String>,
-    val author: String,
-)
+) {
+    companion object {
+        fun fromBookmark(template: BookmarkTemplate): BookmarkedTemplateUiModel =
+            BookmarkedTemplateUiModel(
+                id = template.id,
+                templateId = template.templateId,
+                title = template.title,
+                description = template.description,
+                items = template.items,
+                hashtags = template.hashtags,
+            )
+    }
+}

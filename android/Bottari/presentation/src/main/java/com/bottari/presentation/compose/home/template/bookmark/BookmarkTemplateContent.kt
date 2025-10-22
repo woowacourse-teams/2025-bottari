@@ -18,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
 import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.compose.home.template.component.TemplateEmptyView
 import com.bottari.presentation.compose.home.template.component.TemplateItem
 import com.bottari.presentation.compose.home.template.component.TemplateItemIconButton
 import com.bottari.presentation.compose.home.template.component.TemplateItemType
@@ -27,7 +28,7 @@ import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 @Composable
 fun BookmarkTemplateScreen(
     navigateToDetail: (bookmarkId: Long) -> Unit,
-    viewModel: BookmarkTemplateViewModel = viewModel()
+    viewModel: BookmarkTemplateViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
@@ -44,7 +45,7 @@ fun BookmarkTemplateScreen(
     BookmarkTemplateScreen(
         uiState = uiState,
         onClickDetail = navigateToDetail,
-        onClickDelete = {},
+        onClickDelete = viewModel::deleteBookmark,
     )
 }
 
@@ -56,6 +57,11 @@ private fun BookmarkTemplateScreen(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
+        if (uiState.isEmpty) {
+            TemplateEmptyView(text = "북마크한 템플릿이 없습니다.")
+            return@Box
+        }
+
         BookmarkTemplateColumn(
             templates = uiState.templates,
             onClickDetail = onClickDetail,
@@ -86,7 +92,7 @@ private fun BookmarkTemplateColumn(
                 title = template.title,
                 description = template.description,
                 items = template.items,
-                author = template.author,
+                author = "",
                 takenCount = 0,
                 hashtags =
                     template.hashtags.mapIndexed { index, hashtag ->
@@ -117,7 +123,6 @@ private fun BookmarkTemplateScreenPreview() {
                 description = "우테코출근보따리글자수열다섯 $it",
                 items = listOf("아이템 1", "아이템 2", "아이템 3"),
                 hashtags = listOf("해시태그1", "해시태그2", "해시태그3"),
-                author = "",
             )
         }
     BottariTheme {

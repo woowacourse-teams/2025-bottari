@@ -1,15 +1,53 @@
 package com.bottari.domain.usecase.template
 
+import com.bottari.domain.extension.mapCatching
 import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.model.common.Pageable
+import com.bottari.domain.repository.BookmarkRepository
 import com.bottari.domain.repository.BottariTemplateRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import javax.inject.Inject
 
 class SearchTemplatesByTitleUseCase @Inject constructor(
     private val bottariTemplateRepository: BottariTemplateRepository,
+    private val bookmarkRepository: BookmarkRepository,
 ) {
     suspend operator fun invoke(
         query: String,
         pageable: Pageable<BottariTemplate>,
-    ): Result<Pageable<BottariTemplate>> = bottariTemplateRepository.searchTemplatesByTitle(title = query, pageable = pageable)
+    ): Result<Pageable<BottariTemplate>> =
+        bottariTemplateRepository
+            .searchTemplatesByTitle(title = query, pageable = pageable)
+            .mapCatching { newPageable ->
+                val newContent = applyBookmarkStatusesParallel(newPageable.contents)
+                newPageable.copy(contents = newContent)
+            }
+
+    private suspend fun applyBookmarkStatusesParallel(
+        templates: List<BottariTemplate>,
+        parallelism: Int = 8,
+    ): List<BottariTemplate> =
+        coroutineScope {
+            val semaphore = Semaphore(parallelism)
+            templates.map { template -> temp(semaphore, template) }.awaitAll()
+        }
+
+    private fun CoroutineScope.temp(
+        semaphore: Semaphore,
+        template: BottariTemplate,
+    ): Deferred<BottariTemplate> =
+        async {
+            semaphore.withPermit {
+                bookmarkRepository
+                    .existsByTemplateId(template.id)
+                    .getOrElse { false }
+                    .let { isMarked -> template.copy(isMarked = isMarked) }
+            }
+        }
 }

@@ -1,5 +1,6 @@
 package com.bottari.presentation.model.template
 
+import com.bottari.domain.model.bottari.template.BookmarkTemplate
 import com.bottari.domain.model.bottari.template.BottariTemplate
 
 data class BottariTemplateUiModel(
@@ -10,7 +11,17 @@ data class BottariTemplateUiModel(
     val author: String,
     val takenCount: Int,
     val hashtags: List<BottariTemplateHashtagUiModel> = emptyList(),
+    val isMarked: Boolean = false,
 ) {
+    fun toDomain(): BookmarkTemplate =
+        BookmarkTemplate(
+            templateId = id,
+            title = title,
+            description = description,
+            items = items.map { item -> item.name },
+            hashtags = hashtags.map { hashtag -> hashtag.name },
+        )
+
     companion object {
         fun fromDomain(bottariTemplate: BottariTemplate): BottariTemplateUiModel =
             BottariTemplateUiModel(
@@ -21,6 +32,7 @@ data class BottariTemplateUiModel(
                 author = bottariTemplate.author,
                 takenCount = bottariTemplate.takenCount,
                 hashtags = bottariTemplate.hashtags.map(BottariTemplateHashtagUiModel::fromDomain),
+                isMarked = bottariTemplate.isMarked,
             )
     }
 }
