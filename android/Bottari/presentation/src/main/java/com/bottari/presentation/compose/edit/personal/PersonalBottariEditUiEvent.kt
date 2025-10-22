@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.edit.personal.main
+package com.bottari.presentation.compose.edit.personal
 
 sealed interface PersonalBottariEditUiEvent {
     data object FindBottariFailure : PersonalBottariEditUiEvent

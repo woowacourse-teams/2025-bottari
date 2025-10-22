@@ -11,9 +11,9 @@ import androidx.fragment.app.viewModels
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseFragment
 import com.bottari.presentation.common.extension.showSnackbar
+import com.bottari.presentation.compose.edit.personal.ComposePersonalBottariEditActivity
 import com.bottari.presentation.databinding.FragmentTemplateDetailBinding
 import com.bottari.presentation.view.common.report.ReportDialog
-import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import com.bottari.presentation.view.template.detail.adapter.TemplateDetailAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -128,7 +128,13 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
 
     private fun navigateToBottariEdit(bottariId: Long?) {
         bottariId ?: return
-        startActivity(PersonalBottariEditActivity.newIntent(requireContext(), bottariId, true))
+        startActivity(
+            ComposePersonalBottariEditActivity.newIntent(
+                context = requireContext(),
+                bottariId = bottariId,
+                isNewBottari = true,
+            ),
+        )
         requireActivity().finish()
     }
 

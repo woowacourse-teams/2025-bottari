@@ -6,8 +6,8 @@ import android.app.PendingIntent
 import android.content.Context
 import com.bottari.domain.model.alarm.AlarmType
 import com.bottari.domain.model.notification.Notification
+import com.bottari.presentation.compose.edit.personal.ComposePersonalBottariEditActivity
 import com.bottari.presentation.receiver.AlarmReceiver
-import com.bottari.presentation.view.edit.personal.PersonalBottariEditActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -97,7 +97,7 @@ class AlarmScheduler @Inject constructor(
 
     private fun createEditPendingIntent(notification: Notification): PendingIntent {
         val intent =
-            PersonalBottariEditActivity.newIntent(
+            ComposePersonalBottariEditActivity.newIntent(
                 context,
                 notification.bottariId,
                 false,

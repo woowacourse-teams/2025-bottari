@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.edit.personal.main.rename
+package com.bottari.presentation.compose.edit.personal.rename
 
 data class BottariRenameUiState(
     val isLoading: Boolean = false,
