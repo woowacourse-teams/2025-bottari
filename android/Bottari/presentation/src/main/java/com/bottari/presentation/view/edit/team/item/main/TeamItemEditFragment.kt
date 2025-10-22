@@ -45,6 +45,11 @@ class TeamItemEditFragment :
         setupListener()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.setAnchorView(null)
+    }
+
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner, ::handleUiState)
     }
@@ -52,6 +57,7 @@ class TeamItemEditFragment :
     private fun setupUI() {
         binding.root.applyImeBottomPadding()
         setupTabLayout()
+        viewModel.setAnchorView(binding.viewItemInput.etItemInput)
     }
 
     private fun setupListener() {

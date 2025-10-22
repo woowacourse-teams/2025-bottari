@@ -89,11 +89,20 @@ class TeamAssignedItemEditFragment :
     private fun handleUiEvent(uiEvent: TeamAssignedItemEditEvent) {
         when (uiEvent) {
             is TeamAssignedItemEditEvent.SelectAssignedItem -> parentViewModel.updateInput(uiEvent.itemName)
-            TeamAssignedItemEditEvent.FetchTeamAssignedItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
+            TeamAssignedItemEditEvent.FetchTeamAssignedItemsFailure ->
+                requireView().showSnackbar(
+                    messageRes = R.string.common_fetch_failure_text,
+                    anchor = parentViewModel.anchorView.value,
+                )
+
             TeamAssignedItemEditEvent.DeleteItemFailure,
             TeamAssignedItemEditEvent.CreateItemFailure,
             TeamAssignedItemEditEvent.SaveItemFailure,
-            -> requireView().showSnackbar(R.string.common_save_failure_text)
+            ->
+                requireView().showSnackbar(
+                    messageRes = R.string.common_save_failure_text,
+                    anchor = parentViewModel.anchorView.value,
+                )
 
             TeamAssignedItemEditEvent.SaveItemSuccess -> handleItemEditSuccess()
             TeamAssignedItemEditEvent.CreateItemSuccess,
