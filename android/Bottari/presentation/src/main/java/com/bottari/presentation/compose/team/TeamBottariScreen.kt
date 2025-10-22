@@ -1,5 +1,6 @@
 package com.bottari.presentation.compose.team
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -50,6 +51,7 @@ fun TeamBottariScreen(
             stringResource(R.string.team_checklist_tap_member_checklist_text),
         )
     val pagerState = rememberPagerState(initialPage = 0) { pageTitles.size }
+    BackHandler(enabled = isSwipeScreen, onBack = { isSwipeScreen = false })
 
     LaunchedEffect(uiState) {
         isChecklistCompleted = uiState.isAllChecked
