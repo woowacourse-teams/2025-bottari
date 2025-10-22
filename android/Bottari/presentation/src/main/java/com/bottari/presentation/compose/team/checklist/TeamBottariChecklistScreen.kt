@@ -20,15 +20,14 @@ fun TeamBottariChecklistScreen(
     onToggleItem: (Long, BottariItemTypeUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    if (uiState.isLoading) {
+        IndeterminateCircularIndicator()
+        return
+    }
     Column(
         modifier = modifier.fillMaxSize().padding(BottariTheme.spacing.spaceMedium),
         verticalArrangement = Arrangement.Top,
     ) {
-        if (uiState.isLoading) {
-            IndeterminateCircularIndicator()
-            return
-        }
-
         TeamChecklistScreen(
             uiState = uiState,
             isToolTipClosed = isTooltipClose,
