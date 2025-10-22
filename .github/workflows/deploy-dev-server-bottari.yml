@@ -79,10 +79,10 @@ jobs:
         run: |
           docker pull $IMAGE_NAME:$IMAGE_TAG
 
-      - name: Deploy using Docker Compose
-        working-directory: /home/ubuntu
+      - name: Run Blue-Green Deploy
         run: |
-          IMAGE_NAME=$IMAGE_NAME \
-          IMAGE_TAG=$IMAGE_TAG \
-          FIREBASE_SERVICE_ACCOUNT_JSON='${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}' \
-          docker compose -f docker-compose.dev.yml up -d --force-recreate
+          export DEPLOY_FETCH_MODE=pull
+          export DEPLOY_IMAGE_TAG=${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          export FIREBASE_SERVICE_ACCOUNT_JSON='${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}'
+          cd /home/ubuntu/deploy/scripts
+          ./deploy.sh
