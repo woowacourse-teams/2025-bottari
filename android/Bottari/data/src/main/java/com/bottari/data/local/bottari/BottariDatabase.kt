@@ -32,18 +32,12 @@ abstract class BottariDatabase : RoomDatabase() {
     companion object {
         private const val DATABASE_NAME = "Bottari"
 
-        @Volatile
-        private var instance: BottariDatabase? = null
-
-        fun getDatabase(context: Context): BottariDatabase =
-            instance ?: synchronized(this) {
-                instance ?: Room
-                    .databaseBuilder(
-                        context.applicationContext,
-                        BottariDatabase::class.java,
-                        DATABASE_NAME,
-                    ).build()
-                    .also { instance = it }
-            }
+        fun create(context: Context): BottariDatabase =
+            Room
+                .databaseBuilder(
+                    context = context.applicationContext,
+                    klass = BottariDatabase::class.java,
+                    name = DATABASE_NAME,
+                ).build()
     }
 }

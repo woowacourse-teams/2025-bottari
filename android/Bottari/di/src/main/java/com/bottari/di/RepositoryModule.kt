@@ -2,6 +2,7 @@ package com.bottari.di
 
 import com.bottari.data.repository.AlarmRepositoryImpl
 import com.bottari.data.repository.AppConfigRepositoryImpl
+import com.bottari.data.repository.BookmarkRepositoryImpl
 import com.bottari.data.repository.BottariItemRepositoryImpl
 import com.bottari.data.repository.BottariRepositoryImpl
 import com.bottari.data.repository.BottariTemplateRepositoryImpl
@@ -16,6 +17,7 @@ import com.bottari.data.repository.TeamMemberRepositoryImpl
 import com.bottari.data.repository.TooltipRepositoryImpl
 import com.bottari.domain.repository.AlarmRepository
 import com.bottari.domain.repository.AppConfigRepository
+import com.bottari.domain.repository.BookmarkRepository
 import com.bottari.domain.repository.BottariItemRepository
 import com.bottari.domain.repository.BottariRepository
 import com.bottari.domain.repository.BottariTemplateRepository
@@ -92,4 +94,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindTooltipRepository(impl: TooltipRepositoryImpl): TooltipRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindBookmarkRepository(impl: BookmarkRepositoryImpl): BookmarkRepository
 }

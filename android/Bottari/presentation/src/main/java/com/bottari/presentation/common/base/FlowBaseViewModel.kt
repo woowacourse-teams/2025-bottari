@@ -39,9 +39,7 @@ abstract class FlowBaseViewModel<UiState, UiEvent>(
         launch { _uiEvent.send(event) }
     }
 
-    protected fun launch(block: suspend CoroutineScope.() -> Unit) {
-        viewModelScope.launch(exceptionHandler, block = block)
-    }
+    protected fun launch(block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch(exceptionHandler, block = block)
 
     protected open fun handleError(throwable: Throwable) {
         BottariLogger.error(throwable.localizedMessage, throwable)

@@ -2,6 +2,8 @@ package com.bottari.di
 
 import com.bottari.data.source.local.AppConfigDataSource
 import com.bottari.data.source.local.AppConfigLocalDataSourceImpl
+import com.bottari.data.source.local.BookmarkLocalDataSource
+import com.bottari.data.source.local.BookmarkLocalDataSourceImpl
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.local.MemberIdentifierLocalDataSourceImpl
 import com.bottari.data.source.local.bottari.AlarmLocalDataSource
@@ -98,4 +100,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindTooltipLocalDataSource(impl: TooltipLocalDataSourceImpl): TooltipLocalDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindBookmarkLocalDataSource(impl: BookmarkLocalDataSourceImpl): BookmarkLocalDataSource
 }
