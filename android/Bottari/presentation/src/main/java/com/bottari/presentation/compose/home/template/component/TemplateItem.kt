@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
+import com.bottari.presentation.compose.common.component.CollapsedListLine
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateItemUiModel
@@ -56,6 +57,7 @@ fun TemplateItem(
             TemplateItemHeader(
                 title = template.title,
                 description = template.description,
+                items = template.items.map { item -> item.name },
                 iconButton = iconButton,
             )
 
@@ -81,6 +83,7 @@ fun TemplateItem(
 private fun TemplateItemHeader(
     title: String,
     description: String,
+    items: List<String>,
     modifier: Modifier = Modifier,
     iconButton: @Composable () -> Unit,
 ) {
@@ -99,11 +102,22 @@ private fun TemplateItemHeader(
                 color = BottariTheme.colors.black,
             )
             Spacer(Modifier.height(BottariTheme.spacing.spaceXSmall))
-            Text(
-                text = description,
-                style = BottariTheme.typography.medium14.toTextStyle(),
-                color = BottariTheme.colors.gray500,
-            )
+
+            if (description.isBlank()) {
+                CollapsedListLine(
+                    items = items,
+                    textStyle =
+                        BottariTheme.typography.medium14
+                            .toTextStyle()
+                            .copy(color = BottariTheme.colors.gray500),
+                )
+            } else {
+                Text(
+                    text = description,
+                    style = BottariTheme.typography.medium14.toTextStyle(),
+                    color = BottariTheme.colors.gray500,
+                )
+            }
         }
 
         Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceSmall))
