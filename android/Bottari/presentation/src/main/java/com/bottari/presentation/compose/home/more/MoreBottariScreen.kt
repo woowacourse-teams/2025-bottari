@@ -7,14 +7,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.BuildConfig
 import com.bottari.presentation.R
@@ -24,11 +26,22 @@ import com.bottari.presentation.compose.home.more.component.NicknameBox
 
 @Composable
 fun MoreBottariScreen(
+    snackbarState: SnackbarHostState,
     onNavigateToBrowser: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MoreViewModel = viewModel(),
 ) {
-    val uiState = viewModel.uiState.observeAsState().value ?: MoreUiState()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
+
+    LaunchedEffect(uiEvent.value) {
+        when (uiEvent.value ?: return@LaunchedEffect) {
+            MoreUiEvent.FetchMemberInfoFailure -> snackbarState.showSnackbar("닉네임을 불러오지 못했어요")
+            MoreUiEvent.InvalidNicknameRule -> snackbarState.showSnackbar("닉네임은 2글자에서 10글자 사이여야 해요")
+            MoreUiEvent.SaveMemberNicknameFailure -> snackbarState.showSnackbar("닉네임을 변경하지 못했어요")
+            MoreUiEvent.SaveMemberNicknameSuccess -> snackbarState.showSnackbar("닉네임을 변경했어요")
+        }
+    }
 
     Column(
         modifier =
@@ -42,7 +55,7 @@ fun MoreBottariScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         NicknameBox(
-            nickname = uiState.editingNickname,
+            nickname = uiState.value.editingNickname,
             onChangeNickname = viewModel::updateNickname,
             onSaveNickname = viewModel::saveNickname,
             modifier = Modifier.fillMaxWidth(),
@@ -113,6 +126,9 @@ private fun getAppVersionName(context: Context): String? {
 @Composable
 private fun MoreBottariScreenPreview() {
     BottariTheme {
-        MoreBottariScreen(onNavigateToBrowser = {})
+        MoreBottariScreen(
+            snackbarState = SnackbarHostState(),
+            onNavigateToBrowser = {},
+        )
     }
 }

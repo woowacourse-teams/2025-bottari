@@ -1,6 +1,7 @@
 package com.bottari.presentation.model.alarm
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.alarm.AlarmType
 import kotlinx.parcelize.Parcelize
@@ -8,6 +9,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 
+@Immutable
 @Parcelize
 data class AlarmUiModel(
     val id: Long? = null,
@@ -44,14 +46,15 @@ data class AlarmUiModel(
     companion object {
         private const val DAYS_IN_WEEK = 7
 
-        val DEFAULT_ALARM_UI_MODEL =
-            AlarmUiModel(
-                type = AlarmTypeUiModel.NON_REPEAT,
-                isActive = true,
-                time = LocalTime.now(),
-                date = LocalDate.now(),
-                repeatDays = DayOfWeek.entries.map { RepeatDayUiModel(it, false) },
-            )
+        val DEFAULT_ALARM_UI_MODEL: AlarmUiModel
+            get() =
+                AlarmUiModel(
+                    type = AlarmTypeUiModel.NON_REPEAT,
+                    isActive = false,
+                    time = LocalTime.now().plusMinutes(1),
+                    date = LocalDate.now(),
+                    repeatDays = RepeatDayUiModel.DEFAULT_WEEK,
+                )
 
         fun fromDomain(alarm: Alarm): AlarmUiModel =
             AlarmUiModel(
@@ -61,7 +64,7 @@ data class AlarmUiModel(
                 type = alarm.alarmType.toUiModel(),
                 date = alarm.alarmType.getDate(),
                 repeatDays = alarm.alarmType.getDaysOfWeek().toUiModel(),
-                locationAlarm = alarm.location?.let { LocationAlarmUiModel.fromDomain(it) },
+                locationAlarm = alarm.location?.let(LocationAlarmUiModel::fromDomain),
             )
 
         private fun AlarmType.toUiModel(): AlarmTypeUiModel =
