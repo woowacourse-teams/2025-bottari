@@ -87,10 +87,6 @@ class TeamPersonalItemEditFragment :
                 )
 
             TeamPersonalItemEditEvent.CreateItemSuccess -> {
-                requireView().showSnackbar(
-                    messageRes = R.string.common_save_success_text,
-                    anchor = parentViewModel.anchorView.value,
-                )
                 parentViewModel.updateInput(RESET_INPUT_TEXT)
                 val target = (adapter.itemCount - 1).coerceAtLeast(0)
                 binding.rvTeamPersonalItemEdit.smoothScrollToPosition(target)

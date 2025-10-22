@@ -134,7 +134,6 @@ class TeamAssignedItemEditFragment :
     }
 
     private fun handleItemEditSuccess() {
-        requireView().showSnackbar(R.string.common_save_success_text)
         parentViewModel.updateInput(RESET_INPUT_TEXT)
     }
 
