@@ -123,6 +123,7 @@ dependencies {
     implementation(libs.material.calendarview)
     implementation(libs.threetenabp)
     implementation(libs.compose.swipeable.cards)
+    implementation(libs.wheelpickercompose)
 
     api(platform(libs.firebase.bom))
     api(libs.firebase.messaging)
