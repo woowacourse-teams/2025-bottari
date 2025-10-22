@@ -101,9 +101,7 @@ class ComposeTeamMembersStatusViewModel @Inject constructor(
                 .onSuccess { membersStatus ->
                     val updated = mergeWithPreviousState(membersStatus, myId)
                     updateState {
-                        copy(
-                            membersStatus = updated,
-                        )
+                        copy(membersStatus = updated)
                     }
                 }.onFailure { emitEvent(ComposeTeamMembersStatusUiEvent.FetchMembersStatusFailure) }
             updateState { copy(isLoading = false) }

@@ -1,6 +1,5 @@
 package com.bottari.presentation.compose.team.member
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,10 +44,7 @@ fun TeamMemberStateScreen(
             is ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess ->
                 snackbarHostState.showSnackbar("보채기에 성공했어요")
             ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
-                {
-                    Log.d("test", "failed")
-                    snackbarHostState.showSnackbar("보채기에 실패했어요")
-                }
+                snackbarHostState.showSnackbar("보채기에 실패했어요")
             ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure ->
                 snackbarHostState.showSnackbar("내 id를 불러오지 못했어요")
         }
