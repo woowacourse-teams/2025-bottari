@@ -108,7 +108,7 @@ private fun PersonalBottariScreen(
         },
         containerColor = LocalBottariBgColor.current,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        modifier = modifier
+        modifier = modifier,
     ) { innerPadding ->
         if (uiState.isLoading) {
             IndeterminateCircularIndicator()
