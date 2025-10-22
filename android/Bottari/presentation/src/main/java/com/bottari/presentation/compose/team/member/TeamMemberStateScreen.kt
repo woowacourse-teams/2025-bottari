@@ -29,18 +29,22 @@ import com.bottari.presentation.compose.team.TeamSendRemindDialog
 import com.bottari.presentation.compose.team.TeamStateCard
 import com.bottari.presentation.compose.team.TeamStateListBox
 import com.bottari.presentation.compose.team.checklist.TeamChecklistEmptyView
+import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
 import com.bottari.presentation.model.bottari.team.member.TeamMemberStatusUiModel
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import teamMemberStatusDummyUiState
 
 @Composable
 fun TeamMemberStateScreen(
+    checkedState: List<TeamChecklistItemUiModel>,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: ComposeTeamMembersStatusViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
+
+    LaunchedEffect(checkedState) { viewModel.fetchMemberId() }
 
     LaunchedEffect(uiEvent) {
         when (uiEvent ?: return@LaunchedEffect) {

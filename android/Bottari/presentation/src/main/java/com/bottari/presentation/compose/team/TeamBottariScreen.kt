@@ -110,9 +110,9 @@ fun TeamBottariScreen(
                             modifier = Modifier.fillMaxSize().padding(BottariTheme.spacing.spaceMedium),
                         )
 
-                    1 -> TeamItemStateScreen(snackbarHostState = snackbarHostState)
+                    1 -> TeamItemStateScreen(snackbarHostState = snackbarHostState, checkedState = uiState.bottariItems)
 
-                    2 -> TeamMemberStateScreen(snackbarHostState = snackbarHostState)
+                    2 -> TeamMemberStateScreen(snackbarHostState = snackbarHostState, checkedState = uiState.bottariItems)
                 }
             }
         }

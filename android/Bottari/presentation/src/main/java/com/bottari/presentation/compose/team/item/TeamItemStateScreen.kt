@@ -39,15 +39,19 @@ import com.bottari.presentation.compose.team.TeamStateCard
 import com.bottari.presentation.compose.team.TeamStateListBox
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModelStatus
+import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
 
 @Composable
 fun TeamItemStateScreen(
+    checkedState: List<TeamChecklistItemUiModel>,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: ComposeTeamBottariItemStatusViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
+
+    LaunchedEffect(checkedState) { viewModel.fetchTeamStatus() }
 
     LaunchedEffect(uiEvent) {
         when (uiEvent ?: return@LaunchedEffect) {

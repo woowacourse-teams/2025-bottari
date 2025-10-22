@@ -53,6 +53,18 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch { disconnectTeamEventUseCase() }
     }
 
+    fun fetchTeamStatus() {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            fetchTeamStatusUseCase(teamBottariId)
+                .onSuccess { teamBottariStatus -> handleFetchTeamStatusSuccess(teamBottariStatus) }
+                .onFailure { emitEvent(ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure) }
+
+            updateState { copy(isLoading = false) }
+        }
+    }
+
     fun selectItem(item: TeamBottariUiModelStatus?) {
         updateState { copy(selectedProduct = item) }
     }
@@ -70,18 +82,6 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
                     updateState { copy(selectedProduct = null) }
                     emitEvent(ComposeTeamBottariItemStatusUiEvent.SendRemindFailure)
                 }
-        }
-    }
-
-    private fun fetchTeamStatus() {
-        updateState { copy(isLoading = true) }
-
-        launch {
-            fetchTeamStatusUseCase(teamBottariId)
-                .onSuccess { teamBottariStatus -> handleFetchTeamStatusSuccess(teamBottariStatus) }
-                .onFailure { emitEvent(ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure) }
-
-            updateState { copy(isLoading = false) }
         }
     }
 

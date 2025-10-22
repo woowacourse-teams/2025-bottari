@@ -61,6 +61,16 @@ class ComposeTeamMembersStatusViewModel @Inject constructor(
         }
     }
 
+    fun fetchMemberId() {
+        launch {
+            getMemberIdUseCase()
+                .onSuccess { id ->
+                    updateState { copy(myId = id) }
+                    fetchTeamMembersStatus()
+                }.onFailure { emitEvent(ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure) }
+        }
+    }
+
     private fun sendRemindMessage(member: TeamMemberUiModel) {
         val memberId =
             member.id ?: run {
@@ -80,16 +90,6 @@ class ComposeTeamMembersStatusViewModel @Inject constructor(
                     updateState { copy(selectedMember = null) }
                     emitEvent(ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure)
                 }
-        }
-    }
-
-    private fun fetchMemberId() {
-        launch {
-            getMemberIdUseCase()
-                .onSuccess { id ->
-                    updateState { copy(myId = id) }
-                    fetchTeamMembersStatus()
-                }.onFailure { emitEvent(ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure) }
         }
     }
 
