@@ -70,7 +70,7 @@ public enum ErrorCode {
     HASHTAG_LIMIT_TOO_HIGH(HttpStatus.BAD_REQUEST, "인기 해시태그 조회 limit이 너무 높습니다."),
     HASHTAG_DUPLICATE_IN_REQUEST(HttpStatus.BAD_REQUEST, "요청에 중복된 해시태그가 있습니다."),
     HASHTAG_TOO_MANY(HttpStatus.BAD_REQUEST, "해시태그가 너무 많습니다."),
-    HASHTAG_ID_MISSING(HttpStatus.BAD_REQUEST,"해시태그로 템플릿 검색시 해시태그 아이디는 필수입니다."),
+    HASHTAG_ID_MISSING(HttpStatus.BAD_REQUEST, "해시태그로 템플릿 검색시 해시태그 아이디는 필수입니다."),
 
     // ===== TEAM_BOTTARI 관련 =====
     TEAM_BOTTARI_NOT_FOUND(HttpStatus.NOT_FOUND, "팀 보따리를 찾을 수 없습니다."),

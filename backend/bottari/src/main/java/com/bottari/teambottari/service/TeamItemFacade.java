@@ -122,6 +122,7 @@ public class TeamItemFacade {
         teamAssignedItemService.update(teamBottariId, assignedItemId, request);
     }
 
+    @Transactional
     public void delete(
             final Long id,
             final String ssaid,
@@ -161,6 +162,7 @@ public class TeamItemFacade {
         return TeamMemberChecklistResponse.of(teamSharedItems, teamAssignedItems, teamPersonalItems);
     }
 
+    @Transactional
     public void check(
             final Long id,
             final String ssaid,
@@ -173,6 +175,7 @@ public class TeamItemFacade {
         }
     }
 
+    @Transactional
     public void uncheck(
             final Long id,
             final String ssaid,

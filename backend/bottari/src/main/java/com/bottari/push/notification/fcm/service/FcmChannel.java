@@ -67,8 +67,8 @@ public final class FcmChannel implements NotificationChannel {
         }
         if (!invalidTokenIds.isEmpty()) {
             fcmTokenService.deleteByIds(invalidTokenIds);
-            throw new BusinessException(FCM_INVALID_TOKEN);
         }
+        throwIfAllSendsFailed(memberIds, invalidTokenIds);
     }
 
     @Override
@@ -100,4 +100,14 @@ public final class FcmChannel implements NotificationChannel {
             throw new BusinessException(FCM_MESSAGE_CONVERT_FAIL);
         }
     }
+
+    private void throwIfAllSendsFailed(
+            final List<Long> memberIds,
+            final List<Long> invalidTokenIds
+    ) {
+        if (memberIds.size() == invalidTokenIds.size()) {
+            throw new BusinessException(FCM_MESSAGE_SEND_FAIL);
+        }
+    }
+
 }
