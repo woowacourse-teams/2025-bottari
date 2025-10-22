@@ -15,6 +15,7 @@ import com.bottari.presentation.model.template.BottariTemplateUiModel
 fun MainTemplateContent(
     templates: List<BottariTemplateUiModel>,
     listState: LazyListState,
+    emptyViewText: String,
     query: String,
     onQueryChange: (String) -> Unit,
     chips: List<BottariTemplateHashtagUiModel>,
@@ -46,7 +47,7 @@ fun MainTemplateContent(
             type = TemplateItemType.Bookmark(false),
             templates = templates,
             listState = listState,
-            emptyViewText = "아직 공유된 보따리가 없어요",
+            emptyViewText = emptyViewText,
             showLoadingBlock = showLoadingBlock,
             isRefreshing = isRefreshing,
             onRefresh = onRefresh,
@@ -78,6 +79,7 @@ private fun MainTemplateContentPreview() {
         MainTemplateContent(
             templates = myTemplates,
             listState = LazyListState(),
+            emptyViewText = "아직 공유된 보따리가 없어요",
             query = "",
             onQueryChange = {},
             chips = emptyList(),

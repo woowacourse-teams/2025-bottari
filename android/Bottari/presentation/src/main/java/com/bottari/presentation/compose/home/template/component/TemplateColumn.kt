@@ -27,13 +27,13 @@ fun TemplateColumn(
     type: TemplateItemType,
     templates: List<BottariTemplateUiModel>,
     listState: LazyListState,
+    emptyViewText: String,
     showLoadingBlock: Boolean,
     onClickDetail: (Long) -> Unit,
     onClickDelete: (Long) -> Unit,
     onClickBookmark: (Long) -> Unit,
     onClickHashtag: (BottariTemplateHashtagUiModel) -> Unit,
     modifier: Modifier = Modifier,
-    emptyViewText: String = "결과가 존재하지 않아요",
 ) {
     LazyColumn(
         state = listState,
@@ -45,7 +45,7 @@ fun TemplateColumn(
         contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceSmall),
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
     ) {
-        templates.ifEmpty {
+        if (emptyViewText.isNotBlank() && templates.isEmpty()) {
             item {
                 TemplateEmptyView(
                     text = emptyViewText,
@@ -150,6 +150,7 @@ private fun TemplateColumnPreview() {
             type = TemplateItemType.Bookmark(false),
             templates = templates,
             listState = LazyListState(),
+            emptyViewText = "",
             onClickDetail = {},
             onClickDelete = {},
             onClickBookmark = {},

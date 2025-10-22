@@ -136,6 +136,7 @@ private fun TemplateBottariScreen(
                     MainTemplateContent(
                         templates = uiState.templates,
                         listState = listState,
+                        emptyViewText = if (uiState.isEmpty) "아직 공유된 보따리가 없어요" else "",
                         query = uiState.searchWord,
                         onQueryChange = onQueryChange,
                         chips = uiState.chips,
@@ -151,6 +152,7 @@ private fun TemplateBottariScreen(
                     MyTemplateContent(
                         myTemplates = uiState.myTemplates,
                         listState = myListState,
+                        emptyViewText = if (uiState.isEmpty) "아직 공유한 보따리가 없어요" else "",
                         onClickDetail = onClickDetail,
                         onClickDelete = onClickDelete,
                         isRefreshing = uiState.isRefreshingMy,

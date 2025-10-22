@@ -3,6 +3,7 @@ package com.bottari.presentation.compose.home.template.component
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.presentation.model.template.BottariTemplateUiModel
 
@@ -10,17 +11,19 @@ import com.bottari.presentation.model.template.BottariTemplateUiModel
 fun MyTemplateContent(
     myTemplates: List<BottariTemplateUiModel>,
     listState: LazyListState,
+    emptyViewText: String,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     showLoadingBlock: Boolean,
     onClickDetail: (Long) -> Unit,
     onClickDelete: (Long) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     PullToRefreshTemplateColumn(
         type = TemplateItemType.MyTemplate,
         templates = myTemplates,
         listState = listState,
-        emptyViewText = "아직 공유한 보따리가 없어요",
+        emptyViewText = emptyViewText,
         showLoadingBlock = showLoadingBlock,
         isRefreshing = isRefreshing,
         onRefresh = onRefresh,
@@ -28,6 +31,7 @@ fun MyTemplateContent(
         onClickDelete = onClickDelete,
         onClickBookmark = {},
         onClickHashtag = {},
+        modifier = modifier
     )
 }
 
@@ -50,6 +54,7 @@ private fun MyTemplateContentPreview() {
     MyTemplateContent(
         myTemplates = myTemplates,
         listState = rememberLazyListState(),
+        emptyViewText = "아직 공유된 보따리가 없어요",
         isRefreshing = false,
         onRefresh = {},
         showLoadingBlock = false,
