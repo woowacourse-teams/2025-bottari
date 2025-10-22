@@ -43,7 +43,7 @@ class TeamAssignedItemEditFragment :
         setupUI()
     }
 
-    override fun onClickAssignedItemDelete(itemId: Long) = viewModel.deleteItem(itemId)
+    override fun onClickAssignedItemDelete(itemId: Long) = viewModel.requestDeleteItem(itemId)
 
     override fun onClickAssignedItem(itemId: Long) = viewModel.toggleEditState(itemId)
 

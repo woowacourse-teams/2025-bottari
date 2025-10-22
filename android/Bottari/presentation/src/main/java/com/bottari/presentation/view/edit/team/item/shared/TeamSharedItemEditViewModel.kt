@@ -1,6 +1,7 @@
 package com.bottari.presentation.view.edit.team.item.shared
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
@@ -12,12 +13,15 @@ import com.bottari.presentation.common.base.BaseViewModel
 import com.bottari.presentation.model.bottari.BottariItemUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,8 +36,10 @@ class TeamSharedItemEditViewModel @Inject constructor(
     ) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
+    private val debouncedJobs: MutableMap<Long, Job> = mutableMapOf()
+
     init {
-        fetchPersonalItems()
+        fetchSharedItems()
         handleEvent()
     }
 
@@ -50,7 +56,7 @@ class TeamSharedItemEditViewModel @Inject constructor(
             createTeamSharedItemUseCase(bottariId, currentState.inputText)
                 .onFailure { emitEvent(TeamSharedItemEditEvent.CreateItemFailure) }
                 .onSuccess {
-                    fetchPersonalItems()
+                    fetchSharedItems()
                     emitEvent(TeamSharedItemEditEvent.CreateItemSuccuss)
                 }
 
@@ -58,15 +64,27 @@ class TeamSharedItemEditViewModel @Inject constructor(
         }
     }
 
-    fun deleteItem(itemId: Long) {
-        updateState { copy(isLoading = true) }
+    fun requestDeleteItem(itemId: Long) {
+        updateState { copy(sharedItems = sharedItems.filterNot { it.id == itemId }) }
 
+        debouncedJobs[itemId]?.cancel()
+        debouncedJobs[itemId] =
+            viewModelScope
+                .launch {
+                    delay(DEBOUNCE_DELAY)
+                    performDeleteItem(itemId)
+                }.also { job ->
+                    job.invokeOnCompletion { debouncedJobs.remove(itemId) }
+                }
+    }
+
+    private fun performDeleteItem(itemId: Long) {
         launch {
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.SHARED)
-                .onSuccess { fetchPersonalItems() }
-                .onFailure { emitEvent(TeamSharedItemEditEvent.DeleteItemFailure) }
-
-            updateState { copy(isLoading = false) }
+                .onFailure {
+                    fetchSharedItems()
+                    emitEvent(TeamSharedItemEditEvent.DeleteItemFailure)
+                }
         }
     }
 
@@ -78,18 +96,19 @@ class TeamSharedItemEditViewModel @Inject constructor(
                 .map { event -> event.data }
                 .filterNot { eventData -> eventData.shouldIgnore() }
                 .debounce(DEBOUNCE_DELAY)
-                .onEach { fetchPersonalItems() }
+                .onEach { fetchSharedItems() }
                 .launchIn(this)
         }
     }
 
-    private fun fetchPersonalItems() {
+    private fun fetchSharedItems() {
         updateState { copy(isLoading = true) }
 
         launch {
             fetchTeamSharedItemsUseCase(bottariId)
-                .onSuccess { items -> updateState { copy(sharedItems = items.map(BottariItemUiModel::fromDomain)) } }
-                .onFailure { emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure) }
+                .onSuccess { items ->
+                    updateState { copy(sharedItems = items.map(BottariItemUiModel::fromDomain)) }
+                }.onFailure { emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure) }
 
             updateState { copy(isLoading = false, isFetched = true) }
         }

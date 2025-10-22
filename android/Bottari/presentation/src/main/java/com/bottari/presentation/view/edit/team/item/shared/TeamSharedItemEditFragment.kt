@@ -37,7 +37,7 @@ class TeamSharedItemEditFragment :
     }
 
     override fun onClickDelete(itemId: Long) {
-        viewModel.deleteItem(itemId)
+        viewModel.requestDeleteItem(itemId)
     }
 
     private fun setupObserver() {
