@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.edit.alarm
+package com.bottari.presentation.compose.edit.personal.alarm
 
 import androidx.compose.runtime.Immutable
 import com.bottari.presentation.model.alarm.AlarmTypeUiModel

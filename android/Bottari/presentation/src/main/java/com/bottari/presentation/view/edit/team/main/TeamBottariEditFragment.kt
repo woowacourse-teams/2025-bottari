@@ -98,16 +98,10 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
 
     private fun handleUiState(uiState: TeamBottariEditUiState) {
         toggleLoadingIndicator(uiState.isLoading)
-
-        binding.viewTeamAlarmEdit.switchAlarmEdit.isChecked = uiState.alarmSwitchState
-        binding.viewTeamAlarmEdit.viewAlarmEditEmpty.root.isVisible = uiState.alarmSwitchState
-
         binding.tvTeamEditTitle.text = uiState.bottariTitle
         handlePersonalItemEmptyViews(uiState.isPersonalItemsEmpty)
         handleAssignedItemEmptyViews(uiState.isAssignedItemsEmpty)
         handleSharedItemEmptyViews(uiState.isSharedItemsEmpty)
-        handleAlarmState(uiState.alarm)
-        handleAlarmEmptyViews(uiState.isAlarmNull)
         personalItemAdapter.submitList(uiState.personalItems)
         assignedItemAdapter.submitList(uiState.assignedItems)
         sharedItemAdapter.submitList(uiState.sharedItems)
@@ -126,18 +120,6 @@ class TeamBottariEditFragment : BaseFragment<FragmentTeamBottariEditBinding>(Fra
     private fun handleSharedItemEmptyViews(isItemEmpty: Boolean) {
         binding.viewTeamSharedItemEdit.viewItemEditEmpty.root.isVisible = isItemEmpty
         binding.viewTeamSharedItemEdit.tvItemEditDescription.isVisible = !isItemEmpty
-    }
-
-    private fun handleAlarmEmptyViews(isAlarmNull: Boolean) {
-        binding.viewTeamAlarmEdit.tvAlarmEditDescription.isVisible = !isAlarmNull
-        binding.viewTeamAlarmEdit.groupAlarmItem.isVisible = !isAlarmNull
-    }
-
-    private fun handleAlarmState(alarm: AlarmUiModel?) {
-        if (alarm == null) return
-        val timeFormat = getString(R.string.common_format_time_alarm)
-        binding.viewTeamAlarmEdit.tvAlarmTime.text = alarm.time.formatWithPattern(timeFormat)
-        binding.viewTeamAlarmEdit.tvAlarmType.text = createAlarmTypeText(alarm)
     }
 
     private fun createAlarmTypeText(alarm: AlarmUiModel): String {

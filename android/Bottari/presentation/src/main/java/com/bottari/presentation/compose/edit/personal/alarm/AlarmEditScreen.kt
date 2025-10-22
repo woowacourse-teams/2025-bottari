@@ -55,9 +55,6 @@ import com.bottari.presentation.compose.edit.personal.alarm.component.RepeatDayS
 import com.bottari.presentation.model.alarm.AlarmUiModel
 import com.bottari.presentation.model.alarm.RepeatDayUiModel
 import com.bottari.presentation.util.PermissionUtil
-import com.bottari.presentation.view.edit.alarm.AlarmEditViewModel
-import com.bottari.presentation.view.edit.alarm.AlarmUiEvent
-import com.bottari.presentation.view.edit.alarm.AlarmUiState
 import com.commandiron.wheel_picker_compose.WheelTimePicker
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import kotlinx.coroutines.launch
@@ -102,11 +99,6 @@ fun AlarmEditScreen(
             AlarmUiEvent.SaveAlarmFailure ->
                 snackbarHostState.showSnackbar(
                     context.getString(R.string.alarm_edit_save_failure_text),
-                )
-
-            AlarmUiEvent.SaveAlarmSuccess ->
-                snackbarHostState.showSnackbar(
-                    context.getString(R.string.alarm_edit_save_success_text),
                 )
         }
     }

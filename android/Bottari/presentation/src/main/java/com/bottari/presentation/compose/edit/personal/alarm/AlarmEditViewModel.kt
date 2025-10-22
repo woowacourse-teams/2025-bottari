@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.edit.alarm
+package com.bottari.presentation.compose.edit.personal.alarm
 
 import androidx.lifecycle.viewModelScope
 import com.bottari.domain.model.alarm.Alarm
@@ -138,7 +138,6 @@ class AlarmEditViewModel @Inject constructor(
                             "new_alarm_info" to currentState.alarm.toString(),
                         ),
                     )
-                    emitEvent(AlarmUiEvent.SaveAlarmSuccess)
                     handleAlarm(alarm)
                 }.onFailure {
                     BottariLogger.error(it.stackTraceToString())
@@ -162,12 +161,4 @@ class AlarmEditViewModel @Inject constructor(
             bottariTitle = bottariTitle,
             alarm = alarm,
         )
-
-    companion object {
-        const val KEY_BOTTARI_ID = "KEY_BOTTARI_ID"
-        const val KEY_BOTTARI_TITLE = "KEY_BOTTARI_TITLE"
-
-        private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
-        private const val ERROR_REQUIRE_BOTTARI_TITLE = "[ERROR] 보따리 이름이 존재하지 않습니다."
-    }
 }
