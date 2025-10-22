@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-@Profile("(test1 | test3)")
+@Profile("test1 | test3")
 @Component
 @RequiredArgsConstructor
 public class SseHeartbeatScheduler {
