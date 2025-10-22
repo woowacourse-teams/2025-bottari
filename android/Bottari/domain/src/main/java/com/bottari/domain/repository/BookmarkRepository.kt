@@ -10,7 +10,7 @@ interface BookmarkRepository {
 
     suspend fun deleteBookmarkByTemplateById(templateId: Long): Result<Unit>
 
-    suspend fun getBookmarkById(id: Long): Result<BookmarkTemplate?>
+    suspend fun getBookmarkByTemplateId(templateId: Long): Result<BookmarkTemplate?>
 
     suspend fun existsByTemplateId(templateId: Long): Result<Boolean>
 }

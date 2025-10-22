@@ -14,7 +14,7 @@ class BookmarkLocalDataSourceImpl @Inject constructor(
 
     override suspend fun deleteBookmarkByTemplateId(templateId: Long) = dao.deleteBookmarkByTemplateId(templateId)
 
-    override suspend fun getBookmarkById(id: Long): BookmarkEntity? = dao.getBookmarkById(id)
+    override suspend fun getBookmarkByTemplateId(templateId: Long): BookmarkEntity? = dao.getBookmarkByTemplateId(templateId)
 
     override suspend fun existsByTemplateId(templateId: Long): Boolean = dao.existsByTemplateId(templateId)
 }

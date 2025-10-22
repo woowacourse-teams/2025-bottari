@@ -22,8 +22,8 @@ class BookmarkRepositoryImpl @Inject constructor(
     override suspend fun deleteBookmarkByTemplateById(templateId: Long): Result<Unit> =
         runCatching { localDataSource.deleteBookmarkByTemplateId(templateId) }
 
-    override suspend fun getBookmarkById(id: Long): Result<BookmarkTemplate?> =
-        runCatching { localDataSource.getBookmarkById(id)?.toBookmarkTemplate() }
+    override suspend fun getBookmarkByTemplateId(templateId: Long): Result<BookmarkTemplate?> =
+        runCatching { localDataSource.getBookmarkByTemplateId(templateId)?.toBookmarkTemplate() }
 
     override suspend fun existsByTemplateId(templateId: Long): Result<Boolean> =
         runCatching { localDataSource.existsByTemplateId(templateId) }

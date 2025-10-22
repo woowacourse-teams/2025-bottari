@@ -10,7 +10,7 @@ interface BookmarkLocalDataSource {
 
     suspend fun deleteBookmarkByTemplateId(templateId: Long)
 
-    suspend fun getBookmarkById(id: Long): BookmarkEntity?
+    suspend fun getBookmarkByTemplateId(templateId: Long): BookmarkEntity?
 
     suspend fun existsByTemplateId(templateId: Long): Boolean
 }

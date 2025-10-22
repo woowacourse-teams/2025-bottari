@@ -7,5 +7,5 @@ import javax.inject.Inject
 class FindBookmarkUseCase @Inject constructor(
     private val bookmarkRepository: BookmarkRepository,
 ) {
-    suspend operator fun invoke(templateId: Long): Result<BookmarkTemplate?> = bookmarkRepository.getBookmarkById(templateId)
+    suspend operator fun invoke(templateId: Long): Result<BookmarkTemplate?> = bookmarkRepository.getBookmarkByTemplateId(templateId)
 }
