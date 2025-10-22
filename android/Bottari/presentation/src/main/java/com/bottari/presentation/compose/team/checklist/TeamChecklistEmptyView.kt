@@ -17,22 +17,22 @@ import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
-fun TeamChecklistEmptyView(modifier : Modifier = Modifier) {
-    Column(modifier = modifier,verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+fun TeamChecklistEmptyView(modifier: Modifier = Modifier) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(Modifier.height(BottariTheme.spacing.spaceSmall))
         Icon(
             painter = painterResource(R.drawable.ic_bottari_item_empty_view),
             contentDescription = null,
             modifier = Modifier.size(48.dp),
-            tint = BottariTheme.colors.gray500
+            tint = BottariTheme.colors.gray500,
         )
-        Text("챙길 물건이 없어요",color = BottariTheme.colors.gray500,style = BottariTheme.typography.bold18.toTextStyle())
+        Text("챙길 물건이 없어요", color = BottariTheme.colors.gray500, style = BottariTheme.typography.bold18.toTextStyle())
         Spacer(Modifier.height(BottariTheme.spacing.spaceSmall))
     }
 }
 
 @Preview
 @Composable
-fun TeamChecklistEmptyViewPreview(){
+fun TeamChecklistEmptyViewPreview() {
     TeamChecklistEmptyView()
 }

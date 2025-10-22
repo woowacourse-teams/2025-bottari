@@ -17,22 +17,22 @@ import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
-fun TeamBottariItemStatusEmptyView(modifier : Modifier = Modifier) {
-    Column(modifier = modifier,verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+fun TeamBottariItemStatusEmptyView(modifier: Modifier = Modifier) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(Modifier.height(BottariTheme.spacing.spaceSmall))
         Icon(
             painter = painterResource(R.drawable.ic_bottari_item_empty_view),
             contentDescription = null,
             modifier = Modifier.size(64.dp),
-            tint = BottariTheme.colors.gray700
+            tint = BottariTheme.colors.gray700,
         )
-        Text("챙길 물건이 없어요",color = BottariTheme.colors.gray700,style = BottariTheme.typography.bold32.toTextStyle())
+        Text("챙길 물건이 없어요", color = BottariTheme.colors.gray700, style = BottariTheme.typography.bold32.toTextStyle())
         Spacer(Modifier.height(BottariTheme.spacing.spaceSmall))
     }
 }
 
 @Preview
 @Composable
-fun TeamBottariItemStatusEmptyViewPreview(){
+fun TeamBottariItemStatusEmptyViewPreview() {
     TeamBottariItemStatusEmptyView()
 }
