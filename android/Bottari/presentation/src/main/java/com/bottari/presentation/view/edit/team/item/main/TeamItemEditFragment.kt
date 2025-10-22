@@ -47,7 +47,6 @@ class TeamItemEditFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.setAnchorView(null)
     }
 
     private fun setupObserver() {
@@ -57,7 +56,6 @@ class TeamItemEditFragment :
     private fun setupUI() {
         binding.root.applyImeBottomPadding()
         setupTabLayout()
-        viewModel.setAnchorView(binding.viewItemInput.etItemInput)
     }
 
     private fun setupListener() {
@@ -78,7 +76,7 @@ class TeamItemEditFragment :
         )
         binding.viewItemInput.etItemInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId != EditorInfo.IME_ACTION_SEND) return@setOnEditorActionListener false
-            viewModel.createItem()
+            binding.viewItemInput.btnPersonalItemSend.performClick()
             true
         }
     }

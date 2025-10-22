@@ -73,18 +73,11 @@ class TeamPersonalItemEditFragment :
     private fun handleUiEvent(uiEvent: TeamPersonalItemEditEvent) {
         when (uiEvent) {
             TeamPersonalItemEditEvent.FetchTeamPersonalItemsFailure ->
-                requireView().showSnackbar(
-                    messageRes = R.string.common_fetch_failure_text,
-                    anchor = parentViewModel.anchorView.value,
-                )
+                requireView().showSnackbar(messageRes = R.string.common_fetch_failure_text)
 
             TeamPersonalItemEditEvent.CreateItemFailure,
             TeamPersonalItemEditEvent.DeleteItemFailure,
-            ->
-                requireView().showSnackbar(
-                    messageRes = R.string.common_save_failure_text,
-                    anchor = parentViewModel.anchorView.value,
-                )
+            -> requireView().showSnackbar(messageRes = R.string.common_save_failure_text)
 
             TeamPersonalItemEditEvent.CreateItemSuccess -> {
                 parentViewModel.updateInput(RESET_INPUT_TEXT)

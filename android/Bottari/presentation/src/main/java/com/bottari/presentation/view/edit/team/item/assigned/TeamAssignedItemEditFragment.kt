@@ -92,17 +92,13 @@ class TeamAssignedItemEditFragment :
             TeamAssignedItemEditEvent.FetchTeamAssignedItemsFailure ->
                 requireView().showSnackbar(
                     messageRes = R.string.common_fetch_failure_text,
-                    anchor = parentViewModel.anchorView.value,
                 )
 
             TeamAssignedItemEditEvent.DeleteItemFailure,
             TeamAssignedItemEditEvent.CreateItemFailure,
             TeamAssignedItemEditEvent.SaveItemFailure,
             ->
-                requireView().showSnackbar(
-                    messageRes = R.string.common_save_failure_text,
-                    anchor = parentViewModel.anchorView.value,
-                )
+                requireView().showSnackbar(messageRes = R.string.common_save_failure_text)
 
             TeamAssignedItemEditEvent.SaveItemSuccess -> handleItemEditSuccess()
             TeamAssignedItemEditEvent.CreateItemSuccess,

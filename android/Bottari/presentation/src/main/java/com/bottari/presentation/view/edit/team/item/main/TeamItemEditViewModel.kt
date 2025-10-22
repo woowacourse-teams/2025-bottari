@@ -1,6 +1,5 @@
 package com.bottari.presentation.view.edit.team.item.main
 
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -19,14 +18,6 @@ class TeamItemEditViewModel @Inject constructor(
     ) {
     private val _createItemEvent: MutableLiveData<TeamItemEditUiEvent?> = MutableLiveData()
     val createItemEvent: LiveData<TeamItemEditUiEvent?> get() = _createItemEvent
-
-    private val _anchorView = MutableLiveData<View?>()
-
-    val anchorView: LiveData<View?> = _anchorView
-
-    fun setAnchorView(view: View?) {
-        _anchorView.value = view
-    }
 
     fun updateInput(input: String) {
         if (currentState.itemInputText == input) return
