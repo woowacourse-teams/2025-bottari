@@ -7,6 +7,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +41,6 @@ fun TeamBottariScreen(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
-
     val pageTitles =
         listOf(
             stringResource(R.string.team_checklist_tap_checklist_text),
@@ -48,6 +48,14 @@ fun TeamBottariScreen(
             stringResource(R.string.team_checklist_tap_member_checklist_text),
         )
     val pagerState = rememberPagerState(initialPage = 0) { pageTitles.size }
+
+    LaunchedEffect(uiState) {
+        isChecklistCompleted = uiState.isAllChecked
+    }
+
+    LaunchedEffect(uiEvent) {
+    }
+
     Scaffold(
         topBar = {
             ChecklistTopBar(
