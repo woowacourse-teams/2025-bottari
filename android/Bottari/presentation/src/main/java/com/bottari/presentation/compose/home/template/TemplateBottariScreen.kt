@@ -3,24 +3,15 @@ package com.bottari.presentation.compose.home.template
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,23 +23,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariHashChipSearchBar
 import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.extension.rememberScrolledToEnd
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
-import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.home.template.component.CreateTemplateFAB
-import com.bottari.presentation.compose.home.template.component.TemplateItem
-import com.bottari.presentation.compose.home.template.component.TemplateItemIconButton
-import com.bottari.presentation.compose.home.template.component.TemplateItemType
+import com.bottari.presentation.compose.home.template.component.MainTemplateContent
+import com.bottari.presentation.compose.home.template.component.MyTemplateContent
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateItemUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
@@ -74,6 +60,8 @@ fun TemplateBottariScreen(
     LaunchedEffect(uiEvent.value) {
         when (uiEvent.value ?: return@LaunchedEffect) {
             is TemplateUiEvent.SearchTemplateSuccess -> mainListState.scrollToItem(0)
+            is TemplateUiEvent.MainTemplatesRefreshFinished -> mainListState.scrollToItem(0)
+            is TemplateUiEvent.MyTemplatesRefreshFinished -> myListState.scrollToItem(0)
 
             is TemplateUiEvent.FetchBottariTemplatesFailure ->
                 snackbarState.showSnackbar(context.getString(R.string.template_fetch_template_failure_text))
@@ -97,6 +85,7 @@ fun TemplateBottariScreen(
         onClickAdd = navigateToTemplateCreate,
         onClickDelete = viewModel::deleteTemplate,
         onClickBookmark = {},
+        onRefresh = viewModel::refresh,
         modifier = modifier.noRippleClickable { focusManager.clearFocus() },
     )
 }
@@ -113,19 +102,20 @@ private fun TemplateBottariScreen(
     onClickAdd: () -> Unit,
     onClickDelete: (Long) -> Unit,
     onClickBookmark: (Long) -> Unit,
+    onRefresh: (targetIsMain: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isScrolledToEnd by listState.rememberScrolledToEnd(5)
     var isFabExpanded by remember { mutableStateOf(false) }
     var isFabVisible by remember { mutableStateOf(true) }
 
-    LaunchedEffect(listState.isScrollInProgress) {
-        if (listState.isScrollInProgress) {
+    LaunchedEffect(listState.isScrollInProgress, myListState.isScrollInProgress) {
+        if (listState.isScrollInProgress || myListState.isScrollInProgress) {
             isFabVisible = false
             isFabExpanded = false
             return@LaunchedEffect
         }
-        delay(500)
+        delay(400)
         isFabVisible = true
     }
 
@@ -136,16 +126,14 @@ private fun TemplateBottariScreen(
             .collect { onLoadNextPage() }
     }
 
-    if (uiState.isLoading) IndeterminateCircularIndicator()
-
-    Box(modifier = modifier) {
+    Box(modifier = modifier.fillMaxSize()) {
         TemplatePager(
             pageTitles = listOf("전체 템플릿", "나의 템플릿"),
             modifier = Modifier,
         ) { page ->
             when (page) {
                 0 ->
-                    AllTemplateContent(
+                    MainTemplateContent(
                         templates = uiState.templates,
                         listState = listState,
                         query = uiState.searchWord,
@@ -154,6 +142,8 @@ private fun TemplateBottariScreen(
                         onChipsChange = onChipChange,
                         onClickDetail = onClickDetail,
                         onClickBookmark = onClickBookmark,
+                        isRefreshing = uiState.isRefreshingMain,
+                        onRefresh = { onRefresh(true) },
                     )
 
                 1 ->
@@ -162,9 +152,12 @@ private fun TemplateBottariScreen(
                         listState = myListState,
                         onClickDetail = onClickDetail,
                         onClickDelete = onClickDelete,
+                        isRefreshing = uiState.isRefreshingMy,
+                        onRefresh = { onRefresh(false) },
                     )
             }
         }
+
         AnimatedVisibility(
             visible = isFabVisible,
             modifier =
@@ -176,135 +169,8 @@ private fun TemplateBottariScreen(
         ) {
             CreateTemplateFAB(onClickAdd)
         }
-    }
-}
 
-@Composable
-private fun AllTemplateContent(
-    templates: List<BottariTemplateUiModel>,
-    listState: LazyListState,
-    query: String,
-    onQueryChange: (String) -> Unit,
-    chips: List<BottariTemplateHashtagUiModel>,
-    onChipsChange: (List<BottariTemplateHashtagUiModel>) -> Unit,
-    onClickDetail: (Long) -> Unit,
-    onClickBookmark: (Long) -> Unit,
-) {
-    Column {
-        BottariHashChipSearchBar(
-            query = query,
-            onQueryChange = onQueryChange,
-            chips = chips.map { chip -> "#${chip.name}" },
-            onChipsChange = { new -> if (new.isEmpty()) onChipsChange(emptyList()) },
-            placeholderText = "제목이나 해시태그를 입력하세요",
-            onSearch = {},
-            modifier =
-                Modifier
-                    .padding(horizontal = BottariTheme.spacing.spaceLarge)
-                    .padding(
-                        top = BottariTheme.spacing.spaceXSmall,
-                        bottom = BottariTheme.spacing.space2xSmall,
-                    ),
-        )
-
-        TemplateLazyColumn(
-            type = TemplateItemType.Bookmark(false),
-            templates = templates,
-            listState = listState,
-            onClickDetail = onClickDetail,
-            onClickDelete = {},
-            onClickBookmark = onClickBookmark,
-            onClickHashtag = { tag -> onChipsChange(listOf(tag)) },
-        )
-    }
-}
-
-@Composable
-private fun MyTemplateContent(
-    myTemplates: List<BottariTemplateUiModel>,
-    listState: LazyListState,
-    onClickDetail: (Long) -> Unit,
-    onClickDelete: (Long) -> Unit,
-) {
-    TemplateLazyColumn(
-        type = TemplateItemType.MyTemplate,
-        templates = myTemplates,
-        listState = listState,
-        onClickDetail = onClickDetail,
-        onClickDelete = onClickDelete,
-        onClickBookmark = {},
-        onClickHashtag = {},
-    )
-}
-
-@Composable
-private fun TemplateLazyColumn(
-    type: TemplateItemType,
-    templates: List<BottariTemplateUiModel>,
-    listState: LazyListState,
-    onClickDetail: (Long) -> Unit,
-    onClickDelete: (Long) -> Unit,
-    onClickBookmark: (Long) -> Unit,
-    onClickHashtag: (BottariTemplateHashtagUiModel) -> Unit,
-) {
-    LazyColumn(
-        state = listState,
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = BottariTheme.spacing.spaceLarge)
-                .topBottomFadingEdge(color = BottariTheme.colors.gray50, width = 8.dp),
-        contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceSmall),
-        verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
-    ) {
-        templates.ifEmpty {
-            item {
-                TemplateMyEmptyView(
-                    text = "항목이 존재하지 않습니다",
-                    modifier = Modifier.fillParentMaxSize(),
-                )
-            }
-        }
-
-        items(templates, key = { template -> template.id }) { template ->
-            TemplateItem(
-                template = template,
-                onClickHashtag = onClickHashtag,
-                modifier = Modifier.noRippleClickable { onClickDetail(template.id) },
-                iconButton = {
-                    TemplateItemIconButtonByTemplateItemType(
-                        type = type,
-                        template = template,
-                        onClickDelete = onClickDelete,
-                        onClickBookmark = onClickBookmark,
-                    )
-                },
-            )
-        }
-    }
-}
-
-@Composable
-private fun TemplateItemIconButtonByTemplateItemType(
-    type: TemplateItemType,
-    template: BottariTemplateUiModel,
-    onClickDelete: (Long) -> Unit,
-    onClickBookmark: (Long) -> Unit,
-) {
-    when (type) {
-        is TemplateItemType.MyTemplate -> {
-            TemplateItemIconButton(
-                type = type,
-                onClick = { onClickDelete(template.id) },
-            )
-        }
-
-        is TemplateItemType.Bookmark -> {
-            TemplateItemIconButton(
-                type = type,
-                onClick = { onClickBookmark(template.id) },
-            )
-        }
+        if (uiState.showLoading) IndeterminateCircularIndicator()
     }
 }
 
@@ -322,33 +188,6 @@ private fun TemplatePager(
             pagerState = pagerState,
             modifier = modifier,
             screen = screen,
-        )
-    }
-}
-
-@Composable
-private fun TemplateMyEmptyView(
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_bottari),
-            contentDescription = text,
-            tint = BottariTheme.colors.gray500,
-            modifier = Modifier.size(80.dp),
-        )
-
-        Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
-
-        Text(
-            text = text,
-            style = BottariTheme.typography.semiBold16.toTextStyle(),
-            color = BottariTheme.colors.gray500,
         )
     }
 }
@@ -387,15 +226,8 @@ private fun TemplateBottariScreenPreview() {
             onLoadNextPage = {},
             onClickDelete = {},
             onClickBookmark = {},
+            onRefresh = {},
             onClickAdd = {},
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun TemplateMyEmptyViewPreview() {
-    BottariTheme {
-        TemplateMyEmptyView(text = "항목이 존재하지 않습니다")
     }
 }

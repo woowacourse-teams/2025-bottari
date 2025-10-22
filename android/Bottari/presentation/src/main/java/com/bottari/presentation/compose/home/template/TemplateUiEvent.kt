@@ -5,6 +5,10 @@ sealed interface TemplateUiEvent {
 
     data object FetchBottariTemplatesFailure : TemplateUiEvent
 
+    data object MainTemplatesRefreshFinished : TemplateUiEvent
+
+    data object MyTemplatesRefreshFinished : TemplateUiEvent
+
     data object DeleteBottariTemplateSuccess : TemplateUiEvent
 
     data object DeleteBottariTemplateFailure : TemplateUiEvent
