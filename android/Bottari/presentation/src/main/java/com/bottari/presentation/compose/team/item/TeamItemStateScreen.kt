@@ -1,6 +1,7 @@
 package com.bottari.presentation.compose.team.item
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,9 +16,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -163,7 +166,16 @@ private fun TeamProductStateCard(
             BottariItemTypeUiModel.SHARED -> stringResource(R.string.bottari_item_type_shared_text)
         }
     BottariBox(
-        modifier = modifier.clickable(onClick = { onClick(product) }),
+        modifier =
+            modifier.clickable(
+                onClick = { onClick(product) },
+                indication =
+                    ripple(
+                        bounded = true,
+                        color = BottariTheme.colors.primary,
+                    ),
+                interactionSource = remember { MutableInteractionSource() },
+            ),
         contentPadding = PaddingValues(21.dp),
     ) {
         Column {

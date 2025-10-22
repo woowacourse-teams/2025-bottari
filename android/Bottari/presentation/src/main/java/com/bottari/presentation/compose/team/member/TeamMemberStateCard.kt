@@ -1,6 +1,7 @@
 package com.bottari.presentation.compose.team.member
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -8,7 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,7 +29,19 @@ fun TeamMemberStateCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BottariBox(modifier = modifier.clickable(onClick = onClick), contentPadding = PaddingValues(21.dp)) {
+    BottariBox(
+        modifier =
+            modifier.clickable(
+                onClick = onClick,
+                indication =
+                    ripple(
+                        bounded = true,
+                        color = BottariTheme.colors.primary,
+                    ),
+                interactionSource = remember { MutableInteractionSource() },
+            ),
+        contentPadding = PaddingValues(21.dp),
+    ) {
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(

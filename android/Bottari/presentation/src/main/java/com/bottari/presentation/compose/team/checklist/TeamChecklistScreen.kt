@@ -1,6 +1,11 @@
 package com.bottari.presentation.compose.team.checklist
 
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.component.ChecklistToolTip
+import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.personal.ChecklistProgressHeader
 import com.bottari.presentation.compose.personal.checklist.PersonalChecklistItem
@@ -111,21 +117,27 @@ private fun TeamChecklistNode(
                 itemCount = items.size,
                 onToggle = toggleExpanded,
             )
-            if (isOpened) {
-                Spacer(Modifier.height(height = BottariTheme.spacing.spaceMedium))
-                HorizontalDivider(color = BottariTheme.colors.gray400)
+            AnimatedVisibility(
+                visible = isOpened,
+                enter = expandVertically() + fadeIn(animationSpec = tween(durationMillis = 50)),
+                exit = shrinkVertically() + fadeOut(animationSpec = tween(durationMillis = 50)),
+            ) {
+                Column {
+                    Spacer(Modifier.height(height = BottariTheme.spacing.spaceMedium))
+                    HorizontalDivider(color = BottariTheme.colors.gray400)
 
-                Spacer(Modifier.height(height = BottariTheme.spacing.spaceMedium))
-                if (items.isEmpty()) {
-                    TeamChecklistEmptyView(modifier = Modifier.fillMaxWidth())
-                    return@Column
-                }
-                items.forEach { bottariItem ->
-                    PersonalChecklistItem(
-                        bottariItem = bottariItem,
-                        onClick = { onClickItem(bottariItem.id, bottariItem.type) },
-                    )
-                    Spacer(Modifier.height(height = BottariTheme.spacing.spaceSmall))
+                    Spacer(Modifier.height(height = BottariTheme.spacing.spaceMedium))
+                    if (items.isEmpty()) {
+                        TeamChecklistEmptyView(modifier = Modifier.fillMaxWidth())
+                    } else {
+                        items.forEach { bottariItem ->
+                            PersonalChecklistItem(
+                                bottariItem = bottariItem,
+                                onClick = { onClickItem(bottariItem.id, bottariItem.type) },
+                            )
+                            Spacer(Modifier.height(height = BottariTheme.spacing.spaceSmall))
+                        }
+                    }
                 }
             }
         }
@@ -161,7 +173,7 @@ private fun SectionHeader(
             BottariItemTypeUiModel.SHARED -> stringResource(R.string.bottari_item_type_shared_text)
         }
     Row(
-        modifier = modifier.clickable(onClick = { onToggle(section) }),
+        modifier = modifier.noRippleClickable(onClick = { onToggle(section) }),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
