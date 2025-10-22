@@ -99,7 +99,7 @@ private fun TeamItemStateScreen(
             TeamStateCard(
                 title = stringResource(R.string.team_checklist_current_items_status_count_title),
                 value = uiState.completedItems.toString(),
-                painter = painterResource(R.drawable.ic_compleate),
+                painter = painterResource(R.drawable.ic_complete),
                 color = BottariTheme.colors.green,
                 modifier = Modifier.weight(1f),
             )

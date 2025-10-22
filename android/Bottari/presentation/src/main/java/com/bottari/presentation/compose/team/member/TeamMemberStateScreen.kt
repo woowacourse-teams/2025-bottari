@@ -75,7 +75,7 @@ private fun TeamMemberStateScreen(
                 TeamStateCard(
                     title = "완료 인원",
                     value = uiState.checkedMembers.size.toString(),
-                    painter = painterResource(R.drawable.ic_compleate),
+                    painter = painterResource(R.drawable.ic_complete),
                     color = BottariTheme.colors.green,
                     modifier = Modifier.weight(1f),
                 )
