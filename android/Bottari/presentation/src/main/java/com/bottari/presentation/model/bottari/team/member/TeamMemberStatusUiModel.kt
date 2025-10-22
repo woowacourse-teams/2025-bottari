@@ -19,8 +19,13 @@ data class TeamMemberStatusUiModel(
 
     val isAllChecked: Boolean = checkedItemsCount == totalItemsCount
 
-    val checkedProgress = ((checkedItemsCount.toFloat() / totalItemsCount.toFloat()) * 100).toInt()
-
+    val checkedProgress: Int =
+        if (totalItemsCount == 0) {
+            0
+        } else {
+            (((checkedItemsCount.toFloat() / totalItemsCount.toFloat()) * 100).toInt())
+                .coerceIn(0, 100)
+        }
     val isItemsEmpty: Boolean = sharedItems.isEmpty() && assignedItems.isEmpty()
 
     val shouldHurryUp: Boolean = (isAllChecked || isMe || isItemsEmpty).not()
