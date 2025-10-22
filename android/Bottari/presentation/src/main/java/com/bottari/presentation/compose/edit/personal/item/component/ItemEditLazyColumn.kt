@@ -24,11 +24,12 @@ import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
 import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.model.bottari.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
+import com.bottari.presentation.model.bottari.team.ChecklistItemUiModel
 
 @Composable
 fun ItemEditLazyColumn(
-    items: List<ChecklistItemUiModel>,
+    items: List<PersonalChecklistItemUiModel>,
     onDeleteClick: (Long) -> Unit,
     listState: LazyListState,
     modifier: Modifier = Modifier,
@@ -104,7 +105,14 @@ private fun BottariItem(
 private fun ItemEditLazyColumnPreview() {
     BottariTheme {
         ItemEditLazyColumn(
-            items = listOf(ChecklistItemUiModel(id = 1L, name = "물건", isChecked = false)),
+            items =
+                listOf(
+                    PersonalChecklistItemUiModel(
+                        id = 1L,
+                        name = "물건",
+                        isChecked = false,
+                    ),
+                ),
             onDeleteClick = {},
             listState = rememberLazyListState(),
         )

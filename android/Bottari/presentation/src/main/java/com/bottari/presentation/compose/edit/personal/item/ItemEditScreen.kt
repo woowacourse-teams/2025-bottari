@@ -36,7 +36,7 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditEmptyView
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditLazyColumn
 import com.bottari.presentation.compose.edit.personal.item.component.ItemTextField
-import com.bottari.presentation.model.bottari.ChecklistItemUiModel
+import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 
 @Composable
 fun PersonalItemEditScreen(
@@ -131,7 +131,7 @@ private fun ItemEditContent(
 @Composable
 private fun ItemEditBody(
     isEmpty: Boolean,
-    items: List<ChecklistItemUiModel>,
+    items: List<PersonalChecklistItemUiModel>,
     listState: LazyListState,
     onDeleteClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
