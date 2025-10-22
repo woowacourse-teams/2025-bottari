@@ -17,9 +17,17 @@ public class SseService {
             final SseEmitter sseEmitter
     ) {
         final Long memberId = memberService.getIdBySsaid(ssaid);
-        sseEmitter.onCompletion(() -> sseSessions.remove(memberId));
-        sseEmitter.onTimeout(() -> sseSessions.remove(memberId));
-        sseEmitter.onError(throwable -> sseSessions.remove(memberId));
+        sseEmitter.onCompletion(() -> cleanUpIfSame(memberId, sseEmitter));
+        sseEmitter.onTimeout(() -> cleanUpIfSame(memberId, sseEmitter));
+        sseEmitter.onError(t -> cleanUpIfSame(memberId, sseEmitter));
+
         sseSessions.save(memberId, sseEmitter);
+    }
+
+    private void cleanUpIfSame(
+            final Long memberId,
+            final SseEmitter targetEmitter
+    ) {
+        sseSessions.removeIfSame(memberId, targetEmitter);
     }
 }

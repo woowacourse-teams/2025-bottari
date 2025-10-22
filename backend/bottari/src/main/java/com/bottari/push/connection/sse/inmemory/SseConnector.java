@@ -1,6 +1,9 @@
 package com.bottari.push.connection.sse.inmemory;
 
 import com.bottari.config.MemberIdentifier;
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +24,14 @@ public class SseConnector implements SseConnectorApiDocs {
         final long timeout = 60 * 60 * 1000L;
         final SseEmitter sseEmitter = new SseEmitter(timeout);
         sseService.register(ssaid, sseEmitter);
+        try {
+            sseEmitter.send(
+                    SseEmitter.event().comment(":connected")
+            );
+        } catch (IOException | IllegalStateException e) {
+            sseEmitter.completeWithError(e);
+            throw new BusinessException(ErrorCode.SSE_CONNECTION_FAILED);
+        }
 
         return sseEmitter;
     }

@@ -26,6 +26,10 @@ public class SseSessions {
                 .toList();
     }
 
+    public List<SseEmitter> findAll() {
+        return sseEmittersByMemberId.values().stream().toList();
+    }
+
     public void save(
             final Long memberId,
             final SseEmitter sseEmitter
@@ -33,7 +37,10 @@ public class SseSessions {
         sseEmittersByMemberId.put(memberId, sseEmitter);
     }
 
-    public void remove(final Long memberId) {
-        sseEmittersByMemberId.remove(memberId);
+    public boolean removeIfSame(
+            final Long memberId,
+            final SseEmitter sseEmitter
+    ) {
+        return sseEmittersByMemberId.remove(memberId, sseEmitter);
     }
 }
