@@ -116,7 +116,7 @@ private fun TeamItemStateScreen(
                     BottariTheme.spacing.spaceXSmall,
                 ),
         ) {
-            items(uiState.items, key = { item -> item }) { product ->
+            items(uiState.items, key = { "${it.id} ${it.type}" }) { product ->
                 TeamProductStateCard(product = product, onClick = onSelectProduct)
             }
         }
