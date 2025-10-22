@@ -135,7 +135,7 @@ private fun TeamItemStateScreen(
         uiState.selectedProduct?.let { product ->
             TeamSendRemindDialog(
                 title = product.name,
-                isRemindable = (!product.isAllChecked),
+                isRemindable = (!product.isAllChecked && !uiState.isOnlyMeUnchecked),
                 onDismissRequest = { onSelectProduct(null) },
                 onClickRemind = { onSendRemind(product) },
             ) {
