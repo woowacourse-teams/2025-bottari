@@ -36,18 +36,21 @@ import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.component.CollapsedListLine
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
-import com.bottari.presentation.model.template.BottariTemplateItemUiModel
-import com.bottari.presentation.model.template.BottariTemplateUiModel
 
 @Composable
 fun TemplateItem(
-    template: BottariTemplateUiModel,
+    title: String,
+    description: String,
+    items: List<String>,
+    author: String,
+    takenCount: Int,
+    hashtags: List<BottariTemplateHashtagUiModel>,
     onClickHashtag: (BottariTemplateHashtagUiModel) -> Unit,
     modifier: Modifier = Modifier,
     iconButton: @Composable () -> Unit,
 ) {
     val hashTagSectionPadding =
-        if (template.hashtags.isNotEmpty()) BottariTheme.spacing.spaceMedium else 0.dp
+        if (hashtags.isNotEmpty()) BottariTheme.spacing.spaceMedium else 0.dp
 
     BottariBox(
         modifier = modifier,
@@ -55,26 +58,19 @@ fun TemplateItem(
     ) {
         Column(modifier = Modifier.padding(BottariTheme.spacing.spaceMedium)) {
             TemplateItemHeader(
-                title = template.title,
-                description = template.description,
-                items = template.items.map { item -> item.name },
+                title = title,
+                description = description,
+                items = items,
                 iconButton = iconButton,
             )
 
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
 
-            TemplateHashtagSection(
-                hashtags = template.hashtags,
-                onClickHashtag = onClickHashtag,
-            )
+            TemplateHashtagSection(hashtags = hashtags, onClickHashtag = onClickHashtag)
 
+            if (author.isBlank() && takenCount == 0) return@BottariBox
             Spacer(modifier = Modifier.height(hashTagSectionPadding))
-
-            TemplateItemFooter(
-                author = template.author,
-                takenCount = template.takenCount,
-                itemCount = template.items.size,
-            )
+            TemplateItemFooter(author = author, takenCount = takenCount, itemCount = items.size)
         }
     }
 }
@@ -236,24 +232,18 @@ private fun TemplateItemFooter(
 @Preview(showBackground = true)
 @Composable
 private fun TemplateItemPreview() {
-    val template =
-        BottariTemplateUiModel(
-            id = 1,
-            title = "신입사원 온보딩 가이드",
-            description = "새로운 직장 생활을 위한 완벽 가이드",
-            author = "다이스",
-            takenCount = 100024,
-            items = List(10) { BottariTemplateItemUiModel(it.toLong(), "아이템 $it") },
-            hashtags = List(3) { BottariTemplateHashtagUiModel(it.toLong(), "해시태그 $it") },
-        )
-
     BottariTheme {
         Column(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             TemplateItem(
-                template = template,
+                title = "신입사원 온보딩 가이드",
+                description = "새로운 직장 생활을 위한 완벽 가이드",
+                author = "다이스",
+                takenCount = 100024,
+                items = List(10) { "아이템 $it" },
+                hashtags = List(3) { BottariTemplateHashtagUiModel(it.toLong(), "해시태그$it") },
                 onClickHashtag = {},
             ) {
                 TemplateItemIconButton(
@@ -263,7 +253,12 @@ private fun TemplateItemPreview() {
             }
 
             TemplateItem(
-                template = template,
+                title = "신입사원 온보딩 가이드",
+                description = "새로운 직장 생활을 위한 완벽 가이드",
+                author = "",
+                takenCount = 0,
+                items = List(10) { "아이템 $it" },
+                hashtags = List(3) { BottariTemplateHashtagUiModel(it.toLong(), "해시태그 $it") },
                 onClickHashtag = {},
             ) {
                 TemplateItemIconButton(
@@ -273,7 +268,12 @@ private fun TemplateItemPreview() {
             }
 
             TemplateItem(
-                template = template,
+                title = "신입사원 온보딩 가이드",
+                description = "새로운 직장 생활을 위한 완벽 가이드",
+                author = "다이스",
+                takenCount = 100024,
+                items = List(10) { "아이템 $it" },
+                hashtags = List(3) { BottariTemplateHashtagUiModel(it.toLong(), "해시태그 $it") },
                 onClickHashtag = {},
             ) {
                 TemplateItemIconButton(
