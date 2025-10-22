@@ -17,14 +17,18 @@ class TemplateDetailViewModel @Inject constructor(
     private val fetchBottariTemplateDetailUseCase: FetchBottariTemplateDetailUseCase,
     private val findBookmarkUseCase: FindBookmarkUseCase,
     private val takeBottariTemplateDetailUseCase: TakeBottariTemplateDetailUseCase,
-) : FlowBaseViewModel<TemplateDetailUiState, TemplateDetailUiEvent>(
-        TemplateDetailUiState(
-            templateId = stateHandle[KEY_TEMPLATE_ID] ?: error(ERROR_REQUIRE_TEMPLATE_ID),
-        ),
-    ) {
-    private val isBookmark: Boolean by lazy { stateHandle.get<Boolean>(KEY_IS_BOOKMARK) ?: false }
+) : FlowBaseViewModel<TemplateDetailUiState, TemplateDetailUiEvent>(TemplateDetailUiState()) {
+    private val isBookmark: Boolean = stateHandle.get<Boolean>(KEY_IS_BOOKMARK) ?: false
+    private val templateId: Long = stateHandle[KEY_TEMPLATE_ID] ?: error(ERROR_REQUIRE_TEMPLATE_ID)
 
     init {
+        BottariLogger.debug(
+            """
+            TemplateDetailViewModel init
+            isBookmark: $isBookmark
+            templateId: $templateId
+            """.trimIndent(),
+        )
         if (isBookmark) fetchBookmark() else fetchBottariTemplateDetail()
     }
 
@@ -33,7 +37,7 @@ class TemplateDetailViewModel @Inject constructor(
 
         launch {
             val items = currentState.items.map { it.name }
-            takeBottariTemplateDetailUseCase(currentState.templateId, currentState.title, items)
+            takeBottariTemplateDetailUseCase(templateId, currentState.title, items)
                 .onSuccess { createdBottariId ->
                     logTemplateTaken()
                     emitEvent(
@@ -51,9 +55,12 @@ class TemplateDetailViewModel @Inject constructor(
         updateState { copy(isLoading = true) }
 
         launch {
-            findBookmarkUseCase(currentState.templateId)
+            findBookmarkUseCase(templateId)
                 .onSuccess { template ->
-                    template ?: return@onSuccess
+                    if (template == null) {
+                        emitEvent(TemplateDetailUiEvent.FetchBottariDetailFailure)
+                        return@onSuccess
+                    }
 
                     template.items
                         .mapIndexed { index, item ->
@@ -69,7 +76,7 @@ class TemplateDetailViewModel @Inject constructor(
         updateState { copy(isLoading = true) }
 
         launch {
-            fetchBottariTemplateDetailUseCase(currentState.templateId)
+            fetchBottariTemplateDetailUseCase(templateId)
                 .onSuccess { template ->
                     val itemUiModels =
                         template.items.map { BottariTemplateItemUiModel.fromDomain(it) }
@@ -84,7 +91,7 @@ class TemplateDetailViewModel @Inject constructor(
         BottariLogger.ui(
             UiEventType.TEMPLATE_TAKE,
             mapOf(
-                "template_id" to currentState.templateId,
+                "template_id" to templateId,
                 "template_title" to currentState.title,
                 "template_items" to currentState.items.toString(),
             ),

@@ -32,7 +32,7 @@ fun HomeScreen(
     navigateToPersonalBottariChecklist: (Long, String) -> Unit,
     navigateToTeamBottariChecklist: (Long, String) -> Unit,
     navigateToBrowser: (String) -> Unit,
-    navigateToTemplateDetail: (templateId: Long, isMyTemplate: Boolean) -> Unit,
+    navigateToTemplateDetail: (templateId: Long, isMyTemplate: Boolean, isBookmark: Boolean) -> Unit,
     navigateToTemplateCreate: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -92,7 +92,7 @@ fun HomeScreen(
 private fun HomeScreenRouter(
     navController: NavigationController,
     navigateToBrowser: (String) -> Unit,
-    navigateToTemplateDetail: (templateId: Long, isMyTemplate: Boolean) -> Unit,
+    navigateToTemplateDetail: (templateId: Long, isMyTemplate: Boolean, isBookmark: Boolean) -> Unit,
     navigateToTemplateCreate: () -> Unit,
     navigateToPersonalBottariEdit: (Long, Boolean) -> Unit,
     navigateToTeamBottariEdit: (Long, Boolean) -> Unit,

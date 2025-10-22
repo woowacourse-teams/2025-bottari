@@ -41,7 +41,6 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
 
     private fun setupUI() {
         binding.rvTemplateDetail.adapter = adapter
-//        binding.btnTakeTemplate.isVisible = !isMyTemplate
         popupMenu.menuInflater.inflate(R.menu.template_popup_menu, popupMenu.menu)
         binding.btnTemplateMore.isVisible = isBookmark.not() && isMyTemplate.not()
     }
@@ -121,7 +120,7 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
         }
 
     private fun showReportDialog() {
-        val templateId = viewModel.uiState.value?.templateId ?: return
+        val templateId = requireArguments().getLong(TemplateDetailViewModel.KEY_TEMPLATE_ID)
         ReportDialog
             .newInstance(templateId)
             .show(parentFragmentManager, ReportDialog::class.simpleName)

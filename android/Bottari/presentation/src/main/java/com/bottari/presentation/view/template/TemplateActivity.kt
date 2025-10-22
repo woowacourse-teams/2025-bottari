@@ -54,11 +54,12 @@ class TemplateActivity : BaseActivity<ActivityTemplateBinding>(ActivityTemplateB
         fun newIntentForBookmark(
             context: Context,
             templateId: Long,
+            isBookmark: Boolean,
         ): Intent =
             Intent(context, TemplateActivity::class.java).putExtras(
                 bundleOf(
                     EXTRA_BOTTARI_TEMPLATE_ID to templateId,
-                    EXTRA_IS_BOOKMARK to false,
+                    EXTRA_IS_BOOKMARK to isBookmark,
                 ),
             )
     }

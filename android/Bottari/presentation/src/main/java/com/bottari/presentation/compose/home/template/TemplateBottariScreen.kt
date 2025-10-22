@@ -45,7 +45,7 @@ import kotlinx.coroutines.flow.filter
 @Composable
 fun TemplateBottariScreen(
     snackbarState: SnackbarHostState,
-    navigateToTemplateDetail: (templateId: Long, isMyTemplate: Boolean) -> Unit,
+    navigateToTemplateDetail: (templateId: Long, isMyTemplate: Boolean, isBookmark: Boolean) -> Unit,
     navigateToTemplateCreate: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TemplateViewModel = viewModel(),
@@ -76,6 +76,7 @@ fun TemplateBottariScreen(
 
     TemplateBottariScreen(
         uiState = uiState.value,
+        snackbarState = snackbarState,
         listState = mainListState,
         myListState = myListState,
         onClickDetail = navigateToTemplateDetail,
@@ -93,9 +94,10 @@ fun TemplateBottariScreen(
 @Composable
 private fun TemplateBottariScreen(
     uiState: TemplateUiState,
+    snackbarState: SnackbarHostState,
     listState: LazyListState,
     myListState: LazyListState,
-    onClickDetail: (templateId: Long, isMyTemplate: Boolean) -> Unit,
+    onClickDetail: (templateId: Long, isMyTemplate: Boolean, isBookmark: Boolean) -> Unit,
     onQueryChange: (String) -> Unit,
     onChipChange: (List<BottariTemplateHashtagUiModel>) -> Unit,
     onLoadNextPage: () -> Unit,
@@ -144,7 +146,7 @@ private fun TemplateBottariScreen(
                         onClickDetail = { id ->
                             uiState.myTemplates
                                 .any { template -> template.id == id }
-                                .let { isMyTemplate -> onClickDetail(id, isMyTemplate) }
+                                .let { isMyTemplate -> onClickDetail(id, isMyTemplate, false) }
                         },
                         onClickBookmark = onClickBookmark,
                         isRefreshing = uiState.isRefreshingMain,
@@ -157,7 +159,7 @@ private fun TemplateBottariScreen(
                         myTemplates = uiState.myTemplates,
                         listState = myListState,
                         emptyViewText = if (uiState.isMyTemplatesEmpty) "아직 공유한 보따리가 없어요" else "",
-                        onClickDetail = { id -> onClickDetail(id, true) },
+                        onClickDetail = { id -> onClickDetail(id, true, false) },
                         onClickDelete = onClickDelete,
                         isRefreshing = uiState.isRefreshingMy,
                         onRefresh = { onRefresh(false) },
@@ -166,7 +168,8 @@ private fun TemplateBottariScreen(
 
                 2 ->
                     BookmarkTemplateScreen(
-                        navigateToDetail = { id -> onClickDetail(id, true) },
+                        snackbarHostState = snackbarState,
+                        navigateToDetail = { id -> onClickDetail(id, false, true) },
                     )
             }
         }
@@ -230,9 +233,10 @@ private fun TemplateBottariScreenPreview() {
     BottariTheme {
         TemplateBottariScreen(
             uiState = TemplateUiState(templates = templates),
+            snackbarState = SnackbarHostState(),
             listState = rememberLazyListState(),
             myListState = rememberLazyListState(),
-            onClickDetail = { _, _ -> },
+            onClickDetail = { _, _, _ -> },
             onQueryChange = {},
             onChipChange = {},
             onLoadNextPage = {},
