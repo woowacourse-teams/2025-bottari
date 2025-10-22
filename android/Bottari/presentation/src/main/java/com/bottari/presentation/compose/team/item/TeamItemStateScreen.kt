@@ -3,6 +3,7 @@ package com.bottari.presentation.compose.team.item
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -31,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.component.BottariCheckIndicator
+import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.team.TeamSendRemindDialog
 import com.bottari.presentation.compose.team.TeamStateCard
@@ -75,78 +77,81 @@ private fun TeamItemStateScreen(
     onSendRemind: (TeamBottariUiModelStatus) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .padding(BottariTheme.spacing.spaceMedium),
-        verticalArrangement = Arrangement.Top,
-    ) {
-        Row {
-            TeamStateCard(
-                title =
-                    stringResource(
-                        R.string.team_checklist_current_items_status_percent_title,
-                        uiState.checkedProgress,
-                    ),
-                value =
-                    stringResource(
-                        R.string.team_checklist_current_items_status_percent_text,
-                        uiState.checkedProgress,
-                    ),
-                painter = painterResource(R.drawable.ic_progress),
-                color = BottariTheme.colors.primary,
-                modifier = Modifier.weight(1f),
-            )
-            Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceXSmall))
-            TeamStateCard(
-                title = stringResource(R.string.team_checklist_current_items_status_count_title),
-                value = uiState.completedItems.toString(),
-                painter = painterResource(R.drawable.ic_complete),
-                color = BottariTheme.colors.green,
-                modifier = Modifier.weight(1f),
-            )
-        }
-        Spacer(modifier = Modifier.height(BottariTheme.spacing.space2xLarge))
-        if (uiState.items.isEmpty()) {
-            TeamBottariItemStatusEmptyView(modifier = Modifier.fillMaxSize())
-            return
-        }
-        LazyColumn(
-            contentPadding = PaddingValues(bottom = BottariTheme.spacing.spaceMedium),
-            verticalArrangement =
-                Arrangement.spacedBy(
-                    BottariTheme.spacing.spaceXSmall,
-                ),
+    Box {
+        if (uiState.isLoading) IndeterminateCircularIndicator()
+        Column(
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(BottariTheme.spacing.spaceMedium),
+            verticalArrangement = Arrangement.Top,
         ) {
-            items(uiState.items, key = { "${it.id} ${it.type.toTypeString()}" }) { product ->
-                TeamProductStateCard(product = product, onClick = onSelectProduct)
+            Row {
+                TeamStateCard(
+                    title =
+                        stringResource(
+                            R.string.team_checklist_current_items_status_percent_title,
+                            uiState.checkedProgress,
+                        ),
+                    value =
+                        stringResource(
+                            R.string.team_checklist_current_items_status_percent_text,
+                            uiState.checkedProgress,
+                        ),
+                    painter = painterResource(R.drawable.ic_progress),
+                    color = BottariTheme.colors.primary,
+                    modifier = Modifier.weight(1f),
+                )
+                Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceXSmall))
+                TeamStateCard(
+                    title = stringResource(R.string.team_checklist_current_items_status_count_title),
+                    value = uiState.completedItems.toString(),
+                    painter = painterResource(R.drawable.ic_complete),
+                    color = BottariTheme.colors.green,
+                    modifier = Modifier.weight(1f),
+                )
+            }
+            Spacer(modifier = Modifier.height(BottariTheme.spacing.space2xLarge))
+            if (uiState.items.isEmpty()) {
+                TeamBottariItemStatusEmptyView(modifier = Modifier.fillMaxSize())
+                return
+            }
+            LazyColumn(
+                contentPadding = PaddingValues(bottom = BottariTheme.spacing.spaceMedium),
+                verticalArrangement =
+                    Arrangement.spacedBy(
+                        BottariTheme.spacing.spaceXSmall,
+                    ),
+            ) {
+                items(uiState.items, key = { "${it.id} ${it.type.toTypeString()}" }) { product ->
+                    TeamProductStateCard(product = product, onClick = onSelectProduct)
+                }
             }
         }
-    }
-    uiState.selectedProduct?.let { product ->
-        TeamSendRemindDialog(
-            title = product.name,
-            isRemindable = (!product.isAllChecked),
-            onDismissRequest = { onSelectProduct(null) },
-            onClickRemind = { onSendRemind(product) },
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall)) {
-                if (product.checkedMember.isNotEmpty()) {
-                    TeamStateListBox(
-                        text = "해당 물건을 챙겼습니다",
-                        painter = painterResource(id = R.drawable.ic_bottari_item_empty_view),
-                        color = BottariTheme.colors.primary,
-                        items = product.checkedMember,
-                    )
-                }
-                if (product.uncheckedMember.isNotEmpty()) {
-                    TeamStateListBox(
-                        text = "해당 물건을 챙기지 않았습니다.",
-                        painter = painterResource(id = R.drawable.ic_bottari_item_empty_view),
-                        color = BottariTheme.colors.red,
-                        items = product.uncheckedMember,
-                    )
+        uiState.selectedProduct?.let { product ->
+            TeamSendRemindDialog(
+                title = product.name,
+                isRemindable = (!product.isAllChecked),
+                onDismissRequest = { onSelectProduct(null) },
+                onClickRemind = { onSendRemind(product) },
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall)) {
+                    if (product.checkedMember.isNotEmpty()) {
+                        TeamStateListBox(
+                            text = "해당 물건을 챙겼습니다",
+                            painter = painterResource(id = R.drawable.ic_bottari_item_empty_view),
+                            color = BottariTheme.colors.primary,
+                            items = product.checkedMember,
+                        )
+                    }
+                    if (product.uncheckedMember.isNotEmpty()) {
+                        TeamStateListBox(
+                            text = "해당 물건을 챙기지 않았습니다.",
+                            painter = painterResource(id = R.drawable.ic_bottari_item_empty_view),
+                            color = BottariTheme.colors.red,
+                            items = product.uncheckedMember,
+                        )
+                    }
                 }
             }
         }

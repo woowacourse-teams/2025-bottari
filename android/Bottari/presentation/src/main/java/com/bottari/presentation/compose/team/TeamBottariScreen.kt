@@ -2,6 +2,7 @@ package com.bottari.presentation.compose.team
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
@@ -106,6 +107,7 @@ fun TeamBottariScreen(
                             onCloseToolTip = viewModel::closeTooltip,
                             isToolTipClosed = uiState.isTooltipClosed,
                             onClickItem = viewModel::toggleItemChecked,
+                            modifier = Modifier.fillMaxSize().padding(BottariTheme.spacing.spaceMedium),
                         )
 
                     1 -> TeamItemStateScreen(snackbarHostState = snackbarHostState)

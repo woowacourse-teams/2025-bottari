@@ -55,10 +55,7 @@ class ComposeTeamChecklistViewModel @Inject constructor(
         mutableMapOf<Pair<Long, BottariItemTypeUiModel>, TeamChecklistItemUiModel>()
 
     private val debouncedCheck: (List<TeamChecklistItemUiModel>) -> Unit =
-        debounce(
-            timeMillis = DEBOUNCE_DELAY,
-            coroutineScope = viewModelScope,
-        ) { items -> performItemCheck(items) }
+        viewModelScope.debounce(DEBOUNCE_DELAY) { items -> performItemCheck(items) }
 
     init {
         fetchTeamCheckList()
@@ -97,11 +94,7 @@ class ComposeTeamChecklistViewModel @Inject constructor(
                     if (toggledItem.isSameItem(checklistItem)) return@map toggledItem
                     checklistItem
                 }
-            updateState {
-                copy(
-                    bottariItems = newItems,
-                )
-            }
+            updateState { copy(bottariItems = newItems) }
 
             pendingCheckStatusMap[Pair(toggledItem.id, toggledItem.type)] = toggledItem
             debouncedCheck(pendingCheckStatusMap.values.toList())

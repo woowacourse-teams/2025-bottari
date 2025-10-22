@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
+import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.team.TeamSendRemindDialog
 import com.bottari.presentation.compose.team.TeamStateCard
@@ -77,6 +78,7 @@ private fun TeamMemberStateScreen(
             .fillMaxSize()
             .padding(BottariTheme.spacing.spaceMedium),
     ) {
+        if(uiState.isLoading) IndeterminateCircularIndicator()
         Column(verticalArrangement = Arrangement.Top) {
             Row {
                 TeamStateCard(

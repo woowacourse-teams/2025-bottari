@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,40 +48,39 @@ fun TeamChecklistScreen(
     onClickItem: (Long, BottariItemTypeUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if(uiState.isLoading){
-        IndeterminateCircularIndicator()
-        return
-    }
-    LazyColumn(modifier = modifier, verticalArrangement = Arrangement.Top) {
-        item {
-            if (!isToolTipClosed) {
-                ChecklistToolTip(
-                    icon = {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_shared),
-                            contentDescription = null,
-                            tint = BottariTheme.colors.white,
-                        )
-                    },
-                    title = "팀 보따리",
-                    text = "공통은 모두가, 담당은 지정된 사람이,\n개인은 나만 볼 수 있는 체크리스트예요.",
-                    closeAction = onCloseToolTip,
-                )
+    Box {
+        if (uiState.isLoading) IndeterminateCircularIndicator()
+        LazyColumn(modifier = modifier, verticalArrangement = Arrangement.Top) {
+            item {
+                if (!isToolTipClosed) {
+                    ChecklistToolTip(
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_shared),
+                                contentDescription = null,
+                                tint = BottariTheme.colors.white,
+                            )
+                        },
+                        title = "팀 보따리",
+                        text = "공통은 모두가, 담당은 지정된 사람이,\n개인은 나만 볼 수 있는 체크리스트예요.",
+                        closeAction = onCloseToolTip,
+                    )
+                    Spacer(Modifier.height(BottariTheme.spacing.spaceMedium))
+                }
+            }
+
+            item {
+                ChecklistProgressHeader(uiState.checkedQuantity, uiState.totalQuantity)
                 Spacer(Modifier.height(BottariTheme.spacing.spaceMedium))
             }
-        }
 
-        item {
-            ChecklistProgressHeader(uiState.checkedQuantity, uiState.totalQuantity)
-            Spacer(Modifier.height(BottariTheme.spacing.spaceMedium))
+            teamChecklistNodes(
+                nodes = uiState.sections,
+                items = uiState.bottariItems,
+                toggleExpanded = onClickSection,
+                onClickItem = onClickItem,
+            )
         }
-
-        teamChecklistNodes(
-            nodes = uiState.sections,
-            items = uiState.bottariItems,
-            toggleExpanded = onClickSection,
-            onClickItem = onClickItem,
-        )
     }
 }
 

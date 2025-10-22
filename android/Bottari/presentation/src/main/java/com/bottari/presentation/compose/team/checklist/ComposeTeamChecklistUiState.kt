@@ -19,13 +19,7 @@ data class ComposeTeamChecklistUiState(
 
     val checkedQuantity: Int = bottariItems.count { it.isChecked }
 
-    val unCheckedQuantity: Int = totalQuantity - checkedQuantity
-
-    val isItemsEmpty: Boolean = bottariItems.isEmpty()
-
-    val nonCheckedItems: List<TeamChecklistItemUiModel> by lazy {
-        bottariItems.filterNot { it.isChecked }
-    }
+    val nonCheckedItems: List<TeamChecklistItemUiModel> = bottariItems.filterNot { it.isChecked }
 
     val isAllChecked: Boolean = bottariItems.isNotEmpty() && nonCheckedItems.isEmpty()
 }
