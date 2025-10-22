@@ -7,7 +7,7 @@ import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.SearchTemplatesByHashtagUseCase
 import com.bottari.domain.usecase.template.SearchTemplatesByTitleUseCase
-import com.bottari.presentation.common.base.BaseViewModel
+import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
 import com.bottari.presentation.util.debounce
@@ -20,7 +20,7 @@ class TemplateViewModel @Inject constructor(
     private val searchTemplatesByHashtagUseCase: SearchTemplatesByHashtagUseCase,
     private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
     private val deleteMyBottariTemplateUseCase: DeleteMyBottariTemplateUseCase,
-) : BaseViewModel<TemplateUiState, TemplateUiEvent>(TemplateUiState()) {
+) : FlowBaseViewModel<TemplateUiState, TemplateUiEvent>(TemplateUiState()) {
     private val debouncedSearch: (Unit) -> Unit
 
     private var mainPageable: Pageable<BottariTemplate> = Pageable()
@@ -30,6 +30,14 @@ class TemplateViewModel @Inject constructor(
         fetchTemplates()
         fetchMyUploadTemplates()
         debouncedSearch = viewModelScope.debounce(DEBOUNCE_DELAY) { fetchTemplates() }
+    }
+
+    fun refresh() {
+        mainPageable = Pageable()
+        searchPageable = Pageable()
+        updateState { copy(searchWord = "", chips = emptyList()) }
+        fetchTemplates()
+        fetchMyUploadTemplates()
     }
 
     fun updateSearchWord(searchWord: String) {
@@ -95,7 +103,16 @@ class TemplateViewModel @Inject constructor(
         launch {
             deleteMyBottariTemplateUseCase(templateId)
                 .onSuccess {
-                    updateState { copy(myTemplates = myTemplates.filterNot { it.id == templateId }) }
+                    updateState {
+                        copy(
+                            myTemplates = myTemplates.filterNot { it.id == templateId },
+                            templates = templates.filterNot { it.id == templateId },
+                        )
+                    }
+                    mainPageable =
+                        mainPageable.copy(
+                            contents = mainPageable.contents.filterNot { it.id == templateId },
+                        )
                     emitEvent(TemplateUiEvent.DeleteBottariTemplateSuccess)
                 }.onFailure {
                     emitEvent(TemplateUiEvent.DeleteBottariTemplateFailure)

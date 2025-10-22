@@ -24,9 +24,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +38,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariHashChipSearchBar
@@ -63,16 +69,27 @@ fun TemplateBottariScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
-    val uiState = viewModel.uiState.observeAsState().value ?: return
-    val uiEvent = viewModel.uiEvent.observeAsState().value
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val uiEvent = viewModel.uiEvent.collectAsState(null)
     val mainListState = rememberLazyListState()
     val myListState = rememberLazyListState()
 
-    LaunchedEffect(uiEvent) {
-        if (uiEvent == null) return@LaunchedEffect
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val refreshLatest by rememberUpdatedState(newValue = { viewModel.refresh() })
 
-        when (uiEvent) {
+    DisposableEffect(lifecycleOwner) {
+        val observer =
+            LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_RESUME) refreshLatest()
+            }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    LaunchedEffect(uiEvent.value) {
+        when (uiEvent.value ?: return@LaunchedEffect) {
             is TemplateUiEvent.SearchTemplateSuccess -> mainListState.scrollToItem(0)
+
             is TemplateUiEvent.FetchBottariTemplatesFailure ->
                 snackbarState.showSnackbar(context.getString(R.string.template_fetch_template_failure_text))
 
@@ -85,7 +102,7 @@ fun TemplateBottariScreen(
     }
 
     TemplateBottariScreen(
-        uiState = uiState,
+        uiState = uiState.value,
         listState = mainListState,
         myListState = myListState,
         onClickDetail = navigateToTemplateDetail,

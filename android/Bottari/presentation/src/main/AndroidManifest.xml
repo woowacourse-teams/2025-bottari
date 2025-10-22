@@ -29,7 +29,7 @@
         <activity
             android:name=".compose.edit.personal.ComposePersonalBottariEditActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.template.TemplateActivity"
             android:exported="false" />
@@ -48,7 +48,12 @@
             android:name=".compose.personal.ComposePersonalChecklistActivity"
             android:exported="false" />
 
-        <activity android:name=".compose.team.ComposeTeamChecklistActivity"
+        <activity
+            android:name=".compose.team.ComposeTeamChecklistActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".compose.template.ComposeCreateTemplateActivity"
             android:exported="false" />
 
         <receiver android:name=".receiver.AlarmReceiver" />

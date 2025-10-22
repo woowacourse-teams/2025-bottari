@@ -61,7 +61,7 @@ class PersonalBottariEditViewModel @Inject constructor(
 
         val items = currentState.items.map { it.name }
         launch {
-            createBottariTemplateUseCase(currentState.bottariTitle, items)
+            createBottariTemplateUseCase(currentState.bottariTitle, "", items, emptyList())
                 .onSuccess { createdTemplateId ->
                     handleCreateTemplateSuccess(createdTemplateId)
                     emitEvent(PersonalBottariEditUiEvent.CreateTemplateSuccess)

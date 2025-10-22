@@ -39,7 +39,7 @@ class TemplateCreateViewModel @Inject constructor(
         launch {
             val title = currentState.bottariTitle
             val items = currentState.currentBottariItems.map { it.name }
-            createBottariTemplateUseCase(title, items)
+            createBottariTemplateUseCase(title, "", items, emptyList())
                 .onSuccess { createdTemplateId ->
                     if (createdTemplateId == null) return@onSuccess
                     BottariLogger.ui(

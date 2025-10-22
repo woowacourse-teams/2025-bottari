@@ -95,13 +95,13 @@ private fun TemplateItemHeader(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
-                style = BottariTheme.typography.semiBold16.toTextStyle(),
+                style = BottariTheme.typography.semiBold20.toTextStyle(),
                 color = BottariTheme.colors.black,
             )
-            Spacer(Modifier.height(BottariTheme.spacing.space2xSmall))
+            Spacer(Modifier.height(BottariTheme.spacing.spaceXSmall))
             Text(
                 text = description,
-                style = BottariTheme.typography.regular14.toTextStyle(),
+                style = BottariTheme.typography.medium14.toTextStyle(),
                 color = BottariTheme.colors.gray500,
             )
         }
@@ -118,39 +118,44 @@ private fun TemplateHashtagSection(
     onClickHashtag: (BottariTemplateHashtagUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val chipShape = remember { RoundedCornerShape(999.dp) }
-
     FlowRow(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(BottariTheme.spacing.space2xSmall),
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
         itemVerticalAlignment = Alignment.CenterVertically,
+    ) { hashtags.forEach { hashtag -> HashtagChip(hashtag, onClickHashtag) } }
+}
+
+@Composable
+private fun HashtagChip(
+    hashtag: BottariTemplateHashtagUiModel,
+    onClickHashtag: (BottariTemplateHashtagUiModel) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val chipShape = remember { RoundedCornerShape(999.dp) }
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier =
+            modifier
+                .clip(chipShape)
+                .background(
+                    color = Color(0xFFEFF6FF),
+                    shape = chipShape,
+                ).clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = ripple(color = BottariTheme.colors.primary),
+                ) { onClickHashtag(hashtag) }
+                .padding(
+                    vertical = BottariTheme.spacing.space2xSmall,
+                    horizontal = BottariTheme.spacing.spaceXSmall,
+                ),
     ) {
-        hashtags.forEach { hashtag ->
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier =
-                    Modifier
-                        .clip(chipShape)
-                        .background(
-                            color = Color(0xFFEFF6FF),
-                            shape = chipShape,
-                        ).clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(color = BottariTheme.colors.primary),
-                        ) { onClickHashtag(hashtag) }
-                        .padding(
-                            vertical = BottariTheme.spacing.space2xSmall,
-                            horizontal = BottariTheme.spacing.spaceXSmall,
-                        ),
-            ) {
-                Text(
-                    text = "#${hashtag.name.replace(" ", "")}",
-                    style = BottariTheme.typography.medium12.toTextStyle(),
-                    color = BottariTheme.colors.primary,
-                )
-            }
-        }
+        Text(
+            text = "#${hashtag.name.replace(" ", "")}",
+            style = BottariTheme.typography.medium12.toTextStyle(),
+            color = BottariTheme.colors.primary,
+        )
     }
 }
 

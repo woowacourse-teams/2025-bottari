@@ -61,7 +61,7 @@ private fun Modifier.setupIconButtonByTemplateItemType(type: TemplateItemType): 
                 BottariTheme.colors.gray400.copy(0.2f)
             }
         }
-    }.let { bgColor -> background(color = bgColor, shape = CircleShape).size(32.dp) }
+    }.let { bgColor -> background(color = bgColor, shape = CircleShape).size(40.dp) }
 
 @Composable
 private fun MyTemplateIcon(modifier: Modifier = Modifier) {

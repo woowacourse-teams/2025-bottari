@@ -8,6 +8,8 @@ class CreateBottariTemplateUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         title: String,
+        description: String,
         items: List<String>,
-    ): Result<Long?> = bottariTemplateRepository.createBottariTemplate(title, items)
+        hashtag: List<String>,
+    ): Result<Long?> = bottariTemplateRepository.createBottariTemplate(title, description, items, hashtag)
 }
