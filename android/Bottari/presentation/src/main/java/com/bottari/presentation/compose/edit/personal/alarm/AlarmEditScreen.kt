@@ -159,17 +159,16 @@ private fun AlarmEditScreen(
 ) {
     val alarm = state.alarm
 
-    Column(
+    Box(
         modifier =
             modifier.padding(
                 horizontal = BottariTheme.spacing.spaceLarge,
                 vertical = BottariTheme.spacing.spaceMedium,
             ),
-        verticalArrangement = Arrangement.Top,
     ) {
         if (state.isLoading) {
             IndeterminateCircularIndicator()
-            return@Column
+            return@Box
         }
 
         BottariBox(
