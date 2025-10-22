@@ -4,33 +4,38 @@ import com.bottari.push.connection.sse.SseChannel;
 import com.bottari.push.connection.sse.external.RedisSseChannel;
 import com.bottari.push.connection.sse.inmemory.InMemorySseChannel;
 import com.bottari.push.connection.sse.inmemory.SseSessions;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.core.RedisTemplate;
 
-
 /*
- * 부하 테스트 이후, 삭제될 설정 파일
+ * SSE Channel 설정 정책
  *
- * dev1 - 단일 DB InMemory SSE 테스트 환경
- * dev2 - Read/Write 분리 InMemory SSE 테스트 환경
+ * test1, test3  → InMemory SSE
+ * test2, test4  → Redis SSE
+ * 그 외 전체    → Redis SSE (기본 정책)
  *
- * 1. InMemory SSE   {"dev1", "dev2"}   -> 부하테스트를 위해서 하위 호환되도록
- * 2. Redis SSE      {"!dev1", "!dev2"}   -> 부하테스트 이후에는 Redis로 통합
- * */
+ * 향후 운영 환경은 Redis SSE로 일원화 예정
+ */
+@Slf4j
 @Configuration
 public class SseConfig {
 
-    @Profile("!(dev1 | dev2)")
-    @Bean
-    public SseChannel redisSseChannel(final RedisTemplate<String, Object> redisTemplate) {
-        return new RedisSseChannel(redisTemplate);
-    }
-
-    @Profile("dev1 | dev2")
+    @Profile("test1 | test3")
     @Bean
     public SseChannel inMemorySseChannel(final SseSessions sseSessions) {
+        log.info("[SSE] mode = IN_MEMORY");
+
         return new InMemorySseChannel(sseSessions);
+    }
+
+    @Profile("!(test1 | test3)")
+    @Bean
+    public SseChannel redisSseChannel(final RedisTemplate<String, Object> redisTemplate) {
+        log.info("[SSE] mode = REDIS");
+
+        return new RedisSseChannel(redisTemplate);
     }
 }
