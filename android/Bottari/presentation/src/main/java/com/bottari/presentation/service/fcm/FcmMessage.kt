@@ -29,8 +29,8 @@ sealed class FcmMessage {
 
         companion object {
             const val TYPE = "TEAM_MEMBER_DELETE"
-            private const val KEY_BOTTARI_ID = "bottariId"
-            private const val KEY_BOTTARI_NAME = "bottariName"
+            private const val KEY_BOTTARI_ID = "teamBottariId"
+            private const val KEY_BOTTARI_NAME = "teamBottariName"
             private const val KEY_EXIT_MEMBER_ID = "exitMemberId"
             private const val KEY_EXIT_MEMBER_NAME = "exitMemberName"
             private const val KEY_PUBLISHED_AT = "publishedAt"
