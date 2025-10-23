@@ -89,9 +89,11 @@ fun MyBottariScreen(
         if (uiState.value.showDialogType == MyBottariDialogType.CODE) {
             val clipData = clipboard.nativeClipboard.primaryClip
             clipData?.let { clipData ->
-                val firstItem = clipData.getItemAt(0)
-                val inviteLink = firstItem.text.toString()
-                dialogText = DeeplinkHelper.getInviteCode(inviteLink) ?: ""
+                if (clipData.itemCount > 0) {
+                    val firstItem = clipData.getItemAt(0)
+                    val inviteLink = firstItem.text.toString()
+                    dialogText = DeeplinkHelper.getInviteCode(inviteLink) ?: ""
+                }
             }
         }
     }
