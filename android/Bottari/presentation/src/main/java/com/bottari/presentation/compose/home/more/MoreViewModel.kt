@@ -24,20 +24,16 @@ class MoreViewModel @Inject constructor(
     fun saveNickname() {
         if (currentState.isNicknameChanged.not()) return
         if (currentState.isLoading) return
-        val editingNickname = currentState.editingNickname
+
         updateState { copy(isLoading = true) }
+        val editingNickname = currentState.editingNickname
+
         launch {
             saveMemberNicknameUseCase(editingNickname)
                 .onSuccess {
-                    BottariLogger.ui(
-                        UiEventType.NICKNAME_EDIT,
-                        mapOf(
-                            "old_nickname" to currentState.nickname,
-                            "new_nickname" to editingNickname,
-                        ),
-                    )
                     updateState { copy(nickname = editingNickname) }
                     emitEvent(MoreUiEvent.SaveMemberNicknameSuccess)
+                    logSaveNickname(editingNickname)
                 }.onFailure { error ->
                     updateState { copy(editingNickname = this.nickname) }
                     emitEvent(
@@ -47,8 +43,7 @@ class MoreViewModel @Inject constructor(
                         },
                     )
                 }
-            updateState { copy(isLoading = false) }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     private fun fetchMemberInfo() {
@@ -58,14 +53,19 @@ class MoreViewModel @Inject constructor(
             checkRegisteredMemberUseCase()
                 .onSuccess {
                     updateState {
-                        copy(
-                            nickname = it.name.orEmpty(),
-                            editingNickname = it.name.orEmpty(),
-                        )
+                        copy(nickname = it.name.orEmpty(), editingNickname = it.name.orEmpty())
                     }
                 }.onFailure { emitEvent(MoreUiEvent.FetchMemberInfoFailure) }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
+    }
 
-            updateState { copy(isLoading = false) }
-        }
+    private fun logSaveNickname(editingNickname: String) {
+        BottariLogger.ui(
+            UiEventType.NICKNAME_EDIT,
+            mapOf(
+                "old_nickname" to currentState.nickname,
+                "new_nickname" to editingNickname,
+            ),
+        )
     }
 }
