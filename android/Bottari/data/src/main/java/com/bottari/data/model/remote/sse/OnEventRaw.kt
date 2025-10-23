@@ -59,7 +59,7 @@ fun OnEventRaw.toEvent(json: Json): EventStateResponse.OnEventResponse {
                     data,
                 )
 
-            ResourceResponse.SHARED_ITEM_INFO to EventResponse.CHECK ->
+            ResourceResponse.SHARED_ITEM to EventResponse.CHECK ->
                 json.decodeFromJsonElement(
                     EventDataResponse.SharedItemCheckResponse.serializer(),
                     data,
@@ -95,7 +95,7 @@ fun OnEventRaw.toEvent(json: Json): EventStateResponse.OnEventResponse {
                     data,
                 )
 
-            ResourceResponse.ASSIGNED_ITEM_INFO to EventResponse.CHECK ->
+            ResourceResponse.ASSIGNED_ITEM to EventResponse.CHECK ->
                 json.decodeFromJsonElement(
                     EventDataResponse.AssignedItemCheckResponse.serializer(),
                     data,
