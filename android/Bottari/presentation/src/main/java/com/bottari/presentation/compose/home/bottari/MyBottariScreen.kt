@@ -9,6 +9,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
@@ -17,6 +19,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
+import com.bottari.presentation.util.DeeplinkHelper
 
 @Composable
 fun MyBottariScreen(
@@ -48,6 +51,7 @@ fun MyBottariScreen(
     val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
 
     val context = LocalContext.current
+    val clipboard = LocalClipboard.current
 
     var dialogText by rememberSaveable { mutableStateOf("") }
 
@@ -79,6 +83,17 @@ fun MyBottariScreen(
 
             is MyBottariUiEvent.CreateTeamBottariSuccess ->
                 onNavigateToTeamEdit(event.bottariId, true)
+        }
+    }
+
+    LaunchedEffect(uiState.value.showDialogType) {
+        if (uiState.value.showDialogType == MyBottariDialogType.CODE) {
+            val clipData = clipboard.nativeClipboard.primaryClip
+            clipData?.let { clipData ->
+                val firstItem = clipData.getItemAt(0)
+                val inviteLink = firstItem.text.toString()
+                dialogText = DeeplinkHelper.getInviteCode(inviteLink) ?: ""
+            }
         }
     }
 
