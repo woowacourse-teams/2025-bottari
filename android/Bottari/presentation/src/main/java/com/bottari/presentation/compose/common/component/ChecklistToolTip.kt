@@ -33,10 +33,11 @@ fun ChecklistToolTip(
     title: String,
     text: String,
     closeAction: () -> Unit,
+    modifier : Modifier = Modifier,
 ) {
     Column(
         modifier =
-            Modifier
+            modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = BottariTheme.colors.primary)
@@ -80,7 +81,7 @@ fun ChecklistToolTip(
         Text(
             text = text,
             style =
-                BottariTheme.typography.regular16
+                BottariTheme.typography.regular14
                     .toTextStyle()
                     .copy(lineHeight = 20.sp),
             color = BottariTheme.colors.white,

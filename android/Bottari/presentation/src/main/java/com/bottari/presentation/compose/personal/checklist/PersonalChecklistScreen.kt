@@ -76,6 +76,7 @@ fun PersonalChecklistTooltip(onCloseToolTip: () -> Unit) {
             )
         },
         closeAction = onCloseToolTip,
+        modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceMedium)
     )
 }
 

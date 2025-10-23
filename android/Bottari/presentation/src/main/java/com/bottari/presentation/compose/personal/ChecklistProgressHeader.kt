@@ -38,7 +38,7 @@ fun ChecklistProgressHeader(
             Row {
                 Text(
                     text = stringResource(R.string.checklist_progress_header_title_text),
-                    style = BottariTheme.typography.medium20.toTextStyle(),
+                    style = BottariTheme.typography.semiBold18.toTextStyle(),
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
@@ -47,7 +47,7 @@ fun ChecklistProgressHeader(
                             checkedQuantity,
                             totalQuantity,
                         ),
-                    style = BottariTheme.typography.medium20.toTextStyle(),
+                    style = BottariTheme.typography.semiBold18.toTextStyle(),
                 )
             }
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceMedium))

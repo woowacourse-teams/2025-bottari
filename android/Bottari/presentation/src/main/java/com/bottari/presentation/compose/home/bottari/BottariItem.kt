@@ -72,7 +72,7 @@ fun BottariItem(
             )
             Text(
                 text = bottari.title,
-                style = BottariTheme.typography.semiBold24.toTextStyle(),
+                style = BottariTheme.typography.semiBold20.toTextStyle(),
             )
             Spacer(modifier = Modifier.height(BottariTheme.spacing.space2xSmall))
             BottariCheckInfo(
@@ -129,6 +129,7 @@ private fun BottariInfo(
                         repeatEveryWeekText = stringResource(R.string.bottari_item_alarm_repeat_everyweek_text),
                         repeatEveryDayText = stringResource(R.string.bottari_item_alarm_repeat_everyday_text),
                     ),
+                style = BottariTheme.typography.regular14.toTextStyle(),
                 color = if (alarm.isActive) BottariTheme.colors.black else BottariTheme.colors.gray400,
             )
         }
@@ -187,6 +188,7 @@ private fun BottariTypeLabel(
         Text(
             text =
             bottariTypeText,
+            style = BottariTheme.typography.medium14.toTextStyle(),
         )
     }
 }
@@ -260,7 +262,7 @@ private fun BottariCheckInfo(
                     checkedQuantity,
                     totalQuantity,
                 ),
-            style = BottariTheme.typography.medium14.toTextStyle(),
+            style = BottariTheme.typography.regular14.toTextStyle(),
         )
     }
 }

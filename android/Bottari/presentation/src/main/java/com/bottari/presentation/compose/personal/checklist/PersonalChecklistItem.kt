@@ -50,7 +50,7 @@ fun PersonalChecklistItem(
             Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceMedium))
             Text(
                 text = bottariItem.name,
-                style = BottariTheme.typography.medium20.toTextStyle(),
+                style = BottariTheme.typography.semiBold16.toTextStyle(),
                 modifier = Modifier.weight(1f),
             )
             Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceMedium))

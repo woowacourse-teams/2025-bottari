@@ -26,7 +26,7 @@ fun TeamChecklistEmptyView(modifier: Modifier = Modifier) {
             modifier = Modifier.size(48.dp),
             tint = BottariTheme.colors.gray500,
         )
-        Text("챙길 물건이 없어요", color = BottariTheme.colors.gray500, style = BottariTheme.typography.bold18.toTextStyle())
+        Text("챙길 물건이 없어요", color = BottariTheme.colors.gray500, style = BottariTheme.typography.semiBold16.toTextStyle())
         Spacer(Modifier.height(BottariTheme.spacing.spaceSmall))
     }
 }

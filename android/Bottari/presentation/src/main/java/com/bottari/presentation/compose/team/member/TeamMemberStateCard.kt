@@ -47,7 +47,7 @@ fun TeamMemberStateCard(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = memberStatus.member.nickname,
-                    style = BottariTheme.typography.semiBold20.toTextStyle(),
+                    style = BottariTheme.typography.bold18.toTextStyle(),
                     color = BottariTheme.colors.black,
                 )
                 Spacer(modifier = Modifier.weight(1f))

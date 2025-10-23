@@ -189,7 +189,7 @@ private fun SectionHeader(
         Column {
             Text(
                 text = title,
-                style = BottariTheme.typography.bold18.toTextStyle(),
+                style = BottariTheme.typography.semiBold16.toTextStyle(),
                 color = BottariTheme.colors.black,
             )
             Text(

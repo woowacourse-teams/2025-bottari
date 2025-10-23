@@ -24,9 +24,9 @@ fun TeamBottariItemStatusEmptyView(modifier: Modifier = Modifier) {
             painter = painterResource(R.drawable.ic_bottari_item_empty_view),
             contentDescription = null,
             modifier = Modifier.size(64.dp),
-            tint = BottariTheme.colors.gray700,
+            tint = BottariTheme.colors.gray500,
         )
-        Text("챙길 물건이 없어요", color = BottariTheme.colors.gray700, style = BottariTheme.typography.bold32.toTextStyle())
+        Text("챙길 물건이 없어요", color = BottariTheme.colors.gray500, style = BottariTheme.typography.bold20.toTextStyle())
         Spacer(Modifier.height(BottariTheme.spacing.spaceSmall))
     }
 }

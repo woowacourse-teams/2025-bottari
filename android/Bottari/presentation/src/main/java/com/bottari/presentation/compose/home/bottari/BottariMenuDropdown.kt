@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
@@ -35,14 +34,14 @@ fun BottariMenuDropdown(
         onDismissRequest = onDismissRequest,
         modifier =
             modifier.padding(
-                horizontal = BottariTheme.spacing.spaceLarge,
+                horizontal = BottariTheme.spacing.space2xSmall,
             ),
         shape = RoundedCornerShape(12.dp),
         containerColor = BottariTheme.colors.white,
     ) {
         Row(
-            modifier = Modifier.height(60.dp),
-            horizontalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceMedium),
+            modifier = Modifier.height(48.dp),
+            horizontalArrangement = Arrangement.spacedBy(BottariTheme.spacing.space2xSmall),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(
@@ -50,11 +49,11 @@ fun BottariMenuDropdown(
                     onBottariEdit()
                     onDismissRequest()
                 },
+                modifier = Modifier.padding(BottariTheme.spacing.space2xSmall),
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_edit),
                     contentDescription = stringResource(R.string.bottari_edit_btn_description),
-                    modifier = Modifier.size(30.dp),
                 )
             }
 
@@ -69,11 +68,11 @@ fun BottariMenuDropdown(
                     onBottariDelete()
                     onDismissRequest()
                 },
+                modifier = Modifier.padding(BottariTheme.spacing.space2xSmall),
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_delete),
                     contentDescription = stringResource(R.string.bottari_delete_btn_description),
-                    modifier = Modifier.size(30.dp),
                 )
             }
         }
