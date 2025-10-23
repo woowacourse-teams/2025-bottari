@@ -42,19 +42,16 @@ fun TeamChecklistItem(
                 .background(
                     color = BottariTheme.colors.white,
                     shape = RoundedCornerShape(12.dp),
-                )
-                .border(
+                ).border(
                     width = 2.dp,
                     color = BottariTheme.colors.gray200,
                     shape = RoundedCornerShape(12.dp),
-                )
-                .clip(RoundedCornerShape(12.dp))
+                ).clip(RoundedCornerShape(12.dp))
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(bounded = true, color = BottariTheme.colors.primary),
                     onClick = { onClick() },
-                )
-                .padding(BottariTheme.spacing.spaceMedium)
+                ).padding(BottariTheme.spacing.spaceMedium)
                 .semantics(mergeDescendants = true) {
                     contentDescription = bottariItem.name
                     stateDescription = if (bottariItem.isChecked) "완료" else "미완료"
