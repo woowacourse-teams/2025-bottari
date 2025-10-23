@@ -32,7 +32,7 @@ sealed interface EventDataResponse {
         @Serializable(with = LocalDateTimeSerializer::class)
         val publishedAt: LocalDateTime,
         @SerialName("teamBottariId")
-        val teamBottariId: String,
+        val teamBottariId: Long,
         @SerialName("teamBottariName")
         val teamBottariName: String,
         @SerialName("exitMemberId")

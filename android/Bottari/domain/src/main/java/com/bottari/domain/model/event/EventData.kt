@@ -19,7 +19,7 @@ sealed interface EventData {
 
     data class TeamMemberDelete(
         val publishedAt: LocalDateTime,
-        val teamBottariId: String,
+        val teamBottariId: Long,
         val teamBottariName: String,
         val exitMemberId: Long,
         val exitMemberName: String,
