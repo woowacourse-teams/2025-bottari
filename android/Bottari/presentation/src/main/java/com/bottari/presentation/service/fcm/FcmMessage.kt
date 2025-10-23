@@ -79,7 +79,6 @@ sealed class FcmMessage {
         val teamBottariId: Long,
         val teamBottariTitle: String,
         val teamItemName: String,
-        val publishedAt: String,
     ) : FcmMessage() {
         override fun sendNotification(notificationHelper: NotificationHelper) {
             notificationHelper.sendTeamMessage(
@@ -95,14 +94,12 @@ sealed class FcmMessage {
             private const val KEY_TEAM_ID = "teamBottariId"
             private const val KEY_TEAM_TITLE = "teamBottariTitle"
             private const val KEY_ITEM_NAME = "teamItemName"
-            private const val KEY_PUBLISHED_AT = "publishedAt"
 
             fun fromData(data: JSONObject): AssignedItemInfoRemind =
                 AssignedItemInfoRemind(
                     data.getLong(KEY_TEAM_ID),
                     data.getString(KEY_TEAM_TITLE),
                     data.getString(KEY_ITEM_NAME),
-                    data.getString(KEY_PUBLISHED_AT),
                 )
         }
     }
