@@ -37,7 +37,7 @@ class TeamSharedItemEditFragment :
     }
 
     override fun onClickDelete(itemId: Long) {
-        viewModel.deleteItem(itemId)
+        viewModel.requestDeleteItem(itemId)
     }
 
     private fun setupObserver() {
@@ -72,13 +72,14 @@ class TeamSharedItemEditFragment :
 
     private fun handleUiEvent(uiEvent: TeamSharedItemEditEvent) {
         when (uiEvent) {
-            TeamSharedItemEditEvent.FetchTeamSharedItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
+            TeamSharedItemEditEvent.FetchTeamSharedItemsFailure ->
+                requireView().showSnackbar(messageRes = R.string.common_fetch_failure_text)
+
             TeamSharedItemEditEvent.DeleteItemFailure,
             TeamSharedItemEditEvent.CreateItemFailure,
-            -> requireView().showSnackbar(R.string.common_save_failure_text)
+            -> requireView().showSnackbar(messageRes = R.string.common_save_failure_text)
 
             TeamSharedItemEditEvent.CreateItemSuccuss -> {
-                requireView().showSnackbar(R.string.common_save_success_text)
                 parentViewModel.updateInput(RESET_INPUT_TEXT)
                 val target = (adapter.itemCount - 1).coerceAtLeast(0)
                 binding.rvTeamSharedItemEdit.smoothScrollToPosition(target)

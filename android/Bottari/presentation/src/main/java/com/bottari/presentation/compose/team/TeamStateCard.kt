@@ -35,7 +35,7 @@ fun TeamStateCard(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(horizontalAlignment = Alignment.Start) {
                 Text(text = title, style = BottariTheme.typography.regular14.toTextStyle())
-                Text(text = value, style = BottariTheme.typography.bold32.toTextStyle())
+                Text(text = value, style = BottariTheme.typography.bold22.toTextStyle())
             }
             Spacer(Modifier.weight(1f))
             Box(modifier = Modifier.clip(CircleShape).size(48.dp).background(color = color.copy(0.2f))) {

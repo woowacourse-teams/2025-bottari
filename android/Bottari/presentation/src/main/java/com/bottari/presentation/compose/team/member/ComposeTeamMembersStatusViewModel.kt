@@ -61,6 +61,16 @@ class ComposeTeamMembersStatusViewModel @Inject constructor(
         }
     }
 
+    fun fetchMemberId() {
+        launch {
+            getMemberIdUseCase()
+                .onSuccess { id ->
+                    updateState { copy(myId = id) }
+                    fetchTeamMembersStatus()
+                }.onFailure { emitEvent(ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure) }
+        }
+    }
+
     private fun sendRemindMessage(member: TeamMemberUiModel) {
         val memberId =
             member.id ?: run {
@@ -83,16 +93,6 @@ class ComposeTeamMembersStatusViewModel @Inject constructor(
         }
     }
 
-    private fun fetchMemberId() {
-        launch {
-            getMemberIdUseCase()
-                .onSuccess { id ->
-                    updateState { copy(myId = id) }
-                    fetchTeamMembersStatus()
-                }.onFailure { emitEvent(ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure) }
-        }
-    }
-
     private fun fetchTeamMembersStatus() {
         val myId = currentState.myId
         updateState { copy(isLoading = true) }
@@ -111,7 +111,7 @@ class ComposeTeamMembersStatusViewModel @Inject constructor(
     @OptIn(FlowPreview::class)
     private fun handleEvent() {
         launch {
-            connectTeamEventUseCase(teamBottariId)
+            connectTeamEventUseCase()
                 .filterIsInstance<EventState.OnEvent>()
                 .map { event -> event.data }
                 .debounce(DEBOUNCE_DELAY)

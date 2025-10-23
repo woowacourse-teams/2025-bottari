@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
+import com.bottari.presentation.compose.home.ComposeHomeActivity
 import com.bottari.presentation.compose.team.checklist.ComposeTeamChecklistViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,9 +31,19 @@ class ComposeTeamChecklistActivity : AppCompatActivity() {
             TeamBottariScreen(
                 bottariTitle = bottariTitle,
                 notificationFlag = notificationFlag,
-                navigateBack = ::finish,
+                navigateBack = ::navigateToBackOrHome,
             )
         }
+    }
+
+    private fun navigateToBackOrHome() {
+        if (!isTaskRoot) {
+            finish()
+            return
+        }
+        val intent = Intent(this, ComposeHomeActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     companion object {

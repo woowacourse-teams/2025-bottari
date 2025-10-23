@@ -1,6 +1,7 @@
 package com.bottari.presentation.view.edit.team.item.assigned
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.bottari.domain.model.bottari.item.BottariItem
 import com.bottari.domain.model.event.EventData
 import com.bottari.domain.model.event.EventState
@@ -18,13 +19,16 @@ import com.bottari.presentation.model.bottari.personal.SelectableItemUiModel
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,6 +48,21 @@ class TeamAssignedItemEditViewModel @Inject constructor(
     init {
         refreshAssignedItemsAndMembers()
         handleEvent()
+    }
+
+    private val debouncedJobs: MutableMap<Long, Job> = mutableMapOf()
+
+    fun requestDeleteItem(itemId: Long) {
+        updateState { copy(assignedItems = assignedItems.filterNot { it.id == itemId }) }
+
+        debouncedJobs[itemId]?.cancel()
+
+        debouncedJobs[itemId] =
+            viewModelScope
+                .launch {
+                    delay(DEBOUNCE_DELAY)
+                    deleteItem(itemId)
+                }.also { job -> job.invokeOnCompletion { debouncedJobs.remove(itemId) } }
     }
 
     fun updateInput(input: String) {
@@ -69,13 +88,16 @@ class TeamAssignedItemEditViewModel @Inject constructor(
         createAssignedItem()
     }
 
-    fun deleteItem(itemId: Long) {
+    private fun deleteItem(itemId: Long) {
         updateState { copy(isLoading = true) }
 
         launch {
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.ASSIGNED())
-                .onSuccess { refreshAssignedItemsAndMembers() }
-                .onFailure { emitEvent(TeamAssignedItemEditEvent.DeleteItemFailure) }
+                .onSuccess {}
+                .onFailure {
+                    refreshAssignedItemsAndMembers()
+                    emitEvent(TeamAssignedItemEditEvent.DeleteItemFailure)
+                }
 
             updateState { copy(isLoading = false) }
         }
@@ -97,9 +119,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
             ).onSuccess {
                 refreshAssignedItemsAndMembers()
                 emitEvent(TeamAssignedItemEditEvent.CreateItemSuccess)
-            }.onFailure {
-                emitEvent(TeamAssignedItemEditEvent.CreateItemFailure)
-            }
+            }.onFailure { emitEvent(TeamAssignedItemEditEvent.CreateItemFailure) }
 
             updateState { copy(isLoading = false) }
         }
@@ -123,9 +143,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
                 }
                 refreshAssignedItemsAndMembers()
                 emitEvent(TeamAssignedItemEditEvent.SaveItemSuccess)
-            }.onFailure {
-                emitEvent(TeamAssignedItemEditEvent.SaveItemFailure)
-            }
+            }.onFailure { emitEvent(TeamAssignedItemEditEvent.SaveItemFailure) }
 
             updateState { copy(isLoading = false) }
         }
@@ -182,7 +200,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
     @OptIn(FlowPreview::class)
     private fun handleEvent() {
         launch {
-            connectTeamEventUseCase(bottariId)
+            connectTeamEventUseCase()
                 .filterIsInstance<EventState.OnEvent>()
                 .map { event -> event.data }
                 .filterNot { eventData -> eventData.shouldIgnore() }

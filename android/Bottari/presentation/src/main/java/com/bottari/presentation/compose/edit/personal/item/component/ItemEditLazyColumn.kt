@@ -2,6 +2,7 @@ package com.bottari.presentation.compose.edit.personal.item.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
@@ -37,15 +39,12 @@ fun ItemEditLazyColumn(
     LazyColumn(
         modifier =
             modifier
-                .padding(
-                    horizontal = BottariTheme.spacing.spaceLarge,
-                ).topBottomFadingEdge(color = BottariTheme.colors.gray50, width = 8.dp),
+                .padding(horizontal = BottariTheme.spacing.spaceLarge)
+                .topBottomFadingEdge(color = BottariTheme.colors.gray50, width = 8.dp),
         state = listState,
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
     ) {
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-        }
+        item { Spacer(modifier = Modifier.height(8.dp)) }
         items(
             items = items,
             key = { item -> item.id },
@@ -55,9 +54,7 @@ fun ItemEditLazyColumn(
                 onDeleteClick = onDeleteClick,
             )
         }
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-        }
+        item { Spacer(modifier = Modifier.height(8.dp)) }
     }
 }
 
@@ -69,33 +66,31 @@ private fun BottariItem(
 ) {
     BottariBox(
         modifier = modifier.fillMaxWidth(),
-        contentPadding =
-            PaddingValues(
-                vertical = BottariTheme.spacing.spaceXSmall,
-            ),
+        contentPadding = PaddingValues(vertical = BottariTheme.spacing.space2xSmall),
     ) {
-        Text(
-            text = item.name,
-            modifier =
-                Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = BottariTheme.spacing.space2xLarge),
-            maxLines = 1,
-            style = BottariTheme.typography.medium16.toTextStyle(),
-        )
-        IconButton(
-            onClick = { onDeleteClick(item.id) },
-            modifier =
-                Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(end = BottariTheme.spacing.spaceMedium),
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_delete),
-                contentDescription = stringResource(R.string.common_btn_item_delete_description),
-                modifier = Modifier.padding(8.dp),
-                tint = BottariTheme.colors.gray600,
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = item.name,
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .padding(
+                            horizontal = BottariTheme.spacing.spaceMedium,
+                        ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = BottariTheme.typography.semiBold16.toTextStyle(),
             )
+            IconButton(
+                onClick = { onDeleteClick(item.id) },
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_delete),
+                    contentDescription = stringResource(R.string.common_btn_item_delete_description),
+                    modifier = Modifier.padding(BottariTheme.spacing.spaceXSmall),
+                    tint = BottariTheme.colors.gray600,
+                )
+            }
         }
     }
 }
@@ -109,7 +104,7 @@ private fun ItemEditLazyColumnPreview() {
                 listOf(
                     PersonalChecklistItemUiModel(
                         id = 1L,
-                        name = "물건",
+                        name = "하나하나하나하나하나하나하나하나하나하ㅎ하",
                         isChecked = false,
                     ),
                 ),

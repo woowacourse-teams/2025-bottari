@@ -43,7 +43,7 @@ class TeamAssignedItemEditFragment :
         setupUI()
     }
 
-    override fun onClickAssignedItemDelete(itemId: Long) = viewModel.deleteItem(itemId)
+    override fun onClickAssignedItemDelete(itemId: Long) = viewModel.requestDeleteItem(itemId)
 
     override fun onClickAssignedItem(itemId: Long) = viewModel.toggleEditState(itemId)
 
@@ -89,11 +89,16 @@ class TeamAssignedItemEditFragment :
     private fun handleUiEvent(uiEvent: TeamAssignedItemEditEvent) {
         when (uiEvent) {
             is TeamAssignedItemEditEvent.SelectAssignedItem -> parentViewModel.updateInput(uiEvent.itemName)
-            TeamAssignedItemEditEvent.FetchTeamAssignedItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
+            TeamAssignedItemEditEvent.FetchTeamAssignedItemsFailure ->
+                requireView().showSnackbar(
+                    messageRes = R.string.common_fetch_failure_text,
+                )
+
             TeamAssignedItemEditEvent.DeleteItemFailure,
             TeamAssignedItemEditEvent.CreateItemFailure,
             TeamAssignedItemEditEvent.SaveItemFailure,
-            -> requireView().showSnackbar(R.string.common_save_failure_text)
+            ->
+                requireView().showSnackbar(messageRes = R.string.common_save_failure_text)
 
             TeamAssignedItemEditEvent.SaveItemSuccess -> handleItemEditSuccess()
             TeamAssignedItemEditEvent.CreateItemSuccess,
@@ -125,7 +130,6 @@ class TeamAssignedItemEditFragment :
     }
 
     private fun handleItemEditSuccess() {
-        requireView().showSnackbar(R.string.common_save_success_text)
         parentViewModel.updateInput(RESET_INPUT_TEXT)
     }
 

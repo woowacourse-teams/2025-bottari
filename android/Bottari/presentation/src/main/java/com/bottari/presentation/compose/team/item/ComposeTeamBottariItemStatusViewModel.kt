@@ -6,6 +6,7 @@ import com.bottari.domain.model.event.EventState
 import com.bottari.domain.model.team.bottari.TeamBottariStatus
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
+import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.team.FetchTeamStatusUseCase
 import com.bottari.domain.usecase.team.SendRemindByItemUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
@@ -31,6 +32,7 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
     private val sendRemindByItemUseCase: SendRemindByItemUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
+    private val registeredMemberUseCase: CheckRegisteredMemberUseCase,
 ) : FlowBaseViewModel<ComposeTeamBottariItemStatusUiState, ComposeTeamBottariItemStatusUiEvent>(
         ComposeTeamBottariItemStatusUiState(),
     ) {
@@ -44,6 +46,7 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
         ) { item -> sendRemindByItem(item) }
 
     init {
+        fetchMemberNickname()
         fetchTeamStatus()
         handleEvent()
     }
@@ -53,8 +56,31 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch { disconnectTeamEventUseCase() }
     }
 
+    fun fetchTeamStatus() {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            fetchTeamStatusUseCase(teamBottariId)
+                .onSuccess { teamBottariStatus -> handleFetchTeamStatusSuccess(teamBottariStatus) }
+                .onFailure { emitEvent(ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure) }
+
+            updateState { copy(isLoading = false) }
+        }
+    }
+
     fun selectItem(item: TeamBottariUiModelStatus?) {
         updateState { copy(selectedProduct = item) }
+    }
+
+    private fun fetchMemberNickname() {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            registeredMemberUseCase()
+                .onSuccess { updateState { copy(myNickname = it.name.orEmpty()) } }
+                .onFailure { emitEvent(ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure) }
+            updateState { copy(isLoading = false) }
+        }
     }
 
     private fun sendRemindByItem(selectedProduct: TeamBottariUiModelStatus) {
@@ -73,22 +99,10 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
         }
     }
 
-    private fun fetchTeamStatus() {
-        updateState { copy(isLoading = true) }
-
-        launch {
-            fetchTeamStatusUseCase(teamBottariId)
-                .onSuccess { teamBottariStatus -> handleFetchTeamStatusSuccess(teamBottariStatus) }
-                .onFailure { emitEvent(ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure) }
-
-            updateState { copy(isLoading = false) }
-        }
-    }
-
     @OptIn(FlowPreview::class)
     private fun handleEvent() {
         launch {
-            connectTeamEventUseCase(teamBottariId)
+            connectTeamEventUseCase()
                 .filterIsInstance<EventState.OnEvent>()
                 .map { event -> event.data }
                 .debounce(DEBOUNCE_DELAY)

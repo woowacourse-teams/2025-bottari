@@ -37,7 +37,7 @@ class SSEClientImpl(
         response: Response,
     ) {
         super.onOpen(eventSource, response)
-        BottariLogger.network("[Event] Team Bottari $id open")
+        BottariLogger.network("[Event] Member $id open")
         eventFlow.value = EventStateResponse.OnOpen
     }
 
@@ -74,31 +74,31 @@ class SSEClientImpl(
 
     override fun onClosed(eventSource: EventSource) {
         super.onClosed(eventSource)
-        BottariLogger.network("[Event] Team Bottari $id close")
+        BottariLogger.network("[Event] Member $id close")
         eventFlow.value = EventStateResponse.OnClosed
     }
 
-    override fun connect(teamBottariId: Long): Flow<EventStateResponse> {
+    override fun connect(memberId: Long): Flow<EventStateResponse> {
         if (eventSource != null) return eventFlow
-        id = teamBottariId
-        val request = createRequest()
+        id = memberId
+        val request = createRequest(memberId)
         eventSource = createEventSource(request)
-        BottariLogger.network("[Event] Team Bottari $id stream connect")
+        BottariLogger.network("[Event] Member $id stream connect")
         return eventFlow
     }
 
     override fun disconnect() {
         if (id == null || eventSource == null) return
-        BottariLogger.network("[Event] Team Bottari $id stream disconnect")
+        BottariLogger.network("[Event] Member $id stream disconnect")
         eventSource?.cancel()
         eventSource = null
         id = null
     }
 
-    private fun createRequest(): Request =
+    private fun createRequest(memberId: Long): Request =
         Request
             .Builder()
-            .url(BuildConfig.BASE_URL + SSE_URL)
+            .url(BuildConfig.BASE_URL + SSE_URL + memberId)
             .get()
             .build()
 
@@ -108,6 +108,6 @@ class SSEClientImpl(
             .newEventSource(request, this)
 
     companion object {
-        private const val SSE_URL = "/connect/sse"
+        private const val SSE_URL = "/connect/sse/"
     }
 }

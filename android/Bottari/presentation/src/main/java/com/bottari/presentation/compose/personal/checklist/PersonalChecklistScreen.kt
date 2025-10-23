@@ -47,8 +47,17 @@ fun PersonalChecklistScreen(
         if (!isToolTipClosed) {
             PersonalChecklistTooltip(onCloseToolTip)
         }
-        ChecklistProgressHeader(checkedQuantity = checkedQuantity, totalQuantity = totalQuantity)
-        PersonalChecklistLazyColumn(bottariItems = checklistItems, onClickItem = onClickItem)
+        Box(modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceMedium)) {
+            ChecklistProgressHeader(
+                checkedQuantity = checkedQuantity,
+                totalQuantity = totalQuantity,
+            )
+        }
+        PersonalChecklistLazyColumn(
+            bottariItems = checklistItems,
+            onClickItem = onClickItem,
+            modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceMedium),
+        )
     }
 }
 
@@ -67,6 +76,7 @@ fun PersonalChecklistTooltip(onCloseToolTip: () -> Unit) {
             )
         },
         closeAction = onCloseToolTip,
+        modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceMedium),
     )
 }
 
@@ -74,8 +84,10 @@ fun PersonalChecklistTooltip(onCloseToolTip: () -> Unit) {
 fun PersonalChecklistLazyColumn(
     bottariItems: List<PersonalChecklistItemUiModel>,
     onClickItem: (Long) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
+        modifier = modifier,
         contentPadding = PaddingValues(bottom = BottariTheme.spacing.spaceLarge),
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
     ) {
@@ -139,15 +151,16 @@ private fun PersonalChecklistTooltipPreview() {
 @Composable
 private fun PersonalChecklistScreenPreview() {
     PersonalChecklistScreen(
-        false,
-        {},
-        listOf(
-            PersonalChecklistItemUiModel(1, "테스트", false),
-            PersonalChecklistItemUiModel(2, "테스트", true),
-            PersonalChecklistItemUiModel(3, "테스트", true),
-        ),
-        {},
-        7,
-        3,
+        isToolTipClosed = true,
+        onCloseToolTip = {},
+        checklistItems =
+            listOf(
+                PersonalChecklistItemUiModel(1, "테스트", false),
+                PersonalChecklistItemUiModel(2, "테스트", true),
+                PersonalChecklistItemUiModel(3, "테스트", true),
+            ),
+        onClickItem = {},
+        totalQuantity = 7,
+        checkedQuantity = 3,
     )
 }

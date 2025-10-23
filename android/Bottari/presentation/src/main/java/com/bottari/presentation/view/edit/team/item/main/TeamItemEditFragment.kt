@@ -45,6 +45,10 @@ class TeamItemEditFragment :
         setupListener()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
     private fun setupObserver() {
         viewModel.uiState.observe(viewLifecycleOwner, ::handleUiState)
     }
@@ -72,7 +76,7 @@ class TeamItemEditFragment :
         )
         binding.viewItemInput.etItemInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId != EditorInfo.IME_ACTION_SEND) return@setOnEditorActionListener false
-            viewModel.createItem()
+            binding.viewItemInput.btnPersonalItemSend.performClick()
             true
         }
     }

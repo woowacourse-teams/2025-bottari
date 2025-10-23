@@ -140,7 +140,7 @@ class ComposeTeamChecklistViewModel @Inject constructor(
     @OptIn(FlowPreview::class)
     private fun handleEvent() {
         launch {
-            connectTeamEventUseCase(teamBottariId)
+            connectTeamEventUseCase()
                 .filterIsInstance<EventState.OnEvent>()
                 .map { event -> event.data }
                 .filterNot { eventData -> eventData.shouldIgnore() }

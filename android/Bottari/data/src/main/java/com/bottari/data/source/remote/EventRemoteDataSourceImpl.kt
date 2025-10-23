@@ -8,7 +8,7 @@ import javax.inject.Inject
 class EventRemoteDataSourceImpl @Inject constructor(
     private val client: SSEClient,
 ) : EventRemoteDataSource {
-    override suspend fun connectEvent(teamBottariId: Long): Flow<EventStateResponse> = client.connect(teamBottariId)
+    override suspend fun connectEvent(memberId: Long): Flow<EventStateResponse> = client.connect(memberId)
 
     override suspend fun disconnectEvent() = client.disconnect()
 }

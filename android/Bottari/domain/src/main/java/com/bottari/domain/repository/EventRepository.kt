@@ -4,7 +4,7 @@ import com.bottari.domain.model.event.EventState
 import kotlinx.coroutines.flow.Flow
 
 interface EventRepository {
-    suspend fun connectEvent(teamBottariId: Long): Flow<EventState>
+    suspend fun connectEvent(memberId: Long): Flow<EventState>
 
     suspend fun disconnectEvent()
 }

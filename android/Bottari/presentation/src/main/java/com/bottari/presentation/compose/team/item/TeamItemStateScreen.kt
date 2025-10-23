@@ -39,15 +39,19 @@ import com.bottari.presentation.compose.team.TeamStateCard
 import com.bottari.presentation.compose.team.TeamStateListBox
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModelStatus
+import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
 
 @Composable
 fun TeamItemStateScreen(
+    checkedState: List<TeamChecklistItemUiModel>,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: ComposeTeamBottariItemStatusViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
+
+    LaunchedEffect(checkedState) { viewModel.fetchTeamStatus() }
 
     LaunchedEffect(uiEvent) {
         when (uiEvent ?: return@LaunchedEffect) {
@@ -131,7 +135,7 @@ private fun TeamItemStateScreen(
         uiState.selectedProduct?.let { product ->
             TeamSendRemindDialog(
                 title = product.name,
-                isRemindable = (!product.isAllChecked),
+                isRemindable = (!product.isAllChecked && !uiState.isOnlyMeUnchecked),
                 onDismissRequest = { onSelectProduct(null) },
                 onClickRemind = { onSendRemind(product) },
             ) {
@@ -187,7 +191,7 @@ private fun TeamProductStateCard(
             Row {
                 Text(
                     text = product.name,
-                    style = BottariTheme.typography.semiBold20.toTextStyle(),
+                    style = BottariTheme.typography.bold18.toTextStyle(),
                     color = BottariTheme.colors.black,
                 )
                 Spacer(modifier = Modifier.weight(1f))

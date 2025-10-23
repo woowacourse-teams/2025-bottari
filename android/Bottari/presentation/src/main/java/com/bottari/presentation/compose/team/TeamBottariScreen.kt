@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariTabBar
+import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.personal.ChecklistTopBar
@@ -74,6 +75,10 @@ fun TeamBottariScreen(
         containerColor = LocalBottariBgColor.current,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
+        if (uiState.isLoading) {
+            IndeterminateCircularIndicator()
+            return@Scaffold
+        }
         if (isSwipeScreen) {
             SwipeScreen(
                 items = uiState.nonCheckedItems,
@@ -110,9 +115,9 @@ fun TeamBottariScreen(
                             modifier = Modifier.fillMaxSize().padding(BottariTheme.spacing.spaceMedium),
                         )
 
-                    1 -> TeamItemStateScreen(snackbarHostState = snackbarHostState)
+                    1 -> TeamItemStateScreen(snackbarHostState = snackbarHostState, checkedState = uiState.bottariItems)
 
-                    2 -> TeamMemberStateScreen(snackbarHostState = snackbarHostState)
+                    2 -> TeamMemberStateScreen(snackbarHostState = snackbarHostState, checkedState = uiState.bottariItems)
                 }
             }
         }

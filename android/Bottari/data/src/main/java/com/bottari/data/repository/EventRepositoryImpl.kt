@@ -10,8 +10,8 @@ import javax.inject.Inject
 class EventRepositoryImpl @Inject constructor(
     private val eventRemoteDataSource: EventRemoteDataSource,
 ) : EventRepository {
-    override suspend fun connectEvent(teamBottariId: Long): Flow<EventState> =
-        eventRemoteDataSource.connectEvent(teamBottariId).map { eventStateResponse ->
+    override suspend fun connectEvent(memberId: Long): Flow<EventState> =
+        eventRemoteDataSource.connectEvent(memberId).map { eventStateResponse ->
             eventStateResponse.toDomain()
         }
 

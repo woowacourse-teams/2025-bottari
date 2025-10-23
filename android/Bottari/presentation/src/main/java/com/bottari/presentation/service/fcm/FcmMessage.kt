@@ -11,26 +11,26 @@ sealed class FcmMessage {
     abstract fun sendNotification(notificationHelper: NotificationHelper)
 
     data class TeamMemberDelete(
-        val bottariId: Long,
-        val bottariName: String,
+        val teamBottariId: Long,
+        val teamBottariName: String,
         val exitMemberId: Long,
         val exitMemberName: String,
         val publishedAt: String,
     ) : FcmMessage() {
         override fun sendNotification(notificationHelper: NotificationHelper) {
             notificationHelper.sendTeamMessage(
-                bottariId,
-                bottariName,
+                teamBottariId,
+                teamBottariName,
                 R.string.notification_team_bottari_notification_exit_message,
                 exitMemberName,
-                bottariName,
+                teamBottariName,
             )
         }
 
         companion object {
             const val TYPE = "TEAM_MEMBER_DELETE"
-            private const val KEY_BOTTARI_ID = "bottariId"
-            private const val KEY_BOTTARI_NAME = "bottariName"
+            private const val KEY_BOTTARI_ID = "teamBottariId"
+            private const val KEY_BOTTARI_NAME = "teamBottariName"
             private const val KEY_EXIT_MEMBER_ID = "exitMemberId"
             private const val KEY_EXIT_MEMBER_NAME = "exitMemberName"
             private const val KEY_PUBLISHED_AT = "publishedAt"
@@ -79,7 +79,6 @@ sealed class FcmMessage {
         val teamBottariId: Long,
         val teamBottariTitle: String,
         val teamItemName: String,
-        val publishedAt: String,
     ) : FcmMessage() {
         override fun sendNotification(notificationHelper: NotificationHelper) {
             notificationHelper.sendTeamMessage(
@@ -95,14 +94,12 @@ sealed class FcmMessage {
             private const val KEY_TEAM_ID = "teamBottariId"
             private const val KEY_TEAM_TITLE = "teamBottariTitle"
             private const val KEY_ITEM_NAME = "teamItemName"
-            private const val KEY_PUBLISHED_AT = "publishedAt"
 
             fun fromData(data: JSONObject): AssignedItemInfoRemind =
                 AssignedItemInfoRemind(
                     data.getLong(KEY_TEAM_ID),
                     data.getString(KEY_TEAM_TITLE),
                     data.getString(KEY_ITEM_NAME),
-                    data.getString(KEY_PUBLISHED_AT),
                 )
         }
     }

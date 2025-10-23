@@ -75,8 +75,6 @@ fun BottariList(
                                     color = BottariTheme.colors.primary,
                                 ),
                             onClick = { onBottariClick(bottari) },
-                        ).padding(
-                            horizontal = BottariTheme.spacing.spaceMedium,
                         ),
             )
         }

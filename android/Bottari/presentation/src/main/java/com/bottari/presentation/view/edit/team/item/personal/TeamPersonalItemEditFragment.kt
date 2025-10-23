@@ -37,7 +37,7 @@ class TeamPersonalItemEditFragment :
     }
 
     override fun onClickDelete(itemId: Long) {
-        viewModel.deleteItem(itemId)
+        viewModel.requestDeleteItem(itemId)
     }
 
     private fun setupObserver() {
@@ -72,13 +72,14 @@ class TeamPersonalItemEditFragment :
 
     private fun handleUiEvent(uiEvent: TeamPersonalItemEditEvent) {
         when (uiEvent) {
-            TeamPersonalItemEditEvent.FetchTeamPersonalItemsFailure -> requireView().showSnackbar(R.string.common_fetch_failure_text)
+            TeamPersonalItemEditEvent.FetchTeamPersonalItemsFailure ->
+                requireView().showSnackbar(messageRes = R.string.common_fetch_failure_text)
+
             TeamPersonalItemEditEvent.CreateItemFailure,
             TeamPersonalItemEditEvent.DeleteItemFailure,
-            -> requireView().showSnackbar(R.string.common_save_failure_text)
+            -> requireView().showSnackbar(messageRes = R.string.common_save_failure_text)
 
             TeamPersonalItemEditEvent.CreateItemSuccess -> {
-                requireView().showSnackbar(R.string.common_save_success_text)
                 parentViewModel.updateInput(RESET_INPUT_TEXT)
                 val target = (adapter.itemCount - 1).coerceAtLeast(0)
                 binding.rvTeamPersonalItemEdit.smoothScrollToPosition(target)
