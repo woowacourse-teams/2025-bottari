@@ -1,6 +1,7 @@
 package com.bottari.presentation.compose.home.template.bookmark
 
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.domain.usecase.bookmark.DeleteBookmarkUseCase
 import com.bottari.domain.usecase.bookmark.ObserveAllBookmarksUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
@@ -20,12 +21,11 @@ class BookmarkTemplateViewModel @Inject constructor(
         fetchBookmarks()
     }
 
-    fun deleteBookmark(id: Long) {
+    fun deleteBookmark(templateId: Long) {
         updateState { copy(isLoading = true) }
 
         launch {
-            deleteBookmarkUseCase(id)
-                .onSuccess { emitEvent(BookmarkTemplateEvent.DeleteBookmarkTemplateSuccess) }
+            deleteBookmarkUseCase(templateId)
                 .onFailure { emitEvent(BookmarkTemplateEvent.DeleteBookmarkTemplateFailure) }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }

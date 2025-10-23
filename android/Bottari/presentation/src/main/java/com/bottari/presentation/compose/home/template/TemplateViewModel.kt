@@ -10,7 +10,6 @@ import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.SearchTemplatesByHashtagUseCase
 import com.bottari.domain.usecase.template.SearchTemplatesByTitleUseCase
-import com.bottari.logger.BottariLogger
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
@@ -141,7 +140,7 @@ class TemplateViewModel @Inject constructor(
         if (found.isMarked) deleteBookmark(templateId) else addBookmark(templateId)
     }
 
-    fun addBookmark(templateId: Long) {
+    private fun addBookmark(templateId: Long) {
         updateState { copy(isLoading = true) }
 
         launch {
@@ -151,23 +150,16 @@ class TemplateViewModel @Inject constructor(
                 } ?: return@launch updateState { copy(isLoading = false) }
 
             addBookmarkUseCase(targetTemplate.toDomain())
-                .onSuccess { BottariLogger.debug("added") }
-                .onFailure { it.printStackTrace() }
+                .onFailure { emitEvent(TemplateUiEvent.AddBookmarkFailure) }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
-    fun deleteBookmark(templateId: Long) {
+    private fun deleteBookmark(templateId: Long) {
         updateState { copy(isLoading = true) }
 
         launch {
             deleteBookmarkUseCase(templateId)
-                .onSuccess {
-                    currentState.templates
-                        .map { template ->
-                            if (template.id != templateId) return@map template
-                            template.copy(isMarked = false)
-                        }.also { newTemplates -> updateState { copy(templates = newTemplates) } }
-                }.onFailure { it.printStackTrace() }
+                .onFailure { emitEvent(TemplateUiEvent.DeleteBookmarkFailure) }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 

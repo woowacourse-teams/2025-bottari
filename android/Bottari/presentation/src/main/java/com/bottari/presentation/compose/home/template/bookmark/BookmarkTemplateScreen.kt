@@ -40,9 +40,6 @@ fun BookmarkTemplateScreen(
                 is BookmarkTemplateEvent.FetchBookmarkTemplateFailure ->
                     snackbarHostState.showSnackbar("북마크한 보따리를 불러오지 못했어요")
 
-                is BookmarkTemplateEvent.DeleteBookmarkTemplateSuccess ->
-                    snackbarHostState.showSnackbar("보따리의 북마크를 해제했어요")
-
                 is BookmarkTemplateEvent.DeleteBookmarkTemplateFailure ->
                     snackbarHostState.showSnackbar("보따리의 북마크 해제에 실패했어요")
             }
@@ -60,7 +57,7 @@ fun BookmarkTemplateScreen(
 private fun BookmarkTemplateScreen(
     uiState: BookmarkTemplateUiState,
     onClickDetail: (templateId: Long) -> Unit,
-    onClickDelete: (bookmarkId: Long) -> Unit,
+    onClickDelete: (templateId: Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
@@ -81,7 +78,7 @@ private fun BookmarkTemplateScreen(
 private fun BookmarkTemplateColumn(
     templates: List<BookmarkedTemplateUiModel>,
     onClickDetail: (templateId: Long) -> Unit,
-    onClickDelete: (bookmarkId: Long) -> Unit,
+    onClickDelete: (templateId: Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -110,7 +107,7 @@ private fun BookmarkTemplateColumn(
                 iconButton = {
                     TemplateItemIconButton(
                         type = TemplateItemType.Bookmark(true),
-                        onClick = { onClickDelete(template.id) },
+                        onClick = { onClickDelete(template.templateId) },
                     )
                 },
             )

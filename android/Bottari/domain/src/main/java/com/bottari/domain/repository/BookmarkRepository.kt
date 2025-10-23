@@ -8,7 +8,7 @@ interface BookmarkRepository {
 
     suspend fun upsertBookmark(bookmark: BookmarkTemplate): Result<Unit>
 
-    suspend fun deleteBookmarkByTemplateById(templateId: Long): Result<Unit>
+    suspend fun deleteBookmarkByTemplateId(templateId: Long): Result<Unit>
 
     suspend fun getBookmarkByTemplateId(templateId: Long): Result<BookmarkTemplate?>
 

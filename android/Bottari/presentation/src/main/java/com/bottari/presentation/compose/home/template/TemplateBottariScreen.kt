@@ -71,6 +71,12 @@ fun TemplateBottariScreen(
 
                 is TemplateUiEvent.DeleteBottariTemplateFailure ->
                     snackbarState.showSnackbar(context.getString(R.string.template_my_template_delete_failure_text))
+
+                is TemplateUiEvent.AddBookmarkFailure ->
+                    snackbarState.showSnackbar("")
+
+                is TemplateUiEvent.DeleteBookmarkFailure ->
+                    snackbarState.showSnackbar("")
             }
         }
     }

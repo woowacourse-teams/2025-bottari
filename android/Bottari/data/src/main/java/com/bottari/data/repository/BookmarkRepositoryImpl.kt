@@ -19,7 +19,7 @@ class BookmarkRepositoryImpl @Inject constructor(
     override suspend fun upsertBookmark(bookmark: BookmarkTemplate): Result<Unit> =
         runCatching { localDataSource.upsertBookmark(BookmarkEntity.fromBookmarkTemplate(bookmark)) }
 
-    override suspend fun deleteBookmarkByTemplateById(templateId: Long): Result<Unit> =
+    override suspend fun deleteBookmarkByTemplateId(templateId: Long): Result<Unit> =
         runCatching { localDataSource.deleteBookmarkByTemplateId(templateId) }
 
     override suspend fun getBookmarkByTemplateId(templateId: Long): Result<BookmarkTemplate?> =
