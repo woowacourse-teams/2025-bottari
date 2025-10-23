@@ -14,6 +14,8 @@ sealed interface EventDataResponse {
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)
         val publishedAt: LocalDateTime,
+        @SerialName("teamBottariId")
+        val teamBottariId: Long,
         @SerialName("memberId")
         val memberId: Long,
         @SerialName("name")
@@ -21,7 +23,7 @@ sealed interface EventDataResponse {
         @SerialName("isOwner")
         val isOwner: Boolean,
     ) : EventDataResponse {
-        override fun toDomain(): EventData = EventData.TeamMemberCreate(publishedAt, memberId, name, isOwner)
+        override fun toDomain(): EventData = EventData.TeamMemberCreate(publishedAt, teamBottariId, memberId, name, isOwner)
     }
 
     @Serializable
@@ -29,10 +31,10 @@ sealed interface EventDataResponse {
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)
         val publishedAt: LocalDateTime,
-        @SerialName("bottariId")
-        val bottariId: String,
-        @SerialName("bottariName")
-        val bottariName: String,
+        @SerialName("teamBottariId")
+        val teamBottariId: String,
+        @SerialName("teamBottariName")
+        val teamBottariName: String,
         @SerialName("exitMemberId")
         val exitMemberId: Long,
         @SerialName("exitMemberName")
@@ -41,8 +43,8 @@ sealed interface EventDataResponse {
         override fun toDomain(): EventData =
             EventData.TeamMemberDelete(
                 publishedAt,
-                bottariId,
-                bottariName,
+                teamBottariId,
+                teamBottariName,
                 exitMemberId,
                 exitMemberName,
             )
@@ -129,8 +131,10 @@ sealed interface EventDataResponse {
         val memberId: Long,
         @SerialName("isChecked")
         val isChecked: Boolean,
+        @SerialName("teamBottariId")
+        val teamBottariId: Long,
     ) : EventDataResponse {
-        override fun toDomain(): EventData = EventData.SharedItemCheck(publishedAt, infoId, memberId, isChecked)
+        override fun toDomain(): EventData = EventData.SharedItemCheck(publishedAt, infoId, memberId, isChecked, teamBottariId)
     }
 
     @Serializable
@@ -190,6 +194,8 @@ sealed interface EventDataResponse {
         @SerialName("publishedAt")
         @Serializable(with = LocalDateTimeSerializer::class)
         val publishedAt: LocalDateTime,
+        @SerialName("teamBottariId")
+        val teamBottariId: Long,
         @SerialName("infoId")
         val infoId: Long,
         @SerialName("name")
@@ -197,7 +203,7 @@ sealed interface EventDataResponse {
         @SerialName("memberIds")
         val memberIds: List<Long>,
     ) : EventDataResponse {
-        override fun toDomain(): EventData = EventData.AssignedItemInfoChange(publishedAt, infoId, name, memberIds)
+        override fun toDomain(): EventData = EventData.AssignedItemInfoChange(publishedAt, infoId, name, memberIds, teamBottariId)
     }
 
     @Serializable
@@ -263,7 +269,9 @@ sealed interface EventDataResponse {
         val memberId: Long,
         @SerialName("isChecked")
         val isChecked: Boolean,
+        @SerialName("teamBottariId")
+        val teamBottariId: Long,
     ) : EventDataResponse {
-        override fun toDomain(): EventData = EventData.AssignedItemCheck(publishedAt, infoId, memberId, isChecked)
+        override fun toDomain(): EventData = EventData.AssignedItemCheck(publishedAt, infoId, memberId, isChecked, teamBottariId)
     }
 }

@@ -11,6 +11,7 @@ import java.time.LocalDateTime
 sealed interface EventData {
     data class TeamMemberCreate(
         val publishedAt: LocalDateTime,
+        val teamBottariId: Long,
         val memberId: Long,
         val name: String,
         val isOwner: Boolean,
@@ -18,8 +19,8 @@ sealed interface EventData {
 
     data class TeamMemberDelete(
         val publishedAt: LocalDateTime,
-        val bottariId: String,
-        val bottariName: String,
+        val teamBottariId: String,
+        val teamBottariName: String,
         val exitMemberId: Long,
         val exitMemberName: String,
     ) : EventData
@@ -61,6 +62,7 @@ sealed interface EventData {
         val infoId: Long,
         val memberId: Long,
         val isChecked: Boolean,
+        val teamBottariId: Long,
     ) : EventData
 
     data class AssignedItemInfoCreate(
@@ -95,6 +97,7 @@ sealed interface EventData {
         val infoId: Long,
         val name: String,
         val memberIds: List<Long>,
+        val teamBottariId: Long,
     ) : EventData {
         fun containMember(memberId: Long): Boolean = memberIds.contains(memberId)
     }
@@ -131,5 +134,6 @@ sealed interface EventData {
         val infoId: Long,
         val memberId: Long,
         val isChecked: Boolean,
+        val teamBottariId: Long,
     ) : EventData
 }
