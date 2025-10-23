@@ -17,6 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.presentation.compose.common.component.BottariBox
@@ -37,7 +40,10 @@ fun PersonalChecklistItem(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(bounded = true, color = BottariTheme.colors.primary),
                     onClick = { onClick() },
-                ),
+                ).semantics(mergeDescendants = true) {
+                    contentDescription = bottariItem.name
+                    stateDescription = if (bottariItem.isChecked) "완료" else "미완료"
+                },
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(

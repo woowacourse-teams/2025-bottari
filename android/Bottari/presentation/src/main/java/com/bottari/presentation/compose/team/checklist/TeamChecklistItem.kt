@@ -20,6 +20,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.presentation.compose.common.theme.BottariTheme
@@ -39,16 +42,23 @@ fun TeamChecklistItem(
                 .background(
                     color = BottariTheme.colors.white,
                     shape = RoundedCornerShape(12.dp),
-                ).border(
+                )
+                .border(
                     width = 2.dp,
                     color = BottariTheme.colors.gray200,
                     shape = RoundedCornerShape(12.dp),
-                ).clip(RoundedCornerShape(12.dp))
+                )
+                .clip(RoundedCornerShape(12.dp))
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(bounded = true, color = BottariTheme.colors.primary),
                     onClick = { onClick() },
-                ).padding(BottariTheme.spacing.spaceMedium),
+                )
+                .padding(BottariTheme.spacing.spaceMedium)
+                .semantics(mergeDescendants = true) {
+                    contentDescription = bottariItem.name
+                    stateDescription = if (bottariItem.isChecked) "완료" else "미완료"
+                },
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
