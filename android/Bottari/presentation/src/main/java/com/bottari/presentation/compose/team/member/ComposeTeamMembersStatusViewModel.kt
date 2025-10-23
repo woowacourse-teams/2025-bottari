@@ -111,7 +111,7 @@ class ComposeTeamMembersStatusViewModel @Inject constructor(
     @OptIn(FlowPreview::class)
     private fun handleEvent() {
         launch {
-            connectTeamEventUseCase(teamBottariId)
+            connectTeamEventUseCase()
                 .filterIsInstance<EventState.OnEvent>()
                 .map { event -> event.data }
                 .debounce(DEBOUNCE_DELAY)
