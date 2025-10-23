@@ -7,9 +7,6 @@ data class Pageable<T>(
     val lastId: Long? = null,
     val lastInfo: String? = null,
 ) {
-    // TODO: 임시 처리 > 서버한테 lastInfo 수정 필요하다고 전달 필요
-    val realLastInfo: String = lastInfo?.substringBefore('.') ?: ""
-
     fun nextRequest(): Pageable<T> = copy(currentPage = currentPage + 1)
 
     fun merge(next: Pageable<T>): Pageable<T> =

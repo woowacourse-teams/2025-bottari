@@ -12,6 +12,7 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.personal.ComposePersonalBottariEditActivity
 import com.bottari.presentation.compose.personal.ComposePersonalChecklistActivity
 import com.bottari.presentation.compose.team.ComposeTeamChecklistActivity
+import com.bottari.presentation.compose.template.ComposeCreateTemplateActivity
 import com.bottari.presentation.view.edit.team.TeamBottariEditActivity
 import com.bottari.presentation.view.template.TemplateActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,13 +42,16 @@ class ComposeHomeActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun navigateToTemplateDetail(templateId: Long) {
-        val intent = TemplateActivity.newIntentForDetail(this, templateId)
+    private fun navigateToTemplateDetail(
+        templateId: Long,
+        isMyTemplate: Boolean,
+    ) {
+        val intent = TemplateActivity.newIntentForDetail(this, templateId, isMyTemplate)
         startActivity(intent)
     }
 
     private fun navigateToTemplateCreate() {
-        val intent = TemplateActivity.newIntentForCreateTemplate(this)
+        val intent = ComposeCreateTemplateActivity.newIntent(this)
         startActivity(intent)
     }
 

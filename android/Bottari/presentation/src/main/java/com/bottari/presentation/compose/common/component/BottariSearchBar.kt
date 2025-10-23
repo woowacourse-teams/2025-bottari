@@ -52,21 +52,24 @@ fun BottariSearchBar(
             modifier
                 .onFocusChanged { isFocused = it.isFocused }
                 .fillMaxWidth()
-                .dropShadow(shape)
+                .dropShadow(shape, offsetY = 0.8.dp)
                 .background(
                     color = Color.White,
                     shape = shape,
                 ).border(
-                    width = 1.dp,
-                    color = if (isFocused) BottariTheme.colors.primary else Color.Transparent,
+                    width = 0.8.dp,
+                    color = if (isFocused) BottariTheme.colors.primary else Color.LightGray,
                     shape = shape,
-                ).padding(4.dp),
+                ),
     ) {
         TextField(
             value = query,
             onValueChange = onQueryChange,
             placeholder = {
-                if (isFocused.not()) Text(text = placeholderText)
+                Text(
+                    text = placeholderText,
+                    style = textStyle,
+                )
             },
             leadingIcon = {
                 Icon(
@@ -76,7 +79,9 @@ fun BottariSearchBar(
             },
             trailingIcon = {
                 if (query.isNotEmpty()) {
-                    IconButton(onClick = { onQueryChange("") }) {
+                    IconButton(
+                        onClick = { onQueryChange("") },
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "검색어 지우기",
@@ -95,15 +100,17 @@ fun BottariSearchBar(
 }
 
 @Composable
-private fun defaultBottariSearchBarColors(): TextFieldColors =
+fun defaultBottariSearchBarColors(): TextFieldColors =
     TextFieldDefaults.colors(
         cursorColor = Color.DarkGray,
+        focusedTextColor = Color.Black,
+        unfocusedTextColor = Color.Black,
+        focusedPlaceholderColor = Color.Gray,
+        unfocusedPlaceholderColor = Color.Gray,
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
-        focusedTextColor = Color.Black,
-        unfocusedTextColor = Color.LightGray,
         focusedLeadingIconColor = Color.Black,
         unfocusedLeadingIconColor = Color.LightGray,
         focusedTrailingIconColor = Color.Black,
@@ -112,12 +119,12 @@ private fun defaultBottariSearchBarColors(): TextFieldColors =
 
 @Preview(showBackground = true)
 @Composable
-fun BottariSearchBarPreview() {
+private fun BottariSearchBarPreview() {
     var state by remember { mutableStateOf("") }
     BottariSearchBar(
         query = state,
         onQueryChange = { state = it },
-        placeholderText = "검색어를 입력하세요",
+        placeholderText = "제목이나 해시태그를 입력하세요",
         onSearch = { state = "" },
         modifier =
             Modifier

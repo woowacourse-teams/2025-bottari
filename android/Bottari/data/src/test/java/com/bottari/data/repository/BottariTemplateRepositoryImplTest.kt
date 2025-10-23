@@ -91,7 +91,7 @@ class BottariTemplateRepositoryImplTest {
             } returns Result.success(expectedId)
 
             // when
-            val result = repository.createBottariTemplate(title, items)
+            val result = repository.createBottariTemplate(title, "", items, emptyList())
 
             // then
             result.shouldBeSuccess { it shouldBe expectedId }
@@ -113,7 +113,7 @@ class BottariTemplateRepositoryImplTest {
             } returns Result.failure(exception)
 
             // when
-            val result = repository.createBottariTemplate(title, items)
+            val result = repository.createBottariTemplate(title, "", items, emptyList())
 
             // then
             result.shouldBeFailure { it shouldBe exception }
@@ -201,16 +201,20 @@ class BottariTemplateRepositoryImplTest {
                         id = 1L,
                         items = listOf(),
                         title = "template1",
+                        description = "",
                         createdAt = "12:00",
                         takenCount = 3,
+                        hashtags = emptyList(),
                     ),
                     BottariTemplateFetchResponse(
                         author = "다이스",
                         id = 2L,
                         items = listOf(),
                         title = "template2",
+                        description = "",
                         createdAt = "10:00",
                         takenCount = 4,
+                        hashtags = emptyList(),
                     ),
                 )
             coEvery { remoteDataSource.fetchMyBottariTemplates() } returns

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MemberNicknameSaveRequest(
-    @SerialName("nickname")
+    @SerialName("name")
     val value: String,
 ) {
     companion object {

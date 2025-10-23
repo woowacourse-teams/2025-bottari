@@ -13,8 +13,13 @@ import retrofit2.http.Path
 import retrofit2.http.QueryMap
 
 interface BottariTemplateService {
-    @GET("/templates/cursor")
-    suspend fun fetchBottariTemplates(
+    @GET("/templates/title")
+    suspend fun searchTemplatesByTitle(
+        @QueryMap params: Map<String, String>,
+    ): Response<PageableResponse<BottariTemplateCursorFetchResponse>>
+
+    @GET("/templates/hashtag")
+    suspend fun searchTemplatesByHashtag(
         @QueryMap params: Map<String, String>,
     ): Response<PageableResponse<BottariTemplateCursorFetchResponse>>
 

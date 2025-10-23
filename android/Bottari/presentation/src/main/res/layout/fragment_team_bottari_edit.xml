@@ -85,15 +85,6 @@
                 android:layout_marginHorizontal="@dimen/space_large"
                 android:layout_marginTop="@dimen/space_median" />
 
-            <include
-                android:id="@+id/view_team_alarm_edit"
-                layout="@layout/view_bottari_alarm_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/space_large"
-                android:layout_marginTop="@dimen/space_median"
-                android:visibility="gone" />
-
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/space_2x_large" />

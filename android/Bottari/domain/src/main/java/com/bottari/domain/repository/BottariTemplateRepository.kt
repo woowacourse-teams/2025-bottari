@@ -4,15 +4,22 @@ import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.model.common.Pageable
 
 interface BottariTemplateRepository {
-    suspend fun fetchBottariTemplates(
-        query: String?,
+    suspend fun searchTemplatesByTitle(
+        title: String,
+        pageable: Pageable<BottariTemplate>,
+    ): Result<Pageable<BottariTemplate>>
+
+    suspend fun searchTemplatesByHashtag(
+        hashtagId: Long,
         pageable: Pageable<BottariTemplate>,
     ): Result<Pageable<BottariTemplate>>
 
     suspend fun createBottariTemplate(
         title: String,
+        description: String,
         items: List<String>,
-    ): Result<Long?>
+        hashtag: List<String>,
+    ): Result<Long>
 
     suspend fun fetchBottariTemplate(bottariId: Long): Result<BottariTemplate>
 
