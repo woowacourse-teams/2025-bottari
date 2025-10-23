@@ -32,43 +32,48 @@ class MyBottariViewModel @Inject constructor(
     private val alarmScheduler: AlarmScheduler,
 ) : FlowBaseViewModel<MyBottariUiState, MyBottariUiEvent>(MyBottariUiState()) {
     init {
-        fetchMyBottaries()
-    }
-
-    fun fetchMyBottaries() {
         launch {
             fetchPersonalBottaries()
             fetchTeamBottaries()
         }
     }
 
-    fun deletePersonalBottari(bottariId: Long) {
-        val bottari = currentState.myBottaries.find { bottari -> bottari.id == bottariId } ?: return
+    fun fetchTeamBottaries() {
+        if (currentState.isLoading) return
+        updateState { copy(isLoading = true) }
+
         launch {
-            updateState { copy(isLoading = true) }
+            fetchTeamBottariesUseCase()
+                .onSuccess { bottaries ->
+                    updateState { copy(teamBottaries = bottaries.map(TeamBottariUiModel::fromDomain)) }
+                }.onFailure { emitEvent(MyBottariUiEvent.FetchBottariFailure) }
+        }.invokeOnCompletion { updateState { copy(isLoading = false, isTeamFetched = true) } }
+    }
+
+    fun deletePersonalBottari(bottariId: Long) {
+        val bottari =
+            currentState.allBottaries.find { bottari -> bottari.id == bottariId } ?: return
+        updateState { copy(isLoading = true) }
+
+        launch {
             deleteBottariUseCase(bottariId)
                 .onSuccess {
                     cancelAlarm(bottari)
                     emitEvent(MyBottariUiEvent.DeletePersonalBottariSuccess)
-                }.onFailure {
-                    emitEvent(MyBottariUiEvent.DeletePersonalBottariFailure)
-                }
-            updateState { copy(isLoading = false) }
-        }
+                }.onFailure { emitEvent(MyBottariUiEvent.DeletePersonalBottariFailure) }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     fun deleteTeamBottari(bottariId: Long) {
+        updateState { copy(isLoading = true) }
+
         launch {
-            updateState { copy(isLoading = true) }
             deleteTeamBottariUseCase(bottariId)
                 .onSuccess {
                     fetchTeamBottaries()
                     emitEvent(MyBottariUiEvent.ExitTeamBottariSuccess)
-                }.onFailure {
-                    emitEvent(MyBottariUiEvent.ExitTeamBottariFailure)
-                }
-            updateState { copy(isLoading = false) }
-        }
+                }.onFailure { emitEvent(MyBottariUiEvent.ExitTeamBottariFailure) }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     fun onClickDialog(text: String) {
@@ -90,36 +95,32 @@ class MyBottariViewModel @Inject constructor(
     }
 
     private fun inputTeamBottariCode(code: String) {
+        updateState { copy(isLoading = true) }
+
         launch {
-            updateState { copy(isLoading = true) }
             closeDialog()
             joinTeamBottariUseCase(code)
-                .onSuccess {
-                    fetchTeamBottaries()
-                }.onFailure {
-                    emitEvent(MyBottariUiEvent.JoinTeamBottariFailure)
-                }
-            updateState { copy(isLoading = false) }
-        }
+                .onSuccess { fetchTeamBottaries() }
+                .onFailure { emitEvent(MyBottariUiEvent.JoinTeamBottariFailure) }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     private fun createPersonalBottari(title: String) {
+        updateState { copy(isLoading = true) }
+
         launch {
-            updateState { copy(isLoading = true) }
             closeDialog()
             createBottariUseCase(title)
                 .onSuccess { bottariId ->
                     emitEvent(MyBottariUiEvent.CreatePersonalBottariSuccess(bottariId))
-                }.onFailure {
-                    emitEvent(MyBottariUiEvent.CreateBottariFailure)
-                }
-            updateState { copy(isLoading = false) }
-        }
+                }.onFailure { emitEvent(MyBottariUiEvent.CreateBottariFailure) }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     private fun createTeamBottari(title: String) {
+        updateState { copy(isLoading = true) }
+
         launch {
-            updateState { copy(isLoading = true) }
             closeDialog()
             createTeamBottariUseCase(title)
                 .onSuccess { bottariId ->
@@ -127,11 +128,8 @@ class MyBottariViewModel @Inject constructor(
                         emitEvent(MyBottariUiEvent.CreateTeamBottariSuccess(id))
                         fetchTeamBottaries()
                     }
-                }.onFailure {
-                    emitEvent(MyBottariUiEvent.CreateBottariFailure)
-                }
-            updateState { copy(isLoading = false) }
-        }
+                }.onFailure { emitEvent(MyBottariUiEvent.CreateBottariFailure) }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     private fun cancelAlarm(bottari: MyBottariUiModel) =
@@ -146,38 +144,15 @@ class MyBottariViewModel @Inject constructor(
             )
         }
 
-    private fun fetchTeamBottaries() =
-        launch {
-            updateState { copy(isLoading = true) }
-            fetchTeamBottariesUseCase()
-                .onSuccess { bottaries ->
-                    updateState {
-                        val newBottaries =
-                            bottaries.map { bottari ->
-                                TeamBottariUiModel.fromDomain(bottari)
-                            }
-                        copy(
-                            teamBottaries = newBottaries,
-                        )
-                    }
-                }.onFailure {
-                    emitEvent(MyBottariUiEvent.FetchBottariFailure)
-                }
-            updateState { copy(isLoading = false) }
-        }
-
     private fun fetchPersonalBottaries() =
         fetchBottariesUseCase()
+            .catch { emitEvent(MyBottariUiEvent.FetchBottariFailure) }
             .onEach { bottaries ->
                 updateState {
                     copy(
-                        personalBottaries =
-                            bottaries.map { bottari ->
-                                BottariUiModel.fromPersonalBottari(bottari)
-                            },
+                        personalBottaries = bottaries.map(BottariUiModel::fromPersonalBottari),
+                        isPersonalFetched = true,
                     )
                 }
-            }.catch {
-                emitEvent(MyBottariUiEvent.FetchBottariFailure)
             }.launchIn(viewModelScope)
 }

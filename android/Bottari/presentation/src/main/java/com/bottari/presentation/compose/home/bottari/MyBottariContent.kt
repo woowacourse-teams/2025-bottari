@@ -87,17 +87,19 @@ fun MyBottariContent(
                     )
                 }
 
+                when (page) {
+                    0 -> if (uiState.isAllEmpty) MyBottariEmptyView()
+                    1 -> if (uiState.isPersonalEmpty) MyBottariEmptyView()
+                    2 -> if (uiState.isTeamEmpty) MyBottariEmptyView()
+                }
+
                 val currentList =
                     when (page) {
-                        0 -> uiState.myBottaries
+                        0 -> uiState.allBottaries
                         1 -> uiState.personalBottaries
                         2 -> uiState.teamBottaries
                         else -> emptyList()
                     }
-
-                if (currentList.isEmpty()) {
-                    MyBottariEmptyView()
-                }
 
                 BottariList(
                     bottaries = currentList,
