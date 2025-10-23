@@ -13,11 +13,7 @@ class ConnectTeamEventUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): Flow<EventState> =
         memberRepository.getMemberId().fold(
-            onSuccess = { memberId ->
-                eventRepository.connectEvent(memberId)
-            },
-            onFailure = { exception ->
-                flowOf(EventState.OnFailure(exception))
-            },
+            onSuccess = { memberId -> eventRepository.connectEvent(memberId) },
+            onFailure = { exception -> flowOf(EventState.OnFailure(exception)) },
         )
 }

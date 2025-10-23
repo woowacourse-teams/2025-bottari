@@ -62,9 +62,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
                 .launch {
                     delay(DEBOUNCE_DELAY)
                     deleteItem(itemId)
-                }.also { job ->
-                    job.invokeOnCompletion { debouncedJobs.remove(itemId) }
-                }
+                }.also { job -> job.invokeOnCompletion { debouncedJobs.remove(itemId) } }
     }
 
     fun updateInput(input: String) {
@@ -121,9 +119,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
             ).onSuccess {
                 refreshAssignedItemsAndMembers()
                 emitEvent(TeamAssignedItemEditEvent.CreateItemSuccess)
-            }.onFailure {
-                emitEvent(TeamAssignedItemEditEvent.CreateItemFailure)
-            }
+            }.onFailure { emitEvent(TeamAssignedItemEditEvent.CreateItemFailure) }
 
             updateState { copy(isLoading = false) }
         }
@@ -147,9 +143,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
                 }
                 refreshAssignedItemsAndMembers()
                 emitEvent(TeamAssignedItemEditEvent.SaveItemSuccess)
-            }.onFailure {
-                emitEvent(TeamAssignedItemEditEvent.SaveItemFailure)
-            }
+            }.onFailure { emitEvent(TeamAssignedItemEditEvent.SaveItemFailure) }
 
             updateState { copy(isLoading = false) }
         }

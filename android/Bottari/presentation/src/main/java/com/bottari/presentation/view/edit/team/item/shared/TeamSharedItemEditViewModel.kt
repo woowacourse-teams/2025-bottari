@@ -73,9 +73,7 @@ class TeamSharedItemEditViewModel @Inject constructor(
                 .launch {
                     delay(DEBOUNCE_DELAY)
                     performDeleteItem(itemId)
-                }.also { job ->
-                    job.invokeOnCompletion { debouncedJobs.remove(itemId) }
-                }
+                }.also { job -> job.invokeOnCompletion { debouncedJobs.remove(itemId) } }
     }
 
     private fun performDeleteItem(itemId: Long) {
@@ -106,9 +104,8 @@ class TeamSharedItemEditViewModel @Inject constructor(
 
         launch {
             fetchTeamSharedItemsUseCase(bottariId)
-                .onSuccess { items ->
-                    updateState { copy(sharedItems = items.map(BottariItemUiModel::fromDomain)) }
-                }.onFailure { emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure) }
+                .onSuccess { items -> updateState { copy(sharedItems = items.map(BottariItemUiModel::fromDomain)) } }
+                .onFailure { emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure) }
 
             updateState { copy(isLoading = false, isFetched = true) }
         }

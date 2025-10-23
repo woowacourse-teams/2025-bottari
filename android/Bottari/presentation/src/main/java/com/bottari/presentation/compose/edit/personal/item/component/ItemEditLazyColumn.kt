@@ -44,9 +44,7 @@ fun ItemEditLazyColumn(
         state = listState,
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
     ) {
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-        }
+        item { Spacer(modifier = Modifier.height(8.dp)) }
         items(
             items = items,
             key = { item -> item.id },
@@ -56,9 +54,7 @@ fun ItemEditLazyColumn(
                 onDeleteClick = onDeleteClick,
             )
         }
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-        }
+        item { Spacer(modifier = Modifier.height(8.dp)) }
     }
 }
 
@@ -70,10 +66,7 @@ private fun BottariItem(
 ) {
     BottariBox(
         modifier = modifier.fillMaxWidth(),
-        contentPadding =
-            PaddingValues(
-                vertical = BottariTheme.spacing.space2xSmall,
-            ),
+        contentPadding = PaddingValues(vertical = BottariTheme.spacing.space2xSmall),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(

@@ -49,9 +49,7 @@ fun HomeScreen(
         val currentTime = System.currentTimeMillis()
         if (currentTime - backPressedTime > BACK_PRESS_EXIT_TIMEOUT) {
             backPressedTime = currentTime
-            scope.launch {
-                snackbarHostState.showSnackbar("한 번 더 누르면 종료됩니다")
-            }
+            scope.launch { snackbarHostState.showSnackbar("한 번 더 누르면 종료됩니다") }
             return@BackHandler
         }
         context?.finish()

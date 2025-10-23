@@ -61,9 +61,7 @@ class TeamPersonalItemEditViewModel @Inject constructor(
                 .launch {
                     delay(DEBOUNCE_DELAY)
                     performDeleteItem(itemId)
-                }.also { job ->
-                    job.invokeOnCompletion { debouncedJobs.remove(itemId) }
-                }
+                }.also { job -> job.invokeOnCompletion { debouncedJobs.remove(itemId) } }
     }
 
     private fun performDeleteItem(itemId: Long) {

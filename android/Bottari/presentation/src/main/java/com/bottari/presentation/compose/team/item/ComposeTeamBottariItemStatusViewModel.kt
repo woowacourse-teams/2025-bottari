@@ -77,11 +77,8 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
 
         launch {
             registeredMemberUseCase()
-                .onSuccess {
-                    updateState { copy(myNickname = it.name.orEmpty()) }
-                }.onFailure {
-                    emitEvent(ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure)
-                }
+                .onSuccess { updateState { copy(myNickname = it.name.orEmpty()) } }
+                .onFailure { emitEvent(ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure) }
             updateState { copy(isLoading = false) }
         }
     }

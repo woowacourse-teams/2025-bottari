@@ -151,15 +151,16 @@ private fun PersonalChecklistTooltipPreview() {
 @Composable
 private fun PersonalChecklistScreenPreview() {
     PersonalChecklistScreen(
-        true,
-        {},
-        listOf(
-            PersonalChecklistItemUiModel(1, "테스트", false),
-            PersonalChecklistItemUiModel(2, "테스트", true),
-            PersonalChecklistItemUiModel(3, "테스트", true),
-        ),
-        {},
-        7,
-        3,
+        isToolTipClosed = true,
+        onCloseToolTip = {},
+        checklistItems =
+            listOf(
+                PersonalChecklistItemUiModel(1, "테스트", false),
+                PersonalChecklistItemUiModel(2, "테스트", true),
+                PersonalChecklistItemUiModel(3, "테스트", true),
+            ),
+        onClickItem = {},
+        totalQuantity = 7,
+        checkedQuantity = 3,
     )
 }
