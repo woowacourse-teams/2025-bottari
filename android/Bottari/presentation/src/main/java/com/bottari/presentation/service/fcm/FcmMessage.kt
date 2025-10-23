@@ -11,19 +11,19 @@ sealed class FcmMessage {
     abstract fun sendNotification(notificationHelper: NotificationHelper)
 
     data class TeamMemberDelete(
-        val bottariId: Long,
-        val bottariName: String,
+        val teamBottariId: Long,
+        val teamBottariName: String,
         val exitMemberId: Long,
         val exitMemberName: String,
         val publishedAt: String,
     ) : FcmMessage() {
         override fun sendNotification(notificationHelper: NotificationHelper) {
             notificationHelper.sendTeamMessage(
-                bottariId,
-                bottariName,
+                teamBottariId,
+                teamBottariName,
                 R.string.notification_team_bottari_notification_exit_message,
                 exitMemberName,
-                bottariName,
+                teamBottariName,
             )
         }
 
