@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyListState
@@ -45,32 +44,33 @@ fun PersonalItemEditScreen(
     viewModel: PersonalItemEditViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val context = LocalContext.current
     val listState = rememberLazyListState()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    LaunchedEffect(uiEvent.value) {
-        when (uiEvent.value ?: return@LaunchedEffect) {
-            PersonalItemEditUiEvent.DeleteItemFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(
-                        R.string.bottari_personal_item_delete_failure_text,
-                    ),
-                )
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                PersonalItemEditUiEvent.DeleteItemFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(
+                            R.string.bottari_personal_item_delete_failure_text,
+                        ),
+                    )
 
-            PersonalItemEditUiEvent.FetchBottariItemsFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(R.string.bottari_personal_item_fetch_failure_text),
-                )
+                PersonalItemEditUiEvent.FetchBottariItemsFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.bottari_personal_item_fetch_failure_text),
+                    )
 
-            PersonalItemEditUiEvent.SaveBottariItemFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(
-                        R.string.common_save_failure_text,
-                    ),
-                )
+                PersonalItemEditUiEvent.SaveBottariItemFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(
+                            R.string.common_save_failure_text,
+                        ),
+                    )
+            }
         }
     }
 
@@ -83,7 +83,6 @@ fun PersonalItemEditScreen(
         modifier =
             modifier
                 .fillMaxSize()
-                .imePadding()
                 .noRippleClickable {
                     keyboardController?.hide()
                     focusManager.clearFocus()

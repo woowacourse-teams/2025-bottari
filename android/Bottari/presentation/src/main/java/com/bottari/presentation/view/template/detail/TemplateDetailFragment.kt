@@ -21,10 +21,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(FragmentTemplateDetailBinding::inflate) {
     private val viewModel: TemplateDetailViewModel by viewModels()
     private val isMyTemplate: Boolean by lazy {
-        requireArguments().getBoolean(
-            ARG_IS_MY_TEMPLATE,
-            false,
-        )
+        requireArguments().getBoolean(ARG_IS_MY_TEMPLATE, false)
+    }
+    private val isBookmark: Boolean by lazy {
+        requireArguments().getBoolean(TemplateDetailViewModel.KEY_IS_BOOKMARK, false)
     }
     private val adapter by lazy { TemplateDetailAdapter() }
     private val popupMenu by lazy { createPopupMenu() }
@@ -41,8 +41,8 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
 
     private fun setupUI() {
         binding.rvTemplateDetail.adapter = adapter
-        binding.btnTakeTemplate.isVisible = !isMyTemplate
         popupMenu.menuInflater.inflate(R.menu.template_popup_menu, popupMenu.menu)
+        binding.btnTemplateMore.isVisible = isBookmark.not() && isMyTemplate.not()
     }
 
     private fun createPopupMenu(): PopupMenu {
@@ -57,8 +57,8 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(viewLifecycleOwner, ::handleUiState)
-        viewModel.uiEvent.observe(viewLifecycleOwner, ::handleUiEvent)
+        collectWithLifecycle(viewModel.uiEvent) { event -> handleUiEvent(event) }
+        collectWithLifecycle(viewModel.uiState) { state -> handleUiState(state) }
     }
 
     private fun handleUiState(state: TemplateDetailUiState) {
@@ -120,7 +120,7 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
         }
 
     private fun showReportDialog() {
-        val templateId = viewModel.uiState.value?.templateId ?: return
+        val templateId = requireArguments().getLong(TemplateDetailViewModel.KEY_TEMPLATE_ID)
         ReportDialog
             .newInstance(templateId)
             .show(parentFragmentManager, ReportDialog::class.simpleName)
@@ -144,10 +144,12 @@ class TemplateDetailFragment : BaseFragment<FragmentTemplateDetailBinding>(Fragm
         fun newBundle(
             templateId: Long,
             isMyTemplate: Boolean,
+            isBookmark: Boolean,
         ): Bundle =
             Bundle().apply {
                 putLong(TemplateDetailViewModel.KEY_TEMPLATE_ID, templateId)
                 putBoolean(ARG_IS_MY_TEMPLATE, isMyTemplate)
+                putBoolean(TemplateDetailViewModel.KEY_IS_BOOKMARK, isBookmark)
             }
     }
 }

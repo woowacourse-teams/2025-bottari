@@ -72,19 +72,20 @@ class CreateTemplateViewModel @Inject constructor(
             }.onFailure {
                 emitEvent(CreateTemplateUiEvent.CreateTemplateFailure)
             }
-
-            updateState { copy(isLoading = false) }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     private fun fetchBottaries() {
         updateState { copy(isLoading = true) }
 
         launch {
-            val bottaries = fetchBottariesUseCase().firstOrNull().orEmpty()
-            val uiModels = bottaries.map { BottariDetailUiModel.fromDomain(it) }
-            updateState { copy(isLoading = false, isFetched = true, myTemplates = uiModels) }
-        }
+            fetchBottariesUseCase()
+                .firstOrNull()
+                .orEmpty()
+                .filterNot { template -> template.items.isEmpty() }
+                .map(BottariDetailUiModel::fromDomain)
+                .also { uiModels -> updateState { copy(myTemplates = uiModels) } }
+        }.invokeOnCompletion { updateState { copy(isLoading = false, isFetched = true) } }
     }
 
     private fun updateHashtag(

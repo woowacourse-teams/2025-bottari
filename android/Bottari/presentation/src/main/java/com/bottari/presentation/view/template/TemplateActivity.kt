@@ -21,20 +21,23 @@ class TemplateActivity : BaseActivity<ActivityTemplateBinding>(ActivityTemplateB
     private fun navigateToDetail() {
         val bottariTemplateId = intent.getLongExtra(EXTRA_BOTTARI_TEMPLATE_ID, -1L)
         val isMyTemplate = intent.getBooleanExtra(EXTRA_IS_MY_TEMPLATE, false)
+        val isBookmark = intent.getBooleanExtra(EXTRA_IS_BOOKMARK, false)
+
         if (bottariTemplateId == -1L) finish()
 
         supportFragmentManager.commit {
             replace(
                 R.id.fcv_template,
                 TemplateDetailFragment::class.java,
-                TemplateDetailFragment.newBundle(bottariTemplateId, isMyTemplate),
+                TemplateDetailFragment.newBundle(bottariTemplateId, isMyTemplate, isBookmark),
             )
         }
     }
 
     companion object {
-        private const val EXTRA_BOTTARI_TEMPLATE_ID = "EXTRA_BOTTARI_ID"
+        private const val EXTRA_BOTTARI_TEMPLATE_ID = "EXTRA_BOTTARI_TEMPLATE_ID"
         private const val EXTRA_IS_MY_TEMPLATE = "EXTRA_IS_MY_TEMPLATE"
+        private const val EXTRA_IS_BOOKMARK = "EXTRA_IS_BOOKMARK"
 
         fun newIntentForDetail(
             context: Context,
@@ -45,6 +48,18 @@ class TemplateActivity : BaseActivity<ActivityTemplateBinding>(ActivityTemplateB
                 bundleOf(
                     EXTRA_BOTTARI_TEMPLATE_ID to bottariId,
                     EXTRA_IS_MY_TEMPLATE to isMyTemplate,
+                ),
+            )
+
+        fun newIntentForBookmark(
+            context: Context,
+            templateId: Long,
+            isBookmark: Boolean,
+        ): Intent =
+            Intent(context, TemplateActivity::class.java).putExtras(
+                bundleOf(
+                    EXTRA_BOTTARI_TEMPLATE_ID to templateId,
+                    EXTRA_IS_BOOKMARK to isBookmark,
                 ),
             )
     }

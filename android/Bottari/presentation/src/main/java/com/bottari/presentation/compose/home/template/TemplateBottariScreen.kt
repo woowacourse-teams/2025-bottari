@@ -31,9 +31,10 @@ import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.compose.common.extension.rememberScrolledToEnd
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.compose.home.template.bookmark.BookmarkTemplateScreen
 import com.bottari.presentation.compose.home.template.component.CreateTemplateFAB
-import com.bottari.presentation.compose.home.template.component.MainTemplateContent
-import com.bottari.presentation.compose.home.template.component.MyTemplateContent
+import com.bottari.presentation.compose.home.template.main.MainTemplateContent
+import com.bottari.presentation.compose.home.template.my.MyTemplateContent
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateItemUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
@@ -44,7 +45,7 @@ import kotlinx.coroutines.flow.filter
 @Composable
 fun TemplateBottariScreen(
     snackbarState: SnackbarHostState,
-    navigateToTemplateDetail: (templateId: Long, isMyTemplate: Boolean) -> Unit,
+    navigateToTemplateDetail: (templateId: Long, isMyTemplate: Boolean, isBookmark: Boolean) -> Unit,
     navigateToTemplateCreate: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TemplateViewModel = viewModel(),
@@ -52,29 +53,37 @@ fun TemplateBottariScreen(
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val mainListState = rememberLazyListState()
     val myListState = rememberLazyListState()
 
-    LaunchedEffect(uiEvent.value) {
-        when (uiEvent.value ?: return@LaunchedEffect) {
-            is TemplateUiEvent.SearchTemplateSuccess -> mainListState.scrollToItem(0)
-            is TemplateUiEvent.MainTemplatesRefreshFinished -> mainListState.scrollToItem(0)
-            is TemplateUiEvent.MyTemplatesRefreshFinished -> myListState.scrollToItem(0)
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                is TemplateUiEvent.SearchTemplateSuccess -> mainListState.scrollToItem(0)
+                is TemplateUiEvent.MainTemplatesRefreshFinished -> mainListState.scrollToItem(0)
+                is TemplateUiEvent.MyTemplatesRefreshFinished -> myListState.scrollToItem(0)
 
-            is TemplateUiEvent.FetchBottariTemplatesFailure ->
-                snackbarState.showSnackbar(context.getString(R.string.template_fetch_template_failure_text))
+                is TemplateUiEvent.FetchBottariTemplatesFailure ->
+                    snackbarState.showSnackbar(context.getString(R.string.template_fetch_template_failure_text))
 
-            is TemplateUiEvent.DeleteBottariTemplateSuccess ->
-                snackbarState.showSnackbar(context.getString(R.string.template_my_template_delete_success_text))
+                is TemplateUiEvent.DeleteBottariTemplateSuccess ->
+                    snackbarState.showSnackbar(context.getString(R.string.template_my_template_delete_success_text))
 
-            is TemplateUiEvent.DeleteBottariTemplateFailure ->
-                snackbarState.showSnackbar(context.getString(R.string.template_my_template_delete_failure_text))
+                is TemplateUiEvent.DeleteBottariTemplateFailure ->
+                    snackbarState.showSnackbar(context.getString(R.string.template_my_template_delete_failure_text))
+
+                is TemplateUiEvent.AddBookmarkFailure ->
+                    snackbarState.showSnackbar("")
+
+                is TemplateUiEvent.DeleteBookmarkFailure ->
+                    snackbarState.showSnackbar("")
+            }
         }
     }
 
     TemplateBottariScreen(
         uiState = uiState.value,
+        snackbarState = snackbarState,
         listState = mainListState,
         myListState = myListState,
         onClickDetail = navigateToTemplateDetail,
@@ -83,7 +92,7 @@ fun TemplateBottariScreen(
         onLoadNextPage = viewModel::loadNextPage,
         onClickAdd = navigateToTemplateCreate,
         onClickDelete = viewModel::deleteTemplate,
-        onClickBookmark = {},
+        onClickBookmark = viewModel::toggleBookmark,
         onRefresh = viewModel::refresh,
         modifier = modifier.noRippleClickable { focusManager.clearFocus() },
     )
@@ -92,9 +101,10 @@ fun TemplateBottariScreen(
 @Composable
 private fun TemplateBottariScreen(
     uiState: TemplateUiState,
+    snackbarState: SnackbarHostState,
     listState: LazyListState,
     myListState: LazyListState,
-    onClickDetail: (templateId: Long, isMyTemplate: Boolean) -> Unit,
+    onClickDetail: (templateId: Long, isMyTemplate: Boolean, isBookmark: Boolean) -> Unit,
     onQueryChange: (String) -> Unit,
     onChipChange: (List<BottariTemplateHashtagUiModel>) -> Unit,
     onLoadNextPage: () -> Unit,
@@ -127,7 +137,7 @@ private fun TemplateBottariScreen(
 
     Box(modifier = modifier.fillMaxSize()) {
         TemplatePager(
-            pageTitles = listOf("전체 템플릿", "나의 템플릿"),
+            pageTitles = listOf("전체 템플릿", "나의 템플릿", "북마크"),
             modifier = Modifier,
         ) { page ->
             when (page) {
@@ -143,7 +153,7 @@ private fun TemplateBottariScreen(
                         onClickDetail = { id ->
                             uiState.myTemplates
                                 .any { template -> template.id == id }
-                                .let { isMyTemplate -> onClickDetail(id, isMyTemplate) }
+                                .let { isMyTemplate -> onClickDetail(id, isMyTemplate, false) }
                         },
                         onClickBookmark = onClickBookmark,
                         isRefreshing = uiState.isRefreshingMain,
@@ -156,11 +166,17 @@ private fun TemplateBottariScreen(
                         myTemplates = uiState.myTemplates,
                         listState = myListState,
                         emptyViewText = if (uiState.isMyTemplatesEmpty) "아직 공유한 보따리가 없어요" else "",
-                        onClickDetail = { id -> onClickDetail(id, true) },
+                        onClickDetail = { id -> onClickDetail(id, true, false) },
                         onClickDelete = onClickDelete,
                         isRefreshing = uiState.isRefreshingMy,
                         onRefresh = { onRefresh(false) },
                         showLoadingBlock = uiState.showLoading,
+                    )
+
+                2 ->
+                    BookmarkTemplateScreen(
+                        snackbarHostState = snackbarState,
+                        navigateToDetail = { id -> onClickDetail(id, false, true) },
                     )
             }
         }
@@ -216,6 +232,7 @@ private fun TemplateBottariScreenPreview() {
                 author = "다이스",
                 takenCount = 100_024 + index,
                 items = items,
+                isMarked = index % 2 == 0,
                 hashtags = List(3) { BottariTemplateHashtagUiModel(it.toLong(), "해시태그 $it") },
             )
         }
@@ -223,9 +240,10 @@ private fun TemplateBottariScreenPreview() {
     BottariTheme {
         TemplateBottariScreen(
             uiState = TemplateUiState(templates = templates),
+            snackbarState = SnackbarHostState(),
             listState = rememberLazyListState(),
             myListState = rememberLazyListState(),
-            onClickDetail = { _, _ -> },
+            onClickDetail = { _, _, _ -> },
             onQueryChange = {},
             onChipChange = {},
             onLoadNextPage = {},

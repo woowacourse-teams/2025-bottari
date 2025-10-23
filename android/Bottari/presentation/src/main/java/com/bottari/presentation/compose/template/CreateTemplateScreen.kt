@@ -8,8 +8,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -47,26 +50,30 @@ fun CreateTemplateScreen(
     viewModel: CreateTemplateViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
-    val bottomSheetState = rememberModalBottomSheetState()
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isOpenSelector by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(uiEvent.value) {
-        when (uiEvent.value ?: return@LaunchedEffect) {
-            is CreateTemplateUiEvent.FetchMyBottariesFailure ->
-                snackbarHostState.showSnackbar(context.getString(R.string.bottari_home_fetch_failure_text))
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                is CreateTemplateUiEvent.FetchMyBottariesFailure ->
+                    snackbarHostState.showSnackbar(context.getString(R.string.bottari_home_fetch_failure_text))
 
-            is CreateTemplateUiEvent.CreateTemplateSuccess -> {
-                Toast
-                    .makeText(context, R.string.template_create_success_text, Toast.LENGTH_SHORT)
-                    .show()
-                navigateBack()
+                is CreateTemplateUiEvent.CreateTemplateSuccess -> {
+                    Toast
+                        .makeText(
+                            context,
+                            R.string.template_create_success_text,
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    navigateBack()
+                }
+
+                is CreateTemplateUiEvent.CreateTemplateFailure ->
+                    snackbarHostState.showSnackbar(context.getString(R.string.template_create_failure_text))
             }
-
-            is CreateTemplateUiEvent.CreateTemplateFailure ->
-                snackbarHostState.showSnackbar(context.getString(R.string.template_create_failure_text))
         }
     }
 
@@ -108,18 +115,21 @@ private fun CreateTemplateScreen(
     onClickSelect: () -> Unit,
     onClickBack: () -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+
     Scaffold(
+        modifier = Modifier.imePadding(),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = LocalBottariBgColor.current,
         topBar = { CreateTemplateTopApp(onClickBack) },
     ) { innerPadding ->
         Column(
-            verticalArrangement = Arrangement.SpaceBetween,
             modifier =
                 Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .padding(horizontal = BottariTheme.spacing.spaceMedium),
+                    .padding(horizontal = BottariTheme.spacing.spaceMedium)
+                    .verticalScroll(scrollState),
         ) {
             CreateTemplateScreenContent(
                 uiState = uiState,
@@ -128,13 +138,18 @@ private fun CreateTemplateScreen(
                 onAddHashtag = onAddHashtag,
                 onDeleteHashtag = onDeleteHashtag,
                 onClickSelect = onClickSelect,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
             )
+
+            Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceLarge))
 
             CreateTemplateButton(
                 enabled = uiState.canCreate,
                 onClickCreate = onClickCreate,
-                modifier = Modifier,
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = BottariTheme.spacing.spaceMedium),
             )
         }
     }

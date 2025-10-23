@@ -44,23 +44,22 @@ fun BottariRenameDialog(
     viewModel: BottariRenameViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.setInitialTitle(bottariTitle)
     }
 
-    LaunchedEffect(uiEvent.value) {
-        when (uiEvent.value ?: return@LaunchedEffect) {
-            BottariRenameUiEvent.SaveBottariTitleFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(
-                        R.string.bottari_rename_failure_text,
-                    ),
-                )
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                BottariRenameUiEvent.SaveBottariTitleFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.bottari_rename_failure_text),
+                    )
 
-            BottariRenameUiEvent.SaveBottariTitleSuccess -> onDismissRequest()
+                BottariRenameUiEvent.SaveBottariTitleSuccess -> onDismissRequest()
+            }
         }
     }
 

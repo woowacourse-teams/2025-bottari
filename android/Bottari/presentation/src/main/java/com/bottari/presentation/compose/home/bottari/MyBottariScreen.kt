@@ -2,7 +2,6 @@ package com.bottari.presentation.compose.home.bottari
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,8 +12,7 @@ import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
@@ -29,71 +27,56 @@ fun MyBottariScreen(
     onNavigateToTeamChecklist: (Long, String) -> Unit,
     viewModel: MyBottariViewModel = viewModel(),
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    DisposableEffect(lifecycleOwner) {
-        val observer =
-            LifecycleEventObserver { _, event ->
-                if (event == Lifecycle.Event.ON_RESUME) {
-                    viewModel.fetchMyBottaries()
-                }
-            }
-
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
-
     val context = LocalContext.current
     val clipboard = LocalClipboard.current
 
     var dialogText by rememberSaveable { mutableStateOf("") }
 
-    LaunchedEffect(uiEvent.value) {
-        when (val event = uiEvent.value ?: return@LaunchedEffect) {
-            MyBottariUiEvent.DeletePersonalBottariFailure ->
-                snackbarState.showSnackbar(context.getString(R.string.bottari_home_delete_failure_text))
-
-            MyBottariUiEvent.DeletePersonalBottariSuccess ->
-                snackbarState.showSnackbar(context.getString(R.string.bottari_home_delete_success_text))
-
-            MyBottariUiEvent.ExitTeamBottariFailure ->
-                snackbarState.showSnackbar(context.getString(R.string.exit_team_bottari_failure_text))
-
-            MyBottariUiEvent.ExitTeamBottariSuccess ->
-                snackbarState.showSnackbar(context.getString(R.string.exit_team_bottari_success_text))
-
-            MyBottariUiEvent.FetchBottariFailure ->
-                snackbarState.showSnackbar(context.getString(R.string.bottari_home_fetch_failure_text))
-
-            MyBottariUiEvent.JoinTeamBottariFailure ->
-                snackbarState.showSnackbar(context.getString(R.string.join_team_bottari_failure_text))
-
-            MyBottariUiEvent.CreateBottariFailure ->
-                snackbarState.showSnackbar(context.getString(R.string.bottari_create_failure_text))
-
-            is MyBottariUiEvent.CreatePersonalBottariSuccess ->
-                onNavigateToPersonalEdit(event.bottariId, true)
-
-            is MyBottariUiEvent.CreateTeamBottariSuccess ->
-                onNavigateToTeamEdit(event.bottariId, true)
-        }
-    }
+    LifecycleEventEffect(Lifecycle.Event.ON_START) { viewModel.fetchTeamBottaries() }
 
     LaunchedEffect(uiState.value.showDialogType) {
         if (uiState.value.showDialogType == MyBottariDialogType.CODE) {
             val clipData = clipboard.nativeClipboard.primaryClip
-            clipData?.let { clipData ->
-                if (clipData.itemCount > 0) {
+            clipData?.let { data ->
+                if (data.itemCount > 0) {
                     val firstItem = clipData.getItemAt(0)
                     val inviteLink = firstItem.text.toString()
                     dialogText = DeeplinkHelper.getInviteCode(inviteLink) ?: ""
                 }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                MyBottariUiEvent.DeletePersonalBottariFailure ->
+                    snackbarState.showSnackbar(context.getString(R.string.bottari_home_delete_failure_text))
+
+                MyBottariUiEvent.DeletePersonalBottariSuccess ->
+                    snackbarState.showSnackbar(context.getString(R.string.bottari_home_delete_success_text))
+
+                MyBottariUiEvent.ExitTeamBottariFailure ->
+                    snackbarState.showSnackbar(context.getString(R.string.exit_team_bottari_failure_text))
+
+                MyBottariUiEvent.ExitTeamBottariSuccess ->
+                    snackbarState.showSnackbar(context.getString(R.string.exit_team_bottari_success_text))
+
+                MyBottariUiEvent.FetchBottariFailure ->
+                    snackbarState.showSnackbar(context.getString(R.string.bottari_home_fetch_failure_text))
+
+                MyBottariUiEvent.JoinTeamBottariFailure ->
+                    snackbarState.showSnackbar(context.getString(R.string.join_team_bottari_failure_text))
+
+                MyBottariUiEvent.CreateBottariFailure ->
+                    snackbarState.showSnackbar(context.getString(R.string.bottari_create_failure_text))
+
+                is MyBottariUiEvent.CreatePersonalBottariSuccess ->
+                    onNavigateToPersonalEdit(uiEvent.bottariId, true)
+
+                is MyBottariUiEvent.CreateTeamBottariSuccess ->
+                    onNavigateToTeamEdit(uiEvent.bottariId, true)
             }
         }
     }

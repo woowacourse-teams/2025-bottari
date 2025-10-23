@@ -42,23 +42,24 @@ fun TeamMemberStateScreen(
     viewModel: ComposeTeamMembersStatusViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
 
     LaunchedEffect(checkedState) { viewModel.fetchMemberId() }
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent ?: return@LaunchedEffect) {
-            ComposeTeamMembersStatusUiEvent.FetchMembersStatusFailure ->
-                snackbarHostState.showSnackbar("보따리 불러오기에 실패했습니다")
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                ComposeTeamMembersStatusUiEvent.FetchMembersStatusFailure ->
+                    snackbarHostState.showSnackbar("보따리 불러오기에 실패했습니다")
 
-            is ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess ->
-                snackbarHostState.showSnackbar("보채기에 성공했어요")
+                is ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess ->
+                    snackbarHostState.showSnackbar("보채기에 성공했어요")
 
-            ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
-                snackbarHostState.showSnackbar("보채기에 실패했어요")
+                ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
+                    snackbarHostState.showSnackbar("보채기에 실패했어요")
 
-            ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure ->
-                snackbarHostState.showSnackbar("내 id를 불러오지 못했어요")
+                ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure ->
+                    snackbarHostState.showSnackbar("내 id를 불러오지 못했어요")
+            }
         }
     }
 

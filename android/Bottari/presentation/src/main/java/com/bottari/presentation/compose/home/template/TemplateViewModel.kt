@@ -3,6 +3,9 @@ package com.bottari.presentation.compose.home.template
 import androidx.lifecycle.viewModelScope
 import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.model.common.Pageable
+import com.bottari.domain.usecase.bookmark.AddBookmarkUseCase
+import com.bottari.domain.usecase.bookmark.DeleteBookmarkUseCase
+import com.bottari.domain.usecase.bookmark.ObserveAllBookmarksUseCase
 import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
 import com.bottari.domain.usecase.template.SearchTemplatesByHashtagUseCase
@@ -13,6 +16,8 @@ import com.bottari.presentation.model.template.BottariTemplateUiModel
 import com.bottari.presentation.util.debounce
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +27,9 @@ class TemplateViewModel @Inject constructor(
     private val searchTemplatesByHashtagUseCase: SearchTemplatesByHashtagUseCase,
     private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
     private val deleteMyBottariTemplateUseCase: DeleteMyBottariTemplateUseCase,
+    private val observeAllBookmarksUseCase: ObserveAllBookmarksUseCase,
+    private val addBookmarkUseCase: AddBookmarkUseCase,
+    private val deleteBookmarkUseCase: DeleteBookmarkUseCase,
 ) : FlowBaseViewModel<TemplateUiState, TemplateUiEvent>(TemplateUiState()) {
     private sealed interface Mode {
         data object Main : Mode
@@ -54,6 +62,7 @@ class TemplateViewModel @Inject constructor(
     init {
         loadNextPage()
         loadMyTemplates()
+        observeBookmark()
 
         debouncedSearch = viewModelScope.debounce(DEBOUNCE_DELAY) { loadNextPage(reset = true) }
     }
@@ -101,8 +110,13 @@ class TemplateViewModel @Inject constructor(
         inFlight =
             viewModelScope.launch(exceptionHandler) {
                 fetchTemplatesByMode(mode, pageable.nextRequest())
-                    .onSuccess { loaded -> handleFetchTemplateByModeSuccess(mode, pageable, loaded) }
-                    .onFailure { emitEvent(TemplateUiEvent.FetchBottariTemplatesFailure) }
+                    .onSuccess { loaded ->
+                        handleFetchTemplateByModeSuccess(
+                            mode,
+                            pageable,
+                            loaded,
+                        )
+                    }.onFailure { emitEvent(TemplateUiEvent.FetchBottariTemplatesFailure) }
 
                 updateState { copy(isLoading = false, isRefreshingMain = false) }
                 if (reset) emitEvent(TemplateUiEvent.MainTemplatesRefreshFinished)
@@ -121,13 +135,59 @@ class TemplateViewModel @Inject constructor(
         }
     }
 
+    fun toggleBookmark(templateId: Long) {
+        val found = currentState.templates.find { template -> template.id == templateId } ?: return
+        if (found.isMarked) deleteBookmark(templateId) else addBookmark(templateId)
+    }
+
+    private fun addBookmark(templateId: Long) {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            val targetTemplate =
+                currentState.templates.find { template ->
+                    template.id == templateId
+                } ?: return@launch updateState { copy(isLoading = false) }
+
+            addBookmarkUseCase(targetTemplate.toDomain())
+                .onFailure { emitEvent(TemplateUiEvent.AddBookmarkFailure) }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
+    }
+
+    private fun deleteBookmark(templateId: Long) {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            deleteBookmarkUseCase(templateId)
+                .onFailure { emitEvent(TemplateUiEvent.DeleteBookmarkFailure) }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
+    }
+
+    private fun observeBookmark() {
+        observeAllBookmarksUseCase()
+            .onEach { bookmarkTemplates ->
+                val newTemplates =
+                    currentState.templates.map { template ->
+                        val isMarked =
+                            bookmarkTemplates.any { bookmark -> bookmark.templateId == template.id }
+                        template.copy(isMarked = isMarked)
+                    }
+                updateState { copy(templates = newTemplates) }
+            }.launchIn(viewModelScope)
+    }
+
     private suspend fun fetchTemplatesByMode(
         mode: Mode,
         next: Pageable<BottariTemplate>,
     ): Result<Pageable<BottariTemplate>> =
         when (mode) {
             is Mode.Main -> searchTemplatesByTitleUseCase(query = "", pageable = next)
-            is Mode.TitleSearch -> searchTemplatesByTitleUseCase(query = mode.query, pageable = next)
+            is Mode.TitleSearch ->
+                searchTemplatesByTitleUseCase(
+                    query = mode.query,
+                    pageable = next,
+                )
+
             is Mode.ChipSearch -> {
                 val firstHashtagId = mode.chips.first().id
                 searchTemplatesByHashtagUseCase(hashtagId = firstHashtagId, pageable = next)

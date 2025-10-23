@@ -73,7 +73,7 @@ fun CreateBottariSelector(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.5f)
+                    .fillMaxHeight(0.7f)
                     .padding(BottariTheme.spacing.spaceMedium),
             verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceMedium),
         ) {

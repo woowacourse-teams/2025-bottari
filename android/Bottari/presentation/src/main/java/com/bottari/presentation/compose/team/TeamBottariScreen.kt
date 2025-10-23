@@ -44,7 +44,6 @@ fun TeamBottariScreen(
     var isSwipeScreen by rememberSaveable { mutableStateOf(notificationFlag) }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val pageTitles =
         listOf(
             stringResource(R.string.team_checklist_tap_checklist_text),
@@ -54,10 +53,15 @@ fun TeamBottariScreen(
     val pagerState = rememberPagerState(initialPage = 0) { pageTitles.size }
     BackHandler(enabled = isSwipeScreen, onBack = { isSwipeScreen = false })
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent ?: return@LaunchedEffect) {
-            ComposeTeamChecklistUiEvent.CheckItemFailure -> snackbarHostState.showSnackbar("아이템 체크에 실패했습니다")
-            ComposeTeamChecklistUiEvent.FetchChecklistFailure -> snackbarHostState.showSnackbar("보따리를 불러오지 못했습니다")
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                ComposeTeamChecklistUiEvent.CheckItemFailure ->
+                    snackbarHostState.showSnackbar("아이템 체크에 실패했습니다")
+
+                ComposeTeamChecklistUiEvent.FetchChecklistFailure ->
+                    snackbarHostState.showSnackbar("보따리를 불러오지 못했습니다")
+            }
         }
     }
 
@@ -112,7 +116,10 @@ fun TeamBottariScreen(
                             onCloseToolTip = viewModel::closeTooltip,
                             isToolTipClosed = uiState.isTooltipClosed,
                             onClickItem = viewModel::toggleItemChecked,
-                            modifier = Modifier.fillMaxSize().padding(BottariTheme.spacing.spaceMedium),
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .padding(BottariTheme.spacing.spaceMedium),
                         )
 
                     1 -> TeamItemStateScreen(snackbarHostState = snackbarHostState, checkedState = uiState.bottariItems)

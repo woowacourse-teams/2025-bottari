@@ -12,4 +12,8 @@ sealed interface TemplateUiEvent {
     data object DeleteBottariTemplateSuccess : TemplateUiEvent
 
     data object DeleteBottariTemplateFailure : TemplateUiEvent
+
+    data object AddBookmarkFailure : TemplateUiEvent
+
+    data object DeleteBookmarkFailure : TemplateUiEvent
 }

@@ -5,5 +5,5 @@ data class MoreUiState(
     val nickname: String = "",
     val editingNickname: String = "",
 ) {
-    val isNicknameChanged: Boolean get() = nickname != editingNickname
+    val isNicknameChanged: Boolean = nickname != editingNickname
 }

@@ -44,7 +44,7 @@ fun BottariList(
     ) {
         items(
             items = bottaries,
-            key = { bottari -> bottari.id to bottari::class.java.simpleName },
+            key = { bottari -> bottari.id to bottari::class.simpleName },
         ) { bottari ->
             BottariItem(
                 bottari = bottari,
@@ -69,11 +69,7 @@ fun BottariList(
                     Modifier
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication =
-                                ripple(
-                                    bounded = true,
-                                    color = BottariTheme.colors.primary,
-                                ),
+                            indication = ripple(color = BottariTheme.colors.primary),
                             onClick = { onBottariClick(bottari) },
                         ),
             )

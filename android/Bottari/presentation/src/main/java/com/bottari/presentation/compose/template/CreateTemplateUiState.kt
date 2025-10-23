@@ -16,5 +16,5 @@ data class CreateTemplateUiState(
     val hashtags: List<String> = emptyList(),
 ) {
     val isSelected: Boolean = selectedBottariTitle.isNotBlank() && selectedBottariItems.isNotEmpty()
-    val canCreate: Boolean = isSelected && hashtags.size >= 2
+    val canCreate: Boolean = isSelected
 }

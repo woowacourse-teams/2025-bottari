@@ -56,7 +56,12 @@ fun TemplateColumn(
 
         items(templates, key = { template -> template.id }) { template ->
             TemplateItem(
-                template = template,
+                title = template.title,
+                description = template.description,
+                items = template.items.map { item -> item.name },
+                author = template.author,
+                takenCount = template.takenCount,
+                hashtags = template.hashtags,
                 onClickHashtag = onClickHashtag,
                 modifier = Modifier.noRippleClickable { onClickDetail(template.id) },
                 iconButton = {
@@ -91,7 +96,7 @@ private fun TemplateItemIconButtonByTemplateItemType(
 
         is TemplateItemType.Bookmark -> {
             TemplateItemIconButton(
-                type = type,
+                type = type.copy(isBookmarked = template.isMarked),
                 onClick = { onClickBookmark(template.id) },
             )
         }

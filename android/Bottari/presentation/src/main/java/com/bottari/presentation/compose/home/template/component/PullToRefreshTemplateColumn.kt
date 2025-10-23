@@ -30,8 +30,8 @@ fun PullToRefreshTemplateColumn(
     onClickBookmark: (Long) -> Unit,
     onClickDelete: (Long) -> Unit,
     onClickHashtag: (BottariTemplateHashtagUiModel) -> Unit,
-    modifier: Modifier = Modifier,
     showLoadingBlock: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     val state = rememberPullToRefreshState()
     val animatedPadding by animateDpAsState(

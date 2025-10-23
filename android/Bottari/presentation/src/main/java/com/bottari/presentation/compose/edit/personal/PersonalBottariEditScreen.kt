@@ -1,7 +1,13 @@
 package com.bottari.presentation.compose.edit.personal
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
@@ -17,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,34 +45,35 @@ fun PersonalBottariEditScreen(
     viewModel: PersonalBottariEditViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(uiEvent.value) {
-        when (uiEvent.value ?: return@LaunchedEffect) {
-            PersonalBottariEditUiEvent.CreateTemplateFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(R.string.bottari_edit_create_template_failure_text),
-                )
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                PersonalBottariEditUiEvent.CreateTemplateFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.bottari_edit_create_template_failure_text),
+                    )
 
-            PersonalBottariEditUiEvent.CreateTemplateSuccess ->
-                snackbarHostState.showSnackbar(
-                    context.getString(R.string.bottari_edit_create_template_success_text),
-                )
+                PersonalBottariEditUiEvent.CreateTemplateSuccess ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.bottari_edit_create_template_success_text),
+                    )
 
-            PersonalBottariEditUiEvent.FindBottariFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(
-                        R.string.bottari_edit_fetch_failure_text,
-                    ),
-                )
+                PersonalBottariEditUiEvent.FindBottariFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(
+                            R.string.bottari_edit_fetch_failure_text,
+                        ),
+                    )
 
-            PersonalBottariEditUiEvent.ToggleAlarmStateFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(R.string.bottari_edit_toggle_alarm_state_failure_text),
-                )
+                PersonalBottariEditUiEvent.ToggleAlarmStateFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.bottari_edit_toggle_alarm_state_failure_text),
+                    )
+            }
         }
     }
 
@@ -88,6 +96,7 @@ fun PersonalBottariEditScreen(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun PersonalBottariEditScreen(
     bottariId: Long,
@@ -118,7 +127,13 @@ private fun PersonalBottariEditScreen(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .padding(
+                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                        end = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                        top = paddingValues.calculateTopPadding(),
+                        bottom = BottariTheme.spacing.spaceMedium,
+                    ).imePadding()
+                    .then(if (WindowInsets.isImeVisible) Modifier else Modifier.navigationBarsPadding()),
         )
     }
 }

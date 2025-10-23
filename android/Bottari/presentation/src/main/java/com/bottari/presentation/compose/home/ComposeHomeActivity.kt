@@ -45,7 +45,13 @@ class ComposeHomeActivity : AppCompatActivity() {
     private fun navigateToTemplateDetail(
         templateId: Long,
         isMyTemplate: Boolean,
+        isBookmark: Boolean,
     ) {
+        if (isBookmark) {
+            val intent = TemplateActivity.newIntentForBookmark(this, templateId, true)
+            startActivity(intent)
+            return
+        }
         val intent = TemplateActivity.newIntentForDetail(this, templateId, isMyTemplate)
         startActivity(intent)
     }
