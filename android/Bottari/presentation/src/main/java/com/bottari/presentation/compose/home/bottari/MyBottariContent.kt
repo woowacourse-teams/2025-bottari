@@ -43,18 +43,29 @@ fun MyBottariContent(
     modifier: Modifier = Modifier,
 ) {
     var isFabExpanded by remember { mutableStateOf(false) }
-    val listState = rememberLazyListState()
     var isFabVisible by remember { mutableStateOf(true) }
     var openedMenuBottariId by remember { mutableStateOf<Long?>(null) }
 
-    LaunchedEffect(listState.isScrollInProgress) {
-        if (listState.isScrollInProgress) {
+    val allListState = rememberLazyListState()
+    val personalListState = rememberLazyListState()
+    val teamListState = rememberLazyListState()
+
+    LaunchedEffect(
+        allListState.isScrollInProgress,
+        personalListState.isScrollInProgress,
+        teamListState.isScrollInProgress,
+    ) {
+        if (allListState.isScrollInProgress || personalListState.isScrollInProgress || teamListState.isScrollInProgress) {
             isFabVisible = false
             isFabExpanded = false
             return@LaunchedEffect
         }
         delay(1000)
         isFabVisible = true
+    }
+
+    LaunchedEffect(uiState.isFetched) {
+        allListState.scrollToItem(0)
     }
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -93,6 +104,14 @@ fun MyBottariContent(
                     2 -> if (uiState.isTeamEmpty) MyBottariEmptyView()
                 }
 
+                val currentListState =
+                    when (page) {
+                        0 -> allListState
+                        1 -> personalListState
+                        2 -> teamListState
+                        else -> error("유효하지 않은 페이지")
+                    }
+
                 val currentList =
                     when (page) {
                         0 -> uiState.allBottaries
@@ -103,7 +122,7 @@ fun MyBottariContent(
 
                 BottariList(
                     bottaries = currentList,
-                    listState = listState,
+                    listState = currentListState,
                     onBottariClick = onBottariClick,
                     onDeletePersonalBottari = onDeletePersonalBottari,
                     onDeleteTeamBottari = onDeleteTeamBottari,

@@ -15,6 +15,6 @@ data class MyBottariUiState(
     val isFetched: Boolean = isPersonalFetched && isTeamFetched
     val isPersonalEmpty: Boolean = isFetched && personalBottaries.isEmpty()
     val isTeamEmpty: Boolean = isFetched && teamBottaries.isEmpty()
-    val allBottaries: List<MyBottariUiModel> = personalBottaries + teamBottaries
+    val allBottaries: List<MyBottariUiModel> = teamBottaries + personalBottaries
     val isAllEmpty: Boolean = isFetched && allBottaries.isEmpty()
 }
