@@ -38,20 +38,17 @@ fun TeamChecklistItem(
                 .fillMaxWidth()
                 .background(
                     color = BottariTheme.colors.white,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .border(
+                    shape = RoundedCornerShape(12.dp),
+                ).border(
                     width = 2.dp,
                     color = BottariTheme.colors.gray200,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .clip(RoundedCornerShape(12.dp))
+                    shape = RoundedCornerShape(12.dp),
+                ).clip(RoundedCornerShape(12.dp))
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(bounded = true, color = BottariTheme.colors.primary),
                     onClick = { onClick() },
-                )
-                .padding(16.dp)
+                ).padding(16.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(

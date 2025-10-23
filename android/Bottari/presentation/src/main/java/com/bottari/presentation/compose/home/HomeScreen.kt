@@ -23,7 +23,6 @@ import com.bottari.presentation.compose.home.more.MoreBottariScreen
 import com.bottari.presentation.compose.home.template.TemplateBottariScreen
 import kotlinx.coroutines.launch
 
-
 private const val BACK_PRESS_EXIT_TIMEOUT = 2000L
 
 @Composable

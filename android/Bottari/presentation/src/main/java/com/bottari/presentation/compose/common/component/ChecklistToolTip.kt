@@ -33,7 +33,7 @@ fun ChecklistToolTip(
     title: String,
     text: String,
     closeAction: () -> Unit,
-    modifier : Modifier = Modifier,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
