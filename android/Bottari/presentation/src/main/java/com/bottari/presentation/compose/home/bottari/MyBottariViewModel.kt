@@ -32,14 +32,10 @@ class MyBottariViewModel @Inject constructor(
     private val alarmScheduler: AlarmScheduler,
 ) : FlowBaseViewModel<MyBottariUiState, MyBottariUiEvent>(MyBottariUiState()) {
     init {
-        launch {
-            fetchPersonalBottaries()
-            fetchTeamBottaries()
-        }
+        fetchPersonalBottaries()
     }
 
     fun fetchTeamBottaries() {
-        if (currentState.isLoading) return
         updateState { copy(isLoading = true) }
 
         launch {
