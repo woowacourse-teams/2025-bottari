@@ -48,7 +48,7 @@ fun TeamChecklistItem(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(bounded = true, color = BottariTheme.colors.primary),
                     onClick = { onClick() },
-                ).padding(16.dp),
+                ).padding(BottariTheme.spacing.spaceMedium),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(

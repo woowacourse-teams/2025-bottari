@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
@@ -38,9 +39,8 @@ fun ItemEditLazyColumn(
     LazyColumn(
         modifier =
             modifier
-                .padding(
-                    horizontal = BottariTheme.spacing.spaceLarge,
-                ).topBottomFadingEdge(color = BottariTheme.colors.gray50, width = 8.dp),
+                .padding(horizontal = BottariTheme.spacing.spaceLarge)
+                .topBottomFadingEdge(color = BottariTheme.colors.gray50, width = 8.dp),
         state = listState,
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
     ) {
@@ -79,10 +79,13 @@ private fun BottariItem(
             Text(
                 text = item.name,
                 modifier =
-                    Modifier.weight(1f).padding(
-                        horizontal = BottariTheme.spacing.spaceMedium,
-                    ),
+                    Modifier
+                        .weight(1f)
+                        .padding(
+                            horizontal = BottariTheme.spacing.spaceMedium,
+                        ),
                 maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 style = BottariTheme.typography.semiBold16.toTextStyle(),
             )
             IconButton(
