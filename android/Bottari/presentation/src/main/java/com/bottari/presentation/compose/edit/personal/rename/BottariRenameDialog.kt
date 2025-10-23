@@ -51,7 +51,7 @@ fun BottariRenameDialog(
         viewModel.setInitialTitle(bottariTitle)
     }
 
-    LaunchedEffect(uiEvent.value) {
+    LaunchedEffect(uiEvent) {
         when (uiEvent.value ?: return@LaunchedEffect) {
             BottariRenameUiEvent.SaveBottariTitleFailure ->
                 snackbarHostState.showSnackbar(

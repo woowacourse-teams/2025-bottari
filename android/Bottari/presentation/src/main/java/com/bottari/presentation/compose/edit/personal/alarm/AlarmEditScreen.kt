@@ -89,7 +89,7 @@ fun AlarmEditScreen(
         viewModel.setBottariInfo(bottariId, bottariTitle)
     }
 
-    LaunchedEffect(uiEvent.value) {
+    LaunchedEffect(uiEvent) {
         when (uiEvent.value ?: return@LaunchedEffect) {
             AlarmUiEvent.FetchAlarmFailure ->
                 snackbarHostState.showSnackbar(

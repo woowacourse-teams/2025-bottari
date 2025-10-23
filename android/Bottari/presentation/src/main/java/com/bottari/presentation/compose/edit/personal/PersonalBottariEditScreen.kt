@@ -43,7 +43,7 @@ fun PersonalBottariEditScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(uiEvent.value) {
+    LaunchedEffect(uiEvent) {
         when (uiEvent.value ?: return@LaunchedEffect) {
             PersonalBottariEditUiEvent.CreateTemplateFailure ->
                 snackbarHostState.showSnackbar(

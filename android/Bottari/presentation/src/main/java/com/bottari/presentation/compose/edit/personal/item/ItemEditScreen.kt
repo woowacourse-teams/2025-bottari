@@ -51,7 +51,7 @@ fun PersonalItemEditScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    LaunchedEffect(uiEvent.value) {
+    LaunchedEffect(uiEvent) {
         when (uiEvent.value ?: return@LaunchedEffect) {
             PersonalItemEditUiEvent.DeleteItemFailure ->
                 snackbarHostState.showSnackbar(

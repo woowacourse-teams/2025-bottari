@@ -53,7 +53,7 @@ fun CreateTemplateScreen(
     val bottomSheetState = rememberModalBottomSheetState()
     var isOpenSelector by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(uiEvent.value) {
+    LaunchedEffect(uiEvent) {
         when (uiEvent.value ?: return@LaunchedEffect) {
             is CreateTemplateUiEvent.FetchMyBottariesFailure ->
                 snackbarHostState.showSnackbar(context.getString(R.string.bottari_home_fetch_failure_text))

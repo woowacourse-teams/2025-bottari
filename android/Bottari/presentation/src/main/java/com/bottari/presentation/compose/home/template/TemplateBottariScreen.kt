@@ -57,7 +57,7 @@ fun TemplateBottariScreen(
     val mainListState = rememberLazyListState()
     val myListState = rememberLazyListState()
 
-    LaunchedEffect(uiEvent.value) {
+    LaunchedEffect(uiEvent) {
         when (uiEvent.value ?: return@LaunchedEffect) {
             is TemplateUiEvent.SearchTemplateSuccess -> mainListState.scrollToItem(0)
             is TemplateUiEvent.MainTemplatesRefreshFinished -> mainListState.scrollToItem(0)

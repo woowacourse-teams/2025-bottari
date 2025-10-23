@@ -54,7 +54,7 @@ fun MyBottariScreen(
 
     var dialogText by rememberSaveable { mutableStateOf("") }
 
-    LaunchedEffect(uiEvent.value) {
+    LaunchedEffect(uiEvent) {
         when (val event = uiEvent.value ?: return@LaunchedEffect) {
             MyBottariUiEvent.DeletePersonalBottariFailure ->
                 snackbarState.showSnackbar(context.getString(R.string.bottari_home_delete_failure_text))
