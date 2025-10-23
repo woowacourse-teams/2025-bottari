@@ -22,13 +22,6 @@ class TemplateDetailViewModel @Inject constructor(
     private val templateId: Long = stateHandle[KEY_TEMPLATE_ID] ?: error(ERROR_REQUIRE_TEMPLATE_ID)
 
     init {
-        BottariLogger.debug(
-            """
-            TemplateDetailViewModel init
-            isBookmark: $isBookmark
-            templateId: $templateId
-            """.trimIndent(),
-        )
         if (isBookmark) fetchBookmark() else fetchBottariTemplateDetail()
     }
 
