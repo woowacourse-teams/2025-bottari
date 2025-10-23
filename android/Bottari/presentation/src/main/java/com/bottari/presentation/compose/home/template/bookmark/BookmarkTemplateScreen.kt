@@ -62,7 +62,7 @@ private fun BookmarkTemplateScreen(
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         if (uiState.isEmpty) {
-            TemplateEmptyView(text = "북마크한 템플릿이 없습니다.")
+            TemplateEmptyView(text = "북마크한 템플릿이 없어요")
             return@Box
         }
 

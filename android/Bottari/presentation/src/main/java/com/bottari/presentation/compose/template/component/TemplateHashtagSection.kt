@@ -43,7 +43,7 @@ fun TemplateHashtagSection(
             Spacer(modifier = Modifier.height(BottariTheme.spacing.space2xSmall))
 
             Text(
-                text = "보따리를 표현할 태그를 2개 이상 추가해 주세요",
+                text = "보따리를 표현할 태그를 추가해 주세요",
                 style = BottariTheme.typography.medium12.toTextStyle(),
                 color = BottariTheme.colors.gray500,
             )
