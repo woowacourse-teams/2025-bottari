@@ -1,25 +1,28 @@
 package com.bottari.presentation.compose.home.more.component
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.KeyboardActionHandler
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.maxLength
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
@@ -27,43 +30,45 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun NicknameTextField(
-    textFieldValue: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
-    onSaveNickname: () -> Unit,
+    textFieldState: TextFieldState,
     isEditing: Boolean,
     focusRequester: FocusRequester,
     modifier: Modifier = Modifier,
 ) {
-    BasicTextField(
-        value = textFieldValue,
-        onValueChange = onValueChange,
+    TextField(
+        state = textFieldState,
         modifier =
             modifier
-                .padding(top = 4.dp)
                 .focusRequester(focusRequester)
-                .fillMaxWidth(),
-        textStyle =
-            BottariTheme.typography.medium16
-                .toTextStyle()
-                .copy(color = BottariTheme.colors.black),
-        singleLine = true,
+                .fillMaxWidth()
+                .heightIn(30.dp),
+        textStyle = BottariTheme.typography.medium16.toTextStyle(),
         readOnly = !isEditing,
-        cursorBrush = SolidColor(BottariTheme.colors.black),
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = { onSaveNickname() }),
-        decorationBox = { innerTextField ->
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.CenterStart,
-            ) {
-                if (textFieldValue.text.isEmpty() && isEditing) {
-                    Text(
-                        text = stringResource(R.string.profile_nickname_hint_text),
-                        color = BottariTheme.colors.gray500,
-                        style = BottariTheme.typography.medium16.toTextStyle(),
-                    )
-                }
-                innerTextField()
+        inputTransformation = InputTransformation.maxLength(10),
+        lineLimits = TextFieldLineLimits.SingleLine,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        onKeyboardAction = KeyboardActionHandler { },
+        colors =
+            TextFieldDefaults.colors(
+                focusedIndicatorColor = BottariTheme.colors.transparent,
+                unfocusedIndicatorColor = BottariTheme.colors.transparent,
+                disabledIndicatorColor = BottariTheme.colors.transparent,
+                focusedTextColor = BottariTheme.colors.black,
+                unfocusedTextColor = BottariTheme.colors.black,
+                disabledTextColor = BottariTheme.colors.black,
+                focusedContainerColor = BottariTheme.colors.transparent,
+                unfocusedContainerColor = BottariTheme.colors.transparent,
+                disabledContainerColor = BottariTheme.colors.transparent,
+                cursorColor = BottariTheme.colors.black,
+            ),
+        contentPadding = PaddingValues(0.dp),
+        placeholder = {
+            textFieldState.text.ifEmpty {
+                Text(
+                    text = stringResource(R.string.profile_nickname_hint_text),
+                    color = BottariTheme.colors.gray500,
+                    style = BottariTheme.typography.medium16.toTextStyle(),
+                )
             }
         },
     )
@@ -72,15 +77,22 @@ fun NicknameTextField(
 @Preview(showBackground = true)
 @Composable
 private fun NicknameTextFieldPreview() {
-    var textFieldValue by remember { mutableStateOf(TextFieldValue()) }
     val focusRequester = remember { FocusRequester() }
+    val textFieldState = rememberTextFieldState()
+
     BottariTheme {
-        NicknameTextField(
-            textFieldValue = textFieldValue,
-            onValueChange = { textFieldValue = it },
-            onSaveNickname = {},
-            isEditing = true,
-            focusRequester = focusRequester,
-        )
+        Box(
+            modifier =
+                Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            NicknameTextField(
+                textFieldState = textFieldState,
+                isEditing = true,
+                focusRequester = focusRequester,
+            )
+        }
     }
 }
