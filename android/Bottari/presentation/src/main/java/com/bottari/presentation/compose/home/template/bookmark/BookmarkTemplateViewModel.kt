@@ -1,7 +1,6 @@
 package com.bottari.presentation.compose.home.template.bookmark
 
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.domain.usecase.bookmark.DeleteBookmarkUseCase
 import com.bottari.domain.usecase.bookmark.ObserveAllBookmarksUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
