@@ -52,7 +52,7 @@ fun CreateTemplateScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
-    val bottomSheetState = rememberModalBottomSheetState()
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isOpenSelector by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
