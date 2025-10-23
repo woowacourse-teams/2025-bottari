@@ -35,7 +35,6 @@ import com.bottari.presentation.compose.common.component.IndeterminateCircularIn
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.personal.ChecklistProgressHeader
-import com.bottari.presentation.compose.personal.checklist.PersonalChecklistItem
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
 
@@ -135,7 +134,7 @@ private fun TeamChecklistNode(
                         TeamChecklistEmptyView(modifier = Modifier.fillMaxWidth())
                     } else {
                         items.forEach { bottariItem ->
-                            PersonalChecklistItem(
+                            TeamChecklistItem(
                                 bottariItem = bottariItem,
                                 onClick = { onClickItem(bottariItem.id, bottariItem.type) },
                             )
