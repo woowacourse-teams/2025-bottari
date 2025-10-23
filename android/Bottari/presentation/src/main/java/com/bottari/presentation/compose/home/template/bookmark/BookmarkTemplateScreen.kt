@@ -33,18 +33,19 @@ fun BookmarkTemplateScreen(
     viewModel: BookmarkTemplateViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent.value ?: return@LaunchedEffect) {
-            is BookmarkTemplateEvent.FetchBookmarkTemplateFailure ->
-                snackbarHostState.showSnackbar("북마크한 보따리를 불러오지 못했어요")
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                is BookmarkTemplateEvent.FetchBookmarkTemplateFailure ->
+                    snackbarHostState.showSnackbar("북마크한 보따리를 불러오지 못했어요")
 
-            is BookmarkTemplateEvent.DeleteBookmarkTemplateSuccess ->
-                snackbarHostState.showSnackbar("보따리의 북마크를 해제했어요")
+                is BookmarkTemplateEvent.DeleteBookmarkTemplateSuccess ->
+                    snackbarHostState.showSnackbar("보따리의 북마크를 해제했어요")
 
-            is BookmarkTemplateEvent.DeleteBookmarkTemplateFailure ->
-                snackbarHostState.showSnackbar("보따리의 북마크 해제에 실패했어요")
+                is BookmarkTemplateEvent.DeleteBookmarkTemplateFailure ->
+                    snackbarHostState.showSnackbar("보따리의 북마크 해제에 실패했어요")
+            }
         }
     }
 

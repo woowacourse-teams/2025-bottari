@@ -35,22 +35,23 @@ fun PersonalBottariScreen(
     viewModel: PersonalChecklistViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
-
     val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val snackbarHostState = remember { SnackbarHostState() }
     var isSwipeScreen by remember { mutableStateOf(notificationFlag) }
 
     val checklistFetchFailureText = stringResource(R.string.checklist_fetch_failure_text)
     val checklistResetCheckStateFailureText = stringResource(R.string.checklist_reset_failure_text)
-    LaunchedEffect(uiEvent) {
-        when (uiEvent ?: return@LaunchedEffect) {
-            PersonalChecklistUiEvent.FetchChecklistFailure -> {
-                snackbarHostState.showSnackbar(message = checklistFetchFailureText)
-            }
 
-            PersonalChecklistUiEvent.ResetCheckStateFailure -> {
-                snackbarHostState.showSnackbar(message = checklistResetCheckStateFailureText)
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                PersonalChecklistUiEvent.FetchChecklistFailure -> {
+                    snackbarHostState.showSnackbar(message = checklistFetchFailureText)
+                }
+
+                PersonalChecklistUiEvent.ResetCheckStateFailure -> {
+                    snackbarHostState.showSnackbar(message = checklistResetCheckStateFailureText)
+                }
             }
         }
     }

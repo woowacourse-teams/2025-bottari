@@ -69,7 +69,6 @@ fun AlarmEditScreen(
     viewModel: AlarmEditViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val context = LocalContext.current
     val activity = LocalActivity.current ?: return
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
@@ -89,17 +88,19 @@ fun AlarmEditScreen(
         viewModel.setBottariInfo(bottariId, bottariTitle)
     }
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent.value ?: return@LaunchedEffect) {
-            AlarmUiEvent.FetchAlarmFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(R.string.alarm_edit_fetch_failure_text),
-                )
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                AlarmUiEvent.FetchAlarmFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.alarm_edit_fetch_failure_text),
+                    )
 
-            AlarmUiEvent.SaveAlarmFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(R.string.alarm_edit_save_failure_text),
-                )
+                AlarmUiEvent.SaveAlarmFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.alarm_edit_save_failure_text),
+                    )
+            }
         }
     }
 

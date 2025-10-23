@@ -47,26 +47,30 @@ fun CreateTemplateScreen(
     viewModel: CreateTemplateViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val bottomSheetState = rememberModalBottomSheetState()
     var isOpenSelector by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent.value ?: return@LaunchedEffect) {
-            is CreateTemplateUiEvent.FetchMyBottariesFailure ->
-                snackbarHostState.showSnackbar(context.getString(R.string.bottari_home_fetch_failure_text))
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                is CreateTemplateUiEvent.FetchMyBottariesFailure ->
+                    snackbarHostState.showSnackbar(context.getString(R.string.bottari_home_fetch_failure_text))
 
-            is CreateTemplateUiEvent.CreateTemplateSuccess -> {
-                Toast
-                    .makeText(context, R.string.template_create_success_text, Toast.LENGTH_SHORT)
-                    .show()
-                navigateBack()
+                is CreateTemplateUiEvent.CreateTemplateSuccess -> {
+                    Toast
+                        .makeText(
+                            context,
+                            R.string.template_create_success_text,
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    navigateBack()
+                }
+
+                is CreateTemplateUiEvent.CreateTemplateFailure ->
+                    snackbarHostState.showSnackbar(context.getString(R.string.template_create_failure_text))
             }
-
-            is CreateTemplateUiEvent.CreateTemplateFailure ->
-                snackbarHostState.showSnackbar(context.getString(R.string.template_create_failure_text))
         }
     }
 

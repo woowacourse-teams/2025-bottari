@@ -53,24 +53,25 @@ fun TemplateBottariScreen(
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val mainListState = rememberLazyListState()
     val myListState = rememberLazyListState()
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent.value ?: return@LaunchedEffect) {
-            is TemplateUiEvent.SearchTemplateSuccess -> mainListState.scrollToItem(0)
-            is TemplateUiEvent.MainTemplatesRefreshFinished -> mainListState.scrollToItem(0)
-            is TemplateUiEvent.MyTemplatesRefreshFinished -> myListState.scrollToItem(0)
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                is TemplateUiEvent.SearchTemplateSuccess -> mainListState.scrollToItem(0)
+                is TemplateUiEvent.MainTemplatesRefreshFinished -> mainListState.scrollToItem(0)
+                is TemplateUiEvent.MyTemplatesRefreshFinished -> myListState.scrollToItem(0)
 
-            is TemplateUiEvent.FetchBottariTemplatesFailure ->
-                snackbarState.showSnackbar(context.getString(R.string.template_fetch_template_failure_text))
+                is TemplateUiEvent.FetchBottariTemplatesFailure ->
+                    snackbarState.showSnackbar(context.getString(R.string.template_fetch_template_failure_text))
 
-            is TemplateUiEvent.DeleteBottariTemplateSuccess ->
-                snackbarState.showSnackbar(context.getString(R.string.template_my_template_delete_success_text))
+                is TemplateUiEvent.DeleteBottariTemplateSuccess ->
+                    snackbarState.showSnackbar(context.getString(R.string.template_my_template_delete_success_text))
 
-            is TemplateUiEvent.DeleteBottariTemplateFailure ->
-                snackbarState.showSnackbar(context.getString(R.string.template_my_template_delete_failure_text))
+                is TemplateUiEvent.DeleteBottariTemplateFailure ->
+                    snackbarState.showSnackbar(context.getString(R.string.template_my_template_delete_failure_text))
+            }
         }
     }
 

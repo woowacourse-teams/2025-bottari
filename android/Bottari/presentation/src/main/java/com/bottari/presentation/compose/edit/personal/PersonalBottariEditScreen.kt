@@ -38,34 +38,35 @@ fun PersonalBottariEditScreen(
     viewModel: PersonalBottariEditViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     var showDialog by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent.value ?: return@LaunchedEffect) {
-            PersonalBottariEditUiEvent.CreateTemplateFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(R.string.bottari_edit_create_template_failure_text),
-                )
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                PersonalBottariEditUiEvent.CreateTemplateFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.bottari_edit_create_template_failure_text),
+                    )
 
-            PersonalBottariEditUiEvent.CreateTemplateSuccess ->
-                snackbarHostState.showSnackbar(
-                    context.getString(R.string.bottari_edit_create_template_success_text),
-                )
+                PersonalBottariEditUiEvent.CreateTemplateSuccess ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.bottari_edit_create_template_success_text),
+                    )
 
-            PersonalBottariEditUiEvent.FindBottariFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(
-                        R.string.bottari_edit_fetch_failure_text,
-                    ),
-                )
+                PersonalBottariEditUiEvent.FindBottariFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(
+                            R.string.bottari_edit_fetch_failure_text,
+                        ),
+                    )
 
-            PersonalBottariEditUiEvent.ToggleAlarmStateFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(R.string.bottari_edit_toggle_alarm_state_failure_text),
-                )
+                PersonalBottariEditUiEvent.ToggleAlarmStateFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.bottari_edit_toggle_alarm_state_failure_text),
+                    )
+            }
         }
     }
 

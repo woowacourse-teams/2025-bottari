@@ -49,20 +49,21 @@ fun TeamItemStateScreen(
     viewModel: ComposeTeamBottariItemStatusViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
 
     LaunchedEffect(checkedState) { viewModel.fetchTeamStatus() }
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent ?: return@LaunchedEffect) {
-            ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure ->
-                snackbarHostState.showSnackbar("보따리 불러오기에 실패했습니다")
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure ->
+                    snackbarHostState.showSnackbar("보따리 불러오기에 실패했습니다")
 
-            ComposeTeamBottariItemStatusUiEvent.SendRemindFailure ->
-                snackbarHostState.showSnackbar("보채기에 실패했어요")
+                ComposeTeamBottariItemStatusUiEvent.SendRemindFailure ->
+                    snackbarHostState.showSnackbar("보채기에 실패했어요")
 
-            ComposeTeamBottariItemStatusUiEvent.SendRemindSuccess ->
-                snackbarHostState.showSnackbar("보채기에 성공했어요")
+                ComposeTeamBottariItemStatusUiEvent.SendRemindSuccess ->
+                    snackbarHostState.showSnackbar("보채기에 성공했어요")
+            }
         }
     }
 

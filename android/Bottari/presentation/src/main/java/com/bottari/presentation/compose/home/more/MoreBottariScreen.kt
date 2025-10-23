@@ -32,14 +32,15 @@ fun MoreBottariScreen(
     viewModel: MoreViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent.value ?: return@LaunchedEffect) {
-            MoreUiEvent.FetchMemberInfoFailure -> snackbarState.showSnackbar("닉네임을 불러오지 못했어요")
-            MoreUiEvent.InvalidNicknameRule -> snackbarState.showSnackbar("닉네임은 2글자에서 10글자 사이여야 해요")
-            MoreUiEvent.SaveMemberNicknameFailure -> snackbarState.showSnackbar("닉네임을 변경하지 못했어요")
-            MoreUiEvent.SaveMemberNicknameSuccess -> snackbarState.showSnackbar("닉네임을 변경했어요")
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                MoreUiEvent.FetchMemberInfoFailure -> snackbarState.showSnackbar("닉네임을 불러오지 못했어요")
+                MoreUiEvent.InvalidNicknameRule -> snackbarState.showSnackbar("닉네임은 2글자에서 10글자 사이여야 해요")
+                MoreUiEvent.SaveMemberNicknameFailure -> snackbarState.showSnackbar("닉네임을 변경하지 못했어요")
+                MoreUiEvent.SaveMemberNicknameSuccess -> snackbarState.showSnackbar("닉네임을 변경했어요")
+            }
         }
     }
 

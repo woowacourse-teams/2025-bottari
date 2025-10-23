@@ -45,32 +45,33 @@ fun PersonalItemEditScreen(
     viewModel: PersonalItemEditViewModel = viewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent = viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val context = LocalContext.current
     val listState = rememberLazyListState()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent.value ?: return@LaunchedEffect) {
-            PersonalItemEditUiEvent.DeleteItemFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(
-                        R.string.bottari_personal_item_delete_failure_text,
-                    ),
-                )
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                PersonalItemEditUiEvent.DeleteItemFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(
+                            R.string.bottari_personal_item_delete_failure_text,
+                        ),
+                    )
 
-            PersonalItemEditUiEvent.FetchBottariItemsFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(R.string.bottari_personal_item_fetch_failure_text),
-                )
+                PersonalItemEditUiEvent.FetchBottariItemsFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.bottari_personal_item_fetch_failure_text),
+                    )
 
-            PersonalItemEditUiEvent.SaveBottariItemFailure ->
-                snackbarHostState.showSnackbar(
-                    context.getString(
-                        R.string.common_save_failure_text,
-                    ),
-                )
+                PersonalItemEditUiEvent.SaveBottariItemFailure ->
+                    snackbarHostState.showSnackbar(
+                        context.getString(
+                            R.string.common_save_failure_text,
+                        ),
+                    )
+            }
         }
     }
 
