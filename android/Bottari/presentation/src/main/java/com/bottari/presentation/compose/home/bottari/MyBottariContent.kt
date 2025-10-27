@@ -60,7 +60,7 @@ fun MyBottariContent(
             isFabExpanded = false
             return@LaunchedEffect
         }
-        delay(1000)
+        delay(500)
         isFabVisible = true
     }
 
@@ -69,6 +69,11 @@ fun MyBottariContent(
     }
 
     Box(modifier = modifier.fillMaxSize()) {
+        if (uiState.isLoading && uiState.isFetched.not()) {
+            IndeterminateCircularIndicator()
+            return@Box
+        }
+
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,
@@ -133,7 +138,7 @@ fun MyBottariContent(
         }
 
         AnimatedVisibility(
-            visible = isFabVisible,
+            visible = isFabVisible && uiState.isLoading.not(),
             modifier = Modifier.align(Alignment.BottomEnd),
             enter = fadeIn(),
             exit = fadeOut(),
@@ -143,10 +148,6 @@ fun MyBottariContent(
                 onOpenTeamDialog = onOpenTeamDialog,
                 onOpenCodeDialog = onOpenCodeDialog,
             )
-        }
-
-        if (uiState.isLoading) {
-            IndeterminateCircularIndicator()
         }
     }
 }
