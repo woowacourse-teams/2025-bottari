@@ -83,7 +83,11 @@ private fun TeamItemStateScreen(
     modifier: Modifier = Modifier,
 ) {
     Box {
-        if (uiState.isLoading) IndeterminateCircularIndicator()
+        if (uiState.isInitialLoading) {
+            IndeterminateCircularIndicator()
+            return@Box
+        }
+
         Column(
             modifier =
                 modifier

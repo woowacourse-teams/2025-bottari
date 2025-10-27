@@ -48,7 +48,11 @@ fun TeamChecklistScreen(
     modifier: Modifier = Modifier,
 ) {
     Box {
-        if (uiState.isLoading) IndeterminateCircularIndicator()
+        if (uiState.isInitialLoading) {
+            IndeterminateCircularIndicator()
+            return@Box
+        }
+
         LazyColumn(modifier = modifier, verticalArrangement = Arrangement.Top) {
             item {
                 if (!isToolTipClosed) {

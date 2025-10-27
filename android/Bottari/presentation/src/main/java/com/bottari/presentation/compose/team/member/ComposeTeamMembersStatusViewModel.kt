@@ -95,17 +95,14 @@ class ComposeTeamMembersStatusViewModel @Inject constructor(
 
     private fun fetchTeamMembersStatus() {
         val myId = currentState.myId
-        updateState { copy(isLoading = true) }
         launch {
+            updateState { copy(isLoading = true) }
             fetchTeamMembersStatusUseCase(teamBottariId)
                 .onSuccess { membersStatus ->
                     val updated = mergeWithPreviousState(membersStatus, myId)
-                    updateState {
-                        copy(membersStatus = updated)
-                    }
+                    updateState { copy(membersStatus = updated) }
                 }.onFailure { emitEvent(ComposeTeamMembersStatusUiEvent.FetchMembersStatusFailure) }
-            updateState { copy(isLoading = false) }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false, isFetched = true) } }
     }
 
     @OptIn(FlowPreview::class)

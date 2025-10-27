@@ -79,52 +79,61 @@ fun TeamBottariScreen(
         containerColor = LocalBottariBgColor.current,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
-        if (uiState.isLoading) {
-            IndeterminateCircularIndicator()
-            return@Scaffold
-        }
-        if (isSwipeScreen) {
-            SwipeScreen(
-                items = uiState.nonCheckedItems,
-                checkedQuantity = uiState.checkedQuantity,
-                totalQuantity = uiState.totalQuantity,
-                isComplete = uiState.isAllChecked,
-                onLeftSwipe = {},
-                onRightSwipe = { item ->
-                    val teamItem = item as TeamChecklistItemUiModel
-                    viewModel.toggleItemChecked(teamItem.id, teamItem.type)
-                },
-                onClickCompleteButton = { isSwipeScreen = false },
-                modifier =
-                    Modifier
-                        .padding(innerPadding)
-                        .padding(BottariTheme.spacing.spaceMedium),
-            )
-            return@Scaffold
-        }
+        when {
+            uiState.isInitialLoading -> IndeterminateCircularIndicator()
 
-        Column(modifier = Modifier.padding(innerPadding)) {
-            BottariTabBar(
-                pageTitles = pageTitles,
-                pagerState = pagerState,
-            ) { page ->
-                when (page) {
-                    0 ->
-                        TeamChecklistScreen(
-                            uiState = uiState,
-                            onClickSection = viewModel::toggleTypeExpanded,
-                            onCloseToolTip = viewModel::closeTooltip,
-                            isToolTipClosed = uiState.isTooltipClosed,
-                            onClickItem = viewModel::toggleItemChecked,
-                            modifier =
-                                Modifier
-                                    .fillMaxSize()
-                                    .padding(BottariTheme.spacing.spaceMedium),
-                        )
+            isSwipeScreen -> {
+                SwipeScreen(
+                    items = uiState.nonCheckedItems,
+                    checkedQuantity = uiState.checkedQuantity,
+                    totalQuantity = uiState.totalQuantity,
+                    isComplete = uiState.isAllChecked,
+                    onLeftSwipe = {},
+                    onRightSwipe = { item ->
+                        val teamItem = item as TeamChecklistItemUiModel
+                        viewModel.toggleItemChecked(teamItem.id, teamItem.type)
+                    },
+                    onClickCompleteButton = { isSwipeScreen = false },
+                    modifier =
+                        Modifier
+                            .padding(innerPadding)
+                            .padding(BottariTheme.spacing.spaceMedium),
+                )
+            }
 
-                    1 -> TeamItemStateScreen(snackbarHostState = snackbarHostState, checkedState = uiState.bottariItems)
+            else -> {
+                Column(modifier = Modifier.padding(innerPadding)) {
+                    BottariTabBar(
+                        pageTitles = pageTitles,
+                        pagerState = pagerState,
+                    ) { page ->
+                        when (page) {
+                            0 ->
+                                TeamChecklistScreen(
+                                    uiState = uiState,
+                                    onClickSection = viewModel::toggleTypeExpanded,
+                                    onCloseToolTip = viewModel::closeTooltip,
+                                    isToolTipClosed = uiState.isTooltipClosed,
+                                    onClickItem = viewModel::toggleItemChecked,
+                                    modifier =
+                                        Modifier
+                                            .fillMaxSize()
+                                            .padding(BottariTheme.spacing.spaceMedium),
+                                )
 
-                    2 -> TeamMemberStateScreen(snackbarHostState = snackbarHostState, checkedState = uiState.bottariItems)
+                            1 ->
+                                TeamItemStateScreen(
+                                    snackbarHostState = snackbarHostState,
+                                    checkedState = uiState.bottariItems,
+                                )
+
+                            2 ->
+                                TeamMemberStateScreen(
+                                    snackbarHostState = snackbarHostState,
+                                    checkedState = uiState.bottariItems,
+                                )
+                        }
+                    }
                 }
             }
         }
