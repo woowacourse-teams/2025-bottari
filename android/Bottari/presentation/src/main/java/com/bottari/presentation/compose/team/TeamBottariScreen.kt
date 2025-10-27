@@ -57,10 +57,10 @@ fun TeamBottariScreen(
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
                 ComposeTeamChecklistUiEvent.CheckItemFailure ->
-                    snackbarHostState.showSnackbar("아이템 체크에 실패했습니다")
+                    snackbarHostState.showSnackbar("물건을 챙기지 못했어요")
 
                 ComposeTeamChecklistUiEvent.FetchChecklistFailure ->
-                    snackbarHostState.showSnackbar("보따리를 불러오지 못했습니다")
+                    snackbarHostState.showSnackbar("보따리를 불러오지 못했어요")
             }
         }
     }
