@@ -78,7 +78,7 @@ public class TeamSharedItemService {
         final TeamSharedItemInfo teamSharedItemInfo = teamSharedItemInfoRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND, "공통"));
         validateMemberInTeam(teamSharedItemInfo.getTeamBottari().getId(), ssaid);
-        teamSharedItemRepository.deleteAllByInfo(teamSharedItemInfo);
+        teamSharedItemRepository.deleteAllByInfo(teamSharedItemInfo.getId());
         teamSharedItemInfoRepository.delete(teamSharedItemInfo);
         publishDeleteInfoEvent(teamSharedItemInfo);
     }

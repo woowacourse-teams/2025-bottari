@@ -39,7 +39,12 @@ public interface TeamSharedItemRepository extends JpaRepository<TeamSharedItem, 
             """)
     List<TeamSharedItem> findAllByTeamMemberId(final Long teamMemberId);
 
-    void deleteAllByInfo(final TeamSharedItemInfo teamSharedItemInfo);
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query(value = """
+            DELETE FROM team_shared_item
+            WHERE team_shared_item_info_id = :teamSharedItemInfoId
+            """, nativeQuery = true)
+    void deleteAllByInfo(final Long teamSharedItemInfoId);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""

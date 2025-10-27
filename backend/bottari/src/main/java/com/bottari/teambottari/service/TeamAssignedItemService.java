@@ -107,7 +107,7 @@ public class TeamAssignedItemService {
         final TeamAssignedItemInfo teamAssignedItemInfo = teamAssignedItemInfoRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.TEAM_BOTTARI_ITEM_NOT_FOUND, "담당"));
         validateMemberInTeam(teamAssignedItemInfo.getTeamBottari().getId(), ssaid);
-        teamAssignedItemRepository.deleteAllByInfo(teamAssignedItemInfo);
+        teamAssignedItemRepository.deleteAllByInfo(teamAssignedItemInfo.getId());
         teamAssignedItemInfoRepository.delete(teamAssignedItemInfo);
         publishDeleteEvent(id, teamAssignedItemInfo);
     }
