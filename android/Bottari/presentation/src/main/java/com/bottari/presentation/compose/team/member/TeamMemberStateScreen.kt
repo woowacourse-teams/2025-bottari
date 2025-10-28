@@ -56,9 +56,6 @@ fun TeamMemberStateScreen(
 
                 ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
                     snackbarHostState.showSnackbar("보채기에 실패했어요")
-
-                ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure ->
-                    snackbarHostState.showSnackbar("아이디를 불러오지 못했어요")
             }
         }
     }

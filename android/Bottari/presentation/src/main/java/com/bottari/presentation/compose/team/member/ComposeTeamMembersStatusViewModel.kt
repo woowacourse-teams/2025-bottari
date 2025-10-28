@@ -66,9 +66,8 @@ class ComposeTeamMembersStatusViewModel @Inject constructor(
             getMemberIdUseCase()
                 .onSuccess { id ->
                     updateState { copy(myId = id) }
-                    fetchTeamMembersStatus()
-                }.onFailure { emitEvent(ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure) }
-        }
+                }
+        }.invokeOnCompletion { fetchTeamMembersStatus() }
     }
 
     private fun sendRemindMessage(member: TeamMemberUiModel) {
