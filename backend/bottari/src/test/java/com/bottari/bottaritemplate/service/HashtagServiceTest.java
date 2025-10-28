@@ -39,14 +39,14 @@ class HashtagServiceTest {
             // given
             final int limit = 10;
             final HashtagPopularityProjection projection1 = mock(HashtagPopularityProjection.class);
-            given(projection1.getHashtagId()).willReturn(1L);
-            given(projection1.getHashtagName()).willReturn("여행");
-            given(projection1.getUsageCount()).willReturn(100);
+            given(projection1.hashtagId()).willReturn(1L);
+            given(projection1.hashtagName()).willReturn("여행");
+            given(projection1.usageCount()).willReturn(100L);
 
             final HashtagPopularityProjection projection2 = mock(HashtagPopularityProjection.class);
-            given(projection2.getHashtagId()).willReturn(2L);
-            given(projection2.getHashtagName()).willReturn("캠핑");
-            given(projection2.getUsageCount()).willReturn(50);
+            given(projection2.hashtagId()).willReturn(2L);
+            given(projection2.hashtagName()).willReturn("캠핑");
+            given(projection2.usageCount()).willReturn(50L);
 
             given(trendingHashtagProvider.getPopularHashtags(limit))
                     .willReturn(List.of(projection1, projection2));

@@ -82,10 +82,10 @@ class TrendingHashtagProviderTest {
             // then
             assertAll(
                     () -> assertThat(popularHashtags).hasSize(2),
-                    () -> assertThat(popularHashtags.get(0).getHashtagName()).isEqualTo("최신인기"),
-                    () -> assertThat(popularHashtags.get(0).getUsageCount()).isEqualTo(2),
-                    () -> assertThat(popularHashtags.get(1).getHashtagName()).isEqualTo("인기"),
-                    () -> assertThat(popularHashtags.get(1).getUsageCount()).isEqualTo(1)
+                    () -> assertThat(popularHashtags.get(0).hashtagName()).isEqualTo("최신인기"),
+                    () -> assertThat(popularHashtags.get(0).usageCount()).isEqualTo(2),
+                    () -> assertThat(popularHashtags.get(1).hashtagName()).isEqualTo("인기"),
+                    () -> assertThat(popularHashtags.get(1).usageCount()).isEqualTo(1)
             );
         }
 
@@ -117,8 +117,8 @@ class TrendingHashtagProviderTest {
             // then
             assertAll(
                     () -> assertThat(popularHashtags).hasSize(2),
-                    () -> assertThat(popularHashtags.get(0).getHashtagId())
-                            .isGreaterThan(popularHashtags.get(1).getHashtagId())
+                    () -> assertThat(popularHashtags.get(0).hashtagId())
+                            .isGreaterThan(popularHashtags.get(1).hashtagId())
             );
         }
     }

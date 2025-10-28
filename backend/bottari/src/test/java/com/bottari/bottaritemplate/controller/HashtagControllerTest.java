@@ -36,9 +36,9 @@ class HashtagControllerTest {
     void readPopularHashtags() throws Exception {
         // given
         final List<ReadHashtagWithUsageCountResponse> responses = List.of(
-                new ReadHashtagWithUsageCountResponse(1L, "여행", 42),
-                new ReadHashtagWithUsageCountResponse(2L, "캠핑", 35),
-                new ReadHashtagWithUsageCountResponse(3L, "등산", 28)
+                new ReadHashtagWithUsageCountResponse(1L, "여행", 42L),
+                new ReadHashtagWithUsageCountResponse(2L, "캠핑", 35L),
+                new ReadHashtagWithUsageCountResponse(3L, "등산", 28L)
         );
         given(hashtagService.getPopularHashtags(10))
                 .willReturn(responses);
@@ -55,7 +55,7 @@ class HashtagControllerTest {
     void readPopularHashtags_DefaultLimit() throws Exception {
         // given
         final List<ReadHashtagWithUsageCountResponse> responses = List.of(
-                new ReadHashtagWithUsageCountResponse(1L, "여행", 42)
+                new ReadHashtagWithUsageCountResponse(1L, "여행", 42L)
         );
         given(hashtagService.getPopularHashtags(10))
                 .willReturn(responses);
@@ -71,8 +71,8 @@ class HashtagControllerTest {
     void readPopularHashtags_WithLimit() throws Exception {
         // given
         final List<ReadHashtagWithUsageCountResponse> responses = List.of(
-                new ReadHashtagWithUsageCountResponse(1L, "여행", 42),
-                new ReadHashtagWithUsageCountResponse(2L, "캠핑", 35)
+                new ReadHashtagWithUsageCountResponse(1L, "여행", 42L),
+                new ReadHashtagWithUsageCountResponse(2L, "캠핑", 35L)
         );
         given(hashtagService.getPopularHashtags(2))
                 .willReturn(responses);
