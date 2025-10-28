@@ -64,13 +64,12 @@ fun TemplateItem(
                 iconButton = iconButton,
             )
 
-            Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
-
-            TemplateHashtagSection(hashtags = hashtags, onClickHashtag = onClickHashtag)
-
-            if (author.isBlank() && takenCount == 0) return@BottariBox
-            Spacer(modifier = Modifier.height(hashTagSectionPadding))
-            TemplateItemFooter(author = author, takenCount = takenCount, itemCount = items.size)
+            if (author.isNotBlank() && takenCount != -1) {
+                Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
+                TemplateHashtagSection(hashtags = hashtags, onClickHashtag = onClickHashtag)
+                Spacer(modifier = Modifier.height(hashTagSectionPadding))
+                TemplateItemFooter(author = author, takenCount = takenCount, itemCount = items.size)
+            }
         }
     }
 }
@@ -274,6 +273,21 @@ private fun TemplateItemPreview() {
                 takenCount = 100024,
                 items = List(10) { "아이템 $it" },
                 hashtags = List(3) { BottariTemplateHashtagUiModel(it.toLong(), "해시태그 $it") },
+                onClickHashtag = {},
+            ) {
+                TemplateItemIconButton(
+                    type = TemplateItemType.Bookmark(false),
+                    onClick = {},
+                )
+            }
+
+            TemplateItem(
+                title = "신입사원 온보딩 가이드",
+                description = "새로운 직장 생활을 위한 완벽 가이드",
+                author = "",
+                takenCount = 0,
+                items = List(10) { "아이템 $it" },
+                hashtags = emptyList(),
                 onClickHashtag = {},
             ) {
                 TemplateItemIconButton(

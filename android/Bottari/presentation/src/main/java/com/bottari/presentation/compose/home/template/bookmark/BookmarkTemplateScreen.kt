@@ -97,7 +97,7 @@ private fun BookmarkTemplateColumn(
                 description = template.description,
                 items = template.items,
                 author = "",
-                takenCount = 0,
+                takenCount = -1,
                 hashtags =
                     template.hashtags.mapIndexed { index, hashtag ->
                         BottariTemplateHashtagUiModel(index.toLong(), hashtag)
