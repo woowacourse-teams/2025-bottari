@@ -141,7 +141,7 @@ private fun MainTemplateHeader(
                 onQueryChange = onQueryChange,
                 chips = chip?.let { listOf(it.name) }.orEmpty(),
                 onChipsChange = { new -> if (new.isEmpty()) onChipChange(null) },
-                placeholderText = "제목이나 해시태그를 입력하세요",
+                placeholderText = "제목을 입력하거나 해시태그를 눌러보세요",
                 onSearch = {},
                 modifier =
                     Modifier
