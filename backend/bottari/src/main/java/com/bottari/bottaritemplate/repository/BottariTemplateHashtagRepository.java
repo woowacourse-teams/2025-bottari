@@ -84,19 +84,19 @@ public interface BottariTemplateHashtagRepository extends JpaRepository<BottariT
             final Pageable pageable
     );
 
-    @Query(value = """
-            SELECT
-                h.id AS hashtagId,
-                h.name AS hashtagName,
-                COUNT(bth.id) AS usageCount
-            FROM hashtag h
-            INNER JOIN bottari_template_hashtag bth ON bth.hashtag_id = h.id
-            WHERE bth.deleted_at IS NULL
-              AND bth.created_at >= :since
+    @Query("""
+            SELECT new com.bottari.bottaritemplate.repository.dto.HashtagPopularityProjection(
+                h.id,
+                h.name,
+                COUNT(bth.id)
+            )
+            FROM Hashtag h
+            INNER JOIN BottariTemplateHashtag bth ON bth.hashtag.id = h.id
+            WHERE bth.deletedAt IS NULL
+              AND bth.createdAt >= :since
             GROUP BY h.id, h.name
-            ORDER BY usageCount DESC, h.id DESC
-            LIMIT :limit
-            """, nativeQuery = true)
+            ORDER BY COUNT(bth.id) DESC, h.id DESC
+            """)
     List<HashtagPopularityProjection> findTopNByUsageCountSince(
             final LocalDateTime since,
             final int limit

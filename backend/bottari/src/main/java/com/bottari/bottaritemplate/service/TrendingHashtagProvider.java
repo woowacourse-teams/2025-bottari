@@ -5,6 +5,7 @@ import com.bottari.bottaritemplate.repository.dto.HashtagPopularityProjection;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,6 +16,7 @@ public class TrendingHashtagProvider {
 
     private final BottariTemplateHashtagRepository bottariTemplateHashtagRepository;
 
+    @Cacheable(value = "popularHashtags", key = "'limit:' + #limit")
     public List<HashtagPopularityProjection> getPopularHashtags(final int limit) {
         final LocalDateTime since = calculateSince();
 
