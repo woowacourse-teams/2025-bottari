@@ -5,6 +5,7 @@ import com.bottari.domain.model.bottari.template.BottariTemplate
 import com.bottari.domain.model.common.Pageable
 import com.bottari.domain.usecase.bookmark.AddBookmarkUseCase
 import com.bottari.domain.usecase.bookmark.DeleteBookmarkUseCase
+import com.bottari.domain.usecase.bookmark.ObserveAllBookmarksUseCase
 import com.bottari.domain.usecase.template.SearchTemplatesByHashtagUseCase
 import com.bottari.domain.usecase.template.SearchTemplatesByTitleUseCase
 import com.bottari.logger.BottariLogger
@@ -13,6 +14,8 @@ import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
 import com.bottari.presentation.util.debounce
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +24,7 @@ class MainTemplateViewModel @Inject constructor(
     private val searchTemplatesByHashtagUseCase: SearchTemplatesByHashtagUseCase,
     private val addBookmarkUseCase: AddBookmarkUseCase,
     private val deleteBookmarkUseCase: DeleteBookmarkUseCase,
+    private val observeAllBookmarksUseCase: ObserveAllBookmarksUseCase,
 ) : FlowBaseViewModel<MainTemplateUiState, MainTemplateUiEvent>(MainTemplateUiState()) {
     private var pageable: Pageable<BottariTemplate> = Pageable()
     private val debouncedSearch: (Unit) -> Unit =
@@ -28,6 +32,7 @@ class MainTemplateViewModel @Inject constructor(
 
     init {
         loadNextPageBySearchWord(reset = true)
+        observeAllBookmarks()
     }
 
     fun refresh() {
@@ -152,6 +157,18 @@ class MainTemplateViewModel @Inject constructor(
                 template.copy(isMarked = isMarked)
             }
         updateState { copy(templates = updated) }
+    }
+
+    private fun observeAllBookmarks() {
+        observeAllBookmarksUseCase()
+            .onEach { bookmarks ->
+                val updated =
+                    currentState.templates.map { template ->
+                        val isMarked = bookmarks.any { bookmark -> bookmark.templateId == template.id }
+                        template.copy(isMarked = isMarked)
+                    }
+                updateState { copy(templates = updated) }
+            }.launchIn(viewModelScope)
     }
 
     companion object {
