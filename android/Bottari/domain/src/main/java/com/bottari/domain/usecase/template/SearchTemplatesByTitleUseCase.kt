@@ -10,6 +10,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import javax.inject.Inject
@@ -24,9 +25,10 @@ class SearchTemplatesByTitleUseCase @Inject constructor(
     ): Result<Pageable<BottariTemplate>> =
         bottariTemplateRepository
             .searchTemplatesByTitle(title = query, pageable = pageable)
-            .mapCatching { newPageable ->
-                val newContent = applyBookmarkStatusesParallel(newPageable.contents)
-                newPageable.copy(contents = newContent)
+            .mapCatching { result ->
+                val newContent = applyBookmarkStatusesParallel(result.contents)
+                val newPageable = result.copy(contents = newContent)
+                pageable.merge(newPageable)
             }
 
     private suspend fun applyBookmarkStatusesParallel(

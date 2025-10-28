@@ -1,0 +1,18 @@
+package com.bottari.presentation.compose.home.template.main
+
+import androidx.compose.runtime.Immutable
+import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
+import com.bottari.presentation.model.template.BottariTemplateUiModel
+
+@Immutable
+data class MainTemplateUiState(
+    val isLoading: Boolean = false,
+    val isFetched: Boolean = false,
+    val isRefreshing: Boolean = false,
+    val templates: List<BottariTemplateUiModel> = emptyList(),
+    val chip: BottariTemplateHashtagUiModel? = null,
+    val searchWord: String = "",
+) {
+    val isEmpty: Boolean = isFetched && templates.isEmpty()
+    val showLoading: Boolean = isLoading && isRefreshing.not()
+}
