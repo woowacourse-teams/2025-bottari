@@ -8,6 +8,4 @@ sealed interface ComposeTeamMembersStatusUiEvent {
     ) : ComposeTeamMembersStatusUiEvent
 
     data object SendRemindByMemberMessageFailure : ComposeTeamMembersStatusUiEvent
-
-    data object FetchMemberIdFailure : ComposeTeamMembersStatusUiEvent
 }

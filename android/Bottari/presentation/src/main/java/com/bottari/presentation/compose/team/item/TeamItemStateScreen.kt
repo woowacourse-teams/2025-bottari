@@ -56,7 +56,7 @@ fun TeamItemStateScreen(
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
                 ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure ->
-                    snackbarHostState.showSnackbar("보따리 불러오기에 실패했습니다")
+                    snackbarHostState.showSnackbar("보따리를 불러오지 못했어요")
 
                 ComposeTeamBottariItemStatusUiEvent.SendRemindFailure ->
                     snackbarHostState.showSnackbar("보채기에 실패했어요")
@@ -83,7 +83,11 @@ private fun TeamItemStateScreen(
     modifier: Modifier = Modifier,
 ) {
     Box {
-        if (uiState.isLoading) IndeterminateCircularIndicator()
+        if (uiState.isInitialLoading) {
+            IndeterminateCircularIndicator()
+            return@Box
+        }
+
         Column(
             modifier =
                 modifier

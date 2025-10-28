@@ -57,15 +57,12 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
     }
 
     fun fetchTeamStatus() {
-        updateState { copy(isLoading = true) }
-
         launch {
+            updateState { copy(isLoading = true) }
             fetchTeamStatusUseCase(teamBottariId)
                 .onSuccess { teamBottariStatus -> handleFetchTeamStatusSuccess(teamBottariStatus) }
                 .onFailure { emitEvent(ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure) }
-
-            updateState { copy(isLoading = false) }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false, isFetched = true) } }
     }
 
     fun selectItem(item: TeamBottariUiModelStatus?) {
@@ -73,14 +70,12 @@ class ComposeTeamBottariItemStatusViewModel @Inject constructor(
     }
 
     private fun fetchMemberNickname() {
-        updateState { copy(isLoading = true) }
-
         launch {
+            updateState { copy(isLoading = true) }
             registeredMemberUseCase()
                 .onSuccess { updateState { copy(myNickname = it.name.orEmpty()) } }
                 .onFailure { emitEvent(ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure) }
-            updateState { copy(isLoading = false) }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     private fun sendRemindByItem(selectedProduct: TeamBottariUiModelStatus) {

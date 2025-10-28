@@ -126,15 +126,13 @@ class ComposeTeamChecklistViewModel @Inject constructor(
     private fun fetchTeamCheckList() {
         launch {
             updateState { copy(isLoading = true) }
-
             fetchTeamBottariChecklistUseCase(teamBottariId)
                 .onSuccess { checklistData ->
                     setTeamCheckList(checklistData)
                 }.onFailure {
                     emitEvent(ComposeTeamChecklistUiEvent.FetchChecklistFailure)
                 }
-            updateState { copy(isLoading = false) }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false, isFetched = true) } }
     }
 
     @OptIn(FlowPreview::class)

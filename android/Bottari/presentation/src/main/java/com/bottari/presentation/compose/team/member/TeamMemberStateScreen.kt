@@ -49,16 +49,13 @@ fun TeamMemberStateScreen(
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
                 ComposeTeamMembersStatusUiEvent.FetchMembersStatusFailure ->
-                    snackbarHostState.showSnackbar("보따리 불러오기에 실패했습니다")
+                    snackbarHostState.showSnackbar("보따리를 불러오지 못했어요")
 
                 is ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess ->
                     snackbarHostState.showSnackbar("보채기에 성공했어요")
 
                 ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
                     snackbarHostState.showSnackbar("보채기에 실패했어요")
-
-                ComposeTeamMembersStatusUiEvent.FetchMemberIdFailure ->
-                    snackbarHostState.showSnackbar("내 id를 불러오지 못했어요")
             }
         }
     }
@@ -83,7 +80,11 @@ private fun TeamMemberStateScreen(
             .fillMaxSize()
             .padding(BottariTheme.spacing.spaceMedium),
     ) {
-        if (uiState.isLoading) IndeterminateCircularIndicator()
+        if (uiState.isInitialLoading) {
+            IndeterminateCircularIndicator()
+            return@Box
+        }
+
         Column(verticalArrangement = Arrangement.Top) {
             Row {
                 TeamStateCard(

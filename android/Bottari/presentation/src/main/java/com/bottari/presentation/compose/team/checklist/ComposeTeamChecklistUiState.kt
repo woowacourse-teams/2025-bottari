@@ -5,6 +5,7 @@ import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
 
 data class ComposeTeamChecklistUiState(
     val isLoading: Boolean = false,
+    val isFetched: Boolean = false,
     val originalBottariItems: List<TeamChecklistItemUiModel> = emptyList(),
     val bottariItems: List<TeamChecklistItemUiModel> = emptyList(),
     val sections: Map<BottariItemTypeUiModel, Boolean> =
@@ -15,6 +16,7 @@ data class ComposeTeamChecklistUiState(
         ),
     val isTooltipClosed: Boolean = true,
 ) {
+    val isInitialLoading: Boolean = isLoading && isFetched.not()
     val totalQuantity: Int = bottariItems.size
 
     val checkedQuantity: Int = bottariItems.count { it.isChecked }

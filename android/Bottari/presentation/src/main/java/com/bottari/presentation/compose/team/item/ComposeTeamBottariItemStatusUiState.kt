@@ -4,10 +4,12 @@ import com.bottari.presentation.model.bottari.team.TeamBottariUiModelStatus
 
 data class ComposeTeamBottariItemStatusUiState(
     val isLoading: Boolean = false,
+    val isFetched: Boolean = false,
     val items: List<TeamBottariUiModelStatus> = listOf(),
     val selectedProduct: TeamBottariUiModelStatus? = null,
     val myNickname: String = "",
 ) {
+    val isInitialLoading: Boolean = isLoading && isFetched.not()
     private val totalCount =
         items.sumOf { it.totalItemsCount }
     private val checkedCount =
