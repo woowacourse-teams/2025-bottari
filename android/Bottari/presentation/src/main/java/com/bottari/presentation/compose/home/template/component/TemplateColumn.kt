@@ -63,7 +63,9 @@ fun TemplateColumn(
                 takenCount = template.takenCount,
                 hashtags = template.hashtags,
                 onClickHashtag = onClickHashtag,
-                modifier = Modifier.noRippleClickable { onClickDetail(template.id) },
+                modifier = Modifier
+                    .animateItem()
+                    .noRippleClickable { onClickDetail(template.id) },
                 iconButton = {
                     TemplateItemIconButtonByTemplateItemType(
                         type = type,

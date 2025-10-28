@@ -1,5 +1,6 @@
 package com.bottari.presentation.compose.home.template.main
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -8,7 +9,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +37,8 @@ fun MainTemplateScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
     val isScrolledToEnd by listState.rememberScrolledToEnd(5)
+    val isScrolledToTop by
+        remember(listState) { derivedStateOf { listState.firstVisibleItemIndex == 0 } }
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
@@ -56,6 +61,7 @@ fun MainTemplateScreen(
     MainTemplateScreen(
         uiState = uiState.value,
         listState = listState,
+        showSearchBar = isScrolledToTop,
         onQueryChange = viewModel::updateSearchWord,
         onChipChange = viewModel::updateChip,
         onRefresh = viewModel::refresh,
@@ -69,6 +75,7 @@ fun MainTemplateScreen(
 private fun MainTemplateScreen(
     uiState: MainTemplateUiState,
     listState: LazyListState,
+    showSearchBar: Boolean,
     onQueryChange: (String) -> Unit,
     onChipChange: (BottariTemplateHashtagUiModel?) -> Unit,
     onRefresh: () -> Unit,
@@ -77,21 +84,23 @@ private fun MainTemplateScreen(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        BottariHashChipSearchBar(
-            query = uiState.searchWord,
-            onQueryChange = onQueryChange,
-            chips = uiState.chip?.let { listOf(it.name) }.orEmpty(),
-            onChipsChange = { new -> if (new.isEmpty()) onChipChange(null) },
-            placeholderText = "제목이나 해시태그를 입력하세요",
-            onSearch = {},
-            modifier =
-                Modifier
-                    .padding(horizontal = BottariTheme.spacing.spaceLarge)
-                    .padding(
-                        top = BottariTheme.spacing.spaceXSmall,
-                        bottom = BottariTheme.spacing.space2xSmall,
-                    ),
-        )
+        AnimatedVisibility(visible = showSearchBar) {
+            BottariHashChipSearchBar(
+                query = uiState.searchWord,
+                onQueryChange = onQueryChange,
+                chips = uiState.chip?.let { listOf(it.name) }.orEmpty(),
+                onChipsChange = { new -> if (new.isEmpty()) onChipChange(null) },
+                placeholderText = "제목이나 해시태그를 입력하세요",
+                onSearch = {},
+                modifier =
+                    Modifier
+                        .padding(horizontal = BottariTheme.spacing.spaceLarge)
+                        .padding(
+                            top = BottariTheme.spacing.spaceXSmall,
+                            bottom = BottariTheme.spacing.space2xSmall,
+                        ),
+            )
+        }
 
         PullToRefreshTemplateColumn(
             type = TemplateItemType.Bookmark(false),
@@ -139,6 +148,7 @@ private fun MainTemplateScreenPreview() {
         MainTemplateScreen(
             uiState = uiState,
             listState = rememberLazyListState(),
+            showSearchBar = true,
             onQueryChange = {},
             onChipChange = {},
             onRefresh = {},
