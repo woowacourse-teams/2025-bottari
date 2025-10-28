@@ -1,10 +1,13 @@
 package com.bottari.presentation.compose.common.component.chip
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -23,6 +26,7 @@ fun BottariChip(
     textStyle: TextStyle = BottariTheme.typography.medium12.toTextStyle(),
     containerColor: Color = Color(0xFFEFF6FF),
     contentColor: Color = BottariTheme.colors.primary,
+    onClick: () -> Unit = {},
 ) {
     val chipShape = remember { RoundedCornerShape(999.dp) }
 
@@ -31,7 +35,11 @@ fun BottariChip(
         modifier =
             modifier
                 .clip(chipShape)
-                .background(
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = ripple(color = containerColor),
+                    onClick = onClick,
+                ).background(
                     color = containerColor,
                     shape = chipShape,
                 ).padding(
