@@ -44,10 +44,10 @@ class MainViewModel @Inject constructor(
     }
 
     private fun checkForceUpdate() {
-//        if (BuildConfig.DEBUG) {
-//            checkPermissionFlag()
-//            return
-//        }
+        if (BuildConfig.DEBUG) {
+            checkPermissionFlag()
+            return
+        }
 
         launch {
             checkForceUpdateUseCase(BuildConfig.APP_VERSION_CODE)
