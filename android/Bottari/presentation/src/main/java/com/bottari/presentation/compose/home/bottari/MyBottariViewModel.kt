@@ -15,6 +15,7 @@ import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
 import com.bottari.presentation.util.AlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -36,9 +37,8 @@ class MyBottariViewModel @Inject constructor(
     }
 
     fun fetchTeamBottaries() {
-        updateState { copy(isLoading = true) }
-
         launch {
+            updateState { copy(isLoading = true) }
             fetchTeamBottariesUseCase()
                 .onSuccess { bottaries ->
                     updateState { copy(teamBottaries = bottaries.map(TeamBottariUiModel::fromDomain)) }

@@ -69,11 +69,6 @@ fun MyBottariContent(
     }
 
     Box(modifier = modifier.fillMaxSize()) {
-        if (uiState.isLoading && uiState.isFetched.not()) {
-            IndeterminateCircularIndicator()
-            return@Box
-        }
-
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,
@@ -135,6 +130,10 @@ fun MyBottariContent(
                     onEditTeamBottari = onEditTeamBottari,
                 )
             }
+        }
+
+        if (uiState.isLoading) {
+            IndeterminateCircularIndicator()
         }
 
         AnimatedVisibility(
