@@ -4,13 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.SnackBarDuration
 import com.bottari.presentation.common.extension.showSnackbar
+import com.bottari.presentation.compose.home.ComposeHomeActivity
 import com.bottari.presentation.databinding.ActivityInviteBinding
 import com.bottari.presentation.view.common.LoadingDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class InviteActivity : BaseActivity<ActivityInviteBinding>(ActivityInviteBinding::inflate) {
@@ -24,28 +29,33 @@ class InviteActivity : BaseActivity<ActivityInviteBinding>(ActivityInviteBinding
     }
 
     private fun setupObserver() {
-        viewModel.uiState.observe(this) { uiState ->
-            toggleLoadingIndicator(uiState.isLoading)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) { viewModel.uiState.collect(::handleUiState) }
         }
-        viewModel.uiEvent.observe(this) { uiEvent ->
-            when (uiEvent) {
-                InviteUiEvent.JoinTeamBottariFailure -> {
-                    binding.root.showSnackbar(
-                        R.string.join_team_bottari_failure_text,
-                        SnackBarDuration.VERY_SHORT_DELAY,
-                    ) {
-                        navigateToHome(false)
-                    }
-                }
 
-                InviteUiEvent.JoinTeamBottariSuccess -> {
-                    binding.root.showSnackbar(
-                        R.string.join_team_bottari_success_text,
-                        SnackBarDuration.VERY_SHORT_DELAY,
-                    ) {
-                        navigateToHome(true)
-                    }
-                }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) { viewModel.uiEvent.collect(::handleUiEvent) }
+        }
+    }
+
+    private fun handleUiState(uiState: InviteUiState) {
+        toggleLoadingIndicator(uiState.isLoading)
+    }
+
+    private fun handleUiEvent(uiEvent: InviteUiEvent) {
+        when (uiEvent) {
+            InviteUiEvent.JoinTeamBottariFailure -> {
+                binding.root.showSnackbar(
+                    R.string.join_team_bottari_failure_text,
+                    SnackBarDuration.VERY_SHORT_DELAY,
+                ) { navigateToHome(false) }
+            }
+
+            is InviteUiEvent.JoinTeamBottariSuccess -> {
+                binding.root.showSnackbar(
+                    R.string.join_team_bottari_success_text,
+                    SnackBarDuration.VERY_SHORT_DELAY,
+                ) { navigateToHome(true) }
             }
         }
     }
@@ -72,17 +82,16 @@ class InviteActivity : BaseActivity<ActivityInviteBinding>(ActivityInviteBinding
         if (dialog.isShowing) dialog.dismiss()
     }
 
-    // ComposeHomeActivity에서 별도의 처리 필요
     private fun navigateToHome(isJoinSuccess: Boolean) {
-//        val intent = createIntent(isJoinSuccess)
-//        startActivity(intent)
-//        finish()
+        val intent = createIntent(isJoinSuccess)
+        startActivity(intent)
+        finish()
     }
 
-//    private fun createIntent(isJoinSuccess: Boolean): Intent {
-//        if (isJoinSuccess) return HomeActivity.newIntentForDeeplink(this)
-//        return HomeActivity.newIntent(this)
-//    }
+    private fun createIntent(isJoinSuccess: Boolean): Intent {
+        if (isJoinSuccess) return ComposeHomeActivity.newIntent(this)
+        return ComposeHomeActivity.newIntent(this)
+    }
 
     companion object {
         private const val KEY_INVITE_CODE = "KEY_INVITE_CODE"
