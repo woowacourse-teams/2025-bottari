@@ -22,16 +22,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Velocity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.compose.common.component.BottariHashChipSearchBar
 import com.bottari.presentation.compose.common.component.chip.BottariChip
+import com.bottari.presentation.compose.common.extension.rememberBlockParentAfterChild
 import com.bottari.presentation.compose.common.extension.rememberScrolledToEnd
 import com.bottari.presentation.compose.common.modifier.startEndFadingEdge
 import com.bottari.presentation.compose.common.theme.BottariTheme
@@ -41,7 +38,6 @@ import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlin.math.abs
 
 @Composable
 fun MainTemplateScreen(
@@ -207,28 +203,6 @@ private fun PopularHashtagSection(
         Spacer(modifier = Modifier.height(BottariTheme.spacing.space2xSmall))
     }
 }
-
-@Composable
-fun rememberBlockParentAfterChild(): NestedScrollConnection =
-    remember {
-        object : NestedScrollConnection {
-            override fun onPostScroll(
-                consumed: Offset,
-                available: Offset,
-                source: NestedScrollSource,
-            ): Offset {
-                if (source == NestedScrollSource.UserInput && abs(available.x) > abs(available.y)) {
-                    return Offset(available.x, 0f)
-                }
-                return Offset.Zero
-            }
-
-            override suspend fun onPostFling(
-                consumed: Velocity,
-                available: Velocity,
-            ): Velocity = Velocity(available.x, 0f)
-        }
-    }
 
 @Preview(showBackground = true)
 @Composable
