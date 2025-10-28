@@ -10,6 +10,7 @@ data class MainTemplateUiState(
     val isFetched: Boolean = false,
     val isRefreshing: Boolean = false,
     val templates: List<BottariTemplateUiModel> = emptyList(),
+    val popularHashtags: List<BottariTemplateHashtagUiModel> = emptyList(),
     val chip: BottariTemplateHashtagUiModel? = null,
     val searchWord: String = "",
 ) {

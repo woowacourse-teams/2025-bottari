@@ -6,6 +6,7 @@ import com.bottari.domain.model.common.Pageable
 import com.bottari.domain.usecase.bookmark.AddBookmarkUseCase
 import com.bottari.domain.usecase.bookmark.DeleteBookmarkUseCase
 import com.bottari.domain.usecase.bookmark.ObserveAllBookmarksUseCase
+import com.bottari.domain.usecase.hashtag.FetchPopularHashtagsUseCase
 import com.bottari.domain.usecase.template.SearchTemplatesByHashtagUseCase
 import com.bottari.domain.usecase.template.SearchTemplatesByTitleUseCase
 import com.bottari.logger.BottariLogger
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class MainTemplateViewModel @Inject constructor(
     private val searchTemplatesByTitleUseCase: SearchTemplatesByTitleUseCase,
     private val searchTemplatesByHashtagUseCase: SearchTemplatesByHashtagUseCase,
+    private val fetchPopularHashtagsUseCase: FetchPopularHashtagsUseCase,
     private val addBookmarkUseCase: AddBookmarkUseCase,
     private val deleteBookmarkUseCase: DeleteBookmarkUseCase,
     private val observeAllBookmarksUseCase: ObserveAllBookmarksUseCase,
@@ -32,6 +34,7 @@ class MainTemplateViewModel @Inject constructor(
 
     init {
         loadNextPageBySearchWord(reset = true)
+        fetchPopularHashtags()
         observeAllBookmarks()
     }
 
@@ -56,7 +59,7 @@ class MainTemplateViewModel @Inject constructor(
 
     fun updateChip(chip: BottariTemplateHashtagUiModel?) {
         if (currentState.searchWord.isNotEmpty()) return
-        if (currentState.chip == chip) return
+        if (currentState.chip == chip) return updateChip(null)
 
         updateState { copy(chip = chip, searchWord = "") }
         loadNextPageByHashtag(reset = true)
@@ -115,6 +118,19 @@ class MainTemplateViewModel @Inject constructor(
                     BottariLogger.error(exception.message, exception)
                 }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
+    }
+
+    private fun fetchPopularHashtags() {
+        launch {
+            fetchPopularHashtagsUseCase()
+                .onSuccess { hashtags ->
+                    val uiModels =
+                        hashtags
+                            .sortedBy { hashtag -> hashtag.usageCount }
+                            .map(BottariTemplateHashtagUiModel::fromDomain)
+                    updateState { copy(popularHashtags = uiModels) }
+                }
+        }
     }
 
     private fun addBookmark(templateId: Long) {

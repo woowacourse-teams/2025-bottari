@@ -7,6 +7,6 @@ data class BottariTemplate(
     val items: List<BottariTemplateItem>,
     val author: String,
     val takenCount: Int,
-    val hashtags: List<BottariTemplateHashtag>,
+    val hashtags: List<Hashtag>,
     val isMarked: Boolean = false,
 )

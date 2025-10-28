@@ -20,6 +20,8 @@ import com.bottari.data.source.remote.EventRemoteDataSource
 import com.bottari.data.source.remote.EventRemoteDataSourceImpl
 import com.bottari.data.source.remote.FcmRemoteDataSource
 import com.bottari.data.source.remote.FcmRemoteDataSourceImpl
+import com.bottari.data.source.remote.HashtagRemoteDataSource
+import com.bottari.data.source.remote.HashtagRemoteDataSourceImpl
 import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSourceImpl
 import com.bottari.data.source.remote.RemoteConfigRemoteDataSource
@@ -104,4 +106,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindBookmarkLocalDataSource(impl: BookmarkLocalDataSourceImpl): BookmarkLocalDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindHashtagRemoteDataSource(impl: HashtagRemoteDataSourceImpl): HashtagRemoteDataSource
 }
