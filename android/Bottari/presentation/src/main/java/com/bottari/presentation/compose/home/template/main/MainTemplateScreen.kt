@@ -49,8 +49,7 @@ fun MainTemplateScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
     val isScrolledToEnd by listState.rememberScrolledToEnd(5)
-    val isScrolledToTop by
-        remember(listState) { derivedStateOf { listState.firstVisibleItemIndex == 0 } }
+    val isScrolledToTop by remember(listState) { derivedStateOf { listState.firstVisibleItemIndex == 0 } }
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
@@ -169,7 +168,7 @@ private fun PopularHashtagSection(
     onChipChange: (BottariTemplateHashtagUiModel?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column {
+    Column(modifier = modifier) {
         Text(
             text = "# 인기 해시태그",
             style = BottariTheme.typography.semiBold16.toTextStyle(),
@@ -182,7 +181,7 @@ private fun PopularHashtagSection(
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
             modifier =
-                modifier
+                Modifier
                     .startEndFadingEdge(color = BottariTheme.colors.white)
                     .nestedScroll(rememberBlockParentAfterChild()),
         ) {
