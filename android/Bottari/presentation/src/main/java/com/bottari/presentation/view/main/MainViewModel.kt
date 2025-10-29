@@ -38,7 +38,7 @@ class MainViewModel @Inject constructor(
     fun checkRegisteredMember() {
         launch {
             checkRegisteredMemberUseCase()
-                .onSuccess { result -> handleCheckRegistrationResult(result) }
+                .onSuccess(::handleCheckRegistrationResult)
                 .onFailure { emitEvent(MainUiEvent.LoginFailure) }
         }
     }
@@ -53,18 +53,19 @@ class MainViewModel @Inject constructor(
             checkForceUpdateUseCase(BuildConfig.APP_VERSION_CODE)
                 .onSuccess { isForceUpdate ->
                     if (isForceUpdate) {
+                        updateState { copy(isReady = true) }
                         emitEvent(MainUiEvent.ForceUpdate)
                         return@onSuccess
                     }
                     checkPermissionFlag()
                 }.onFailure { exception -> BottariLogger.error(exception.message, exception) }
-        }.invokeOnCompletion { updateState { copy(isReady = true) } }
+        }
     }
 
     private fun checkPermissionFlag() {
         launch {
             getPermissionFlagUseCase()
-                .onSuccess { flag -> handlePermissionFlag(flag) }
+                .onSuccess(::handlePermissionFlag)
                 .onFailure { emitEvent(MainUiEvent.GetPermissionFlagFailure) }
         }
     }
