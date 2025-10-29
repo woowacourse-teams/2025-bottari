@@ -126,7 +126,7 @@ class MainTemplateViewModel @Inject constructor(
                 .onSuccess { hashtags ->
                     val uiModels =
                         hashtags
-                            .sortedBy { hashtag -> hashtag.usageCount }
+                            .sortedByDescending { hashtag -> hashtag.usageCount }
                             .map(BottariTemplateHashtagUiModel::fromDomain)
                     updateState { copy(popularHashtags = uiModels) }
                 }
