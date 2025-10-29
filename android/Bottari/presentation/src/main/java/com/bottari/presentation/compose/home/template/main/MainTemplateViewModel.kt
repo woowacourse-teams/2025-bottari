@@ -1,7 +1,9 @@
 package com.bottari.presentation.compose.home.template.main
 
 import androidx.lifecycle.viewModelScope
+import com.bottari.domain.model.bottari.template.BookmarkTemplate
 import com.bottari.domain.model.bottari.template.BottariTemplate
+import com.bottari.domain.model.bottari.template.PopularHashtag
 import com.bottari.domain.model.common.Pageable
 import com.bottari.domain.usecase.bookmark.AddBookmarkUseCase
 import com.bottari.domain.usecase.bookmark.DeleteBookmarkUseCase
@@ -15,6 +17,7 @@ import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel
 import com.bottari.presentation.util.debounce
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -84,18 +87,9 @@ class MainTemplateViewModel @Inject constructor(
 
         launch {
             updateState { copy(isLoading = true) }
-
             searchTemplatesByTitleUseCase(currentState.searchWord, wordPageable)
-                .onSuccess { newPageable ->
-                    pageable = newPageable
-                    updateState {
-                        copy(templates = newPageable.contents.map(BottariTemplateUiModel::fromDomain))
-                    }
-                    if (reset) emitEvent(MainTemplateUiEvent.SearchTemplateSuccess)
-                }.onFailure { exception ->
-                    emitEvent(MainTemplateUiEvent.FetchBottariTemplatesFailure)
-                    BottariLogger.error(exception.message, exception)
-                }
+                .onSuccess { newPageable -> handleLoadNextPageSuccess(reset, newPageable) }
+                .onFailure(::handleLoadNextPageFailure)
         }.invokeOnCompletion { updateState { copy(isLoading = false, isFetched = true) } }
     }
 
@@ -105,32 +99,37 @@ class MainTemplateViewModel @Inject constructor(
 
         launch {
             updateState { copy(isLoading = true) }
-
             searchTemplatesByHashtagUseCase(chip.id, chipPageable)
-                .onSuccess { newPageable ->
-                    pageable = newPageable
-                    updateState {
-                        copy(templates = newPageable.contents.map(BottariTemplateUiModel::fromDomain))
-                    }
-                    if (reset) emitEvent(MainTemplateUiEvent.SearchTemplateSuccess)
-                }.onFailure { exception ->
-                    emitEvent(MainTemplateUiEvent.FetchBottariTemplatesFailure)
-                    BottariLogger.error(exception.message, exception)
-                }
+                .onSuccess { newPageable -> handleLoadNextPageSuccess(reset, newPageable) }
+                .onFailure(::handleLoadNextPageFailure)
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
+    private fun handleLoadNextPageSuccess(
+        reset: Boolean,
+        newPageable: Pageable<BottariTemplate>,
+    ) {
+        pageable = newPageable
+        val newContents = newPageable.contents.map(BottariTemplateUiModel::fromDomain)
+        updateState { copy(templates = newContents) }
+
+        if (reset) emitEvent(MainTemplateUiEvent.SearchTemplateSuccess)
+    }
+
+    private fun handleLoadNextPageFailure(exception: Throwable) {
+        emitEvent(MainTemplateUiEvent.FetchBottariTemplatesFailure)
+        BottariLogger.error(exception.message, exception)
+    }
+
     private fun fetchPopularHashtags() {
-        launch {
-            fetchPopularHashtagsUseCase()
-                .onSuccess { hashtags ->
-                    val uiModels =
-                        hashtags
-                            .sortedByDescending { hashtag -> hashtag.usageCount }
-                            .map(BottariTemplateHashtagUiModel::fromDomain)
-                    updateState { copy(popularHashtags = uiModels) }
-                }
-        }
+        launch { fetchPopularHashtagsUseCase().onSuccess(::handleFetchPopularHashtagsSuccess) }
+    }
+
+    private fun handleFetchPopularHashtagsSuccess(hashtags: List<PopularHashtag>) {
+        hashtags
+            .sortedByDescending { hashtag -> hashtag.usageCount }
+            .map(BottariTemplateHashtagUiModel::fromDomain)
+            .also { uiModels -> updateState { copy(popularHashtags = uiModels) } }
     }
 
     private fun addBookmark(templateId: Long) {
@@ -153,7 +152,6 @@ class MainTemplateViewModel @Inject constructor(
     private fun deleteBookmark(templateId: Long) {
         launch {
             updateState { copy(isLoading = true) }
-
             deleteBookmarkUseCase(templateId)
                 .onSuccess { changeMarkedById(templateId, false) }
                 .onFailure { exception ->
@@ -167,24 +165,26 @@ class MainTemplateViewModel @Inject constructor(
         templateId: Long,
         isMarked: Boolean,
     ) {
-        val updated =
-            currentState.templates.map { template ->
+        currentState.templates
+            .map { template ->
                 if (template.id != templateId) return@map template
                 template.copy(isMarked = isMarked)
-            }
-        updateState { copy(templates = updated) }
+            }.also { updated -> updateState { copy(templates = updated) } }
     }
 
     private fun observeAllBookmarks() {
         observeAllBookmarksUseCase()
-            .onEach { bookmarks ->
-                val updated =
-                    currentState.templates.map { template ->
-                        val isMarked = bookmarks.any { bookmark -> bookmark.templateId == template.id }
-                        template.copy(isMarked = isMarked)
-                    }
-                updateState { copy(templates = updated) }
-            }.launchIn(viewModelScope)
+            .catch { exception -> BottariLogger.error(exception.message, exception) }
+            .onEach(::handleObserveAllBookmarks)
+            .launchIn(viewModelScope)
+    }
+
+    private fun handleObserveAllBookmarks(bookmarks: List<BookmarkTemplate>) {
+        currentState.templates
+            .map { template ->
+                val isMarked = bookmarks.any { bookmark -> bookmark.templateId == template.id }
+                template.copy(isMarked = isMarked)
+            }.also { updated -> updateState { copy(templates = updated) } }
     }
 
     companion object {
