@@ -8,6 +8,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.showSnackbar
@@ -25,6 +28,7 @@ import com.bottari.presentation.view.common.alert.DialogListener
 import com.bottari.presentation.view.common.alert.DialogPresetType
 import com.bottari.presentation.view.invite.InviteActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
@@ -37,9 +41,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
-            setKeepOnScreenCondition {
-                viewModel.uiState.value?.isReady == false
-            }
+            setKeepOnScreenCondition { !viewModel.uiState.value.isReady }
         }
         super.onCreate(savedInstanceState)
         setupObserver()
@@ -54,17 +56,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun setupObserver() {
-        viewModel.uiEvent.observe(this) { uiEvent ->
-            when (uiEvent) {
-                is MainUiEvent.LoginSuccess -> checkPermissionAndNavigate(uiEvent.permissionFlag)
-                MainUiEvent.IncompletePermissionFlow -> showPermissionDescriptionDialog()
-                MainUiEvent.ForceUpdate -> showForceUpdateDialog()
-                MainUiEvent.RegisterFailure,
-                MainUiEvent.LoginFailure,
-                MainUiEvent.GetPermissionFlagFailure,
-                MainUiEvent.SavePermissionFlagFailure,
-                -> finishAffinity()
-            }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) { viewModel.uiEvent.collect(::handleUiEvent) }
+        }
+    }
+
+    private fun handleUiEvent(uiEvent: MainUiEvent) {
+        when (uiEvent) {
+            is MainUiEvent.LoginSuccess -> checkPermissionAndNavigate(uiEvent.permissionFlag)
+            MainUiEvent.IncompletePermissionFlow -> showPermissionDescriptionDialog()
+            MainUiEvent.ForceUpdate -> showForceUpdateDialog()
+            MainUiEvent.RegisterFailure,
+            MainUiEvent.LoginFailure,
+            MainUiEvent.GetPermissionFlagFailure,
+            MainUiEvent.SavePermissionFlagFailure,
+            -> finishAffinity()
         }
     }
 
@@ -144,6 +150,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private fun launchPlayStore() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = "market://details?id=$packageName".toUri()
+        intent.`package` = "com.android.vending"
         startActivity(intent)
         finishAffinity()
     }

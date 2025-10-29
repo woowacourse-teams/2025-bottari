@@ -9,7 +9,7 @@ import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.BuildConfig
-import com.bottari.presentation.common.base.BaseViewModel
+import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.tasks.await
@@ -23,19 +23,9 @@ class MainViewModel @Inject constructor(
     private val saveFcmTokenUseCase: SaveFcmTokenUseCase,
     private val getPermissionFlagUseCase: GetPermissionFlagUseCase,
     private val checkForceUpdateUseCase: CheckForceUpdateUseCase,
-) : BaseViewModel<MainUiState, MainUiEvent>(MainUiState()) {
+) : FlowBaseViewModel<MainUiState, MainUiEvent>(MainUiState()) {
     init {
         checkForceUpdate()
-    }
-
-    fun checkRegisteredMember() {
-        updateState { copy(isLoading = true) }
-
-        launch {
-            checkRegisteredMemberUseCase()
-                .onSuccess { result -> handleCheckRegistrationResult(result) }
-                .onFailure { emitEvent(MainUiEvent.LoginFailure) }
-        }
     }
 
     fun savePermissionFlag() {
@@ -45,64 +35,91 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun checkRegisteredMember() {
+        launch {
+            checkRegisteredMemberUseCase()
+                .onSuccess(::handleCheckRegistrationResult)
+                .onFailure { emitEvent(MainUiEvent.LoginFailure) }
+        }
+    }
+
+    private fun checkForceUpdate() {
+        if (BuildConfig.DEBUG) {
+            checkPermissionFlag()
+            return
+        }
+
+        launch {
+            checkForceUpdateUseCase(BuildConfig.APP_VERSION_CODE)
+                .onSuccess { isForceUpdate ->
+                    if (isForceUpdate) {
+                        updateState { copy(isReady = true) }
+                        emitEvent(MainUiEvent.ForceUpdate)
+                        return@onSuccess
+                    }
+                    checkPermissionFlag()
+                }.onFailure { exception -> BottariLogger.error(exception.message, exception) }
+        }
+    }
+
     private fun checkPermissionFlag() {
         launch {
             getPermissionFlagUseCase()
-                .onSuccess { permissionFlag -> handlePermissionFlag(permissionFlag) }
+                .onSuccess(::handlePermissionFlag)
                 .onFailure { emitEvent(MainUiEvent.GetPermissionFlagFailure) }
         }
     }
 
-    private fun handleCheckRegistrationResult(result: RegisteredMember) {
-        if (result.isRegistered) return saveFcmToken()
-        registerMember()
-    }
-
     private fun handlePermissionFlag(permissionFlag: Boolean) {
         updateState { copy(hasPermissionFlag = permissionFlag) }
+
         if (!permissionFlag) {
             updateState { copy(isReady = true) }
             emitEvent(MainUiEvent.IncompletePermissionFlow)
             return
         }
+
         checkRegisteredMember()
+    }
+
+    private fun handleCheckRegistrationResult(result: RegisteredMember) {
+        if (result.isRegistered) {
+            saveFcmToken()
+            return
+        }
+        registerMember()
     }
 
     private fun registerMember() {
         launch {
-            val fcmToken = FirebaseMessaging.getInstance().token.await()
+            val fcmToken = fetchFcmToken()
+            if (fcmToken == null) {
+                emitEvent(MainUiEvent.RegisterFailure)
+                return@launch
+            }
+
             registerMemberUseCase(fcmToken)
+                .onSuccess { onLoginReady() }
                 .onFailure { emitEvent(MainUiEvent.RegisterFailure) }
-                .onSuccess {
-                    updateState { copy(isLoading = false, isReady = true) }
-                    emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))
-                }
         }
     }
 
     private fun saveFcmToken() {
         launch {
-            val fcmToken = FirebaseMessaging.getInstance().token.await()
-            saveFcmTokenUseCase(fcmToken)
-                .onFailure { exception -> BottariLogger.error(exception.message, exception) }
-
-            updateState { copy(isLoading = false, isReady = true) }
-            emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))
-        }
+            fetchFcmToken()?.let { fcmToken ->
+                saveFcmTokenUseCase(fcmToken)
+                    .onFailure { exception -> BottariLogger.error(exception.message, exception) }
+            }
+        }.invokeOnCompletion { onLoginReady() }
     }
 
-    private fun checkForceUpdate() {
-        if (BuildConfig.DEBUG) return checkPermissionFlag()
-        updateState { copy(isLoading = true) }
-
-        launch {
-            checkForceUpdateUseCase(BuildConfig.APP_VERSION_CODE)
-                .onSuccess { isForceUpdate ->
-                    if (isForceUpdate) return@onSuccess emitEvent(MainUiEvent.ForceUpdate)
-                    checkPermissionFlag()
-                }.onFailure { exception -> BottariLogger.error(exception.message, exception) }
-
-            updateState { copy(isLoading = false) }
-        }
+    private fun onLoginReady() {
+        updateState { copy(isReady = true) }
+        emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))
     }
+
+    private suspend fun fetchFcmToken(): String? =
+        runCatching { FirebaseMessaging.getInstance().token.await() }
+            .onFailure { exception -> BottariLogger.error(exception.message, exception) }
+            .getOrNull()
 }
