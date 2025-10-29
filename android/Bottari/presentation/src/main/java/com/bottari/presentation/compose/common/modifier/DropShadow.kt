@@ -26,7 +26,7 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 @Composable
 fun Modifier.dropShadow(
     shape: Shape,
-    color: Color = Color.Black.copy(0.25f),
+    color: Color = BottariTheme.colors.black.copy(0.25f),
     blur: Dp = 1.dp,
     offsetY: Dp = 1.dp,
     offsetX: Dp = 0.dp,
