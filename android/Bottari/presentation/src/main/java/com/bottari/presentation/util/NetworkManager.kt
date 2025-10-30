@@ -45,17 +45,13 @@ class NetworkManager @Inject constructor(
                         networkCapabilities: NetworkCapabilities,
                     ) {
                         super.onCapabilitiesChanged(network, networkCapabilities)
-                        val isConnected =
-                            networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-                                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                        val isConnected = hasCapability(networkCapabilities)
                         trySend(isConnected)
                     }
                 }
             connectivityManager.registerDefaultNetworkCallback(networkCallback)
 
-            awaitClose {
-                connectivityManager.unregisterNetworkCallback(networkCallback)
-            }
+            awaitClose { connectivityManager.unregisterNetworkCallback(networkCallback) }
         }.distinctUntilChanged()
 
     val isConnected: StateFlow<Boolean> =
@@ -69,11 +65,12 @@ class NetworkManager @Inject constructor(
         val activeNetwork = connectivityManager.activeNetwork
         if (activeNetwork == null) {
             return false
-        } else {
-            val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
-            return networkCapabilities != null &&
-                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
         }
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+        return networkCapabilities != null && hasCapability(networkCapabilities)
     }
+
+    private fun hasCapability(networkCapabilities: NetworkCapabilities) =
+        networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+            networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
 }
