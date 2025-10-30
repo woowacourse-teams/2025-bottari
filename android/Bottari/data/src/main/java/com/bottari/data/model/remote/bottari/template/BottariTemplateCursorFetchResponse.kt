@@ -1,11 +1,11 @@
 package com.bottari.data.model.remote.bottari.template
 
 import com.bottari.domain.model.bottari.template.BottariTemplate
-import com.bottari.domain.model.bottari.template.BottariTemplateHashtag
 import com.bottari.domain.model.bottari.template.BottariTemplateItem
 import com.bottari.domain.model.bottari.template.HashtagName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import com.bottari.domain.model.bottari.template.Hashtag as HashtagDomain
 
 @Serializable
 data class BottariTemplateCursorFetchResponse(
@@ -47,8 +47,8 @@ data class BottariTemplateCursorFetchResponse(
         @SerialName("name")
         val name: String,
     ) {
-        fun toDomain(): BottariTemplateHashtag =
-            BottariTemplateHashtag(
+        fun toDomain(): HashtagDomain =
+            HashtagDomain(
                 id = id,
                 name = HashtagName.create(name).getOrDefault(HashtagName.UNKNOWN_HASHTAG_NAME),
             )

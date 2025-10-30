@@ -26,9 +26,10 @@ class SearchTemplatesByHashtagUseCase @Inject constructor(
             .searchTemplatesByHashtag(
                 hashtagId = hashtagId,
                 pageable = pageable,
-            ).mapCatching { newPageable ->
-                val newContent = applyBookmarkStatusesParallel(newPageable.contents)
-                newPageable.copy(contents = newContent)
+            ).mapCatching { result ->
+                val newContent = applyBookmarkStatusesParallel(result.contents)
+                val newPageable = result.copy(contents = newContent)
+                pageable.merge(newPageable)
             }
 
     private suspend fun applyBookmarkStatusesParallel(

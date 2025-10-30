@@ -1,5 +1,7 @@
 package com.bottari.presentation.compose.home.template.component
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,15 +9,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
@@ -40,30 +44,78 @@ fun TemplateColumn(
         modifier =
             modifier
                 .fillMaxSize()
-                .padding(horizontal = BottariTheme.spacing.spaceLarge)
+                .padding(horizontal = BottariTheme.spacing.spaceMedium)
                 .topBottomFadingEdge(color = BottariTheme.colors.gray50, width = 8.dp),
         contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceSmall),
-        verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
+        verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
     ) {
-        if (emptyViewText.isNotBlank() && templates.isEmpty()) {
-            item {
-                TemplateEmptyView(
-                    text = emptyViewText,
-                    modifier = Modifier.fillParentMaxSize(),
-                )
-            }
-        }
+        emptyView(emptyViewText = emptyViewText, isEmpty = templates.isEmpty())
 
-        items(templates, key = { template -> template.id }) { template ->
+        templateItems(
+            type = type,
+            templates = templates,
+            onClickDetail = onClickDetail,
+            onClickDelete = onClickDelete,
+            onClickBookmark = onClickBookmark,
+            onClickHashtag = onClickHashtag,
+        )
+
+        loadingBlock(show = showLoadingBlock)
+    }
+}
+
+private fun LazyListScope.emptyView(
+    emptyViewText: String,
+    isEmpty: Boolean,
+) {
+    if (emptyViewText.isBlank() || !isEmpty) return
+    item(key = "empty") {
+        TemplateEmptyView(
+            text = emptyViewText,
+            modifier = Modifier.fillParentMaxSize(),
+        )
+    }
+}
+
+private fun LazyListScope.loadingBlock(show: Boolean) {
+    if (!show) return
+    item(key = "loading") { LoadingBlock() }
+}
+
+private fun LazyListScope.templateItems(
+    type: TemplateItemType,
+    templates: List<BottariTemplateUiModel>,
+    onClickDetail: (Long) -> Unit,
+    onClickDelete: (Long) -> Unit,
+    onClickBookmark: (Long) -> Unit,
+    onClickHashtag: (BottariTemplateHashtagUiModel) -> Unit,
+) {
+    items(
+        items = templates,
+        key = { template -> template.id },
+    ) { template ->
+        Box(
+            modifier =
+                Modifier
+                    .animateItem()
+                    .padding(
+                        horizontal = BottariTheme.spacing.space2xSmall,
+                        vertical = BottariTheme.spacing.space2xSmall,
+                    ),
+        ) {
             TemplateItem(
                 title = template.title,
                 description = template.description,
-                items = template.items.map { item -> item.name },
+                items = template.items.map { it.name },
                 author = template.author,
                 takenCount = template.takenCount,
                 hashtags = template.hashtags,
                 onClickHashtag = onClickHashtag,
-                modifier = Modifier.noRippleClickable { onClickDetail(template.id) },
+                modifier =
+                    Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = ripple(color = BottariTheme.colors.primary),
+                    ) { onClickDetail(template.id) },
                 iconButton = {
                     TemplateItemIconButtonByTemplateItemType(
                         type = type,
@@ -74,8 +126,6 @@ fun TemplateColumn(
                 },
             )
         }
-
-        if (showLoadingBlock) item { LoadingBlock() }
     }
 }
 
@@ -113,7 +163,6 @@ private fun LoadingBlock(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
-            modifier = Modifier,
             color = BottariTheme.colors.primary,
             trackColor = BottariTheme.colors.primarySoft,
         )
@@ -123,9 +172,7 @@ private fun LoadingBlock(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun LoadingBlockPreview() {
-    BottariTheme {
-        LoadingBlock()
-    }
+    BottariTheme { LoadingBlock() }
 }
 
 @Preview(showBackground = true)
@@ -150,6 +197,7 @@ private fun TemplateColumnPreview() {
                 hashtags = List(3) { BottariTemplateHashtagUiModel(it.toLong(), "해시태그 $it") },
             )
         }
+
     BottariTheme {
         TemplateColumn(
             type = TemplateItemType.Bookmark(false),

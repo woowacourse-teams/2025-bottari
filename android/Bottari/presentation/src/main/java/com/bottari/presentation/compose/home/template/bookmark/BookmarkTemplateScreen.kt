@@ -96,20 +96,23 @@ private fun BookmarkTemplateColumn(
                 title = template.title,
                 description = template.description,
                 items = template.items,
-                author = "",
-                takenCount = 0,
                 hashtags =
                     template.hashtags.mapIndexed { index, hashtag ->
                         BottariTemplateHashtagUiModel(index.toLong(), hashtag)
                     },
-                onClickHashtag = {},
-                modifier = Modifier.noRippleClickable { onClickDetail(template.templateId) },
                 iconButton = {
                     TemplateItemIconButton(
                         type = TemplateItemType.Bookmark(true),
                         onClick = { onClickDelete(template.templateId) },
                     )
                 },
+                modifier =
+                    Modifier
+                        .animateItem()
+                        .noRippleClickable { onClickDetail(template.templateId) },
+                onClickHashtag = {},
+                author = "",
+                takenCount = -1,
             )
         }
     }

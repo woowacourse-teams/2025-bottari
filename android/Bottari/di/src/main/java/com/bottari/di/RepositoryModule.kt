@@ -8,6 +8,7 @@ import com.bottari.data.repository.BottariRepositoryImpl
 import com.bottari.data.repository.BottariTemplateRepositoryImpl
 import com.bottari.data.repository.EventRepositoryImpl
 import com.bottari.data.repository.FcmRepositoryImpl
+import com.bottari.data.repository.HashtagRepositoryImpl
 import com.bottari.data.repository.MemberRepositoryImpl
 import com.bottari.data.repository.RemoteConfigRepositoryImpl
 import com.bottari.data.repository.ReportRepositoryImpl
@@ -23,6 +24,7 @@ import com.bottari.domain.repository.BottariRepository
 import com.bottari.domain.repository.BottariTemplateRepository
 import com.bottari.domain.repository.EventRepository
 import com.bottari.domain.repository.FcmRepository
+import com.bottari.domain.repository.HashtagRepository
 import com.bottari.domain.repository.MemberRepository
 import com.bottari.domain.repository.RemoteConfigRepository
 import com.bottari.domain.repository.ReportRepository
@@ -98,4 +100,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindBookmarkRepository(impl: BookmarkRepositoryImpl): BookmarkRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHashtagRepository(impl: HashtagRepositoryImpl): HashtagRepository
 }
