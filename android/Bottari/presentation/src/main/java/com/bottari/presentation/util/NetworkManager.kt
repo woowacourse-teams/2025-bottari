@@ -63,9 +63,8 @@ class NetworkManager @Inject constructor(
 
     private fun readInitialNetworkState(): Boolean {
         val activeNetwork = connectivityManager.activeNetwork
-        if (activeNetwork == null) {
-            return false
-        }
+        if (activeNetwork == null) return false
+
         val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
         return networkCapabilities != null && hasCapability(networkCapabilities)
     }
