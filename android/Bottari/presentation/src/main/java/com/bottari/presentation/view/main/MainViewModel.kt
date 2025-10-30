@@ -8,7 +8,7 @@ import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.BuildConfig
-import com.bottari.presentation.common.base.FlowBaseViewModel
+import com.bottari.presentation.common.base.NetworkBaseViewModel
 import com.bottari.presentation.util.NetworkManager
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,14 +17,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val networkManager: NetworkManager,
+    networkManager: NetworkManager,
     private val registerMemberUseCase: RegisterMemberUseCase,
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
     private val savePermissionFlagUseCase: SavePermissionFlagUseCase,
     private val saveFcmTokenUseCase: SaveFcmTokenUseCase,
     private val getPermissionFlagUseCase: GetPermissionFlagUseCase,
     private val checkForceUpdateUseCase: CheckForceUpdateUseCase,
-) : FlowBaseViewModel<MainUiState, MainUiEvent>(MainUiState()) {
+) : NetworkBaseViewModel<MainUiState, MainUiEvent>(
+        initialState = MainUiState(),
+        networkManager = networkManager,
+    ) {
     init {
         initializeApp()
     }
@@ -38,7 +41,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun checkRegisteredMember() {
-        if (networkManager.isConnected.value.not()) return handleOffline()
+        if (isConnected.value.not()) return handleOffline()
 
         launch {
             checkRegisteredMemberUseCase()
@@ -54,7 +57,7 @@ class MainViewModel @Inject constructor(
 
     private fun initializeApp() =
         when {
-            networkManager.isConnected.value.not() -> handleOffline()
+            isConnected.value.not() -> handleOffline()
             BuildConfig.DEBUG -> checkPermissionFlag()
             else -> handleForceUpdate()
         }
