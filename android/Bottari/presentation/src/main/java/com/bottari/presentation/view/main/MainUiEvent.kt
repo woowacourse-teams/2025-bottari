@@ -7,6 +7,10 @@ sealed interface MainUiEvent {
         val permissionFlag: Boolean,
     ) : MainUiEvent
 
+    data class Offline(
+        val permissionFlag: Boolean,
+    ) : MainUiEvent
+
     data object LoginFailure : MainUiEvent
 
     data object GetPermissionFlagFailure : MainUiEvent
