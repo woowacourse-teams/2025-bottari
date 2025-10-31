@@ -1,0 +1,302 @@
+package com.bottari.presentation.compose.edit.team.assigned.component
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.bottari.presentation.R
+import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.compose.edit.team.assigned.ComposeTeamAssignedItemEditUiState
+import com.bottari.presentation.compose.edit.team.assigned.dummyMembers
+import com.bottari.presentation.compose.team.TeamStateListBox
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
+
+@Composable
+fun TeamAssignedBottomSheet(
+    uiState: ComposeTeamAssignedItemEditUiState,
+    onSaveItem: () -> Unit,
+    onAllSelect: () -> Unit,
+    onAllUnSelect: () -> Unit,
+    onSelectMember: (Long) -> Unit,
+    onChangeInputText: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                .background(
+                    BottariTheme.colors.white,
+                ).padding(BottariTheme.spacing.spaceMedium),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "새 물건 추가", style = BottariTheme.typography.semiBold20.toTextStyle())
+            Spacer(Modifier.weight(1f))
+            TextButton(
+                onClick = onSaveItem,
+                enabled = uiState.canSend,
+                colors = ButtonDefaults.textButtonColors(contentColor = BottariTheme.colors.primary),
+            ) {
+                Text("저장", style = BottariTheme.typography.semiBold16.toTextStyle())
+            }
+        }
+        Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceSmall))
+        Text(
+            text = "물건 이름을 입력하고 담당자를 지정해 주세요",
+            style = BottariTheme.typography.regular14.toTextStyle(),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
+        HorizontalDivider(thickness = 2.dp, color = BottariTheme.colors.gray500)
+        Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
+        Row {
+            Text(text = "물건 이름", style = BottariTheme.typography.semiBold16.toTextStyle())
+            Spacer(Modifier.padding(horizontal = BottariTheme.spacing.space2xSmall))
+            Text(
+                text = "*",
+                style = BottariTheme.typography.semiBold16.toTextStyle(),
+                color = BottariTheme.colors.red,
+            )
+        }
+        Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
+        OutlinedTextField(
+            value = uiState.inputText,
+            onValueChange = { currentText -> onChangeInputText(currentText) },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            colors =
+                OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor = BottariTheme.colors.white,
+                    focusedContainerColor = BottariTheme.colors.white,
+                    unfocusedBorderColor = BottariTheme.colors.gray500,
+                    focusedBorderColor = BottariTheme.colors.gray500,
+                ),
+            textStyle = BottariTheme.typography.semiBold16.toTextStyle(),
+            isError = uiState.isAlreadyExist
+        )
+        Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Row {
+                Text(text = "담당자 선택", style = BottariTheme.typography.semiBold16.toTextStyle())
+                Spacer(Modifier.padding(horizontal = BottariTheme.spacing.space2xSmall))
+                Text(
+                    text = "*",
+                    style = BottariTheme.typography.semiBold16.toTextStyle(),
+                    color = BottariTheme.colors.red,
+                )
+            }
+            Spacer(Modifier.weight(1f))
+            Button(
+                onClick = onAllSelect,
+                modifier = Modifier.height(30.dp),
+                contentPadding =
+                    PaddingValues(
+                        horizontal = 12.dp,
+                        vertical = 2.dp,
+                    ),
+                colors =
+                    ButtonColors(
+                        containerColor = BottariTheme.colors.primary.copy(alpha = 0.1f),
+                        contentColor = BottariTheme.colors.primary,
+                        disabledContainerColor = BottariTheme.colors.primary.copy(alpha = 0.1f),
+                        disabledContentColor = BottariTheme.colors.primary,
+                    ),
+            ) {
+                Text("전체선택", style = BottariTheme.typography.medium14.toTextStyle())
+            }
+            Spacer(Modifier.width(BottariTheme.spacing.spaceXSmall))
+            Button(
+                onClick = onAllUnSelect,
+                modifier = Modifier.height(30.dp),
+                contentPadding =
+                    PaddingValues(
+                        horizontal = 12.dp,
+                        vertical = 2.dp,
+                    ),
+                colors =
+                    ButtonColors(
+                        containerColor = BottariTheme.colors.gray200,
+                        contentColor = BottariTheme.colors.black,
+                        disabledContainerColor = BottariTheme.colors.gray200,
+                        disabledContentColor = BottariTheme.colors.black,
+                    ),
+            ) {
+                Text("전체해제", style = BottariTheme.typography.medium14.toTextStyle())
+            }
+        }
+
+        Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
+        TeamStateListBox(
+            items =
+                uiState.members
+                    .filter { member -> member.isHost }
+                    .map { member -> member.nickname },
+            text = "${uiState.members.filter { member -> member.isHost }.size} 명이 선택되었습니다",
+            painter =
+                painterResource(
+                    R.drawable.ic_assigned,
+                ),
+            color = BottariTheme.colors.primary,
+        )
+        Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceMedium))
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall)) {
+            items(uiState.members) { member ->
+                member.id?.let {
+                    TeamAssignedMemberItem(member, onSelectMember)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TeamAssignedMemberItem(
+    member: TeamMemberUiModel,
+    onToggleMember: (Long) -> Unit,
+) {
+    if (member.isHost) {
+        TeamAssignedSelectedMemberItem(member, onToggleMember)
+        return
+    }
+    TeamAssignedUnSelectedMemberItem(member, onToggleMember)
+}
+
+@Composable
+private fun TeamAssignedSelectedMemberItem(
+    member: TeamMemberUiModel,
+    onToggleMember: (Long) -> Unit,
+) {
+    if (member.id == null) return
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(BottariTheme.colors.primary.copy(0.1f))
+                .border(
+                    2.dp,
+                    BottariTheme.colors.primary,
+                    RoundedCornerShape(16.dp),
+                ).padding(BottariTheme.spacing.spaceXLarge)
+                .clickable(
+                    onClick = { onToggleMember(member.id) },
+                ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = member.nickname,
+            style = BottariTheme.typography.semiBold16.toTextStyle(),
+            modifier = Modifier.weight(1f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Box(
+            modifier =
+                Modifier
+                    .size(20.dp)
+                    .clip(CircleShape)
+                    .background(BottariTheme.colors.primary)
+                    .padding(4.dp),
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_check),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                tint = BottariTheme.colors.white,
+            )
+        }
+    }
+}
+
+@Composable
+private fun TeamAssignedUnSelectedMemberItem(
+    member: TeamMemberUiModel,
+    onToggleMember: (Long) -> Unit,
+) {
+    if (member.id == null) return
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(BottariTheme.colors.gray100)
+                .border(
+                    2.dp,
+                    BottariTheme.colors.gray500,
+                    RoundedCornerShape(16.dp),
+                ).padding(BottariTheme.spacing.spaceXLarge)
+                .clickable(onClick = { onToggleMember(member.id) }),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = member.nickname,
+            style = BottariTheme.typography.semiBold16.toTextStyle(),
+            modifier = Modifier.weight(1f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Box(
+            modifier =
+                Modifier
+                    .size(20.dp)
+                    .clip(CircleShape)
+                    .background(BottariTheme.colors.gray500)
+                    .padding(4.dp),
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_check),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                tint = BottariTheme.colors.white,
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun TeamAssignedBottomSheetPreview() {
+    TeamAssignedBottomSheet(
+        uiState = ComposeTeamAssignedItemEditUiState(members = dummyMembers),
+        onSaveItem = {},
+        onAllSelect = {},
+        onAllUnSelect = {},
+        onSelectMember = {},
+        onChangeInputText = {},
+    )
+}
