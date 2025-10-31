@@ -60,6 +60,11 @@
             android:name=".compose.template.ComposeCreateTemplateActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".compose.edit.team.ComposeTeamBottariEditActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <receiver android:name=".receiver.AlarmReceiver" />
         <receiver
             android:name=".receiver.BootReceiver"
