@@ -21,20 +21,19 @@ fun ComposeTeamPersonalScreen(
     LaunchedEffect(uiEvent) {
         when (uiEvent ?: return@LaunchedEffect) {
             ComposeTeamPersonalItemEditEvent.CreateItemSuccessCompose -> return@LaunchedEffect
-                ComposeTeamPersonalItemEditEvent.CreateItemFailureCompose -> snackbarHostState.showSnackbar("물품 생성하기에 실패했습니다")
-                ComposeTeamPersonalItemEditEvent.DeleteItemFailureCompose -> snackbarHostState.showSnackbar("물품 삭제하기에 실패했습니다")
-                ComposeTeamPersonalItemEditEvent.FetchComposeTeamPersonalItemsFailure -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
-            }
-
+            ComposeTeamPersonalItemEditEvent.CreateItemFailureCompose -> snackbarHostState.showSnackbar("물품 생성하기에 실패했습니다")
+            ComposeTeamPersonalItemEditEvent.DeleteItemFailureCompose -> snackbarHostState.showSnackbar("물품 삭제하기에 실패했습니다")
+            ComposeTeamPersonalItemEditEvent.FetchComposeTeamPersonalItemsFailure -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
         }
-        ComposeTeamChecklistEditScreen(
-            items = uiState.personalItems,
-            isInvalidItem = uiState.isAlreadyExist,
-            isSavable = (uiState.inputText.isNotBlank() && !uiState.isAlreadyExist),
-            onDeleteItem = viewModel::deleteItem,
-            onSaveItem = viewModel::createItem,
-            newItemName = uiState.inputText,
-            onChangeItemName = { input -> viewModel.updateInput(input) },
-            modifier = modifier,
-        )
     }
+    ComposeTeamChecklistEditScreen(
+        items = uiState.personalItems,
+        isInvalidItem = uiState.isAlreadyExist,
+        isSavable = (uiState.inputText.isNotBlank() && !uiState.isAlreadyExist),
+        onDeleteItem = viewModel::deleteItem,
+        onSaveItem = viewModel::createItem,
+        newItemName = uiState.inputText,
+        onChangeItemName = { input -> viewModel.updateInput(input) },
+        modifier = modifier,
+    )
+}

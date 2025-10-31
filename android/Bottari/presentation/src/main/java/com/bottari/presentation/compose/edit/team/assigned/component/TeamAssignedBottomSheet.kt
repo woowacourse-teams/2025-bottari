@@ -107,7 +107,7 @@ fun TeamAssignedBottomSheet(
                     focusedBorderColor = BottariTheme.colors.gray500,
                 ),
             textStyle = BottariTheme.typography.semiBold16.toTextStyle(),
-            isError = uiState.isAlreadyExist
+            isError = uiState.isAlreadyExist,
         )
         Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
         Row(verticalAlignment = Alignment.CenterVertically) {

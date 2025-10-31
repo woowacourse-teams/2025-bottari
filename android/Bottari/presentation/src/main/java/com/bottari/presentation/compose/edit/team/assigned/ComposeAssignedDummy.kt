@@ -27,100 +27,120 @@ val m20 = TeamMemberUiModel(id = 20L, nickname = "멤버20", isHost = false)
 
 val dummyMembers = listOf(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10)
 
-val previewAssignedSelectableItemsLarge = listOf(
-    SelectableItemUiModel(
-        id = 2L, name = "고기 굽기",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m2, m3, m10)),
-        isSelected = true
-    ),
-    SelectableItemUiModel(
-        id = 3L, name = "설거지 담당 (저녁)",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m4, m6, m7, m8)),
-        isSelected = false
-    ),
-    SelectableItemUiModel(
-        id = 4L, name = "장보기 (채소)",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m9, m11)),
-        isSelected = false
-    ),
-    SelectableItemUiModel(
-        id = 5L, name = "텐트 설치",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m1, m2, m3, m4, m5)),
-        isSelected = true
-    ),
-    SelectableItemUiModel(
-        id = 6L, name = "총무 (회비 관리)",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m12)),
-        isSelected = false
-    ),
-    SelectableItemUiModel(
-        id = 7L, name = "음악/블루투스 스피커",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m13, m14)),
-        isSelected = false
-    ),
-    SelectableItemUiModel(
-        id = 8L, name = "사진/영상 촬영",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m15)),
-        isSelected = true
-    ),
-    SelectableItemUiModel(
-        id = 9L, name = "짐 나르기 (공용 짐)",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m1, m3, m5, m7, m9, m11)),
-        isSelected = false
-    ),
-    SelectableItemUiModel(
-        id = 10L, name = "아침 식사 준비",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m16, m17, m18)),
-        isSelected = false
-    ),
-    SelectableItemUiModel(
-        id = 11L, name = "분리수거 및 뒷정리",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m19, m20, m2, m4)),
-        isSelected = true
-    ),
-    SelectableItemUiModel(
-        id = 12L, name = "게임/레크레이션 준비",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m6, m12)),
-        isSelected = false
-    ),
-    SelectableItemUiModel(
-        id = 13L, name = "간식 담당",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m8, m10, m13)),
-        isSelected = false
-    ),
-    SelectableItemUiModel(
-        id = 14L, name = "주류/음료 담당",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m1, m14, m15)),
-        isSelected = true
-    ),
-    SelectableItemUiModel(
-        id = 15L, name = "불 피우기 (바베큐)",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m3, m7)),
-        isSelected = false
-    ),
-    SelectableItemUiModel(
-        id = 16L, name = "요리 (메인 디시)",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m11, m16)),
-        isSelected = false
-    ),
-    SelectableItemUiModel(
-        id = 17L, name = "요리 보조 (재료 손질)",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m17, m18, m19, m20)),
-        isSelected = true
-    ),
-    SelectableItemUiModel(
-        id = 18L, name = "아이들 돌보기",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m4, m8)),
-        isSelected = false
-    ),
-    SelectableItemUiModel(
-        id = 19L, name = "구급약 담당",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m1)),
-        isSelected = false
-    ),
-    SelectableItemUiModel(
-        id = 20L, name = "숙소 예약 확인",
-        type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m1, m12)),
-        isSelected = true
+val previewAssignedSelectableItemsLarge =
+    listOf(
+        SelectableItemUiModel(
+            id = 2L,
+            name = "고기 굽기",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m2, m3, m10)),
+            isSelected = true,
+        ),
+        SelectableItemUiModel(
+            id = 3L,
+            name = "설거지 담당 (저녁)",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m4, m6, m7, m8)),
+            isSelected = false,
+        ),
+        SelectableItemUiModel(
+            id = 4L,
+            name = "장보기 (채소)",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m9, m11)),
+            isSelected = false,
+        ),
+        SelectableItemUiModel(
+            id = 5L,
+            name = "텐트 설치",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m1, m2, m3, m4, m5)),
+            isSelected = true,
+        ),
+        SelectableItemUiModel(
+            id = 6L,
+            name = "총무 (회비 관리)",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m12)),
+            isSelected = false,
+        ),
+        SelectableItemUiModel(
+            id = 7L,
+            name = "음악/블루투스 스피커",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m13, m14)),
+            isSelected = false,
+        ),
+        SelectableItemUiModel(
+            id = 8L,
+            name = "사진/영상 촬영",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m15)),
+            isSelected = true,
+        ),
+        SelectableItemUiModel(
+            id = 9L,
+            name = "짐 나르기 (공용 짐)",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m1, m3, m5, m7, m9, m11)),
+            isSelected = false,
+        ),
+        SelectableItemUiModel(
+            id = 10L,
+            name = "아침 식사 준비",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m16, m17, m18)),
+            isSelected = false,
+        ),
+        SelectableItemUiModel(
+            id = 11L,
+            name = "분리수거 및 뒷정리",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m19, m20, m2, m4)),
+            isSelected = true,
+        ),
+        SelectableItemUiModel(
+            id = 12L,
+            name = "게임/레크레이션 준비",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m6, m12)),
+            isSelected = false,
+        ),
+        SelectableItemUiModel(
+            id = 13L,
+            name = "간식 담당",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m8, m10, m13)),
+            isSelected = false,
+        ),
+        SelectableItemUiModel(
+            id = 14L,
+            name = "주류/음료 담당",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m1, m14, m15)),
+            isSelected = true,
+        ),
+        SelectableItemUiModel(
+            id = 15L,
+            name = "불 피우기 (바베큐)",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m3, m7)),
+            isSelected = false,
+        ),
+        SelectableItemUiModel(
+            id = 16L,
+            name = "요리 (메인 디시)",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m11, m16)),
+            isSelected = false,
+        ),
+        SelectableItemUiModel(
+            id = 17L,
+            name = "요리 보조 (재료 손질)",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m17, m18, m19, m20)),
+            isSelected = true,
+        ),
+        SelectableItemUiModel(
+            id = 18L,
+            name = "아이들 돌보기",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m4, m8)),
+            isSelected = false,
+        ),
+        SelectableItemUiModel(
+            id = 19L,
+            name = "구급약 담당",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m1)),
+            isSelected = false,
+        ),
+        SelectableItemUiModel(
+            id = 20L,
+            name = "숙소 예약 확인",
+            type = BottariItemTypeUiModel.ASSIGNED(members = listOf(m1, m12)),
+            isSelected = true,
+        ),
     )
-)

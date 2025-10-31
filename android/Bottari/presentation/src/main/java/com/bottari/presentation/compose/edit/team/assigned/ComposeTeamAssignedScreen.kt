@@ -50,13 +50,14 @@ fun ComposeTeamAssignedScreen(
     val sheetState = rememberModalBottomSheetState()
 
     LaunchedEffect(uiEvent) {
-        when(uiEvent?:return@LaunchedEffect){
+        when (uiEvent ?: return@LaunchedEffect) {
             ComposeTeamAssignedItemEditUiEvent.CreateItemFailureComposeUi -> snackbarHostState.showSnackbar("물품 생성에 실패했습니다")
             ComposeTeamAssignedItemEditUiEvent.DeleteItemFailureComposeUi -> snackbarHostState.showSnackbar("물품 삭제에 실패했습니다")
             ComposeTeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailureUi -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
             ComposeTeamAssignedItemEditUiEvent.SaveItemFailureUi -> snackbarHostState.showSnackbar("물품 저장에 실패했습니다")
             ComposeTeamAssignedItemEditUiEvent.CreateItemSuccessComposeUi,
-            ComposeTeamAssignedItemEditUiEvent.SaveItemSuccessUi -> return@LaunchedEffect
+            ComposeTeamAssignedItemEditUiEvent.SaveItemSuccessUi,
+            -> return@LaunchedEffect
         }
     }
 

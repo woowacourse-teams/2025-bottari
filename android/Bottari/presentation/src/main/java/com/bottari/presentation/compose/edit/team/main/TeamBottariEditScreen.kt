@@ -59,7 +59,7 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
     }
 
     LaunchedEffect(uiEvent) {
-        when(uiEvent?: return@LaunchedEffect){
+        when (uiEvent ?: return@LaunchedEffect) {
             ComposeTeamBottariEditUiEvent.FetchComposeTeamBottariDetailFailure -> snackbarHostState.showSnackbar("보따리 불러오기에 실패했습니다")
             ComposeTeamBottariEditUiEvent.ToggleAlarmStateFailure -> snackbarHostState.showSnackbar("알람 불러오기에 실패했습니다")
         }

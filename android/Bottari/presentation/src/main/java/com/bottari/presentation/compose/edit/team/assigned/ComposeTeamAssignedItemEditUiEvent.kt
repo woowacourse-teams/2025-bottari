@@ -11,4 +11,5 @@ sealed interface ComposeTeamAssignedItemEditUiEvent {
 
     data object SaveItemSuccessUi : ComposeTeamAssignedItemEditUiEvent
 
-    data object SaveItemFailureUi : ComposeTeamAssignedItemEditUiEvent }
+    data object SaveItemFailureUi : ComposeTeamAssignedItemEditUiEvent
+}
