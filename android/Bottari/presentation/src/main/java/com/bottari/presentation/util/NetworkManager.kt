@@ -57,7 +57,7 @@ class NetworkManager @Inject constructor(
     val isConnected: StateFlow<Boolean> =
         networkState.stateIn(
             scope = appScope,
-            started = SharingStarted.WhileSubscribed(5000L),
+            started = SharingStarted.Eagerly,
             initialValue = readInitialNetworkState(),
         )
 

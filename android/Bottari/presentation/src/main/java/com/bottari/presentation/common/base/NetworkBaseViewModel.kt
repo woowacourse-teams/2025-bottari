@@ -9,20 +9,7 @@ import kotlinx.coroutines.flow.update
 
 abstract class NetworkBaseViewModel<UiState, UiEvent>(
     initialState: UiState,
-    private val networkManager: NetworkManager,
+    networkManager: NetworkManager,
 ) : FlowBaseViewModel<UiState, UiEvent>(initialState) {
-    private val _isConnected: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isConnected: StateFlow<Boolean> = _isConnected.asStateFlow()
-
-    init {
-        observeNetworkState()
-    }
-
-    private fun observeNetworkState() {
-        launch {
-            networkManager.isConnected.collectLatest { isConnected ->
-                _isConnected.update { isConnected }
-            }
-        }
-    }
+    val isConnected: StateFlow<Boolean> = networkManager.isConnected
 }
