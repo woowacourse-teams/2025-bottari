@@ -123,7 +123,10 @@ class MainViewModel @Inject constructor(
             fetchFcmToken()?.let { fcmToken ->
                 registerMemberUseCase(fcmToken)
                     .onSuccess { onLoginReady() }
-                    .onFailure { exception -> BottariLogger.error(exception.message, exception) }
+                    .onFailure { exception ->
+                        BottariLogger.error(exception.message, exception)
+                        emitEvent(MainUiEvent.RegisterFailure)
+                    }
             }
         }
     }
