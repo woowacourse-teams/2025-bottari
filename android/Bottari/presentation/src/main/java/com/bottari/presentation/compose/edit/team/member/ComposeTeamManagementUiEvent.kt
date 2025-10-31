@@ -1,5 +1,5 @@
 package com.bottari.presentation.compose.edit.team.member
 
-interface ComposeTeamManagementUiEvent {
+sealed interface ComposeTeamManagementUiEvent {
     data object FetchTeamMembersFailure : ComposeTeamManagementUiEvent
 }

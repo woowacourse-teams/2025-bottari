@@ -1,0 +1,184 @@
+package com.bottari.presentation.compose.edit.team.member
+
+import android.content.Intent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.presentation.R
+import com.bottari.presentation.compose.common.component.BottariBox
+import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
+import com.bottari.presentation.util.DeeplinkHelper.createDeeplink
+
+@Composable
+fun MemberEditScreen(
+    bottariTitle: String,
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
+    viewModel: ComposeTeamManagementViewModel = viewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
+
+    LaunchedEffect(uiEvent) {
+        when (uiEvent ?: return@LaunchedEffect) {
+            ComposeTeamManagementUiEvent.FetchTeamMembersFailure -> snackbarHostState.showSnackbar("팀 멤버 불러오기에 실패했습니다")
+        }
+    }
+
+    MemberEditScreen(bottariTitle, uiState, modifier)
+}
+
+@Composable
+private fun MemberEditScreen(
+    bottariTitle: String,
+    uiState: ComposeTeamManagementUiState,
+    modifier: Modifier = Modifier,
+) {
+    var isOpenShareInvite by remember { mutableStateOf(false) }
+    if (isOpenShareInvite) {
+        ShareInvite(uiState.inviteCode, bottariTitle)
+    }
+    Column(modifier = modifier.fillMaxSize()) {
+        BottariBox(contentPadding = PaddingValues(horizontal = 0.dp, vertical = BottariTheme.spacing.spaceXSmall)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Spacer(Modifier.width(BottariTheme.spacing.spaceLarge))
+                Text(
+                    text = stringResource(R.string.team_management_add_member_text),
+                    style = BottariTheme.typography.bold18.toTextStyle(),
+                )
+                Spacer(Modifier.weight(1f))
+                IconButton({ isOpenShareInvite = true }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_share),
+                        contentDescription = null,
+                    )
+                }
+            }
+        }
+        Spacer(Modifier.height(BottariTheme.spacing.spaceLarge))
+
+        BottariBox(modifier = Modifier.fillMaxWidth()) {
+            Column {
+                Row {
+                    Text(
+                        text = stringResource(R.string.team_management_member_title_text),
+                        style = BottariTheme.typography.bold18.toTextStyle(),
+                    )
+                    Spacer(Modifier.weight(1f))
+                    Text(
+                        text = "${uiState.teamMemberHeadCount}/${uiState.maxHeadCount}",
+                        style = BottariTheme.typography.bold18.toTextStyle(),
+                    )
+                }
+                Spacer(Modifier.height(BottariTheme.spacing.spaceLarge))
+                LazyColumn {
+                    itemsIndexed(uiState.members) { index, member ->
+                        Text(
+                            text = member.nickname,
+                            style = BottariTheme.typography.bold18.toTextStyle(),
+                            modifier = Modifier.padding(vertical = BottariTheme.spacing.spaceMedium),
+                        )
+                        if (index < uiState.members.size - 1) {
+                            HorizontalDivider(
+                                color = BottariTheme.colors.gray500,
+                                thickness = 1.dp,
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ShareInvite(
+    inviteCode: String,
+    bottariTitle: String,
+) {
+    val shareMessage = generateShareMessage(inviteCode, bottariTitle)
+    val sendIntent: Intent =
+        Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, shareMessage)
+            type = "text/plain"
+        }
+
+    val shareIntent = Intent.createChooser(sendIntent, null)
+    LocalContext.current.startActivity(shareIntent)
+}
+
+@Composable
+private fun generateShareMessage(
+    inviteCode: String,
+    bottariTitle: String,
+): String {
+    val inviteLink = createDeeplink(inviteCode)
+    return stringResource(
+        R.string.team_management_share_template_text,
+        bottariTitle,
+        inviteCode,
+        inviteLink,
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MemberEditScreenPreview() {
+    MemberEditScreen(
+        bottariTitle = "테스트보따리",
+        uiState =
+            ComposeTeamManagementUiState(
+                members =
+                    listOf(
+                        TeamMemberUiModel(
+                            id = 1,
+                            nickname = "테스트",
+                            isHost = true,
+                        ),
+                        TeamMemberUiModel(
+                            id = 2,
+                            nickname = "테스트2",
+                            isHost = false,
+                        ),
+                        TeamMemberUiModel(
+                            id = 3,
+                            nickname = "테스트3",
+                            isHost = false,
+                        ),
+                    ),
+                teamMemberHeadCount = 3,
+                maxHeadCount = 20,
+            ),
+        modifier = Modifier.padding(BottariTheme.spacing.spaceMedium),
+    )
+}
