@@ -8,9 +8,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.showSnackbar
@@ -28,7 +25,6 @@ import com.bottari.presentation.view.common.alert.DialogListener
 import com.bottari.presentation.view.common.alert.DialogPresetType
 import com.bottari.presentation.view.invite.InviteActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
@@ -37,11 +33,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions(),
         ) { showExactAlarmSettingsDialog() }
+    private var isReady: Boolean = false
     private var isNavigatedToSettings: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
-            setKeepOnScreenCondition { !viewModel.uiState.value.isReady }
+            setKeepOnScreenCondition { !isReady }
         }
         super.onCreate(savedInstanceState)
         setupObserver()
@@ -56,21 +53,28 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun setupObserver() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) { viewModel.uiEvent.collect(::handleUiEvent) }
+        collectWithLifecycle(viewModel.uiState) { state ->
+            isReady = state.isReady
         }
-    }
 
-    private fun handleUiEvent(uiEvent: MainUiEvent) {
-        when (uiEvent) {
-            is MainUiEvent.LoginSuccess -> checkPermissionAndNavigate(uiEvent.permissionFlag)
-            MainUiEvent.IncompletePermissionFlow -> showPermissionDescriptionDialog()
-            MainUiEvent.ForceUpdate -> showForceUpdateDialog()
-            MainUiEvent.RegisterFailure,
-            MainUiEvent.LoginFailure,
-            MainUiEvent.GetPermissionFlagFailure,
-            MainUiEvent.SavePermissionFlagFailure,
-            -> finishAffinity()
+        collectWithLifecycle(viewModel.uiEvent) { event ->
+            when (event) {
+                is MainUiEvent.LoginSuccess ->
+                    checkPermissionAndNavigate(event.permissionFlag)
+
+                is MainUiEvent.Offline ->
+                    checkPermissionAndNavigate(event.permissionFlag)
+
+                MainUiEvent.IncompletePermissionFlow -> showPermissionDescriptionDialog()
+
+                MainUiEvent.ForceUpdate -> showForceUpdateDialog()
+
+                MainUiEvent.RegisterFailure,
+                MainUiEvent.LoginFailure,
+                MainUiEvent.GetPermissionFlagFailure,
+                MainUiEvent.SavePermissionFlagFailure,
+                -> finishAffinity()
+            }
         }
     }
 
