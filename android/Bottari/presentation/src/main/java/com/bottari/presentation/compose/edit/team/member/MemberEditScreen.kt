@@ -68,7 +68,11 @@ private fun MemberEditScreen(
     }
     Column(modifier = modifier.fillMaxSize()) {
         BottariBox(
-            contentPadding = PaddingValues(horizontal = BottariTheme.spacing.spaceSmall, vertical = BottariTheme.spacing.spaceXSmall),
+            contentPadding =
+                PaddingValues(
+                    horizontal = BottariTheme.spacing.spaceSmall,
+                    vertical = BottariTheme.spacing.space2xSmall,
+                ),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
@@ -86,7 +90,17 @@ private fun MemberEditScreen(
         }
         Spacer(Modifier.height(BottariTheme.spacing.spaceLarge))
 
-        BottariBox(modifier = Modifier.fillMaxWidth()) {
+        BottariBox(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding =
+                PaddingValues(
+                    bottom = 0.dp,
+                    top = BottariTheme.spacing.spaceMedium,
+                    start = BottariTheme.spacing.spaceMedium,
+                    end = BottariTheme.spacing.spaceMedium
+
+                ),
+        ) {
             Column {
                 Row {
                     Text(
@@ -99,7 +113,11 @@ private fun MemberEditScreen(
                         style = BottariTheme.typography.bold18.toTextStyle(),
                     )
                 }
-                Spacer(Modifier.height(BottariTheme.spacing.spaceLarge))
+                Spacer(Modifier.padding(BottariTheme.spacing.spaceXSmall))
+                HorizontalDivider(
+                    color = BottariTheme.colors.gray500,
+                    thickness = 1.dp,
+                )
                 LazyColumn {
                     itemsIndexed(uiState.members) { index, member ->
                         Text(
