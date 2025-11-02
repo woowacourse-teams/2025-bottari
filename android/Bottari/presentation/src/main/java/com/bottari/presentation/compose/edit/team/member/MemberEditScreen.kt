@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
@@ -68,9 +67,10 @@ private fun MemberEditScreen(
         ShareInvite(uiState.inviteCode, bottariTitle)
     }
     Column(modifier = modifier.fillMaxSize()) {
-        BottariBox(contentPadding = PaddingValues(horizontal = 0.dp, vertical = BottariTheme.spacing.spaceXSmall)) {
+        BottariBox(
+            contentPadding = PaddingValues(horizontal = BottariTheme.spacing.spaceSmall, vertical = BottariTheme.spacing.spaceXSmall),
+        ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Spacer(Modifier.width(BottariTheme.spacing.spaceLarge))
                 Text(
                     text = stringResource(R.string.team_management_add_member_text),
                     style = BottariTheme.typography.bold18.toTextStyle(),
