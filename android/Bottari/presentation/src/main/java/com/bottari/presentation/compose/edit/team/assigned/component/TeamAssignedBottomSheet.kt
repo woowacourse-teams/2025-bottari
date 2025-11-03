@@ -2,7 +2,6 @@ package com.bottari.presentation.compose.edit.team.assigned.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +19,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -38,6 +36,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
+import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.team.assigned.ComposeTeamAssignedItemEditUiState
 import com.bottari.presentation.compose.edit.team.assigned.dummyMembers
@@ -130,7 +129,7 @@ fun TeamAssignedBottomSheet(
                         vertical = 2.dp,
                     ),
                 colors =
-                    ButtonColors(
+                    ButtonDefaults.buttonColors(
                         containerColor = BottariTheme.colors.primary.copy(alpha = 0.1f),
                         contentColor = BottariTheme.colors.primary,
                         disabledContainerColor = BottariTheme.colors.primary.copy(alpha = 0.1f),
@@ -149,7 +148,7 @@ fun TeamAssignedBottomSheet(
                         vertical = 2.dp,
                     ),
                 colors =
-                    ButtonColors(
+                    ButtonDefaults.buttonColors(
                         containerColor = BottariTheme.colors.gray200,
                         contentColor = BottariTheme.colors.black,
                         disabledContainerColor = BottariTheme.colors.gray200,
@@ -208,14 +207,12 @@ private fun TeamAssignedSelectedMemberItem(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(BottariTheme.colors.primary.copy(0.1f))
+                .noRippleClickable(onClick = { onToggleMember(member.id) } )
                 .border(
                     2.dp,
                     BottariTheme.colors.primary,
                     RoundedCornerShape(16.dp),
-                ).padding(BottariTheme.spacing.spaceXLarge)
-                .clickable(
-                    onClick = { onToggleMember(member.id) },
-                ),
+                ).padding(BottariTheme.spacing.spaceXLarge),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
@@ -255,12 +252,12 @@ private fun TeamAssignedUnSelectedMemberItem(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(BottariTheme.colors.gray100)
+                .noRippleClickable(onClick = { onToggleMember(member.id) })
                 .border(
                     2.dp,
                     BottariTheme.colors.gray500,
                     RoundedCornerShape(16.dp),
-                ).padding(BottariTheme.spacing.spaceXLarge)
-                .clickable(onClick = { onToggleMember(member.id) }),
+                ).padding(BottariTheme.spacing.spaceXLarge),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
