@@ -58,7 +58,7 @@ fun ComposeTeamAssignedEditItem(
                 IconButton(onClick = onClickDelete) {
                     Icon(
                         painter = painterResource(R.drawable.ic_delete),
-                        contentDescription = "수정 버튼",
+                        contentDescription = "삭제 버튼",
                     )
                 }
             }
