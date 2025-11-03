@@ -25,7 +25,7 @@ val m18 = TeamMemberUiModel(id = 18L, nickname = "멤버18", isHost = false)
 val m19 = TeamMemberUiModel(id = 19L, nickname = "멤버19", isHost = false)
 val m20 = TeamMemberUiModel(id = 20L, nickname = "멤버20", isHost = false)
 
-val dummyMembers = listOf(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10)
+val dummyMembers = listOf(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20)
 
 val previewAssignedSelectableItemsLarge =
     listOf(

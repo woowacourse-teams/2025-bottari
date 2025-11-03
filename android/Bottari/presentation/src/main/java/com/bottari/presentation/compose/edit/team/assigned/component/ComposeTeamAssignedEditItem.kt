@@ -30,7 +30,7 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 @Composable
 fun ComposeTeamAssignedEditItem(
     title: String,
-    members: List<String>,
+    assignedMembers: List<Pair<String, Int>>,
     onClickEdit: () -> Unit,
     onClickDelete: () -> Unit,
 ) {
@@ -66,7 +66,7 @@ fun ComposeTeamAssignedEditItem(
                 modifier = Modifier.padding(end = BottariTheme.spacing.spaceXSmall),
                 horizontalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
             ) {
-                members.forEachIndexed { index, member ->
+                assignedMembers.forEachIndexed { index, member ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -74,13 +74,13 @@ fun ComposeTeamAssignedEditItem(
                             modifier =
                                 Modifier
                                     .clip(CircleShape)
-                                    .background(BottariTheme.colors.primary)
+                                    .background(BottariTheme.colors.memberColors[member.second])
                                     .size(6.dp),
                         )
                         Spacer(modifier = Modifier.width(4.dp))
 
                         Text(
-                            text = member,
+                            text = member.first,
                             style = BottariTheme.typography.regular14.toTextStyle(),
                         )
                     }
@@ -95,24 +95,7 @@ fun ComposeTeamAssignedEditItem(
 fun ComposeTeamAssignedEditItemPreview() {
     ComposeTeamAssignedEditItem(
         title = "이이이이이이이이이이이이이이이이이이이이이이잉름",
-        members =
-            listOf(
-                "시아1",
-                "시아2",
-                "시아3",
-                "시아4",
-                "시아5",
-                "시아6",
-                "시아7",
-                "시아8",
-                "시아9",
-                "시아10",
-                "시아11",
-                "시아12",
-                "시아13",
-                "시아14",
-                "시아15",
-            ),
+        assignedMembers = listOf(Pair("이름", 1)),
         onClickDelete = {},
         onClickEdit = {},
     )

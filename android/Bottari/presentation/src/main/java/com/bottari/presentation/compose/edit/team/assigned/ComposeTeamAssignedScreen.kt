@@ -1,12 +1,10 @@
 package com.bottari.presentation.compose.edit.team.assigned
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -106,9 +103,12 @@ fun ComposeTeamAssignedScreen(
     onSelectMember: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier) {
+    Column(modifier = modifier.fillMaxSize()) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
             contentPadding = PaddingValues(end = BottariTheme.spacing.space2xSmall),
             verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
         ) {
@@ -116,7 +116,10 @@ fun ComposeTeamAssignedScreen(
                 val type = item.type as BottariItemTypeUiModel.ASSIGNED
                 ComposeTeamAssignedEditItem(
                     item.name,
-                    type.members.map { member -> member.nickname },
+                    type.members.map { member ->
+                        val memberIndex = uiState.members.indexOfFirst { it.id == member.id }
+                        Pair(member.nickname, memberIndex)
+                    },
                     onClickEdit = { onEditItem(item.id) },
                     onClickDelete = { onDeleteItem(item.id) },
                 )
@@ -126,7 +129,6 @@ fun ComposeTeamAssignedScreen(
             onClick = { onBottomSheetVisibleChange() },
             modifier =
                 Modifier
-                    .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .padding(vertical = BottariTheme.spacing.spaceMedium),
             colors =
@@ -138,9 +140,7 @@ fun ComposeTeamAssignedScreen(
                 ),
             shape = RoundedCornerShape(12.dp),
             contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceMedium),
-        ) {
-            Text(text = "물품 추가", style = BottariTheme.typography.semiBold24.toTextStyle())
-        }
+        ) { Text(text = "물품 추가", style = BottariTheme.typography.semiBold24.toTextStyle()) }
         if (showBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = onBottomSheetClose,
@@ -157,7 +157,6 @@ fun ComposeTeamAssignedScreen(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceMedium))
     }
 }
 
@@ -168,8 +167,11 @@ private fun ComposeTeamAssignedScreenPreview() {
     val sheetState = rememberModalBottomSheetState()
     ComposeTeamAssignedScreen(
         uiState =
-            ComposeTeamAssignedItemEditUiState(),
-        showBottomSheet = true,
+            ComposeTeamAssignedItemEditUiState(
+                assignedItems = previewAssignedSelectableItemsLarge,
+                members = dummyMembers,
+            ),
+        showBottomSheet = false,
         sheetState = sheetState,
         onBottomSheetVisibleChange = {},
         onBottomSheetClose = {},

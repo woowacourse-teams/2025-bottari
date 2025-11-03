@@ -50,6 +50,29 @@ data class BottariColorSystem(
     val productTypePersonal: Color = Color(0xFF0064FF),
     val productTypeShared: Color = Color(0xFF22C55E),
     val productTypeAssigned: Color = Color(0xFFA855F7),
+    val memberColors: List<Color> =
+        listOf(
+            Color(0xFF1F77B4),
+            Color(0xFFFF7F0E),
+            Color(0xFF2CA02C),
+            Color(0xFFD62728),
+            Color(0xFF9467BD),
+            Color(0xFF8C564B),
+            Color(0xFFE377C2),
+            Color(0xFF7F7F7F),
+            Color(0xFFBCBD22),
+            Color(0xFF17BECF),
+            Color(0xFFAEC7E8),
+            Color(0xFFFFBB78),
+            Color(0xFF98DF8A),
+            Color(0xFFFF9896),
+            Color(0xFFC5B0D5),
+            Color(0xFFC49C94),
+            Color(0xFFF7B6D2),
+            Color(0xFFC7C7C7),
+            Color(0xFFDBDB8D),
+            Color(0xFF9EDAE5),
+        ),
 )
 
 private val lightColorScheme = BottariColorSystem()
@@ -95,6 +118,9 @@ private fun BottariColorSystemPreview() {
         ColorItem("productTypePersonal", colors.productTypePersonal)
         ColorItem("productTypeShared", colors.productTypeShared)
         ColorItem("productTypeAssigned", colors.productTypeAssigned)
+        colors.memberColors.forEachIndexed { index, color ->
+            ColorItem("memberColor${index + 1}", color)
+        }
     }
 }
 

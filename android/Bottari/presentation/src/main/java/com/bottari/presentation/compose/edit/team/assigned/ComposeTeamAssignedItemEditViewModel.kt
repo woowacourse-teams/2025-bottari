@@ -96,11 +96,6 @@ class ComposeTeamAssignedItemEditViewModel @Inject constructor(
         updateState { copy(inputText = item?.name ?: "") }
     }
 
-    private fun saveSelectedState() {
-        if (currentState.hasRestoreState) return
-        updateState { copy(hasRestoreState = true) }
-    }
-
     private fun createAssignedItem() {
         updateState { copy(isLoading = true) }
 
