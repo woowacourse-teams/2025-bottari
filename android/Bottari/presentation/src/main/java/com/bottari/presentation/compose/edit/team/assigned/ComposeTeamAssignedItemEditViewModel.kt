@@ -22,9 +22,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNot
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
@@ -197,8 +195,7 @@ class ComposeTeamAssignedItemEditViewModel @Inject constructor(
                 .map { event -> event.data }
                 .filterNot { eventData -> eventData.shouldIgnore() }
                 .debounce(DEBOUNCE_DELAY)
-                .onEach { refreshAssignedItemsAndMembers() }
-                .launchIn(this)
+                .collect { refreshAssignedItemsAndMembers() }
         }
     }
 

@@ -19,9 +19,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -70,8 +68,7 @@ class ComposeTeamManagementViewModel @Inject constructor(
                 .filter { eventData ->
                     eventData is EventData.TeamMemberCreate || eventData is EventData.TeamMemberDelete
                 }.debounce(DEBOUNCE_DELAY)
-                .onEach { fetchTeamMembers() }
-                .launchIn(this)
+                .collect { fetchTeamMembers() }
         }
     }
 
@@ -97,7 +94,6 @@ class ComposeTeamManagementViewModel @Inject constructor(
 
     companion object {
         private const val ERROR_REQUIRE_BOTTARI_ID = "[ERROR] 보따리 ID가 존재하지 않습니다."
-        private const val ERROR_REQUIRE_BOTTARI_TITLE = "[ERROR] 보따리 이름이 존재하지 않습니다."
         private const val DEBOUNCE_DELAY = 500L
     }
 }
