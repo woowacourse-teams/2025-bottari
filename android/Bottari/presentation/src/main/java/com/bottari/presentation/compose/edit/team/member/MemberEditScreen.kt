@@ -46,11 +46,12 @@ fun MemberEditScreen(
     viewModel: TeamManagementViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent ?: return@LaunchedEffect) {
-            TeamManagementUiEvent.FetchTeamMembersFailure -> snackbarHostState.showSnackbar("팀 멤버 불러오기에 실패했습니다")
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                TeamManagementUiEvent.FetchTeamMembersFailure -> snackbarHostState.showSnackbar("팀 멤버 불러오기에 실패했습니다")
+            }
         }
     }
     MemberEditScreen(bottariTitle, uiState, modifier)

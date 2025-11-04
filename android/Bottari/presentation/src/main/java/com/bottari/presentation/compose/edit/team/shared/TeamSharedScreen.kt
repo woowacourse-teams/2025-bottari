@@ -19,7 +19,18 @@ fun TeamSharedScreen(
     viewModel: TeamSharedItemEditViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                TeamSharedItemEditEvent.CreateItemSuccess -> return@collect
+                TeamSharedItemEditEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물품 생성에 실패했습니다")
+                TeamSharedItemEditEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물품 삭제에 실패했습니다")
+                TeamSharedItemEditEvent.FetchTeamSharedItemsFailure -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
+            }
+        }
+
+    }
 
     TeamChecklistEditScreen(
         items = uiState.sharedItems,
@@ -31,15 +42,6 @@ fun TeamSharedScreen(
         onChangeItemName = { input -> viewModel.updateInput(input) },
         modifier = modifier,
     )
-
-    LaunchedEffect(uiEvent) {
-        when (uiEvent ?: return@LaunchedEffect) {
-            TeamSharedItemEditEvent.CreateItemSuccess -> return@LaunchedEffect
-            TeamSharedItemEditEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물품 생성에 실패했습니다")
-            TeamSharedItemEditEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물품 삭제에 실패했습니다")
-            TeamSharedItemEditEvent.FetchTeamSharedItemsFailure -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
-        }
-    }
 }
 
 @Composable

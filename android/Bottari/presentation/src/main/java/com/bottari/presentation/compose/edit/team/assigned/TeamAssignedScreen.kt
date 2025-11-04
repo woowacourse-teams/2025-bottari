@@ -41,20 +41,21 @@ fun TeamAssignedScreen(
     viewModel: TeamAssignedItemEditViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
 
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent ?: return@LaunchedEffect) {
-            TeamAssignedItemEditUiEvent.CreateItemFailureUi -> snackbarHostState.showSnackbar("물품 생성에 실패했습니다")
-            TeamAssignedItemEditUiEvent.DeleteItemFailureUi -> snackbarHostState.showSnackbar("물품 삭제에 실패했습니다")
-            TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailureUi -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
-            TeamAssignedItemEditUiEvent.SaveItemFailureUi -> snackbarHostState.showSnackbar("물품 저장에 실패했습니다")
-            TeamAssignedItemEditUiEvent.CreateItemSuccessUi,
-            TeamAssignedItemEditUiEvent.SaveItemSuccessUi,
-            -> return@LaunchedEffect
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                TeamAssignedItemEditUiEvent.CreateItemFailureUi -> snackbarHostState.showSnackbar("물품 생성에 실패했습니다")
+                TeamAssignedItemEditUiEvent.DeleteItemFailureUi -> snackbarHostState.showSnackbar("물품 삭제에 실패했습니다")
+                TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailureUi -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
+                TeamAssignedItemEditUiEvent.SaveItemFailureUi -> snackbarHostState.showSnackbar("물품 저장에 실패했습니다")
+                TeamAssignedItemEditUiEvent.CreateItemSuccessUi,
+                TeamAssignedItemEditUiEvent.SaveItemSuccessUi,
+                    -> return@collect
+            }
         }
     }
 

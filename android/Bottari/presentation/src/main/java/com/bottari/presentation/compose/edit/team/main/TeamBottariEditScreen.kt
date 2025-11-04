@@ -45,7 +45,6 @@ fun TeamBottariEditScreen(viewModel: TeamBottariEditViewModel = viewModel()) {
     var isMemberScreen by remember { mutableStateOf(false) }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
     val focusManager = LocalFocusManager.current
 
     val pageTitles =
@@ -64,17 +63,15 @@ fun TeamBottariEditScreen(viewModel: TeamBottariEditViewModel = viewModel()) {
         focusManager.clearFocus()
     }
 
-    LaunchedEffect(uiEvent) {
-        when (uiEvent ?: return@LaunchedEffect) {
-            TeamBottariEditUiEvent.FetchTeamBottariDetailFailure ->
-                snackbarHostState.showSnackbar(
-                    "보따리 불러오기에 실패했습니다",
-                )
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { uiEvent ->
+            when (uiEvent) {
+                TeamBottariEditUiEvent.FetchTeamBottariDetailFailure ->
+                    snackbarHostState.showSnackbar("보따리 불러오기에 실패했습니다")
 
-            TeamBottariEditUiEvent.ToggleAlarmStateFailure ->
-                snackbarHostState.showSnackbar(
-                    "알람 불러오기에 실패했습니다",
-                )
+                TeamBottariEditUiEvent.ToggleAlarmStateFailure ->
+                    snackbarHostState.showSnackbar("알람 불러오기에 실패했습니다")
+            }
         }
     }
 
