@@ -1,19 +1,21 @@
 package com.bottari.presentation.view.edit.team.main
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariDetailUseCase
 import com.bottari.presentation.CoroutinesTestExtension
 import com.bottari.presentation.InstantTaskExecutorExtension
+import com.bottari.presentation.compose.edit.team.main.ComposeTeamBottariEditUiEvent
+import com.bottari.presentation.compose.edit.team.main.ComposeTeamBottariEditViewModel
 import com.bottari.presentation.fixture.TEAM_BOTTARI_DETAIL_FIXTURE
-import com.bottari.presentation.getOrAwaitValue
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -27,7 +29,6 @@ class TeamBottariEditViewModelTest {
     private lateinit var connectTeamEventUseCase: ConnectTeamEventUseCase
     private lateinit var disconnectTeamEventUseCase: DisconnectTeamEventUseCase
     private lateinit var stateHandle: SavedStateHandle
-    private lateinit var viewModel: TeamBottariEditViewModel
 
     @BeforeEach
     fun setUp() {
@@ -35,13 +36,6 @@ class TeamBottariEditViewModelTest {
         connectTeamEventUseCase = mockk<ConnectTeamEventUseCase>()
         disconnectTeamEventUseCase = mockk<DisconnectTeamEventUseCase>()
         stateHandle = SavedStateHandle(mapOf("KEY_BOTTARI_ID" to 1L))
-        viewModel =
-            TeamBottariEditViewModel(
-                stateHandle,
-                fetchTeamBottariDetailUseCase,
-                connectTeamEventUseCase,
-                disconnectTeamEventUseCase,
-            )
     }
 
     @DisplayName("팀 보따리 상세 정보를 조회한다")
@@ -55,16 +49,23 @@ class TeamBottariEditViewModelTest {
                     TEAM_BOTTARI_DETAIL_FIXTURE,
                 )
 
-            // when - fetchBottariDetail()l
+            // when
+            val viewModel =
+                ComposeTeamBottariEditViewModel(
+                    stateHandle,
+                    fetchTeamBottariDetailUseCase,
+                    connectTeamEventUseCase,
+                    disconnectTeamEventUseCase,
+                )
+
             // then
-            viewModel.uiState.awaitFetchedState { uiState ->
-                assertSoftly(uiState) {
-                    bottariTitle shouldBe TEAM_BOTTARI_DETAIL_FIXTURE.bottari.title
-                    personalItems.size shouldBe TEAM_BOTTARI_DETAIL_FIXTURE.personalItems.size
-                    sharedItems.size shouldBe TEAM_BOTTARI_DETAIL_FIXTURE.sharedItems.size
-                    assignedItems.size shouldBe TEAM_BOTTARI_DETAIL_FIXTURE.assignedItems.size
-                    isFetched shouldBe true
-                }
+            val uiState = viewModel.uiState.value
+            assertSoftly(uiState) {
+                bottariTitle shouldBe TEAM_BOTTARI_DETAIL_FIXTURE.bottari.title
+                personalItems.size shouldBe TEAM_BOTTARI_DETAIL_FIXTURE.personalItems.size
+                sharedItems.size shouldBe TEAM_BOTTARI_DETAIL_FIXTURE.sharedItems.size
+                assignedItems.size shouldBe TEAM_BOTTARI_DETAIL_FIXTURE.assignedItems.size
+                isFetched shouldBe true
             }
         }
 
@@ -72,22 +73,37 @@ class TeamBottariEditViewModelTest {
     @Test
     fun fetchTeamBottariDetailFailureTest() =
         runTest {
-            // given
+            // given + when
             val id = 1L
             coEvery { fetchTeamBottariDetailUseCase(id) } returns Result.failure(Throwable())
+            val expected = ComposeTeamBottariEditUiEvent.FetchComposeTeamBottariDetailFailure
+            val collectedEvents = mutableListOf<ComposeTeamBottariEditUiEvent>()
 
-            // when - fetchBottariDetail()l
+            val viewModel =
+                ComposeTeamBottariEditViewModel(
+                    stateHandle,
+                    fetchTeamBottariDetailUseCase,
+                    connectTeamEventUseCase,
+                    disconnectTeamEventUseCase,
+                )
+
+            val job =
+                launch {
+                    viewModel.uiEvent.collect { event ->
+                        collectedEvents.add(event)
+                    }
+                }
+
+            advanceUntilIdle()
+
             // then
-            val expected = TeamBottariEditUiEvent.FetchTeamBottariDetailFailure
-            viewModel.uiState.awaitFetchedState {
-                val uiEvent = viewModel.uiEvent.getOrAwaitValue()
-                uiEvent shouldBe expected
-            }
-        }
 
-    private fun LiveData<TeamBottariEditUiState>.awaitFetchedState(action: (TeamBottariEditUiState) -> Unit) {
-        observeForever { uiState ->
-            if (uiState.isFetched) action(uiState)
+            assertSoftly {
+                collectedEvents.size shouldBe 1
+                collectedEvents[0] shouldBe expected
+                viewModel.uiState.value.isFetched shouldBe false
+            }
+
+            job.cancel()
         }
-    }
 }
