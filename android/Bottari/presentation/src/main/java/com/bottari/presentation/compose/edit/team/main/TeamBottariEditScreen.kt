@@ -126,8 +126,8 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
                                 Modifier
                                     .fillMaxSize()
                                     .padding(
-                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current,),
-                                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current,),
+                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
                                         bottom = BottariTheme.spacing.spaceMedium,
                                     ).imePadding()
                                     .then(if (WindowInsets.isImeVisible) Modifier else Modifier.navigationBarsPadding()),
@@ -140,11 +140,11 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
                                 Modifier
                                     .fillMaxSize()
                                     .padding(
-                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current,),
-                                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current,),
+                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
                                     ).padding(horizontal = BottariTheme.spacing.spaceMedium)
                                     .padding(top = BottariTheme.spacing.spaceSmall)
-                                    .then( Modifier.navigationBarsPadding()),
+                                    .then(Modifier.navigationBarsPadding()),
                         )
 
                     2 ->
@@ -154,8 +154,8 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
                                 Modifier
                                     .fillMaxSize()
                                     .padding(
-                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current,),
-                                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current,),
+                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
                                         bottom = BottariTheme.spacing.spaceMedium,
                                     ).imePadding()
                                     .then(if (WindowInsets.isImeVisible) Modifier else Modifier.navigationBarsPadding()),

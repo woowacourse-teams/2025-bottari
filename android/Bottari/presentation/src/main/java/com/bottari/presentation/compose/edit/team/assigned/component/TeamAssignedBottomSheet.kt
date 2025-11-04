@@ -207,7 +207,7 @@ private fun TeamAssignedSelectedMemberItem(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(BottariTheme.colors.primary.copy(0.1f))
-                .noRippleClickable(onClick = { onToggleMember(member.id) } )
+                .noRippleClickable(onClick = { onToggleMember(member.id) })
                 .border(
                     2.dp,
                     BottariTheme.colors.primary,
