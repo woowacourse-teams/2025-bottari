@@ -1,5 +1,6 @@
 package com.bottari.presentation.compose.edit.team.member
 
+import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -52,7 +53,6 @@ fun MemberEditScreen(
             ComposeTeamManagementUiEvent.FetchTeamMembersFailure -> snackbarHostState.showSnackbar("팀 멤버 불러오기에 실패했습니다")
         }
     }
-
     MemberEditScreen(bottariTitle, uiState, modifier)
 }
 
@@ -63,8 +63,16 @@ private fun MemberEditScreen(
     modifier: Modifier = Modifier,
 ) {
     var isOpenShareInvite by remember { mutableStateOf(false) }
-    if (isOpenShareInvite) {
-        ShareInvite(uiState.inviteCode, bottariTitle)
+    val context = LocalContext.current
+    LaunchedEffect(isOpenShareInvite) {
+        if (isOpenShareInvite) {
+            shareInvite(
+                context = context,
+                inviteCode = uiState.inviteCode,
+                bottariTitle = bottariTitle,
+            )
+            isOpenShareInvite = false
+        }
     }
     Column(modifier = modifier.fillMaxSize()) {
         BottariBox(
@@ -97,8 +105,7 @@ private fun MemberEditScreen(
                     bottom = 0.dp,
                     top = BottariTheme.spacing.spaceMedium,
                     start = BottariTheme.spacing.spaceMedium,
-                    end = BottariTheme.spacing.spaceMedium
-
+                    end = BottariTheme.spacing.spaceMedium,
                 ),
         ) {
             Column {
@@ -138,12 +145,17 @@ private fun MemberEditScreen(
     }
 }
 
-@Composable
-private fun ShareInvite(
+private fun shareInvite(
+    context: Context,
     inviteCode: String,
     bottariTitle: String,
 ) {
-    val shareMessage = generateShareMessage(inviteCode, bottariTitle)
+    val shareMessage =
+        generateShareMessage(
+            context = context,
+            inviteCode = inviteCode,
+            bottariTitle = bottariTitle,
+        )
     val sendIntent: Intent =
         Intent().apply {
             action = Intent.ACTION_SEND
@@ -152,16 +164,16 @@ private fun ShareInvite(
         }
 
     val shareIntent = Intent.createChooser(sendIntent, null)
-    LocalContext.current.startActivity(shareIntent)
+    context.startActivity(shareIntent)
 }
 
-@Composable
 private fun generateShareMessage(
+    context: Context,
     inviteCode: String,
     bottariTitle: String,
 ): String {
     val inviteLink = createDeeplink(inviteCode)
-    return stringResource(
+    return context.getString(
         R.string.team_management_share_template_text,
         bottariTitle,
         inviteCode,

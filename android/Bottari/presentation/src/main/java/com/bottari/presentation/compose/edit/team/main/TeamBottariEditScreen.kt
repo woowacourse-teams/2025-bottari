@@ -5,6 +5,7 @@ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
@@ -125,15 +126,9 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
                                 Modifier
                                     .fillMaxSize()
                                     .padding(
-                                        start =
-                                            paddingValues.calculateStartPadding(
-                                                LocalLayoutDirection.current,
-                                            ),
-                                        end =
-                                            paddingValues.calculateStartPadding(
-                                                LocalLayoutDirection.current,
-                                            ),
-                                        bottom = BottariTheme.spacing.spaceMedium, // 기존 컨텐츠 패딩
+                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current,),
+                                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current,),
+                                        bottom = BottariTheme.spacing.spaceMedium,
                                     ).imePadding()
                                     .then(if (WindowInsets.isImeVisible) Modifier else Modifier.navigationBarsPadding()),
                         )
@@ -145,17 +140,11 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
                                 Modifier
                                     .fillMaxSize()
                                     .padding(
-                                        start =
-                                            paddingValues.calculateStartPadding(
-                                                LocalLayoutDirection.current,
-                                            ),
-                                        end =
-                                            paddingValues.calculateStartPadding(
-                                                LocalLayoutDirection.current,
-                                            ),
-                                        bottom = BottariTheme.spacing.spaceMedium, // 기존 컨텐츠 패딩
+                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current,),
+                                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current,),
                                     ).padding(horizontal = BottariTheme.spacing.spaceMedium)
-                                    .padding(top = BottariTheme.spacing.spaceSmall),
+                                    .padding(top = BottariTheme.spacing.spaceSmall)
+                                    .then( Modifier.navigationBarsPadding()),
                         )
 
                     2 ->
@@ -165,15 +154,9 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
                                 Modifier
                                     .fillMaxSize()
                                     .padding(
-                                        start =
-                                            paddingValues.calculateStartPadding(
-                                                LocalLayoutDirection.current,
-                                            ),
-                                        end =
-                                            paddingValues.calculateStartPadding(
-                                                LocalLayoutDirection.current,
-                                            ),
-                                        bottom = BottariTheme.spacing.spaceMedium, // 기존 컨텐츠 패딩
+                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current,),
+                                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current,),
+                                        bottom = BottariTheme.spacing.spaceMedium,
                                     ).imePadding()
                                     .then(if (WindowInsets.isImeVisible) Modifier else Modifier.navigationBarsPadding()),
                         )
