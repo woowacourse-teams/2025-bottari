@@ -19,14 +19,14 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class ComposeTeamSharedItemEditViewModel @Inject constructor(
+class TeamSharedItemEditViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamSharedItemsUseCase: FetchTeamSharedItemsUseCase,
     private val createTeamSharedItemUseCase: CreateTeamSharedItemUseCase,
     private val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
-) : FlowBaseViewModel<ComposeTeamSharedItemEditUiState, ComposeTeamSharedItemEditEvent>(
-        ComposeTeamSharedItemEditUiState(),
+) : FlowBaseViewModel<TeamSharedItemEditUiState, TeamSharedItemEditEvent>(
+        TeamSharedItemEditUiState(),
     ) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
@@ -46,11 +46,11 @@ class ComposeTeamSharedItemEditViewModel @Inject constructor(
 
         launch {
             createTeamSharedItemUseCase(bottariId, currentState.inputText)
-                .onFailure { emitEvent(ComposeTeamSharedItemEditEvent.CreateItemFailureCompose) }
+                .onFailure { emitEvent(TeamSharedItemEditEvent.CreateItemFailure) }
                 .onSuccess {
                     fetchPersonalItems()
                     updateState { copy(inputText = "") }
-                    emitEvent(ComposeTeamSharedItemEditEvent.CreateItemSuccessCompose)
+                    emitEvent(TeamSharedItemEditEvent.CreateItemSuccess)
                 }
 
             updateState { copy(isLoading = false) }
@@ -63,7 +63,7 @@ class ComposeTeamSharedItemEditViewModel @Inject constructor(
         launch {
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.SHARED)
                 .onSuccess { fetchPersonalItems() }
-                .onFailure { emitEvent(ComposeTeamSharedItemEditEvent.DeleteItemFailureCompose) }
+                .onFailure { emitEvent(TeamSharedItemEditEvent.DeleteItemFailure) }
 
             updateState { copy(isLoading = false) }
         }
@@ -87,7 +87,7 @@ class ComposeTeamSharedItemEditViewModel @Inject constructor(
         launch {
             fetchTeamSharedItemsUseCase(bottariId)
                 .onSuccess { items -> updateState { copy(sharedItems = items.map(BottariItemUiModel::fromDomain)) } }
-                .onFailure { emitEvent(ComposeTeamSharedItemEditEvent.FetchComposeTeamSharedItemsFailure) }
+                .onFailure { emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure) }
 
             updateState { copy(isLoading = false, isFetched = true) }
         }

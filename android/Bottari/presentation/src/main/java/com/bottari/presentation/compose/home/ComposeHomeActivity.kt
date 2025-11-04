@@ -10,7 +10,7 @@ import androidx.core.net.toUri
 import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.personal.ComposePersonalBottariEditActivity
-import com.bottari.presentation.compose.edit.team.ComposeTeamBottariEditActivity
+import com.bottari.presentation.compose.edit.team.TeamBottariEditActivity
 import com.bottari.presentation.compose.personal.ComposePersonalChecklistActivity
 import com.bottari.presentation.compose.team.ComposeTeamChecklistActivity
 import com.bottari.presentation.compose.template.ComposeCreateTemplateActivity
@@ -73,7 +73,7 @@ class ComposeHomeActivity : AppCompatActivity() {
         bottariId: Long,
         isNew: Boolean,
     ) {
-        val intent = ComposeTeamBottariEditActivity.newIntent(this, bottariId, isNew)
+        val intent = TeamBottariEditActivity.newIntent(this, bottariId, isNew)
         startActivity(intent)
     }
 

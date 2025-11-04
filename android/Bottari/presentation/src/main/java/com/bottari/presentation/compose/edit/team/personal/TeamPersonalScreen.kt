@@ -7,26 +7,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bottari.presentation.compose.edit.team.main.ComposeTeamChecklistEditScreen
+import com.bottari.presentation.compose.edit.team.main.TeamChecklistEditScreen
 
 @Composable
-fun ComposeTeamPersonalScreen(
+fun TeamPersonalScreen(
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    viewModel: ComposeTeamPersonalItemEditViewModel = viewModel(),
+    viewModel: TeamPersonalItemEditViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
 
     LaunchedEffect(uiEvent) {
         when (uiEvent ?: return@LaunchedEffect) {
-            ComposeTeamPersonalItemEditEvent.CreateItemSuccessCompose -> return@LaunchedEffect
-            ComposeTeamPersonalItemEditEvent.CreateItemFailureCompose -> snackbarHostState.showSnackbar("물품 생성하기에 실패했습니다")
-            ComposeTeamPersonalItemEditEvent.DeleteItemFailureCompose -> snackbarHostState.showSnackbar("물품 삭제하기에 실패했습니다")
-            ComposeTeamPersonalItemEditEvent.FetchComposeTeamPersonalItemsFailure -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
+            TeamPersonalItemEditEvent.CreateItemSuccessCompose -> return@LaunchedEffect
+            TeamPersonalItemEditEvent.CreateItemFailureCompose -> snackbarHostState.showSnackbar("물품 생성하기에 실패했습니다")
+            TeamPersonalItemEditEvent.DeleteItemFailureCompose -> snackbarHostState.showSnackbar("물품 삭제하기에 실패했습니다")
+            TeamPersonalItemEditEvent.FetchTeamPersonalItemsFailure -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
         }
     }
-    ComposeTeamChecklistEditScreen(
+    TeamChecklistEditScreen(
         items = uiState.personalItems,
         isInvalidItem = uiState.isAlreadyExist,
         isSavable = (uiState.inputText.isNotBlank() && !uiState.isAlreadyExist),

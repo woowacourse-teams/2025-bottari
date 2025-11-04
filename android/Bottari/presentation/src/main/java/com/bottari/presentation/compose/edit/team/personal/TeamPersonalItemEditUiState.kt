@@ -2,7 +2,7 @@ package com.bottari.presentation.compose.edit.team.personal
 
 import com.bottari.presentation.model.bottari.BottariItemUiModel
 
-data class ComposeTeamPersonalItemEditUiState(
+data class TeamPersonalItemEditUiState(
     val isLoading: Boolean = false,
     val isFetched: Boolean = false,
     val personalItems: List<BottariItemUiModel> = emptyList(),

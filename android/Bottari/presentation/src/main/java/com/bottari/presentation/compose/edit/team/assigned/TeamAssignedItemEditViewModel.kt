@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class ComposeTeamAssignedItemEditViewModel @Inject constructor(
+class TeamAssignedItemEditViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamAssignedItemsUseCase: FetchTeamAssignedItemsUseCase,
     private val createTeamAssignedItemUseCase: CreateTeamAssignedItemUseCase,
@@ -34,8 +34,8 @@ class ComposeTeamAssignedItemEditViewModel @Inject constructor(
     private val fetchTeamBottariMembersUseCase: FetchTeamBottariMembersUseCase,
     private val saveTeamBottariAssignedItemUseCase: SaveTeamBottariAssignedItemUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
-) : FlowBaseViewModel<ComposeTeamAssignedItemEditUiState, ComposeTeamAssignedItemEditUiEvent>(
-        ComposeTeamAssignedItemEditUiState(),
+) : FlowBaseViewModel<TeamAssignedItemEditUiState, TeamAssignedItemEditUiEvent>(
+        TeamAssignedItemEditUiState(),
     ) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID)
 
@@ -83,7 +83,7 @@ class ComposeTeamAssignedItemEditViewModel @Inject constructor(
         launch {
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.ASSIGNED())
                 .onSuccess { refreshAssignedItemsAndMembers() }
-                .onFailure { emitEvent(ComposeTeamAssignedItemEditUiEvent.DeleteItemFailureComposeUi) }
+                .onFailure { emitEvent(TeamAssignedItemEditUiEvent.DeleteItemFailureUi) }
 
             updateState { copy(isLoading = false) }
         }
@@ -104,9 +104,9 @@ class ComposeTeamAssignedItemEditViewModel @Inject constructor(
                 currentState.selectedMemberIds,
             ).onSuccess {
                 refreshAssignedItemsAndMembers()
-                emitEvent(ComposeTeamAssignedItemEditUiEvent.CreateItemSuccessComposeUi)
+                emitEvent(TeamAssignedItemEditUiEvent.CreateItemSuccessUi)
             }.onFailure {
-                emitEvent(ComposeTeamAssignedItemEditUiEvent.CreateItemFailureComposeUi)
+                emitEvent(TeamAssignedItemEditUiEvent.CreateItemFailureUi)
             }
 
             updateState { copy(isLoading = false) }
@@ -130,9 +130,9 @@ class ComposeTeamAssignedItemEditViewModel @Inject constructor(
                     )
                 }
                 refreshAssignedItemsAndMembers()
-                emitEvent(ComposeTeamAssignedItemEditUiEvent.SaveItemSuccessUi)
+                emitEvent(TeamAssignedItemEditUiEvent.SaveItemSuccessUi)
             }.onFailure {
-                emitEvent(ComposeTeamAssignedItemEditUiEvent.SaveItemFailureUi)
+                emitEvent(TeamAssignedItemEditUiEvent.SaveItemFailureUi)
             }
 
             updateState { copy(isLoading = false) }
@@ -201,12 +201,12 @@ class ComposeTeamAssignedItemEditViewModel @Inject constructor(
 
     private suspend fun loadAssignedItems(): List<BottariItem> =
         fetchTeamAssignedItemsUseCase(bottariId)
-            .onFailure { emitEvent(ComposeTeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailureUi) }
+            .onFailure { emitEvent(TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailureUi) }
             .getOrElse { emptyList() }
 
     private suspend fun loadTeamMembers(): List<TeamMember> =
         fetchTeamBottariMembersUseCase(bottariId)
-            .onFailure { emitEvent(ComposeTeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailureUi) }
+            .onFailure { emitEvent(TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailureUi) }
             .getOrElse { emptyList() }
 
     private fun toggleMemberSelection(memberId: Long): List<TeamMemberUiModel> =

@@ -6,8 +6,8 @@ import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.FetchTeamBottariDetailUseCase
 import com.bottari.presentation.CoroutinesTestExtension
 import com.bottari.presentation.InstantTaskExecutorExtension
-import com.bottari.presentation.compose.edit.team.main.ComposeTeamBottariEditUiEvent
-import com.bottari.presentation.compose.edit.team.main.ComposeTeamBottariEditViewModel
+import com.bottari.presentation.compose.edit.team.main.TeamBottariEditUiEvent
+import com.bottari.presentation.compose.edit.team.main.TeamBottariEditViewModel
 import com.bottari.presentation.fixture.TEAM_BOTTARI_DETAIL_FIXTURE
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.shouldBe
@@ -51,7 +51,7 @@ class TeamBottariEditViewModelTest {
 
             // when
             val viewModel =
-                ComposeTeamBottariEditViewModel(
+                TeamBottariEditViewModel(
                     stateHandle,
                     fetchTeamBottariDetailUseCase,
                     connectTeamEventUseCase,
@@ -76,11 +76,11 @@ class TeamBottariEditViewModelTest {
             // given + when
             val id = 1L
             coEvery { fetchTeamBottariDetailUseCase(id) } returns Result.failure(Throwable())
-            val expected = ComposeTeamBottariEditUiEvent.FetchComposeTeamBottariDetailFailure
-            val collectedEvents = mutableListOf<ComposeTeamBottariEditUiEvent>()
+            val expected = TeamBottariEditUiEvent.FetchTeamBottariDetailFailure
+            val collectedEvents = mutableListOf<TeamBottariEditUiEvent>()
 
             val viewModel =
-                ComposeTeamBottariEditViewModel(
+                TeamBottariEditViewModel(
                     stateHandle,
                     fetchTeamBottariDetailUseCase,
                     connectTeamEventUseCase,
@@ -89,15 +89,11 @@ class TeamBottariEditViewModelTest {
 
             val job =
                 launch {
-                    viewModel.uiEvent.collect { event ->
-                        collectedEvents.add(event)
-                    }
+                    viewModel.uiEvent.collect { event -> collectedEvents.add(event) }
                 }
-
             advanceUntilIdle()
 
             // then
-
             assertSoftly {
                 collectedEvents.size shouldBe 1
                 collectedEvents[0] shouldBe expected

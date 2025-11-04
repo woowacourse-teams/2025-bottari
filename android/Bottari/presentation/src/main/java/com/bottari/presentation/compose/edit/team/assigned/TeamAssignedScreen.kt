@@ -29,16 +29,16 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.edit.team.assigned.component.ComposeTeamAssignedEditItem
 import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedBottomSheet
+import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedEditItem
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ComposeTeamAssignedScreen(
+fun TeamAssignedScreen(
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    viewModel: ComposeTeamAssignedItemEditViewModel = viewModel(),
+    viewModel: TeamAssignedItemEditViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
@@ -48,17 +48,17 @@ fun ComposeTeamAssignedScreen(
 
     LaunchedEffect(uiEvent) {
         when (uiEvent ?: return@LaunchedEffect) {
-            ComposeTeamAssignedItemEditUiEvent.CreateItemFailureComposeUi -> snackbarHostState.showSnackbar("물품 생성에 실패했습니다")
-            ComposeTeamAssignedItemEditUiEvent.DeleteItemFailureComposeUi -> snackbarHostState.showSnackbar("물품 삭제에 실패했습니다")
-            ComposeTeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailureUi -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
-            ComposeTeamAssignedItemEditUiEvent.SaveItemFailureUi -> snackbarHostState.showSnackbar("물품 저장에 실패했습니다")
-            ComposeTeamAssignedItemEditUiEvent.CreateItemSuccessComposeUi,
-            ComposeTeamAssignedItemEditUiEvent.SaveItemSuccessUi,
+            TeamAssignedItemEditUiEvent.CreateItemFailureUi -> snackbarHostState.showSnackbar("물품 생성에 실패했습니다")
+            TeamAssignedItemEditUiEvent.DeleteItemFailureUi -> snackbarHostState.showSnackbar("물품 삭제에 실패했습니다")
+            TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailureUi -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
+            TeamAssignedItemEditUiEvent.SaveItemFailureUi -> snackbarHostState.showSnackbar("물품 저장에 실패했습니다")
+            TeamAssignedItemEditUiEvent.CreateItemSuccessUi,
+            TeamAssignedItemEditUiEvent.SaveItemSuccessUi,
             -> return@LaunchedEffect
         }
     }
 
-    ComposeTeamAssignedScreen(
+    TeamAssignedScreen(
         uiState = uiState,
         modifier = modifier,
         showBottomSheet = showBottomSheet,
@@ -88,8 +88,8 @@ fun ComposeTeamAssignedScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ComposeTeamAssignedScreen(
-    uiState: ComposeTeamAssignedItemEditUiState,
+fun TeamAssignedScreen(
+    uiState: TeamAssignedItemEditUiState,
     showBottomSheet: Boolean,
     sheetState: SheetState,
     onChangeInputText: (String) -> Unit,
@@ -114,7 +114,7 @@ fun ComposeTeamAssignedScreen(
         ) {
             items(uiState.assignedItems) { item ->
                 val type = item.type as BottariItemTypeUiModel.ASSIGNED
-                ComposeTeamAssignedEditItem(
+                TeamAssignedEditItem(
                     item.name,
                     type.members.map { member ->
                         val memberIndex = uiState.members.indexOfFirst { it.id == member.id }
@@ -163,11 +163,11 @@ fun ComposeTeamAssignedScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-private fun ComposeTeamAssignedScreenPreview() {
+private fun TeamAssignedScreenPreview() {
     val sheetState = rememberModalBottomSheetState()
-    ComposeTeamAssignedScreen(
+    TeamAssignedScreen(
         uiState =
-            ComposeTeamAssignedItemEditUiState(
+            TeamAssignedItemEditUiState(
                 assignedItems = previewAssignedSelectableItemsLarge,
                 members = dummyMembers,
             ),

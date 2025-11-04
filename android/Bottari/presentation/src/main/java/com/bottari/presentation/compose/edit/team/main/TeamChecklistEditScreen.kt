@@ -19,7 +19,7 @@ import com.bottari.presentation.model.bottari.BottariItemUiModel
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ComposeTeamChecklistEditScreen(
+fun TeamChecklistEditScreen(
     items: List<BottariItemUiModel>,
     newItemName: String,
     isInvalidItem: Boolean,

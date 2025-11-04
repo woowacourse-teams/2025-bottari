@@ -13,7 +13,7 @@ import com.bottari.presentation.compose.edit.team.main.TeamBottariEditScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ComposeTeamBottariEditActivity : AppCompatActivity() {
+class TeamBottariEditActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(BottariStatusBarStyle)
@@ -34,7 +34,7 @@ class ComposeTeamBottariEditActivity : AppCompatActivity() {
             bottariId: Long,
             isNew: Boolean,
         ): Intent =
-            Intent(context, ComposeTeamBottariEditActivity::class.java).apply {
+            Intent(context, TeamBottariEditActivity::class.java).apply {
                 putExtra(KEY_BOTTARI_ID, bottariId)
                 putExtra(EXTRA_IS_NEW_BOTTARI, isNew)
             }

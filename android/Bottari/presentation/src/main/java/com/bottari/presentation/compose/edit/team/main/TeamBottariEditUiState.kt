@@ -3,7 +3,7 @@ package com.bottari.presentation.compose.edit.team.main
 import com.bottari.presentation.model.alarm.AlarmUiModel
 import com.bottari.presentation.model.bottari.BottariItemUiModel
 
-data class ComposeTeamBottariEditUiState(
+data class TeamBottariEditUiState(
     val isLoading: Boolean = false,
     val bottariTitle: String = "",
     val personalItems: List<BottariItemUiModel> = emptyList(),

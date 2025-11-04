@@ -10,7 +10,7 @@ import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel
-import com.bottari.presentation.compose.edit.team.ComposeTeamBottariEditActivity.Companion.KEY_BOTTARI_ID
+import com.bottari.presentation.compose.edit.team.TeamBottariEditActivity.Companion.KEY_BOTTARI_ID
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -24,13 +24,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ComposeTeamManagementViewModel @Inject constructor(
+class TeamManagementViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamMembersUseCase: FetchTeamMembersUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
-) : FlowBaseViewModel<ComposeTeamManagementUiState, ComposeTeamManagementUiEvent>(
-        ComposeTeamManagementUiState(),
+) : FlowBaseViewModel<TeamManagementUiState, TeamManagementUiEvent>(
+        TeamManagementUiState(),
     ) {
     private val teamBottariId: Long =
         stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
@@ -53,7 +53,7 @@ class ComposeTeamManagementViewModel @Inject constructor(
                     updateState { copyFromTeamMembers(teamMembers) }
                     logTeamMembersFetch(teamMembers)
                 }.onFailure {
-                    emitEvent(ComposeTeamManagementUiEvent.FetchTeamMembersFailure)
+                    emitEvent(TeamManagementUiEvent.FetchTeamMembersFailure)
                 }
             updateState { copy(isLoading = false) }
         }
@@ -72,7 +72,7 @@ class ComposeTeamManagementViewModel @Inject constructor(
         }
     }
 
-    private fun ComposeTeamManagementUiState.copyFromTeamMembers(teamStatus: TeamStatus): ComposeTeamManagementUiState =
+    private fun TeamManagementUiState.copyFromTeamMembers(teamStatus: TeamStatus): TeamManagementUiState =
         copy(
             inviteCode = teamStatus.inviteCode,
             teamMemberHeadCount = teamStatus.memberCount.value,

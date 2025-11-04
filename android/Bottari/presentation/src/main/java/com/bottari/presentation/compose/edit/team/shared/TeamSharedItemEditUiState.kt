@@ -2,7 +2,7 @@ package com.bottari.presentation.compose.edit.team.shared
 
 import com.bottari.presentation.model.bottari.BottariItemUiModel
 
-data class ComposeTeamSharedItemEditUiState(
+data class TeamSharedItemEditUiState(
     val isLoading: Boolean = false,
     val isFetched: Boolean = false,
     val sharedItems: List<BottariItemUiModel> = emptyList(),

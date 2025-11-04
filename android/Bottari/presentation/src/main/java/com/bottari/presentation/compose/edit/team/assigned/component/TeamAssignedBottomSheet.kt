@@ -38,14 +38,14 @@ import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.edit.team.assigned.ComposeTeamAssignedItemEditUiState
+import com.bottari.presentation.compose.edit.team.assigned.TeamAssignedItemEditUiState
 import com.bottari.presentation.compose.edit.team.assigned.dummyMembers
 import com.bottari.presentation.compose.team.TeamStateListBox
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 
 @Composable
 fun TeamAssignedBottomSheet(
-    uiState: ComposeTeamAssignedItemEditUiState,
+    uiState: TeamAssignedItemEditUiState,
     onSaveItem: () -> Unit,
     onAllSelect: () -> Unit,
     onAllUnSelect: () -> Unit,
@@ -289,7 +289,7 @@ private fun TeamAssignedUnSelectedMemberItem(
 @Composable
 private fun TeamAssignedBottomSheetPreview() {
     TeamAssignedBottomSheet(
-        uiState = ComposeTeamAssignedItemEditUiState(members = dummyMembers),
+        uiState = TeamAssignedItemEditUiState(members = dummyMembers),
         onSaveItem = {},
         onAllSelect = {},
         onAllUnSelect = {},

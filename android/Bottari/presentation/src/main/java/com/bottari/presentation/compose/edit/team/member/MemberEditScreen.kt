@@ -43,14 +43,14 @@ fun MemberEditScreen(
     bottariTitle: String,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    viewModel: ComposeTeamManagementViewModel = viewModel(),
+    viewModel: TeamManagementViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle(null)
 
     LaunchedEffect(uiEvent) {
         when (uiEvent ?: return@LaunchedEffect) {
-            ComposeTeamManagementUiEvent.FetchTeamMembersFailure -> snackbarHostState.showSnackbar("팀 멤버 불러오기에 실패했습니다")
+            TeamManagementUiEvent.FetchTeamMembersFailure -> snackbarHostState.showSnackbar("팀 멤버 불러오기에 실패했습니다")
         }
     }
     MemberEditScreen(bottariTitle, uiState, modifier)
@@ -59,7 +59,7 @@ fun MemberEditScreen(
 @Composable
 private fun MemberEditScreen(
     bottariTitle: String,
-    uiState: ComposeTeamManagementUiState,
+    uiState: TeamManagementUiState,
     modifier: Modifier = Modifier,
 ) {
     var isOpenShareInvite by remember { mutableStateOf(false) }
@@ -187,7 +187,7 @@ private fun MemberEditScreenPreview() {
     MemberEditScreen(
         bottariTitle = "테스트보따리",
         uiState =
-            ComposeTeamManagementUiState(
+            TeamManagementUiState(
                 members =
                     listOf(
                         TeamMemberUiModel(

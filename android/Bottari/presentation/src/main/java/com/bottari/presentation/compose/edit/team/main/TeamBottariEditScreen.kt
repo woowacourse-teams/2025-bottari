@@ -31,14 +31,14 @@ import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.edit.team.TeamEditTopbar
-import com.bottari.presentation.compose.edit.team.assigned.ComposeTeamAssignedScreen
+import com.bottari.presentation.compose.edit.team.assigned.TeamAssignedScreen
 import com.bottari.presentation.compose.edit.team.member.MemberEditScreen
-import com.bottari.presentation.compose.edit.team.personal.ComposeTeamPersonalScreen
-import com.bottari.presentation.compose.edit.team.shared.ComposeTeamSharedScreen
+import com.bottari.presentation.compose.edit.team.personal.TeamPersonalScreen
+import com.bottari.presentation.compose.edit.team.shared.TeamSharedScreen
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel()) {
+fun TeamBottariEditScreen(viewModel: TeamBottariEditViewModel = viewModel()) {
     val snackbarHostState = remember { SnackbarHostState() }
     val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
@@ -66,12 +66,12 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
 
     LaunchedEffect(uiEvent) {
         when (uiEvent ?: return@LaunchedEffect) {
-            ComposeTeamBottariEditUiEvent.FetchComposeTeamBottariDetailFailure ->
+            TeamBottariEditUiEvent.FetchTeamBottariDetailFailure ->
                 snackbarHostState.showSnackbar(
                     "보따리 불러오기에 실패했습니다",
                 )
 
-            ComposeTeamBottariEditUiEvent.ToggleAlarmStateFailure ->
+            TeamBottariEditUiEvent.ToggleAlarmStateFailure ->
                 snackbarHostState.showSnackbar(
                     "알람 불러오기에 실패했습니다",
                 )
@@ -120,7 +120,7 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
             ) { page ->
                 when (page) {
                     0 ->
-                        ComposeTeamSharedScreen(
+                        TeamSharedScreen(
                             snackbarHostState,
                             modifier =
                                 Modifier
@@ -134,7 +134,7 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
                         )
 
                     1 ->
-                        ComposeTeamAssignedScreen(
+                        TeamAssignedScreen(
                             snackbarHostState,
                             modifier =
                                 Modifier
@@ -148,7 +148,7 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
                         )
 
                     2 ->
-                        ComposeTeamPersonalScreen(
+                        TeamPersonalScreen(
                             snackbarHostState,
                             modifier =
                                 Modifier

@@ -28,7 +28,7 @@ import com.bottari.presentation.compose.common.component.BottariBox
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
-fun ComposeTeamAssignedEditItem(
+fun TeamAssignedEditItem(
     title: String,
     assignedMembers: List<Pair<String, Int>>,
     onClickEdit: () -> Unit,
@@ -92,8 +92,8 @@ fun ComposeTeamAssignedEditItem(
 
 @Preview
 @Composable
-fun ComposeTeamAssignedEditItemPreview() {
-    ComposeTeamAssignedEditItem(
+fun TeamAssignedEditItemPreview() {
+    TeamAssignedEditItem(
         title = "이이이이이이이이이이이이이이이이이이이이이이잉름",
         assignedMembers = listOf(Pair("이름", 1)),
         onClickDelete = {},

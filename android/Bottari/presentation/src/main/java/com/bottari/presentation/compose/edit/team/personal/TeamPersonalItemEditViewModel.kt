@@ -11,13 +11,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ComposeTeamPersonalItemEditViewModel @Inject constructor(
+class TeamPersonalItemEditViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamPersonalItemsUseCase: FetchTeamPersonalItemsUseCase,
     private val createTeamPersonalItemUseCase: CreateTeamPersonalItemUseCase,
     private val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase,
-) : FlowBaseViewModel<ComposeTeamPersonalItemEditUiState, ComposeTeamPersonalItemEditEvent>(
-        ComposeTeamPersonalItemEditUiState(),
+) : FlowBaseViewModel<TeamPersonalItemEditUiState, TeamPersonalItemEditEvent>(
+        TeamPersonalItemEditUiState(),
     ) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
@@ -36,11 +36,11 @@ class ComposeTeamPersonalItemEditViewModel @Inject constructor(
 
         launch {
             createTeamPersonalItemUseCase(bottariId, currentState.inputText)
-                .onFailure { emitEvent(ComposeTeamPersonalItemEditEvent.CreateItemFailureCompose) }
+                .onFailure { emitEvent(TeamPersonalItemEditEvent.CreateItemFailureCompose) }
                 .onSuccess {
                     fetchPersonalItems()
                     updateState { copy(inputText = "") }
-                    emitEvent(ComposeTeamPersonalItemEditEvent.CreateItemSuccessCompose)
+                    emitEvent(TeamPersonalItemEditEvent.CreateItemSuccessCompose)
                 }
 
             updateState { copy(isLoading = false) }
@@ -53,7 +53,7 @@ class ComposeTeamPersonalItemEditViewModel @Inject constructor(
         launch {
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.PERSONAL)
                 .onSuccess { fetchPersonalItems() }
-                .onFailure { emitEvent(ComposeTeamPersonalItemEditEvent.DeleteItemFailureCompose) }
+                .onFailure { emitEvent(TeamPersonalItemEditEvent.DeleteItemFailureCompose) }
 
             updateState { copy(isLoading = false) }
         }
@@ -65,7 +65,7 @@ class ComposeTeamPersonalItemEditViewModel @Inject constructor(
         launch {
             fetchTeamPersonalItemsUseCase(bottariId)
                 .onSuccess { items -> updateState { copy(personalItems = items.map { BottariItemUiModel.fromDomain(it) }) } }
-                .onFailure { emitEvent(ComposeTeamPersonalItemEditEvent.FetchComposeTeamPersonalItemsFailure) }
+                .onFailure { emitEvent(TeamPersonalItemEditEvent.FetchTeamPersonalItemsFailure) }
 
             updateState { copy(isLoading = false, isFetched = true) }
         }

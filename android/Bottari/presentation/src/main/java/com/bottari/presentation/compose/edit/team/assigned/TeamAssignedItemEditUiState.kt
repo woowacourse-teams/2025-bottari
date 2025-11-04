@@ -3,7 +3,7 @@ package com.bottari.presentation.compose.edit.team.assigned
 import com.bottari.presentation.model.bottari.personal.SelectableItemUiModel
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 
-data class ComposeTeamAssignedItemEditUiState(
+data class TeamAssignedItemEditUiState(
     val isLoading: Boolean = false,
     val isFetched: Boolean = false,
     val hasRestoreState: Boolean = false,

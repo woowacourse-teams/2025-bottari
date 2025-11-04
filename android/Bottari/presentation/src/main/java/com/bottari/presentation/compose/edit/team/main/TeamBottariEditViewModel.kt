@@ -22,12 +22,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ComposeTeamBottariEditViewModel @Inject constructor(
+class TeamBottariEditViewModel @Inject constructor(
     createHandle: SavedStateHandle,
     private val fetchTeamBottariDetailUseCase: FetchTeamBottariDetailUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
-) : FlowBaseViewModel<ComposeTeamBottariEditUiState, ComposeTeamBottariEditUiEvent>(ComposeTeamBottariEditUiState()) {
+) : FlowBaseViewModel<TeamBottariEditUiState, TeamBottariEditUiEvent>(TeamBottariEditUiState()) {
     private val bottariId: Long = createHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
     init {
@@ -49,7 +49,7 @@ class ComposeTeamBottariEditViewModel @Inject constructor(
                     handleFetchTeamBottariDetail(it)
                     updateState { copy(isFetched = true) }
                 }.onFailure {
-                    emitEvent(ComposeTeamBottariEditUiEvent.FetchComposeTeamBottariDetailFailure)
+                    emitEvent(TeamBottariEditUiEvent.FetchTeamBottariDetailFailure)
                     updateState { copy(isFetched = false) }
                 }
 

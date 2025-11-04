@@ -6,7 +6,7 @@ import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
 import com.bottari.presentation.CoroutinesTestExtension
 import com.bottari.presentation.InstantTaskExecutorExtension
-import com.bottari.presentation.compose.edit.team.member.ComposeTeamManagementViewModel
+import com.bottari.presentation.compose.edit.team.member.TeamManagementViewModel
 import com.bottari.presentation.fixture.TEAM_MEMBERS_FIXTURE
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.shouldBe
@@ -26,7 +26,7 @@ class TeamManagementViewModelTest {
     private lateinit var connectTeamEventUseCase: ConnectTeamEventUseCase
     private lateinit var disconnectTeamEventUseCase: DisconnectTeamEventUseCase
     private lateinit var stateHandle: SavedStateHandle
-    private lateinit var viewModel: ComposeTeamManagementViewModel
+    private lateinit var viewModel: TeamManagementViewModel
 
     @BeforeEach
     fun setUp() {
@@ -45,7 +45,7 @@ class TeamManagementViewModelTest {
             coEvery { fetchTeamMembersUseCase(id) } returns Result.success(TEAM_MEMBERS_FIXTURE)
 
             viewModel =
-                ComposeTeamManagementViewModel(
+                TeamManagementViewModel(
                     stateHandle,
                     fetchTeamMembersUseCase,
                     connectTeamEventUseCase,
