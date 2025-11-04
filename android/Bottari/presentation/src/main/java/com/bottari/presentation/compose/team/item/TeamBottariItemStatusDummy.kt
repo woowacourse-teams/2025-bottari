@@ -10,7 +10,7 @@ val teamBottariItemStatusDummyUiState: ComposeTeamBottariItemStatusUiState =
             listOf(
                 TeamBottariUiModelStatus(
                     id = 1L,
-                    name = "공용 물품 1 (수건)",
+                    name = "공용 물건 1 (수건)",
                     memberCheckStatus =
                         listOf(
                             MemberCheckStatusUiModel(name = "멤버 A", checked = true),
@@ -23,7 +23,7 @@ val teamBottariItemStatusDummyUiState: ComposeTeamBottariItemStatusUiState =
                 ),
                 TeamBottariUiModelStatus(
                     id = 2L,
-                    name = "개인 할당 물품 (여권)",
+                    name = "개인 할당 물건 (여권)",
                     memberCheckStatus =
                         listOf(
                             MemberCheckStatusUiModel(name = "멤버 B", checked = true),
@@ -34,7 +34,7 @@ val teamBottariItemStatusDummyUiState: ComposeTeamBottariItemStatusUiState =
                 ),
                 TeamBottariUiModelStatus(
                     id = 3L,
-                    name = "공용 물품 2 (상비약)",
+                    name = "공용 물건 2 (상비약)",
                     memberCheckStatus =
                         listOf(
                             MemberCheckStatusUiModel(name = "멤버 A", checked = false),
@@ -47,7 +47,7 @@ val teamBottariItemStatusDummyUiState: ComposeTeamBottariItemStatusUiState =
                 ),
                 TeamBottariUiModelStatus(
                     id = 4L,
-                    name = "공용 물품 3 (충전기)",
+                    name = "공용 물건 3 (충전기)",
                     memberCheckStatus =
                         listOf(
                             MemberCheckStatusUiModel(name = "멤버 A", checked = true),
@@ -59,7 +59,7 @@ val teamBottariItemStatusDummyUiState: ComposeTeamBottariItemStatusUiState =
                 ),
                 TeamBottariUiModelStatus(
                     id = 5L,
-                    name = "모두 챙긴 물품",
+                    name = "모두 챙긴 물건",
                     memberCheckStatus =
                         listOf(
                             MemberCheckStatusUiModel(name = "멤버 A", checked = true),

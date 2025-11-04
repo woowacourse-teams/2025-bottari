@@ -104,7 +104,6 @@ class TeamAssignedItemEditViewModel @Inject constructor(
                 currentState.selectedMemberIds,
             ).onSuccess {
                 refreshAssignedItemsAndMembers()
-                emitEvent(TeamAssignedItemEditUiEvent.CreateItemSuccess)
             }.onFailure {
                 emitEvent(TeamAssignedItemEditUiEvent.CreateItemFailure)
             }
@@ -130,7 +129,6 @@ class TeamAssignedItemEditViewModel @Inject constructor(
                     )
                 }
                 refreshAssignedItemsAndMembers()
-                emitEvent(TeamAssignedItemEditUiEvent.SaveItemSuccess)
             }.onFailure {
                 emitEvent(TeamAssignedItemEditUiEvent.SaveItemFailure)
             }

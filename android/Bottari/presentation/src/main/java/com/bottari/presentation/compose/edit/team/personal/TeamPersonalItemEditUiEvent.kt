@@ -6,6 +6,4 @@ sealed interface TeamPersonalItemEditUiEvent {
     data object DeleteItemFailureCompose : TeamPersonalItemEditUiEvent
 
     data object CreateItemFailureCompose : TeamPersonalItemEditUiEvent
-
-    data object CreateItemSuccessCompose : TeamPersonalItemEditUiEvent
 }

@@ -40,7 +40,6 @@ class TeamPersonalItemEditViewModel @Inject constructor(
                 .onSuccess {
                     fetchPersonalItems()
                     updateState { copy(inputText = "") }
-                    emitEvent(TeamPersonalItemEditUiEvent.CreateItemSuccessCompose)
                 }
 
             updateState { copy(isLoading = false) }

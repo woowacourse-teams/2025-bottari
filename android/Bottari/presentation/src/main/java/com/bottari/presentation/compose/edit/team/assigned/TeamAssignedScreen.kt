@@ -48,13 +48,10 @@ fun TeamAssignedScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                TeamAssignedItemEditUiEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물품 생성에 실패했습니다")
-                TeamAssignedItemEditUiEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물품 삭제에 실패했습니다")
-                TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailure -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
-                TeamAssignedItemEditUiEvent.SaveItemFailure -> snackbarHostState.showSnackbar("물품 저장에 실패했습니다")
-                TeamAssignedItemEditUiEvent.CreateItemSuccess,
-                TeamAssignedItemEditUiEvent.SaveItemSuccess,
-                -> Unit
+                TeamAssignedItemEditUiEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물건 생성에 실패했어요")
+                TeamAssignedItemEditUiEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물건 삭제에 실패했어요")
+                TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailure -> snackbarHostState.showSnackbar("물건 불러오기에 실패했어요")
+                TeamAssignedItemEditUiEvent.SaveItemFailure -> snackbarHostState.showSnackbar("물건 저장에 실패했어요")
             }
         }
     }
@@ -140,7 +137,7 @@ fun TeamAssignedScreen(
                 ),
             shape = RoundedCornerShape(12.dp),
             contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceMedium),
-        ) { Text(text = "물품 추가", style = BottariTheme.typography.semiBold24.toTextStyle()) }
+        ) { Text(text = "물건 추가", style = BottariTheme.typography.semiBold24.toTextStyle()) }
         if (showBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = onBottomSheetClose,

@@ -23,10 +23,9 @@ fun TeamSharedScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                TeamSharedItemEditEvent.CreateItemSuccess -> return@collect
-                TeamSharedItemEditEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물품 생성에 실패했습니다")
-                TeamSharedItemEditEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물품 삭제에 실패했습니다")
-                TeamSharedItemEditEvent.FetchTeamSharedItemsFailure -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
+                TeamSharedItemEditEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물건 생성에 실패했어요")
+                TeamSharedItemEditEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물건 삭제에 실패했어요")
+                TeamSharedItemEditEvent.FetchTeamSharedItemsFailure -> snackbarHostState.showSnackbar("물건 불러오기에 실패했어요")
             }
         }
     }
