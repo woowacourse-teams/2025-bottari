@@ -143,8 +143,8 @@ class TeamAssignedItemEditViewModel @Inject constructor(
 
             updateState {
                 copy(
-                    assignedItems = syncAssignedItems(assignedItems.map { SelectableItemUiModel.fromDomain(it) }),
-                    members = syncMembers(members.map { TeamMemberUiModel.fromDomain(it) }),
+                    assignedItems = syncAssignedItems(assignedItems.map(SelectableItemUiModel::fromDomain)),
+                    members = syncMembers(members.map(TeamMemberUiModel::fromDomain)),
                     isFetched = true,
                 )
             }

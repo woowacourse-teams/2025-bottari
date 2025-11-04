@@ -64,7 +64,7 @@ fun TeamAssignedScreen(
         modifier = modifier,
         showBottomSheet = showBottomSheet,
         sheetState = sheetState,
-        onChangeInputText = { input -> viewModel.updateInput(input) },
+        onChangeInputText = viewModel::updateInput,
         onBottomSheetVisibleChange = { showBottomSheet = !showBottomSheet },
         onBottomSheetClose = {
             showBottomSheet = false
@@ -75,14 +75,14 @@ fun TeamAssignedScreen(
             showBottomSheet = false
             viewModel.resetState()
         },
-        onEditItem = { itemId ->
-            viewModel.toggleEditState(itemId)
+        onEditItem = {
+            viewModel::toggleEditState
             showBottomSheet = true
         },
-        onAllSelect = { viewModel.selectAllMember() },
-        onAllUnSelect = { viewModel.unSelectAllMember() },
-        onSelectMember = { id -> viewModel.selectMember(id) },
-        onDeleteItem = { id -> viewModel.deleteItem(id) },
+        onAllSelect =  viewModel::selectAllMember,
+        onAllUnSelect = viewModel::unSelectAllMember,
+        onSelectMember = viewModel::selectMember,
+        onDeleteItem = viewModel::deleteItem,
     )
 }
 
@@ -126,7 +126,7 @@ fun TeamAssignedScreen(
             }
         }
         Button(
-            onClick = { onBottomSheetVisibleChange() },
+            onClick = onBottomSheetVisibleChange,
             modifier =
                 Modifier
                     .fillMaxWidth()

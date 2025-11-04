@@ -81,7 +81,7 @@ class TeamBottariEditViewModel @Inject constructor(
         }
 
     private fun handleFetchTeamBottariDetail(teamBottariDetail: TeamBottariDetail) {
-        val alarmUi = teamBottariDetail.bottari.alarm?.let { AlarmUiModel.fromDomain(it) }
+        val alarmUi = teamBottariDetail.bottari.alarm?.let(AlarmUiModel::fromDomain)
         updateState {
             copy(
                 bottariTitle = teamBottariDetail.bottari.title,

@@ -32,14 +32,12 @@ fun TeamChecklistEditScreen(
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = modifier.noRippleClickable(onClick = { focusManager.clearFocus() }),
+        modifier = modifier.noRippleClickable(onClick = focusManager::clearFocus),
     ) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
             contentPadding =
-                PaddingValues(
-                    bottom = BottariTheme.spacing.spaceMedium,
-                ),
+                PaddingValues(bottom = BottariTheme.spacing.spaceMedium,),
             modifier =
                 Modifier
                     .padding(horizontal = BottariTheme.spacing.spaceMedium)

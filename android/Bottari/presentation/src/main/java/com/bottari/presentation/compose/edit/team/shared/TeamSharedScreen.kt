@@ -37,7 +37,7 @@ fun TeamSharedScreen(
         onDeleteItem = viewModel::deleteItem,
         onSaveItem = viewModel::createItem,
         newItemName = uiState.inputText,
-        onChangeItemName = { input -> viewModel.updateInput(input) },
+        onChangeItemName = viewModel::updateInput,
         modifier = modifier,
     )
 }
