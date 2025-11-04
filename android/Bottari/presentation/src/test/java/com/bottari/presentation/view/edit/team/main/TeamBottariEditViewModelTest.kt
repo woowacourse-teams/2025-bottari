@@ -57,6 +57,7 @@ class TeamBottariEditViewModelTest {
                     connectTeamEventUseCase,
                     disconnectTeamEventUseCase,
                 )
+            advanceUntilIdle()
 
             // then
             val uiState = viewModel.uiState.value
