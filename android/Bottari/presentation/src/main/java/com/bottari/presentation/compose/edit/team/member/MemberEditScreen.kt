@@ -208,7 +208,7 @@ private fun MemberEditScreenPreview() {
                         ),
                     ),
                 teamMemberHeadCount = 3,
-                maxHeadCount = 20,
+                maxHeadCount = 10,
             ),
         modifier = Modifier.padding(BottariTheme.spacing.spaceMedium),
     )

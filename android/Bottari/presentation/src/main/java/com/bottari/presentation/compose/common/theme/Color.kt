@@ -62,16 +62,6 @@ data class BottariColorSystem(
             Color(0xFF7F7F7F),
             Color(0xFFBCBD22),
             Color(0xFF17BECF),
-            Color(0xFFAEC7E8),
-            Color(0xFFFFBB78),
-            Color(0xFF98DF8A),
-            Color(0xFFFF9896),
-            Color(0xFFC5B0D5),
-            Color(0xFFC49C94),
-            Color(0xFFF7B6D2),
-            Color(0xFFC7C7C7),
-            Color(0xFFDBDB8D),
-            Color(0xFF9EDAE5),
         ),
 )
 
