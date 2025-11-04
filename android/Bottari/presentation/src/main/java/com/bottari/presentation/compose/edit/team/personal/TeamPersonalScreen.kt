@@ -7,7 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bottari.presentation.compose.edit.team.main.TeamChecklistEditScreen
+import com.bottari.presentation.compose.edit.team.TeamChecklistEditScreen
 
 @Composable
 fun TeamPersonalScreen(
@@ -34,7 +34,7 @@ fun TeamPersonalScreen(
     TeamChecklistEditScreen(
         items = uiState.personalItems,
         isInvalidItem = uiState.isAlreadyExist,
-        isSavable =uiState.isSavable,
+        isSavable = uiState.isSavable,
         onDeleteItem = viewModel::deleteItem,
         onSaveItem = viewModel::createItem,
         newItemName = uiState.inputText,
