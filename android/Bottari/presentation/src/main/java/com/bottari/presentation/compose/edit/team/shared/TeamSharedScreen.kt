@@ -29,7 +29,6 @@ fun TeamSharedScreen(
                 TeamSharedItemEditEvent.FetchTeamSharedItemsFailure -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
             }
         }
-
     }
 
     TeamChecklistEditScreen(

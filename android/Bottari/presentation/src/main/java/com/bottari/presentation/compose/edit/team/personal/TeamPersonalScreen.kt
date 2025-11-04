@@ -22,17 +22,20 @@ fun TeamPersonalScreen(
 
             when (uiEvent) {
                 TeamPersonalItemEditEvent.CreateItemSuccessCompose -> return@collect
-                TeamPersonalItemEditEvent.CreateItemFailureCompose -> snackbarHostState.showSnackbar(
-                    "물품 생성하기에 실패했습니다"
-                )
+                TeamPersonalItemEditEvent.CreateItemFailureCompose ->
+                    snackbarHostState.showSnackbar(
+                        "물품 생성하기에 실패했습니다",
+                    )
 
-                TeamPersonalItemEditEvent.DeleteItemFailureCompose -> snackbarHostState.showSnackbar(
-                    "물품 삭제하기에 실패했습니다"
-                )
+                TeamPersonalItemEditEvent.DeleteItemFailureCompose ->
+                    snackbarHostState.showSnackbar(
+                        "물품 삭제하기에 실패했습니다",
+                    )
 
-                TeamPersonalItemEditEvent.FetchTeamPersonalItemsFailure -> snackbarHostState.showSnackbar(
-                    "물품 불러오기에 실패했습니다"
-                )
+                TeamPersonalItemEditEvent.FetchTeamPersonalItemsFailure ->
+                    snackbarHostState.showSnackbar(
+                        "물품 불러오기에 실패했습니다",
+                    )
             }
         }
     }

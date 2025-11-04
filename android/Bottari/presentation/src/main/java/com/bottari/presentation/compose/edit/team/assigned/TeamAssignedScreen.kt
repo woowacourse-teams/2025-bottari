@@ -54,7 +54,7 @@ fun TeamAssignedScreen(
                 TeamAssignedItemEditUiEvent.SaveItemFailureUi -> snackbarHostState.showSnackbar("물품 저장에 실패했습니다")
                 TeamAssignedItemEditUiEvent.CreateItemSuccessUi,
                 TeamAssignedItemEditUiEvent.SaveItemSuccessUi,
-                    -> return@collect
+                -> return@collect
             }
         }
     }
