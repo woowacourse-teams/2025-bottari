@@ -1,15 +1,15 @@
 package com.bottari.presentation.compose.edit.team.assigned
 
 sealed interface TeamAssignedItemEditUiEvent {
-    data object FetchTeamAssignedItemsFailureUi : TeamAssignedItemEditUiEvent
+    data object FetchTeamAssignedItemsFailure : TeamAssignedItemEditUiEvent
 
-    data object DeleteItemFailureUi : TeamAssignedItemEditUiEvent
+    data object DeleteItemFailure : TeamAssignedItemEditUiEvent
 
-    data object CreateItemFailureUi : TeamAssignedItemEditUiEvent
+    data object CreateItemFailure : TeamAssignedItemEditUiEvent
 
-    data object CreateItemSuccessUi : TeamAssignedItemEditUiEvent
+    data object CreateItemSuccess : TeamAssignedItemEditUiEvent
 
-    data object SaveItemSuccessUi : TeamAssignedItemEditUiEvent
+    data object SaveItemSuccess : TeamAssignedItemEditUiEvent
 
-    data object SaveItemFailureUi : TeamAssignedItemEditUiEvent
+    data object SaveItemFailure : TeamAssignedItemEditUiEvent
 }

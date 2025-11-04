@@ -16,7 +16,7 @@ class TeamPersonalItemEditViewModel @Inject constructor(
     private val fetchTeamPersonalItemsUseCase: FetchTeamPersonalItemsUseCase,
     private val createTeamPersonalItemUseCase: CreateTeamPersonalItemUseCase,
     private val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase,
-) : FlowBaseViewModel<TeamPersonalItemEditUiState, TeamPersonalItemEditEvent>(
+) : FlowBaseViewModel<TeamPersonalItemEditUiState, TeamPersonalItemEditUiEvent>(
         TeamPersonalItemEditUiState(),
     ) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
@@ -36,11 +36,11 @@ class TeamPersonalItemEditViewModel @Inject constructor(
 
         launch {
             createTeamPersonalItemUseCase(bottariId, currentState.inputText)
-                .onFailure { emitEvent(TeamPersonalItemEditEvent.CreateItemFailureCompose) }
+                .onFailure { emitEvent(TeamPersonalItemEditUiEvent.CreateItemFailureCompose) }
                 .onSuccess {
                     fetchPersonalItems()
                     updateState { copy(inputText = "") }
-                    emitEvent(TeamPersonalItemEditEvent.CreateItemSuccessCompose)
+                    emitEvent(TeamPersonalItemEditUiEvent.CreateItemSuccessCompose)
                 }
 
             updateState { copy(isLoading = false) }
@@ -53,7 +53,7 @@ class TeamPersonalItemEditViewModel @Inject constructor(
         launch {
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.PERSONAL)
                 .onSuccess { fetchPersonalItems() }
-                .onFailure { emitEvent(TeamPersonalItemEditEvent.DeleteItemFailureCompose) }
+                .onFailure { emitEvent(TeamPersonalItemEditUiEvent.DeleteItemFailureCompose) }
 
             updateState { copy(isLoading = false) }
         }
@@ -65,7 +65,7 @@ class TeamPersonalItemEditViewModel @Inject constructor(
         launch {
             fetchTeamPersonalItemsUseCase(bottariId)
                 .onSuccess { items -> updateState { copy(personalItems = items.map { BottariItemUiModel.fromDomain(it) }) } }
-                .onFailure { emitEvent(TeamPersonalItemEditEvent.FetchTeamPersonalItemsFailure) }
+                .onFailure { emitEvent(TeamPersonalItemEditUiEvent.FetchTeamPersonalItemsFailure) }
 
             updateState { copy(isLoading = false, isFetched = true) }
         }

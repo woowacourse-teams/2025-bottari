@@ -21,18 +21,18 @@ fun TeamPersonalScreen(
         viewModel.uiEvent.collect { uiEvent ->
 
             when (uiEvent) {
-                TeamPersonalItemEditEvent.CreateItemSuccessCompose -> return@collect
-                TeamPersonalItemEditEvent.CreateItemFailureCompose ->
+                TeamPersonalItemEditUiEvent.CreateItemSuccessCompose -> Unit
+                TeamPersonalItemEditUiEvent.CreateItemFailureCompose ->
                     snackbarHostState.showSnackbar(
                         "물품 생성하기에 실패했습니다",
                     )
 
-                TeamPersonalItemEditEvent.DeleteItemFailureCompose ->
+                TeamPersonalItemEditUiEvent.DeleteItemFailureCompose ->
                     snackbarHostState.showSnackbar(
                         "물품 삭제하기에 실패했습니다",
                     )
 
-                TeamPersonalItemEditEvent.FetchTeamPersonalItemsFailure ->
+                TeamPersonalItemEditUiEvent.FetchTeamPersonalItemsFailure ->
                     snackbarHostState.showSnackbar(
                         "물품 불러오기에 실패했습니다",
                     )

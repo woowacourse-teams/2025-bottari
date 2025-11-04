@@ -83,7 +83,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
         launch {
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.ASSIGNED())
                 .onSuccess { refreshAssignedItemsAndMembers() }
-                .onFailure { emitEvent(TeamAssignedItemEditUiEvent.DeleteItemFailureUi) }
+                .onFailure { emitEvent(TeamAssignedItemEditUiEvent.DeleteItemFailure) }
 
             updateState { copy(isLoading = false) }
         }
@@ -104,9 +104,9 @@ class TeamAssignedItemEditViewModel @Inject constructor(
                 currentState.selectedMemberIds,
             ).onSuccess {
                 refreshAssignedItemsAndMembers()
-                emitEvent(TeamAssignedItemEditUiEvent.CreateItemSuccessUi)
+                emitEvent(TeamAssignedItemEditUiEvent.CreateItemSuccess)
             }.onFailure {
-                emitEvent(TeamAssignedItemEditUiEvent.CreateItemFailureUi)
+                emitEvent(TeamAssignedItemEditUiEvent.CreateItemFailure)
             }
 
             updateState { copy(isLoading = false) }
@@ -130,9 +130,9 @@ class TeamAssignedItemEditViewModel @Inject constructor(
                     )
                 }
                 refreshAssignedItemsAndMembers()
-                emitEvent(TeamAssignedItemEditUiEvent.SaveItemSuccessUi)
+                emitEvent(TeamAssignedItemEditUiEvent.SaveItemSuccess)
             }.onFailure {
-                emitEvent(TeamAssignedItemEditUiEvent.SaveItemFailureUi)
+                emitEvent(TeamAssignedItemEditUiEvent.SaveItemFailure)
             }
 
             updateState { copy(isLoading = false) }
@@ -201,12 +201,12 @@ class TeamAssignedItemEditViewModel @Inject constructor(
 
     private suspend fun loadAssignedItems(): List<BottariItem> =
         fetchTeamAssignedItemsUseCase(bottariId)
-            .onFailure { emitEvent(TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailureUi) }
+            .onFailure { emitEvent(TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailure) }
             .getOrElse { emptyList() }
 
     private suspend fun loadTeamMembers(): List<TeamMember> =
         fetchTeamBottariMembersUseCase(bottariId)
-            .onFailure { emitEvent(TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailureUi) }
+            .onFailure { emitEvent(TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailure) }
             .getOrElse { emptyList() }
 
     private fun toggleMemberSelection(memberId: Long): List<TeamMemberUiModel> =

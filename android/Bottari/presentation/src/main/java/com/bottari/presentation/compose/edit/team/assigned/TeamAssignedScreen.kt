@@ -48,13 +48,13 @@ fun TeamAssignedScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                TeamAssignedItemEditUiEvent.CreateItemFailureUi -> snackbarHostState.showSnackbar("물품 생성에 실패했습니다")
-                TeamAssignedItemEditUiEvent.DeleteItemFailureUi -> snackbarHostState.showSnackbar("물품 삭제에 실패했습니다")
-                TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailureUi -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
-                TeamAssignedItemEditUiEvent.SaveItemFailureUi -> snackbarHostState.showSnackbar("물품 저장에 실패했습니다")
-                TeamAssignedItemEditUiEvent.CreateItemSuccessUi,
-                TeamAssignedItemEditUiEvent.SaveItemSuccessUi,
-                -> return@collect
+                TeamAssignedItemEditUiEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물품 생성에 실패했습니다")
+                TeamAssignedItemEditUiEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물품 삭제에 실패했습니다")
+                TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailure -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")
+                TeamAssignedItemEditUiEvent.SaveItemFailure -> snackbarHostState.showSnackbar("물품 저장에 실패했습니다")
+                TeamAssignedItemEditUiEvent.CreateItemSuccess,
+                TeamAssignedItemEditUiEvent.SaveItemSuccess,
+                -> Unit
             }
         }
     }
