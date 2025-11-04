@@ -45,10 +45,15 @@ class ComposeTeamBottariEditViewModel @Inject constructor(
 
         launch {
             fetchTeamBottariDetailUseCase(bottariId)
-                .onSuccess { handleFetchTeamBottariDetail(it) }
-                .onFailure { emitEvent(ComposeTeamBottariEditUiEvent.FetchComposeTeamBottariDetailFailure) }
+                .onSuccess {
+                    handleFetchTeamBottariDetail(it)
+                    updateState { copy(isFetched = true) }
+                }.onFailure {
+                    emitEvent(ComposeTeamBottariEditUiEvent.FetchComposeTeamBottariDetailFailure)
+                    updateState { copy(isFetched = false) }
+                }
 
-            updateState { copy(isLoading = false, isFetched = true) }
+            updateState { copy(isLoading = false) }
         }
     }
 
