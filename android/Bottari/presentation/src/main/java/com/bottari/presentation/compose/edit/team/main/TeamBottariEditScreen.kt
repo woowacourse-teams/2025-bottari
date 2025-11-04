@@ -1,5 +1,6 @@
 package com.bottari.presentation.compose.edit.team.main
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -54,24 +55,43 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
         )
     val pagerState = rememberPagerState(initialPage = 0) { pageTitles.size }
 
+    BackHandler(enabled = isMemberScreen) {
+        isMemberScreen = false
+    }
+
     LaunchedEffect(pagerState.currentPage) {
         focusManager.clearFocus()
     }
 
     LaunchedEffect(uiEvent) {
         when (uiEvent ?: return@LaunchedEffect) {
-            ComposeTeamBottariEditUiEvent.FetchComposeTeamBottariDetailFailure -> snackbarHostState.showSnackbar("보따리 불러오기에 실패했습니다")
-            ComposeTeamBottariEditUiEvent.ToggleAlarmStateFailure -> snackbarHostState.showSnackbar("알람 불러오기에 실패했습니다")
+            ComposeTeamBottariEditUiEvent.FetchComposeTeamBottariDetailFailure ->
+                snackbarHostState.showSnackbar(
+                    "보따리 불러오기에 실패했습니다",
+                )
+
+            ComposeTeamBottariEditUiEvent.ToggleAlarmStateFailure ->
+                snackbarHostState.showSnackbar(
+                    "알람 불러오기에 실패했습니다",
+                )
         }
     }
 
     Scaffold(
         topBar = {
-            TeamEditTopbar(title = uiState.bottariTitle, isMemberScreen = isMemberScreen, onBackClick = {
-                backPressedDispatcher?.onBackPressed()
-            }, onMemberClick = {
-                isMemberScreen = true
-            }, modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceXSmall))
+            TeamEditTopbar(
+                title = uiState.bottariTitle,
+                isMemberScreen = isMemberScreen,
+                onBackClick = {
+                    if (isMemberScreen) {
+                        isMemberScreen = false
+                        return@TeamEditTopbar
+                    }
+                    backPressedDispatcher?.onBackPressed()
+                },
+                onMemberClick = { isMemberScreen = true },
+                modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceXSmall),
+            )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = LocalBottariBgColor.current,
@@ -105,8 +125,14 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
                                 Modifier
                                     .fillMaxSize()
                                     .padding(
-                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
-                                        end = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                                        start =
+                                            paddingValues.calculateStartPadding(
+                                                LocalLayoutDirection.current,
+                                            ),
+                                        end =
+                                            paddingValues.calculateStartPadding(
+                                                LocalLayoutDirection.current,
+                                            ),
                                         bottom = BottariTheme.spacing.spaceMedium, // 기존 컨텐츠 패딩
                                     ).imePadding()
                                     .then(if (WindowInsets.isImeVisible) Modifier else Modifier.navigationBarsPadding()),
@@ -119,8 +145,14 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
                                 Modifier
                                     .fillMaxSize()
                                     .padding(
-                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
-                                        end = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                                        start =
+                                            paddingValues.calculateStartPadding(
+                                                LocalLayoutDirection.current,
+                                            ),
+                                        end =
+                                            paddingValues.calculateStartPadding(
+                                                LocalLayoutDirection.current,
+                                            ),
                                         bottom = BottariTheme.spacing.spaceMedium, // 기존 컨텐츠 패딩
                                     ).padding(horizontal = BottariTheme.spacing.spaceMedium)
                                     .padding(top = BottariTheme.spacing.spaceSmall),
@@ -133,8 +165,14 @@ fun TeamBottariEditScreen(viewModel: ComposeTeamBottariEditViewModel = viewModel
                                 Modifier
                                     .fillMaxSize()
                                     .padding(
-                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
-                                        end = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                                        start =
+                                            paddingValues.calculateStartPadding(
+                                                LocalLayoutDirection.current,
+                                            ),
+                                        end =
+                                            paddingValues.calculateStartPadding(
+                                                LocalLayoutDirection.current,
+                                            ),
                                         bottom = BottariTheme.spacing.spaceMedium, // 기존 컨텐츠 패딩
                                     ).imePadding()
                                     .then(if (WindowInsets.isImeVisible) Modifier else Modifier.navigationBarsPadding()),
