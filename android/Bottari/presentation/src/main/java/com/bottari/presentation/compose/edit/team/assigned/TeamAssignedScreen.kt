@@ -72,7 +72,6 @@ fun TeamAssignedScreen(
         onSaveItem = {
             viewModel.submitItem()
             showBottomSheet = false
-            viewModel.refreshAssignedItemsAndMembers()
             viewModel.resetState()
         },
         onEditItem = { itemId ->
