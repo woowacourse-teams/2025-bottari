@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
 import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.team.main.TeamBottariEditScreen
@@ -17,7 +16,6 @@ class TeamBottariEditActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(BottariStatusBarStyle)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             BottariTheme {
                 TeamBottariEditScreen()
