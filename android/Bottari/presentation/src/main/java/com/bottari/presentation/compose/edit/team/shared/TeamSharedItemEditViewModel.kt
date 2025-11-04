@@ -51,9 +51,7 @@ class TeamSharedItemEditViewModel @Inject constructor(
                     fetchPersonalItems()
                     updateState { copy(inputText = "") }
                 }
-
-            updateState { copy(isLoading = false) }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     fun deleteItem(itemId: Long) {
@@ -63,9 +61,7 @@ class TeamSharedItemEditViewModel @Inject constructor(
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.SHARED)
                 .onSuccess { fetchPersonalItems() }
                 .onFailure { emitEvent(TeamSharedItemEditEvent.DeleteItemFailure) }
-
-            updateState { copy(isLoading = false) }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     @OptIn(FlowPreview::class)
@@ -85,11 +81,18 @@ class TeamSharedItemEditViewModel @Inject constructor(
 
         launch {
             fetchTeamSharedItemsUseCase(bottariId)
-                .onSuccess { items -> updateState { copy(sharedItems = items.map(BottariItemUiModel::fromDomain)) } }
-                .onFailure { emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure) }
-
-            updateState { copy(isLoading = false, isFetched = true) }
-        }
+                .onSuccess { items ->
+                    updateState {
+                        copy(
+                            sharedItems = items.map(BottariItemUiModel::fromDomain),
+                            isFetched = true,
+                        )
+                    }
+                }.onFailure {
+                    updateState { copy(isFetched = false) }
+                    emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure)
+                }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     private fun EventData.shouldIgnore(): Boolean =

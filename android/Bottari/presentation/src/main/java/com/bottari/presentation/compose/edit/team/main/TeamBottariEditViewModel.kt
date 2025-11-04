@@ -52,7 +52,7 @@ class TeamBottariEditViewModel @Inject constructor(
                     emitEvent(TeamBottariEditUiEvent.FetchTeamBottariDetailFailure)
                     updateState { copy(isFetched = false) }
                 }
-
+        }.invokeOnCompletion {
             updateState { copy(isLoading = false) }
         }
     }

@@ -41,9 +41,7 @@ class TeamPersonalItemEditViewModel @Inject constructor(
                     fetchPersonalItems()
                     updateState { copy(inputText = "") }
                 }
-
-            updateState { copy(isLoading = false) }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     fun deleteItem(itemId: Long) {
@@ -53,9 +51,7 @@ class TeamPersonalItemEditViewModel @Inject constructor(
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.PERSONAL)
                 .onSuccess { fetchPersonalItems() }
                 .onFailure { emitEvent(TeamPersonalItemEditUiEvent.DeleteItemFailureCompose) }
-
-            updateState { copy(isLoading = false) }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     private fun fetchPersonalItems() {
@@ -63,11 +59,19 @@ class TeamPersonalItemEditViewModel @Inject constructor(
 
         launch {
             fetchTeamPersonalItemsUseCase(bottariId)
-                .onSuccess { items -> updateState { copy(personalItems = items.map { BottariItemUiModel.fromDomain(it) }) } }
-                .onFailure { emitEvent(TeamPersonalItemEditUiEvent.FetchTeamPersonalItemsFailure) }
-
-            updateState { copy(isLoading = false, isFetched = true) }
-        }
+                .onSuccess { items ->
+                    updateState {
+                        copy(
+                            personalItems =
+                                items.map { BottariItemUiModel.fromDomain(it) },
+                            isFetched = true,
+                        )
+                    }
+                }.onFailure {
+                    updateState { copy(isFetched = false) }
+                    emitEvent(TeamPersonalItemEditUiEvent.FetchTeamPersonalItemsFailure)
+                }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     companion object {

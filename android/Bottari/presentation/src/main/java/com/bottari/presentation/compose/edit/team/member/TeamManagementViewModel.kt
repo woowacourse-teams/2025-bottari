@@ -52,11 +52,8 @@ class TeamManagementViewModel @Inject constructor(
                 .onSuccess { teamMembers ->
                     updateState { copyFromTeamMembers(teamMembers) }
                     logTeamMembersFetch(teamMembers)
-                }.onFailure {
-                    emitEvent(TeamManagementUiEvent.FetchTeamMembersFailure)
-                }
-            updateState { copy(isLoading = false) }
-        }
+                }.onFailure { emitEvent(TeamManagementUiEvent.FetchTeamMembersFailure) }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     @OptIn(FlowPreview::class)

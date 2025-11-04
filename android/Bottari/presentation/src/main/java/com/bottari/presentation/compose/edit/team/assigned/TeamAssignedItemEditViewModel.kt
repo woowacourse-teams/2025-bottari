@@ -84,9 +84,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.ASSIGNED())
                 .onSuccess { refreshAssignedItemsAndMembers() }
                 .onFailure { emitEvent(TeamAssignedItemEditUiEvent.DeleteItemFailure) }
-
-            updateState { copy(isLoading = false) }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     private fun applyTextInput(itemId: Long) {
@@ -107,9 +105,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
             }.onFailure {
                 emitEvent(TeamAssignedItemEditUiEvent.CreateItemFailure)
             }
-
-            updateState { copy(isLoading = false) }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     private fun saveAssignedItem() {
@@ -132,9 +128,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
             }.onFailure {
                 emitEvent(TeamAssignedItemEditUiEvent.SaveItemFailure)
             }
-
-            updateState { copy(isLoading = false) }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
     fun refreshAssignedItemsAndMembers() {
@@ -149,14 +143,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
 
             updateState {
                 copy(
-                    assignedItems =
-                        syncAssignedItems(
-                            assignedItems.map {
-                                SelectableItemUiModel.fromDomain(
-                                    it,
-                                )
-                            },
-                        ),
+                    assignedItems = syncAssignedItems(assignedItems.map { SelectableItemUiModel.fromDomain(it) }),
                     members = syncMembers(members.map { TeamMemberUiModel.fromDomain(it) }),
                     isFetched = true,
                 )
