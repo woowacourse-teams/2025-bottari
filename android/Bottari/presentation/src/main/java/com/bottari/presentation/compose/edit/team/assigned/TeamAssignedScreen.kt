@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -50,7 +49,11 @@ fun TeamAssignedScreen(
             when (uiEvent) {
                 TeamAssignedItemEditUiEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물건 생성에 실패했어요")
                 TeamAssignedItemEditUiEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물건 삭제에 실패했어요")
-                TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailure -> snackbarHostState.showSnackbar("물건 불러오기에 실패했어요")
+                TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailure ->
+                    snackbarHostState.showSnackbar(
+                        "물건 불러오기에 실패했어요",
+                    )
+
                 TeamAssignedItemEditUiEvent.SaveItemFailure -> snackbarHostState.showSnackbar("물건 저장에 실패했어요")
             }
         }
@@ -139,20 +142,16 @@ fun TeamAssignedScreen(
             contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceMedium),
         ) { Text(text = "물건 추가", style = BottariTheme.typography.semiBold24.toTextStyle()) }
         if (showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = onBottomSheetClose,
+            TeamAssignedBottomSheet(
+                uiState = uiState,
+                onSaveItem = onSaveItem,
+                onAllSelect = onAllSelect,
+                onBottomSheetClose = onBottomSheetClose,
+                onAllUnSelect = onAllUnSelect,
+                onSelectMember = onSelectMember,
+                onChangeInputText = onChangeInputText,
                 sheetState = sheetState,
-                containerColor = BottariTheme.colors.white,
-            ) {
-                TeamAssignedBottomSheet(
-                    uiState = uiState,
-                    onSaveItem = onSaveItem,
-                    onAllSelect = onAllSelect,
-                    onAllUnSelect = onAllUnSelect,
-                    onSelectMember = onSelectMember,
-                    onChangeInputText = onChangeInputText,
-                )
-            }
+            )
         }
     }
 }
