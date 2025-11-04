@@ -19,7 +19,6 @@ fun TeamPersonalScreen(
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
-
             when (uiEvent) {
                 TeamPersonalItemEditUiEvent.CreateItemFailureCompose ->
                     snackbarHostState.showSnackbar("물건 생성하기에 실패했어요")
@@ -35,7 +34,7 @@ fun TeamPersonalScreen(
     TeamChecklistEditScreen(
         items = uiState.personalItems,
         isInvalidItem = uiState.isAlreadyExist,
-        isSavable = (uiState.inputText.isNotBlank() && !uiState.isAlreadyExist),
+        isSavable =uiState.isSavable,
         onDeleteItem = viewModel::deleteItem,
         onSaveItem = viewModel::createItem,
         newItemName = uiState.inputText,

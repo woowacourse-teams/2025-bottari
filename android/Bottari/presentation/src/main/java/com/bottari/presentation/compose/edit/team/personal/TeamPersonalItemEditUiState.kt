@@ -10,4 +10,5 @@ data class TeamPersonalItemEditUiState(
 ) {
     val isEmpty: Boolean = isFetched && personalItems.isEmpty()
     val isAlreadyExist: Boolean = personalItems.any { it.name == inputText }
+    val isSavable: Boolean = inputText.isNotBlank() && !isAlreadyExist
 }

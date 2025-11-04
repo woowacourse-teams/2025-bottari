@@ -10,4 +10,5 @@ data class TeamSharedItemEditUiState(
 ) {
     val isEmpty: Boolean = isFetched && sharedItems.isEmpty()
     val isAlreadyExist: Boolean = sharedItems.any { it.name == inputText }
+    val isSavable : Boolean = inputText.isNotBlank() && !isAlreadyExist
 }

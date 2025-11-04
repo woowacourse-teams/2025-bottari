@@ -33,7 +33,7 @@ fun TeamSharedScreen(
     TeamChecklistEditScreen(
         items = uiState.sharedItems,
         isInvalidItem = uiState.isAlreadyExist,
-        isSavable = (uiState.inputText.isNotBlank() && !uiState.isAlreadyExist),
+        isSavable = uiState.isSavable,
         onDeleteItem = viewModel::deleteItem,
         onSaveItem = viewModel::createItem,
         newItemName = uiState.inputText,
