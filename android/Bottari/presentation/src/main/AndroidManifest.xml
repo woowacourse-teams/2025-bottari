@@ -32,10 +32,6 @@
             android:exported="false" />
 
         <activity
-            android:name=".view.edit.team.TeamBottariEditActivity"
-            android:exported="false" />
-
-        <activity
             android:name=".view.invite.InviteActivity"
             android:exported="false" />
 
@@ -61,7 +57,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".compose.edit.team.ComposeTeamBottariEditActivity"
+            android:name=".compose.edit.team.TeamBottariEditActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
