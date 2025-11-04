@@ -70,12 +70,7 @@ fun TeamAssignedEditItem(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        val color =
-                            if (member.second == -1) {
-                                BottariTheme.colors.primary
-                            } else {
-                                BottariTheme.colors.memberColors[member.second]
-                            }
+                        val color = BottariTheme.colors.memberColors.getOrNull(member.second) ?: BottariTheme.colors.primary
                         Box(
                             modifier =
                                 Modifier
