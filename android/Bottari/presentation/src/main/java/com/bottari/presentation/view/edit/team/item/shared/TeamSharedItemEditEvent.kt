@@ -7,5 +7,5 @@ sealed interface TeamSharedItemEditEvent {
 
     data object CreateItemFailure : TeamSharedItemEditEvent
 
-    data object CreateItemSuccuss : TeamSharedItemEditEvent
+    data object CreateItemSuccess : TeamSharedItemEditEvent
 }

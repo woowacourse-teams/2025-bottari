@@ -7,5 +7,5 @@ sealed interface ComposeTeamSharedItemEditEvent {
 
     data object CreateItemFailureCompose : ComposeTeamSharedItemEditEvent
 
-    data object CreateItemSuccussCompose : ComposeTeamSharedItemEditEvent
+    data object CreateItemSuccessCompose : ComposeTeamSharedItemEditEvent
 }

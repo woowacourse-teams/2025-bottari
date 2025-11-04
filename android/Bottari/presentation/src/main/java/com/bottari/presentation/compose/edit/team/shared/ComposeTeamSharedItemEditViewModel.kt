@@ -50,7 +50,7 @@ class ComposeTeamSharedItemEditViewModel @Inject constructor(
                 .onSuccess {
                     fetchPersonalItems()
                     updateState { copy(inputText = "") }
-                    emitEvent(ComposeTeamSharedItemEditEvent.CreateItemSuccussCompose)
+                    emitEvent(ComposeTeamSharedItemEditEvent.CreateItemSuccessCompose)
                 }
 
             updateState { copy(isLoading = false) }

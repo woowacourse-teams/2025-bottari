@@ -79,7 +79,7 @@ class TeamSharedItemEditFragment :
             TeamSharedItemEditEvent.CreateItemFailure,
             -> requireView().showSnackbar(messageRes = R.string.common_save_failure_text)
 
-            TeamSharedItemEditEvent.CreateItemSuccuss -> {
+            TeamSharedItemEditEvent.CreateItemSuccess -> {
                 parentViewModel.updateInput(RESET_INPUT_TEXT)
                 val target = (adapter.itemCount - 1).coerceAtLeast(0)
                 binding.rvTeamSharedItemEdit.smoothScrollToPosition(target)

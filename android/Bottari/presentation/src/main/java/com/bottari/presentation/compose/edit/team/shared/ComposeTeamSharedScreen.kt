@@ -34,7 +34,7 @@ fun ComposeTeamSharedScreen(
 
     LaunchedEffect(uiEvent) {
         when (uiEvent ?: return@LaunchedEffect) {
-            ComposeTeamSharedItemEditEvent.CreateItemSuccussCompose -> return@LaunchedEffect
+            ComposeTeamSharedItemEditEvent.CreateItemSuccessCompose -> return@LaunchedEffect
             ComposeTeamSharedItemEditEvent.CreateItemFailureCompose -> snackbarHostState.showSnackbar("물품 생성에 실패했습니다")
             ComposeTeamSharedItemEditEvent.DeleteItemFailureCompose -> snackbarHostState.showSnackbar("물품 삭제에 실패했습니다")
             ComposeTeamSharedItemEditEvent.FetchComposeTeamSharedItemsFailure -> snackbarHostState.showSnackbar("물품 불러오기에 실패했습니다")

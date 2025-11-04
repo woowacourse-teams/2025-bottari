@@ -57,7 +57,7 @@ class TeamSharedItemEditViewModel @Inject constructor(
                 .onFailure { emitEvent(TeamSharedItemEditEvent.CreateItemFailure) }
                 .onSuccess {
                     fetchSharedItems()
-                    emitEvent(TeamSharedItemEditEvent.CreateItemSuccuss)
+                    emitEvent(TeamSharedItemEditEvent.CreateItemSuccess)
                 }
 
             updateState { copy(isLoading = false) }
