@@ -129,7 +129,10 @@ fun TeamAssignedBottomSheet(
                 color = BottariTheme.colors.primary,
             )
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceMedium))
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall)) {
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall)
+            ) {
                 items(uiState.members) { member ->
                     member.id?.let {
                         TeamAssignedMemberItem(
