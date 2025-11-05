@@ -10,7 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SnackbarHostState
@@ -132,7 +132,7 @@ fun TeamAssignedScreen(
                     .fillMaxWidth()
                     .padding(vertical = BottariTheme.spacing.spaceMedium),
             colors =
-                ButtonColors(
+                ButtonDefaults.buttonColors(
                     containerColor = BottariTheme.colors.primary,
                     contentColor = BottariTheme.colors.white,
                     disabledContainerColor = BottariTheme.colors.primary,
