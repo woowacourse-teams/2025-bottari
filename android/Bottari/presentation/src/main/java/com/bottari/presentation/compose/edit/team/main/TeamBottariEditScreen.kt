@@ -88,7 +88,6 @@ fun TeamBottariEditScreen(viewModel: TeamBottariEditViewModel = viewModel()) {
                     backPressedDispatcher?.onBackPressed()
                 },
                 onMemberClick = { isMemberScreen = true },
-                modifier = Modifier.padding(horizontal = BottariTheme.spacing.spaceXSmall),
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },

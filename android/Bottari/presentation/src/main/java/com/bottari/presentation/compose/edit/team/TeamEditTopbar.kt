@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.theme.BottariTheme
 
@@ -56,5 +57,16 @@ fun TeamEditTopbar(
                 }
             }
         },
+    )
+}
+
+@Preview
+@Composable
+private fun TeamEditTopbarPreview(){
+    TeamEditTopbar(
+        title = "보따리 이름",
+        isMemberScreen = false,
+        onBackClick = {},
+        onMemberClick = {},
     )
 }
