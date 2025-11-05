@@ -92,7 +92,7 @@ private fun MemberEditScreen(
                 IconButton({ isOpenShareInvite = true }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_share),
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.team_btn_share_link_description),
                     )
                 }
             }
