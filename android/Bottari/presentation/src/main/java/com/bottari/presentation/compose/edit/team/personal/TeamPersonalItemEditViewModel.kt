@@ -36,12 +36,14 @@ class TeamPersonalItemEditViewModel @Inject constructor(
 
         launch {
             createTeamPersonalItemUseCase(bottariId, currentState.inputText)
-                .onFailure { emitEvent(TeamPersonalItemEditUiEvent.CreateItemFailureCompose) }
                 .onSuccess {
                     fetchPersonalItems()
                     updateState { copy(inputText = "") }
+                }.onFailure {
+                    updateState { copy(isLoading = false) }
+                    emitEvent(TeamPersonalItemEditUiEvent.CreateItemFailureCompose)
                 }
-        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
+        }
     }
 
     fun deleteItem(itemId: Long) {
@@ -49,9 +51,13 @@ class TeamPersonalItemEditViewModel @Inject constructor(
 
         launch {
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.PERSONAL)
-                .onSuccess { fetchPersonalItems() }
-                .onFailure { emitEvent(TeamPersonalItemEditUiEvent.DeleteItemFailureCompose) }
-        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
+                .onSuccess {
+                    fetchPersonalItems()
+                }.onFailure {
+                    updateState { copy(isLoading = false) }
+                    emitEvent(TeamPersonalItemEditUiEvent.DeleteItemFailureCompose)
+                }
+        }
     }
 
     private fun fetchPersonalItems() {
