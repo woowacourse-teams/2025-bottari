@@ -75,8 +75,8 @@ fun TeamAssignedScreen(
             showBottomSheet = false
             viewModel.resetState()
         },
-        onEditItem = {
-            viewModel::toggleEditState
+        onEditItem = { itemId ->
+            viewModel.toggleEditState(itemId)
             showBottomSheet = true
         },
         onAllSelect = viewModel::selectAllMember,
