@@ -51,7 +51,7 @@ import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 @Composable
 fun TeamAssignedBottomSheet(
     uiState: TeamAssignedItemEditUiState,
-    sheetState : SheetState,
+    sheetState: SheetState,
     onSaveItem: () -> Unit,
     onAllSelect: () -> Unit,
     onAllUnSelect: () -> Unit,
@@ -74,17 +74,11 @@ fun TeamAssignedBottomSheet(
                         BottariTheme.colors.white,
                     ).padding(BottariTheme.spacing.spaceMedium),
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "새 물건 추가", style = BottariTheme.typography.semiBold20.toTextStyle())
-                Spacer(Modifier.weight(1f))
-                TextButton(
-                    onClick = onSaveItem,
-                    enabled = uiState.canSend,
-                    colors = ButtonDefaults.textButtonColors(contentColor = BottariTheme.colors.primary),
-                ) {
-                    Text("저장", style = BottariTheme.typography.semiBold16.toTextStyle())
-                }
-            }
+             BottomSheetHeader(
+                canSend = uiState.canSend,
+                onSaveItem = onSaveItem,
+            )
+
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceSmall))
             Text(
                 text = "물건 이름을 입력하고 담당자를 지정해 주세요",
@@ -95,15 +89,9 @@ fun TeamAssignedBottomSheet(
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
             HorizontalDivider(thickness = 2.dp, color = BottariTheme.colors.gray500)
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
-            Row {
-                Text(text = "물건 이름", style = BottariTheme.typography.semiBold16.toTextStyle())
-                Spacer(Modifier.padding(horizontal = BottariTheme.spacing.space2xSmall))
-                Text(
-                    text = "*",
-                    style = BottariTheme.typography.semiBold16.toTextStyle(),
-                    color = BottariTheme.colors.red,
-                )
-            }
+
+            SectionLabel(text = "물건 이름")
+
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
             OutlinedTextField(
                 value = uiState.inputText,
@@ -121,55 +109,11 @@ fun TeamAssignedBottomSheet(
                 isError = uiState.isAlreadyExist,
             )
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Row {
-                    Text(text = "담당자 선택", style = BottariTheme.typography.semiBold16.toTextStyle())
-                    Spacer(Modifier.padding(horizontal = BottariTheme.spacing.space2xSmall))
-                    Text(
-                        text = "*",
-                        style = BottariTheme.typography.semiBold16.toTextStyle(),
-                        color = BottariTheme.colors.red,
-                    )
-                }
-                Spacer(Modifier.weight(1f))
-                Button(
-                    onClick = onAllSelect,
-                    modifier = Modifier.height(30.dp),
-                    contentPadding =
-                        PaddingValues(
-                            horizontal = 12.dp,
-                            vertical = 2.dp,
-                        ),
-                    colors =
-                        ButtonDefaults.buttonColors(
-                            containerColor = BottariTheme.colors.primary.copy(alpha = 0.1f),
-                            contentColor = BottariTheme.colors.primary,
-                            disabledContainerColor = BottariTheme.colors.primary.copy(alpha = 0.1f),
-                            disabledContentColor = BottariTheme.colors.primary,
-                        ),
-                ) {
-                    Text("전체선택", style = BottariTheme.typography.medium14.toTextStyle())
-                }
-                Spacer(Modifier.width(BottariTheme.spacing.spaceXSmall))
-                Button(
-                    onClick = onAllUnSelect,
-                    modifier = Modifier.height(30.dp),
-                    contentPadding =
-                        PaddingValues(
-                            horizontal = 12.dp,
-                            vertical = 2.dp,
-                        ),
-                    colors =
-                        ButtonDefaults.buttonColors(
-                            containerColor = BottariTheme.colors.gray200,
-                            contentColor = BottariTheme.colors.black,
-                            disabledContainerColor = BottariTheme.colors.gray200,
-                            disabledContentColor = BottariTheme.colors.black,
-                        ),
-                ) {
-                    Text("전체해제", style = BottariTheme.typography.medium14.toTextStyle())
-                }
-            }
+
+            MemberSelectionHeader(
+                onAllSelect = onAllSelect,
+                onAllUnSelect = onAllUnSelect,
+            )
 
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
             TeamStateListBox(
@@ -188,10 +132,92 @@ fun TeamAssignedBottomSheet(
             LazyColumn(verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall)) {
                 items(uiState.members) { member ->
                     member.id?.let {
-                        TeamAssignedMemberItem(member, onSelectMember)
+                        TeamAssignedMemberItem(
+                            member = member,
+                            onToggleMember = onSelectMember,
+                        )
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun BottomSheetHeader(
+    canSend: Boolean,
+    onSaveItem: () -> Unit,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(text = "새 물건 추가", style = BottariTheme.typography.semiBold20.toTextStyle())
+        Spacer(Modifier.weight(1f))
+        TextButton(
+            onClick = onSaveItem,
+            enabled = canSend,
+            colors = ButtonDefaults.textButtonColors(contentColor = BottariTheme.colors.primary),
+        ) {
+            Text("저장", style = BottariTheme.typography.semiBold16.toTextStyle())
+        }
+    }
+}
+
+@Composable
+private fun SectionLabel(text: String) {
+    Row {
+        Text(text = text, style = BottariTheme.typography.semiBold16.toTextStyle())
+        Spacer(Modifier.padding(horizontal = BottariTheme.spacing.space2xSmall))
+        Text(
+            text = "*",
+            style = BottariTheme.typography.semiBold16.toTextStyle(),
+            color = BottariTheme.colors.red,
+        )
+    }
+}
+
+@Composable
+private fun MemberSelectionHeader(
+    onAllSelect: () -> Unit,
+    onAllUnSelect: () -> Unit,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        SectionLabel(text = "담당자 선택") // SectionLabel 재사용
+        Spacer(Modifier.weight(1f))
+        Button(
+            onClick = onAllSelect,
+            modifier = Modifier.height(30.dp),
+            contentPadding =
+                PaddingValues(
+                    horizontal = 12.dp,
+                    vertical = 2.dp,
+                ),
+            colors =
+                ButtonDefaults.buttonColors(
+                    containerColor = BottariTheme.colors.primary.copy(alpha = 0.1f),
+                    contentColor = BottariTheme.colors.primary,
+                    disabledContainerColor = BottariTheme.colors.primary.copy(alpha = 0.1f),
+                    disabledContentColor = BottariTheme.colors.primary,
+                ),
+        ) {
+            Text("전체선택", style = BottariTheme.typography.medium14.toTextStyle())
+        }
+        Spacer(Modifier.width(BottariTheme.spacing.spaceXSmall))
+        Button(
+            onClick = onAllUnSelect,
+            modifier = Modifier.height(30.dp),
+            contentPadding =
+                PaddingValues(
+                    horizontal = 12.dp,
+                    vertical = 2.dp,
+                ),
+            colors =
+                ButtonDefaults.buttonColors(
+                    containerColor = BottariTheme.colors.gray200,
+                    contentColor = BottariTheme.colors.black,
+                    disabledContainerColor = BottariTheme.colors.gray200,
+                    disabledContentColor = BottariTheme.colors.black,
+                ),
+        ) {
+            Text("전체해제", style = BottariTheme.typography.medium14.toTextStyle())
         }
     }
 }
@@ -201,29 +227,23 @@ private fun TeamAssignedMemberItem(
     member: TeamMemberUiModel,
     onToggleMember: (Long) -> Unit,
 ) {
-    if (member.isHost) {
-        TeamAssignedSelectedMemberItem(member, onToggleMember)
-        return
-    }
-    TeamAssignedUnSelectedMemberItem(member, onToggleMember)
-}
-
-@Composable
-private fun TeamAssignedSelectedMemberItem(
-    member: TeamMemberUiModel,
-    onToggleMember: (Long) -> Unit,
-) {
     if (member.id == null) return
+
+    val isSelected = member.isHost
+    val backgroundColor = if (isSelected) BottariTheme.colors.primary.copy(0.1f) else BottariTheme.colors.gray100
+    val borderColor = if (isSelected) BottariTheme.colors.primary else BottariTheme.colors.gray500
+    val checkmarkColor = if (isSelected) BottariTheme.colors.primary else BottariTheme.colors.gray500
+
     Row(
         modifier =
             Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
-                .background(BottariTheme.colors.primary.copy(0.1f))
+                .background(backgroundColor) // 변수 사용
                 .noRippleClickable(onClick = { onToggleMember(member.id) })
                 .border(
                     2.dp,
-                    BottariTheme.colors.primary,
+                    borderColor, // 변수 사용
                     RoundedCornerShape(16.dp),
                 ).padding(BottariTheme.spacing.spaceXLarge),
         verticalAlignment = Alignment.CenterVertically,
@@ -240,52 +260,7 @@ private fun TeamAssignedSelectedMemberItem(
                 Modifier
                     .size(20.dp)
                     .clip(CircleShape)
-                    .background(BottariTheme.colors.primary)
-                    .padding(4.dp),
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_check),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                tint = BottariTheme.colors.white,
-            )
-        }
-    }
-}
-
-@Composable
-private fun TeamAssignedUnSelectedMemberItem(
-    member: TeamMemberUiModel,
-    onToggleMember: (Long) -> Unit,
-) {
-    if (member.id == null) return
-    Row(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(BottariTheme.colors.gray100)
-                .noRippleClickable(onClick = { onToggleMember(member.id) })
-                .border(
-                    2.dp,
-                    BottariTheme.colors.gray500,
-                    RoundedCornerShape(16.dp),
-                ).padding(BottariTheme.spacing.spaceXLarge),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = member.nickname,
-            style = BottariTheme.typography.semiBold16.toTextStyle(),
-            modifier = Modifier.weight(1f),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Box(
-            modifier =
-                Modifier
-                    .size(20.dp)
-                    .clip(CircleShape)
-                    .background(BottariTheme.colors.gray500)
+                    .background(checkmarkColor) // 변수 사용
                     .padding(4.dp),
         ) {
             Icon(
