@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -126,19 +124,17 @@ private fun MemberEditScreen(
                     color = BottariTheme.colors.gray500,
                     thickness = 1.dp,
                 )
-                LazyColumn {
-                    itemsIndexed(uiState.members) { index, member ->
-                        Text(
-                            text = member.nickname,
-                            style = BottariTheme.typography.bold18.toTextStyle(),
-                            modifier = Modifier.padding(vertical = BottariTheme.spacing.spaceMedium),
+                uiState.members.forEachIndexed { index, member ->
+                    Text(
+                        text = member.nickname,
+                        style = BottariTheme.typography.bold18.toTextStyle(),
+                        modifier = Modifier.padding(vertical = BottariTheme.spacing.spaceMedium),
+                    )
+                    if (index < uiState.members.size - 1) {
+                        HorizontalDivider(
+                            color = BottariTheme.colors.gray500,
+                            thickness = 1.dp,
                         )
-                        if (index < uiState.members.size - 1) {
-                            HorizontalDivider(
-                                color = BottariTheme.colors.gray500,
-                                thickness = 1.dp,
-                            )
-                        }
                     }
                 }
             }
