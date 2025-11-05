@@ -63,7 +63,7 @@ class TeamPersonalItemEditViewModel @Inject constructor(
                     updateState {
                         copy(
                             personalItems =
-                                items.map (BottariItemUiModel::fromDomain),
+                                items.map(BottariItemUiModel::fromDomain),
                             isFetched = true,
                         )
                     }

@@ -37,7 +37,7 @@ fun TeamChecklistEditScreen(
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
             contentPadding =
-                PaddingValues(bottom = BottariTheme.spacing.spaceMedium,),
+                PaddingValues(bottom = BottariTheme.spacing.spaceMedium),
             modifier =
                 Modifier
                     .padding(horizontal = BottariTheme.spacing.spaceMedium)

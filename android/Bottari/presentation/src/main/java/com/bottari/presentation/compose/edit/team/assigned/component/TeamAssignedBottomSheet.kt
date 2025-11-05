@@ -74,7 +74,7 @@ fun TeamAssignedBottomSheet(
                         BottariTheme.colors.white,
                     ).padding(BottariTheme.spacing.spaceMedium),
         ) {
-             BottomSheetHeader(
+            BottomSheetHeader(
                 canSend = uiState.canSend,
                 onSaveItem = onSaveItem,
             )

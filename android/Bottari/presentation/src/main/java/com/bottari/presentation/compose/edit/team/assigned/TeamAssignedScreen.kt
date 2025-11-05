@@ -79,7 +79,7 @@ fun TeamAssignedScreen(
             viewModel::toggleEditState
             showBottomSheet = true
         },
-        onAllSelect =  viewModel::selectAllMember,
+        onAllSelect = viewModel::selectAllMember,
         onAllUnSelect = viewModel::unSelectAllMember,
         onSelectMember = viewModel::selectMember,
         onDeleteItem = viewModel::deleteItem,
