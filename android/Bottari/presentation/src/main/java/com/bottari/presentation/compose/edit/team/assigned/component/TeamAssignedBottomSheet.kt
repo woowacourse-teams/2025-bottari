@@ -8,16 +8,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,6 +39,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -41,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
+import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.team.assigned.TeamAssignedItemEditUiState
 import com.bottari.presentation.compose.edit.team.assigned.dummyMembers
@@ -64,15 +74,18 @@ fun TeamAssignedBottomSheet(
         onDismissRequest = onBottomSheetClose,
         sheetState = sheetState,
         containerColor = BottariTheme.colors.white,
+        contentWindowInsets = { WindowInsets.navigationBars },
+        dragHandle = { BottomSheetDefaults.DragHandle(modifier = Modifier.noRippleClickable(true, {})) },
+        modifier = Modifier.statusBarsPadding(),
     ) {
         Column(
             modifier =
                 modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-                    .background(
-                        BottariTheme.colors.white,
-                    ).padding(BottariTheme.spacing.spaceMedium),
+                    .background(BottariTheme.colors.white)
+                    .padding(BottariTheme.spacing.spaceMedium)
+                    .navigationBarsPadding(),
         ) {
             BottomSheetHeader(
                 canSend = uiState.canSend,
@@ -115,7 +128,7 @@ fun TeamAssignedBottomSheet(
                 onAllUnSelect = onAllUnSelect,
             )
 
-            Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
+            Spacer(Modifier.padding(vertical = BottariTheme.spacing.space2xSmall))
             TeamStateListBox(
                 items =
                     uiState.members
@@ -130,8 +143,12 @@ fun TeamAssignedBottomSheet(
             )
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceMedium))
             LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall)
+                modifier =
+                    Modifier
+                        .topBottomFadingEdge(BottariTheme.colors.white)
+                        .nestedScroll(ConsumeOverscrollConnection),
+                verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
+                contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceSmall),
             ) {
                 items(uiState.members) { member ->
                     member.id?.let {
@@ -145,6 +162,15 @@ fun TeamAssignedBottomSheet(
         }
     }
 }
+
+private val ConsumeOverscrollConnection =
+    object : NestedScrollConnection {
+        override fun onPostScroll(
+            consumed: Offset,
+            available: Offset,
+            source: NestedScrollSource,
+        ): Offset = available
+    }
 
 @Composable
 private fun BottomSheetHeader(
@@ -183,7 +209,7 @@ private fun MemberSelectionHeader(
     onAllUnSelect: () -> Unit,
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        SectionLabel(text = "담당자 선택") // SectionLabel 재사용
+        SectionLabel(text = "담당자 선택")
         Spacer(Modifier.weight(1f))
         Button(
             onClick = onAllSelect,
@@ -233,9 +259,11 @@ private fun TeamAssignedMemberItem(
     if (member.id == null) return
 
     val isSelected = member.isHost
-    val backgroundColor = if (isSelected) BottariTheme.colors.primary.copy(0.1f) else BottariTheme.colors.gray100
+    val backgroundColor =
+        if (isSelected) BottariTheme.colors.primary.copy(0.1f) else BottariTheme.colors.gray100
     val borderColor = if (isSelected) BottariTheme.colors.primary else BottariTheme.colors.gray500
-    val checkmarkColor = if (isSelected) BottariTheme.colors.primary else BottariTheme.colors.gray500
+    val checkmarkColor =
+        if (isSelected) BottariTheme.colors.primary else BottariTheme.colors.gray500
 
     Row(
         modifier =
