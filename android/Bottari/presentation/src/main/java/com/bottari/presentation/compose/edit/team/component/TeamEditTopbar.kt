@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.edit.team
+package com.bottari.presentation.compose.edit.team.component
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -62,7 +62,7 @@ fun TeamEditTopbar(
 
 @Preview
 @Composable
-private fun TeamEditTopbarPreview(){
+private fun TeamEditTopbarPreview() {
     TeamEditTopbar(
         title = "보따리 이름",
         isMemberScreen = false,

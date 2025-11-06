@@ -7,7 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bottari.presentation.compose.edit.team.TeamChecklistEditScreen
+import com.bottari.presentation.compose.edit.team.component.TeamChecklistEditScreen
 
 @Composable
 fun TeamPersonalScreen(

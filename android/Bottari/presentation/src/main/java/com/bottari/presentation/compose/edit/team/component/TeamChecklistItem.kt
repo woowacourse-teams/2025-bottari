@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.edit.team
+package com.bottari.presentation.compose.edit.team.component
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -30,7 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
-import com.bottari.presentation.compose.edit.team.TeamEditTopbar
+import com.bottari.presentation.compose.edit.team.component.TeamEditTopbar
 import com.bottari.presentation.compose.edit.team.assigned.TeamAssignedScreen
 import com.bottari.presentation.compose.edit.team.member.MemberEditScreen
 import com.bottari.presentation.compose.edit.team.personal.TeamPersonalScreen

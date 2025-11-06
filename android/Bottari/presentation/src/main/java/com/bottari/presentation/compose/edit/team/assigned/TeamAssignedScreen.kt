@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.compose.edit.team.component.TeamEditEmptyView
 import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedBottomSheet
 import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedEditItem
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
@@ -104,25 +105,29 @@ fun TeamAssignedScreen(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-        LazyColumn(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-            contentPadding = PaddingValues(end = BottariTheme.spacing.space2xSmall),
-            verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
-        ) {
-            items(uiState.assignedItems) { item ->
-                val type = item.type as BottariItemTypeUiModel.ASSIGNED
-                TeamAssignedEditItem(
-                    item.name,
-                    type.members.map { member ->
-                        val memberIndex = uiState.members.indexOfFirst { it.id == member.id }
-                        Pair(member.nickname, memberIndex)
-                    },
-                    onClickEdit = { onEditItem(item.id) },
-                    onClickDelete = { onDeleteItem(item.id) },
-                )
+        if (uiState.assignedItems.isEmpty()) {
+            TeamEditEmptyView(modifier = Modifier.fillMaxWidth().weight(1f))
+        } else {
+            LazyColumn(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                contentPadding = PaddingValues(end = BottariTheme.spacing.space2xSmall),
+                verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
+            ) {
+                items(uiState.assignedItems) { item ->
+                    val type = item.type as BottariItemTypeUiModel.ASSIGNED
+                    TeamAssignedEditItem(
+                        item.name,
+                        type.members.map { member ->
+                            val memberIndex = uiState.members.indexOfFirst { it.id == member.id }
+                            Pair(member.nickname, memberIndex)
+                        },
+                        onClickEdit = { onEditItem(item.id) },
+                        onClickDelete = { onDeleteItem(item.id) },
+                    )
+                }
             }
         }
         Button(
