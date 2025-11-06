@@ -91,20 +91,12 @@ fun TeamAssignedBottomSheet(
                 canSend = uiState.canSend,
                 onSaveItem = onSaveItem,
             )
-
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceSmall))
-            Text(
-                text = "물건 이름을 입력하고 담당자를 지정해 주세요",
-                style = BottariTheme.typography.regular14.toTextStyle(),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
-            HorizontalDivider(thickness = 2.dp, color = BottariTheme.colors.gray500)
+            BottomSheetHint("물건 이름을 입력하고 담당자를 지정해 주세요")
+
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
 
             SectionLabel(text = "물건 이름")
-
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
             OutlinedTextField(
                 value = uiState.inputText,
@@ -121,13 +113,13 @@ fun TeamAssignedBottomSheet(
                 textStyle = BottariTheme.typography.semiBold16.toTextStyle(),
                 isError = uiState.isAlreadyExist,
             )
+
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
 
             MemberSelectionHeader(
                 onAllSelect = onAllSelect,
                 onAllUnSelect = onAllUnSelect,
             )
-
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.space2xSmall))
             TeamStateListBox(
                 items =
@@ -135,10 +127,7 @@ fun TeamAssignedBottomSheet(
                         .filter { member -> member.isHost }
                         .map { member -> member.nickname },
                 text = "${uiState.members.filter { member -> member.isHost }.size} 명이 선택되었습니다",
-                painter =
-                    painterResource(
-                        R.drawable.ic_assigned,
-                    ),
+                painter = painterResource(R.drawable.ic_assigned),
                 color = BottariTheme.colors.primary,
             )
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceMedium))
@@ -188,6 +177,18 @@ private fun BottomSheetHeader(
             Text("저장", style = BottariTheme.typography.semiBold16.toTextStyle())
         }
     }
+}
+
+@Composable
+private fun BottomSheetHint(text: String) {
+    Text(
+        text = text,
+        style = BottariTheme.typography.regular14.toTextStyle(),
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth(),
+    )
+    Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
+    HorizontalDivider(thickness = 2.dp, color = BottariTheme.colors.gray500)
 }
 
 @Composable

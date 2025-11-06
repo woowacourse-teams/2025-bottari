@@ -44,50 +44,91 @@ fun TeamAssignedEditItem(
             ),
     ) {
         Column {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = title,
-                    style = BottariTheme.typography.medium20.toTextStyle(),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f),
-                )
-                IconButton(onClick = onClickEdit) {
-                    Icon(painter = painterResource(R.drawable.ic_pen), contentDescription = "수정 버튼")
-                }
-                IconButton(onClick = onClickDelete) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_delete),
-                        contentDescription = "삭제 버튼",
-                    )
-                }
-            }
-            FlowRow(
+            ItemHeader(
+                title = title,
+                onClickEdit = onClickEdit,
+                onClickDelete = onClickDelete,
+            )
+            AssignedMembersList(
+                assignedMembers = assignedMembers,
                 modifier = Modifier.padding(end = BottariTheme.spacing.spaceXSmall),
-                horizontalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
-            ) {
-                assignedMembers.forEachIndexed { index, member ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        val color = BottariTheme.colors.memberColors.getOrNull(member.second) ?: BottariTheme.colors.primary
-                        Box(
-                            modifier =
-                                Modifier
-                                    .clip(CircleShape)
-                                    .background(color)
-                                    .size(6.dp),
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-
-                        Text(
-                            text = member.first,
-                            style = BottariTheme.typography.regular14.toTextStyle(),
-                        )
-                    }
-                }
-            }
+            )
         }
+    }
+}
+
+@Composable
+private fun ItemHeader(
+    title: String,
+    onClickEdit: () -> Unit,
+    onClickDelete: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = title,
+            style = BottariTheme.typography.medium20.toTextStyle(),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f),
+        )
+        IconButton(onClick = onClickEdit) {
+            Icon(painter = painterResource(R.drawable.ic_pen), contentDescription = "수정 버튼")
+        }
+        IconButton(onClick = onClickDelete) {
+            Icon(
+                painter = painterResource(R.drawable.ic_delete),
+                contentDescription = "삭제 버튼",
+            )
+        }
+    }
+}
+
+@Composable
+private fun AssignedMembersList(
+    assignedMembers: List<Pair<String, Int>>,
+    modifier: Modifier = Modifier,
+) {
+    FlowRow(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
+    ) {
+        assignedMembers.forEach { (name, colorIndex) ->
+            // 3. 개별 멤버 칩 호출
+            AssignedMemberChip(
+                name = name,
+                colorIndex = colorIndex,
+            )
+        }
+    }
+}
+
+@Composable
+private fun AssignedMemberChip(
+    name: String,
+    colorIndex: Int,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        val color = BottariTheme.colors.memberColors.getOrNull(colorIndex) ?: BottariTheme.colors.primary
+        Box(
+            modifier =
+                Modifier
+                    .clip(CircleShape)
+                    .background(color)
+                    .size(6.dp),
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = name,
+            style = BottariTheme.typography.regular14.toTextStyle(),
+        )
     }
 }
 
@@ -96,7 +137,7 @@ fun TeamAssignedEditItem(
 fun TeamAssignedEditItemPreview() {
     TeamAssignedEditItem(
         title = "이이이이이이이이이이이이이이이이이이이이이이잉름",
-        assignedMembers = listOf(Pair("이름", 1)),
+        assignedMembers = listOf(Pair("이름", 1), Pair("이름이 긴 멤버", 2), Pair("멤버 3", 3)),
         onClickDelete = {},
         onClickEdit = {},
     )
