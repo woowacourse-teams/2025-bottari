@@ -2,7 +2,6 @@ package com.bottari.presentation.compose.edit.team.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,7 +16,6 @@ import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditInputBar
 import com.bottari.presentation.model.bottari.BottariItemUiModel
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TeamChecklistEditScreen(
     items: List<BottariItemUiModel>,
