@@ -40,7 +40,7 @@ fun TeamEditTopbar(
             IconButton(onBackClick) {
                 Icon(
                     painterResource(R.drawable.ic_arrow),
-                    contentDescription = null,
+                    contentDescription = "뒤로 가기",
                     tint = BottariTheme.colors.black,
                     modifier = Modifier.rotate(180f),
                 )
@@ -51,7 +51,7 @@ fun TeamEditTopbar(
                 IconButton(onMemberClick) {
                     Icon(
                         painterResource(R.drawable.ic_team),
-                        contentDescription = null,
+                        contentDescription = "팀 멤버 편집",
                         tint = BottariTheme.colors.black,
                     )
                 }
