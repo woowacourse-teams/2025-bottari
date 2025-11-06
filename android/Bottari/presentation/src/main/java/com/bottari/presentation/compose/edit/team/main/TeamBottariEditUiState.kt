@@ -12,8 +12,4 @@ data class TeamBottariEditUiState(
     val alarm: AlarmUiModel? = null,
     val alarmSwitchState: Boolean = false,
     val isFetched: Boolean = false,
-) {
-    val isPersonalItemsEmpty: Boolean = isFetched && personalItems.isEmpty()
-    val isSharedItemsEmpty: Boolean = isFetched && sharedItems.isEmpty()
-    val isAssignedItemsEmpty: Boolean = isFetched && assignedItems.isEmpty()
-}
+)

@@ -97,7 +97,6 @@ private fun AssignedMembersList(
         horizontalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
     ) {
         assignedMembers.forEach { (name, colorIndex) ->
-            // 3. 개별 멤버 칩 호출
             AssignedMemberChip(
                 name = name,
                 colorIndex = colorIndex,

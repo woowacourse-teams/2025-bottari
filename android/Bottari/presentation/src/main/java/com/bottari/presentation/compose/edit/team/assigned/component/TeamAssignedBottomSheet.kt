@@ -292,7 +292,7 @@ private fun TeamAssignedMemberItem(
                 Modifier
                     .size(20.dp)
                     .clip(CircleShape)
-                    .background(checkmarkColor) // 변수 사용
+                    .background(checkmarkColor)
                     .padding(4.dp),
         ) {
             Icon(

@@ -51,10 +51,7 @@ fun TeamAssignedScreen(
                 TeamAssignedItemEditUiEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물건 생성에 실패했어요")
                 TeamAssignedItemEditUiEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물건 삭제에 실패했어요")
                 TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailure ->
-                    snackbarHostState.showSnackbar(
-                        "물건 불러오기에 실패했어요",
-                    )
-
+                    snackbarHostState.showSnackbar("물건 불러오기에 실패했어요",)
                 TeamAssignedItemEditUiEvent.SaveItemFailure -> snackbarHostState.showSnackbar("물건 저장에 실패했어요")
             }
         }
