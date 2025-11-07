@@ -11,10 +11,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditInputBar
 import com.bottari.presentation.model.bottari.BottariItemUiModel
+import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 
 @Composable
 fun TeamChecklistEditScreen(
@@ -33,7 +35,12 @@ fun TeamChecklistEditScreen(
         modifier = modifier.noRippleClickable(onClick = focusManager::clearFocus),
     ) {
         if (items.isEmpty()) {
-            TeamEditEmptyView(modifier = Modifier.fillMaxWidth().weight(1f))
+            TeamEditEmptyView(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+            )
         } else {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
@@ -62,4 +69,29 @@ fun TeamChecklistEditScreen(
                     .wrapContentHeight(),
         )
     }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun TeamChecklistEditScreenPreview() {
+    val items =
+        listOf(
+            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
+            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
+            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
+            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
+            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
+            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
+            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
+        )
+
+    TeamChecklistEditScreen(
+        items = items,
+        onDeleteItem = {},
+        newItemName = "",
+        isInvalidItem = false,
+        isSavable = true,
+        onChangeItemName = {},
+        onSaveItem = {},
+    )
 }

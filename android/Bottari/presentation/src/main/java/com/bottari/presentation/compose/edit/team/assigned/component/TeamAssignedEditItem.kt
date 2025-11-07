@@ -133,7 +133,7 @@ private fun AssignedMemberChip(
 
 @Preview
 @Composable
-fun TeamAssignedEditItemPreview() {
+private fun TeamAssignedEditItemPreview() {
     TeamAssignedEditItem(
         title = "이이이이이이이이이이이이이이이이이이이이이이잉름",
         assignedMembers = listOf(Pair("이름", 1), Pair("이름이 긴 멤버", 2), Pair("멤버 3", 3)),

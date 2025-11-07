@@ -32,9 +32,10 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -309,6 +310,8 @@ private fun TeamAssignedMemberItem(
 @Preview
 @Composable
 private fun TeamAssignedBottomSheetPreview() {
+    val sheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded)
+
     TeamAssignedBottomSheet(
         uiState = TeamAssignedItemEditUiState(members = dummyMembers),
         onSaveItem = {},
@@ -317,6 +320,6 @@ private fun TeamAssignedBottomSheetPreview() {
         onSelectMember = {},
         onChangeInputText = {},
         onBottomSheetClose = {},
-        sheetState = rememberModalBottomSheetState(),
+        sheetState = sheetState,
     )
 }

@@ -5,12 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.compose.edit.team.component.TeamChecklistEditScreen
-import com.bottari.presentation.model.bottari.BottariItemUiModel
-import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 
 @Composable
 fun TeamSharedScreen(
@@ -39,30 +36,5 @@ fun TeamSharedScreen(
         newItemName = uiState.inputText,
         onChangeItemName = viewModel::updateInput,
         modifier = modifier,
-    )
-}
-
-@Composable
-@Preview(showBackground = true)
-fun TeamChecklistEditScreenPreview() {
-    val items =
-        listOf(
-            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
-            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
-            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
-            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
-            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
-            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
-            BottariItemUiModel(1, "물건", BottariItemTypeUiModel.PERSONAL),
-        )
-
-    TeamChecklistEditScreen(
-        items = items,
-        onDeleteItem = {},
-        newItemName = "",
-        isInvalidItem = false,
-        isSavable = true,
-        onChangeItemName = {},
-        onSaveItem = {},
     )
 }
