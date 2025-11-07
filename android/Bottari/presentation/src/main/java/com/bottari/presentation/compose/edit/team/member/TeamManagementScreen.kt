@@ -52,7 +52,12 @@ fun MemberEditScreen(
             }
         }
     }
-    MemberEditScreen(bottariTitle, uiState, modifier)
+
+    MemberEditScreen(
+        bottariTitle = bottariTitle,
+        uiState = uiState,
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -63,6 +68,7 @@ private fun MemberEditScreen(
 ) {
     var isOpenShareInvite by remember { mutableStateOf(false) }
     val context = LocalContext.current
+
     LaunchedEffect(isOpenShareInvite) {
         if (isOpenShareInvite) {
             shareInvite(

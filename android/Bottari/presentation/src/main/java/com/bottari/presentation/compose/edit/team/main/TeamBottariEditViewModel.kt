@@ -45,8 +45,8 @@ class TeamBottariEditViewModel @Inject constructor(
 
         launch {
             fetchTeamBottariDetailUseCase(bottariId)
-                .onSuccess {
-                    handleFetchTeamBottariDetail(it)
+                .onSuccess { teamBottariDetail ->
+                    handleFetchTeamBottariDetail(teamBottariDetail)
                     updateState { copy(isFetched = true) }
                 }.onFailure {
                     emitEvent(TeamBottariEditUiEvent.FetchTeamBottariDetailFailure)

@@ -64,9 +64,9 @@ private fun TeamChecklistItemPreview() {
     TeamChecklistItem(
         item =
             BottariItemUiModel(
-                1,
-                "물건",
-                BottariItemTypeUiModel.PERSONAL,
+                id = 1,
+                name = "물건",
+                type = BottariItemTypeUiModel.PERSONAL,
             ),
         onDeleteClick = {},
     )

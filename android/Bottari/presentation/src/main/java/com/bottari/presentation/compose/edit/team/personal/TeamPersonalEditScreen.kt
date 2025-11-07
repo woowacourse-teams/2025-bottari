@@ -31,6 +31,7 @@ fun TeamPersonalScreen(
             }
         }
     }
+
     TeamChecklistEditScreen(
         items = uiState.personalItems,
         isInvalidItem = uiState.isAlreadyExist,

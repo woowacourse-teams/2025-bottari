@@ -86,7 +86,7 @@ fun TeamAssignedScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TeamAssignedScreen(
+private fun TeamAssignedScreen(
     uiState: TeamAssignedEditUiState,
     showBottomSheet: Boolean,
     sheetState: SheetState,

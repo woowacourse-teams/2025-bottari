@@ -79,13 +79,14 @@ class TeamManagementViewModel @Inject constructor(
 
     private fun logTeamMembersFetch(teamStatus: TeamStatus) {
         BottariLogger.ui(
-            UiEventType.TEAM_BOTTARI_MEMBERS_FETCH,
-            mapOf(
-                "invite_code" to teamStatus.inviteCode,
-                "member_head_count" to teamStatus.memberCount.value,
-                "host_name" to teamStatus.hostName.value,
-                "members" to teamStatus.nicknames.map { nickname -> nickname.value },
-            ),
+            type = UiEventType.TEAM_BOTTARI_MEMBERS_FETCH,
+            params =
+                mapOf(
+                    "invite_code" to teamStatus.inviteCode,
+                    "member_head_count" to teamStatus.memberCount.value,
+                    "host_name" to teamStatus.hostName.value,
+                    "members" to teamStatus.nicknames.map { nickname -> nickname.value },
+                ),
         )
     }
 

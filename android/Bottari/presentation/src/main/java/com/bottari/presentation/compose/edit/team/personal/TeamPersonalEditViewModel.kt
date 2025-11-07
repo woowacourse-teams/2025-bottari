@@ -35,7 +35,7 @@ class TeamPersonalEditViewModel @Inject constructor(
         updateState { copy(isLoading = true) }
 
         launch {
-            createTeamPersonalItemUseCase(bottariId, currentState.inputText)
+            createTeamPersonalItemUseCase(bottariId = bottariId, name = currentState.inputText)
                 .onSuccess {
                     fetchPersonalItems()
                     updateState { copy(inputText = "") }
@@ -50,7 +50,7 @@ class TeamPersonalEditViewModel @Inject constructor(
         updateState { copy(isLoading = true) }
 
         launch {
-            deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.PERSONAL)
+            deleteTeamBottariItemUseCase(itemId = itemId, type = TeamBottariItemType.PERSONAL)
                 .onSuccess {
                     fetchPersonalItems()
                 }.onFailure {
