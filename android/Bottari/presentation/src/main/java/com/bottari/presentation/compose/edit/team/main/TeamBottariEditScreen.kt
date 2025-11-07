@@ -97,10 +97,11 @@ fun TeamBottariEditScreen(viewModel: TeamBottariEditViewModel = viewModel()) {
             MemberEditScreen(
                 bottariTitle = uiState.bottariTitle,
                 snackbarHostState = snackbarHostState,
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .padding(horizontal = BottariTheme.spacing.spaceMedium)
-                    .fillMaxSize(),
+                modifier =
+                    Modifier
+                        .padding(paddingValues)
+                        .padding(horizontal = BottariTheme.spacing.spaceMedium)
+                        .fillMaxSize(),
             )
             return@Scaffold
         }
@@ -118,40 +119,43 @@ fun TeamBottariEditScreen(viewModel: TeamBottariEditViewModel = viewModel()) {
                     0 ->
                         TeamSharedScreen(
                             snackbarHostState = snackbarHostState,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(
-                                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
-                                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
-                                    bottom = BottariTheme.spacing.spaceMedium,
-                                ).imePadding()
-                                .then(if (WindowInsets.isImeVisible) Modifier else Modifier.navigationBarsPadding()),
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .padding(
+                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+                                        bottom = BottariTheme.spacing.spaceMedium,
+                                    ).imePadding()
+                                    .then(if (WindowInsets.isImeVisible) Modifier else Modifier.navigationBarsPadding()),
                         )
 
                     1 ->
                         TeamAssignedScreen(
                             snackbarHostState = snackbarHostState,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(
-                                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
-                                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
-                                ).padding(horizontal = BottariTheme.spacing.spaceMedium)
-                                .padding(top = BottariTheme.spacing.spaceSmall)
-                                .then(Modifier.navigationBarsPadding()),
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .padding(
+                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+                                    ).padding(horizontal = BottariTheme.spacing.spaceMedium)
+                                    .padding(top = BottariTheme.spacing.spaceSmall)
+                                    .then(Modifier.navigationBarsPadding()),
                         )
 
                     2 ->
                         TeamPersonalScreen(
                             snackbarHostState = snackbarHostState,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(
-                                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
-                                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
-                                    bottom = BottariTheme.spacing.spaceMedium,
-                                ).imePadding()
-                                .then(if (WindowInsets.isImeVisible) Modifier else Modifier.navigationBarsPadding()),
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .padding(
+                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+                                        bottom = BottariTheme.spacing.spaceMedium,
+                                    ).imePadding()
+                                    .then(if (WindowInsets.isImeVisible) Modifier else Modifier.navigationBarsPadding()),
                         )
                 }
             }

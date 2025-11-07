@@ -56,7 +56,7 @@ fun MemberEditScreen(
     MemberEditScreen(
         bottariTitle = bottariTitle,
         uiState = uiState,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -93,7 +93,7 @@ private fun MemberEditScreen(
 }
 
 @Composable
-private fun ShareInviteItem(onShareClick : ()->Unit) {
+private fun ShareInviteItem(onShareClick: () -> Unit) {
     BottariBox(
         contentPadding =
             PaddingValues(
@@ -118,7 +118,11 @@ private fun ShareInviteItem(onShareClick : ()->Unit) {
 }
 
 @Composable
-private fun TeamBottariMemberList(members : List<TeamMemberUiModel>,teamMemberHeadCount : Int , maxHeadCount: Int = 10){
+private fun TeamBottariMemberList(
+    members: List<TeamMemberUiModel>,
+    teamMemberHeadCount: Int,
+    maxHeadCount: Int = 10,
+) {
     BottariBox(
         modifier = Modifier.fillMaxWidth(),
         contentPadding =
@@ -137,7 +141,7 @@ private fun TeamBottariMemberList(members : List<TeamMemberUiModel>,teamMemberHe
                 )
                 Spacer(Modifier.weight(1f))
                 Text(
-                    text = "${teamMemberHeadCount}/${maxHeadCount}",
+                    text = "$teamMemberHeadCount/$maxHeadCount",
                     style = BottariTheme.typography.bold18.toTextStyle(),
                 )
             }
