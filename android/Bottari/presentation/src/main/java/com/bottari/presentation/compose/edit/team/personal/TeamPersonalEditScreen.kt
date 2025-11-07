@@ -20,13 +20,13 @@ fun TeamPersonalScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                TeamPersonalEditEditUiEvent.CreateItemFailureCompose ->
+                TeamPersonalEditUiEvent.CreateItemFailureCompose ->
                     snackbarHostState.showSnackbar("물건 생성하기에 실패했어요")
 
-                TeamPersonalEditEditUiEvent.DeleteItemFailureCompose ->
+                TeamPersonalEditUiEvent.DeleteItemFailureCompose ->
                     snackbarHostState.showSnackbar("물건 삭제하기에 실패했어요")
 
-                TeamPersonalEditEditUiEvent.FetchTeamPersonalItemsFailure ->
+                TeamPersonalEditUiEvent.FetchTeamPersonalItemsFailure ->
                     snackbarHostState.showSnackbar("물건 불러오기에 실패했어요")
             }
         }

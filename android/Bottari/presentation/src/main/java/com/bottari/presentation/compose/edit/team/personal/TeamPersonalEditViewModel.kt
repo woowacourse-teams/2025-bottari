@@ -16,7 +16,7 @@ class TeamPersonalEditViewModel @Inject constructor(
     private val fetchTeamPersonalItemsUseCase: FetchTeamPersonalItemsUseCase,
     private val createTeamPersonalItemUseCase: CreateTeamPersonalItemUseCase,
     private val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase,
-) : FlowBaseViewModel<TeamPersonalEditUiState, TeamPersonalEditEditUiEvent>(
+) : FlowBaseViewModel<TeamPersonalEditUiState, TeamPersonalEditUiEvent>(
         TeamPersonalEditUiState(),
     ) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
@@ -41,7 +41,7 @@ class TeamPersonalEditViewModel @Inject constructor(
                     updateState { copy(inputText = "") }
                 }.onFailure {
                     updateState { copy(isLoading = false) }
-                    emitEvent(TeamPersonalEditEditUiEvent.CreateItemFailureCompose)
+                    emitEvent(TeamPersonalEditUiEvent.CreateItemFailureCompose)
                 }
         }
     }
@@ -55,7 +55,7 @@ class TeamPersonalEditViewModel @Inject constructor(
                     fetchPersonalItems()
                 }.onFailure {
                     updateState { copy(isLoading = false) }
-                    emitEvent(TeamPersonalEditEditUiEvent.DeleteItemFailureCompose)
+                    emitEvent(TeamPersonalEditUiEvent.DeleteItemFailureCompose)
                 }
         }
     }
@@ -75,7 +75,7 @@ class TeamPersonalEditViewModel @Inject constructor(
                     }
                 }.onFailure {
                     updateState { copy(isFetched = false) }
-                    emitEvent(TeamPersonalEditEditUiEvent.FetchTeamPersonalItemsFailure)
+                    emitEvent(TeamPersonalEditUiEvent.FetchTeamPersonalItemsFailure)
                 }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }

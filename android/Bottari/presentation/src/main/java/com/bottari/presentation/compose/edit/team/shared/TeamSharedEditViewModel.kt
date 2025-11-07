@@ -25,7 +25,7 @@ class TeamSharedEditViewModel @Inject constructor(
     private val createTeamSharedItemUseCase: CreateTeamSharedItemUseCase,
     private val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
-) : FlowBaseViewModel<TeamSharedEditUiState, TeamSharedEditEvent>(
+) : FlowBaseViewModel<TeamSharedEditUiState, TeamSharedEditUiEvent>(
         TeamSharedEditUiState(),
     ) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
@@ -46,7 +46,7 @@ class TeamSharedEditViewModel @Inject constructor(
 
         launch {
             createTeamSharedItemUseCase(bottariId, currentState.inputText)
-                .onFailure { emitEvent(TeamSharedEditEvent.CreateItemFailure) }
+                .onFailure { emitEvent(TeamSharedEditUiEvent.CreateItemFailure) }
                 .onSuccess {
                     fetchPersonalItems()
                     updateState { copy(inputText = "") }
@@ -60,7 +60,7 @@ class TeamSharedEditViewModel @Inject constructor(
         launch {
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.SHARED)
                 .onSuccess { fetchPersonalItems() }
-                .onFailure { emitEvent(TeamSharedEditEvent.DeleteItemFailure) }
+                .onFailure { emitEvent(TeamSharedEditUiEvent.DeleteItemFailure) }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
@@ -90,7 +90,7 @@ class TeamSharedEditViewModel @Inject constructor(
                     }
                 }.onFailure {
                     updateState { copy(isFetched = false) }
-                    emitEvent(TeamSharedEditEvent.FetchTeamSharedItemsFailure)
+                    emitEvent(TeamSharedEditUiEvent.FetchTeamSharedItemsFailure)
                 }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
