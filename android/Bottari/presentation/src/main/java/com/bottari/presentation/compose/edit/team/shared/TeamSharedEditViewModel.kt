@@ -19,14 +19,14 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class TeamSharedItemEditViewModel @Inject constructor(
+class TeamSharedEditViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamSharedItemsUseCase: FetchTeamSharedItemsUseCase,
     private val createTeamSharedItemUseCase: CreateTeamSharedItemUseCase,
     private val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
-) : FlowBaseViewModel<TeamSharedItemEditUiState, TeamSharedItemEditEvent>(
-        TeamSharedItemEditUiState(),
+) : FlowBaseViewModel<TeamSharedEditUiState, TeamSharedEditEvent>(
+        TeamSharedEditUiState(),
     ) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
@@ -46,7 +46,7 @@ class TeamSharedItemEditViewModel @Inject constructor(
 
         launch {
             createTeamSharedItemUseCase(bottariId, currentState.inputText)
-                .onFailure { emitEvent(TeamSharedItemEditEvent.CreateItemFailure) }
+                .onFailure { emitEvent(TeamSharedEditEvent.CreateItemFailure) }
                 .onSuccess {
                     fetchPersonalItems()
                     updateState { copy(inputText = "") }
@@ -60,7 +60,7 @@ class TeamSharedItemEditViewModel @Inject constructor(
         launch {
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.SHARED)
                 .onSuccess { fetchPersonalItems() }
-                .onFailure { emitEvent(TeamSharedItemEditEvent.DeleteItemFailure) }
+                .onFailure { emitEvent(TeamSharedEditEvent.DeleteItemFailure) }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
@@ -90,7 +90,7 @@ class TeamSharedItemEditViewModel @Inject constructor(
                     }
                 }.onFailure {
                     updateState { copy(isFetched = false) }
-                    emitEvent(TeamSharedItemEditEvent.FetchTeamSharedItemsFailure)
+                    emitEvent(TeamSharedEditEvent.FetchTeamSharedItemsFailure)
                 }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }

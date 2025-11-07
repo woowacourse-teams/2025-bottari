@@ -11,13 +11,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class TeamPersonalItemEditViewModel @Inject constructor(
+class TeamPersonalEditViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamPersonalItemsUseCase: FetchTeamPersonalItemsUseCase,
     private val createTeamPersonalItemUseCase: CreateTeamPersonalItemUseCase,
     private val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase,
-) : FlowBaseViewModel<TeamPersonalItemEditUiState, TeamPersonalItemEditUiEvent>(
-        TeamPersonalItemEditUiState(),
+) : FlowBaseViewModel<TeamPersonalEditUiState, TeamPersonalEditEditUiEvent>(
+        TeamPersonalEditUiState(),
     ) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_REQUIRE_BOTTARI_ID)
 
@@ -41,7 +41,7 @@ class TeamPersonalItemEditViewModel @Inject constructor(
                     updateState { copy(inputText = "") }
                 }.onFailure {
                     updateState { copy(isLoading = false) }
-                    emitEvent(TeamPersonalItemEditUiEvent.CreateItemFailureCompose)
+                    emitEvent(TeamPersonalEditEditUiEvent.CreateItemFailureCompose)
                 }
         }
     }
@@ -55,7 +55,7 @@ class TeamPersonalItemEditViewModel @Inject constructor(
                     fetchPersonalItems()
                 }.onFailure {
                     updateState { copy(isLoading = false) }
-                    emitEvent(TeamPersonalItemEditUiEvent.DeleteItemFailureCompose)
+                    emitEvent(TeamPersonalEditEditUiEvent.DeleteItemFailureCompose)
                 }
         }
     }
@@ -75,7 +75,7 @@ class TeamPersonalItemEditViewModel @Inject constructor(
                     }
                 }.onFailure {
                     updateState { copy(isFetched = false) }
-                    emitEvent(TeamPersonalItemEditUiEvent.FetchTeamPersonalItemsFailure)
+                    emitEvent(TeamPersonalEditEditUiEvent.FetchTeamPersonalItemsFailure)
                 }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }

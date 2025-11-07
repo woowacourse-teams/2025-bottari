@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class TeamAssignedItemEditViewModel @Inject constructor(
+class TeamAssignedEditViewModel @Inject constructor(
     stateHandle: SavedStateHandle,
     private val fetchTeamAssignedItemsUseCase: FetchTeamAssignedItemsUseCase,
     private val createTeamAssignedItemUseCase: CreateTeamAssignedItemUseCase,
@@ -34,8 +34,8 @@ class TeamAssignedItemEditViewModel @Inject constructor(
     private val fetchTeamBottariMembersUseCase: FetchTeamBottariMembersUseCase,
     private val saveTeamBottariAssignedItemUseCase: SaveTeamBottariAssignedItemUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
-) : FlowBaseViewModel<TeamAssignedItemEditUiState, TeamAssignedItemEditUiEvent>(
-        TeamAssignedItemEditUiState(),
+) : FlowBaseViewModel<TeamAssignedEditUiState, TeamAssignedEditUiEvent>(
+        TeamAssignedEditUiState(),
     ) {
     private val bottariId: Long = stateHandle[KEY_BOTTARI_ID] ?: error(ERROR_BOTTARI_ID)
 
@@ -83,7 +83,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
         launch {
             deleteTeamBottariItemUseCase(itemId, TeamBottariItemType.ASSIGNED())
                 .onSuccess { refreshAssignedItemsAndMembers() }
-                .onFailure { emitEvent(TeamAssignedItemEditUiEvent.DeleteItemFailure) }
+                .onFailure { emitEvent(TeamAssignedEditUiEvent.DeleteItemFailure) }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
@@ -103,7 +103,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
             ).onSuccess {
                 refreshAssignedItemsAndMembers()
             }.onFailure {
-                emitEvent(TeamAssignedItemEditUiEvent.CreateItemFailure)
+                emitEvent(TeamAssignedEditUiEvent.CreateItemFailure)
             }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
@@ -126,7 +126,7 @@ class TeamAssignedItemEditViewModel @Inject constructor(
                 }
                 refreshAssignedItemsAndMembers()
             }.onFailure {
-                emitEvent(TeamAssignedItemEditUiEvent.SaveItemFailure)
+                emitEvent(TeamAssignedEditUiEvent.SaveItemFailure)
             }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
@@ -186,12 +186,12 @@ class TeamAssignedItemEditViewModel @Inject constructor(
 
     private suspend fun loadAssignedItems(): List<BottariItem> =
         fetchTeamAssignedItemsUseCase(bottariId)
-            .onFailure { emitEvent(TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailure) }
+            .onFailure { emitEvent(TeamAssignedEditUiEvent.FetchTeamAssignedItemsFailure) }
             .getOrElse { emptyList() }
 
     private suspend fun loadTeamMembers(): List<TeamMember> =
         fetchTeamBottariMembersUseCase(bottariId)
-            .onFailure { emitEvent(TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailure) }
+            .onFailure { emitEvent(TeamAssignedEditUiEvent.FetchTeamAssignedItemsFailure) }
             .getOrElse { emptyList() }
 
     private fun toggleMemberSelection(memberId: Long): List<TeamMemberUiModel> =

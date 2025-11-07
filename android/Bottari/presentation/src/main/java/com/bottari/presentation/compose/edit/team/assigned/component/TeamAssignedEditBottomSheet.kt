@@ -53,7 +53,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
 import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.edit.team.assigned.TeamAssignedItemEditUiState
+import com.bottari.presentation.compose.edit.team.assigned.TeamAssignedEditUiState
 import com.bottari.presentation.compose.edit.team.assigned.dummyMembers
 import com.bottari.presentation.compose.team.TeamStateListBox
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
@@ -61,7 +61,7 @@ import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TeamAssignedBottomSheet(
-    uiState: TeamAssignedItemEditUiState,
+    uiState: TeamAssignedEditUiState,
     sheetState: SheetState,
     onSaveItem: () -> Unit,
     onAllSelect: () -> Unit,
@@ -313,7 +313,7 @@ private fun TeamAssignedBottomSheetPreview() {
     val sheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded)
 
     TeamAssignedBottomSheet(
-        uiState = TeamAssignedItemEditUiState(members = dummyMembers),
+        uiState = TeamAssignedEditUiState(members = dummyMembers),
         onSaveItem = {},
         onAllSelect = {},
         onAllUnSelect = {},

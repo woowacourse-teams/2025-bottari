@@ -38,7 +38,7 @@ import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 fun TeamAssignedScreen(
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    viewModel: TeamAssignedItemEditViewModel = viewModel(),
+    viewModel: TeamAssignedEditViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -48,11 +48,11 @@ fun TeamAssignedScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                TeamAssignedItemEditUiEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물건 생성에 실패했어요")
-                TeamAssignedItemEditUiEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물건 삭제에 실패했어요")
-                TeamAssignedItemEditUiEvent.FetchTeamAssignedItemsFailure ->
+                TeamAssignedEditUiEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물건 생성에 실패했어요")
+                TeamAssignedEditUiEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물건 삭제에 실패했어요")
+                TeamAssignedEditUiEvent.FetchTeamAssignedItemsFailure ->
                     snackbarHostState.showSnackbar("물건 불러오기에 실패했어요")
-                TeamAssignedItemEditUiEvent.SaveItemFailure -> snackbarHostState.showSnackbar("물건 저장에 실패했어요")
+                TeamAssignedEditUiEvent.SaveItemFailure -> snackbarHostState.showSnackbar("물건 저장에 실패했어요")
             }
         }
     }
@@ -87,7 +87,7 @@ fun TeamAssignedScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TeamAssignedScreen(
-    uiState: TeamAssignedItemEditUiState,
+    uiState: TeamAssignedEditUiState,
     showBottomSheet: Boolean,
     sheetState: SheetState,
     onChangeInputText: (String) -> Unit,
@@ -165,7 +165,7 @@ private fun TeamAssignedScreenPreview() {
     val sheetState = rememberModalBottomSheetState()
     TeamAssignedScreen(
         uiState =
-            TeamAssignedItemEditUiState(
+            TeamAssignedEditUiState(
                 assignedItems = previewAssignedSelectableItemsLarge,
                 members = dummyMembers,
             ),

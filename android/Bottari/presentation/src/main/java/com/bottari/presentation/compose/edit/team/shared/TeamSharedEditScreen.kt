@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.edit.team.personal
+package com.bottari.presentation.compose.edit.team.shared
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -10,29 +10,25 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.compose.edit.team.component.TeamChecklistEditScreen
 
 @Composable
-fun TeamPersonalScreen(
+fun TeamSharedScreen(
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    viewModel: TeamPersonalItemEditViewModel = viewModel(),
+    viewModel: TeamSharedEditViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                TeamPersonalItemEditUiEvent.CreateItemFailureCompose ->
-                    snackbarHostState.showSnackbar("물건 생성하기에 실패했어요")
-
-                TeamPersonalItemEditUiEvent.DeleteItemFailureCompose ->
-                    snackbarHostState.showSnackbar("물건 삭제하기에 실패했어요")
-
-                TeamPersonalItemEditUiEvent.FetchTeamPersonalItemsFailure ->
-                    snackbarHostState.showSnackbar("물건 불러오기에 실패했어요")
+                TeamSharedEditEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물건 생성에 실패했어요")
+                TeamSharedEditEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물건 삭제에 실패했어요")
+                TeamSharedEditEvent.FetchTeamSharedItemsFailure -> snackbarHostState.showSnackbar("물건 불러오기에 실패했어요")
             }
         }
     }
+
     TeamChecklistEditScreen(
-        items = uiState.personalItems,
+        items = uiState.sharedItems,
         isInvalidItem = uiState.isAlreadyExist,
         isSavable = uiState.isSavable,
         onDeleteItem = viewModel::deleteItem,
