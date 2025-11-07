@@ -87,6 +87,28 @@ class TeamAssignedEditViewModel @Inject constructor(
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
     }
 
+    fun refreshAssignedItemsAndMembers() {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            val assignedItemsDeferred = async { loadAssignedItems() }
+            val membersDeferred = async { loadTeamMembers() }
+
+            val assignedItems = assignedItemsDeferred.await()
+            val members = membersDeferred.await()
+
+            updateState {
+                copy(
+                    assignedItems = syncAssignedItems(assignedItems.map(SelectableItemUiModel::fromDomain)),
+                    members = syncMembers(members.map(TeamMemberUiModel::fromDomain)),
+                    isFetched = true,
+                )
+            }
+
+            updateState { copy(isLoading = false, isFetched = true) }
+        }
+    }
+
     private fun applyTextInput(itemId: Long) {
         val item = currentState.assignedItems.find { it.id == itemId }
         updateState { copy(inputText = item?.name ?: "") }
@@ -129,28 +151,6 @@ class TeamAssignedEditViewModel @Inject constructor(
                 emitEvent(TeamAssignedEditUiEvent.SaveItemFailure)
             }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
-    }
-
-    fun refreshAssignedItemsAndMembers() {
-        updateState { copy(isLoading = true) }
-
-        launch {
-            val assignedItemsDeferred = async { loadAssignedItems() }
-            val membersDeferred = async { loadTeamMembers() }
-
-            val assignedItems = assignedItemsDeferred.await()
-            val members = membersDeferred.await()
-
-            updateState {
-                copy(
-                    assignedItems = syncAssignedItems(assignedItems.map(SelectableItemUiModel::fromDomain)),
-                    members = syncMembers(members.map(TeamMemberUiModel::fromDomain)),
-                    isFetched = true,
-                )
-            }
-
-            updateState { copy(isLoading = false, isFetched = true) }
-        }
     }
 
     private fun syncAssignedItems(items: List<SelectableItemUiModel>): List<SelectableItemUiModel> {
