@@ -80,68 +80,83 @@ private fun MemberEditScreen(
         }
     }
     Column(modifier = modifier.fillMaxSize()) {
-        BottariBox(
-            contentPadding =
-                PaddingValues(
-                    horizontal = BottariTheme.spacing.spaceSmall,
-                    vertical = BottariTheme.spacing.space2xSmall,
-                ),
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+        ShareInviteItem(onShareClick = { isOpenShareInvite = true })
+
+        Spacer(Modifier.height(BottariTheme.spacing.spaceLarge))
+
+        TeamBottariMemberList(
+            members = uiState.members,
+            teamMemberHeadCount = uiState.teamMemberHeadCount,
+            maxHeadCount = uiState.maxHeadCount,
+        )
+    }
+}
+
+@Composable
+private fun ShareInviteItem(onShareClick : ()->Unit) {
+    BottariBox(
+        contentPadding =
+            PaddingValues(
+                horizontal = BottariTheme.spacing.spaceSmall,
+                vertical = BottariTheme.spacing.space2xSmall,
+            ),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = stringResource(R.string.team_management_add_member_text),
+                style = BottariTheme.typography.bold18.toTextStyle(),
+            )
+            Spacer(Modifier.weight(1f))
+            IconButton(onShareClick) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_share),
+                    contentDescription = stringResource(R.string.team_btn_share_link_description),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun TeamBottariMemberList(members : List<TeamMemberUiModel>,teamMemberHeadCount : Int , maxHeadCount: Int = 10){
+    BottariBox(
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding =
+            PaddingValues(
+                bottom = 0.dp,
+                top = BottariTheme.spacing.spaceMedium,
+                start = BottariTheme.spacing.spaceMedium,
+                end = BottariTheme.spacing.spaceMedium,
+            ),
+    ) {
+        Column {
+            Row {
                 Text(
-                    text = stringResource(R.string.team_management_add_member_text),
+                    text = stringResource(R.string.team_management_member_title_text),
                     style = BottariTheme.typography.bold18.toTextStyle(),
                 )
                 Spacer(Modifier.weight(1f))
-                IconButton({ isOpenShareInvite = true }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_share),
-                        contentDescription = stringResource(R.string.team_btn_share_link_description),
-                    )
-                }
-            }
-        }
-        Spacer(Modifier.height(BottariTheme.spacing.spaceLarge))
-
-        BottariBox(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding =
-                PaddingValues(
-                    bottom = 0.dp,
-                    top = BottariTheme.spacing.spaceMedium,
-                    start = BottariTheme.spacing.spaceMedium,
-                    end = BottariTheme.spacing.spaceMedium,
-                ),
-        ) {
-            Column {
-                Row {
-                    Text(
-                        text = stringResource(R.string.team_management_member_title_text),
-                        style = BottariTheme.typography.bold18.toTextStyle(),
-                    )
-                    Spacer(Modifier.weight(1f))
-                    Text(
-                        text = "${uiState.teamMemberHeadCount}/${uiState.maxHeadCount}",
-                        style = BottariTheme.typography.bold18.toTextStyle(),
-                    )
-                }
-                Spacer(Modifier.padding(BottariTheme.spacing.spaceXSmall))
-                HorizontalDivider(
-                    color = BottariTheme.colors.gray500,
-                    thickness = 1.dp,
+                Text(
+                    text = "${teamMemberHeadCount}/${maxHeadCount}",
+                    style = BottariTheme.typography.bold18.toTextStyle(),
                 )
-                uiState.members.forEachIndexed { index, member ->
-                    Text(
-                        text = member.nickname,
-                        style = BottariTheme.typography.bold18.toTextStyle(),
-                        modifier = Modifier.padding(vertical = BottariTheme.spacing.spaceMedium),
+            }
+            Spacer(Modifier.padding(BottariTheme.spacing.spaceXSmall))
+            HorizontalDivider(
+                color = BottariTheme.colors.gray500,
+                thickness = 1.dp,
+            )
+            members.forEachIndexed { index, member ->
+                Text(
+                    text = member.nickname,
+                    style = BottariTheme.typography.bold18.toTextStyle(),
+                    modifier = Modifier.padding(vertical = BottariTheme.spacing.spaceMedium),
+                )
+                if (index < members.size - 1) {
+                    HorizontalDivider(
+                        color = BottariTheme.colors.gray500,
+                        thickness = 1.dp,
                     )
-                    if (index < uiState.members.size - 1) {
-                        HorizontalDivider(
-                            color = BottariTheme.colors.gray500,
-                            thickness = 1.dp,
-                        )
-                    }
                 }
             }
         }
