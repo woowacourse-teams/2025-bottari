@@ -145,7 +145,7 @@ private fun TeamBottariMemberList(
                     style = BottariTheme.typography.bold18.toTextStyle(),
                 )
             }
-            Spacer(Modifier.padding(BottariTheme.spacing.spaceXSmall))
+            Spacer(Modifier.height(BottariTheme.spacing.spaceSmall))
             HorizontalDivider(
                 color = BottariTheme.colors.gray500,
                 thickness = 1.dp,
