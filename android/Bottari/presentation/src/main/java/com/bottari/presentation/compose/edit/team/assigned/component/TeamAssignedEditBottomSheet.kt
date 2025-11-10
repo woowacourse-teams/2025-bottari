@@ -44,6 +44,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -76,9 +77,18 @@ fun TeamAssignedBottomSheet(
         sheetState = sheetState,
         containerColor = BottariTheme.colors.white,
         contentWindowInsets = { WindowInsets.navigationBars },
-        dragHandle = { BottomSheetDefaults.DragHandle(modifier = Modifier.noRippleClickable(true, {})) },
+        dragHandle = {
+            BottomSheetDefaults.DragHandle(
+                modifier =
+                    Modifier.noRippleClickable(
+                        true,
+                        {},
+                    ),
+            )
+        },
         modifier = Modifier.statusBarsPadding(),
     ) {
+        val focusManager = LocalFocusManager.current
         Column(
             modifier =
                 modifier
@@ -86,7 +96,8 @@ fun TeamAssignedBottomSheet(
                     .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
                     .background(BottariTheme.colors.white)
                     .padding(BottariTheme.spacing.spaceMedium)
-                    .navigationBarsPadding(),
+                    .navigationBarsPadding()
+                    .noRippleClickable(onClick = { focusManager.clearFocus() }),
         ) {
             BottomSheetHeader(
                 canSend = uiState.canSend,
