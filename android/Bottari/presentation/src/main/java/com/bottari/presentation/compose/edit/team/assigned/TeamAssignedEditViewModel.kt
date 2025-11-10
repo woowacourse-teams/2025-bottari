@@ -63,6 +63,7 @@ class TeamAssignedEditViewModel @Inject constructor(
             copy(
                 inputText = "",
                 members = members.map { member -> member.copy(isHost = false) },
+                assignedItems = assignedItems.map { item -> item.copy(isSelected = false) },
             )
         }
 
