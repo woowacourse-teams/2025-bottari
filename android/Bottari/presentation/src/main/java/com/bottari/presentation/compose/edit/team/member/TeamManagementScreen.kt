@@ -2,6 +2,7 @@ package com.bottari.presentation.compose.edit.team.member
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariBox
+import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import com.bottari.presentation.util.DeeplinkHelper.createDeeplink
@@ -79,16 +81,19 @@ private fun MemberEditScreen(
             isOpenShareInvite = false
         }
     }
-    Column(modifier = modifier.fillMaxSize()) {
-        ShareInviteItem(onShareClick = { isOpenShareInvite = true })
+    Box {
+        Column(modifier = modifier.fillMaxSize()) {
+            ShareInviteItem(onShareClick = { isOpenShareInvite = true })
 
-        Spacer(Modifier.height(BottariTheme.spacing.spaceLarge))
+            Spacer(Modifier.height(BottariTheme.spacing.spaceLarge))
 
-        TeamBottariMemberList(
-            members = uiState.members,
-            teamMemberHeadCount = uiState.teamMemberHeadCount,
-            maxHeadCount = uiState.maxHeadCount,
-        )
+            TeamBottariMemberList(
+                members = uiState.members,
+                teamMemberHeadCount = uiState.teamMemberHeadCount,
+                maxHeadCount = uiState.maxHeadCount,
+            )
+        }
+        if (uiState.isLoading) IndeterminateCircularIndicator()
     }
 }
 

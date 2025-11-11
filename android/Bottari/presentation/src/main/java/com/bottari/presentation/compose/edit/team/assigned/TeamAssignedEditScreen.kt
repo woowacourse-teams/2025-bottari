@@ -1,6 +1,7 @@
 package com.bottari.presentation.compose.edit.team.assigned
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedBottomSheet
 import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedEditItem
@@ -85,60 +87,63 @@ private fun TeamAssignedScreen(
     onSelectMember: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.fillMaxSize()) {
-        if (uiState.assignedItems.isEmpty()) {
-            TeamEditEmptyView(modifier = Modifier.fillMaxWidth().weight(1f))
-        } else {
-            LazyColumn(
+    Box {
+        Column(modifier = modifier.fillMaxSize()) {
+            if (uiState.assignedItems.isEmpty()) {
+                TeamEditEmptyView(modifier = Modifier.fillMaxWidth().weight(1f))
+            } else {
+                LazyColumn(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                    contentPadding = PaddingValues(end = BottariTheme.spacing.space2xSmall),
+                    verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
+                ) {
+                    items(uiState.assignedItems) { item ->
+                        val type = item.type as BottariItemTypeUiModel.ASSIGNED
+                        TeamAssignedEditItem(
+                            item.name,
+                            type.members.map { member ->
+                                val memberIndex = uiState.members.indexOfFirst { it.id == member.id }
+                                Pair(member.nickname, memberIndex)
+                            },
+                            onClickEdit = { onEditItem(item.id) },
+                            onClickDelete = { onDeleteItem(item.id) },
+                        )
+                    }
+                }
+            }
+            Button(
+                onClick = onBottomSheetOpen,
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .weight(1f),
-                contentPadding = PaddingValues(end = BottariTheme.spacing.space2xSmall),
-                verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
-            ) {
-                items(uiState.assignedItems) { item ->
-                    val type = item.type as BottariItemTypeUiModel.ASSIGNED
-                    TeamAssignedEditItem(
-                        item.name,
-                        type.members.map { member ->
-                            val memberIndex = uiState.members.indexOfFirst { it.id == member.id }
-                            Pair(member.nickname, memberIndex)
-                        },
-                        onClickEdit = { onEditItem(item.id) },
-                        onClickDelete = { onDeleteItem(item.id) },
-                    )
-                }
+                        .padding(vertical = BottariTheme.spacing.spaceMedium),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = BottariTheme.colors.primary,
+                        contentColor = BottariTheme.colors.white,
+                        disabledContainerColor = BottariTheme.colors.primary,
+                        disabledContentColor = BottariTheme.colors.white,
+                    ),
+                shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceMedium),
+            ) { Text(text = "물건 추가", style = BottariTheme.typography.semiBold24.toTextStyle()) }
+            if (uiState.isSheetVisible) {
+                TeamAssignedBottomSheet(
+                    uiState = uiState,
+                    onSaveItem = onSaveItem,
+                    onAllSelect = onAllSelect,
+                    onBottomSheetClose = onBottomSheetClose,
+                    onAllUnSelect = onAllUnSelect,
+                    onSelectMember = onSelectMember,
+                    onChangeInputText = onChangeInputText,
+                    sheetState = sheetState,
+                )
             }
         }
-        Button(
-            onClick = onBottomSheetOpen,
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = BottariTheme.spacing.spaceMedium),
-            colors =
-                ButtonDefaults.buttonColors(
-                    containerColor = BottariTheme.colors.primary,
-                    contentColor = BottariTheme.colors.white,
-                    disabledContainerColor = BottariTheme.colors.primary,
-                    disabledContentColor = BottariTheme.colors.white,
-                ),
-            shape = RoundedCornerShape(12.dp),
-            contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceMedium),
-        ) { Text(text = "물건 추가", style = BottariTheme.typography.semiBold24.toTextStyle()) }
-        if (uiState.isSheetVisible) {
-            TeamAssignedBottomSheet(
-                uiState = uiState,
-                onSaveItem = onSaveItem,
-                onAllSelect = onAllSelect,
-                onBottomSheetClose = onBottomSheetClose,
-                onAllUnSelect = onAllUnSelect,
-                onSelectMember = onSelectMember,
-                onChangeInputText = onChangeInputText,
-                sheetState = sheetState,
-            )
-        }
+        if (uiState.isLoading) IndeterminateCircularIndicator()
     }
 }
 

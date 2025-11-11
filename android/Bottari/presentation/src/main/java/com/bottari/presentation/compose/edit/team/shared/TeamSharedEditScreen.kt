@@ -31,6 +31,7 @@ fun TeamSharedScreen(
         items = uiState.sharedItems,
         isInvalidItem = uiState.isAlreadyExist,
         isSavable = uiState.isSavable,
+        isLoading = uiState.isLoading,
         onDeleteItem = viewModel::deleteItem,
         onSaveItem = viewModel::createItem,
         newItemName = uiState.inputText,

@@ -1,6 +1,7 @@
 package com.bottari.presentation.compose.edit.team.component
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
+import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditInputBar
@@ -24,50 +26,53 @@ fun TeamChecklistEditScreen(
     newItemName: String,
     isInvalidItem: Boolean,
     isSavable: Boolean,
+    isLoading: Boolean,
     onDeleteItem: (Long) -> Unit,
     onChangeItemName: (String) -> Unit,
     onSaveItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
-
-    Column(
-        modifier = modifier.noRippleClickable(onClick = focusManager::clearFocus),
-    ) {
-        if (items.isEmpty()) {
-            TeamEditEmptyView(
+    Box {
+        Column(
+            modifier = modifier.noRippleClickable(onClick = focusManager::clearFocus),
+        ) {
+            if (items.isEmpty()) {
+                TeamEditEmptyView(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                )
+            } else {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
+                    contentPadding =
+                        PaddingValues(bottom = BottariTheme.spacing.spaceMedium),
+                    modifier =
+                        Modifier
+                            .padding(horizontal = BottariTheme.spacing.spaceMedium)
+                            .padding(top = BottariTheme.spacing.spaceSmall)
+                            .weight(1f),
+                ) {
+                    items(items) { item ->
+                        TeamChecklistItem(item = item, onDeleteClick = onDeleteItem)
+                    }
+                }
+            }
+            ItemEditInputBar(
+                itemName = newItemName,
+                isInvalidItem = isInvalidItem,
+                isSavable = isSavable,
+                onNameChange = onChangeItemName,
+                onSaveItem = onSaveItem,
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .weight(1f),
+                        .wrapContentHeight(),
             )
-        } else {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceSmall),
-                contentPadding =
-                    PaddingValues(bottom = BottariTheme.spacing.spaceMedium),
-                modifier =
-                    Modifier
-                        .padding(horizontal = BottariTheme.spacing.spaceMedium)
-                        .padding(top = BottariTheme.spacing.spaceSmall)
-                        .weight(1f),
-            ) {
-                items(items) { item ->
-                    TeamChecklistItem(item = item, onDeleteClick = onDeleteItem)
-                }
-            }
         }
-        ItemEditInputBar(
-            itemName = newItemName,
-            isInvalidItem = isInvalidItem,
-            isSavable = isSavable,
-            onNameChange = onChangeItemName,
-            onSaveItem = onSaveItem,
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-        )
+        if (isLoading) IndeterminateCircularIndicator()
     }
 }
 
@@ -89,6 +94,7 @@ private fun TeamChecklistEditScreenPreview() {
         items = items,
         onDeleteItem = {},
         newItemName = "",
+        isLoading = true,
         isInvalidItem = false,
         isSavable = true,
         onChangeItemName = {},
