@@ -162,6 +162,6 @@ private fun TeamAssignedScreenPreview() {
         onSelectMember = {},
         onChangeInputText = {},
         onDeleteItem = {},
-        onBottomSheetOpen ={},
+        onBottomSheetOpen = {},
     )
 }
