@@ -61,6 +61,7 @@ class TeamAssignedEditViewModel @Inject constructor(
     fun resetState() =
         updateState {
             copy(
+                isCreating = false,
                 inputText = "",
                 members = members.map { member -> member.copy(isHost = false) },
                 assignedItems = assignedItems.map { item -> item.copy(isSelected = false) },
@@ -76,6 +77,7 @@ class TeamAssignedEditViewModel @Inject constructor(
     fun submitItem() {
         if (currentState.isEditing) return saveAssignedItem()
         createAssignedItem()
+        resetState()
     }
 
     fun deleteItem(itemId: Long) {
@@ -129,6 +131,10 @@ class TeamAssignedEditViewModel @Inject constructor(
                 emitEvent(TeamAssignedEditUiEvent.CreateItemFailure)
             }
         }.invokeOnCompletion { updateState { copy(isLoading = false) } }
+    }
+
+    fun openBottomSheetState() {
+        updateState { copy(isCreating = true) }
     }
 
     private fun saveAssignedItem() {

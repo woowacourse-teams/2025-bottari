@@ -19,9 +19,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,7 +39,6 @@ fun TeamAssignedScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
 
     LaunchedEffect(Unit) {
@@ -60,23 +56,12 @@ fun TeamAssignedScreen(
     TeamAssignedScreen(
         uiState = uiState,
         modifier = modifier,
-        showBottomSheet = showBottomSheet,
         sheetState = sheetState,
         onChangeInputText = viewModel::updateInput,
-        onBottomSheetVisibleChange = { showBottomSheet = !showBottomSheet },
-        onBottomSheetClose = {
-            showBottomSheet = false
-            viewModel.resetState()
-        },
-        onSaveItem = {
-            viewModel.submitItem()
-            showBottomSheet = false
-            viewModel.resetState()
-        },
-        onEditItem = { itemId ->
-            viewModel.toggleEditState(itemId)
-            showBottomSheet = true
-        },
+        onBottomSheetOpen = viewModel::openBottomSheetState,
+        onBottomSheetClose = viewModel::resetState,
+        onSaveItem = viewModel::submitItem,
+        onEditItem = viewModel::toggleEditState,
         onAllSelect = viewModel::selectAllMember,
         onAllUnSelect = viewModel::unSelectAllMember,
         onSelectMember = viewModel::selectMember,
@@ -88,10 +73,9 @@ fun TeamAssignedScreen(
 @Composable
 private fun TeamAssignedScreen(
     uiState: TeamAssignedEditUiState,
-    showBottomSheet: Boolean,
     sheetState: SheetState,
     onChangeInputText: (String) -> Unit,
-    onBottomSheetVisibleChange: () -> Unit,
+    onBottomSheetOpen: () -> Unit,
     onBottomSheetClose: () -> Unit,
     onEditItem: (Long) -> Unit,
     onSaveItem: () -> Unit,
@@ -128,7 +112,7 @@ private fun TeamAssignedScreen(
             }
         }
         Button(
-            onClick = onBottomSheetVisibleChange,
+            onClick = onBottomSheetOpen,
             modifier =
                 Modifier
                     .fillMaxWidth()
@@ -143,7 +127,7 @@ private fun TeamAssignedScreen(
             shape = RoundedCornerShape(12.dp),
             contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceMedium),
         ) { Text(text = "물건 추가", style = BottariTheme.typography.semiBold24.toTextStyle()) }
-        if (showBottomSheet) {
+        if (uiState.isSheetVisible) {
             TeamAssignedBottomSheet(
                 uiState = uiState,
                 onSaveItem = onSaveItem,
@@ -169,9 +153,7 @@ private fun TeamAssignedScreenPreview() {
                 assignedItems = previewAssignedSelectableItemsLarge,
                 members = dummyMembers,
             ),
-        showBottomSheet = false,
         sheetState = sheetState,
-        onBottomSheetVisibleChange = {},
         onBottomSheetClose = {},
         onEditItem = {},
         onSaveItem = {},
@@ -180,5 +162,6 @@ private fun TeamAssignedScreenPreview() {
         onSelectMember = {},
         onChangeInputText = {},
         onDeleteItem = {},
+        onBottomSheetOpen ={},
     )
 }
