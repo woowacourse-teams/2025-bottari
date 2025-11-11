@@ -121,6 +121,7 @@ fun TeamAssignedBottomSheet(
                         focusedContainerColor = BottariTheme.colors.white,
                         unfocusedBorderColor = BottariTheme.colors.gray500,
                         focusedBorderColor = BottariTheme.colors.gray500,
+                        errorContainerColor = BottariTheme.colors.white,
                     ),
                 textStyle = BottariTheme.typography.semiBold16.toTextStyle(),
                 isError = uiState.isAlreadyExist,
