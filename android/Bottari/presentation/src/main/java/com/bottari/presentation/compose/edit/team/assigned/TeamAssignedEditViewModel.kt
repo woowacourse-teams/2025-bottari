@@ -75,8 +75,8 @@ class TeamAssignedEditViewModel @Inject constructor(
     fun unSelectAllMember() = updateState { copy(members = currentState.members.map { it.copy(isHost = false) }) }
 
     fun submitItem() {
-        if (currentState.isEditing) return saveAssignedItem()
-        createAssignedItem()
+        if (currentState.isEditing) saveAssignedItem() else createAssignedItem()
+        resetState()
     }
 
     fun deleteItem(itemId: Long) {
@@ -125,7 +125,6 @@ class TeamAssignedEditViewModel @Inject constructor(
                 currentState.inputText,
                 currentState.selectedMemberIds,
             ).onSuccess {
-                resetState()
                 refreshAssignedItemsAndMembers()
             }.onFailure {
                 emitEvent(TeamAssignedEditUiEvent.CreateItemFailure)
@@ -147,7 +146,6 @@ class TeamAssignedEditViewModel @Inject constructor(
                 currentState.inputText,
                 currentState.selectedMemberIds,
             ).onSuccess {
-                resetState()
                 refreshAssignedItemsAndMembers()
             }.onFailure {
                 emitEvent(TeamAssignedEditUiEvent.SaveItemFailure)
