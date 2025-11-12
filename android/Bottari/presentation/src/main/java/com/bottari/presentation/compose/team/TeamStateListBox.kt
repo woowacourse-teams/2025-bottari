@@ -57,7 +57,7 @@ fun TeamStateListBox(
                     color = color,
                 )
             }
-            Spacer(Modifier.height(BottariTheme.spacing.spaceXSmall))
+            if (items.isNotEmpty()) Spacer(Modifier.height(BottariTheme.spacing.spaceXSmall))
             FlowRow {
                 items.forEach { item ->
                     Text(
@@ -68,7 +68,10 @@ fun TeamStateListBox(
                                 .padding(2.dp)
                                 .clip(RoundedCornerShape(16.dp))
                                 .background(BottariTheme.colors.white)
-                                .padding(horizontal = BottariTheme.spacing.spaceXSmall, vertical = BottariTheme.spacing.space2xSmall),
+                                .padding(
+                                    horizontal = BottariTheme.spacing.spaceXSmall,
+                                    vertical = BottariTheme.spacing.space2xSmall,
+                                ),
                     )
                 }
             }

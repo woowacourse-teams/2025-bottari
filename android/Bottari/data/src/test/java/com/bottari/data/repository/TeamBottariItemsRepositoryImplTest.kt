@@ -204,7 +204,7 @@ class TeamBottariItemsRepositoryImplTest {
             }
         }
 
-    @DisplayName("팀 보따리 공통 물건을 추가에 성공하면 Succuss를 반환한다")
+    @DisplayName("팀 보따리 공통 물건을 추가에 성공하면 Success를 반환한다")
     @Test
     fun createTeamBottariSharedItemReturnsSuccessTest() =
         runTest {

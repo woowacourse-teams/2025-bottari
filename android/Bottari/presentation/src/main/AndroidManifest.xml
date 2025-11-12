@@ -32,10 +32,6 @@
             android:exported="false" />
 
         <activity
-            android:name=".view.edit.team.TeamBottariEditActivity"
-            android:exported="false" />
-
-        <activity
             android:name=".view.invite.InviteActivity"
             android:exported="false" />
 
@@ -59,6 +55,11 @@
         <activity
             android:name=".compose.template.ComposeCreateTemplateActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".compose.edit.team.TeamBottariEditActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
         <receiver android:name=".receiver.AlarmReceiver" />
         <receiver
