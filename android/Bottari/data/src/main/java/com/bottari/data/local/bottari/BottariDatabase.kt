@@ -1,0 +1,43 @@
+package com.bottari.data.local.bottari
+
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.bottari.data.common.util.LocalDateConverter
+import com.bottari.data.common.util.LocalTimeConverter
+import com.bottari.data.common.util.RepeatDaysConverter
+import com.bottari.data.model.local.bottari.AlarmEntity
+import com.bottari.data.model.local.bottari.BottariEntity
+import com.bottari.data.model.local.bottari.ItemEntity
+
+@Database(
+    entities = [
+        BottariEntity::class,
+        ItemEntity::class,
+        AlarmEntity::class,
+    ],
+    version = 1,
+    exportSchema = false,
+)
+@TypeConverters(LocalTimeConverter::class, LocalDateConverter::class, RepeatDaysConverter::class)
+abstract class BottariDatabase : RoomDatabase() {
+    abstract fun bottariDao(): BottariDao
+
+    abstract fun itemDao(): ItemDao
+
+    abstract fun alarmDao(): AlarmDao
+
+    companion object {
+        private const val DATABASE_NAME = "Bottari"
+
+        fun create(context: Context): BottariDatabase =
+            Room
+                .databaseBuilder(
+                    context = context.applicationContext,
+                    klass = BottariDatabase::class.java,
+                    name = DATABASE_NAME,
+                ).build()
+    }
+}

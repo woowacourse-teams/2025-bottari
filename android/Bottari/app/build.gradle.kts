@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -16,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId = "com.bottari.bottari"
-        versionName = libs.versions.versionName.get()
+        versionName = System.getenv("VERSION_NAME") ?: libs.versions.versionName.get()
         versionCode =
             System.getenv("VERSION_CODE")?.toIntOrNull() ?: libs.versions.versionCode
                 .get()
@@ -81,6 +83,7 @@ configurations.all {
 }
 
 dependencies {
+    implementation(project(":domain"))
     implementation(project(":di"))
     implementation(project(":presentation"))
     implementation(project(":logger"))
@@ -91,6 +94,12 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.work.runtime.ktx)
+
+    ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.work)
 
     testImplementation(libs.bundles.test)
     androidTestImplementation(libs.androidx.junit)

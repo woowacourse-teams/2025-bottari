@@ -1,6 +1,6 @@
 package com.bottari.data.repository
 
-import com.bottari.data.model.report.ReportTemplateRequest
+import com.bottari.data.model.remote.report.TemplateReportRequest
 import com.bottari.data.source.remote.ReportRemoteDataSource
 import com.bottari.domain.repository.ReportRepository
 import io.kotest.matchers.result.shouldBeFailure
@@ -34,7 +34,7 @@ class ReportRepositoryImplTest {
             // given
             val templateId = 1L
             val reason = "reason"
-            val request = ReportTemplateRequest("reason")
+            val request = TemplateReportRequest("reason")
 
             coEvery {
                 remoteDataSource.reportTemplate(templateId, request)
@@ -57,7 +57,7 @@ class ReportRepositoryImplTest {
             // given
             val templateId = 1L
             val reason = "reason"
-            val request = ReportTemplateRequest(reason)
+            val request = TemplateReportRequest(reason)
 
             val errorResponse =
                 Response.error<Unit>(

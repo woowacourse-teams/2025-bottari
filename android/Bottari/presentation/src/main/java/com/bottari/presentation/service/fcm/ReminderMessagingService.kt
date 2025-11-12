@@ -1,23 +1,28 @@
 package com.bottari.presentation.service.fcm
 
 import android.content.Intent
-import com.bottari.di.UseCaseProvider
 import com.bottari.domain.usecase.fcm.SaveFcmTokenUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.util.NotificationHelper
 import com.google.firebase.messaging.Constants
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ReminderMessagingService(
-    private val saveFcmTokenUseCase: SaveFcmTokenUseCase = UseCaseProvider.saveFcmTokenUseCase,
-) : FirebaseMessagingService() {
-    private val notificationHelper by lazy { NotificationHelper() }
+@AndroidEntryPoint
+class ReminderMessagingService : FirebaseMessagingService() {
+    @Inject
+    lateinit var saveFcmTokenUseCase: SaveFcmTokenUseCase
+
+    @Inject
+    lateinit var notificationHelper: NotificationHelper
+
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override fun onNewToken(token: String) {

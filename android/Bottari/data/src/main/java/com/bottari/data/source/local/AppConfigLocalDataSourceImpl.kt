@@ -1,8 +1,9 @@
 package com.bottari.data.source.local
 
 import com.bottari.data.local.AppConfigDataStore
+import javax.inject.Inject
 
-class AppConfigLocalDataSourceImpl(
+class AppConfigLocalDataSourceImpl @Inject constructor(
     private val dataStore: AppConfigDataStore,
 ) : AppConfigDataSource {
     override suspend fun savePermissionFlag(flag: Boolean): Result<Unit> =

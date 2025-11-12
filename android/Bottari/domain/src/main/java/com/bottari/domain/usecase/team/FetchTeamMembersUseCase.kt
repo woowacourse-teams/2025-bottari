@@ -1,10 +1,11 @@
 package com.bottari.domain.usecase.team
 
-import com.bottari.domain.model.team.TeamMembers
-import com.bottari.domain.repository.TeamBottariRepository
+import com.bottari.domain.model.team.member.TeamStatus
+import com.bottari.domain.repository.TeamMemberRepository
+import javax.inject.Inject
 
-class FetchTeamMembersUseCase(
-    private val repository: TeamBottariRepository,
+class FetchTeamMembersUseCase @Inject constructor(
+    private val teamMemberRepository: TeamMemberRepository,
 ) {
-    suspend operator fun invoke(id: Long): Result<TeamMembers> = repository.fetchTeamMembers(id)
+    suspend operator fun invoke(id: Long): Result<TeamStatus> = teamMemberRepository.fetchTeamMembers(id)
 }

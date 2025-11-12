@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bottari.presentation.databinding.ItemTemplateDetailItemBinding
-import com.bottari.presentation.model.BottariTemplateItemUiModel
+import com.bottari.presentation.model.template.BottariTemplateItemUiModel
 
 class TemplateDetailViewHolder private constructor(
     private val binding: ItemTemplateDetailItemBinding,

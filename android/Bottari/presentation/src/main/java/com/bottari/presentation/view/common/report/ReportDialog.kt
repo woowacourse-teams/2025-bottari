@@ -15,16 +15,14 @@ import androidx.fragment.app.viewModels
 import com.bottari.logger.LogEventHelper
 import com.bottari.presentation.R
 import com.bottari.presentation.databinding.DialogReportBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReportDialog : DialogFragment() {
     private var _binding: DialogReportBinding? = null
     val binding: DialogReportBinding get() = _binding!!
 
-    private val viewModel: ReportViewModel by viewModels {
-        ReportViewModel.Factory(
-            templateId = requireArguments().getLong(ARG_TEMPLATE_ID),
-        )
-    }
+    private val viewModel: ReportViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,12 +126,11 @@ class ReportDialog : DialogFragment() {
     companion object {
         const val REQUEST_KEY_REPORT = "REQUEST_KEY_REPORT"
         const val ARG_REPORT_RESULT = "ARG_REPORT_RESULT"
-        private const val ARG_TEMPLATE_ID = "ARG_TEMPLATE_ID"
         private const val WIDTH_RATIO = 0.9
 
         fun newInstance(templateId: Long): ReportDialog =
             ReportDialog().apply {
-                arguments = bundleOf(ARG_TEMPLATE_ID to templateId)
+                arguments = bundleOf(ReportViewModel.KEY_TEMPLATE_ID to templateId)
             }
     }
 }

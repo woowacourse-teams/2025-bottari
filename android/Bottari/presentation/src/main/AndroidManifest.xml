@@ -26,29 +26,40 @@
                 <data android:pathPrefix="/team" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.home.HomeActivity"
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name=".view.checklist.personal.ChecklistActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.edit.personal.PersonalBottariEditActivity"
-            android:exported="false" />
+
         <activity
             android:name=".view.template.TemplateActivity"
             android:exported="false" />
-        <activity
-            android:name=".view.edit.team.TeamBottariEditActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.checklist.team.TeamChecklistActivity"
-            android:exported="false" />
+
         <activity
             android:name=".view.invite.InviteActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".compose.edit.personal.ComposePersonalBottariEditActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".compose.home.ComposeHomeActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".compose.personal.ComposePersonalChecklistActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".compose.team.ComposeTeamChecklistActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".compose.template.ComposeCreateTemplateActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".compose.edit.team.TeamBottariEditActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
         <receiver android:name=".receiver.AlarmReceiver" />
         <receiver

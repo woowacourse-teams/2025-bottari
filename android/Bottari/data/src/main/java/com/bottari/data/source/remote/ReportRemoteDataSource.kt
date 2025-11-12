@@ -1,10 +1,10 @@
 package com.bottari.data.source.remote
 
-import com.bottari.data.model.report.ReportTemplateRequest
+import com.bottari.data.model.remote.report.TemplateReportRequest
 
 interface ReportRemoteDataSource {
     suspend fun reportTemplate(
         bottariTemplateId: Long,
-        request: ReportTemplateRequest,
+        request: TemplateReportRequest,
     ): Result<Unit>
 }

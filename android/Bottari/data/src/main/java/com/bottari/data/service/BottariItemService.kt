@@ -1,7 +1,7 @@
 package com.bottari.data.service
 
-import com.bottari.data.model.item.FetchChecklistResponse
-import com.bottari.data.model.item.SaveBottariItemsRequest
+import com.bottari.data.model.remote.bottari.item.ItemFetchResponse
+import com.bottari.data.model.remote.bottari.item.ItemsSaveRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -12,7 +12,7 @@ interface BottariItemService {
     @GET("/bottaries/{bottariId}/bottari-items")
     suspend fun fetchChecklist(
         @Path("bottariId") bottariId: Long,
-    ): Response<List<FetchChecklistResponse>>
+    ): Response<List<ItemFetchResponse>>
 
     @PATCH("/bottari-items/{id}/uncheck")
     suspend fun uncheckBottariItem(
@@ -27,7 +27,7 @@ interface BottariItemService {
     @PATCH("/bottaries/{bottariId}/bottari-items")
     suspend fun saveBottariItems(
         @Path("bottariId") bottariId: Long,
-        @Body request: SaveBottariItemsRequest,
+        @Body request: ItemsSaveRequest,
     ): Response<Unit>
 
     @PATCH("/bottaries/{bottariId}/bottari-items/reset")

@@ -3,6 +3,9 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
     id("kotlin-parcelize")
 }
 
@@ -73,6 +76,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        compose = true
     }
 }
 
@@ -96,18 +100,36 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.core.splashscreen)
 
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.material.icons.extended.android)
+
+    ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.work)
+
     implementation(libs.material)
     implementation(libs.cardstackview)
     implementation(libs.flexbox)
-    implementation(libs.number.picker)
     implementation(libs.spinkit)
-    implementation(libs.material.calendarview)
-    implementation(libs.threetenabp)
+    implementation(libs.compose.swipeable.cards)
+    implementation(libs.wheelpickercompose)
 
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.messaging)
+    api(platform(libs.firebase.bom))
+    api(libs.firebase.messaging)
 
     testImplementation(libs.bundles.test)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }

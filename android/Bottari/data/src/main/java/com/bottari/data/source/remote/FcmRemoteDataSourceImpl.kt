@@ -1,11 +1,12 @@
 package com.bottari.data.source.remote
 
 import com.bottari.data.common.util.safeApiCall
-import com.bottari.data.model.fcm.SaveFcmTokenRequest
+import com.bottari.data.model.remote.fcm.FcmTokenSaveRequest
 import com.bottari.data.service.FcmService
+import javax.inject.Inject
 
-class FcmRemoteDataSourceImpl(
+class FcmRemoteDataSourceImpl @Inject constructor(
     private val fcmService: FcmService,
 ) : FcmRemoteDataSource {
-    override suspend fun saveFcmToken(request: SaveFcmTokenRequest): Result<Unit> = safeApiCall { fcmService.saveFcmToken(request) }
+    override suspend fun saveFcmToken(request: FcmTokenSaveRequest): Result<Unit> = safeApiCall { fcmService.saveFcmToken(request) }
 }

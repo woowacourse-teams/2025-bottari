@@ -11,6 +11,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bottari.presentation.R
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.showSnackbar
+import com.bottari.presentation.compose.home.ComposeHomeActivity
 import com.bottari.presentation.databinding.ActivityMainBinding
 import com.bottari.presentation.util.DeeplinkHelper.getInviteCode
 import com.bottari.presentation.util.DeeplinkHelper.validateUri
@@ -22,22 +23,22 @@ import com.bottari.presentation.view.common.PermissionDescriptionDialog
 import com.bottari.presentation.view.common.alert.CustomAlertDialog
 import com.bottari.presentation.view.common.alert.DialogListener
 import com.bottari.presentation.view.common.alert.DialogPresetType
-import com.bottari.presentation.view.home.HomeActivity
 import com.bottari.presentation.view.invite.InviteActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
-    private val viewModel: MainViewModel by viewModels { MainViewModel.Factory() }
+    private val viewModel: MainViewModel by viewModels()
     private val permissionLauncher: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions(),
         ) { showExactAlarmSettingsDialog() }
+    private var isReady: Boolean = false
     private var isNavigatedToSettings: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
-            setKeepOnScreenCondition {
-                viewModel.uiState.value?.isReady == false
-            }
+            setKeepOnScreenCondition { !isReady }
         }
         super.onCreate(savedInstanceState)
         setupObserver()
@@ -52,11 +53,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun setupObserver() {
-        viewModel.uiEvent.observe(this) { uiEvent ->
-            when (uiEvent) {
-                is MainUiEvent.LoginSuccess -> checkPermissionAndNavigate(uiEvent.permissionFlag)
+        collectWithLifecycle(viewModel.uiState) { state ->
+            isReady = state.isReady
+        }
+
+        collectWithLifecycle(viewModel.uiEvent) { event ->
+            when (event) {
+                is MainUiEvent.LoginSuccess ->
+                    checkPermissionAndNavigate(event.permissionFlag)
+
+                is MainUiEvent.Offline ->
+                    checkPermissionAndNavigate(event.permissionFlag)
+
                 MainUiEvent.IncompletePermissionFlow -> showPermissionDescriptionDialog()
+
                 MainUiEvent.ForceUpdate -> showForceUpdateDialog()
+
                 MainUiEvent.RegisterFailure,
                 MainUiEvent.LoginFailure,
                 MainUiEvent.GetPermissionFlagFailure,
@@ -90,7 +102,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun checkPermissionAndNavigate(permissionFlag: Boolean) {
         if (!hasRequiredPermission(permissionFlag)) {
-            binding.root.showSnackbar(R.string.splash_screen_permission_denied_text) {
+            binding.root.showSnackbar(R.string.common_permission_denied_text) {
                 if (!checkDeeplink()) navigateToHome()
             }
             return
@@ -127,7 +139,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun navigateToHome() {
-        val intent = HomeActivity.newIntent(this)
+        val intent = Intent(this, ComposeHomeActivity::class.java)
         startActivity(intent)
         finish()
     }
@@ -142,6 +154,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private fun launchPlayStore() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = "market://details?id=$packageName".toUri()
+        intent.`package` = "com.android.vending"
         startActivity(intent)
         finishAffinity()
     }

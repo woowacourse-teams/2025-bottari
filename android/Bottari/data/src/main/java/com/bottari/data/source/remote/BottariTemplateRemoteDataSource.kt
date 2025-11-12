@@ -1,19 +1,29 @@
 package com.bottari.data.source.remote
 
-import com.bottari.data.model.template.CreateBottariTemplateRequest
-import com.bottari.data.model.template.FetchBottariTemplateResponse
-import com.bottari.data.model.template.FetchMyBottariTemplatesResponse
+import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
+import com.bottari.data.model.remote.bottari.template.BottariTemplateCursorFetchResponse
+import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse
+import com.bottari.data.model.remote.common.PageableRequest
+import com.bottari.data.model.remote.common.PageableResponse
 
 interface BottariTemplateRemoteDataSource {
-    suspend fun fetchBottariTemplates(searchWord: String?): Result<List<FetchBottariTemplateResponse>>
+    suspend fun searchTemplatesByTitle(
+        title: String,
+        pageableRequest: PageableRequest,
+    ): Result<PageableResponse<BottariTemplateCursorFetchResponse>>
 
-    suspend fun createBottariTemplate(createBottariTemplateRequest: CreateBottariTemplateRequest): Result<Long?>
+    suspend fun searchTemplatesByHashtag(
+        hashtagId: Long,
+        pageableRequest: PageableRequest,
+    ): Result<PageableResponse<BottariTemplateCursorFetchResponse>>
 
-    suspend fun fetchBottariTemplateDetail(bottariId: Long): Result<FetchBottariTemplateResponse>
+    suspend fun createBottariTemplate(bottariTemplateCreateRequest: BottariTemplateCreateRequest): Result<Long>
+
+    suspend fun fetchBottariTemplateDetail(bottariId: Long): Result<BottariTemplateFetchResponse>
 
     suspend fun takeBottariTemplate(bottariId: Long): Result<Long?>
 
-    suspend fun fetchMyBottariTemplates(): Result<List<FetchMyBottariTemplatesResponse>>
+    suspend fun fetchMyBottariTemplates(): Result<List<BottariTemplateFetchResponse>>
 
     suspend fun deleteMyBottariTemplate(bottariTemplateId: Long): Result<Unit>
 }

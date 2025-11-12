@@ -1,6 +1,7 @@
 package com.bottari.data.service
 
-import com.bottari.data.model.bottari.AlarmRequest
+import com.bottari.data.model.remote.alarm.AlarmCreateRequest
+import com.bottari.data.model.remote.alarm.AlarmSaveRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.PATCH
@@ -12,13 +13,13 @@ interface AlarmService {
     @PUT("/alarms/{id}")
     suspend fun saveAlarm(
         @Path("id") id: Long,
-        @Body alarmRequest: AlarmRequest,
+        @Body alarmSaveRequest: AlarmSaveRequest,
     ): Response<Unit>
 
     @POST("/bottaries/{bottariId}/alarms")
     suspend fun createAlarm(
         @Path("bottariId") bottariId: Long,
-        @Body alarmRequest: AlarmRequest,
+        @Body alarmCreateRequest: AlarmCreateRequest,
     ): Response<Unit>
 
     @PATCH("/alarms/{id}/active")

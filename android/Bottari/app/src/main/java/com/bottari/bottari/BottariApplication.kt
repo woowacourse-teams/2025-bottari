@@ -1,14 +1,29 @@
 package com.bottari.bottari
 
 import android.app.Application
-import com.bottari.di.ApplicationContextProvider
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
 import com.bottari.logger.BottariLogger
+import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
-class BottariApplication : Application() {
+@HiltAndroidApp
+class BottariApplication :
+    Application(),
+    Configuration.Provider {
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
+    override val workManagerConfiguration: Configuration
+        get() =
+            Configuration
+                .Builder()
+                .setWorkerFactory(workerFactory)
+                .build()
+
     override fun onCreate() {
         super.onCreate()
         BottariLogger.init(this)
-        ApplicationContextProvider.init(this)
         BottariLogger.global(APPLICATION_INIT_MESSAGE)
     }
 

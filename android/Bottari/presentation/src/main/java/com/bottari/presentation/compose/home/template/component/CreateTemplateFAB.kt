@@ -1,0 +1,50 @@
+package com.bottari.presentation.compose.home.template.component
+
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.bottari.presentation.R
+import com.bottari.presentation.compose.common.theme.BottariTheme
+
+@Composable
+fun CreateTemplateFAB(
+    onClickAdd: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    FloatingActionButton(
+        onClick = onClickAdd,
+        shape = RoundedCornerShape(12.dp),
+        containerColor = BottariTheme.colors.primary,
+        contentColor = BottariTheme.colors.white,
+        elevation =
+            FloatingActionButtonDefaults.elevation(
+                defaultElevation = 2.dp,
+                pressedElevation = 0.dp,
+                hoveredElevation = 0.dp,
+                focusedElevation = 0.dp,
+            ),
+        modifier = modifier,
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_plus),
+            contentDescription = null,
+            modifier = Modifier.size(20.dp),
+            tint = BottariTheme.colors.white,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun CreateTemplateFABPreview() {
+    BottariTheme {
+        CreateTemplateFAB(onClickAdd = {})
+    }
+}

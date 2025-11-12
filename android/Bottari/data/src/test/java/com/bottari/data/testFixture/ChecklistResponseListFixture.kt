@@ -1,9 +1,9 @@
 package com.bottari.data.testFixture
 
-import com.bottari.data.model.item.FetchChecklistResponse
+import com.bottari.data.model.remote.bottari.item.ItemFetchResponse
 
-fun fetchChecklistResponseListFixture(): List<FetchChecklistResponse> =
+fun fetchChecklistResponseListFixture(): List<ItemFetchResponse> =
     listOf(
-        FetchChecklistResponse(id = 1, name = "item1", isChecked = true),
-        FetchChecklistResponse(id = 2, name = "item2", isChecked = false),
+        ItemFetchResponse(id = 1, name = "item1", isChecked = true),
+        ItemFetchResponse(id = 2, name = "item2", isChecked = false),
     )

@@ -1,8 +1,7 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.MemberMapper.toDomain
-import com.bottari.data.mapper.NicknameMapper.toRequest
-import com.bottari.data.model.member.RegisterMemberRequest
+import com.bottari.data.model.remote.member.MemberNicknameSaveRequest
+import com.bottari.data.model.remote.member.MemberRegisterRequest
 import com.bottari.data.source.local.MemberIdentifierLocalDataSource
 import com.bottari.data.source.remote.MemberRemoteDataSource
 import com.bottari.domain.extension.flatMapCatching
@@ -11,20 +10,20 @@ import com.bottari.domain.model.member.Nickname
 import com.bottari.domain.model.member.RegisteredMember
 import com.bottari.domain.repository.MemberRepository
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MemberRepositoryImpl(
+class MemberRepositoryImpl @Inject constructor(
     private val memberRemoteDataSource: MemberRemoteDataSource,
     private val memberIdentifierLocalDataSource: MemberIdentifierLocalDataSource,
-    private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val coroutineDispatcher: CoroutineDispatcher,
 ) : MemberRepository {
     override suspend fun registerMember(fcmToken: String): Result<Long> =
         withContext(coroutineDispatcher) {
             memberIdentifierLocalDataSource
                 .getInstallationId()
                 .mapCatching { installationId ->
-                    RegisterMemberRequest(installationId, fcmToken)
+                    MemberRegisterRequest(installationId, fcmToken)
                 }.flatMapCatching { request ->
                     memberRemoteDataSource.registerMember(request)
                 }.flatMapCatching { memberId ->
@@ -34,7 +33,7 @@ class MemberRepositoryImpl(
 
     override suspend fun saveMemberNickname(nickname: Nickname): Result<Unit> =
         withContext(coroutineDispatcher) {
-            memberRemoteDataSource.saveMemberNickname(nickname.toRequest())
+            memberRemoteDataSource.saveMemberNickname(MemberNicknameSaveRequest.fromDomain(nickname))
         }
 
     override suspend fun checkRegisteredMember(): Result<RegisteredMember> =

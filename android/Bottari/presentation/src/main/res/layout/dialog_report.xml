@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_x_small"
         android:text="@string/common_report_dialog_description_text"
-        android:textColor="@color/gray_787878"
+        android:textColor="@color/gray_700"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_dialog_report_title" />
 
@@ -107,7 +107,7 @@
         android:paddingStart="@dimen/space_x_large"
         android:paddingEnd="0dp"
         android:paddingBottom="@dimen/space_x_large"
-        android:src="@drawable/btn_close"
+        android:src="@drawable/ic_close"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
