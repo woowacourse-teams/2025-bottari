@@ -32,7 +32,7 @@ public class SseService {
             final Long memberId,
             final SseEmitter targetEmitter
     ) {
-        log.info("unconnected memberId: {}", memberId);
+        log.info("disconnected memberId: {}", memberId);
         final boolean removed = sseSessions.removeIfSame(memberId, targetEmitter);
         if (removed && sseSessions.findByMemberId(memberId).isEmpty()) {
             subscribeManager.unsubscribe(topic);
