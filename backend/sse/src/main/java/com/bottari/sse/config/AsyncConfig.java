@@ -37,6 +37,7 @@ public class AsyncConfig {
         executor.setTaskDecorator(new ObservabilityTaskDecorator());
 
         executor.initialize();
+
         return executor;
     }
 }
