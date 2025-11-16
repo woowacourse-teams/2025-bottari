@@ -1,9 +1,11 @@
 package com.bottari.sse.sse;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SseService {
@@ -30,6 +32,7 @@ public class SseService {
             final Long memberId,
             final SseEmitter targetEmitter
     ) {
+        log.info("unconnected memberId: {}", memberId);
         final boolean removed = sseSessions.removeIfSame(memberId, targetEmitter);
         if (removed && sseSessions.findByMemberId(memberId).isEmpty()) {
             subscribeManager.unsubscribe(topic);
