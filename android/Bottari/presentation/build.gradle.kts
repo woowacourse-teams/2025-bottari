@@ -1,33 +1,18 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.bottari.android.feature)
     id("kotlin-parcelize")
 }
 
 android {
     namespace = "com.bottari.presentation"
-    compileSdk =
-        libs.versions.compileSdk
-            .get()
-            .toInt()
 
     val localProperties = gradleLocalProperties(rootDir, providers)
 
     fun getPropertyOrThrow(key: String): String = localProperties.getProperty(key) ?: error("$key is missing in local.properties")
 
     defaultConfig {
-        minSdk =
-            libs.versions.minSdk
-                .get()
-                .toInt()
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-
         buildConfigField(
             "String",
             "PRIVACY_POLICY_URL",
@@ -41,9 +26,11 @@ android {
         buildConfigField(
             "int",
             "APP_VERSION_CODE",
-            "${System.getenv("VERSION_CODE")?.toIntOrNull() ?: libs.versions.versionCode
-                .get()
-                .toInt()}",
+            "${
+                System.getenv("VERSION_CODE")?.toIntOrNull() ?: libs.versions.versionCode
+                    .get()
+                    .toInt()
+            }",
         )
     }
 
@@ -60,28 +47,18 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
-
-    kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
-    }
-
     testOptions {
         unitTests.all { it.useJUnitPlatform() }
     }
 
     buildFeatures {
         viewBinding = true
-        buildConfig = true
-        compose = true
     }
 }
 
 dependencies {
-    implementation(project(":core:domain"))
+    implementation(project(":domain"))
+    implementation(project(":di"))
     implementation(project(":logger"))
 
     implementation(libs.androidx.core.ktx)
@@ -93,27 +70,14 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.core.splashscreen)
 
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.runtime.livedata)
-    implementation(libs.androidx.material.icons.extended.android)
-
-    ksp(libs.hilt.compiler)
-    ksp(libs.androidx.hilt.compiler)
-    implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.work)
 
     implementation(libs.material)
     implementation(libs.cardstackview)
     implementation(libs.flexbox)
     implementation(libs.spinkit)
-    implementation(libs.compose.swipeable.cards)
-    implementation(libs.wheelpickercompose)
+    implementation(libs.swipeable.cards)
+    implementation(libs.wheel.picker.compose)
 
     api(platform(libs.firebase.bom))
     api(libs.firebase.messaging)
@@ -122,7 +86,4 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 }
