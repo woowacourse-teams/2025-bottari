@@ -1,4 +1,4 @@
-package com.bottari.convention
+package com.bottari.convention.internal
 
 internal object Plugins {
     const val JAVA_LIBRARY = "java-library"

@@ -1,7 +1,7 @@
 package com.bottari.convention.plugin
 
-import com.bottari.convention.applyPlugins
-import com.bottari.convention.implementation
+import com.bottari.convention.internal.applyPlugins
+import com.bottari.convention.internal.implementation
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies

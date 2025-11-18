@@ -1,9 +1,9 @@
 package com.bottari.convention.plugin
 
 import com.android.build.api.dsl.ApplicationExtension
-import com.bottari.convention.Plugins
-import com.bottari.convention.applyPlugins
-import com.bottari.convention.configureCompose
+import com.bottari.convention.internal.Plugins
+import com.bottari.convention.internal.applyPlugins
+import com.bottari.convention.internal.configureCompose
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure

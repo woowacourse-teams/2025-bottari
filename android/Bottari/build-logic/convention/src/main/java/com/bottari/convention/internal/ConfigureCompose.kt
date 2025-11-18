@@ -1,4 +1,4 @@
-package com.bottari.convention
+package com.bottari.convention.internal
 
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project

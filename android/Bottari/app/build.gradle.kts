@@ -11,21 +11,10 @@ android {
     namespace = "com.bottari.bottari"
 
     buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("debug")
         }
-
         debug {
-            isMinifyEnabled = false
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-dev"
-            resValue("string", "app_name", "보따리 (Dev)")
-
             configure<CrashlyticsExtension> {
                 mappingFileUploadEnabled = false
             }

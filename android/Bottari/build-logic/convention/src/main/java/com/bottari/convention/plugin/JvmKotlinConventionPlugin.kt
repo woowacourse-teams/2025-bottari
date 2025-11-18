@@ -1,8 +1,8 @@
 package com.bottari.convention.plugin
 
-import com.bottari.convention.ApplicationConfig
-import com.bottari.convention.Plugins
-import com.bottari.convention.applyPlugins
+import com.bottari.convention.internal.ApplicationConfig
+import com.bottari.convention.internal.Plugins
+import com.bottari.convention.internal.applyPlugins
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension

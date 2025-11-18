@@ -1,12 +1,13 @@
 package com.bottari.convention.plugin
 
 import com.android.build.api.dsl.ApplicationExtension
-import com.bottari.convention.ApplicationConfig
-import com.bottari.convention.Plugins
-import com.bottari.convention.applyPlugins
-import com.bottari.convention.configureAndroid
-import com.bottari.convention.implementation
-import com.bottari.convention.libs
+import com.bottari.convention.internal.ApplicationConfig
+import com.bottari.convention.internal.Plugins
+import com.bottari.convention.internal.applyPlugins
+import com.bottari.convention.internal.configureAndroid
+import com.bottari.convention.internal.configureBuildTypes
+import com.bottari.convention.internal.implementation
+import com.bottari.convention.internal.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -19,6 +20,7 @@ internal class AndroidApplicationConventionPlugin : Plugin<Project> {
 
             extensions.configure<ApplicationExtension> {
                 configureAndroid(this)
+                configureBuildTypes(this)
 
                 defaultConfig {
                     targetSdk = ApplicationConfig.TARGET_VERSION

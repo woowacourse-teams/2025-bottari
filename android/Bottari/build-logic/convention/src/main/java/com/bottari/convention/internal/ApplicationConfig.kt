@@ -1,4 +1,4 @@
-package com.bottari.convention
+package com.bottari.convention.internal
 
 internal object ApplicationConfig {
     const val COMPILE_VERSION = 36

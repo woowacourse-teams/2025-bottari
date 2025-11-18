@@ -1,10 +1,11 @@
 package com.bottari.convention.plugin
 
 import com.android.build.api.dsl.LibraryExtension
-import com.bottari.convention.ApplicationConfig
-import com.bottari.convention.Plugins
-import com.bottari.convention.applyPlugins
-import com.bottari.convention.configureAndroid
+import com.bottari.convention.internal.ApplicationConfig
+import com.bottari.convention.internal.Plugins
+import com.bottari.convention.internal.applyPlugins
+import com.bottari.convention.internal.configureAndroid
+import com.bottari.convention.internal.configureBuildTypes
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -16,6 +17,7 @@ internal class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureAndroid(this)
+                configureBuildTypes(this)
 
                 testOptions.targetSdk = ApplicationConfig.TARGET_VERSION
             }

@@ -36,14 +36,18 @@ android {
 
     buildTypes {
         release {
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"${getPropertyOrThrow("RELEASE_BASE_URL")}\"",
             )
-            buildConfigField("String", "BASE_URL", "\"${getPropertyOrThrow("RELEASE_BASE_URL")}\"")
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"${getPropertyOrThrow("DEBUG_BASE_URL")}\"")
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"${getPropertyOrThrow("DEBUG_BASE_URL")}\"",
+            )
         }
     }
 
@@ -57,10 +61,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":di"))
-    implementation(project(":logger"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)

@@ -1,4 +1,4 @@
-package com.bottari.convention
+package com.bottari.convention.internal
 
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
@@ -14,8 +14,8 @@ internal fun Project.applyPlugins(vararg plugins: String) {
     plugins.forEach(pluginManager::apply)
 }
 
-fun DependencyHandler.implementation(dependencyNotation: Any): Dependency? = add("implementation", dependencyNotation)
+internal fun DependencyHandler.implementation(dependencyNotation: Any): Dependency? = add("implementation", dependencyNotation)
 
-fun DependencyHandler.ksp(dependencyNotation: Any): Dependency? = add("ksp", dependencyNotation)
+internal fun DependencyHandler.ksp(dependencyNotation: Any): Dependency? = add("ksp", dependencyNotation)
 
-fun DependencyHandler.debugImplementation(dependencyNotation: Any): Dependency? = add("debugImplementation", dependencyNotation)
+internal fun DependencyHandler.debugImplementation(dependencyNotation: Any): Dependency? = add("debugImplementation", dependencyNotation)

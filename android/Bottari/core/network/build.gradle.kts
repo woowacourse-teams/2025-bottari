@@ -26,14 +26,18 @@ android {
 
     buildTypes {
         release {
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"${getPropertyOrThrow("RELEASE_BASE_URL")}\"",
             )
-            buildConfigField("String", "BASE_URL", "\"${getPropertyOrThrow("RELEASE_BASE_URL")}\"")
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"${getPropertyOrThrow("DEBUG_BASE_URL")}\"")
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"${getPropertyOrThrow("DEBUG_BASE_URL")}\"",
+            )
         }
     }
 

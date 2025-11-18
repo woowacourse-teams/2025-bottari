@@ -1,10 +1,10 @@
 package com.bottari.convention.plugin
 
-import com.bottari.convention.Plugins
-import com.bottari.convention.applyPlugins
-import com.bottari.convention.implementation
-import com.bottari.convention.ksp
-import com.bottari.convention.libs
+import com.bottari.convention.internal.Plugins
+import com.bottari.convention.internal.applyPlugins
+import com.bottari.convention.internal.implementation
+import com.bottari.convention.internal.ksp
+import com.bottari.convention.internal.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
