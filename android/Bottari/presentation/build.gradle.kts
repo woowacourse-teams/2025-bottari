@@ -47,10 +47,6 @@ android {
         }
     }
 
-    testOptions {
-        unitTests.all { it.useJUnitPlatform() }
-    }
-
     buildFeatures {
         viewBinding = true
     }
