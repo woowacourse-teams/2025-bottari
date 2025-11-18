@@ -1,25 +1,12 @@
-import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
-
 plugins {
-    alias(libs.plugins.google.gms.google.services)
-    alias(libs.plugins.google.firebase.crashlytics)
     alias(libs.plugins.bottari.android.application.compose)
     alias(libs.plugins.bottari.android.hilt)
+    alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.google.firebase.crashlytics)
 }
 
 android {
     namespace = "com.bottari.bottari"
-
-    buildTypes {
-        getByName("release") {
-            signingConfig = signingConfigs.getByName("debug")
-        }
-        debug {
-            configure<CrashlyticsExtension> {
-                mappingFileUploadEnabled = false
-            }
-        }
-    }
 }
 
 tasks.register("printVersionName") {

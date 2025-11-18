@@ -104,7 +104,6 @@ androidx-compose-foundation-layout = { group = "androidx.compose.foundation", na
 
 # --- Compose Runtime ---
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
-androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "composeRuntimeLivedata" }
 
 # --- Compose Material & Icons ---
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial3" }
