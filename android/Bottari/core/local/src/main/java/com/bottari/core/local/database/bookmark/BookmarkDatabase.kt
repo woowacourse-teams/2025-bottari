@@ -8,7 +8,8 @@ import androidx.room.TypeConverters
 import com.bottari.core.local.database.converter.StringListJsonConverter
 import com.bottari.core.local.entity.bookmark.BookmarkEntity
 
-@Database(entities = [BookmarkEntity::class], version = 1)
+// DB 마이그레이션 시 exportScheme = true로 변경 필요
+@Database(entities = [BookmarkEntity::class], version = 1, exportSchema = false)
 @TypeConverters(StringListJsonConverter::class)
 abstract class BookmarkDatabase : RoomDatabase() {
     abstract fun bookmarkDao(): BookmarkDao
