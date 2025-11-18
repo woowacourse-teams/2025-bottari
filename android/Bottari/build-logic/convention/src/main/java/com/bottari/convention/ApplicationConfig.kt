@@ -1,8 +1,6 @@
 package com.bottari.convention
 
 internal object ApplicationConfig {
-    const val NAMESPACE = "com.bottari.bottari"
-
     const val COMPILE_VERSION = 36
     const val TARGET_VERSION = 36
     const val MIN_VERSION = 28

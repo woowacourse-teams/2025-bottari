@@ -8,6 +8,8 @@ plugins {
 }
 
 android {
+    namespace = "com.bottari.bottari"
+
     buildTypes {
         release {
             isMinifyEnabled = true

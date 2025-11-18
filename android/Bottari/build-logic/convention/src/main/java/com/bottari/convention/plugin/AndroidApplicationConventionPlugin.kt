@@ -18,7 +18,6 @@ internal class AndroidApplicationConventionPlugin : Plugin<Project> {
             applyPlugins(Plugins.ANDROID_APPLICATION, Plugins.KOTLIN_ANDROID)
 
             extensions.configure<ApplicationExtension> {
-                namespace = ApplicationConfig.NAMESPACE
                 configureAndroid(this)
 
                 defaultConfig {
