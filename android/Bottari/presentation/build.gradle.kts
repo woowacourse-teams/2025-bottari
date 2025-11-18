@@ -1,4 +1,4 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.bottari.convention.external.getPropertyOrThrow
 
 plugins {
     alias(libs.plugins.bottari.android.feature)
@@ -7,10 +7,6 @@ plugins {
 
 android {
     namespace = "com.bottari.presentation"
-
-    val localProperties = gradleLocalProperties(rootDir, providers)
-
-    fun getPropertyOrThrow(key: String): String = localProperties.getProperty(key) ?: error("$key is missing in local.properties")
 
     defaultConfig {
         buildConfigField(
