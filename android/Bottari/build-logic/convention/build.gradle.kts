@@ -62,7 +62,7 @@ gradlePlugin {
 
         register("android.feature") {
             id = getPluginIdFromProvider(libs.plugins.bottari.android.feature)
-            implementationClass = "com.bottari.convention.plugin.AndroidFeatureConventPlugin"
+            implementationClass = "com.bottari.convention.plugin.AndroidFeatureConventionPlugin"
         }
 
         register("jvm.kotlin") {

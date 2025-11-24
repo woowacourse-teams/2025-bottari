@@ -7,7 +7,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.project
 
-internal class AndroidFeatureConventPlugin : Plugin<Project> {
+internal class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.run {
             applyPlugins(
