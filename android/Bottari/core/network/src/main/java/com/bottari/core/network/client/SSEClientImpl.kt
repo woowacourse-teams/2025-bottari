@@ -1,0 +1,113 @@
+package com.bottari.core.network.client
+
+import com.bottari.core.network.BuildConfig
+import com.bottari.core.network.dto.sse.EventStateResponse
+import com.bottari.core.network.dto.sse.OnEventRaw
+import com.bottari.core.network.dto.sse.toEvent
+import com.bottari.logger.BottariLogger
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.sse.EventSource
+import okhttp3.sse.EventSourceListener
+import okhttp3.sse.EventSources
+
+class SSEClientImpl(
+    private val client: OkHttpClient,
+) : EventSourceListener(),
+    SSEClient {
+    private var eventSource: EventSource? = null
+    private var id: Long? = null
+    private val eventFlow: MutableStateFlow<EventStateResponse> =
+        MutableStateFlow(
+            EventStateResponse.Empty,
+        )
+    private val json =
+        Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+            encodeDefaults = true
+        }
+
+    override fun onOpen(
+        eventSource: EventSource,
+        response: Response,
+    ) {
+        super.onOpen(eventSource, response)
+        BottariLogger.network("[Event] Member $id open")
+        eventFlow.value = EventStateResponse.OnOpen
+    }
+
+    override fun onEvent(
+        eventSource: EventSource,
+        id: String?,
+        type: String?,
+        data: String,
+    ) {
+        super.onEvent(eventSource, id, type, data)
+        runCatching {
+            val rawEvent = json.decodeFromString(OnEventRaw.serializer(), data)
+            rawEvent.toEvent(json)
+        }.onSuccess { event ->
+            BottariLogger.network("[Event] $data")
+            eventFlow.value = event
+        }.onFailure { exception ->
+            BottariLogger.error(exception.message, exception)
+            eventFlow.value = EventStateResponse.OnFailure(exception)
+        }
+    }
+
+    override fun onFailure(
+        eventSource: EventSource,
+        t: Throwable?,
+        response: Response?,
+    ) {
+        super.onFailure(eventSource, t, response)
+        eventFlow.value = EventStateResponse.OnFailure(t)
+        t?.let { exception ->
+            BottariLogger.error("[Event] ${exception.message}", exception)
+        }
+    }
+
+    override fun onClosed(eventSource: EventSource) {
+        super.onClosed(eventSource)
+        BottariLogger.network("[Event] Member $id close")
+        eventFlow.value = EventStateResponse.OnClosed
+    }
+
+    override fun connect(memberId: Long): Flow<EventStateResponse> {
+        if (eventSource != null) return eventFlow
+        id = memberId
+        val request = createRequest(memberId)
+        eventSource = createEventSource(request)
+        BottariLogger.network("[Event] Member $id stream connect")
+        return eventFlow
+    }
+
+    override fun disconnect() {
+        if (id == null || eventSource == null) return
+        BottariLogger.network("[Event] Member $id stream disconnect")
+        eventSource?.cancel()
+        eventSource = null
+        id = null
+    }
+
+    private fun createRequest(memberId: Long): Request =
+        Request
+            .Builder()
+            .url(BuildConfig.BASE_URL + SSE_URL + memberId)
+            .get()
+            .build()
+
+    private fun createEventSource(request: Request): EventSource =
+        EventSources
+            .createFactory(client)
+            .newEventSource(request, this)
+
+    companion object {
+        private const val SSE_URL = "/connect/sse/"
+    }
+}
