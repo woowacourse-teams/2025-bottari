@@ -1,6 +1,6 @@
 package com.bottari.presentation.common.base
 
-import com.bottari.presentation.util.NetworkManager
+import com.bottari.core.domain.network.NetworkManager
 import kotlinx.coroutines.flow.StateFlow
 
 abstract class NetworkBaseViewModel<UiState, UiEvent>(
