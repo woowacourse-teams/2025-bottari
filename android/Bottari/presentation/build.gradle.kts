@@ -82,7 +82,6 @@ android {
 
 dependencies {
     implementation(project(":core:domain"))
-    implementation(project(":core:data"))
     implementation(project(":logger"))
 
     implementation(libs.androidx.core.ktx)
