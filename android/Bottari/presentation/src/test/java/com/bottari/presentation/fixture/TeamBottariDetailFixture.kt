@@ -1,10 +1,10 @@
 package com.bottari.presentation.fixture
 
-import com.bottari.domain.model.bottari.Bottari
-import com.bottari.domain.model.bottari.item.BottariItem
-import com.bottari.domain.model.team.bottari.TeamBottariDetail
-import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
-import com.bottari.domain.model.team.member.TeamMember
+import com.bottari.core.domain.model.bottari.Bottari
+import com.bottari.core.domain.model.bottari.item.BottariItem
+import com.bottari.core.domain.model.team.bottari.TeamBottariDetail
+import com.bottari.core.domain.model.team.bottari.item.TeamBottariItemType
+import com.bottari.core.domain.model.team.member.TeamMember
 
 val TEAM_BOTTARI_DETAIL_FIXTURE: TeamBottariDetail by lazy {
     TeamBottariDetail(

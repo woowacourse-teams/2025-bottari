@@ -1,9 +1,9 @@
 package com.bottari.presentation.view.edit.team.main
 
 import androidx.lifecycle.SavedStateHandle
-import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
-import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
-import com.bottari.domain.usecase.team.FetchTeamBottariDetailUseCase
+import com.bottari.core.domain.usecase.event.ConnectTeamEventUseCase
+import com.bottari.core.domain.usecase.event.DisconnectTeamEventUseCase
+import com.bottari.core.domain.usecase.team.FetchTeamBottariDetailUseCase
 import com.bottari.presentation.CoroutinesTestExtension
 import com.bottari.presentation.InstantTaskExecutorExtension
 import com.bottari.presentation.compose.edit.team.main.TeamBottariEditUiEvent

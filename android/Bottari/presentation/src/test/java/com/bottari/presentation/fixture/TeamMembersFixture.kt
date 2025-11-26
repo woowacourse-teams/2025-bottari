@@ -1,8 +1,8 @@
 package com.bottari.presentation.fixture
 
-import com.bottari.domain.model.member.Nickname
-import com.bottari.domain.model.team.member.HeadCount
-import com.bottari.domain.model.team.member.TeamStatus
+import com.bottari.core.domain.model.member.Nickname
+import com.bottari.core.domain.model.team.member.HeadCount
+import com.bottari.core.domain.model.team.member.TeamStatus
 
 val TEAM_MEMBERS_FIXTURE =
     TeamStatus(
