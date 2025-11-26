@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.bottari.core.local"
+    namespace = "com.bottari.core.data"
     compileSdk =
         libs.versions.compileSdk
             .get()
