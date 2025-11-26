@@ -10,7 +10,5 @@ interface MemberRepository {
 
     suspend fun checkRegisteredMember(): Result<RegisteredMember>
 
-    suspend fun getInstallationId(): Result<String>
-
     suspend fun getMemberId(): Result<Long>
 }
