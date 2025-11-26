@@ -88,7 +88,8 @@ configurations.all {
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":di"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:data"))
     implementation(project(":logger"))
 
     implementation(libs.androidx.core.ktx)

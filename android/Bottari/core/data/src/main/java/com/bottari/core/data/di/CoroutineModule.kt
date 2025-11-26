@@ -1,4 +1,4 @@
-package com.bottari.di
+package com.bottari.core.data.di
 
 import dagger.Module
 import dagger.Provides

@@ -84,7 +84,6 @@ configurations.all {
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":di"))
     implementation(project(":presentation"))
     implementation(project(":logger"))
 
