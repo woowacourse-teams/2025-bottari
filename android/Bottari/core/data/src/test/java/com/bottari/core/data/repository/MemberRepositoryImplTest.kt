@@ -1,0 +1,191 @@
+package com.bottari.core.data.repository
+
+import com.bottari.core.data.source.local.MemberIdentifierLocalDataSource
+import com.bottari.core.data.source.remote.MemberRemoteDataSource
+import com.bottari.core.domain.model.member.Nickname
+import com.bottari.core.domain.repository.MemberRepository
+import com.bottari.core.network.client.interceptor.FirebaseInstallationIdProvider
+import com.bottari.core.network.dto.member.MemberNicknameSaveRequest
+import com.bottari.core.network.dto.member.MemberRegisterCheckResponse
+import com.bottari.core.network.dto.member.MemberRegisterRequest
+import io.kotest.assertions.assertSoftly
+import io.kotest.matchers.result.shouldBeFailure
+import io.kotest.matchers.result.shouldBeSuccess
+import io.kotest.matchers.shouldBe
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.ResponseBody.Companion.toResponseBody
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import retrofit2.HttpException
+import retrofit2.Response
+
+class MemberRepositoryImplTest {
+    private lateinit var idProvider: FirebaseInstallationIdProvider
+    private lateinit var remoteDataSource: MemberRemoteDataSource
+    private lateinit var userInfoLocalDataSource: MemberIdentifierLocalDataSource
+    private val testDispatcher: TestDispatcher = StandardTestDispatcher()
+    private lateinit var repository: MemberRepository
+    private val errorResponseBody =
+        """{"message":"잘못된 요청입니다."}""".toResponseBody("application/json".toMediaType())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @BeforeEach
+    fun setUp() {
+        Dispatchers.setMain(testDispatcher)
+        idProvider = mockk<FirebaseInstallationIdProvider>()
+        remoteDataSource = mockk<MemberRemoteDataSource>()
+        userInfoLocalDataSource = mockk<MemberIdentifierLocalDataSource>()
+        repository =
+            MemberRepositoryImpl(
+                idProvider,
+                remoteDataSource,
+                userInfoLocalDataSource,
+                testDispatcher,
+            )
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @AfterEach
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
+    @DisplayName("회원 등록에 성공하면 Success를 반환한다")
+    @Test
+    fun registerMemberSuccessReturnsSuccess() =
+        runTest(testDispatcher) {
+            // given
+            val request = MemberRegisterRequest("ssaid", "token")
+            coEvery { idProvider.getInstallationId() } returns Result.success("ssaid")
+            coEvery { remoteDataSource.registerMember(request) } returns Result.success(1)
+            coEvery { userInfoLocalDataSource.saveMemberId(1) } returns Result.success(Unit)
+
+            // when
+            val result = repository.registerMember("token")
+
+            // then
+            result.shouldBeSuccess()
+
+            // verify
+            coVerify(exactly = 1) { remoteDataSource.registerMember(request) }
+        }
+
+    @DisplayName("회원 등록에 실패하면 Failure를 반환한다")
+    @Test
+    fun registerMemberFailsReturnsFailure() =
+        runTest(testDispatcher) {
+            // given
+            val request = MemberRegisterRequest("ssaid", "token")
+            val exception = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery { idProvider.getInstallationId() } returns Result.success("ssaid")
+            coEvery { remoteDataSource.registerMember(request) } returns Result.failure(exception)
+
+            // when
+            val result = repository.registerMember("token")
+
+            // then
+            result.shouldBeFailure { it shouldBe exception }
+
+            // verify
+            coVerify(exactly = 1) { remoteDataSource.registerMember(request) }
+        }
+
+    @DisplayName("닉네임 갱신에 성공하면 Success를 반환한다")
+    @Test
+    fun saveMemberNicknameSuccess() =
+        runTest(testDispatcher) {
+            // given
+            val newNickname = Nickname("nickname")
+            val request = MemberNicknameSaveRequest("nickname")
+            coEvery { remoteDataSource.saveMemberNickname(request) } returns Result.success(Unit)
+
+            // when
+            val result = repository.saveMemberNickname(newNickname)
+
+            // then
+            result.shouldBeSuccess()
+
+            // verify
+            coVerify(exactly = 1) { remoteDataSource.saveMemberNickname(request) }
+        }
+
+    @DisplayName("닉네임 갱신에 실패하면 Failure를 반환한다")
+    @Test
+    fun saveMemberNicknameFailsReturnsFailure() =
+        runTest(testDispatcher) {
+            // given
+            val newNickname = Nickname("nickname")
+            val request = MemberNicknameSaveRequest("nickname")
+            val httpException = HttpException(Response.error<Unit>(400, errorResponseBody))
+            coEvery { remoteDataSource.saveMemberNickname(request) } returns
+                Result.failure(httpException)
+
+            // when
+            val result = repository.saveMemberNickname(newNickname)
+
+            // then
+            result.shouldBeFailure { it shouldBe httpException }
+
+            // verify
+            coVerify(exactly = 1) { remoteDataSource.saveMemberNickname(request) }
+        }
+
+    @DisplayName("회원가입된 상태에서 회원가입 여부 확인에 성공하면 Success를 반환한다")
+    @Test
+    fun checkRegisteredMemberSuccess() =
+        runTest(testDispatcher) {
+            // given
+            val response = MemberRegisterCheckResponse(true, 1, "test")
+            coEvery { remoteDataSource.checkRegisteredMember() } returns Result.success(response)
+            coEvery { userInfoLocalDataSource.saveMemberId(1) } returns Result.success(Unit)
+
+            // when
+            val result = repository.checkRegisteredMember()
+
+            // then
+            assertSoftly(result) {
+                shouldBeSuccess()
+                getOrThrow().isRegistered shouldBe true
+                getOrThrow().id shouldBe 1
+                getOrThrow().name shouldBe "test"
+            }
+
+            // verify
+            coVerify(exactly = 1) { remoteDataSource.checkRegisteredMember() }
+        }
+
+    @DisplayName("회원가입이 되지 않은 상태에서 회원가입 여부 확인에 성공하면 Success를 반환한다")
+    @Test
+    fun checkRegisteredMemberFailsReturnsFailure() =
+        runTest(testDispatcher) {
+            // given
+            val response = MemberRegisterCheckResponse(false, 1, "test")
+            coEvery { remoteDataSource.checkRegisteredMember() } returns Result.success(response)
+
+            // when
+            val result = repository.checkRegisteredMember()
+
+            // then
+            assertSoftly(result) {
+                shouldBeSuccess()
+                getOrThrow().isRegistered shouldBe false
+                getOrThrow().id shouldBe 1
+                getOrThrow().name shouldBe "test"
+            }
+
+            // verify
+            coVerify(exactly = 1) { remoteDataSource.checkRegisteredMember() }
+        }
+}
