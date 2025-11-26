@@ -34,7 +34,7 @@ import com.bottari.presentation.compose.common.component.ChecklistToolTip
 import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.modifier.noRippleClickable
 import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.personal.ChecklistProgressHeader
+import com.bottari.presentation.compose.personal.component.ChecklistProgressHeader
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
 

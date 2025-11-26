@@ -1,9 +1,9 @@
 package com.bottari.presentation.view.template.detail
 
 import androidx.lifecycle.SavedStateHandle
-import com.bottari.domain.usecase.bookmark.FindBookmarkUseCase
-import com.bottari.domain.usecase.template.FetchBottariTemplateDetailUseCase
-import com.bottari.domain.usecase.template.TakeBottariTemplateDetailUseCase
+import com.bottari.core.domain.usecase.bookmark.FindBookmarkUseCase
+import com.bottari.core.domain.usecase.template.FetchBottariTemplateDetailUseCase
+import com.bottari.core.domain.usecase.template.TakeBottariTemplateDetailUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel

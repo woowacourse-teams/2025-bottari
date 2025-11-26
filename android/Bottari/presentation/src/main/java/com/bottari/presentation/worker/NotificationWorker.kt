@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.bottari.domain.model.notification.Notification
-import com.bottari.domain.usecase.notification.FetchNotificationsUseCase
+import com.bottari.core.domain.model.notification.Notification
+import com.bottari.core.domain.usecase.notification.FetchNotificationsUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.util.AlarmScheduler
 import dagger.assisted.Assisted

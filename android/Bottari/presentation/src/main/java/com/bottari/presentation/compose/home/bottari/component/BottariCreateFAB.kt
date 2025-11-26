@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.bottari
+package com.bottari.presentation.compose.home.bottari.component
 
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes

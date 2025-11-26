@@ -2,12 +2,12 @@ package com.bottari.presentation.compose.personal
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bottari.domain.model.tooltip.TooltipType
-import com.bottari.domain.usecase.item.FetchItemsUseCase
-import com.bottari.domain.usecase.item.ResetItemsCheckStateUseCase
-import com.bottari.domain.usecase.item.UpdateItemCheckStateUseCase
-import com.bottari.domain.usecase.tooltip.FetchTooltipStatusUseCase
-import com.bottari.domain.usecase.tooltip.UpdateTooltipStatusUseCase
+import com.bottari.core.domain.model.tooltip.TooltipType
+import com.bottari.core.domain.usecase.item.FetchItemsUseCase
+import com.bottari.core.domain.usecase.item.ResetItemsCheckStateUseCase
+import com.bottari.core.domain.usecase.item.UpdateItemCheckStateUseCase
+import com.bottari.core.domain.usecase.tooltip.FetchTooltipStatusUseCase
+import com.bottari.core.domain.usecase.tooltip.UpdateTooltipStatusUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel

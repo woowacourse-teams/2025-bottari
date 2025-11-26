@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.bottari
+package com.bottari.presentation.compose.home.bottari.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

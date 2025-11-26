@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.personal
+package com.bottari.presentation.compose.personal.component
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar

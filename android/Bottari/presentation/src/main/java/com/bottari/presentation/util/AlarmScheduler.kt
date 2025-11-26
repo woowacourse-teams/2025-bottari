@@ -4,8 +4,8 @@ import android.app.AlarmManager
 import android.app.AlarmManager.AlarmClockInfo
 import android.app.PendingIntent
 import android.content.Context
-import com.bottari.domain.model.alarm.AlarmType
-import com.bottari.domain.model.notification.Notification
+import com.bottari.core.domain.model.alarm.AlarmType
+import com.bottari.core.domain.model.notification.Notification
 import com.bottari.presentation.compose.edit.personal.ComposePersonalBottariEditActivity
 import com.bottari.presentation.receiver.AlarmReceiver
 import dagger.hilt.android.qualifiers.ApplicationContext

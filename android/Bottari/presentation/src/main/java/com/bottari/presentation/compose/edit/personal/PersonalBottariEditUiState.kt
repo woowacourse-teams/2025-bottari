@@ -1,6 +1,6 @@
 package com.bottari.presentation.compose.edit.personal
 
-import com.bottari.domain.model.bottari.personal.PersonalBottari
+import com.bottari.core.domain.model.bottari.personal.PersonalBottari
 import com.bottari.presentation.model.alarm.AlarmUiModel
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 
@@ -14,8 +14,6 @@ data class PersonalBottariEditUiState(
     val isAlarmActive: Boolean = false,
 ) {
     val isEmpty: Boolean = isFetched && items.isEmpty()
-    val isShowAlarm: Boolean = isAlarmActive && alarm != null
-    val isShowAlarmCreate: Boolean = isAlarmActive && alarm == null
 
     companion object {
         fun from(bottari: PersonalBottari): PersonalBottariEditUiState =

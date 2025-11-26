@@ -1,6 +1,6 @@
 package com.bottari.presentation.model.bottari
 
-import com.bottari.domain.model.bottari.item.ChecklistItem
+import com.bottari.core.domain.model.bottari.item.ChecklistItem
 import com.bottari.presentation.model.bottari.team.ChecklistItemUiModel
 
 data class PersonalChecklistItemUiModel(

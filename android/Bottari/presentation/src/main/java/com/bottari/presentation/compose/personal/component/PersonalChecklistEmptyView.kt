@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.personal
+package com.bottari.presentation.compose.personal.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

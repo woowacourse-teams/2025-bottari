@@ -1,7 +1,7 @@
 package com.bottari.presentation.model.bottari.personal
 
-import com.bottari.domain.model.bottari.BottariState
-import com.bottari.domain.model.bottari.personal.PersonalBottari
+import com.bottari.core.domain.model.bottari.BottariState
+import com.bottari.core.domain.model.bottari.personal.PersonalBottari
 import com.bottari.presentation.model.alarm.AlarmUiModel
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 

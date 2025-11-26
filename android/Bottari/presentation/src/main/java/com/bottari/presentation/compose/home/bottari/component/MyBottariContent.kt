@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.bottari
+package com.bottari.presentation.compose.home.bottari.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -23,6 +23,7 @@ import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.compose.home.bottari.MyBottariUiState
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel

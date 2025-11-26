@@ -16,6 +16,9 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.presentation.R
+import com.bottari.presentation.compose.home.bottari.component.MyBottariContent
+import com.bottari.presentation.compose.home.bottari.component.MyBottariDialogType
+import com.bottari.presentation.compose.home.bottari.component.MyBottariDialogs
 import com.bottari.presentation.util.DeeplinkHelper
 
 @Composable

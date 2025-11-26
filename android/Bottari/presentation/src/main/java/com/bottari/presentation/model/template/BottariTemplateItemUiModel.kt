@@ -1,6 +1,6 @@
 package com.bottari.presentation.model.template
 
-import com.bottari.domain.model.bottari.template.BottariTemplateItem
+import com.bottari.core.domain.model.bottari.template.BottariTemplateItem
 
 data class BottariTemplateItemUiModel(
     val id: Long,

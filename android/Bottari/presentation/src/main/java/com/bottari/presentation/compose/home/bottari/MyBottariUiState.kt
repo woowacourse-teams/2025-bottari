@@ -1,5 +1,6 @@
 package com.bottari.presentation.compose.home.bottari
 
+import com.bottari.presentation.compose.home.bottari.component.MyBottariDialogType
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel

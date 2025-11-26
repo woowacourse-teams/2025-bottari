@@ -5,7 +5,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
-import com.bottari.di.ApplicationScope
+import com.bottari.core.data.di.ApplicationScope
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose

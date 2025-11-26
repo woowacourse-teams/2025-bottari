@@ -1,10 +1,10 @@
 package com.bottari.presentation.compose.edit.personal.alarm
 
 import androidx.lifecycle.viewModelScope
-import com.bottari.domain.model.alarm.Alarm
-import com.bottari.domain.model.notification.Notification
-import com.bottari.domain.usecase.alarm.FindAlarmUseCase
-import com.bottari.domain.usecase.alarm.SaveAlarmUseCase
+import com.bottari.core.domain.usecase.alarm.FindAlarmUseCase
+import com.bottari.core.domain.usecase.alarm.SaveAlarmUseCase
+import com.bottari.core.domain.model.alarm.Alarm
+import com.bottari.core.domain.model.notification.Notification
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel

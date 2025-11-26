@@ -1,6 +1,6 @@
 package com.bottari.presentation.model.template
 
-import com.bottari.domain.model.bottari.template.BookmarkTemplate
+import com.bottari.core.domain.model.bottari.template.BookmarkTemplate
 
 data class BookmarkedTemplateUiModel(
     val id: Long,

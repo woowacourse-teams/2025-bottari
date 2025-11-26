@@ -1,16 +1,16 @@
 package com.bottari.presentation.compose.home.template.main
 
 import androidx.lifecycle.viewModelScope
-import com.bottari.domain.model.bottari.template.BookmarkTemplate
-import com.bottari.domain.model.bottari.template.BottariTemplate
-import com.bottari.domain.model.bottari.template.PopularHashtag
-import com.bottari.domain.model.common.Pageable
-import com.bottari.domain.usecase.bookmark.AddBookmarkUseCase
-import com.bottari.domain.usecase.bookmark.DeleteBookmarkUseCase
-import com.bottari.domain.usecase.bookmark.ObserveAllBookmarksUseCase
-import com.bottari.domain.usecase.hashtag.FetchPopularHashtagsUseCase
-import com.bottari.domain.usecase.template.SearchTemplatesByHashtagUseCase
-import com.bottari.domain.usecase.template.SearchTemplatesByTitleUseCase
+import com.bottari.core.domain.model.bottari.template.BookmarkTemplate
+import com.bottari.core.domain.model.bottari.template.BottariTemplate
+import com.bottari.core.domain.model.bottari.template.PopularHashtag
+import com.bottari.core.domain.model.common.Pageable
+import com.bottari.core.domain.usecase.bookmark.AddBookmarkUseCase
+import com.bottari.core.domain.usecase.bookmark.DeleteBookmarkUseCase
+import com.bottari.core.domain.usecase.bookmark.ObserveAllBookmarksUseCase
+import com.bottari.core.domain.usecase.hashtag.FetchPopularHashtagsUseCase
+import com.bottari.core.domain.usecase.template.SearchTemplatesByHashtagUseCase
+import com.bottari.core.domain.usecase.template.SearchTemplatesByTitleUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel

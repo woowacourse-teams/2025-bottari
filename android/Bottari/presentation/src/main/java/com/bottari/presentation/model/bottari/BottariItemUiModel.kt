@@ -1,8 +1,8 @@
 package com.bottari.presentation.model.bottari
 
 import android.os.Parcelable
-import com.bottari.domain.model.bottari.item.BottariItem
-import com.bottari.domain.model.bottari.item.ChecklistItem
+import com.bottari.core.domain.model.bottari.item.BottariItem
+import com.bottari.core.domain.model.bottari.item.ChecklistItem
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import kotlinx.parcelize.Parcelize
 

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.component.ChecklistToolTip
 import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.personal.ChecklistProgressHeader
+import com.bottari.presentation.compose.personal.component.ChecklistProgressHeader
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 
 @Composable

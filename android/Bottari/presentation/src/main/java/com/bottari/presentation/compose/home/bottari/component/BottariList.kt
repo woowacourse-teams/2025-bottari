@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.bottari
+package com.bottari.presentation.compose.home.bottari.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

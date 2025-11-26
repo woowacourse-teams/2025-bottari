@@ -2,8 +2,8 @@ package com.bottari.presentation.model.alarm
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
-import com.bottari.domain.model.alarm.Alarm
-import com.bottari.domain.model.alarm.AlarmType
+import com.bottari.core.domain.model.alarm.Alarm
+import com.bottari.core.domain.model.alarm.AlarmType
 import kotlinx.parcelize.Parcelize
 import java.time.DayOfWeek
 import java.time.LocalDate

@@ -1,9 +1,9 @@
 package com.bottari.presentation.compose.template
 
-import com.bottari.domain.model.bottari.template.HashtagName
-import com.bottari.domain.model.bottari.template.HashtagNameError
-import com.bottari.domain.usecase.bottari.FetchBottariesUseCase
-import com.bottari.domain.usecase.template.CreateBottariTemplateUseCase
+import com.bottari.core.domain.model.bottari.template.HashtagName
+import com.bottari.core.domain.model.bottari.template.HashtagNameError
+import com.bottari.core.domain.usecase.bottari.FetchBottariesUseCase
+import com.bottari.core.domain.usecase.template.CreateBottariTemplateUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.personal.BottariDetailUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,6 +1,6 @@
 package com.bottari.presentation.model.template
 
-import com.bottari.domain.model.bottari.personal.PersonalBottari
+import com.bottari.core.domain.model.bottari.personal.PersonalBottari
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 
 data class SelectableBottariUiModel(

@@ -1,7 +1,7 @@
 package com.bottari.presentation.compose.home.more
 
-import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
-import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
+import com.bottari.core.domain.usecase.member.CheckRegisteredMemberUseCase
+import com.bottari.core.domain.usecase.member.SaveMemberNicknameUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel
