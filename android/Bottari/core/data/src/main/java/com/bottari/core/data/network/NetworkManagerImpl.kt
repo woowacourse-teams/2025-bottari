@@ -1,4 +1,4 @@
-package com.bottari.presentation.util
+package com.bottari.core.data.network
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import com.bottari.core.data.di.ApplicationScope
+import com.bottari.core.domain.network.NetworkManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
@@ -16,14 +17,12 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @SuppressLint("MissingPermission")
-@Singleton
-class NetworkManager @Inject constructor(
+class NetworkManagerImpl @Inject constructor(
     @ApplicationContext context: Context,
     @ApplicationScope private val appScope: CoroutineScope,
-) {
+) : NetworkManager {
     private val connectivityManager = context.getSystemService(ConnectivityManager::class.java)
 
     private val networkState: Flow<Boolean> =
@@ -54,7 +53,7 @@ class NetworkManager @Inject constructor(
             awaitClose { connectivityManager.unregisterNetworkCallback(networkCallback) }
         }.distinctUntilChanged()
 
-    val isConnected: StateFlow<Boolean> =
+    override val isConnected: StateFlow<Boolean> =
         networkState.stateIn(
             scope = appScope,
             started = SharingStarted.Eagerly,
