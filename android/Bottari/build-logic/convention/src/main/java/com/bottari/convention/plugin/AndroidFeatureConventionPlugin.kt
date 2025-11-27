@@ -14,6 +14,7 @@ internal class AndroidFeatureConventionPlugin : Plugin<Project> {
                 "bottari.android.library.compose",
                 "bottari.android.hilt",
             )
+            pluginManager.apply("kotlin-parcelize")
 
             dependencies {
                 implementation(project(":core:domain"))

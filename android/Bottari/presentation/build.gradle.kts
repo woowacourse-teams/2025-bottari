@@ -2,7 +2,6 @@ import com.bottari.convention.external.getPropertyOrThrow
 
 plugins {
     alias(libs.plugins.bottari.android.feature)
-    id("kotlin-parcelize")
 }
 
 android {
@@ -73,9 +72,4 @@ dependencies {
 
     api(platform(libs.firebase.bom))
     api(libs.firebase.messaging)
-
-    testImplementation(libs.bundles.test)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 }
