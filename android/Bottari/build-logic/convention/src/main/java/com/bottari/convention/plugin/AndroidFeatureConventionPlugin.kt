@@ -16,8 +16,7 @@ internal class AndroidFeatureConventionPlugin : Plugin<Project> {
             )
 
             dependencies {
-                implementation(project(":domain"))
-                implementation(project(":di"))
+                implementation(project(":core:domain"))
                 implementation(project(":logger"))
             }
         }

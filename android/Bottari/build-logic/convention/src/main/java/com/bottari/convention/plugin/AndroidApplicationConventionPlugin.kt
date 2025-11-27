@@ -12,6 +12,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.project
 
 internal class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -35,8 +36,7 @@ internal class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                implementation(project(":domain"))
-                implementation(project(":di"))
+                implementation(project(":core:data"))
                 implementation(project(":presentation"))
                 implementation(project(":logger"))
             }
