@@ -24,7 +24,7 @@ import com.bottari.presentation.compose.common.component.BottariTabBar
 import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
-import com.bottari.presentation.compose.personal.ChecklistTopBar
+import com.bottari.presentation.compose.personal.component.ChecklistTopBar
 import com.bottari.presentation.compose.personal.swipe.SwipeScreen
 import com.bottari.presentation.compose.team.checklist.ComposeTeamChecklistUiEvent
 import com.bottari.presentation.compose.team.checklist.ComposeTeamChecklistViewModel

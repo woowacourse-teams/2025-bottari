@@ -1,0 +1,78 @@
+package com.bottari.presentation.compose.home.bottari.component
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ripple
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.presentation.model.bottari.MyBottariUiModel
+import com.bottari.presentation.model.bottari.personal.BottariUiModel
+
+@Composable
+fun BottariList(
+    listState: LazyListState,
+    onBottariClick: (MyBottariUiModel) -> Unit,
+    onDeletePersonalBottari: (Long) -> Unit,
+    onDeleteTeamBottari: (Long) -> Unit,
+    onEditPersonalBottari: (Long) -> Unit,
+    onEditTeamBottari: (Long) -> Unit,
+    bottaries: List<MyBottariUiModel>,
+    modifier: Modifier = Modifier,
+) {
+    var openedMenuBottari by remember { mutableStateOf<Any?>(null) }
+
+    LazyColumn(
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(horizontal = BottariTheme.spacing.spaceMedium),
+        state = listState,
+        contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceSmall),
+        verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
+    ) {
+        items(
+            items = bottaries,
+            key = { bottari -> bottari.id to bottari::class.simpleName },
+        ) { bottari ->
+            BottariItem(
+                bottari = bottari,
+                isMenuShown = (openedMenuBottari == bottari),
+                onShowMenu = { openedMenuBottari = bottari },
+                onCloseMenu = { openedMenuBottari = null },
+                onBottariDelete = onBottariDelete@{
+                    if (bottari is BottariUiModel) {
+                        onDeletePersonalBottari(bottari.id)
+                        return@onBottariDelete
+                    }
+                    onDeleteTeamBottari(bottari.id)
+                },
+                onBottariEdit = onBottariEdit@{
+                    if (bottari is BottariUiModel) {
+                        onEditPersonalBottari(bottari.id)
+                        return@onBottariEdit
+                    }
+                    onEditTeamBottari(bottari.id)
+                },
+                modifier =
+                    Modifier
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = ripple(color = BottariTheme.colors.primary),
+                            onClick = { onBottariClick(bottari) },
+                        ),
+            )
+        }
+    }
+}

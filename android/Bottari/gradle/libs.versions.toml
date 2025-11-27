@@ -109,6 +109,7 @@ compose-swipeable-cards = { module = "com.github.smartword-app:compose-swipeable
 # --- Hilt ---
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-core = { group = "comgoogle.dagger", name = "hilt-core", version.ref = "hilt" }
 androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "androidx-hilt" }
 androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "androidx-hilt" }
 javax-inject = { module = "javax.inject:javax.inject", version.ref = "javax" }

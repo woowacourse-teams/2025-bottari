@@ -1,7 +1,7 @@
 package com.bottari.presentation.model.alarm
 
 import android.os.Parcelable
-import com.bottari.domain.model.notification.Notification
+import com.bottari.core.domain.model.notification.Notification
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

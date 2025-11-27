@@ -2,9 +2,9 @@ package com.bottari.presentation.model.bottari.team.member
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
-import com.bottari.domain.model.team.member.TeamMember
-import com.bottari.domain.model.team.member.TeamMemberStatus
-import com.bottari.domain.model.team.member.TeamStatus
+import com.bottari.core.domain.model.team.member.TeamMember
+import com.bottari.core.domain.model.team.member.TeamMemberStatus
+import com.bottari.core.domain.model.team.member.TeamStatus
 import kotlinx.parcelize.Parcelize
 
 @Immutable

@@ -24,8 +24,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "Bottari"
 include(":app")
-include(":di")
-include(":domain")
 include(":presentation")
-include(":data")
 include(":logger")
+include(":core:data")
+include(":core:network")
+include(":core:local")
+include(":core:domain")

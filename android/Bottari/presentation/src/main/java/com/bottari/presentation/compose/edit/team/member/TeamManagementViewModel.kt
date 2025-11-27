@@ -1,12 +1,12 @@
 package com.bottari.presentation.compose.edit.team.member
 
 import androidx.lifecycle.SavedStateHandle
-import com.bottari.domain.model.event.EventData
-import com.bottari.domain.model.event.EventState
-import com.bottari.domain.model.team.member.TeamStatus
-import com.bottari.domain.usecase.event.ConnectTeamEventUseCase
-import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
-import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
+import com.bottari.core.domain.model.event.EventData
+import com.bottari.core.domain.model.event.EventState
+import com.bottari.core.domain.model.team.member.TeamStatus
+import com.bottari.core.domain.usecase.event.ConnectTeamEventUseCase
+import com.bottari.core.domain.usecase.event.DisconnectTeamEventUseCase
+import com.bottari.core.domain.usecase.team.FetchTeamMembersUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel

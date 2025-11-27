@@ -1,7 +1,7 @@
 package com.bottari.presentation.compose.edit.personal.rename
 
 import androidx.lifecycle.SavedStateHandle
-import com.bottari.domain.usecase.bottari.SaveBottariTitleUseCase
+import com.bottari.core.domain.usecase.bottari.SaveBottariTitleUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel

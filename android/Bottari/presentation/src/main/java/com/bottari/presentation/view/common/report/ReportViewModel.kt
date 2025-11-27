@@ -1,7 +1,7 @@
 package com.bottari.presentation.view.common.report
 
 import androidx.lifecycle.SavedStateHandle
-import com.bottari.domain.usecase.report.ReportTemplateUseCase
+import com.bottari.core.domain.usecase.report.ReportTemplateUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.BaseViewModel

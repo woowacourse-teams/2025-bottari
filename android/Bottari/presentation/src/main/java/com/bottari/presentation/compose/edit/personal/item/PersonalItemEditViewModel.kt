@@ -2,9 +2,9 @@ package com.bottari.presentation.compose.edit.personal.item
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bottari.domain.usecase.item.DeleteItemUseCase
-import com.bottari.domain.usecase.item.FetchItemsUseCase
-import com.bottari.domain.usecase.item.SaveItemUseCase
+import com.bottari.core.domain.usecase.item.DeleteItemUseCase
+import com.bottari.core.domain.usecase.item.FetchItemsUseCase
+import com.bottari.core.domain.usecase.item.SaveItemUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.base.FlowBaseViewModel

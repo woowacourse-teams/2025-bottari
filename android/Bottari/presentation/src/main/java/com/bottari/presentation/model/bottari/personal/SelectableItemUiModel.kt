@@ -2,7 +2,7 @@ package com.bottari.presentation.model.bottari.personal
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
-import com.bottari.domain.model.bottari.item.BottariItem
+import com.bottari.core.domain.model.bottari.item.BottariItem
 import kotlinx.parcelize.Parcelize
 
 @Immutable

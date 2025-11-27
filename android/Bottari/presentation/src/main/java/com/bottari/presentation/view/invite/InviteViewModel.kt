@@ -1,6 +1,6 @@
 package com.bottari.presentation.view.invite
 
-import com.bottari.domain.usecase.team.JoinTeamBottariUseCase
+import com.bottari.core.domain.usecase.team.JoinTeamBottariUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

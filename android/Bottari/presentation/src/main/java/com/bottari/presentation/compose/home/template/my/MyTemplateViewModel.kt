@@ -1,7 +1,7 @@
 package com.bottari.presentation.compose.home.template.my
 
-import com.bottari.domain.usecase.template.DeleteMyBottariTemplateUseCase
-import com.bottari.domain.usecase.template.FetchMyBottariTemplatesUseCase
+import com.bottari.core.domain.usecase.template.DeleteMyBottariTemplateUseCase
+import com.bottari.core.domain.usecase.template.FetchMyBottariTemplatesUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel

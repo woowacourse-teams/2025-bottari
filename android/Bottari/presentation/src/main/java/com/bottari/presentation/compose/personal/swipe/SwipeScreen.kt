@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.personal.ChecklistProgressHeader
+import com.bottari.presentation.compose.personal.component.ChecklistProgressHeader
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 import com.bottari.presentation.model.bottari.team.ChecklistItemUiModel
 import com.spartapps.swipeablecards.state.SwipeableCardsState

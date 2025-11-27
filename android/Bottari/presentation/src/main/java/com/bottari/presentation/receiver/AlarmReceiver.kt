@@ -2,7 +2,7 @@ package com.bottari.presentation.receiver
 
 import android.content.Context
 import android.content.Intent
-import com.bottari.domain.model.notification.Notification
+import com.bottari.core.domain.model.notification.Notification
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import com.bottari.presentation.common.extension.getParcelableCompat

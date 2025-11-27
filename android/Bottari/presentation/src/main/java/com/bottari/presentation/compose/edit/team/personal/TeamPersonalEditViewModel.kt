@@ -1,10 +1,10 @@
 package com.bottari.presentation.compose.edit.team.personal
 
 import androidx.lifecycle.SavedStateHandle
-import com.bottari.domain.model.team.bottari.item.TeamBottariItemType
-import com.bottari.domain.usecase.team.CreateTeamPersonalItemUseCase
-import com.bottari.domain.usecase.team.DeleteTeamBottariItemUseCase
-import com.bottari.domain.usecase.team.FetchTeamPersonalItemsUseCase
+import com.bottari.core.domain.model.team.bottari.item.TeamBottariItemType
+import com.bottari.core.domain.usecase.team.CreateTeamPersonalItemUseCase
+import com.bottari.core.domain.usecase.team.DeleteTeamBottariItemUseCase
+import com.bottari.core.domain.usecase.team.FetchTeamPersonalItemsUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.bottari.BottariItemUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,8 +1,8 @@
 package com.bottari.presentation.compose.home.template.bookmark
 
 import androidx.lifecycle.viewModelScope
-import com.bottari.domain.usecase.bookmark.DeleteBookmarkUseCase
-import com.bottari.domain.usecase.bookmark.ObserveAllBookmarksUseCase
+import com.bottari.core.domain.usecase.bookmark.DeleteBookmarkUseCase
+import com.bottari.core.domain.usecase.bookmark.ObserveAllBookmarksUseCase
 import com.bottari.presentation.common.base.FlowBaseViewModel
 import com.bottari.presentation.model.template.BookmarkedTemplateUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel

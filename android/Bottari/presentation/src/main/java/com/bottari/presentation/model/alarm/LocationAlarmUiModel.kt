@@ -1,7 +1,7 @@
 package com.bottari.presentation.model.alarm
 
 import android.os.Parcelable
-import com.bottari.domain.model.alarm.LocationAlarm
+import com.bottari.core.domain.model.alarm.LocationAlarm
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

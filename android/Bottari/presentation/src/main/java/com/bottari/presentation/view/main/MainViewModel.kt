@@ -1,15 +1,15 @@
 package com.bottari.presentation.view.main
 
-import com.bottari.domain.usecase.appConfig.CheckForceUpdateUseCase
-import com.bottari.domain.usecase.appConfig.GetPermissionFlagUseCase
-import com.bottari.domain.usecase.appConfig.SavePermissionFlagUseCase
-import com.bottari.domain.usecase.fcm.SaveFcmTokenUseCase
-import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
-import com.bottari.domain.usecase.member.RegisterMemberUseCase
+import com.bottari.core.domain.network.NetworkManager
+import com.bottari.core.domain.usecase.appConfig.CheckForceUpdateUseCase
+import com.bottari.core.domain.usecase.appConfig.GetPermissionFlagUseCase
+import com.bottari.core.domain.usecase.appConfig.SavePermissionFlagUseCase
+import com.bottari.core.domain.usecase.fcm.SaveFcmTokenUseCase
+import com.bottari.core.domain.usecase.member.CheckRegisteredMemberUseCase
+import com.bottari.core.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.BuildConfig
 import com.bottari.presentation.common.base.NetworkBaseViewModel
-import com.bottari.presentation.util.NetworkManager
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.tasks.await

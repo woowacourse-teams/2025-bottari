@@ -1,7 +1,7 @@
 package com.bottari.presentation.model.template
 
-import com.bottari.domain.model.bottari.template.BookmarkTemplate
-import com.bottari.domain.model.bottari.template.BottariTemplate
+import com.bottari.core.domain.model.bottari.template.BookmarkTemplate
+import com.bottari.core.domain.model.bottari.template.BottariTemplate
 
 data class BottariTemplateUiModel(
     val id: Long,

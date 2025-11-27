@@ -1,6 +1,6 @@
 package com.bottari.presentation.model.bottari.team
 
-import com.bottari.domain.model.team.bottari.TeamBottariProductStatus
+import com.bottari.core.domain.model.team.bottari.TeamBottariProductStatus
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.model.bottari.team.member.MemberCheckStatusUiModel
 import kotlin.math.roundToInt

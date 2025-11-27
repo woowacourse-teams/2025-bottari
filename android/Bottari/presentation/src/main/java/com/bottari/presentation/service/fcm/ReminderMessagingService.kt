@@ -1,7 +1,7 @@
 package com.bottari.presentation.service.fcm
 
 import android.content.Intent
-import com.bottari.domain.usecase.fcm.SaveFcmTokenUseCase
+import com.bottari.core.domain.usecase.fcm.SaveFcmTokenUseCase
 import com.bottari.logger.BottariLogger
 import com.bottari.presentation.util.NotificationHelper
 import com.google.firebase.messaging.Constants

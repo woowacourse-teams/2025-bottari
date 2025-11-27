@@ -1,7 +1,7 @@
 package com.bottari.presentation.model.template
 
-import com.bottari.domain.model.bottari.template.Hashtag
-import com.bottari.domain.model.bottari.template.PopularHashtag
+import com.bottari.core.domain.model.bottari.template.Hashtag
+import com.bottari.core.domain.model.bottari.template.PopularHashtag
 
 data class BottariTemplateHashtagUiModel(
     val id: Long,
