@@ -5,11 +5,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
-import com.bottari.fcm.FcmMessageConverter;
-import com.bottari.fcm.FcmMessageSender;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
+import com.bottari.push.PushManager;
+import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
@@ -27,15 +27,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({
         TeamBottariService.class,
         JpaAuditingConfig.class,
-        FcmMessageConverter.class
+        TeamBottariMessageConverter.class
 })
 class TeamBottariServiceTest {
 
@@ -46,7 +48,7 @@ class TeamBottariServiceTest {
     private EntityManager entityManager;
 
     @MockitoBean
-    private FcmMessageSender fcmMessageSender;
+    private PushManager pushManager;
 
     @Nested
     class GetAllBySsaid {
@@ -367,19 +369,19 @@ class TeamBottariServiceTest {
 
             // then
             final TeamPersonalItem actualMemberPersonalItem = (TeamPersonalItem) entityManager.createNativeQuery(
-                    """
-                     SELECT * 
-                     FROM team_personal_item
-                     WHERE id = :id
-                     """, TeamPersonalItem.class)
+                            """
+                                    SELECT * 
+                                    FROM team_personal_item
+                                    WHERE id = :id
+                                    """, TeamPersonalItem.class)
                     .setParameter("id", personalItem.getId())
                     .getSingleResult();
             final TeamPersonalItem actualOtherMemberPersonalItem = (TeamPersonalItem) entityManager.createNativeQuery(
-                    """
-                      SELECT * 
-                      FROM team_personal_item
-                      WHERE id = :id
-                      """, TeamPersonalItem.class)
+                            """
+                                    SELECT * 
+                                    FROM team_personal_item
+                                    WHERE id = :id
+                                    """, TeamPersonalItem.class)
                     .setParameter("id", otherPersonalItem.getId())
                     .getSingleResult();
 
@@ -419,11 +421,11 @@ class TeamBottariServiceTest {
 
             // then
             final TeamSharedItem actualMemberSharedItem = (TeamSharedItem) entityManager.createNativeQuery(
-                     """
-                     SELECT * 
-                     FROM team_shared_item
-                     WHERE id = :id
-                     """, TeamSharedItem.class)
+                            """
+                                    SELECT * 
+                                    FROM team_shared_item
+                                    WHERE id = :id
+                                    """, TeamSharedItem.class)
                     .setParameter("id", sharedItem.getId())
                     .getSingleResult();
             final TeamSharedItem actualOtherMemberSharedItem = (TeamSharedItem) entityManager.createNativeQuery(
@@ -471,11 +473,11 @@ class TeamBottariServiceTest {
 
             // then
             final TeamAssignedItem actualMemberAssignedItem = (TeamAssignedItem) entityManager.createNativeQuery(
-                   """
-                    SELECT * 
-                    FROM team_assigned_item
-                    WHERE id = :id
-                    """, TeamAssignedItem.class)
+                            """
+                                    SELECT * 
+                                    FROM team_assigned_item
+                                    WHERE id = :id
+                                    """, TeamAssignedItem.class)
                     .setParameter("id", assignedItem.getId())
                     .getSingleResult();
             final TeamAssignedItem actualOtherMemberAssignedItem = (TeamAssignedItem) entityManager.createNativeQuery(
@@ -527,19 +529,19 @@ class TeamBottariServiceTest {
 
             // then
             final TeamAssignedItemInfo actualAssignedItemInfo1 = (TeamAssignedItemInfo) entityManager.createNativeQuery(
-                    """
-                    SELECT * 
-                    FROM team_assigned_item_info
-                    WHERE id = :id
-                    """, TeamAssignedItemInfo.class)
+                            """
+                                    SELECT * 
+                                    FROM team_assigned_item_info
+                                    WHERE id = :id
+                                    """, TeamAssignedItemInfo.class)
                     .setParameter("id", teamAssignedItemInfo1.getId())
                     .getSingleResult();
             final TeamAssignedItemInfo actualAssignedItemInfo2 = (TeamAssignedItemInfo) entityManager.createNativeQuery(
-                    """
-                    SELECT * 
-                    FROM team_assigned_item_info
-                    WHERE id = :id
-                    """, TeamAssignedItemInfo.class)
+                            """
+                                    SELECT * 
+                                    FROM team_assigned_item_info
+                                    WHERE id = :id
+                                    """, TeamAssignedItemInfo.class)
                     .setParameter("id", teamAssignedItemInfo2.getId())
                     .getSingleResult();
 
@@ -631,11 +633,11 @@ class TeamBottariServiceTest {
 
             // then
             final TeamMember actualTeamMember1 = (TeamMember) entityManager.createNativeQuery(
-                    """
-                     SELECT * 
-                     FROM team_member
-                     WHERE id = :id
-                     """, TeamMember.class)
+                            """
+                                    SELECT * 
+                                    FROM team_member
+                                    WHERE id = :id
+                                    """, TeamMember.class)
                     .setParameter("id", teamMember1.getId())
                     .getSingleResult();
             final TeamMember actualTeamMember2 = (TeamMember) entityManager.createNativeQuery(
@@ -680,19 +682,19 @@ class TeamBottariServiceTest {
 
             // then
             final TeamSharedItemInfo actualTeamSharedItemInfo1 = (TeamSharedItemInfo) entityManager.createNativeQuery(
-                    """
-                     SELECT * 
-                     FROM team_shared_item_info
-                     WHERE id = :id
-                     """, TeamSharedItemInfo.class)
+                            """
+                                    SELECT * 
+                                    FROM team_shared_item_info
+                                    WHERE id = :id
+                                    """, TeamSharedItemInfo.class)
                     .setParameter("id", teamSharedItemInfo1.getId())
                     .getSingleResult();
             final TeamSharedItemInfo actualTeamSharedItemInfo2 = (TeamSharedItemInfo) entityManager.createNativeQuery(
-                   """
-                    SELECT * 
-                    FROM team_shared_item_info
-                    WHERE id = :id
-                    """, TeamSharedItemInfo.class)
+                            """
+                                    SELECT * 
+                                    FROM team_shared_item_info
+                                    WHERE id = :id
+                                    """, TeamSharedItemInfo.class)
                     .setParameter("id", teamSharedItemInfo2.getId())
                     .getSingleResult();
             assertThat(actualTeamSharedItemInfo1.getDeletedAt()).isNotNull();
@@ -731,11 +733,11 @@ class TeamBottariServiceTest {
 
             // then
             final TeamSharedItemInfo actualTeamSharedItemInfo = (TeamSharedItemInfo) entityManager.createNativeQuery(
-                    """
-                     SELECT * 
-                     FROM team_shared_item_info
-                     WHERE id = :id
-                     """, TeamSharedItemInfo.class)
+                            """
+                                    SELECT * 
+                                    FROM team_shared_item_info
+                                    WHERE id = :id
+                                    """, TeamSharedItemInfo.class)
                     .setParameter("id", teamSharedItemInfo.getId())
                     .getSingleResult();
             assertThat(actualTeamSharedItemInfo.getDeletedAt()).isNull();
@@ -761,11 +763,11 @@ class TeamBottariServiceTest {
 
             // then
             final TeamBottari actualTeamBottari = (TeamBottari) entityManager.createNativeQuery(
-                     """
-                     SELECT * 
-                     FROM team_bottari
-                     WHERE id = :id
-                     """, TeamBottari.class)
+                            """
+                                    SELECT * 
+                                    FROM team_bottari
+                                    WHERE id = :id
+                                    """, TeamBottari.class)
                     .setParameter("id", teamBottari.getId())
                     .getSingleResult();
             assertThat(actualTeamBottari.getDeletedAt()).isNotNull();
@@ -795,11 +797,11 @@ class TeamBottariServiceTest {
 
             // then
             final TeamBottari actualTeamBottari = (TeamBottari) entityManager.createNativeQuery(
-                    """
-                      SELECT * 
-                      FROM team_bottari
-                      WHERE id = :id
-                      """, TeamBottari.class)
+                            """
+                                    SELECT * 
+                                    FROM team_bottari
+                                    WHERE id = :id
+                                    """, TeamBottari.class)
                     .setParameter("id", teamBottari.getId())
                     .getSingleResult();
             assertThat(actualTeamBottari.getDeletedAt()).isNull();

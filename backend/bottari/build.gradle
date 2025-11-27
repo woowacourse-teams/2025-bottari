@@ -13,6 +13,14 @@ java {
     }
 }
 
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = false
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -25,6 +33,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
@@ -32,8 +41,20 @@ dependencies {
     implementation "ch.qos.logback:logback-classic:1.5.18"
     implementation 'com.google.firebase:firebase-admin:9.5.0'
     implementation 'io.github.vaneproject:badwordfiltering:1.0.0'
+    implementation('org.springframework.boot:spring-boot-starter-actuator') {
+        // Actuator가 자체적으로 Trace를 생성하는 것을 막기 위해
+        exclude group: 'io.micrometer', module: 'micrometer-tracing'
+        // Micrometer Tracing 관련 모듈을 명시적으로 제외합니다.
+        exclude group: 'io.micrometer', module: 'micrometer-tracing-bridge-brave'
+    }
+
+    implementation 'io.opentelemetry:opentelemetry-api:1.45.0'
+    implementation 'io.opentelemetry:opentelemetry-context:1.45.0'
+    implementation 'io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:2.9.0' // @WithSpan, @SpanAttribute
+    implementation 'io.micrometer:context-propagation:1.1.2'
+
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

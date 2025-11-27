@@ -1,3 +1,15 @@
+server:
+  tomcat:
+    threads:
+      max: ${TOMCAT_THREADS_MAX:200}
+      min-spare: ${TOMCAT_THREADS_MIN_SPARE:10}
+
+    max-connections: ${TOMCAT_MAX_CONNECTIONS:8192}
+    accept-count: ${TOMCAT_ACCEPT_COUNT:100}
+
+    connection-timeout: ${TOMCAT_CONNECTION_TIMEOUT:60s}
+    keep-alive-timeout: ${TOMCAT_KEEP_ALIVE_TIMEOUT:60s}
+
 spring:
   application:
     name: bottari
@@ -5,10 +17,33 @@ spring:
     hibernate:
       ddl-auto: create
     defer-datasource-initialization: true
-    open-in-view: true
+    open-in-view: false
+    database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Asia/Seoul
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    hikari:
+      maximum-pool-size: ${HIKARI_MAX_POOL_SIZE:10}
+      connection-timeout: ${HIKARI_CONNECTION_TIMEOUT:30000}   # ms
+      max-lifetime: ${HIKARI_MAX_LIFETIME:1800000}             # ms
+      minimum-idle: ${HIKARI_MIN_IDLE:10}
+
   sql:
     init:
       mode: always
+      data-locations: classpath:init.sql
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
 firebase:
   service:
     key-path: ${FIREBASE_SERVICE_ACCOUNT_JSON}

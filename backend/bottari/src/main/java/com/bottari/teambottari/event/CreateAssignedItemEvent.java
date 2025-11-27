@@ -12,5 +12,5 @@ public class CreateAssignedItemEvent extends CustomApplicationEvent {
     private final Long teamBottariId;
     private final Long infoId;
     private final String name;
-    private final List<Long> memberIds;
+    private final List<Long> itemIds;
 }

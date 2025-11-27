@@ -14,10 +14,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(ReportService.class)
 class ReportServiceTest {
 
@@ -40,9 +42,9 @@ class ReportServiceTest {
             final Member reporter = new Member("reporter_ssaid", "reporter");
             entityManager.persist(reporter);
 
-            final BottariTemplate bottariTemplateToReport = new BottariTemplate("title", owner);
+            final BottariTemplate bottariTemplateToReport = new BottariTemplate("title", "description", owner);
             entityManager.persist(bottariTemplateToReport);
-            final BottariTemplate AnotherBottariTemplate = new BottariTemplate("title", owner);
+            final BottariTemplate AnotherBottariTemplate = new BottariTemplate("title", "description", owner);
             entityManager.persist(AnotherBottariTemplate);
 
             final String reportReason = "reason";
@@ -77,7 +79,7 @@ class ReportServiceTest {
             final Member owner = new Member("ssaid", "name");
             entityManager.persist(owner);
 
-            final BottariTemplate bottariTemplate = new BottariTemplate("title", owner);
+            final BottariTemplate bottariTemplate = new BottariTemplate("title", "description", owner);
             entityManager.persist(bottariTemplate);
 
             final String invalidSSsaid = "invalid_ssaid";
@@ -117,7 +119,7 @@ class ReportServiceTest {
             final Member reporter = new Member("reporter_ssaid", "reporter");
             entityManager.persist(reporter);
 
-            final BottariTemplate bottariTemplate = new BottariTemplate("title", owner);
+            final BottariTemplate bottariTemplate = new BottariTemplate("title", "description", owner);
             entityManager.persist(bottariTemplate);
 
             final Report report = new Report(bottariTemplate, reporter, "reason");

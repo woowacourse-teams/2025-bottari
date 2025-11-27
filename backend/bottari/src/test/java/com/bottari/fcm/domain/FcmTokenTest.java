@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.bottari.fixture.FcmTokenFixture;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.member.domain.Member;
+import com.bottari.push.notification.fcm.domain.FcmToken;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

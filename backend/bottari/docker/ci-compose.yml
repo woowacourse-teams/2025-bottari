@@ -1,0 +1,31 @@
+services:
+  db:
+    container_name: bottari-mysql
+    image: ${TEST_DATABASE_IMAGE}
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ${TEST_DATABASE_NAME}
+      MYSQL_ROOT_PASSWORD: ${TEST_DATABASE_PASSWORD}
+    command: --ngram_token_size=${TEST_NGRAM_TOKEN_SIZE}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p${TEST_DATABASE_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 2s
+      retries: 36
+      start_period: 10s
+
+  redis:
+    container_name: bottari-redis
+    image: ${TEST_REDIS_IMAGE}
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_PASSWORD: ${TEST_REDIS_PASSWORD}
+    command: ["redis-server", "--requirepass", "${TEST_REDIS_PASSWORD}"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${TEST_REDIS_PASSWORD}", "ping"]
+      interval: 5s
+      timeout: 2s
+      retries: 36
+      start_period: 5s

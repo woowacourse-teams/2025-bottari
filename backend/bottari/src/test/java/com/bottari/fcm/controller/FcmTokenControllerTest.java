@@ -4,8 +4,9 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.bottari.fcm.dto.UpdateFcmRequest;
-import com.bottari.fcm.service.FcmTokenService;
+import com.bottari.push.notification.fcm.controller.FcmTokenController;
+import com.bottari.push.notification.fcm.dto.UpdateFcmRequest;
+import com.bottari.push.notification.fcm.service.FcmTokenService;
 import com.bottari.log.LogFormatter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;

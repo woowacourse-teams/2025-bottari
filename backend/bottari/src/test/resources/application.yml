@@ -1,8 +1,30 @@
 spring:
   application:
     name: bottari
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+    open-in-view: true
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Asia/Seoul
+        dialect: org.hibernate.dialect.MySQLDialect
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 2
+      minimum-idle: 0
   sql:
     init:
-      mode: never
-  profiles:
-    active: test
+      mode: always
+      schema-locations: classpath:schema.sql
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}

@@ -7,11 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.config.JpaAuditingConfig;
 import com.bottari.error.BusinessException;
-import com.bottari.fcm.FcmMessageConverter;
-import com.bottari.fcm.FcmMessageSender;
 import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
+import com.bottari.push.PushManager;
+import com.bottari.push.connection.ConnectionChannels;
+import com.bottari.push.notification.NotificationChannels;
+import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
@@ -40,17 +42,20 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({
         TeamItemFacade.class,
         TeamSharedItemService.class,
         TeamAssignedItemService.class,
         TeamPersonalItemService.class,
-        FcmMessageConverter.class,
+        TeamBottariMessageConverter.class,
+        PushManager.class,
         JpaAuditingConfig.class
 })
 public class TeamItemFacadeTest {
@@ -59,7 +64,10 @@ public class TeamItemFacadeTest {
     private TeamItemFacade teamItemFacade;
 
     @MockitoBean
-    private FcmMessageSender fcmMessageSender;
+    private NotificationChannels notificationChannels;
+
+    @MockitoBean
+    private ConnectionChannels connectionChannels;
 
     @Autowired
     private EntityManager entityManager;

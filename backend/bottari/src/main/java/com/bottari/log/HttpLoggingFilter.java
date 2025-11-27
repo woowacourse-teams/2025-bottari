@@ -47,7 +47,7 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(final HttpServletRequest request) {
-        return isSwaggerRequest(request) || isSseRequest(request);
+        return isSwaggerRequest(request) || isSseRequest(request) || isActuatorRequest(request);
     }
 
     private boolean isSwaggerRequest(final HttpServletRequest request) {
@@ -60,6 +60,12 @@ public class HttpLoggingFilter extends OncePerRequestFilter {
         final String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
 
         return acceptHeader != null && acceptHeader.contains(MediaType.TEXT_EVENT_STREAM_VALUE);
+    }
+
+    private boolean isActuatorRequest(final HttpServletRequest request) {
+        final String requestURI = request.getRequestURI();
+
+        return requestURI.startsWith("/actuator");
     }
 
     private void doLog(

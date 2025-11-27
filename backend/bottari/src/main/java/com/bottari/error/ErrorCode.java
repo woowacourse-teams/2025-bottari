@@ -51,11 +51,26 @@ public enum ErrorCode {
     BOTTARI_TEMPLATE_TITLE_BLANK(HttpStatus.BAD_REQUEST, "보따리 템플릿 제목은 공백일 수 없습니다."),
     BOTTARI_TEMPLATE_TITLE_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 템플릿 제목이 너무 깁니다. 최대 15자까지 입력 가능합니다."),
     BOTTARI_TEMPLATE_TITLE_OFFENSIVE(HttpStatus.BAD_REQUEST, "보따리 템플릿 제목에 비속어를 입력할 수 없습니다."),
+    BOTTARI_TEMPLATE_DESCRIPTION_NULL(HttpStatus.BAD_REQUEST, "보따리 템플릿 설명은 null일 수 없습니다."),
+    BOTTARI_TEMPLATE_DESCRIPTION_TOO_LONG(HttpStatus.BAD_REQUEST, "보따리 템플릿 설명이 너무 깁니다."),
+    BOTTARI_TEMPLATE_DESCRIPTION_OFFENSIVE(HttpStatus.BAD_REQUEST, "보따리 템플릿 설명에 비속어를 입력할 수 없습니다."),
     BOTTARI_TEMPLATE_INVALID_SORT_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 보따리 템플릿 정렬 타입입니다."),
     BOTTARI_TEMPLATE_ALREADY_TAKEN_RECENTLY(HttpStatus.CONFLICT, "최근에 해당 보따리 템플릿을 가져온 기록이 있습니다. 잠시 후 다시 시도해주세요."),
 
     // ===== BOTTARI_TEMPLATE_ITEM 관련 =====
     BOTTARI_TEMPLATE_ITEM_DUPLICATE_IN_REQUEST(HttpStatus.BAD_REQUEST, "요청에 중복된 보따리 템플릿 물품이 있습니다."),
+
+    // ===== HASHTAG 관련 =====
+    HASHTAG_NAME_BLANK(HttpStatus.BAD_REQUEST, "해시태그는 공백일 수 없습니다."),
+    HASHTAG_NAME_TOO_SHORT(HttpStatus.BAD_REQUEST, "해시태그 제목이 너무 짧습니다."),
+    HASHTAG_NAME_TOO_LONG(HttpStatus.BAD_REQUEST, "해시태그 제목이 너무 깁니다."),
+    HASHTAG_NAME_CONTAINS_WHITESPACE(HttpStatus.BAD_REQUEST, "해시태그에는 공백을 포함할 수 없습니다."),
+    HASHTAG_NAME_INVALID_CHARACTER(HttpStatus.BAD_REQUEST, "해시태그는 한글, 영문, 숫자, 언더스코어(_)만 사용할 수 있습니다."),
+    HASHTAG_LIMIT_TOO_LOW(HttpStatus.BAD_REQUEST, "인기 해시태그 조회 limit이 너무 적습니다."),
+    HASHTAG_LIMIT_TOO_HIGH(HttpStatus.BAD_REQUEST, "인기 해시태그 조회 limit이 너무 높습니다."),
+    HASHTAG_DUPLICATE_IN_REQUEST(HttpStatus.BAD_REQUEST, "요청에 중복된 해시태그가 있습니다."),
+    HASHTAG_TOO_MANY(HttpStatus.BAD_REQUEST, "해시태그가 너무 많습니다."),
+    HASHTAG_ID_MISSING(HttpStatus.BAD_REQUEST, "해시태그로 템플릿 검색시 해시태그 아이디는 필수입니다."),
 
     // ===== TEAM_BOTTARI 관련 =====
     TEAM_BOTTARI_NOT_FOUND(HttpStatus.NOT_FOUND, "팀 보따리를 찾을 수 없습니다."),
@@ -101,9 +116,14 @@ public enum ErrorCode {
     FCM_INVALID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰으로 인해 FCM 메시지 전송을 실패하였습니다."),
     FCM_MESSAGE_CONVERT_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 메시지 변환을 실패하였습니다."),
 
+    // ===== SSE CONNECTION 관련 =====
+    SSE_CONNECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결에 실패했습니다."),
+
     // ===== 기타 =====
     DATE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 날짜 형식입니다."),
-    NUMBER_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 숫자 형식입니다.");
+    NUMBER_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 숫자 형식입니다."),
+    INVALID_TOPIC_NAME(HttpStatus.INTERNAL_SERVER_ERROR, "올바르지 않은 토픽 이름입니다."),
+    ;
 
     private final HttpStatus status;
     private final String message;

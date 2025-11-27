@@ -4,9 +4,9 @@ import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.support.BadWordValidator;
+import com.bottari.support.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,16 +19,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @SQLDelete(sql = "UPDATE bottari_template SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class BottariTemplate {
+public class BottariTemplate extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,24 +33,26 @@ public class BottariTemplate {
 
     private String title;
 
+    private String description;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     private int takenCount;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
-
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     public BottariTemplate(
             final String title,
+            final String description,
             final Member member
     ) {
         validateTitle(title);
+        validateDescription(description);
         this.title = title;
+        this.description = description;
         this.member = member;
         this.takenCount = 0;
     }
@@ -71,6 +70,18 @@ public class BottariTemplate {
         }
         if (BadWordValidator.hasBadWord(title)) {
             throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_TITLE_OFFENSIVE);
+        }
+    }
+
+    private void validateDescription(final String description) {
+        if (description == null) {
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_DESCRIPTION_NULL);
+        }
+        if (description.length() > 30) {
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_DESCRIPTION_TOO_LONG, "최대 30자까지 입력 가능합니다.");
+        }
+        if (BadWordValidator.hasBadWord(description)) {
+            throw new BusinessException(ErrorCode.BOTTARI_TEMPLATE_DESCRIPTION_OFFENSIVE);
         }
     }
 }

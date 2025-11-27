@@ -2,12 +2,13 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.fcm.FcmMessageConverter;
-import com.bottari.fcm.FcmMessageSender;
-import com.bottari.fcm.dto.MessageType;
-import com.bottari.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
+import com.bottari.push.PushManager;
+import com.bottari.push.message.MessageEventType;
+import com.bottari.push.message.MessageResourceType;
+import com.bottari.push.message.PushMessage;
+import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.teambottari.domain.TeamAssignedItem;
 import com.bottari.teambottari.domain.TeamAssignedItemInfo;
 import com.bottari.teambottari.domain.TeamBottari;
@@ -37,6 +38,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TeamAssignedItemService {
 
@@ -45,8 +47,8 @@ public class TeamAssignedItemService {
     private final TeamMemberRepository teamMemberRepository;
     private final MemberRepository memberRepository;
 
-    private final FcmMessageSender fcmMessageSender;
-    private final FcmMessageConverter fcmMessageConverter;
+    private final PushManager pushManager;
+    private final TeamBottariMessageConverter teamBottariMessageConverter;
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -75,13 +77,11 @@ public class TeamAssignedItemService {
         final List<String> requestAssignedMemberNames = getRequestAssignedMemberNames(request.memberIds());
         final List<TeamMember> teamMembers = getAssignedTeamMembersByRequest(requestAssignedMemberNames, teamBottari);
         final TeamAssignedItemInfo savedTeamAssignedItemInfo = saveTeamAssignedItemInfo(request.name(), teamBottari);
-        saveAssignedItemToTeamMembers(savedTeamAssignedItemInfo, teamMembers);
-        applicationEventPublisher.publishEvent(new CreateAssignedItemEvent(
-                teamBottari.getId(),
-                savedTeamAssignedItemInfo.getId(),
-                savedTeamAssignedItemInfo.getName(),
-                request.memberIds()
-        ));
+        final List<TeamAssignedItem> savedTeamAssignedItems = saveAssignedItemToTeamMembers(
+                savedTeamAssignedItemInfo,
+                teamMembers
+        );
+        publishCreateEvent(savedTeamAssignedItemInfo, savedTeamAssignedItems);
 
         return savedTeamAssignedItemInfo.getId();
     }
@@ -109,11 +109,7 @@ public class TeamAssignedItemService {
         validateMemberInTeam(teamAssignedItemInfo.getTeamBottari().getId(), ssaid);
         teamAssignedItemRepository.deleteAllByInfo(teamAssignedItemInfo);
         teamAssignedItemInfoRepository.delete(teamAssignedItemInfo);
-        applicationEventPublisher.publishEvent(new DeleteAssignedItemEvent(
-                teamAssignedItemInfo.getTeamBottari().getId(),
-                id,
-                teamAssignedItemInfo.getName()
-        ));
+        publishDeleteEvent(id, teamAssignedItemInfo);
     }
 
     public List<TeamItemStatusResponse> getAllWithMemberStatusByTeamBottariId(final Long teamBottariId) {
@@ -250,14 +246,15 @@ public class TeamAssignedItemService {
         }
     }
 
-    private void saveAssignedItemToTeamMembers(
+    private List<TeamAssignedItem> saveAssignedItemToTeamMembers(
             final TeamAssignedItemInfo savedTeamAssignedItemInfo,
             final List<TeamMember> teamMembers
     ) {
         final List<TeamAssignedItem> teamAssignedItems = teamMembers.stream()
                 .map(member -> new TeamAssignedItem(savedTeamAssignedItemInfo, member))
                 .toList();
-        teamAssignedItemRepository.saveAll(teamAssignedItems);
+
+        return teamAssignedItemRepository.saveAll(teamAssignedItems);
     }
 
     private void publishCheckEvent(final TeamAssignedItem item) {
@@ -417,12 +414,20 @@ public class TeamAssignedItemService {
             final TeamAssignedItemInfo info,
             final List<Long> uncheckedMemberIds
     ) {
-        final SendMessageRequest sendMessageRequest = fcmMessageConverter.convert(
+        if (uncheckedMemberIds.isEmpty()) {
+            return;
+        }
+        final PushMessage pushMessage = teamBottariMessageConverter.convert(
+                MessageResourceType.ASSIGNED_ITEM_INFO,
+                MessageEventType.REMIND,
                 info.getTeamBottari(),
-                info,
-                MessageType.REMIND_BY_ITEM
+                info
         );
-        fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
+        pushManager.message(pushMessage)
+                .to(uncheckedMemberIds)
+                .multicast()
+                .viaNotification()
+                .send();
     }
 
     private void validateOwner(
@@ -441,5 +446,31 @@ public class TeamAssignedItemService {
         if (!teamMemberRepository.existsByTeamBottariIdAndMemberId(teamBottari.getId(), member.getId())) {
             throw new BusinessException(ErrorCode.MEMBER_NOT_IN_TEAM_BOTTARI);
         }
+    }
+
+    private void publishCreateEvent(
+            final TeamAssignedItemInfo savedTeamAssignedItemInfo,
+            final List<TeamAssignedItem> savedTeamAssignedItems
+    ) {
+        final List<Long> itemIds = savedTeamAssignedItems.stream()
+                .map(TeamAssignedItem::getId)
+                .toList();
+        applicationEventPublisher.publishEvent(new CreateAssignedItemEvent(
+                savedTeamAssignedItemInfo.getTeamBottari().getId(),
+                savedTeamAssignedItemInfo.getId(),
+                savedTeamAssignedItemInfo.getName(),
+                itemIds
+        ));
+    }
+
+    private void publishDeleteEvent(
+            final Long id,
+            final TeamAssignedItemInfo teamAssignedItemInfo
+    ) {
+        applicationEventPublisher.publishEvent(new DeleteAssignedItemEvent(
+                teamAssignedItemInfo.getTeamBottari().getId(),
+                id,
+                teamAssignedItemInfo.getName()
+        ));
     }
 }

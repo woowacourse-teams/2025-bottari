@@ -2,12 +2,13 @@ package com.bottari.teambottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.fcm.FcmMessageConverter;
-import com.bottari.fcm.FcmMessageSender;
-import com.bottari.fcm.dto.MessageType;
-import com.bottari.fcm.dto.SendMessageRequest;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
+import com.bottari.push.PushManager;
+import com.bottari.push.message.MessageEventType;
+import com.bottari.push.message.MessageResourceType;
+import com.bottari.push.message.PushMessage;
+import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
 import com.bottari.teambottari.domain.TeamBottari;
 import com.bottari.teambottari.domain.TeamMember;
 import com.bottari.teambottari.domain.TeamSharedItem;
@@ -32,11 +33,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TeamSharedItemService {
 
-    private final FcmMessageSender fcmMessageSender;
-    private final FcmMessageConverter fcmMessageConverter;
+    private final PushManager pushManager;
+    private final TeamBottariMessageConverter teamBottariMessageConverter;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final TeamSharedItemRepository teamSharedItemRepository;
     private final TeamSharedItemInfoRepository teamSharedItemInfoRepository;
@@ -62,8 +64,8 @@ public class TeamSharedItemService {
         validateDuplicateName(teamBottari.getId(), request.name());
         final TeamSharedItemInfo savedTeamSharedItemInfo = saveTeamSharedItemInfo(request.name(), teamBottari);
         final List<TeamMember> teamMembers = teamMemberRepository.findAllByTeamBottariId(teamBottari.getId());
-        saveSharedItemToTeamMembers(savedTeamSharedItemInfo, teamMembers);
-        publishCreateEvent(savedTeamSharedItemInfo);
+        final List<TeamSharedItem> savedItems = saveSharedItemToTeamMembers(savedTeamSharedItemInfo, teamMembers);
+        publishCreateEvent(savedTeamSharedItemInfo, savedItems);
 
         return savedTeamSharedItemInfo.getId();
     }
@@ -167,21 +169,29 @@ public class TeamSharedItemService {
         }
     }
 
-    private void saveSharedItemToTeamMembers(
+    private List<TeamSharedItem> saveSharedItemToTeamMembers(
             final TeamSharedItemInfo savedTeamSharedItemInfo,
             final List<TeamMember> teamMembers
     ) {
         final List<TeamSharedItem> teamSharedItems = teamMembers.stream()
                 .map(member -> new TeamSharedItem(savedTeamSharedItemInfo, member))
                 .toList();
-        teamSharedItemRepository.saveAll(teamSharedItems);
+
+        return teamSharedItemRepository.saveAll(teamSharedItems);
     }
 
-    private void publishCreateEvent(final TeamSharedItemInfo info) {
+    private void publishCreateEvent(
+            final TeamSharedItemInfo info,
+            final List<TeamSharedItem> items
+    ) {
+        final List<Long> itemIds = items.stream()
+                .map(TeamSharedItem::getId)
+                .toList();
         final CreateTeamSharedItemEvent event = new CreateTeamSharedItemEvent(
                 info.getTeamBottari().getId(),
                 info.getId(),
-                info.getName()
+                info.getName(),
+                itemIds
         );
         applicationEventPublisher.publishEvent(event);
     }
@@ -255,9 +265,17 @@ public class TeamSharedItemService {
             final TeamSharedItemInfo info,
             final List<Long> uncheckedMemberIds
     ) {
-        final SendMessageRequest sendMessageRequest = fcmMessageConverter.convert(info.getTeamBottari(), info,
-                MessageType.REMIND_BY_ITEM);
-        fcmMessageSender.sendMessageToMembers(uncheckedMemberIds, sendMessageRequest);
+        final PushMessage pushMessage = teamBottariMessageConverter.convert(
+                MessageResourceType.SHARED_ITEM_INFO,
+                MessageEventType.REMIND,
+                info.getTeamBottari(),
+                info
+        );
+        pushManager.message(pushMessage)
+                .to(uncheckedMemberIds)
+                .multicast()
+                .viaNotification()
+                .send();
     }
 
     private void validateOwner(

@@ -1,0 +1,39 @@
+package com.bottari.sse.sse;
+
+import static com.bottari.sse.error.ErrorCode.SSE_CONNECTION_FAILED;
+
+import com.bottari.sse.error.BusinessException;
+import java.io.IOException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+@RestController
+@RequiredArgsConstructor
+public class SseConnector implements SseConnectorApiDocs {
+
+    private final SseService sseService;
+
+    @GetMapping(path = "/connect/sse/{memberId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @Override
+    public SseEmitter connect(
+            @PathVariable final Long memberId
+    ) {
+        final long timeout = 60 * 60 * 1000L;
+        final SseEmitter sseEmitter = new SseEmitter(timeout);
+        sseService.register(memberId, sseEmitter);
+        try {
+            sseEmitter.send(
+                    SseEmitter.event().comment(":connected")
+            );
+        } catch (IOException | IllegalStateException e) {
+            sseEmitter.completeWithError(e);
+            throw new BusinessException(SSE_CONNECTION_FAILED);
+        }
+
+        return sseEmitter;
+    }
+}

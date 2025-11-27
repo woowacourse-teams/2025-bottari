@@ -2,7 +2,8 @@ package com.bottari.bottaritemplate.controller;
 
 import com.bottari.bottaritemplate.dto.CreateBottariTemplateRequest;
 import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse;
-import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateRequest;
+import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateByHashtagRequest;
+import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateByTitleRequest;
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
@@ -47,17 +48,31 @@ public interface BottariTemplateApiDocs {
             final String query
     );
 
-    @Operation(summary = "커서 기반 보따리 템플릿 목록 조회")
+    @Operation(summary = "커서 기반 제목으로 보따리 템플릿 목록 조회")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "커서 기반 보따리 템플릿 목록 조회 성공"),
+            @ApiResponse(responseCode = "200", description = "커서 기반 제목으로 보따리 템플릿 목록 조회 성공"),
     })
     @ApiErrorCodes({
             ErrorCode.DATE_FORMAT_INVALID,
             ErrorCode.NUMBER_FORMAT_INVALID,
             ErrorCode.BOTTARI_TEMPLATE_INVALID_SORT_TYPE
     })
-    ResponseEntity<ReadNextBottariTemplateResponse> readNextAll(
-            final ReadNextBottariTemplateRequest request
+    ResponseEntity<ReadNextBottariTemplateResponse> readNextAllByTitle(
+            final ReadNextBottariTemplateByTitleRequest request
+    );
+
+    @Operation(summary = "커서 기반 해시태그로 보따리 템플릿 목록 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "커서 기반 해시태그로 보따리 템플릿 목록 조회 성공"),
+    })
+    @ApiErrorCodes({
+            ErrorCode.DATE_FORMAT_INVALID,
+            ErrorCode.NUMBER_FORMAT_INVALID,
+            ErrorCode.BOTTARI_TEMPLATE_INVALID_SORT_TYPE,
+            ErrorCode.HASHTAG_ID_MISSING
+    })
+    ResponseEntity<ReadNextBottariTemplateResponse> readNextAllByHashtag(
+            final ReadNextBottariTemplateByHashtagRequest request
     );
 
     @Operation(summary = "보따리 템플릿 생성")

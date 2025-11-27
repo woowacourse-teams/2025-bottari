@@ -3,17 +3,19 @@ package com.bottari.vo;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.support.BadWordValidator;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record BottariTitle(
-        String title
+        @Column(name = "title")
+        String value
 ) {
 
     private static final int MAX_TITLE_LENGTH = 15;
 
     public BottariTitle {
-        validateTitle(title);
+        validateTitle(value);
     }
 
     private void validateTitle(final String title) {
