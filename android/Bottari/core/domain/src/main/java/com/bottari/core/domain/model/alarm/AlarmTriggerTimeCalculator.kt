@@ -60,7 +60,7 @@ class AlarmTriggerTimeCalculator @Inject constructor() {
                         (dayOfWeek.value - baseDateTime.dayOfWeek.value + DAYS_IN_WEEK) % DAYS_IN_WEEK
                     val adjustedDaysUntil = if (daysUntil == 0) DAYS_IN_WEEK else daysUntil
                     baseDate.plusDays(adjustedDaysUntil.toLong())
-                }.minByOrNull { date -> date.toEpochDay() }
+                }.minByOrNull { date -> date.toEpochDay() } ?: return null
         return LocalDateTime.of(nextDate, time).toTimeMillis()
     }
 
