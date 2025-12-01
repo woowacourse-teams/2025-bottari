@@ -28,7 +28,7 @@ class AlarmReceiver : HiltBroadcastReceiver() {
         super.onReceive(context, intent)
         val notification = intent.getParcelableCompat<NotificationUiModel>(EXTRA_NOTIFICATION)
         notificationHelper.sendPersonalNotification(notification.bottariId, notification.bottariTitle)
-        alarmScheduler.scheduleNextAlarm(notification = notification.toDomain())
+        alarmScheduler.scheduleAlarm(notification.toDomain())
         BottariLogger.ui(
             UiEventType.NOTIFICATION_CREATE,
             mapOf("notification_id" to notification.bottariId, "time" to LocalDateTime.now().toString()),
