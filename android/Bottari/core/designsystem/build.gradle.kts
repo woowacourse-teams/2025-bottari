@@ -8,4 +8,6 @@ android {
 
 dependencies {
     implementation(project(":core:ui"))
+
+    implementation(libs.androidx.appcompat)
 }
