@@ -72,4 +72,6 @@ dependencies {
 
     api(platform(libs.firebase.bom))
     api(libs.firebase.messaging)
+
+    implementation(project(":core:designsystem"))
 }

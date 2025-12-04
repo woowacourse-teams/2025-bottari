@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.modifier
+package com.bottari.core.designsystem.modifier
 
 import android.graphics.BlurMaskFilter
 import androidx.compose.foundation.background

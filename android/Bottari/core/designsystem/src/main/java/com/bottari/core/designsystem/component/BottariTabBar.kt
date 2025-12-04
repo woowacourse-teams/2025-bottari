@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.component
+package com.bottari.core.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -27,10 +27,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.bottari.presentation.compose.common.modifier.dropShadow
-import com.bottari.presentation.compose.common.modifier.pagerTabIndicatorOffset
-import com.bottari.presentation.compose.common.source.NoRippleInteractionSource
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.designsystem.modifier.dropShadow
+import com.bottari.core.designsystem.theme.BottariTheme
+import com.bottari.core.ui.modifier.pagerTabIndicatorOffset
+import com.bottari.core.ui.source.NoRippleInteractionSource
 import kotlinx.coroutines.launch
 
 @Composable
@@ -111,7 +111,7 @@ private fun BottariIndicator(
 ) {
     Box(
         modifier =
-            Modifier
+            Modifier.Companion
                 .pagerTabIndicatorOffset(pagerState = pagerState, tabPositions = tabPositions)
                 .wrapContentSize(align = Alignment.BottomStart)
                 .fillMaxSize()

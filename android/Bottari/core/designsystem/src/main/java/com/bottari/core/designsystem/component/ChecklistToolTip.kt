@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.component
+package com.bottari.core.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -24,8 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.designsystem.R
+import com.bottari.core.designsystem.theme.BottariTheme
 
 @Composable
 fun ChecklistToolTip(

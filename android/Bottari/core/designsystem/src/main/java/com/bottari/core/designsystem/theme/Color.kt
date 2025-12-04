@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.theme
+package com.bottari.core.designsystem.theme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.compose.common.theme.BottariTheme.colors
+import com.bottari.core.designsystem.theme.BottariTheme.colors
 
 @Immutable
 data class BottariColorSystem(

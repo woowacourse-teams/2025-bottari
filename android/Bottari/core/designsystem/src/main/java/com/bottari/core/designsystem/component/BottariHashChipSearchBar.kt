@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.component
+package com.bottari.core.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,8 +29,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.compose.common.modifier.dropShadow
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.designsystem.modifier.dropShadow
+import com.bottari.core.designsystem.theme.BottariTheme
 
 @Composable
 fun BottariHashChipSearchBar(

@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.theme
+package com.bottari.core.designsystem.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable

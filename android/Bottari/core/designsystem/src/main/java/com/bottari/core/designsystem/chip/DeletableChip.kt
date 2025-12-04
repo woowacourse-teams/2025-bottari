@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.component.chip
+package com.bottari.core.designsystem.chip
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
@@ -22,9 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.compose.common.modifier.noRippleClickable
-import com.bottari.presentation.compose.common.source.NoRippleInteractionSource
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.designsystem.theme.BottariTheme
+import com.bottari.core.ui.modifier.noRippleClickable
+import com.bottari.core.ui.source.NoRippleInteractionSource
 
 @Composable
 fun DeletableChip(
@@ -83,7 +83,7 @@ private fun DeletableChipTrailingIcon(onDelete: () -> Unit) {
         imageVector = Icons.Filled.Close,
         contentDescription = "삭제",
         modifier =
-            Modifier
+            Modifier.Companion
                 .noRippleClickable { onDelete() }
                 .padding(BottariTheme.spacing.space2xSmall),
     )
