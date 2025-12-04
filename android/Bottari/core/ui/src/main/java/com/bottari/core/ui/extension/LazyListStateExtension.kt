@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.extension
+package com.bottari.core.ui.extension
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable

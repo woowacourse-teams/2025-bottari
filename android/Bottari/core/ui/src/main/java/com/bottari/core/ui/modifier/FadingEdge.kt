@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.modifier
+package com.bottari.core.ui.modifier
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateDpAsState
