@@ -36,11 +36,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.core.designsystem.component.BottariBox
+import com.bottari.core.designsystem.component.CollapsedListLine
+import com.bottari.core.designsystem.theme.BottariTheme
+import com.bottari.core.ui.modifier.topBottomFadingEdge
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.component.CollapsedListLine
-import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.bottari.BottariItemUiModel
 import com.bottari.presentation.model.bottari.personal.BottariDetailUiModel
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel

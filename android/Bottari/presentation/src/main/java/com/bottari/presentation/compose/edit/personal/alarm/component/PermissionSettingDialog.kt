@@ -21,8 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.designsystem.component.BottariBox
+import com.bottari.core.designsystem.theme.BottariTheme
 
 @Composable
 fun PermissionSettingDialog(

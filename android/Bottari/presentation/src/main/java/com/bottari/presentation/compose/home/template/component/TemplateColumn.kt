@@ -20,8 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.designsystem.theme.BottariTheme
+import com.bottari.core.ui.modifier.topBottomFadingEdge
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 import com.bottari.presentation.model.template.BottariTemplateItemUiModel
 import com.bottari.presentation.model.template.BottariTemplateUiModel

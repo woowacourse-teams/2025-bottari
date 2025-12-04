@@ -19,10 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.bottari.core.designsystem.component.BottariTabBar
+import com.bottari.core.designsystem.component.IndeterminateCircularIndicator
+import com.bottari.core.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariTabBar
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.home.bottari.MyBottariUiState
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel

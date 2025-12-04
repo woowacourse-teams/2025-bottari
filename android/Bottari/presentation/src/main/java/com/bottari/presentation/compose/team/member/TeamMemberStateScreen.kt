@@ -22,9 +22,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.core.designsystem.component.IndeterminateCircularIndicator
+import com.bottari.core.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.team.TeamSendRemindDialog
 import com.bottari.presentation.compose.team.TeamStateCard
 import com.bottari.presentation.compose.team.TeamStateListBox
@@ -33,6 +33,7 @@ import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel
 import com.bottari.presentation.model.bottari.team.member.TeamMemberStatusUiModel
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import teamMemberStatusDummyUiState
+import com.bottari.core.designsystem.R as DsR
 
 @Composable
 fun TeamMemberStateScreen(
@@ -98,7 +99,7 @@ private fun TeamMemberStateScreen(
                 TeamStateCard(
                     title = "미완료 인원",
                     value = uiState.uncheckedMembers.size.toString(),
-                    painter = painterResource(R.drawable.ic_close),
+                    painter = painterResource(DsR.drawable.ic_close),
                     color = BottariTheme.colors.red,
                     modifier = Modifier.weight(1f),
                 )

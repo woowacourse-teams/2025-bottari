@@ -52,8 +52,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:ui"))
+
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.fragment.ktx)
@@ -72,6 +74,4 @@ dependencies {
 
     api(platform(libs.firebase.bom))
     api(libs.firebase.messaging)
-
-    implementation(project(":core:designsystem"))
 }

@@ -29,10 +29,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.core.designsystem.component.BottariTabBar
+import com.bottari.core.designsystem.theme.BottariTheme
+import com.bottari.core.designsystem.theme.LocalBottariBgColor
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariTabBar
-import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.edit.personal.alarm.AlarmEditScreen
 import com.bottari.presentation.compose.edit.personal.component.PersonalBottariEditTopAppBar
 import com.bottari.presentation.compose.edit.personal.item.PersonalItemEditScreen

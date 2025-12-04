@@ -29,11 +29,12 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.core.designsystem.component.BottariBox
+import com.bottari.core.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.personal.rename.component.BottariRenameButton
 import com.bottari.presentation.compose.edit.personal.rename.component.BottariRenameTextField
+import com.bottari.core.designsystem.R as DsR
 
 @Composable
 fun BottariRenameDialog(
@@ -142,7 +143,7 @@ private fun BottariRenameDialogHeader(
         IconButton(onClick = onDismissRequest) {
             Icon(
                 imageVector = Icons.Default.Clear,
-                contentDescription = stringResource(R.string.common_close_btn_description),
+                contentDescription = stringResource(DsR.string.common_close_btn_description),
             )
         }
     }

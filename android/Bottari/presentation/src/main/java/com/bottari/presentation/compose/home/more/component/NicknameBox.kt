@@ -24,9 +24,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.core.designsystem.component.BottariBox
+import com.bottari.core.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun NicknameBox(

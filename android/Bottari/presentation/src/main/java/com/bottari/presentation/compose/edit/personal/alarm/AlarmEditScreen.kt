@@ -43,11 +43,11 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.core.designsystem.component.BottariBox
+import com.bottari.core.designsystem.component.IndeterminateCircularIndicator
+import com.bottari.core.designsystem.theme.BottariTheme
+import com.bottari.core.designsystem.theme.LocalBottariBgColor
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.edit.personal.alarm.component.DatePickerModal
 import com.bottari.presentation.compose.edit.personal.alarm.component.DateSelector
 import com.bottari.presentation.compose.edit.personal.alarm.component.PermissionSettingDialog

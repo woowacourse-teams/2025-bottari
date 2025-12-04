@@ -25,8 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.designsystem.component.IndeterminateCircularIndicator
+import com.bottari.core.designsystem.theme.BottariTheme
 import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedBottomSheet
 import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedEditItem
 import com.bottari.presentation.compose.edit.team.component.TeamEditEmptyView

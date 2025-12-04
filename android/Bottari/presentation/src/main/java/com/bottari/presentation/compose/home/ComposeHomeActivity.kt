@@ -7,8 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
-import com.bottari.presentation.compose.common.theme.BottariStatusBarStyle
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.designsystem.theme.BottariStatusBarStyle
+import com.bottari.core.designsystem.theme.BottariTheme
 import com.bottari.presentation.compose.edit.personal.ComposePersonalBottariEditActivity
 import com.bottari.presentation.compose.edit.team.TeamBottariEditActivity
 import com.bottari.presentation.compose.personal.ComposePersonalChecklistActivity

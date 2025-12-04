@@ -42,8 +42,9 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.core.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.designsystem.R as DsR
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -98,7 +99,7 @@ private fun buildFabMenuItems(
     val joinTeamBottariText = stringResource(R.string.team_bottari_join_btn_text)
 
     return listOf(
-        FabMenuItem(R.drawable.ic_team_invite_code, joinTeamBottariText, onOpenCodeDialog),
+        FabMenuItem(DsR.drawable.ic_team_invite_code, joinTeamBottariText, onOpenCodeDialog),
         FabMenuItem(R.drawable.ic_people, teamBottariText, onOpenTeamDialog),
         FabMenuItem(R.drawable.ic_person_filled, personalBottariText, onOpenPersonalDialog),
     )

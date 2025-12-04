@@ -1,6 +1,7 @@
 package com.bottari.presentation.view.common.alert
 
 import com.bottari.presentation.R
+import com.bottari.core.designsystem.R as DsR
 
 enum class DialogPresetType {
     EXIT_WITHOUT_SAVE,
@@ -24,12 +25,12 @@ enum class DialogPresetType {
             binding.tvDialogCustomTitle.setText(R.string.common_alert_dialog_title_text)
             binding.tvDialogCustomDescription.setText(R.string.common_alert_unsaved_dialog_message_text)
             setPositiveButton(
-                textRes = R.string.common_yes_btn_text,
+                textRes = DsR.string.common_yes_btn_text,
                 textColorRes = R.color.white,
                 backgroundColorRes = R.color.primary,
             )
             setNegativeButton(
-                textRes = R.string.common_no_btn_text,
+                textRes = DsR.string.common_no_btn_text,
                 textColorRes = R.color.gray_700,
                 backgroundColorRes = R.color.white,
             )
@@ -78,12 +79,12 @@ enum class DialogPresetType {
             binding.tvDialogCustomTitle.setText(R.string.reset_bottari_items_check_state_dialog_title_text)
             binding.tvDialogCustomDescription.setText(R.string.reset_bottari_items_check_state_dialog_description_text)
             setPositiveButton(
-                textRes = R.string.common_yes_btn_text,
+                textRes = DsR.string.common_yes_btn_text,
                 textColorRes = R.color.white,
                 backgroundColorRes = R.color.primary,
             )
             setNegativeButton(
-                textRes = R.string.common_no_btn_text,
+                textRes = DsR.string.common_no_btn_text,
                 textColorRes = R.color.gray_700,
                 backgroundColorRes = R.color.white,
             )

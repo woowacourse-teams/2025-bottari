@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.designsystem.theme.BottariTheme
 import com.bottari.presentation.compose.personal.component.ChecklistProgressHeader
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 import com.bottari.presentation.model.bottari.team.ChecklistItemUiModel

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import com.bottari.presentation.R
+import com.bottari.core.designsystem.R
 
 val Pretendard =
     FontFamily(

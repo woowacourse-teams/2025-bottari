@@ -17,14 +17,15 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.core.designsystem.component.IndeterminateCircularIndicator
+import com.bottari.core.designsystem.theme.BottariTheme
+import com.bottari.core.ui.modifier.noRippleClickable
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.modifier.noRippleClickable
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditEmptyView
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditInputBar
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditLazyColumn
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
+import com.bottari.core.designsystem.R as DsR
 
 @Composable
 fun PersonalItemEditScreen(
@@ -56,7 +57,7 @@ fun PersonalItemEditScreen(
                 PersonalItemEditUiEvent.SaveBottariItemFailure ->
                     snackbarHostState.showSnackbar(
                         context.getString(
-                            R.string.common_save_failure_text,
+                            DsR.string.common_save_failure_text,
                         ),
                     )
             }

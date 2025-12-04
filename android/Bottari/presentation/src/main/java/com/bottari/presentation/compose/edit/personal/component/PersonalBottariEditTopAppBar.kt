@@ -19,8 +19,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.bottari.core.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.designsystem.R as DsR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +48,7 @@ fun PersonalBottariEditTopAppBar(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = stringResource(R.string.common_previous_btn_description),
+                    contentDescription = stringResource(DsR.string.common_previous_btn_description),
                 )
             }
         },
@@ -57,7 +58,7 @@ fun PersonalBottariEditTopAppBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
-                    contentDescription = stringResource(R.string.common_option_btn_description),
+                    contentDescription = stringResource(DsR.string.common_option_btn_description),
                 )
             }
             PersonalBottariEditMenu(

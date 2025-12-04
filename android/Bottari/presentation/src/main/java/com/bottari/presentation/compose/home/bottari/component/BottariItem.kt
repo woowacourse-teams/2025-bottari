@@ -25,12 +25,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.core.designsystem.component.BottariBox
+import com.bottari.core.designsystem.component.BottariCheckIndicator
+import com.bottari.core.designsystem.component.chooseBottariStateColor
+import com.bottari.core.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.formatWithPattern
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.component.BottariCheckIndicator
-import com.bottari.presentation.compose.common.component.chooseBottariStateColor
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.alarm.AlarmTypeUiModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
 import com.bottari.presentation.model.alarm.RepeatDayUiModel
@@ -42,6 +42,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.TextStyle
 import java.util.Locale
+import com.bottari.core.designsystem.R as DsR
 
 @Composable
 fun BottariItem(
@@ -123,9 +124,9 @@ private fun BottariInfo(
                 text =
                     dateText(
                         alarmUiModel = alarm,
-                        dateFormat = stringResource(R.string.common_format_date_alarm),
-                        timeFormat = stringResource(R.string.common_format_time_alarm),
-                        separator = stringResource(R.string.common_separator_text),
+                        dateFormat = stringResource(DsR.string.common_format_date_alarm),
+                        timeFormat = stringResource(DsR.string.common_format_time_alarm),
+                        separator = stringResource(DsR.string.common_separator_text),
                         repeatEveryWeekText = stringResource(R.string.bottari_item_alarm_repeat_everyweek_text),
                         repeatEveryDayText = stringResource(R.string.bottari_item_alarm_repeat_everyday_text),
                     ),

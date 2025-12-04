@@ -7,8 +7,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.bottari.presentation.compose.common.component.BottariTabBar
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.designsystem.component.BottariTabBar
+import com.bottari.core.designsystem.theme.BottariTheme
 import com.bottari.presentation.compose.home.template.bookmark.BookmarkTemplateScreen
 import com.bottari.presentation.compose.home.template.main.MainTemplateScreen
 import com.bottari.presentation.compose.home.template.my.MyTemplateScreen

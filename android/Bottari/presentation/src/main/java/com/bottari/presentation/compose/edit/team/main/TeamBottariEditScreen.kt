@@ -27,9 +27,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bottari.presentation.compose.common.component.BottariTabBar
-import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
+import com.bottari.core.designsystem.component.BottariTabBar
+import com.bottari.core.designsystem.theme.BottariTheme
+import com.bottari.core.designsystem.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.edit.team.assigned.TeamAssignedScreen
 import com.bottari.presentation.compose.edit.team.component.TeamEditTopbar
 import com.bottari.presentation.compose.edit.team.member.MemberEditScreen
