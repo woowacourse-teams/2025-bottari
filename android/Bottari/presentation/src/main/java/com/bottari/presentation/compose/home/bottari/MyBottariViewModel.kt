@@ -2,6 +2,7 @@ package com.bottari.presentation.compose.home.bottari
 
 import androidx.lifecycle.viewModelScope
 import com.bottari.core.domain.model.notification.Notification
+import com.bottari.core.domain.network.NetworkManager
 import com.bottari.core.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.core.domain.usecase.bottari.DeleteBottariUseCase
 import com.bottari.core.domain.usecase.bottari.FetchBottariesUseCase
@@ -9,7 +10,7 @@ import com.bottari.core.domain.usecase.team.CreateTeamBottariUseCase
 import com.bottari.core.domain.usecase.team.ExitTeamBottariUseCase
 import com.bottari.core.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.core.domain.usecase.team.JoinTeamBottariUseCase
-import com.bottari.presentation.common.base.FlowBaseViewModel
+import com.bottari.presentation.common.base.NetworkBaseViewModel
 import com.bottari.presentation.compose.home.bottari.component.MyBottariDialogType
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
@@ -23,6 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyBottariViewModel @Inject constructor(
+    networkManager: NetworkManager,
     private val fetchBottariesUseCase: FetchBottariesUseCase,
     private val fetchTeamBottariesUseCase: FetchTeamBottariesUseCase,
     private val createBottariUseCase: CreateBottariUseCase,
@@ -31,18 +33,25 @@ class MyBottariViewModel @Inject constructor(
     private val deleteTeamBottariUseCase: ExitTeamBottariUseCase,
     private val joinTeamBottariUseCase: JoinTeamBottariUseCase,
     private val alarmScheduler: AlarmScheduler,
-) : FlowBaseViewModel<MyBottariUiState, MyBottariUiEvent>(MyBottariUiState()) {
+) : NetworkBaseViewModel<MyBottariUiState, MyBottariUiEvent>(
+        initialState = MyBottariUiState(),
+        networkManager = networkManager,
+    ) {
     init {
         fetchPersonalBottaries()
     }
 
     fun fetchTeamBottaries() {
+        if (isConnected.value.not()) return
+
         launch {
             updateState { copy(isLoading = true) }
             fetchTeamBottariesUseCase()
                 .onSuccess { bottaries ->
                     updateState { copy(teamBottaries = bottaries.map(TeamBottariUiModel::fromDomain)) }
-                }.onFailure { emitEvent(MyBottariUiEvent.FetchBottariFailure) }
+                }.onFailure {
+                    emitEvent(MyBottariUiEvent.FetchBottariFailure)
+                }
         }.invokeOnCompletion { updateState { copy(isLoading = false, isTeamFetched = true) } }
     }
 
