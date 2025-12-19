@@ -32,7 +32,7 @@ import com.bottari.core.designsystem.component.BottariBox
 import com.bottari.core.designsystem.component.ChecklistToolTip
 import com.bottari.core.designsystem.component.IndeterminateCircularIndicator
 import com.bottari.core.designsystem.theme.BottariTheme
-import com.bottari.core.ui.modifier.noRippleClickable
+import com.bottari.core.designsystem.modifier.noRippleClickable
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.personal.component.ChecklistProgressHeader
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel

@@ -19,7 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.core.designsystem.component.IndeterminateCircularIndicator
 import com.bottari.core.designsystem.theme.BottariTheme
-import com.bottari.core.ui.modifier.noRippleClickable
+import com.bottari.core.designsystem.modifier.noRippleClickable
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditEmptyView
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditInputBar

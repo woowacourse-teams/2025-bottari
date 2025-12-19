@@ -1,4 +1,4 @@
-package com.bottari.core.ui.modifier
+package com.bottari.core.designsystem.modifier
 
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.TabPosition

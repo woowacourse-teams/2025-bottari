@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.bottari.core.ui"
 }
+
+dependencies {
+    api(project(":core:designsystem"))
+}

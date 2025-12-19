@@ -1,4 +1,4 @@
-package com.bottari.core.ui.source
+package com.bottari.core.designsystem.interaction
 
 import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource

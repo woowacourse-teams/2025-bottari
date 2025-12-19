@@ -23,8 +23,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.core.designsystem.theme.BottariTheme
-import com.bottari.core.ui.modifier.noRippleClickable
-import com.bottari.core.ui.source.NoRippleInteractionSource
+import com.bottari.core.designsystem.interaction.NoRippleInteractionSource
+import com.bottari.core.designsystem.modifier.noRippleClickable
 
 @Composable
 fun DeletableChip(

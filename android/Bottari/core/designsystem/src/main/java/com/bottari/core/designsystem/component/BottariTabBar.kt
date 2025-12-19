@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.bottari.core.designsystem.modifier.dropShadow
 import com.bottari.core.designsystem.theme.BottariTheme
-import com.bottari.core.ui.modifier.pagerTabIndicatorOffset
-import com.bottari.core.ui.source.NoRippleInteractionSource
+import com.bottari.core.designsystem.interaction.NoRippleInteractionSource
+import com.bottari.core.designsystem.modifier.pagerTabIndicatorOffset
 import kotlinx.coroutines.launch
 
 @Composable
