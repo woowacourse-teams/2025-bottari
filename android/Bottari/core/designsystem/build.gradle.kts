@@ -5,7 +5,3 @@ plugins {
 android {
     namespace = "com.bottari.core.designsystem"
 }
-
-dependencies {
-    implementation(libs.androidx.appcompat)
-}
