@@ -18,9 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.core.designsystem.chip.BottariChip
 import com.bottari.core.designsystem.component.BottariBox
+import com.bottari.core.designsystem.modifier.noRippleClickable
 import com.bottari.core.designsystem.theme.BottariTheme
 import com.bottari.core.ui.modifier.dashedBorder
-import com.bottari.core.designsystem.modifier.noRippleClickable
 
 @Composable
 fun SelectedBottariSection(
