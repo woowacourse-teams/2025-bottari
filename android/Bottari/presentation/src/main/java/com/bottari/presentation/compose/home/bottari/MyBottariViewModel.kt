@@ -42,8 +42,6 @@ class MyBottariViewModel @Inject constructor(
     }
 
     fun fetchTeamBottaries() {
-        if (isConnected.value.not()) return
-
         launch {
             updateState { copy(isLoading = true) }
             fetchTeamBottariesUseCase()
