@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.theme
+package com.bottari.bottari.designsystem.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import com.bottari.presentation.R
+import com.bottari.core.designsystem.R
 
 val Pretendard =
     FontFamily(

@@ -59,13 +59,6 @@
     <string name="common_item_title_prefix_format">•\u00A0\u00A0%s</string>
     <string name="common_separator_text">\u00A0|\u00A0</string>
 
-    <!-- Common: 공통 버튼 텍스트 -->
-    <string name="common_confirm_btn_text">확인</string>
-    <string name="common_save_btn_text">저장</string>
-    <string name="common_cancel_btn_text">취소</string>
-    <string name="common_yes_btn_text">예</string>
-    <string name="common_no_btn_text">아니오</string>
-
     <!-- Common: 접근성 -->
     <string name="common_previous_btn_description">뒤로가기 버튼</string>
     <string name="common_setting_btn_description">설정 버튼</string>

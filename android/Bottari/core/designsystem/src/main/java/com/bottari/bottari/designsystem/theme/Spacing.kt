@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.theme
+package com.bottari.bottari.designsystem.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
