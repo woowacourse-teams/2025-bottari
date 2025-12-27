@@ -25,8 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.IndeterminateCircularIndicator
 import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedBottomSheet
 import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedEditItem
 import com.bottari.presentation.compose.edit.team.component.TeamEditEmptyView
@@ -46,11 +46,21 @@ fun TeamAssignedScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                TeamAssignedEditUiEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물건 생성에 실패했어요")
-                TeamAssignedEditUiEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물건 삭제에 실패했어요")
-                TeamAssignedEditUiEvent.FetchTeamAssignedItemsFailure ->
+                TeamAssignedEditUiEvent.CreateItemFailure -> {
+                    snackbarHostState.showSnackbar("물건 생성에 실패했어요")
+                }
+
+                TeamAssignedEditUiEvent.DeleteItemFailure -> {
+                    snackbarHostState.showSnackbar("물건 삭제에 실패했어요")
+                }
+
+                TeamAssignedEditUiEvent.FetchTeamAssignedItemsFailure -> {
                     snackbarHostState.showSnackbar("물건 불러오기에 실패했어요")
-                TeamAssignedEditUiEvent.SaveItemFailure -> snackbarHostState.showSnackbar("물건 저장에 실패했어요")
+                }
+
+                TeamAssignedEditUiEvent.SaveItemFailure -> {
+                    snackbarHostState.showSnackbar("물건 저장에 실패했어요")
+                }
             }
         }
     }
@@ -90,7 +100,12 @@ private fun TeamAssignedScreen(
     Box {
         Column(modifier = modifier.fillMaxSize()) {
             if (uiState.assignedItems.isEmpty()) {
-                TeamEditEmptyView(modifier = Modifier.fillMaxWidth().weight(1f))
+                TeamEditEmptyView(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                )
             } else {
                 LazyColumn(
                     modifier =
@@ -105,7 +120,8 @@ private fun TeamAssignedScreen(
                         TeamAssignedEditItem(
                             item.name,
                             type.members.map { member ->
-                                val memberIndex = uiState.members.indexOfFirst { it.id == member.id }
+                                val memberIndex =
+                                    uiState.members.indexOfFirst { it.id == member.id }
                                 Pair(member.nickname, memberIndex)
                             },
                             onClickEdit = { onEditItem(item.id) },

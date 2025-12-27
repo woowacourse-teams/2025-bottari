@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.modifier
+package com.bottari.core.ui.extension
 
 import android.graphics.BlurMaskFilter
 import androidx.compose.foundation.background
@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.BottariTheme
 
 @Composable
 fun Modifier.dropShadow(

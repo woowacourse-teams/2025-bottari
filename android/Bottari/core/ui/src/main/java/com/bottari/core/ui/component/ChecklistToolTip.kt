@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.component
+package com.bottari.core.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Code
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -19,13 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.R
 
 @Composable
 fun ChecklistToolTip(
@@ -71,7 +73,7 @@ fun ChecklistToolTip(
                 modifier = Modifier.size(48.dp),
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_close),
+                    imageVector = Icons.Default.Close,
                     contentDescription = stringResource(R.string.common_close_btn_description),
                     tint = BottariTheme.colors.white,
                 )
@@ -95,15 +97,13 @@ private fun ChecklistToolTipPreview() {
     ChecklistToolTip(
         icon = {
             Icon(
-                painter = painterResource(R.drawable.ic_team_invite_code),
+                imageVector = Icons.Default.Code,
                 contentDescription = null,
                 tint = BottariTheme.colors.white,
             )
         },
         title = "개인 보따리",
-        text =
-            "오른쪽 상단 버튼을 통해,\n" +
-                "스와이프 화면으로 이동할 수 있어요.",
+        text = "오른쪽 상단 버튼을 통해,\n스와이프 화면으로 이동할 수 있어요.",
         closeAction = {},
     )
 }

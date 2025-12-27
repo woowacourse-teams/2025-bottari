@@ -17,10 +17,11 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.IndeterminateCircularIndicator
+import com.bottari.core.ui.extension.noRippleClickable
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.modifier.noRippleClickable
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.ui.R as UIR
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditEmptyView
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditInputBar
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditLazyColumn
@@ -41,24 +42,27 @@ fun PersonalItemEditScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                PersonalItemEditUiEvent.DeleteItemFailure ->
+                PersonalItemEditUiEvent.DeleteItemFailure -> {
                     snackbarHostState.showSnackbar(
                         context.getString(
                             R.string.bottari_personal_item_delete_failure_text,
                         ),
                     )
+                }
 
-                PersonalItemEditUiEvent.FetchBottariItemsFailure ->
+                PersonalItemEditUiEvent.FetchBottariItemsFailure -> {
                     snackbarHostState.showSnackbar(
                         context.getString(R.string.bottari_personal_item_fetch_failure_text),
                     )
+                }
 
-                PersonalItemEditUiEvent.SaveBottariItemFailure ->
+                PersonalItemEditUiEvent.SaveBottariItemFailure -> {
                     snackbarHostState.showSnackbar(
                         context.getString(
-                            R.string.common_save_failure_text,
+                            UIR.string.common_save_failure_text,
                         ),
                     )
+                }
             }
         }
     }

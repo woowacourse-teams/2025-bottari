@@ -27,9 +27,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bottari.presentation.compose.common.component.BottariTabBar
-import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
+import com.bottari.core.ui.component.BottariTabBar
 import com.bottari.presentation.compose.edit.team.assigned.TeamAssignedScreen
 import com.bottari.presentation.compose.edit.team.component.TeamEditTopbar
 import com.bottari.presentation.compose.edit.team.member.MemberEditScreen
@@ -66,11 +66,13 @@ fun TeamBottariEditScreen(viewModel: TeamBottariEditViewModel = viewModel()) {
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                TeamBottariEditUiEvent.FetchTeamBottariDetailFailure ->
+                TeamBottariEditUiEvent.FetchTeamBottariDetailFailure -> {
                     snackbarHostState.showSnackbar("보따리 불러오기에 실패했습니다")
+                }
 
-                TeamBottariEditUiEvent.ToggleAlarmStateFailure ->
+                TeamBottariEditUiEvent.ToggleAlarmStateFailure -> {
                     snackbarHostState.showSnackbar("알람 불러오기에 실패했습니다")
+                }
             }
         }
     }
@@ -116,47 +118,59 @@ fun TeamBottariEditScreen(viewModel: TeamBottariEditViewModel = viewModel()) {
                 pagerState = pagerState,
             ) { page ->
                 when (page) {
-                    0 ->
+                    0 -> {
                         TeamSharedScreen(
                             snackbarHostState = snackbarHostState,
                             modifier =
                                 Modifier
                                     .fillMaxSize()
                                     .padding(
-                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                                        start =
+                                            paddingValues.calculateStartPadding(
+                                                LocalLayoutDirection.current,
+                                            ),
                                         end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
                                         bottom = BottariTheme.spacing.spaceMedium,
                                     ).imePadding()
                                     .then(if (WindowInsets.isImeVisible) Modifier else Modifier.navigationBarsPadding()),
                         )
+                    }
 
-                    1 ->
+                    1 -> {
                         TeamAssignedScreen(
                             snackbarHostState = snackbarHostState,
                             modifier =
                                 Modifier
                                     .fillMaxSize()
                                     .padding(
-                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                                        start =
+                                            paddingValues.calculateStartPadding(
+                                                LocalLayoutDirection.current,
+                                            ),
                                         end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
                                     ).padding(horizontal = BottariTheme.spacing.spaceMedium)
                                     .padding(top = BottariTheme.spacing.spaceSmall)
                                     .then(Modifier.navigationBarsPadding()),
                         )
+                    }
 
-                    2 ->
+                    2 -> {
                         TeamPersonalScreen(
                             snackbarHostState = snackbarHostState,
                             modifier =
                                 Modifier
                                     .fillMaxSize()
                                     .padding(
-                                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                                        start =
+                                            paddingValues.calculateStartPadding(
+                                                LocalLayoutDirection.current,
+                                            ),
                                         end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
                                         bottom = BottariTheme.spacing.spaceMedium,
                                     ).imePadding()
                                     .then(if (WindowInsets.isImeVisible) Modifier else Modifier.navigationBarsPadding()),
                         )
+                    }
                 }
             }
         }

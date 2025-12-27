@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.modifier
+package com.bottari.core.ui.extension
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

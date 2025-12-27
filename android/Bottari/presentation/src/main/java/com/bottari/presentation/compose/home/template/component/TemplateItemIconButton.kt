@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.BottariTheme
 
 sealed interface TemplateItemType {
     data object MyTemplate : TemplateItemType
@@ -39,12 +39,16 @@ fun TemplateItemIconButton(
         modifier = modifier.setupIconButtonByTemplateItemType(type),
     ) {
         when (type) {
-            is TemplateItemType.MyTemplate -> MyTemplateIcon(defaultIconModifier)
-            is TemplateItemType.Bookmark ->
+            is TemplateItemType.MyTemplate -> {
+                MyTemplateIcon(defaultIconModifier)
+            }
+
+            is TemplateItemType.Bookmark -> {
                 BookmarkIcon(
                     isBookmarked = type.isBookmarked,
                     modifier = defaultIconModifier,
                 )
+            }
         }
     }
 }
@@ -52,7 +56,10 @@ fun TemplateItemIconButton(
 @Composable
 private fun Modifier.setupIconButtonByTemplateItemType(type: TemplateItemType): Modifier =
     when (type) {
-        is TemplateItemType.MyTemplate -> BottariTheme.colors.gray400.copy(0.2f)
+        is TemplateItemType.MyTemplate -> {
+            BottariTheme.colors.gray400.copy(0.2f)
+        }
+
         is TemplateItemType.Bookmark -> {
             if (type.isBookmarked) {
                 BottariTheme.colors.primary.copy(0.2f)

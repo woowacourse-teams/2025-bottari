@@ -28,12 +28,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.BottariBox
+import com.bottari.core.ui.component.ChecklistToolTip
+import com.bottari.core.ui.component.IndeterminateCircularIndicator
+import com.bottari.core.ui.extension.noRippleClickable
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.component.ChecklistToolTip
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.modifier.noRippleClickable
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.personal.component.ChecklistProgressHeader
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.model.bottari.team.TeamChecklistItemUiModel

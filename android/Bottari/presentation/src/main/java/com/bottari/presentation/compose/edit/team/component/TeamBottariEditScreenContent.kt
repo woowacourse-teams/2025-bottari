@@ -13,9 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.modifier.noRippleClickable
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.IndeterminateCircularIndicator
+import com.bottari.core.ui.extension.noRippleClickable
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditInputBar
 import com.bottari.presentation.model.bottari.BottariItemUiModel
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel

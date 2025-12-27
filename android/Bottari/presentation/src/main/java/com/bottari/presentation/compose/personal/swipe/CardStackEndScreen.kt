@@ -19,9 +19,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.BottariBox
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun CardStackEndScreen(
@@ -107,7 +107,10 @@ private fun SwipeNotCompletedView(modifier: Modifier = Modifier) {
 @Composable
 private fun CardStackEndScreenCompletedPreview() {
     CardStackEndScreen(
-        modifier = Modifier.fillMaxSize().padding(BottariTheme.spacing.spaceXSmall),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(BottariTheme.spacing.spaceXSmall),
         isCompleted = true,
         onClickButton = {},
     )
@@ -117,7 +120,10 @@ private fun CardStackEndScreenCompletedPreview() {
 @Composable
 private fun CardStackEndScreenNotCompletedPreview() {
     CardStackEndScreen(
-        modifier = Modifier.fillMaxSize().padding(BottariTheme.spacing.spaceXSmall),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(BottariTheme.spacing.spaceXSmall),
         isCompleted = false,
         onClickButton = {},
     )

@@ -16,9 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bottari.presentation.compose.common.modifier.noRippleClickable
-import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.extension.noRippleClickable
+import com.bottari.core.ui.extension.topBottomFadingEdge
 import com.bottari.presentation.compose.home.template.component.TemplateEmptyView
 import com.bottari.presentation.compose.home.template.component.TemplateItem
 import com.bottari.presentation.compose.home.template.component.TemplateItemIconButton
@@ -37,11 +37,13 @@ fun BookmarkTemplateScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                is BookmarkTemplateEvent.FetchBookmarkTemplateFailure ->
+                is BookmarkTemplateEvent.FetchBookmarkTemplateFailure -> {
                     snackbarHostState.showSnackbar("북마크한 보따리를 불러오지 못했어요")
+                }
 
-                is BookmarkTemplateEvent.DeleteBookmarkTemplateFailure ->
+                is BookmarkTemplateEvent.DeleteBookmarkTemplateFailure -> {
                     snackbarHostState.showSnackbar("보따리의 북마크 해제에 실패했어요")
+                }
             }
         }
     }

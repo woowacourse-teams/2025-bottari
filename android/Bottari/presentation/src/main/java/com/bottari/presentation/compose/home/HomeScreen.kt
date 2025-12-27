@@ -15,9 +15,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.common.navigation.Navigation
 import com.bottari.presentation.compose.common.navigation.NavigationController
-import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.home.bottari.MyBottariScreen
 import com.bottari.presentation.compose.home.more.MoreBottariScreen
 import com.bottari.presentation.compose.home.template.TemplateBottariScreen
@@ -114,7 +114,7 @@ private fun HomeScreenRouter(
                 )
             }
 
-            HomeScreenRoute.Bottari ->
+            HomeScreenRoute.Bottari -> {
                 MyBottariScreen(
                     snackbarState = snackbarState,
                     onNavigateToPersonalEdit = navigateToPersonalBottariEdit,
@@ -122,12 +122,14 @@ private fun HomeScreenRouter(
                     onNavigateToPersonalChecklist = navigateToPersonalBottariChecklist,
                     onNavigateToTeamChecklist = navigateToTeamBottariChecklist,
                 )
+            }
 
-            HomeScreenRoute.More ->
+            HomeScreenRoute.More -> {
                 MoreBottariScreen(
                     snackbarState = snackbarState,
                     onNavigateToBrowser = navigateToBrowser,
                 )
+            }
         }
     }
 }

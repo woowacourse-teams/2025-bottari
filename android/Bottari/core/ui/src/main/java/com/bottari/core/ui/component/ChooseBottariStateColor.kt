@@ -1,8 +1,8 @@
-package com.bottari.presentation.compose.common.component
+package com.bottari.core.ui.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.BottariTheme
 
 @Composable
 fun chooseBottariStateColor(

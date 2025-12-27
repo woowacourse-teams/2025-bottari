@@ -23,9 +23,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.BottariBox
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun TeamAssignedEditItem(
@@ -115,7 +115,8 @@ private fun AssignedMemberChip(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        val color = BottariTheme.colors.memberColors.getOrNull(colorIndex) ?: BottariTheme.colors.primary
+        val color =
+            BottariTheme.colors.memberColors.getOrNull(colorIndex) ?: BottariTheme.colors.primary
         Box(
             modifier =
                 Modifier

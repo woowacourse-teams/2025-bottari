@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.component
+package com.bottari.core.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -27,10 +27,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.bottari.presentation.compose.common.modifier.dropShadow
-import com.bottari.presentation.compose.common.modifier.pagerTabIndicatorOffset
-import com.bottari.presentation.compose.common.source.NoRippleInteractionSource
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.extension.dropShadow
+import com.bottari.core.ui.extension.pagerTabIndicatorOffset
+import com.bottari.core.ui.source.NoRippleInteractionSource
 import kotlinx.coroutines.launch
 
 @Composable

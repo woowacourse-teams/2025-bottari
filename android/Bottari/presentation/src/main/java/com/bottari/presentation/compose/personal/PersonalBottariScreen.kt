@@ -18,10 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
+import com.bottari.core.ui.component.IndeterminateCircularIndicator
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.personal.checklist.PersonalChecklistScreen
 import com.bottari.presentation.compose.personal.component.ChecklistTopBar
 import com.bottari.presentation.compose.personal.component.PersonalChecklistEmptyView

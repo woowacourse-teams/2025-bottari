@@ -7,8 +7,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.bottari.presentation.compose.common.component.BottariTabBar
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.BottariTabBar
 import com.bottari.presentation.compose.home.template.bookmark.BookmarkTemplateScreen
 import com.bottari.presentation.compose.home.template.main.MainTemplateScreen
 import com.bottari.presentation.compose.home.template.my.MyTemplateScreen
@@ -25,24 +25,27 @@ fun TemplateBottariScreen(
         modifier = modifier,
     ) { page ->
         when (page) {
-            0 ->
+            0 -> {
                 MainTemplateScreen(
                     snackbarState = snackbarState,
                     onClickDetail = { id -> navigateToTemplateDetail(id, false, false) },
                 )
+            }
 
-            1 ->
+            1 -> {
                 MyTemplateScreen(
                     snackbarState = snackbarState,
                     onClickDetail = { id -> navigateToTemplateDetail(id, true, false) },
                     onClickCreate = navigateToTemplateCreate,
                 )
+            }
 
-            2 ->
+            2 -> {
                 BookmarkTemplateScreen(
                     snackbarHostState = snackbarState,
                     navigateToDetail = { id -> navigateToTemplateDetail(id, false, true) },
                 )
+            }
         }
     }
 }

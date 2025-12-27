@@ -1,10 +1,12 @@
 package com.bottari.presentation.compose.common.navigation
 
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.setValue
 
+@Stable
 class NavigationController(
     initialScreen: Screen,
 ) {

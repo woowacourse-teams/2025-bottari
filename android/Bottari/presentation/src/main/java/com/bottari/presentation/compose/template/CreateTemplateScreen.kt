@@ -34,9 +34,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.template.component.CreateBottariSelector
 import com.bottari.presentation.compose.template.component.CreateTemplateTopApp
 import com.bottari.presentation.compose.template.component.SelectedBottariSection
@@ -58,8 +58,9 @@ fun CreateTemplateScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                is CreateTemplateUiEvent.FetchMyBottariesFailure ->
+                is CreateTemplateUiEvent.FetchMyBottariesFailure -> {
                     snackbarHostState.showSnackbar(context.getString(R.string.bottari_home_fetch_failure_text))
+                }
 
                 is CreateTemplateUiEvent.CreateTemplateSuccess -> {
                     Toast
@@ -71,8 +72,9 @@ fun CreateTemplateScreen(
                     navigateBack()
                 }
 
-                is CreateTemplateUiEvent.CreateTemplateFailure ->
+                is CreateTemplateUiEvent.CreateTemplateFailure -> {
                     snackbarHostState.showSnackbar(context.getString(R.string.template_create_failure_text))
+                }
             }
         }
     }

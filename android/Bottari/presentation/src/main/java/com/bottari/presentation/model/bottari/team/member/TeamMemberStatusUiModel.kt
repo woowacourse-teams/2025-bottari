@@ -1,8 +1,10 @@
 package com.bottari.presentation.model.bottari.team.member
 
+import androidx.compose.runtime.Immutable
 import com.bottari.core.domain.model.team.member.TeamMemberStatus
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 
+@Immutable
 data class TeamMemberStatusUiModel(
     val member: TeamMemberUiModel,
     val totalItemsCount: Int,

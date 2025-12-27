@@ -29,9 +29,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.BottariBox
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.ui.R as UIR
 import com.bottari.presentation.compose.edit.personal.rename.component.BottariRenameButton
 import com.bottari.presentation.compose.edit.personal.rename.component.BottariRenameTextField
 
@@ -53,12 +54,15 @@ fun BottariRenameDialog(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                BottariRenameUiEvent.SaveBottariTitleFailure ->
+                BottariRenameUiEvent.SaveBottariTitleFailure -> {
                     snackbarHostState.showSnackbar(
                         context.getString(R.string.bottari_rename_failure_text),
                     )
+                }
 
-                BottariRenameUiEvent.SaveBottariTitleSuccess -> onDismissRequest()
+                BottariRenameUiEvent.SaveBottariTitleSuccess -> {
+                    onDismissRequest()
+                }
             }
         }
     }
@@ -142,7 +146,7 @@ private fun BottariRenameDialogHeader(
         IconButton(onClick = onDismissRequest) {
             Icon(
                 imageVector = Icons.Default.Clear,
-                contentDescription = stringResource(R.string.common_close_btn_description),
+                contentDescription = stringResource(UIR.string.common_close_btn_description),
             )
         }
     }

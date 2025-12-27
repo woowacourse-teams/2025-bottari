@@ -19,9 +19,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.BottariBox
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun TeamStateCard(
@@ -38,7 +38,13 @@ fun TeamStateCard(
                 Text(text = value, style = BottariTheme.typography.bold22.toTextStyle())
             }
             Spacer(Modifier.weight(1f))
-            Box(modifier = Modifier.clip(CircleShape).size(48.dp).background(color = color.copy(0.2f))) {
+            Box(
+                modifier =
+                    Modifier
+                        .clip(CircleShape)
+                        .size(48.dp)
+                        .background(color = color.copy(0.2f)),
+            ) {
                 Icon(
                     painter = painter,
                     contentDescription = null,

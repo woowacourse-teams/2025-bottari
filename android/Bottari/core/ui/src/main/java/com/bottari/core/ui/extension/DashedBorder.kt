@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.modifier
+package com.bottari.core.ui.extension
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind

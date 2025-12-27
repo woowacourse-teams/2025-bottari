@@ -29,11 +29,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.BottariBox
+import com.bottari.core.ui.component.BottariCheckIndicator
+import com.bottari.core.ui.component.IndeterminateCircularIndicator
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.component.BottariCheckIndicator
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.team.TeamSendRemindDialog
 import com.bottari.presentation.compose.team.TeamStateCard
 import com.bottari.presentation.compose.team.TeamStateListBox
@@ -55,14 +55,17 @@ fun TeamItemStateScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure ->
+                ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure -> {
                     snackbarHostState.showSnackbar("보따리를 불러오지 못했어요")
+                }
 
-                ComposeTeamBottariItemStatusUiEvent.SendRemindFailure ->
+                ComposeTeamBottariItemStatusUiEvent.SendRemindFailure -> {
                     snackbarHostState.showSnackbar("보채기에 실패했어요")
+                }
 
-                ComposeTeamBottariItemStatusUiEvent.SendRemindSuccess ->
+                ComposeTeamBottariItemStatusUiEvent.SendRemindSuccess -> {
                     snackbarHostState.showSnackbar("보채기에 성공했어요")
+                }
             }
         }
     }

@@ -13,8 +13,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.core.ui.R as UIR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +43,7 @@ fun ChecklistTopBar(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_previous),
-                    contentDescription = stringResource(R.string.common_previous_btn_description),
+                    contentDescription = stringResource(UIR.string.common_previous_btn_description),
                     modifier = Modifier.size(24.dp),
                 )
             }

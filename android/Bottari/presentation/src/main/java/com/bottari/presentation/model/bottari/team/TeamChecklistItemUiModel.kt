@@ -1,7 +1,9 @@
 package com.bottari.presentation.model.bottari.team
 
+import androidx.compose.runtime.Immutable
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 
+@Immutable
 interface ChecklistItemUiModel {
     val id: Long
     val name: String

@@ -50,10 +50,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.extension.noRippleClickable
+import com.bottari.core.ui.extension.topBottomFadingEdge
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.modifier.noRippleClickable
-import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.team.assigned.TeamAssignedEditUiState
 import com.bottari.presentation.compose.edit.team.assigned.dummyMembers
 import com.bottari.presentation.compose.team.TeamStateListBox

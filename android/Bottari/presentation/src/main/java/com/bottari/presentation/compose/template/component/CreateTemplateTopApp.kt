@@ -10,8 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

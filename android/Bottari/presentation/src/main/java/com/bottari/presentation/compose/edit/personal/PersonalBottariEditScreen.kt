@@ -29,10 +29,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
+import com.bottari.core.ui.component.BottariTabBar
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariTabBar
-import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.edit.personal.alarm.AlarmEditScreen
 import com.bottari.presentation.compose.edit.personal.component.PersonalBottariEditTopAppBar
 import com.bottari.presentation.compose.edit.personal.item.PersonalItemEditScreen
@@ -52,27 +52,31 @@ fun PersonalBottariEditScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                PersonalBottariEditUiEvent.CreateTemplateFailure ->
+                PersonalBottariEditUiEvent.CreateTemplateFailure -> {
                     snackbarHostState.showSnackbar(
                         context.getString(R.string.bottari_edit_create_template_failure_text),
                     )
+                }
 
-                PersonalBottariEditUiEvent.CreateTemplateSuccess ->
+                PersonalBottariEditUiEvent.CreateTemplateSuccess -> {
                     snackbarHostState.showSnackbar(
                         context.getString(R.string.bottari_edit_create_template_success_text),
                     )
+                }
 
-                PersonalBottariEditUiEvent.FindBottariFailure ->
+                PersonalBottariEditUiEvent.FindBottariFailure -> {
                     snackbarHostState.showSnackbar(
                         context.getString(
                             R.string.bottari_edit_fetch_failure_text,
                         ),
                     )
+                }
 
-                PersonalBottariEditUiEvent.ToggleAlarmStateFailure ->
+                PersonalBottariEditUiEvent.ToggleAlarmStateFailure -> {
                     snackbarHostState.showSnackbar(
                         context.getString(R.string.bottari_edit_toggle_alarm_state_failure_text),
                     )
+                }
             }
         }
     }
@@ -167,13 +171,17 @@ private fun PersonalBottariEditPager(
             pagerState = pagerState,
         ) { page ->
             when (page) {
-                0 -> PersonalItemEditScreen(snackbarHostState = snackbarHostState)
-                1 ->
+                0 -> {
+                    PersonalItemEditScreen(snackbarHostState = snackbarHostState)
+                }
+
+                1 -> {
                     AlarmEditScreen(
                         bottariId = bottariId,
                         bottariTitle = bottariTitle,
                         snackbarHostState = snackbarHostState,
                     )
+                }
             }
         }
     }

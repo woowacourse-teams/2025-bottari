@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.common.component.chip
+package com.bottari.core.ui.component.chip
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
@@ -22,9 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.compose.common.modifier.noRippleClickable
-import com.bottari.presentation.compose.common.source.NoRippleInteractionSource
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.extension.noRippleClickable
+import com.bottari.core.ui.source.NoRippleInteractionSource
 
 @Composable
 fun DeletableChip(
