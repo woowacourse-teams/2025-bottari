@@ -1,4 +1,4 @@
-package com.bottari.core.ui.component
+package com.bottari.core.ui.component.searchbar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

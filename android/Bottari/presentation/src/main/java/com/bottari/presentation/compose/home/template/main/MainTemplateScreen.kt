@@ -27,8 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.BottariHashChipSearchBar
 import com.bottari.core.ui.component.chip.BottariChip
+import com.bottari.core.ui.component.searchbar.BottariHashChipSearchBar
 import com.bottari.core.ui.extension.rememberBlockParentAfterChild
 import com.bottari.core.ui.extension.rememberScrolledToEnd
 import com.bottari.core.ui.extension.startEndFadingEdge
