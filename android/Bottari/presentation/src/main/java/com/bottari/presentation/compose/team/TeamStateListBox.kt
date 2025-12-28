@@ -36,7 +36,7 @@ fun TeamStateListBox(
     Box(
         modifier =
             modifier
-                .clip(RoundedCornerShape(16.dp))
+                .clip(BottariTheme.shapes.radiusLarge)
                 .background(BottariTheme.colors.white)
                 .background(color.copy(0.1f))
                 .fillMaxWidth()
