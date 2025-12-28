@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,8 +22,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.BottariBox
 import com.bottari.presentation.R
 
 @Composable
@@ -34,7 +34,7 @@ fun TeamAssignedEditItem(
     onClickEdit: () -> Unit,
     onClickDelete: () -> Unit,
 ) {
-    BottariBox(
+    BottariCard(
         contentPadding =
             PaddingValues(
                 top = BottariTheme.spacing.spaceXSmall,
@@ -75,10 +75,10 @@ private fun ItemHeader(
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f),
         )
-        IconButton(onClick = onClickEdit) {
+        BottariIconButton(onClick = onClickEdit) {
             Icon(painter = painterResource(R.drawable.ic_pen), contentDescription = "수정 버튼")
         }
-        IconButton(onClick = onClickDelete) {
+        BottariIconButton(onClick = onClickDelete) {
             Icon(
                 painter = painterResource(R.drawable.ic_delete),
                 contentDescription = "삭제 버튼",

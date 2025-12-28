@@ -1,12 +1,10 @@
 package com.bottari.presentation.compose.personal.swipe
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,8 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariButton
+import com.bottari.bottari.designsystem.component.BottariButtonStyle
+import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.BottariBox
 import com.bottari.presentation.R
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 import com.bottari.presentation.model.bottari.team.ChecklistItemUiModel
@@ -71,13 +71,7 @@ fun CardStackScreen(
                 Modifier
                     .weight(1f)
                     .fillMaxWidth(),
-        ) {
-            items(items) { item, _, _ ->
-                BottariCard(
-                    item = item,
-                )
-            }
-        }
+        ) { items(items) { item, _, _ -> SwipeableChecklistItem(item = item) } }
         Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceMedium))
         SwipeButtons(
             items = items,
@@ -89,15 +83,17 @@ fun CardStackScreen(
 }
 
 @Composable
-private fun BottariCard(item: ChecklistItemUiModel) {
-    BottariBox(
+private fun SwipeableChecklistItem(item: ChecklistItemUiModel) {
+    BottariCard(
         modifier =
             Modifier
-                .fillMaxSize()
+                .fillMaxHeight()
                 .padding(BottariTheme.spacing.spaceXSmall),
     ) {
-        Column(modifier = Modifier.align(Alignment.Center)) {
-            Spacer(modifier = Modifier.weight(1f))
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            verticalArrangement = Arrangement.Center,
+        ) {
             Text(
                 text = item.name,
                 modifier = Modifier.fillMaxWidth(),
@@ -169,7 +165,6 @@ private fun BottariCard(item: ChecklistItemUiModel) {
                 textAlign = TextAlign.Center,
                 color = BottariTheme.colors.gray500,
             )
-            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }
@@ -182,46 +177,34 @@ private fun SwipeButtons(
     onRightSwipe: (ChecklistItemUiModel) -> Unit,
 ) {
     Row(modifier = Modifier.fillMaxWidth()) {
-        BottariBox(
+        BottariButton(
+            text = stringResource(R.string.checklist_swipe_not_btn_text),
+            style = BottariButtonStyle.Secondary,
+            onClick = {
+                state.swipe(SwipeableCardDirection.Left)
+                onLeftSwipe(items[min(state.currentCardIndex, items.size - 1)])
+            },
             modifier =
                 Modifier
-                    .height(70.dp)
                     .weight(1f)
-                    .clickable(onClick = {
-                        state.swipe(SwipeableCardDirection.Left)
-                        onLeftSwipe(items[min(state.currentCardIndex, items.size - 1)])
-                    }),
-        ) {
-            Text(
-                text = stringResource(R.string.checklist_swipe_not_btn_text),
-                modifier = Modifier.align(Alignment.Center),
-                style = BottariTheme.typography.medium20.toTextStyle(),
-            )
-        }
+                    .height(60.dp),
+        )
         Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceMedium))
-
-        BottariBox(
+        BottariButton(
+            text = stringResource(R.string.checklist_swipe_yes_btn_text),
+            onClick = {
+                state.swipe(SwipeableCardDirection.Right)
+                onRightSwipe(items[min(state.currentCardIndex, items.size - 1)])
+            },
             modifier =
                 Modifier
-                    .height(70.dp)
                     .weight(1f)
-                    .background(BottariTheme.colors.primary)
-                    .clickable(onClick = {
-                        state.swipe(SwipeableCardDirection.Right)
-                        onRightSwipe(items[min(state.currentCardIndex, items.size - 1)])
-                    }),
-        ) {
-            Text(
-                text = stringResource(R.string.checklist_swipe_yes_btn_text),
-                modifier = Modifier.align(Alignment.Center),
-                style = BottariTheme.typography.medium20.toTextStyle(),
-                color = BottariTheme.colors.white,
-            )
-        }
+                    .height(60.dp),
+        )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun CardStackScreenPreview() {
     val items =
@@ -258,10 +241,10 @@ private fun CardStackScreenPreview() {
     CardStackScreen(state, items, onLeftSwipe = {}, onRightSwipe = {})
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun BottariCardPreview() {
-    BottariCard(
+private fun SwipeableChecklistItemPreview() {
+    SwipeableChecklistItem(
         PersonalChecklistItemUiModel(
             id = 4,
             name = "눈누난나아무튼엄청긴글자",
@@ -270,7 +253,7 @@ private fun BottariCardPreview() {
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun SwipeButtonsPreview() {
     val items =

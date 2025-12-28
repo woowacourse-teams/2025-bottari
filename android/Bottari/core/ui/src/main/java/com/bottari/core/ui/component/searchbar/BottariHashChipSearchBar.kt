@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -29,9 +28,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariIconButton
+import com.bottari.bottari.designsystem.extension.dropShadow
 import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.core.ui.component.HashChipTextField
-import com.bottari.core.ui.extension.dropShadow
 
 @Composable
 fun BottariHashChipSearchBar(
@@ -104,7 +104,7 @@ private fun HashChipSearchBarLeadingIcon(isFocused: Boolean) {
 
 @Composable
 private fun HashChipSearchBarTrailingIcon(onQueryChange: (String) -> Unit) {
-    IconButton(onClick = { onQueryChange("") }) {
+    BottariIconButton(onClick = { onQueryChange("") }) {
         Icon(
             imageVector = Icons.Default.Close,
             contentDescription = "검색어 지우기",

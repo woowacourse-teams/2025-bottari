@@ -18,14 +18,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.IndeterminateCircularIndicator
+import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.core.ui.extension.noRippleClickable
 import com.bottari.presentation.R
-import com.bottari.core.ui.R as UIR
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditEmptyView
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditInputBar
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditLazyColumn
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun PersonalItemEditScreen(
@@ -94,7 +94,7 @@ private fun ItemEditContent(
 ) {
     Column(modifier = modifier) {
         if (state.isLoading) {
-            IndeterminateCircularIndicator()
+            BottariCircularLoader()
             return@Column
         }
 

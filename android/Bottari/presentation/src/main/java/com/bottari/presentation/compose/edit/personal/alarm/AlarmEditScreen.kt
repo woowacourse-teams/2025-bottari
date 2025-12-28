@@ -10,7 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,10 +42,10 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
-import com.bottari.core.ui.component.BottariBox
-import com.bottari.core.ui.component.IndeterminateCircularIndicator
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.edit.personal.alarm.component.DatePickerModal
 import com.bottari.presentation.compose.edit.personal.alarm.component.DateSelector
@@ -170,14 +169,11 @@ private fun AlarmEditScreen(
             ),
     ) {
         if (state.isLoading) {
-            IndeterminateCircularIndicator()
+            BottariCircularLoader()
             return@Box
         }
 
-        BottariBox(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(BottariTheme.spacing.spaceXLarge),
-        ) {
+        BottariCard(modifier = Modifier.fillMaxWidth()) {
             Column {
                 AlarmEditHeader(
                     isActive = alarm.isActive,

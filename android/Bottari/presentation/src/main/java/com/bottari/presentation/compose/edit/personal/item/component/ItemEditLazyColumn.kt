@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,8 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.BottariBox
 import com.bottari.core.ui.extension.topBottomFadingEdge
 import com.bottari.presentation.R
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
@@ -64,7 +64,7 @@ private fun BottariItem(
     onDeleteClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BottariBox(
+    BottariCard(
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(vertical = BottariTheme.spacing.space2xSmall),
     ) {
@@ -81,9 +81,7 @@ private fun BottariItem(
                 overflow = TextOverflow.Ellipsis,
                 style = BottariTheme.typography.semiBold16.toTextStyle(),
             )
-            IconButton(
-                onClick = { onDeleteClick(item.id) },
-            ) {
+            BottariIconButton(onClick = { onDeleteClick(item.id) }) {
                 Icon(
                     painter = painterResource(R.drawable.ic_delete),
                     contentDescription = stringResource(R.string.common_btn_item_delete_description),

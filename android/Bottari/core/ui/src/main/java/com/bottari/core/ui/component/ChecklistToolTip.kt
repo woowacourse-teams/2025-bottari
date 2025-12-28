@@ -16,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,6 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bottari.bottari.designsystem.component.BottariIconButton
+import com.bottari.bottari.designsystem.component.BottariIconButtonTone
 import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.core.ui.R
 
@@ -68,10 +69,7 @@ fun ChecklistToolTip(
                 color = BottariTheme.colors.white,
             )
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(
-                onClick = closeAction,
-                modifier = Modifier.size(48.dp),
-            ) {
+            BottariIconButton(onClick = closeAction) {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = stringResource(R.string.common_close_btn_description),

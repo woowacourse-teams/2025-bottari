@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.IndeterminateCircularIndicator
+import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.team.TeamSendRemindDialog
 import com.bottari.presentation.compose.team.TeamStateCard
@@ -84,7 +84,7 @@ private fun TeamMemberStateScreen(
             .padding(BottariTheme.spacing.spaceMedium),
     ) {
         if (uiState.isInitialLoading) {
-            IndeterminateCircularIndicator()
+            BottariCircularLoader()
             return@Box
         }
 
@@ -130,7 +130,7 @@ private fun TeamMemberStateScreen(
         uiState.selectedMember?.let { member ->
             TeamSendRemindDialog(
                 title = member.member.nickname,
-                isRemindable = member.shouldHurryUp,
+                enableRemind = member.shouldHurryUp,
                 onDismissRequest = { onSelectMember(null) },
                 onClickRemind = { onSendRemind(member.member) },
             ) {

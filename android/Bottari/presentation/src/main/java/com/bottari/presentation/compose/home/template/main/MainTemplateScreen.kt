@@ -1,6 +1,7 @@
 package com.bottari.presentation.compose.home.template.main
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,8 +27,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.component.BottariInputChip
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.chip.BottariChip
 import com.bottari.core.ui.component.searchbar.BottariHashChipSearchBar
 import com.bottari.core.ui.extension.rememberBlockParentAfterChild
 import com.bottari.core.ui.extension.rememberScrolledToEnd
@@ -187,13 +188,10 @@ private fun PopularHashtagSection(
         ) {
             item { Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceSmall)) }
             items(popularHashtags, key = { hashtag -> hashtag.id }) { hashtag ->
-                val selected = chip?.id == hashtag.id
-                BottariChip(
-                    value = hashtag.name,
-                    containerColor = if (selected) BottariTheme.colors.primary else BottariTheme.colors.gray100,
-                    contentColor = if (selected) BottariTheme.colors.white else BottariTheme.colors.gray700,
-                    textStyle = BottariTheme.typography.medium14.toTextStyle(),
-                    onClick = { onChipChange(hashtag) },
+                BottariInputChip(
+                    text = hashtag.name,
+                    selected = chip?.id == hashtag.id,
+                    modifier = Modifier.clickable { onChipChange(hashtag) },
                 )
             }
             item { Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceSmall)) }

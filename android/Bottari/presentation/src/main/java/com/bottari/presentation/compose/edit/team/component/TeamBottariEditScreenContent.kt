@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.IndeterminateCircularIndicator
+import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.core.ui.extension.noRippleClickable
 import com.bottari.presentation.compose.edit.personal.item.component.ItemEditInputBar
 import com.bottari.presentation.model.bottari.BottariItemUiModel
@@ -72,7 +72,7 @@ fun TeamChecklistEditScreen(
                         .wrapContentHeight(),
             )
         }
-        if (isLoading) IndeterminateCircularIndicator()
+        if (isLoading) BottariCircularLoader()
     }
 }
 

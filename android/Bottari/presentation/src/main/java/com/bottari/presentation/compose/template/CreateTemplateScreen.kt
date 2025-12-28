@@ -98,7 +98,7 @@ fun CreateTemplateScreen(
         onDescriptionChange = viewModel::updateDescription,
         onWritingHashtagChange = viewModel::updateHashtag,
         onAddHashtag = viewModel::addHashtag,
-        onDeleteHashtag = viewModel::deleteHashtag,
+        onUpdateHashtags = viewModel::updateHashtags,
         onClickCreate = viewModel::createTemplate,
         onClickSelect = { isOpenSelector = true },
         onClickBack = navigateBack,
@@ -112,7 +112,7 @@ private fun CreateTemplateScreen(
     onDescriptionChange: (String) -> Unit,
     onWritingHashtagChange: (String) -> Unit,
     onAddHashtag: () -> Unit,
-    onDeleteHashtag: (String) -> Unit,
+    onUpdateHashtags: (List<String>) -> Unit,
     onClickCreate: () -> Unit,
     onClickSelect: () -> Unit,
     onClickBack: () -> Unit,
@@ -138,7 +138,7 @@ private fun CreateTemplateScreen(
                 onDescriptionChange = onDescriptionChange,
                 onWritingHashtagChange = onWritingHashtagChange,
                 onAddHashtag = onAddHashtag,
-                onDeleteHashtag = onDeleteHashtag,
+                onUpdateHashtags = onUpdateHashtags,
                 onClickSelect = onClickSelect,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -163,7 +163,7 @@ private fun CreateTemplateScreenContent(
     onDescriptionChange: (String) -> Unit,
     onWritingHashtagChange: (String) -> Unit,
     onAddHashtag: () -> Unit,
-    onDeleteHashtag: (String) -> Unit,
+    onUpdateHashtags: (List<String>) -> Unit,
     onClickSelect: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -187,7 +187,7 @@ private fun CreateTemplateScreenContent(
             onWritingHashtagChange = onWritingHashtagChange,
             canAddHashtag = uiState.canAddHashtag,
             onClickAdd = onAddHashtag,
-            onClickDelete = onDeleteHashtag,
+            onUpdateHashtags = onUpdateHashtags,
         )
     }
 }
@@ -245,7 +245,7 @@ private fun CreateTemplateScreenPreview() {
             onClickBack = {},
             onDescriptionChange = { uiState = uiState.copy(description = it) },
             onWritingHashtagChange = { uiState = uiState.copy(writingHashtag = it) },
-            onDeleteHashtag = { uiState = uiState.copy(hashtags = uiState.hashtags - it) },
+            onUpdateHashtags = { uiState = uiState.copy(hashtags = uiState.hashtags - it) },
             onAddHashtag = {
                 uiState =
                     uiState.copy(

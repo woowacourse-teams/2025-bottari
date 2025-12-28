@@ -22,8 +22,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.BottariBox
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 import com.bottari.presentation.model.bottari.team.ChecklistItemUiModel
 
@@ -32,7 +32,7 @@ fun PersonalChecklistItem(
     bottariItem: ChecklistItemUiModel,
     onClick: () -> Unit,
 ) {
-    BottariBox(
+    BottariCard(
         modifier =
             Modifier
                 .fillMaxWidth()
@@ -40,7 +40,8 @@ fun PersonalChecklistItem(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(bounded = true, color = BottariTheme.colors.primary),
                     onClick = { onClick() },
-                ).semantics(mergeDescendants = true) {
+                )
+                .semantics(mergeDescendants = true) {
                     contentDescription = bottariItem.name
                     stateDescription = if (bottariItem.isChecked) "완료" else "미완료"
                 },

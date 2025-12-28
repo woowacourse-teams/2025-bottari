@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,8 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.BottariBox
 
 @Composable
 fun TemplateDescriptionSection(
@@ -24,7 +23,7 @@ fun TemplateDescriptionSection(
     onDescriptionChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BottariBox(modifier = modifier.fillMaxWidth()) {
+    BottariCard(modifier) {
         Column {
             Text(
                 text = "보따리 설명",
@@ -74,7 +73,8 @@ private fun DescriptionInputContent(
                     .background(
                         color = BottariTheme.colors.gray200,
                         shape = RoundedCornerShape(999.dp),
-                    ).padding(
+                    )
+                    .padding(
                         vertical = BottariTheme.spacing.space2xSmall,
                         horizontal = BottariTheme.spacing.spaceXSmall,
                     ),

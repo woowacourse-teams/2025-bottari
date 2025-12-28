@@ -12,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
@@ -31,8 +30,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariIconButton
+import com.bottari.bottari.designsystem.extension.dropShadow
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.extension.dropShadow
 
 @Composable
 fun BottariSearchBar(
@@ -56,7 +56,8 @@ fun BottariSearchBar(
                 .background(
                     color = Color.White,
                     shape = shape,
-                ).border(
+                )
+                .border(
                     width = 0.8.dp,
                     color = if (isFocused) BottariTheme.colors.primary else Color.LightGray,
                     shape = shape,
@@ -79,9 +80,7 @@ fun BottariSearchBar(
             },
             trailingIcon = {
                 if (query.isNotEmpty()) {
-                    IconButton(
-                        onClick = { onQueryChange("") },
-                    ) {
+                    BottariIconButton(onClick = { onQueryChange("") }) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "검색어 지우기",

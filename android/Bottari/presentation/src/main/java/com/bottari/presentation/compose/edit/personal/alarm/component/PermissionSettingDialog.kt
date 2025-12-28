@@ -4,16 +4,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,8 +18,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.bottari.bottari.designsystem.component.BottariButton
+import com.bottari.bottari.designsystem.component.BottariButtonStyle
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.BottariBox
 
 @Composable
 fun PermissionSettingDialog(
@@ -51,7 +51,7 @@ private fun PermissionSettingDialogContent(
     description: String,
     modifier: Modifier = Modifier,
 ) {
-    BottariBox(
+    BottariCard(
         modifier = modifier,
         contentPadding = PaddingValues(0.dp),
     ) {
@@ -100,7 +100,7 @@ private fun PermissionSettingDialogHeader(
                 ),
             style = BottariTheme.typography.semiBold20.toTextStyle(),
         )
-        IconButton(onClick = onDismiss) {
+        BottariIconButton(onClick = onDismiss) {
             Icon(
                 imageVector = Icons.Default.Clear,
                 contentDescription = "권한 다이얼로그 닫기",
@@ -122,58 +122,23 @@ private fun PermissionSettingDialogButtons(
                 horizontal = BottariTheme.spacing.spaceMedium,
             ),
     ) {
-        TextButton(
+        BottariButton(
             onClick = onDismiss,
-            modifier =
-                Modifier
-                    .weight(1f)
-                    .padding(end = BottariTheme.spacing.space2xSmall),
-            shape = RoundedCornerShape(12.dp),
-            colors =
-                ButtonDefaults.buttonColors(
-                    containerColor = BottariTheme.colors.white,
-                    contentColor = BottariTheme.colors.gray700,
-                ),
-            elevation =
-                ButtonDefaults.buttonElevation(
-                    defaultElevation = 2.dp,
-                    pressedElevation = 0.dp,
-                ),
-        ) {
-            Text(
-                text = "나중에 하기",
-                modifier = Modifier.padding(vertical = BottariTheme.spacing.space2xSmall),
-                style = BottariTheme.typography.semiBold16.toTextStyle(),
-            )
-        }
+            text = "나중에 하기",
+            style = BottariButtonStyle.Secondary,
+            modifier = Modifier.weight(1f),
+        )
 
-        TextButton(
+        Spacer(modifier = Modifier.weight(0.1f))
+
+        BottariButton(
             onClick = {
                 onNavigateClick()
                 onDismiss()
             },
-            modifier =
-                Modifier
-                    .weight(1f)
-                    .padding(start = BottariTheme.spacing.space2xSmall),
-            shape = RoundedCornerShape(12.dp),
-            colors =
-                ButtonDefaults.buttonColors(
-                    containerColor = BottariTheme.colors.primary,
-                    contentColor = BottariTheme.colors.white,
-                ),
-            elevation =
-                ButtonDefaults.buttonElevation(
-                    defaultElevation = 2.dp,
-                    pressedElevation = 0.dp,
-                ),
-        ) {
-            Text(
-                text = "설정으로 가기",
-                modifier = Modifier.padding(vertical = BottariTheme.spacing.space2xSmall),
-                style = BottariTheme.typography.semiBold16.toTextStyle(),
-            )
-        }
+            text = "설정으로 가기",
+            modifier = Modifier.weight(1f),
+        )
     }
 }
 

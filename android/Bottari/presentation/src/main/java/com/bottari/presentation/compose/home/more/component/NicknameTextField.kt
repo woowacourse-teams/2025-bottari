@@ -1,10 +1,7 @@
 package com.bottari.presentation.compose.home.more.component
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.KeyboardActionHandler
@@ -17,7 +14,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -37,11 +33,7 @@ fun NicknameTextField(
 ) {
     TextField(
         state = textFieldState,
-        modifier =
-            modifier
-                .focusRequester(focusRequester)
-                .fillMaxWidth()
-                .heightIn(30.dp),
+        modifier = modifier.focusRequester(focusRequester).height(20.dp),
         textStyle = BottariTheme.typography.medium16.toTextStyle(),
         readOnly = !isEditing,
         inputTransformation = InputTransformation.maxLength(10),
@@ -81,18 +73,10 @@ private fun NicknameTextFieldPreview() {
     val textFieldState = rememberTextFieldState()
 
     BottariTheme {
-        Box(
-            modifier =
-                Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-            contentAlignment = Alignment.Center,
-        ) {
-            NicknameTextField(
-                textFieldState = textFieldState,
-                isEditing = true,
-                focusRequester = focusRequester,
-            )
-        }
+        NicknameTextField(
+            textFieldState = textFieldState,
+            isEditing = true,
+            focusRequester = focusRequester,
+        )
     }
 }

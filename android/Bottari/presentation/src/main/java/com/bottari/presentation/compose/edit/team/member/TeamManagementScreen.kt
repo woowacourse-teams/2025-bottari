@@ -2,6 +2,7 @@ package com.bottari.presentation.compose.edit.team.member
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,17 +12,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,12 +30,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.BottariBox
-import com.bottari.core.ui.component.IndeterminateCircularIndicator
+import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.presentation.R
 import com.bottari.presentation.model.bottari.team.member.TeamMemberUiModel
 import com.bottari.presentation.util.DeeplinkHelper.createDeeplink
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun MemberEditScreen(
@@ -46,44 +47,42 @@ fun MemberEditScreen(
     viewModel: TeamManagementViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        viewModel.uiEvent.collect { uiEvent ->
+    LaunchedEffect(viewModel) {
+        viewModel.uiEvent.collectLatest { uiEvent ->
             when (uiEvent) {
-                TeamManagementUiEvent.FetchTeamMembersFailure -> snackbarHostState.showSnackbar("팀 멤버 불러오기에 실패했습니다")
+                TeamManagementUiEvent.FetchTeamMembersFailure -> {
+                    snackbarHostState.showSnackbar("팀 멤버 불러오기에 실패했습니다")
+                }
             }
         }
     }
 
-    MemberEditScreen(
+    MemberEditContent(
         bottariTitle = bottariTitle,
         uiState = uiState,
-        modifier = modifier,
-    )
-}
-
-@Composable
-private fun MemberEditScreen(
-    bottariTitle: String,
-    uiState: TeamManagementUiState,
-    modifier: Modifier = Modifier,
-) {
-    var isOpenShareInvite by remember { mutableStateOf(false) }
-    val context = LocalContext.current
-
-    LaunchedEffect(isOpenShareInvite) {
-        if (isOpenShareInvite) {
+        onShareClick = {
             shareInvite(
                 context = context,
                 inviteCode = uiState.inviteCode,
                 bottariTitle = bottariTitle,
             )
-            isOpenShareInvite = false
-        }
-    }
-    Box {
-        Column(modifier = modifier.fillMaxSize()) {
-            ShareInviteItem(onShareClick = { isOpenShareInvite = true })
+        },
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun MemberEditContent(
+    bottariTitle: String,
+    uiState: TeamManagementUiState,
+    onShareClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier.fillMaxSize()) {
+        Column {
+            ShareInviteItem(onShareClick = onShareClick)
 
             Spacer(Modifier.height(BottariTheme.spacing.spaceLarge))
 
@@ -93,26 +92,34 @@ private fun MemberEditScreen(
                 maxHeadCount = uiState.maxHeadCount,
             )
         }
-        if (uiState.isLoading) IndeterminateCircularIndicator()
+
+        if (uiState.isLoading) {
+            BottariCircularLoader()
+        }
     }
 }
 
 @Composable
 private fun ShareInviteItem(onShareClick: () -> Unit) {
-    BottariBox(
+    BottariCard(
         contentPadding =
             PaddingValues(
-                horizontal = BottariTheme.spacing.spaceSmall,
-                vertical = BottariTheme.spacing.space2xSmall,
+                top = BottariTheme.spacing.space2xSmall,
+                bottom = BottariTheme.spacing.space2xSmall,
+                start = BottariTheme.spacing.spaceSmall,
+                end = BottariTheme.spacing.space2xSmall,
             ),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Text(
                 text = stringResource(R.string.team_management_add_member_text),
                 style = BottariTheme.typography.bold18.toTextStyle(),
+                modifier = Modifier.weight(1f),
             )
-            Spacer(Modifier.weight(1f))
-            IconButton(onShareClick) {
+            BottariIconButton(onClick = onShareClick) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_share),
                     contentDescription = stringResource(R.string.team_btn_share_link_description),
@@ -128,44 +135,64 @@ private fun TeamBottariMemberList(
     teamMemberHeadCount: Int,
     maxHeadCount: Int = 10,
 ) {
-    BottariBox(
-        modifier = Modifier.fillMaxWidth(),
-        contentPadding =
-            PaddingValues(
-                bottom = 0.dp,
-                top = BottariTheme.spacing.spaceMedium,
-                start = BottariTheme.spacing.spaceMedium,
-                end = BottariTheme.spacing.spaceMedium,
-            ),
-    ) {
+    BottariCard {
         Column {
-            Row {
-                Text(
-                    text = stringResource(R.string.team_management_member_title_text),
-                    style = BottariTheme.typography.bold18.toTextStyle(),
-                )
-                Spacer(Modifier.weight(1f))
-                Text(
-                    text = "$teamMemberHeadCount/$maxHeadCount",
-                    style = BottariTheme.typography.bold18.toTextStyle(),
-                )
-            }
+            TeamBottariMemberListTitle(
+                teamMemberHeadCount = teamMemberHeadCount,
+                maxHeadCount = maxHeadCount,
+            )
+
             Spacer(Modifier.height(BottariTheme.spacing.spaceSmall))
             HorizontalDivider(
-                color = BottariTheme.colors.gray500,
+                color = BottariTheme.colors.gray400,
                 thickness = 1.dp,
             )
-            members.forEachIndexed { index, member ->
+            Spacer(Modifier.height(BottariTheme.spacing.spaceSmall))
+
+            TeamBottariMemberItems(members = members)
+        }
+    }
+}
+
+@Composable
+private fun TeamBottariMemberListTitle(
+    teamMemberHeadCount: Int,
+    maxHeadCount: Int,
+) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = stringResource(R.string.team_management_member_title_text),
+            style = BottariTheme.typography.bold18.toTextStyle(),
+        )
+        Spacer(Modifier.weight(1f))
+        Text(
+            text = "$teamMemberHeadCount/$maxHeadCount",
+            style = BottariTheme.typography.bold18.toTextStyle(),
+        )
+    }
+}
+
+@Composable
+private fun TeamBottariMemberItems(members: List<TeamMemberUiModel>) {
+    LazyColumn {
+        itemsIndexed(items = members) { index, member ->
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+            ) {
                 Text(
                     text = member.nickname,
                     style = BottariTheme.typography.bold18.toTextStyle(),
-                    modifier = Modifier.padding(vertical = BottariTheme.spacing.spaceMedium),
+                    modifier = Modifier.fillMaxWidth(),
                 )
+
                 if (index < members.size - 1) {
+                    Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
                     HorizontalDivider(
-                        color = BottariTheme.colors.gray500,
+                        color = BottariTheme.colors.gray400,
                         thickness = 1.dp,
                     )
+                    Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
                 }
             }
         }
@@ -183,59 +210,45 @@ private fun shareInvite(
             inviteCode = inviteCode,
             bottariTitle = bottariTitle,
         )
-    val sendIntent: Intent =
-        Intent().apply {
-            action = Intent.ACTION_SEND
+
+    val sendIntent =
+        Intent(Intent.ACTION_SEND).apply {
             putExtra(Intent.EXTRA_TEXT, shareMessage)
             type = "text/plain"
         }
 
-    val shareIntent = Intent.createChooser(sendIntent, null)
-    context.startActivity(shareIntent)
+    context.startActivity(Intent.createChooser(sendIntent, null))
 }
 
 private fun generateShareMessage(
     context: Context,
     inviteCode: String,
     bottariTitle: String,
-): String {
-    val inviteLink = createDeeplink(inviteCode)
-    return context.getString(
+): String =
+    context.getString(
         R.string.team_management_share_template_text,
         bottariTitle,
         inviteCode,
-        inviteLink,
+        createDeeplink(inviteCode),
     )
-}
 
 @Preview(showBackground = true)
 @Composable
 private fun MemberEditScreenPreview() {
-    MemberEditScreen(
+    MemberEditContent(
         bottariTitle = "테스트보따리",
         uiState =
             TeamManagementUiState(
                 members =
                     listOf(
-                        TeamMemberUiModel(
-                            id = 1,
-                            nickname = "테스트",
-                            isHost = true,
-                        ),
-                        TeamMemberUiModel(
-                            id = 2,
-                            nickname = "테스트2",
-                            isHost = false,
-                        ),
-                        TeamMemberUiModel(
-                            id = 3,
-                            nickname = "테스트3",
-                            isHost = false,
-                        ),
+                        TeamMemberUiModel(id = 1, nickname = "테스트", isHost = true),
+                        TeamMemberUiModel(id = 2, nickname = "테스트2", isHost = false),
+                        TeamMemberUiModel(id = 3, nickname = "테스트3", isHost = false),
                     ),
                 teamMemberHeadCount = 3,
                 maxHeadCount = 10,
             ),
+        onShareClick = {},
         modifier = Modifier.padding(BottariTheme.spacing.spaceMedium),
     )
 }

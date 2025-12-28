@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -18,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,8 +40,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariIconButton
+import com.bottari.bottari.designsystem.component.BottariInputChip
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.chip.DeletableChip
 
 @Composable
 fun HashChipTextField(
@@ -76,10 +77,9 @@ fun HashChipTextField(
         Spacer(modifier = Modifier.width(BottariTheme.spacing.space2xSmall))
 
         chips.forEach { chip ->
-            DeletableChip(
+            BottariInputChip(
                 text = chip,
-                onClick = {},
-                onDelete = {
+                onRemove = {
                     val updated = chips.toMutableList().also { it.remove(chip) }
                     onChipsChange(updated)
                 },
@@ -201,11 +201,14 @@ private fun extractCompletedTags(input: String): Pair<List<String>, String> {
 @Composable
 private fun HashChipTextFieldPreview() {
     var text by rememberSaveable { mutableStateOf("") }
-    val chips = remember { mutableStateListOf<String>() }
+    val chips = remember { mutableStateListOf<String>("#123", "#456") }
     var isFocused by rememberSaveable { mutableStateOf(false) }
 
     Box(
-        modifier = Modifier.onFocusChanged { isFocused = it.isFocused },
+        modifier =
+            Modifier
+                .height(48.dp)
+                .onFocusChanged { isFocused = it.isFocused },
     ) {
         HashChipTextField(
             value = text,
@@ -219,8 +222,10 @@ private fun HashChipTextFieldPreview() {
             placeholderText = "태그를 입력하세요... (예: #compose )",
             onSearch = {},
             modifier =
-                Modifier
-                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp)),
+                Modifier.background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(12.dp),
+                ),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
@@ -230,9 +235,7 @@ private fun HashChipTextFieldPreview() {
             },
             trailingIcon = {
                 if (text.isNotEmpty()) {
-                    IconButton(
-                        onClick = { text = "" },
-                    ) {
+                    BottariIconButton(onClick = { text = "" }) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "검색어 지우기",

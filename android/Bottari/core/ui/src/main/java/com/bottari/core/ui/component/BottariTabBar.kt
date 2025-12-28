@@ -27,8 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.bottari.bottari.designsystem.extension.dropShadow
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.extension.dropShadow
 import com.bottari.core.ui.extension.pagerTabIndicatorOffset
 import com.bottari.core.ui.source.NoRippleInteractionSource
 import kotlinx.coroutines.launch

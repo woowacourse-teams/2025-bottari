@@ -19,8 +19,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.BottariBox
 import com.bottari.presentation.R
 
 @Composable
@@ -31,7 +31,7 @@ fun TeamStateCard(
     color: Color,
     modifier: Modifier = Modifier,
 ) {
-    BottariBox(modifier = modifier) {
+    BottariCard(modifier = modifier) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(horizontalAlignment = Alignment.Start) {
                 Text(text = title, style = BottariTheme.typography.regular14.toTextStyle())

@@ -1,4 +1,4 @@
-package com.bottari.core.ui.extension
+package com.bottari.bottari.designsystem.extension
 
 import android.graphics.BlurMaskFilter
 import androidx.compose.foundation.background

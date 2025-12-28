@@ -20,7 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
-import com.bottari.core.ui.component.IndeterminateCircularIndicator
+import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.personal.checklist.PersonalChecklistScreen
 import com.bottari.presentation.compose.personal.component.ChecklistTopBar
@@ -114,7 +114,7 @@ private fun PersonalBottariScreen(
         modifier = modifier,
     ) { innerPadding ->
         if (uiState.isLoading) {
-            IndeterminateCircularIndicator()
+            BottariCircularLoader()
             return@Scaffold
         }
         if (uiState.isItemsEmpty) {

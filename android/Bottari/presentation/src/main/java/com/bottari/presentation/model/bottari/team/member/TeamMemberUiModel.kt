@@ -7,7 +7,6 @@ import com.bottari.core.domain.model.team.member.TeamMemberStatus
 import com.bottari.core.domain.model.team.member.TeamStatus
 import kotlinx.parcelize.Parcelize
 
-@Immutable
 @Parcelize
 data class TeamMemberUiModel(
     val id: Long?,

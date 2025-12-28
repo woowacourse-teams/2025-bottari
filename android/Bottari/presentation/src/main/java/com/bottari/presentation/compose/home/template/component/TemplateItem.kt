@@ -31,8 +31,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.BottariBox
 import com.bottari.core.ui.component.CollapsedListLine
 import com.bottari.presentation.R
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
@@ -52,7 +52,7 @@ fun TemplateItem(
     val hashTagSectionPadding =
         if (hashtags.isNotEmpty()) BottariTheme.spacing.spaceMedium else 0.dp
 
-    BottariBox(
+    BottariCard(
         modifier = modifier,
         contentPadding = PaddingValues(),
     ) {
@@ -151,7 +151,8 @@ private fun HashtagChip(
                 .background(
                     color = Color(0xFFEFF6FF),
                     shape = chipShape,
-                ).clickable(
+                )
+                .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(color = BottariTheme.colors.primary),
                 ) { onClickHashtag(hashtag) }

@@ -5,12 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,12 +27,13 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.component.BottariButton
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.component.BottariIconButton
+import com.bottari.bottari.designsystem.component.BottariTextField
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.BottariBox
 import com.bottari.presentation.R
 import com.bottari.core.ui.R as UIR
-import com.bottari.presentation.compose.edit.personal.rename.component.BottariRenameButton
-import com.bottari.presentation.compose.edit.personal.rename.component.BottariRenameTextField
 
 @Composable
 fun BottariRenameDialog(
@@ -90,7 +89,7 @@ private fun BottariRenameDialog(
         onDismissRequest = onDismissRequest,
         properties = DialogProperties(usePlatformDefaultWidth = true),
     ) {
-        BottariBox(
+        BottariCard(
             modifier = modifier,
             contentPadding = PaddingValues(0.dp),
         ) {
@@ -99,26 +98,27 @@ private fun BottariRenameDialog(
                     onDismissRequest = onDismissRequest,
                     modifier = Modifier.fillMaxWidth(),
                 )
-                BottariRenameTextField(
-                    title = bottariTitle,
-                    onTitleChange = onTitleChange,
+                Column(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .height(48.dp)
-                            .padding(horizontal = BottariTheme.spacing.spaceLarge),
-                )
-                BottariRenameButton(
-                    onClick = onTitleSave,
-                    isClickable = isSavable,
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                vertical = BottariTheme.spacing.spaceMedium,
-                                horizontal = BottariTheme.spacing.spaceLarge,
-                            ),
-                )
+                        Modifier.padding(
+                            horizontal = BottariTheme.spacing.spaceLarge,
+                        ),
+                ) {
+                    BottariTextField(
+                        value = bottariTitle,
+                        onValueChange = onTitleChange,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    BottariButton(
+                        text = stringResource(R.string.bottari_rename_dialog_btn_text),
+                        onClick = onTitleSave,
+                        enabled = isSavable,
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = BottariTheme.spacing.spaceMedium),
+                    )
+                }
             }
         }
     }
@@ -143,7 +143,7 @@ private fun BottariRenameDialogHeader(
                 ),
             style = BottariTheme.typography.medium16.toTextStyle(),
         )
-        IconButton(onClick = onDismissRequest) {
+        BottariIconButton(onClick = onDismissRequest) {
             Icon(
                 imageVector = Icons.Default.Clear,
                 contentDescription = stringResource(UIR.string.common_close_btn_description),

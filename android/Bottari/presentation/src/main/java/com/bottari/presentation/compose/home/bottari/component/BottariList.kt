@@ -1,7 +1,5 @@
 package com.bottari.presentation.compose.home.bottari.component
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,6 +45,7 @@ fun BottariList(
         ) { bottari ->
             BottariItem(
                 bottari = bottari,
+                onBottariClick = { onBottariClick(bottari) },
                 isMenuShown = (openedMenuBottari == bottari),
                 onShowMenu = { openedMenuBottari = bottari },
                 onCloseMenu = { openedMenuBottari = null },
@@ -65,13 +63,6 @@ fun BottariList(
                     }
                     onEditTeamBottari(bottari.id)
                 },
-                modifier =
-                    Modifier
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(color = BottariTheme.colors.primary),
-                            onClick = { onBottariClick(bottari) },
-                        ),
             )
         }
     }

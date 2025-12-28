@@ -1,36 +1,26 @@
 package com.bottari.presentation.compose.team
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.bottari.bottari.designsystem.component.BottariButton
+import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.BottariBox
 import com.bottari.presentation.R
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun TeamSendRemindDialog(
     title: String,
-    isRemindable: Boolean,
+    enableRemind: Boolean,
     onDismissRequest: () -> Unit,
     onClickRemind: () -> Unit,
     modifier: Modifier = Modifier,
@@ -40,47 +30,25 @@ fun TeamSendRemindDialog(
         onDismissRequest = onDismissRequest,
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
-        BottariBox(
-            modifier = modifier.fillMaxWidth(0.85f),
-            shape = RoundedCornerShape(16.dp),
-            contentPadding = PaddingValues(BottariTheme.spacing.spaceLarge),
-        ) {
+        BottariCard(modifier = modifier.fillMaxWidth(0.85f)) {
             Column {
                 Text(text = title, style = BottariTheme.typography.bold20.toTextStyle())
                 Spacer(Modifier.height(BottariTheme.spacing.spaceMedium))
                 content()
-                if (isRemindable) {
+                if (enableRemind) {
                     Spacer(Modifier.height(BottariTheme.spacing.spaceMedium))
-                    Button(
+                    BottariButton(
+                        text = "지금 보채기",
+                        modifier = Modifier.fillMaxWidth(),
                         onClick = onClickRemind,
-                        shape = RoundedCornerShape(16.dp),
-                        colors =
-                            ButtonColors(
-                                BottariTheme.colors.primary,
-                                contentColor = BottariTheme.colors.white,
-                                disabledContainerColor = BottariTheme.colors.primary,
-                                disabledContentColor = BottariTheme.colors.white,
-                            ),
-                        contentPadding = PaddingValues(BottariTheme.spacing.spaceMedium),
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
+                        leadingIcon = {
                             Icon(
                                 painter = painterResource(id = R.drawable.iv_notification),
                                 contentDescription = null,
                                 tint = BottariTheme.colors.white,
                             )
-                            Spacer(Modifier.width(BottariTheme.spacing.space2xSmall))
-                            Text(
-                                text = "지금 보채기",
-                                style = BottariTheme.typography.semiBold16.toTextStyle(),
-                                color = BottariTheme.colors.white,
-                            )
-                        }
-                    }
+                        },
+                    )
                 }
             }
         }

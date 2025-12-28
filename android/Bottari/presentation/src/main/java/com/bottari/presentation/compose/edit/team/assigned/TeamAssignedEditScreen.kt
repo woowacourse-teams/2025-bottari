@@ -9,24 +9,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.component.BottariButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.IndeterminateCircularIndicator
+import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedBottomSheet
 import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedEditItem
 import com.bottari.presentation.compose.edit.team.component.TeamEditEmptyView
@@ -130,22 +126,14 @@ private fun TeamAssignedScreen(
                     }
                 }
             }
-            Button(
+            BottariButton(
+                text = "물건 추가",
                 onClick = onBottomSheetOpen,
                 modifier =
                     Modifier
                         .fillMaxWidth()
                         .padding(vertical = BottariTheme.spacing.spaceMedium),
-                colors =
-                    ButtonDefaults.buttonColors(
-                        containerColor = BottariTheme.colors.primary,
-                        contentColor = BottariTheme.colors.white,
-                        disabledContainerColor = BottariTheme.colors.primary,
-                        disabledContentColor = BottariTheme.colors.white,
-                    ),
-                shape = RoundedCornerShape(12.dp),
-                contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceMedium),
-            ) { Text(text = "물건 추가", style = BottariTheme.typography.semiBold24.toTextStyle()) }
+            )
             if (uiState.isSheetVisible) {
                 TeamAssignedBottomSheet(
                     uiState = uiState,
@@ -159,7 +147,7 @@ private fun TeamAssignedScreen(
                 )
             }
         }
-        if (uiState.isLoading) IndeterminateCircularIndicator()
+        if (uiState.isLoading) BottariCircularLoader()
     }
 }
 
