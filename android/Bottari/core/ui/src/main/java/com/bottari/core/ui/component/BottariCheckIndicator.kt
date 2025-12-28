@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +25,7 @@ fun BottariCheckIndicator(
         modifier =
             modifier
                 .fillMaxSize()
-                .clip(shape = RoundedCornerShape(16.dp))
+                .clip(shape = BottariTheme.shapes.radiusLarge)
                 .background(BottariTheme.colors.gray400),
         contentAlignment = Alignment.CenterStart,
     ) {
@@ -35,7 +34,7 @@ fun BottariCheckIndicator(
                 Modifier
                     .fillMaxWidth(generateIndicatorSize(checkedQuantity, totalQuantity))
                     .fillMaxHeight()
-                    .clip(shape = RoundedCornerShape(16.dp))
+                    .clip(shape = BottariTheme.shapes.radiusLarge)
                     .background(chooseBottariStateColor(checkedQuantity, totalQuantity)),
         )
     }

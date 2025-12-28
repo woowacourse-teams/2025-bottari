@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
@@ -46,7 +44,7 @@ fun BottariInputChip(
 
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(999.dp),
+        shape = BottariTheme.shapes.pill,
         color = colors.first,
         contentColor = colors.second,
         tonalElevation = 0.dp,
@@ -71,7 +69,7 @@ fun BottariInputChip(
                     modifier =
                         Modifier
                             .size(12.dp)
-                            .clip(CircleShape)
+                            .clip(BottariTheme.shapes.circle)
                             .clickable { onRemove() },
                 )
             }

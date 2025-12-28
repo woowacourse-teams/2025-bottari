@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -25,7 +24,7 @@ import com.bottari.bottari.designsystem.theme.BottariTheme
 
 @Composable
 fun Modifier.dropShadow(
-    shape: Shape,
+    shape: Shape = BottariTheme.shapes.radiusMedium,
     color: Color = BottariTheme.colors.black.copy(0.25f),
     blur: Dp = 1.dp,
     offsetY: Dp = 1.dp,
@@ -72,15 +71,14 @@ fun Modifier.dropShadow(
 @Composable
 private fun DropShadowPreview() {
     BottariTheme {
-        val shape = RoundedCornerShape(12.dp)
-
+        val previewShape = BottariTheme.shapes.radiusMedium
         Box(modifier = Modifier.padding(20.dp)) {
             Box(
                 modifier =
                     Modifier
                         .size(50.dp)
-                        .dropShadow(shape = shape)
-                        .background(color = BottariTheme.colors.white, shape = shape),
+                        .dropShadow(shape = previewShape)
+                        .background(color = BottariTheme.colors.white, shape = previewShape),
             )
         }
     }

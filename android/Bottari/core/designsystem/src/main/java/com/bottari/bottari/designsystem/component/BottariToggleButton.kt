@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
@@ -31,7 +30,7 @@ fun BottariToggleButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     tone: BottariToggleButtonTone = BottariToggleButtonTone.None,
-    shape: Shape = RoundedCornerShape(12.dp),
+    shape: Shape = BottariTheme.shapes.radiusMedium,
     content: @Composable (checked: Boolean) -> Unit,
 ) {
     val background =

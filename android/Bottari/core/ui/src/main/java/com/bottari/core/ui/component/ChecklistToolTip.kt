@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Code
@@ -41,7 +39,7 @@ fun ChecklistToolTip(
         modifier =
             modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
+                .clip(BottariTheme.shapes.radiusMedium)
                 .background(color = BottariTheme.colors.primary)
                 .padding(
                     top = BottariTheme.spacing.spaceXSmall,
@@ -54,7 +52,7 @@ fun ChecklistToolTip(
             Box(
                 modifier =
                     Modifier
-                        .clip(CircleShape)
+                        .clip(BottariTheme.shapes.circle)
                         .size(32.dp)
                         .background(color = BottariTheme.colors.white.copy(alpha = 0.7f)),
                 contentAlignment = Alignment.Center,

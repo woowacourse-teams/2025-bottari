@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -34,15 +33,18 @@ fun BottariButton(
     leadingIcon: (@Composable () -> Unit)? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
 ) {
+    val elevationValue = if (style != BottariButtonStyle.None) 1.dp else 0.dp
+
     Button(
         onClick = onClick,
         modifier = modifier.heightIn(min = 48.dp),
         enabled = enabled,
-        shape = RoundedCornerShape(12.dp),
+        shape = BottariTheme.shapes.radiusMedium,
         colors = buttonColorsByStyle(style),
         elevation =
             ButtonDefaults.buttonElevation(
-                defaultElevation = if (style != BottariButtonStyle.None) 1.dp else 0.dp,
+                defaultElevation = elevationValue,
+                pressedElevation = elevationValue,
             ),
         contentPadding = PaddingValues(horizontal = BottariTheme.spacing.spaceSmall),
     ) {

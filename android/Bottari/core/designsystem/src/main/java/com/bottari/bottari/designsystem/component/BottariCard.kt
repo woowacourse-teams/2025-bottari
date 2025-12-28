@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -40,8 +39,8 @@ fun BottariCard(
     Box(
         modifier =
             modifier
-                .dropShadow(shape = RoundedCornerShape(12.dp))
-                .clip(shape = RoundedCornerShape(12.dp))
+                .dropShadow(shape = BottariTheme.shapes.radiusMedium)
+                .clip(shape = BottariTheme.shapes.radiusMedium)
                 .background(color = background)
                 .clickableCard(
                     enabled = onClick != null,

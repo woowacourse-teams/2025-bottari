@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabPosition
 import androidx.compose.material3.TabRow
@@ -54,7 +53,7 @@ fun BottariTabBar(
             modifier
                 .height(60.dp)
                 .padding(horizontal = 16.dp)
-                .clip(CircleShape),
+                .clip(BottariTheme.shapes.pill),
         selectedTabIndex = pagerState.currentPage,
         indicator = indicator,
         divider = {},
@@ -117,11 +116,11 @@ private fun BottariIndicator(
                 .fillMaxSize()
                 .padding(horizontal = 4.dp)
                 .dropShadow(
-                    CircleShape,
+                    BottariTheme.shapes.pill,
                     color = BottariTheme.colors.black.copy(alpha = 0.05f),
                     blur = 2.dp,
                     offsetY = 1.dp,
-                ).background(color = Color.White, CircleShape)
+                ).background(color = Color.White, BottariTheme.shapes.pill)
                 .zIndex(1f),
     )
 }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -41,7 +40,7 @@ fun BottariHashChipSearchBar(
     placeholderText: String,
     onSearch: (String) -> Unit,
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(16.dp),
+    shape: Shape = BottariTheme.shapes.radiusLarge,
     textStyle: TextStyle = TextStyle(),
 ) {
     var isFocused by rememberSaveable { mutableStateOf(false) }

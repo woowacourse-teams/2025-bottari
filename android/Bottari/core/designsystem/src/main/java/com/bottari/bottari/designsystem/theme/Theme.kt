@@ -25,6 +25,11 @@ object BottariTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalBottariTypographySystem.current
+
+    val shapes: BottariShape
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalBottariShape.current
 }
 
 val BottariStatusBarStyle =

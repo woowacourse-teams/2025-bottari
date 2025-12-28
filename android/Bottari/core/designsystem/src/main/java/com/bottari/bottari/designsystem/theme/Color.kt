@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -123,12 +122,13 @@ private fun ColorItem(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth(),
     ) {
+        val sampleShape = BottariTheme.shapes.radiusSmall
         Box(
             modifier =
                 Modifier
                     .size(40.dp)
-                    .background(color = color, shape = RoundedCornerShape(8.dp))
-                    .border(1.dp, colors.gray300, RoundedCornerShape(8.dp)),
+                    .background(color = color, shape = sampleShape)
+                    .border(1.dp, colors.gray300, sampleShape),
         )
         Spacer(modifier = Modifier.width(12.dp))
         Text(

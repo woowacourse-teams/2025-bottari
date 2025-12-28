@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,7 +39,7 @@ fun BottariMultilineField(
                     .border(
                         width = 1.dp,
                         color = BottariTheme.colors.gray300,
-                        shape = RoundedCornerShape(12.dp),
+                        shape = BottariTheme.shapes.radiusMedium,
                     ).padding(BottariTheme.spacing.spaceMedium),
             decorationBox = { inner ->
                 Box {
@@ -67,7 +66,7 @@ fun BottariMultilineField(
                         .padding(BottariTheme.spacing.space2xSmall)
                         .background(
                             color = BottariTheme.colors.gray200,
-                            shape = RoundedCornerShape(999.dp),
+                            shape = BottariTheme.shapes.pill,
                         ).padding(horizontal = 8.dp, vertical = 4.dp),
             )
         }
