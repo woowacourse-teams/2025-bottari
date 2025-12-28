@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -73,7 +74,7 @@ private fun BottariTopAppBarPreview() {
                 title = "보따리",
                 navigationIcon = {
                     BottariIconButton(onClick = {}) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = null)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                     }
                 },
                 actions = {
@@ -93,6 +94,11 @@ private fun BottariTopAppBarPreview() {
             BottariTopAppBar(
                 title = "보따리",
                 centerAligned = false,
+                navigationIcon = {
+                    BottariIconButton(onClick = {}) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                    }
+                }
             )
         }
     }

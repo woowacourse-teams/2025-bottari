@@ -1,4 +1,4 @@
-package com.bottari.core.ui.component.searchbar
+package com.bottari.core.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.extension.dropShadow
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.component.HashChipTextField
 
 @Composable
 fun BottariHashChipSearchBar(
