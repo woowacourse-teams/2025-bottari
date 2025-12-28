@@ -28,6 +28,14 @@ import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.preview.ComponentPreview
 import com.bottari.bottari.designsystem.theme.BottariTheme
 
+/**
+ * 태그나 카테고리를 표시하는 칩 컴포넌트로 선택 상태와 삭제 버튼을 지원합니다.
+ *
+ * @param text 칩에 표시할 문자열.
+ * @param modifier 칩 래퍼에 적용할 Modifier.
+ * @param onRemove 삭제 아이콘 터치 시 호출되는 콜백, null이면 아이콘을 숨깁니다.
+ * @param selected true면 강조 색상으로 표시합니다.
+ */
 @Composable
 fun BottariInputChip(
     text: String,
@@ -77,6 +85,13 @@ fun BottariInputChip(
     }
 }
 
+/**
+ * 여러 개의 BottariInputChip을 행 단위로 배치하고 삭제 콜백을 연결합니다.
+ *
+ * @param chips 표시할 텍스트 리스트.
+ * @param onChipsChange 칩 목록이 변경되었을 때 호출되는 콜백.
+ * @param modifier FlowRow에 적용할 Modifier.
+ */
 @Composable
 fun BottariChipGroup(
     chips: List<String>,

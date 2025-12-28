@@ -22,6 +22,15 @@ import com.bottari.bottari.designsystem.theme.BottariTheme
 
 enum class BottariCardTone { Primary, Secondary }
 
+/**
+ * 그림자와 둥근 모서리를 가진 보따리 카드 컴포넌트입니다.
+ *
+ * @param modifier 카드 전체에 적용할 Modifier.
+ * @param tone 배경색과 리플 컬러를 결정하는 톤.
+ * @param contentPadding 카드 내부 여백.
+ * @param onClick null이 아니면 클릭 가능한 카드로 동작합니다.
+ * @param content 카드 본문 콘텐츠 슬롯.
+ */
 @Composable
 fun BottariCard(
     modifier: Modifier = Modifier,

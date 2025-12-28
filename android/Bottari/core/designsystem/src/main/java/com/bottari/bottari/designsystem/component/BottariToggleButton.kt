@@ -23,6 +23,17 @@ import com.bottari.bottari.designsystem.theme.BottariTheme
 
 enum class BottariToggleButtonTone { None, Primary }
 
+/**
+ * 상태를 전환하는 토글 아이콘 버튼으로 톤과 배경을 설정할 수 있습니다.
+ *
+ * @param checked 현재 선택 상태.
+ * @param onCheckedChange 클릭 시 전달할 상태 변경 콜백.
+ * @param modifier 레이아웃 Modifier.
+ * @param enabled 비활성화 여부.
+ * @param tone 배경 톤 설정.
+ * @param shape 버튼 모양.
+ * @param content checked 상태를 전달받는 콘텐츠 슬롯.
+ */
 @Composable
 fun BottariToggleButton(
     checked: Boolean,

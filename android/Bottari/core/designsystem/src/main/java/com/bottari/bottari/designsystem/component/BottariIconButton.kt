@@ -19,6 +19,16 @@ import com.bottari.bottari.designsystem.theme.BottariTheme
 
 enum class BottariIconButtonTone { None, Primary }
 
+/**
+ * 아이콘만 표시하는 버튼으로 톤에 따라 배경을 다르게 렌더링합니다.
+ *
+ * @param onClick 버튼 클릭 콜백.
+ * @param modifier 버튼 외부 Modifier.
+ * @param enabled 비활성화 여부.
+ * @param tone 배경 톤 설정.
+ * @param shape 버튼 외곽 모양.
+ * @param content 아이콘 콘텐츠 슬롯.
+ */
 @Composable
 fun BottariIconButton(
     onClick: () -> Unit,

@@ -22,6 +22,22 @@ import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.preview.ComponentPreview
 import com.bottari.bottari.designsystem.theme.BottariTheme
 
+/**
+ * 라벨, 플레이스홀더, 보조 문구를 지원하는 기본 단일행 텍스트 필드입니다.
+ *
+ * @param value 현재 입력 값.
+ * @param onValueChange 값 변경 시 호출되는 콜백.
+ * @param modifier 레이아웃 Modifier.
+ * @param placeholder 입력이 비었을 때 보여줄 텍스트.
+ * @param label 필드 상단에 노출되는 라벨.
+ * @param supportingText 에러/설명을 위한 하단 문구.
+ * @param singleLine true면 단일 행 입력으로 제한합니다.
+ * @param isError 에러 상태 표시 여부.
+ * @param keyboardOptions 키보드 옵션.
+ * @param keyboardActions 키보드 액션 콜백.
+ * @param leadingIcon 텍스트 앞쪽 슬롯.
+ * @param trailingIcon 텍스트 뒤쪽 슬롯.
+ */
 @Composable
 fun BottariTextField(
     value: String,

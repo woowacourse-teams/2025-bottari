@@ -23,6 +23,17 @@ import com.bottari.bottari.designsystem.theme.BottariTheme
 
 enum class BottariButtonStyle { Primary, Secondary, None }
 
+/**
+ * 보따리 전역에서 사용하는 기본 버튼으로 스타일과 아이콘 조합을 설정할 수 있습니다.
+ *
+ * @param text 버튼 안에 표시되는 텍스트.
+ * @param onClick 버튼 클릭 시 호출되는 콜백.
+ * @param modifier 외부에서 전달하는 레이아웃/스타일 Modifier.
+ * @param enabled false이면 비활성화 상태로 표시됩니다.
+ * @param style 버튼 배경·텍스트 색을 정의하는 스타일.
+ * @param leadingIcon 텍스트 앞에 배치되는 아이콘 콘텐츠.
+ * @param trailingIcon 텍스트 뒤에 배치되는 아이콘 콘텐츠.
+ */
 @Composable
 fun BottariButton(
     text: String,

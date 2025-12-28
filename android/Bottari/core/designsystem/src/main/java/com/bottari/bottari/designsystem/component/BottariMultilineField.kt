@@ -18,6 +18,16 @@ import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.preview.ComponentPreview
 import com.bottari.bottari.designsystem.theme.BottariTheme
 
+/**
+ * 긴 문장을 입력할 때 사용하는 멀티라인 필드로 카운터 표시를 지원합니다.
+ *
+ * @param value 입력 값.
+ * @param onValueChange 변경 콜백.
+ * @param modifier 외부 Modifier.
+ * @param placeholder 값이 비었을 때 보여줄 안내 문구.
+ * @param maxLines 표시할 최대 줄 수.
+ * @param counter 현재 글자수/제한 정보를 전달하는 Pair, null이면 숨깁니다.
+ */
 @Composable
 fun BottariMultilineField(
     value: String,

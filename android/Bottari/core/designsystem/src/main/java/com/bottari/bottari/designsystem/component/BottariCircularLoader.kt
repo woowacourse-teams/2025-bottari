@@ -12,6 +12,13 @@ import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.preview.ComponentPreview
 import com.bottari.bottari.designsystem.theme.BottariTheme
 
+/**
+ * 화면 중앙에 배치되는 원형 진행 표시기로 로딩 상태를 전달합니다.
+ *
+ * @param modifier 외부 레이아웃에 사용할 Modifier.
+ * @param color 진행 표시 인디케이터 색상.
+ * @param trackColor 배경 트랙 색상.
+ */
 @Composable
 fun BottariCircularLoader(
     modifier: Modifier = Modifier,

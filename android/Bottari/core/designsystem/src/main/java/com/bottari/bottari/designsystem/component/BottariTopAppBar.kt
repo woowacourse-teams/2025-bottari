@@ -23,6 +23,15 @@ import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.preview.ComponentPreview
 import com.bottari.bottari.designsystem.theme.BottariTheme
 
+/**
+ * 상단에서 제목과 내비게이션, 액션을 제공하는 TopAppBar 컴포넌트입니다.
+ *
+ * @param title 가운데(혹은 왼쪽)에 보여줄 제목 텍스트.
+ * @param modifier 앱바에 적용할 Modifier.
+ * @param navigationIcon 좌측 내비게이션 아이콘 슬롯.
+ * @param actions 우측 액션 슬롯.
+ * @param centerAligned true면 CenterAlignedTopAppBar를 사용합니다.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottariTopAppBar(
