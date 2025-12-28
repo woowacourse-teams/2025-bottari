@@ -67,8 +67,7 @@ private fun Modifier.setupCreateTemplateTextField(): Modifier =
             width = 1.dp,
             color = BottariTheme.colors.gray400,
             shape = BottariTheme.shapes.radiusMedium,
-        )
-        .padding(BottariTheme.spacing.spaceMedium)
+        ).padding(BottariTheme.spacing.spaceMedium)
 
 @Composable
 private fun CreateTemplateTextFieldDecorationBox(

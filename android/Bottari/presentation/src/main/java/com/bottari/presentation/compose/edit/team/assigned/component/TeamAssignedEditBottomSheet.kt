@@ -253,8 +253,7 @@ private fun TeamAssignedMemberItem(
                     width = 1.dp,
                     color = borderColor,
                     shape = BottariTheme.shapes.radiusLarge,
-                )
-                .padding(BottariTheme.spacing.spaceXLarge),
+                ).padding(BottariTheme.spacing.spaceXLarge),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(

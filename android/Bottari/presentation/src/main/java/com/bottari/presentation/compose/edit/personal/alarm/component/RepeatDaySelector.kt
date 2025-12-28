@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.component.BottariToggleButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.extension.noRippleClickable
 import com.bottari.presentation.model.alarm.AlarmUiModel
 import com.bottari.presentation.model.alarm.RepeatDayUiModel
 import java.time.format.TextStyle
