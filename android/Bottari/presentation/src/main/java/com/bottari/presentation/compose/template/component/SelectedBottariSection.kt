@@ -112,8 +112,7 @@ private fun SelectedBottariSectionEmptyContent(modifier: Modifier = Modifier) {
                 .dashedBorder(
                     color = BottariTheme.colors.gray500,
                     strokeWidth = 1.5.dp,
-                )
-                .padding(vertical = BottariTheme.spacing.space2xLarge),
+                ).padding(vertical = BottariTheme.spacing.space2xLarge),
     ) {
         Icon(
             imageVector = Icons.Rounded.Add,

@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bottari.bottari.designsystem.component.BottariTopAppBar
 import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
 import com.bottari.core.ui.component.BottariTabBar

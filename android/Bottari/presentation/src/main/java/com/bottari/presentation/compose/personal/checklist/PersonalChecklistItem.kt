@@ -40,8 +40,7 @@ fun PersonalChecklistItem(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(bounded = true, color = BottariTheme.colors.primary),
                     onClick = { onClick() },
-                )
-                .semantics(mergeDescendants = true) {
+                ).semantics(mergeDescendants = true) {
                     contentDescription = bottariItem.name
                     stateDescription = if (bottariItem.isChecked) "완료" else "미완료"
                 },

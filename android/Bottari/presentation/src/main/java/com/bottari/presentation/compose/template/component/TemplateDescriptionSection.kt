@@ -73,8 +73,7 @@ private fun DescriptionInputContent(
                     .background(
                         color = BottariTheme.colors.gray200,
                         shape = RoundedCornerShape(999.dp),
-                    )
-                    .padding(
+                    ).padding(
                         vertical = BottariTheme.spacing.space2xSmall,
                         horizontal = BottariTheme.spacing.spaceXSmall,
                     ),

@@ -37,11 +37,12 @@ fun ItemEditInputBar(
             value = itemName,
             onValueChange = onNameChange,
             isError = isInvalidItem,
-            supportingText = if(isInvalidItem) "추가할 물건은 중복되거나 1-20자여야 해요" else null,
+            supportingText = if (isInvalidItem) "추가할 물건은 중복되거나 1-20자여야 해요" else null,
             placeholder = stringResource(R.string.bottari_personal_item_edit_hint_text),
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = BottariTheme.spacing.spaceSmall),
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(start = BottariTheme.spacing.spaceSmall),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
             keyboardActions = KeyboardActions(onSend = { onSaveItem() }),
         )

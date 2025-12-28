@@ -98,7 +98,7 @@ private fun BottariTopAppBarPreview() {
                     BottariIconButton(onClick = {}) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                     }
-                }
+                },
             )
         }
     }

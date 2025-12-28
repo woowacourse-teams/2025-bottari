@@ -41,8 +41,7 @@ fun BottariMultilineField(
                         width = 1.dp,
                         color = BottariTheme.colors.gray300,
                         shape = RoundedCornerShape(12.dp),
-                    )
-                    .padding(BottariTheme.spacing.spaceMedium),
+                    ).padding(BottariTheme.spacing.spaceMedium),
             decorationBox = { inner ->
                 Box {
                     value.ifBlank {
@@ -69,8 +68,7 @@ fun BottariMultilineField(
                         .background(
                             color = BottariTheme.colors.gray200,
                             shape = RoundedCornerShape(999.dp),
-                        )
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                        ).padding(horizontal = 8.dp, vertical = 4.dp),
             )
         }
     }

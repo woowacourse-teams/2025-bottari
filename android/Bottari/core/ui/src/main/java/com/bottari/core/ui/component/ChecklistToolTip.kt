@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bottari.bottari.designsystem.component.BottariIconButton
-import com.bottari.bottari.designsystem.component.BottariIconButtonTone
 import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.core.ui.R
 

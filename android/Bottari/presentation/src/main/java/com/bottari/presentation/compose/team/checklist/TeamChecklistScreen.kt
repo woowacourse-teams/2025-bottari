@@ -29,8 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.component.BottariCard
-import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.bottari.designsystem.component.BottariCircularLoader
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.core.ui.component.ChecklistToolTip
 import com.bottari.core.ui.extension.noRippleClickable
 import com.bottari.presentation.R
