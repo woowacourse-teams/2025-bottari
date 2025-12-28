@@ -111,12 +111,14 @@ fun BottariCheckBox(isChecked: Boolean) {
 
 @Composable
 private fun BottariUncheckedBox() {
+    val shape = BottariTheme.shapes.radiusSmall
+
     Box(
         modifier =
             Modifier
                 .size(30.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .border(3.dp, BottariTheme.colors.gray400, RoundedCornerShape(8.dp)),
+                .clip(shape)
+                .border(width = 1.dp, color = BottariTheme.colors.gray400, shape = shape),
     )
 }
 
@@ -126,7 +128,7 @@ private fun BottariCheckedBox() {
         modifier =
             Modifier
                 .size(30.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .clip(BottariTheme.shapes.radiusSmall)
                 .background(BottariTheme.colors.primary),
     ) {
         Icon(

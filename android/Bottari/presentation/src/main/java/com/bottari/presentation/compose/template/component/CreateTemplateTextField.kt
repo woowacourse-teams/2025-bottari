@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -67,8 +66,9 @@ private fun Modifier.setupCreateTemplateTextField(): Modifier =
         .border(
             width = 1.dp,
             color = BottariTheme.colors.gray400,
-            shape = RoundedCornerShape(12.dp),
-        ).padding(BottariTheme.spacing.spaceMedium)
+            shape = BottariTheme.shapes.radiusMedium,
+        )
+        .padding(BottariTheme.spacing.spaceMedium)
 
 @Composable
 private fun CreateTemplateTextFieldDecorationBox(

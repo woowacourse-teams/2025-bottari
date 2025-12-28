@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -248,14 +246,15 @@ private fun TeamAssignedMemberItem(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(backgroundColor) // 변수 사용
+                .clip(BottariTheme.shapes.radiusLarge)
+                .background(backgroundColor)
                 .noRippleClickable(onClick = { onToggleMember(member.id) })
                 .border(
-                    2.dp,
-                    borderColor, // 변수 사용
-                    RoundedCornerShape(16.dp),
-                ).padding(BottariTheme.spacing.spaceXLarge),
+                    width = 1.dp,
+                    color = borderColor,
+                    shape = BottariTheme.shapes.radiusLarge,
+                )
+                .padding(BottariTheme.spacing.spaceXLarge),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
@@ -269,7 +268,7 @@ private fun TeamAssignedMemberItem(
             modifier =
                 Modifier
                     .size(20.dp)
-                    .clip(CircleShape)
+                    .clip(BottariTheme.shapes.circle)
                     .background(checkmarkColor)
                     .padding(4.dp),
         ) {

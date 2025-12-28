@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,7 +40,7 @@ fun TeamStateCard(
             Box(
                 modifier =
                     Modifier
-                        .clip(CircleShape)
+                        .clip(BottariTheme.shapes.circle)
                         .size(48.dp)
                         .background(color = color.copy(0.2f)),
             ) {

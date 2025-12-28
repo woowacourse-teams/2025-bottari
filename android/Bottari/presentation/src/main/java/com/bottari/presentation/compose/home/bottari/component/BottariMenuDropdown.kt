@@ -35,7 +35,7 @@ fun BottariMenuDropdown(
         expanded = expanded,
         modifier = modifier,
         onDismissRequest = onDismissRequest,
-        shape = RoundedCornerShape(12.dp),
+        shape = BottariTheme.shapes.radiusMedium,
         containerColor = BottariTheme.colors.white,
     ) {
         Row(

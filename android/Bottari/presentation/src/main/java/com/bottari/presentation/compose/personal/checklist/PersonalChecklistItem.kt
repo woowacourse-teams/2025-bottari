@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -50,7 +49,7 @@ fun PersonalChecklistItem(
                 modifier =
                     Modifier
                         .size(5.dp)
-                        .clip(shape = CircleShape)
+                        .clip(shape = BottariTheme.shapes.circle)
                         .background(BottariTheme.colors.black),
             )
             Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceMedium))

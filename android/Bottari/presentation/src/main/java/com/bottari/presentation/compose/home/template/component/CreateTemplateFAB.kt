@@ -20,12 +20,12 @@ fun CreateTemplateFAB(
 ) {
     FloatingActionButton(
         onClick = onClickAdd,
-        shape = RoundedCornerShape(12.dp),
+        shape = BottariTheme.shapes.radiusMedium,
         containerColor = BottariTheme.colors.primary,
         contentColor = BottariTheme.colors.white,
         elevation =
             FloatingActionButtonDefaults.elevation(
-                defaultElevation = 2.dp,
+                defaultElevation = 1.dp,
                 pressedElevation = 0.dp,
                 hoveredElevation = 0.dp,
                 focusedElevation = 0.dp,

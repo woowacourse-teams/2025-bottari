@@ -66,7 +66,7 @@ fun TeamStateListBox(
                         modifier =
                             Modifier
                                 .padding(2.dp)
-                                .clip(RoundedCornerShape(16.dp))
+                                .clip(BottariTheme.shapes.radiusLarge)
                                 .background(BottariTheme.colors.white)
                                 .padding(
                                     horizontal = BottariTheme.spacing.spaceXSmall,

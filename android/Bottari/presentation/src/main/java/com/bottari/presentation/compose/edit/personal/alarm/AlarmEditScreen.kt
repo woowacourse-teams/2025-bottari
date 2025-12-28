@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material3.Icon
@@ -45,7 +43,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.edit.personal.alarm.component.DatePickerModal
 import com.bottari.presentation.compose.edit.personal.alarm.component.DateSelector
@@ -213,7 +210,7 @@ private fun AlarmEditHeader(
                 Modifier
                     .size(48.dp)
                     .background(
-                        shape = CircleShape,
+                        shape = BottariTheme.shapes.circle,
                         color = BottariTheme.colors.primary.copy(alpha = 0.1f),
                     ),
         ) {
@@ -275,14 +272,14 @@ private fun AlarmEditBody(
             selectorProperties =
                 WheelPickerDefaults.selectorProperties(
                     enabled = true,
-                    shape = RoundedCornerShape(50),
+                    shape = BottariTheme.shapes.radiusLarge,
                     color = BottariTheme.colors.primary.copy(alpha = 0.1f),
                     border = BorderStroke(width = 0.dp, color = BottariTheme.colors.transparent),
                 ),
             onSnappedTime = onTimeChange,
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceXSmall))
 
         Text(
             text = "알람 시간",
@@ -290,14 +287,14 @@ private fun AlarmEditBody(
             style = BottariTheme.typography.regular16.toTextStyle(),
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceMedium))
 
         DateSelector(
             alarm = alarm,
             onCalendarClick = onCalendarClick,
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceXSmall))
 
         RepeatDaySelector(
             alarm = alarm,
@@ -351,23 +348,15 @@ private fun AlarmEditScreenPreview() {
     var alarmState by remember { mutableStateOf(AlarmUiState()) }
 
     BottariTheme {
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(
-                        color = LocalBottariBgColor.current,
-                        shape = RoundedCornerShape(0.dp),
-                    ),
-        ) {
-            AlarmEditScreen(
-                state = alarmState,
-                onSwitchAlarmActivate = {},
-                onTimeChange = {},
-                onCalendarClick = {},
-                onRepeatDaysChange = {},
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
+        AlarmEditScreen(
+            state = alarmState,
+            onSwitchAlarmActivate = {
+                alarmState = alarmState.copy(alarm = alarmState.alarm.copy(isActive = it))
+            },
+            onTimeChange = {},
+            onCalendarClick = {},
+            onRepeatDaysChange = {},
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }

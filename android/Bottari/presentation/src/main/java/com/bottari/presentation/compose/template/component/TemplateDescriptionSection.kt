@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -72,8 +71,9 @@ private fun DescriptionInputContent(
                     .padding(BottariTheme.spacing.spaceXSmall)
                     .background(
                         color = BottariTheme.colors.gray200,
-                        shape = RoundedCornerShape(999.dp),
-                    ).padding(
+                        shape = BottariTheme.shapes.pill,
+                    )
+                    .padding(
                         vertical = BottariTheme.spacing.space2xSmall,
                         horizontal = BottariTheme.spacing.spaceXSmall,
                     ),

@@ -34,7 +34,6 @@ fun HomeBottomNavigationBar(
     val selectedColor = BottariTheme.colors.black
     val unselectedColor = BottariTheme.colors.gray500
     val noRippleInteractionSource = remember { NoRippleInteractionSource() }
-
     NavigationBar(
         containerColor = BottariTheme.colors.white,
         modifier = modifier.clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)),

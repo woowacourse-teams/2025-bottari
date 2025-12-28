@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.List
 import androidx.compose.material3.Icon
@@ -141,7 +140,7 @@ private fun HashtagChip(
     onClickHashtag: (BottariTemplateHashtagUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val chipShape = remember { RoundedCornerShape(999.dp) }
+    val chipShape = BottariTheme.shapes.pill
 
     Box(
         contentAlignment = Alignment.Center,
@@ -151,7 +150,8 @@ private fun HashtagChip(
                 .background(
                     color = Color(0xFFEFF6FF),
                     shape = chipShape,
-                ).clickable(
+                )
+                .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(color = BottariTheme.colors.primary),
                 ) { onClickHashtag(hashtag) }

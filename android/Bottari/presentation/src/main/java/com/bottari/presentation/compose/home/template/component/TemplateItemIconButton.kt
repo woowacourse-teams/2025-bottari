@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
@@ -38,7 +37,7 @@ fun TemplateItemIconButton(
         checked = type is TemplateItemType.Bookmark && type.isBookmarked,
         onCheckedChange = { onClick() },
         tone = BottariToggleButtonTone.Primary,
-        shape = CircleShape,
+        shape = BottariTheme.shapes.circle,
     ) {
         when (type) {
             is TemplateItemType.MyTemplate -> MyTemplateIcon()
@@ -46,22 +45,6 @@ fun TemplateItemIconButton(
         }
     }
 }
-
-@Composable
-private fun Modifier.setupIconButtonByTemplateItemType(type: TemplateItemType): Modifier =
-    when (type) {
-        is TemplateItemType.MyTemplate -> {
-            BottariTheme.colors.gray400.copy(0.2f)
-        }
-
-        is TemplateItemType.Bookmark -> {
-            if (type.isBookmarked) {
-                BottariTheme.colors.primary.copy(0.2f)
-            } else {
-                BottariTheme.colors.gray400.copy(0.2f)
-            }
-        }
-    }.let { bgColor -> background(color = bgColor, shape = CircleShape).size(40.dp) }
 
 @Composable
 private fun MyTemplateIcon(modifier: Modifier = Modifier) {
