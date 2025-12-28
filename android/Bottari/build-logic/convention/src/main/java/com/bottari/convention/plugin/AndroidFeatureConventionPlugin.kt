@@ -18,6 +18,7 @@ internal class AndroidFeatureConventionPlugin : Plugin<Project> {
             pluginManager.apply("kotlin-parcelize")
 
             dependencies {
+                implementation(project(":core:ui"))
                 implementation(project(":core:domain"))
                 implementation(project(":logger"))
                 implementation(libs.findBundle("androidx.compose.navigation").get())
