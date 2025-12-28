@@ -127,14 +127,14 @@ private fun EnabledBottariButtonPreview() {
             )
 
             BottariButton(
-                text = "Ghost",
+                text = "None",
                 onClick = {},
                 style = BottariButtonStyle.None,
                 leadingIcon = { Icon(Icons.Default.Search, null) },
                 trailingIcon = { Icon(Icons.Default.Close, null) },
             )
             BottariButton(
-                text = "Ghost",
+                text = "None",
                 onClick = {},
                 style = BottariButtonStyle.None,
                 leadingIcon = { Icon(Icons.Default.Search, null) },
