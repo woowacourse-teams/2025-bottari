@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.core.ui.component.BottariTabBar
+import com.bottari.core.ui.component.OfflineContent
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.home.bottari.MyBottariUiState
 import com.bottari.presentation.model.bottari.MyBottariUiModel
