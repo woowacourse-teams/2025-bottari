@@ -35,13 +35,15 @@ class MainViewModel @Inject constructor(
     fun savePermissionFlag() {
         launch {
             savePermissionFlagUseCase(true)
-                .onSuccess { updateState { copy(hasPermissionFlag = true) } }
                 .onFailure { emitEvent(MainUiEvent.SavePermissionFlagFailure) }
         }
     }
 
     fun checkRegisteredMember() {
-        if (isConnected.value.not()) return handleOffline()
+        if (isConnected.value.not()) {
+            emitEvent(MainUiEvent.Offline(false))
+            return
+        }
 
         launch {
             checkRegisteredMemberUseCase()

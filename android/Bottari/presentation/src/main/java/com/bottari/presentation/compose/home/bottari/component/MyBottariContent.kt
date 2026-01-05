@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.core.ui.component.BottariTabBar
+import com.bottari.core.ui.component.OfflineContent
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.home.bottari.MyBottariUiState
 import com.bottari.presentation.model.bottari.MyBottariUiModel
@@ -32,6 +33,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun MyBottariContent(
     uiState: MyBottariUiState,
+    isConnected: Boolean,
+    onRetryClick: () -> Unit,
     onClickPersonalBottari: (Long, String) -> Unit,
     onClickTeamBottari: (Long, String) -> Unit,
     onDeletePersonalBottari: (Long) -> Unit,
@@ -47,6 +50,13 @@ fun MyBottariContent(
     var isFabVisible by remember { mutableStateOf(true) }
     var openedMenuBottariId by remember { mutableStateOf<Long?>(null) }
 
+    val pageTitles =
+        listOf(
+            stringResource(R.string.all_bottari_text),
+            stringResource(R.string.personal_bottari_text),
+            stringResource(R.string.team_bottari_text),
+        )
+    val pagerState = rememberPagerState { pageTitles.size }
     val allListState = rememberLazyListState()
     val personalListState = rememberLazyListState()
     val teamListState = rememberLazyListState()
@@ -75,16 +85,9 @@ fun MyBottariContent(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            val pageTitles =
-                listOf(
-                    stringResource(R.string.all_bottari_text),
-                    stringResource(R.string.personal_bottari_text),
-                    stringResource(R.string.team_bottari_text),
-                )
-
             BottariTabBar(
                 pageTitles = pageTitles,
-                pagerState = rememberPagerState(initialPage = 0) { pageTitles.size },
+                pagerState = pagerState,
             ) { page ->
                 val onBottariClick = onBottariClick@{ bottari: MyBottariUiModel ->
                     if (isFabExpanded || openedMenuBottariId != null) {
@@ -99,37 +102,52 @@ fun MyBottariContent(
                     )
                 }
 
-                when (page) {
-                    0 -> if (uiState.isAllEmpty) MyBottariEmptyView()
-                    1 -> if (uiState.isPersonalEmpty) MyBottariEmptyView()
-                    2 -> if (uiState.isTeamEmpty) MyBottariEmptyView()
+                val isEmpty =
+                    when (page) {
+                        0 -> uiState.isAllEmpty
+                        1 -> uiState.isPersonalEmpty
+                        2 -> uiState.isTeamEmpty
+                        else -> true
+                    }
+
+                when {
+                    isConnected.not() && page == 2 -> {
+                        OfflineContent(
+                            onRetryClick = onRetryClick,
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                    }
+
+                    isEmpty -> MyBottariEmptyView()
+
+                    else -> {
+                        val currentListState =
+                            when (page) {
+                                0 -> allListState
+                                1 -> personalListState
+                                2 -> teamListState
+                                else -> error("유효하지 않은 페이지")
+                            }
+
+                        val currentList =
+                            when (page) {
+                                0 -> uiState.allBottaries
+                                1 -> uiState.personalBottaries
+                                2 -> uiState.teamBottaries
+                                else -> emptyList()
+                            }
+
+                        BottariList(
+                            bottaries = currentList,
+                            listState = currentListState,
+                            onBottariClick = onBottariClick,
+                            onDeletePersonalBottari = onDeletePersonalBottari,
+                            onDeleteTeamBottari = onDeleteTeamBottari,
+                            onEditPersonalBottari = onEditPersonalBottari,
+                            onEditTeamBottari = onEditTeamBottari,
+                        )
+                    }
                 }
-
-                val currentListState =
-                    when (page) {
-                        0 -> allListState
-                        1 -> personalListState
-                        2 -> teamListState
-                        else -> error("유효하지 않은 페이지")
-                    }
-
-                val currentList =
-                    when (page) {
-                        0 -> uiState.allBottaries
-                        1 -> uiState.personalBottaries
-                        2 -> uiState.teamBottaries
-                        else -> emptyList()
-                    }
-
-                BottariList(
-                    bottaries = currentList,
-                    listState = currentListState,
-                    onBottariClick = onBottariClick,
-                    onDeletePersonalBottari = onDeletePersonalBottari,
-                    onDeleteTeamBottari = onDeleteTeamBottari,
-                    onEditPersonalBottari = onEditPersonalBottari,
-                    onEditTeamBottari = onEditTeamBottari,
-                )
             }
         }
 
@@ -207,6 +225,8 @@ private fun MyBottariContentPreview() {
     BottariTheme {
         MyBottariContent(
             uiState = fakeUiState,
+            isConnected = true,
+            onRetryClick = {},
             onClickPersonalBottari = { _, _ -> },
             onClickTeamBottari = { _, _ -> },
             onDeletePersonalBottari = {},

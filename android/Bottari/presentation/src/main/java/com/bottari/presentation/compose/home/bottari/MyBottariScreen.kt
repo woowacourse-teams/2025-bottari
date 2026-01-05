@@ -30,16 +30,23 @@ fun MyBottariScreen(
     onNavigateToTeamChecklist: (Long, String) -> Unit,
     viewModel: MyBottariViewModel = viewModel(),
 ) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val isConnected = viewModel.isConnected.collectAsStateWithLifecycle().value
     val context = LocalContext.current
     val clipboard = LocalClipboard.current
 
     var dialogText by rememberSaveable { mutableStateOf("") }
 
-    LifecycleEventEffect(Lifecycle.Event.ON_START) { viewModel.fetchTeamBottaries() }
+    LifecycleEventEffect(Lifecycle.Event.ON_START) {
+        viewModel.fetchTeamBottaries()
+    }
 
-    LaunchedEffect(uiState.value.showDialogType) {
-        if (uiState.value.showDialogType == MyBottariDialogType.CODE) {
+    LaunchedEffect(isConnected) {
+        viewModel.fetchTeamBottaries()
+    }
+
+    LaunchedEffect(uiState.showDialogType) {
+        if (uiState.showDialogType == MyBottariDialogType.CODE) {
             val clipData = clipboard.nativeClipboard.primaryClip
             clipData?.let { data ->
                 if (data.itemCount > 0) {
@@ -86,7 +93,7 @@ fun MyBottariScreen(
 
     val defaultBottariTitle = stringResource(id = R.string.bottari_create_default_title_text)
 
-    uiState.value.showDialogType?.let { type ->
+    uiState.showDialogType?.let { type ->
         MyBottariDialogs(
             dialogType = type,
             text = dialogText,
@@ -104,7 +111,9 @@ fun MyBottariScreen(
     }
 
     MyBottariContent(
-        uiState = uiState.value,
+        uiState = uiState,
+        isConnected = isConnected,
+        onRetryClick = viewModel::fetchTeamBottaries,
         onClickPersonalBottari = onNavigateToPersonalChecklist,
         onClickTeamBottari = onNavigateToTeamChecklist,
         onDeletePersonalBottari = viewModel::deletePersonalBottari,
