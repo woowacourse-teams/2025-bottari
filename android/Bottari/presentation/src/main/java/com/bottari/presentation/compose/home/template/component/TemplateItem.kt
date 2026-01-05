@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.List
 import androidx.compose.material3.Icon
@@ -31,10 +30,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.CollapsedListLine
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.component.CollapsedListLine
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.template.BottariTemplateHashtagUiModel
 
 @Composable
@@ -52,7 +51,7 @@ fun TemplateItem(
     val hashTagSectionPadding =
         if (hashtags.isNotEmpty()) BottariTheme.spacing.spaceMedium else 0.dp
 
-    BottariBox(
+    BottariCard(
         modifier = modifier,
         contentPadding = PaddingValues(),
     ) {
@@ -141,7 +140,7 @@ private fun HashtagChip(
     onClickHashtag: (BottariTemplateHashtagUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val chipShape = remember { RoundedCornerShape(999.dp) }
+    val chipShape = BottariTheme.shapes.pill
 
     Box(
         contentAlignment = Alignment.Center,

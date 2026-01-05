@@ -44,33 +44,18 @@
             - bottari_create_btn_description: 보따리 만들기 버튼
     -->
 
-    <!-- Common: 실패/성공 메시지 -->
-    <string name="common_save_failure_text">저장하지 못했어요</string>
-    <string name="common_save_success_text">저장했어요!</string>
-    <string name="common_fetch_failure_text">정보를 불러오지 못했어요</string>
-    <string name="common_permission_failure_text">권한 요청에 실패했어요</string>
+    <!--    &lt;!&ndash; Common: 실패/성공 메시지 &ndash;&gt;-->
+    <!--    <string name="common_save_failure_text">저장하지 못했어요</string>-->
 
     <!-- Common: 포맷 -->
-    <string name="common_format_quantity_status">%d개 중 %d개</string>
     <string name="common_format_date_alarm">M월 d일</string>
     <string name="common_format_time_alarm">HH:mm</string>
-    <string name="common_format_template_items">\u00A0외 %d개</string>
-    <string name="common_format_checklist_swipe_status">%d개 중 %d개 남았어요!</string>
-    <string name="common_item_title_prefix_format">•\u00A0\u00A0%s</string>
     <string name="common_separator_text">\u00A0|\u00A0</string>
 
-    <!-- Common: 공통 버튼 텍스트 -->
-    <string name="common_confirm_btn_text">확인</string>
-    <string name="common_save_btn_text">저장</string>
-    <string name="common_cancel_btn_text">취소</string>
-    <string name="common_yes_btn_text">예</string>
-    <string name="common_no_btn_text">아니오</string>
-
-    <!-- Common: 접근성 -->
-    <string name="common_previous_btn_description">뒤로가기 버튼</string>
-    <string name="common_setting_btn_description">설정 버튼</string>
-    <string name="common_close_btn_description">닫기 버튼</string>
-    <string name="common_option_btn_description">옵션 버튼</string>
+    <!--    &lt;!&ndash; Common: 접근성 &ndash;&gt;-->
+    <!--    <string name="common_previous_btn_description">뒤로가기 버튼</string>-->
+    <!--    <string name="common_close_btn_description">닫기 버튼</string>-->
+    <!--    <string name="common_option_btn_description">옵션 버튼</string>-->
 
     <!-- Dialog: 권한 다이얼로그 -->
     <string name="common_permission_notice_dialog_title_text">보따리를 편하게 챙기려면\n다음과 같은 권한이 필요해요</string>

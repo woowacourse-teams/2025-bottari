@@ -19,10 +19,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.source.NoRippleInteractionSource
 import com.bottari.presentation.R
 import com.bottari.presentation.compose.common.navigation.Screen
-import com.bottari.presentation.compose.common.source.NoRippleInteractionSource
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun HomeBottomNavigationBar(
@@ -34,7 +34,6 @@ fun HomeBottomNavigationBar(
     val selectedColor = BottariTheme.colors.black
     val unselectedColor = BottariTheme.colors.gray500
     val noRippleInteractionSource = remember { NoRippleInteractionSource() }
-
     NavigationBar(
         containerColor = BottariTheme.colors.white,
         modifier = modifier.clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)),

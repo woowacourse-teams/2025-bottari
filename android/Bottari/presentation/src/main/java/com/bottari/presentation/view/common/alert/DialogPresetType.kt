@@ -1,6 +1,7 @@
 package com.bottari.presentation.view.common.alert
 
 import com.bottari.presentation.R
+import com.bottari.core.designsystem.R as DSR
 
 enum class DialogPresetType {
     EXIT_WITHOUT_SAVE,
@@ -24,14 +25,14 @@ enum class DialogPresetType {
             binding.tvDialogCustomTitle.setText(R.string.common_alert_dialog_title_text)
             binding.tvDialogCustomDescription.setText(R.string.common_alert_unsaved_dialog_message_text)
             setPositiveButton(
-                textRes = R.string.common_yes_btn_text,
-                textColorRes = R.color.white,
-                backgroundColorRes = R.color.primary,
+                textRes = DSR.string.common_yes_btn_text,
+                textColorRes = DSR.color.white,
+                backgroundColorRes = DSR.color.primary,
             )
             setNegativeButton(
-                textRes = R.string.common_no_btn_text,
-                textColorRes = R.color.gray_700,
-                backgroundColorRes = R.color.white,
+                textRes = DSR.string.common_no_btn_text,
+                textColorRes = DSR.color.gray_700,
+                backgroundColorRes = DSR.color.white,
             )
             setCloseButton()
         }
@@ -43,13 +44,13 @@ enum class DialogPresetType {
             binding.tvDialogCustomDescription.setText(R.string.common_notification_permission_dialog_message_text)
             setPositiveButton(
                 textRes = R.string.common_permission_dialog_positive_btn_text,
-                textColorRes = R.color.white,
-                backgroundColorRes = R.color.primary,
+                textColorRes = DSR.color.white,
+                backgroundColorRes = DSR.color.primary,
             )
             setNegativeButton(
                 textRes = R.string.common_permission_dialog_negative_btn_text,
-                textColorRes = R.color.gray_700,
-                backgroundColorRes = R.color.white,
+                textColorRes = DSR.color.gray_700,
+                backgroundColorRes = DSR.color.white,
             )
             setCloseButton()
         }
@@ -61,13 +62,13 @@ enum class DialogPresetType {
             binding.tvDialogCustomDescription.setText(R.string.common_alarm_permission_dialog_message_text)
             setPositiveButton(
                 textRes = R.string.common_permission_dialog_positive_btn_text,
-                textColorRes = R.color.white,
-                backgroundColorRes = R.color.primary,
+                textColorRes = DSR.color.white,
+                backgroundColorRes = DSR.color.primary,
             )
             setNegativeButton(
                 textRes = R.string.common_permission_dialog_negative_btn_text,
-                textColorRes = R.color.gray_700,
-                backgroundColorRes = R.color.white,
+                textColorRes = DSR.color.gray_700,
+                backgroundColorRes = DSR.color.white,
             )
             setCloseButton()
         }
@@ -78,14 +79,14 @@ enum class DialogPresetType {
             binding.tvDialogCustomTitle.setText(R.string.reset_bottari_items_check_state_dialog_title_text)
             binding.tvDialogCustomDescription.setText(R.string.reset_bottari_items_check_state_dialog_description_text)
             setPositiveButton(
-                textRes = R.string.common_yes_btn_text,
-                textColorRes = R.color.white,
-                backgroundColorRes = R.color.primary,
+                textRes = DSR.string.common_yes_btn_text,
+                textColorRes = DSR.color.white,
+                backgroundColorRes = DSR.color.primary,
             )
             setNegativeButton(
-                textRes = R.string.common_no_btn_text,
-                textColorRes = R.color.gray_700,
-                backgroundColorRes = R.color.white,
+                textRes = DSR.string.common_no_btn_text,
+                textColorRes = DSR.color.gray_700,
+                backgroundColorRes = DSR.color.white,
             )
         }
     }
@@ -98,13 +99,13 @@ enum class DialogPresetType {
             requireDialog().setCanceledOnTouchOutside(false)
             setPositiveButton(
                 textRes = R.string.force_update_dialog_update_btn_text,
-                textColorRes = R.color.white,
-                backgroundColorRes = R.color.primary,
+                textColorRes = DSR.color.white,
+                backgroundColorRes = DSR.color.primary,
             )
             setNegativeButton(
                 textRes = R.string.force_update_dialog_close_btn_text,
-                textColorRes = R.color.gray_700,
-                backgroundColorRes = R.color.white,
+                textColorRes = DSR.color.gray_700,
+                backgroundColorRes = DSR.color.white,
             )
         }
     }

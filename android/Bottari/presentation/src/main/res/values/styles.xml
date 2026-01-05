@@ -7,11 +7,6 @@
         <item name="android:fontWeight">400</item>
     </style>
 
-    <style name="CustomSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
-        <item name="trackColor">@color/primary</item>
-        <item name="thumbColor">@color/white</item>
-    </style>
-
     <style name="CustomPopupMenu" parent="@style/Widget.AppCompat.PopupMenu">
         <item name="android:popupBackground">@color/white</item>
     </style>
@@ -20,12 +15,5 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/pretendard_medium</item>
-    </style>
-
-    <style name="CustomTabText" parent="TextAppearance.AppCompat" >
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:fontFamily">@font/pretendard</item>
-        <item name="android:textFontWeight">600</item>
     </style>
 </resources>

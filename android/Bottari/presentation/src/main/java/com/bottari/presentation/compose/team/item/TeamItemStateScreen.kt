@@ -1,7 +1,5 @@
 package com.bottari.presentation.compose.team.item
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,11 +15,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,11 +25,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.component.BottariCircularLoader
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.BottariCheckIndicator
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.component.BottariCheckIndicator
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.team.TeamSendRemindDialog
 import com.bottari.presentation.compose.team.TeamStateCard
 import com.bottari.presentation.compose.team.TeamStateListBox
@@ -55,14 +51,17 @@ fun TeamItemStateScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure ->
+                ComposeTeamBottariItemStatusUiEvent.FetchTeamBottariItemStatusFailure -> {
                     snackbarHostState.showSnackbar("보따리를 불러오지 못했어요")
+                }
 
-                ComposeTeamBottariItemStatusUiEvent.SendRemindFailure ->
+                ComposeTeamBottariItemStatusUiEvent.SendRemindFailure -> {
                     snackbarHostState.showSnackbar("보채기에 실패했어요")
+                }
 
-                ComposeTeamBottariItemStatusUiEvent.SendRemindSuccess ->
+                ComposeTeamBottariItemStatusUiEvent.SendRemindSuccess -> {
                     snackbarHostState.showSnackbar("보채기에 성공했어요")
+                }
             }
         }
     }
@@ -84,7 +83,7 @@ private fun TeamItemStateScreen(
 ) {
     Box {
         if (uiState.isInitialLoading) {
-            IndeterminateCircularIndicator()
+            BottariCircularLoader()
             return@Box
         }
 
@@ -140,7 +139,7 @@ private fun TeamItemStateScreen(
         uiState.selectedProduct?.let { product ->
             TeamSendRemindDialog(
                 title = product.name,
-                isRemindable = (!product.isAllChecked && !uiState.isOnlyMeUnchecked),
+                enableRemind = (!product.isAllChecked && !uiState.isOnlyMeUnchecked),
                 onDismissRequest = { onSelectProduct(null) },
                 onClickRemind = { onSendRemind(product) },
             ) {
@@ -170,7 +169,6 @@ private fun TeamItemStateScreen(
 @Composable
 private fun TeamProductStateCard(
     product: TeamBottariUiModelStatus,
-    modifier: Modifier = Modifier,
     onClick: (TeamBottariUiModelStatus) -> Unit = {},
 ) {
     val type =
@@ -179,19 +177,7 @@ private fun TeamProductStateCard(
             BottariItemTypeUiModel.PERSONAL -> stringResource(R.string.bottari_item_type_personal_text)
             BottariItemTypeUiModel.SHARED -> stringResource(R.string.bottari_item_type_shared_text)
         }
-    BottariBox(
-        modifier =
-            modifier.clickable(
-                onClick = { onClick(product) },
-                indication =
-                    ripple(
-                        bounded = true,
-                        color = BottariTheme.colors.primary,
-                    ),
-                interactionSource = remember { MutableInteractionSource() },
-            ),
-        contentPadding = PaddingValues(BottariTheme.spacing.spaceLarge),
-    ) {
+    BottariCard(onClick = { onClick(product) }) {
         Column {
             Row {
                 Text(
@@ -245,7 +231,7 @@ private fun TeamProductStateCard(
 @Composable
 private fun TeamItemStateScreenPreview() {
     TeamItemStateScreen(
-        uiState = teamBottariItemStatusDummyUiState,
+        uiState = teamBottariItemStatusDummyUiState.copy(selectedProduct = null),
         onSelectProduct = {},
         onSendRemind = {},
     )

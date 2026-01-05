@@ -1,7 +1,5 @@
 package com.bottari.presentation.compose.template.component
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,18 +11,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,11 +30,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariButton
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.component.BottariIconButton
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.CollapsedListLine
+import com.bottari.core.ui.extension.topBottomFadingEdge
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.component.CollapsedListLine
-import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.bottari.BottariItemUiModel
 import com.bottari.presentation.model.bottari.personal.BottariDetailUiModel
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
@@ -61,7 +57,6 @@ fun CreateBottariSelector(
 
     ModalBottomSheet(
         sheetState = bottomSheetState,
-        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         containerColor = BottariTheme.colors.white,
         contentColor = BottariTheme.colors.black,
         onDismissRequest = onDismissRequest,
@@ -125,9 +120,7 @@ private fun CreateBottariSelectorHeader(
             style = BottariTheme.typography.bold22.toTextStyle(),
         )
 
-        IconButton(
-            onClick = onClickClose,
-        ) {
+        BottariIconButton(onClick = onClickClose) {
             Icon(
                 imageVector = Icons.Rounded.Close,
                 contentDescription = "닫기",
@@ -169,14 +162,9 @@ private fun CreateBottariSelectorItem(
     onClickBottari: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BottariBox(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = ripple(color = BottariTheme.colors.primary),
-                ) { onClickBottari(bottari.id) },
+    BottariCard(
+        modifier = modifier,
+        onClick = { onClickBottari(bottari.id) },
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -259,10 +247,11 @@ private fun CreateBottariSelectorPreview() {
                     },
             )
         } else {
-            TextButton(
+            BottariButton(
+                text = "바텀 시트 열기",
                 onClick = { isOpen = true },
                 modifier = Modifier.padding(16.dp),
-            ) { Text(text = "바텀 시트 열기") }
+            )
         }
     }
 }

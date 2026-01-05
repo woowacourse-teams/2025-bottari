@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,12 +30,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.template.component.CreateBottariSelector
 import com.bottari.presentation.compose.template.component.CreateTemplateTopApp
 import com.bottari.presentation.compose.template.component.SelectedBottariSection
@@ -58,8 +56,9 @@ fun CreateTemplateScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                is CreateTemplateUiEvent.FetchMyBottariesFailure ->
+                is CreateTemplateUiEvent.FetchMyBottariesFailure -> {
                     snackbarHostState.showSnackbar(context.getString(R.string.bottari_home_fetch_failure_text))
+                }
 
                 is CreateTemplateUiEvent.CreateTemplateSuccess -> {
                     Toast
@@ -71,8 +70,9 @@ fun CreateTemplateScreen(
                     navigateBack()
                 }
 
-                is CreateTemplateUiEvent.CreateTemplateFailure ->
+                is CreateTemplateUiEvent.CreateTemplateFailure -> {
                     snackbarHostState.showSnackbar(context.getString(R.string.template_create_failure_text))
+                }
             }
         }
     }
@@ -96,7 +96,7 @@ fun CreateTemplateScreen(
         onDescriptionChange = viewModel::updateDescription,
         onWritingHashtagChange = viewModel::updateHashtag,
         onAddHashtag = viewModel::addHashtag,
-        onDeleteHashtag = viewModel::deleteHashtag,
+        onUpdateHashtags = viewModel::updateHashtags,
         onClickCreate = viewModel::createTemplate,
         onClickSelect = { isOpenSelector = true },
         onClickBack = navigateBack,
@@ -110,7 +110,7 @@ private fun CreateTemplateScreen(
     onDescriptionChange: (String) -> Unit,
     onWritingHashtagChange: (String) -> Unit,
     onAddHashtag: () -> Unit,
-    onDeleteHashtag: (String) -> Unit,
+    onUpdateHashtags: (List<String>) -> Unit,
     onClickCreate: () -> Unit,
     onClickSelect: () -> Unit,
     onClickBack: () -> Unit,
@@ -136,7 +136,7 @@ private fun CreateTemplateScreen(
                 onDescriptionChange = onDescriptionChange,
                 onWritingHashtagChange = onWritingHashtagChange,
                 onAddHashtag = onAddHashtag,
-                onDeleteHashtag = onDeleteHashtag,
+                onUpdateHashtags = onUpdateHashtags,
                 onClickSelect = onClickSelect,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -161,7 +161,7 @@ private fun CreateTemplateScreenContent(
     onDescriptionChange: (String) -> Unit,
     onWritingHashtagChange: (String) -> Unit,
     onAddHashtag: () -> Unit,
-    onDeleteHashtag: (String) -> Unit,
+    onUpdateHashtags: (List<String>) -> Unit,
     onClickSelect: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -185,7 +185,7 @@ private fun CreateTemplateScreenContent(
             onWritingHashtagChange = onWritingHashtagChange,
             canAddHashtag = uiState.canAddHashtag,
             onClickAdd = onAddHashtag,
-            onClickDelete = onDeleteHashtag,
+            onUpdateHashtags = onUpdateHashtags,
         )
     }
 }
@@ -200,7 +200,7 @@ private fun CreateTemplateButton(
         TextButton(
             enabled = enabled,
             onClick = onClickCreate,
-            shape = RoundedCornerShape(12.dp),
+            shape = BottariTheme.shapes.radiusMedium,
             modifier = modifier.fillMaxWidth(),
             contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceMedium),
             colors =
@@ -243,7 +243,7 @@ private fun CreateTemplateScreenPreview() {
             onClickBack = {},
             onDescriptionChange = { uiState = uiState.copy(description = it) },
             onWritingHashtagChange = { uiState = uiState.copy(writingHashtag = it) },
-            onDeleteHashtag = { uiState = uiState.copy(hashtags = uiState.hashtags - it) },
+            onUpdateHashtags = { uiState = uiState.copy(hashtags = uiState.hashtags - it) },
             onAddHashtag = {
                 uiState =
                     uiState.copy(

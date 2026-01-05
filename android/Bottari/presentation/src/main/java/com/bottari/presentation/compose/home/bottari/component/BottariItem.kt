@@ -11,10 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,12 +22,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.component.BottariIconButton
+import com.bottari.bottari.designsystem.component.BottariIconButtonTone
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.BottariCheckIndicator
+import com.bottari.core.ui.component.chooseBottariStateColor
 import com.bottari.presentation.R
 import com.bottari.presentation.common.extension.formatWithPattern
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.component.BottariCheckIndicator
-import com.bottari.presentation.compose.common.component.chooseBottariStateColor
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.model.alarm.AlarmTypeUiModel
 import com.bottari.presentation.model.alarm.AlarmUiModel
 import com.bottari.presentation.model.alarm.RepeatDayUiModel
@@ -46,6 +45,7 @@ import java.util.Locale
 @Composable
 fun BottariItem(
     bottari: MyBottariUiModel,
+    onBottariClick: () -> Unit,
     isMenuShown: Boolean,
     onShowMenu: () -> Unit,
     onCloseMenu: () -> Unit,
@@ -53,13 +53,14 @@ fun BottariItem(
     onBottariEdit: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BottariBox(
+    BottariCard(
         modifier = modifier,
         contentPadding =
             PaddingValues(
                 start = BottariTheme.spacing.spaceMedium,
                 bottom = BottariTheme.spacing.spaceSmall,
             ),
+        onClick = onBottariClick,
     ) {
         Column {
             BottariInfo(
@@ -89,7 +90,6 @@ fun BottariItem(
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun BottariInfo(
     bottari: MyBottariUiModel,
@@ -134,28 +134,21 @@ private fun BottariInfo(
             )
         }
 
-        IconButton(
+        BottariIconButton(
             onClick = { onShowMenu() },
-            modifier = Modifier.size(48.dp),
+            tone = BottariIconButtonTone.None,
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_more_horizontal),
                 contentDescription = stringResource(R.string.bottari_btn_more_description),
-                modifier =
-                    Modifier
-                        .size(24.dp)
-                        .rotate(90f),
+                modifier = Modifier.rotate(90f),
             )
 
             BottariMenuDropdown(
                 expanded = isMenuShown,
                 onDismissRequest = onCloseMenu,
-                onBottariDelete = {
-                    onBottariDelete(bottari.id)
-                },
-                onBottariEdit = {
-                    onBottariEdit(bottari.id)
-                },
+                onBottariDelete = { onBottariDelete(bottari.id) },
+                onBottariEdit = { onBottariEdit(bottari.id) },
             )
         }
     }
@@ -173,7 +166,7 @@ private fun BottariTypeLabel(
             modifier =
                 modifier
                     .size(8.dp)
-                    .clip(CircleShape)
+                    .clip(BottariTheme.shapes.circle)
                     .background(
                         color =
                             chooseBottariStateColor(
@@ -287,11 +280,11 @@ private fun TeamBottariScreenPreview() {
                     ),
                 memberCount = 4,
             ),
+        onBottariClick = {},
         isMenuShown = false,
         onShowMenu = {},
         onCloseMenu = {},
         onBottariDelete = {},
         onBottariEdit = {},
-        modifier = Modifier,
     )
 }

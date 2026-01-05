@@ -16,11 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.component.chip.BottariChip
-import com.bottari.presentation.compose.common.modifier.dashedBorder
-import com.bottari.presentation.compose.common.modifier.noRippleClickable
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.component.BottariInputChip
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.extension.dashedBorder
+import com.bottari.core.ui.extension.noRippleClickable
 
 @Composable
 fun SelectedBottariSection(
@@ -30,12 +30,7 @@ fun SelectedBottariSection(
     onClickSelect: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BottariBox(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .noRippleClickable { onClickSelect() },
-    ) {
+    BottariCard(modifier = modifier.noRippleClickable { onClickSelect() }) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start,
@@ -79,10 +74,8 @@ private fun SelectedBottariSectionContent(
                 text = "보따리 제목",
                 style = BottariTheme.typography.semiBold16.toTextStyle(),
             )
-
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceXSmall))
-
-            BottariChip(value = selectedBottariTitle)
+            BottariInputChip(text = selectedBottariTitle)
         }
 
         Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceMedium))
@@ -101,7 +94,7 @@ private fun SelectedBottariSectionContent(
                 verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.space2xSmall),
             ) {
                 selectedBottariItems.forEach { item ->
-                    BottariChip(value = item)
+                    BottariInputChip(text = item)
                 }
             }
         }

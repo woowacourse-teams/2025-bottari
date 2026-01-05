@@ -1,7 +1,5 @@
 package com.bottari.presentation.compose.personal.swipe
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,9 +17,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariButton
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun CardStackEndScreen(
@@ -37,21 +35,11 @@ fun CardStackEndScreen(
             SwipeNotCompletedView()
         }
         Spacer(modifier = Modifier.weight(1f))
-        BottariBox(
-            modifier =
-                Modifier
-                    .background(BottariTheme.colors.primary)
-                    .fillMaxWidth()
-                    .height(70.dp)
-                    .clickable(onClick = onClickButton),
-        ) {
-            Text(
-                text = stringResource(R.string.checklist_swipe_return_btn_text),
-                style = BottariTheme.typography.medium20.toTextStyle(),
-                color = BottariTheme.colors.white,
-                modifier = Modifier.align(Alignment.Center),
-            )
-        }
+        BottariButton(
+            onClick = onClickButton,
+            text = stringResource(R.string.checklist_swipe_return_btn_text),
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
 
@@ -107,7 +95,10 @@ private fun SwipeNotCompletedView(modifier: Modifier = Modifier) {
 @Composable
 private fun CardStackEndScreenCompletedPreview() {
     CardStackEndScreen(
-        modifier = Modifier.fillMaxSize().padding(BottariTheme.spacing.spaceXSmall),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(BottariTheme.spacing.spaceXSmall),
         isCompleted = true,
         onClickButton = {},
     )
@@ -117,7 +108,10 @@ private fun CardStackEndScreenCompletedPreview() {
 @Composable
 private fun CardStackEndScreenNotCompletedPreview() {
     CardStackEndScreen(
-        modifier = Modifier.fillMaxSize().padding(BottariTheme.spacing.spaceXSmall),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(BottariTheme.spacing.spaceXSmall),
         isCompleted = false,
         onClickButton = {},
     )

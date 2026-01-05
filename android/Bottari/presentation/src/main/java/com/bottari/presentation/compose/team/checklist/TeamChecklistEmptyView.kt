@@ -13,12 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun TeamChecklistEmptyView(modifier: Modifier = Modifier) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Spacer(Modifier.height(BottariTheme.spacing.spaceSmall))
         Icon(
             painter = painterResource(R.drawable.ic_bottari_item_empty_view),
@@ -26,7 +30,11 @@ fun TeamChecklistEmptyView(modifier: Modifier = Modifier) {
             modifier = Modifier.size(48.dp),
             tint = BottariTheme.colors.gray500,
         )
-        Text("챙길 물건이 없어요", color = BottariTheme.colors.gray500, style = BottariTheme.typography.semiBold16.toTextStyle())
+        Text(
+            "챙길 물건이 없어요",
+            color = BottariTheme.colors.gray500,
+            style = BottariTheme.typography.semiBold16.toTextStyle(),
+        )
         Spacer(Modifier.height(BottariTheme.spacing.spaceSmall))
     }
 }

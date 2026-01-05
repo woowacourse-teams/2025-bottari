@@ -1,5 +1,6 @@
 package com.bottari.presentation.model.bottari.team
 
+import androidx.compose.runtime.Immutable
 import com.bottari.core.domain.model.team.bottari.TeamBottariProductStatus
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.presentation.model.bottari.team.member.MemberCheckStatusUiModel
@@ -7,6 +8,7 @@ import kotlin.math.roundToInt
 
 sealed interface TeamItemStatus
 
+@Immutable
 data class TeamBottariUiModelStatus(
     val id: Long,
     val name: String,

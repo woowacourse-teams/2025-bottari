@@ -1,7 +1,6 @@
 package com.bottari.presentation.compose.home.more
 
 import android.content.Context
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,20 +17,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.BuildConfig
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.home.more.component.NicknameBox
 
 @Composable
 fun MoreBottariScreen(
     snackbarState: SnackbarHostState,
     onNavigateToBrowser: (String) -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: MoreViewModel = viewModel(),
 ) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
@@ -44,6 +42,24 @@ fun MoreBottariScreen(
         }
     }
 
+    MoreBottariScreen(
+        uiState = uiState,
+        onChangeNickname = viewModel::updateNickname,
+        onSaveNickname = viewModel::saveNickname,
+        onClickPrivacyPolicy = { onNavigateToBrowser(BuildConfig.PRIVACY_POLICY_URL) },
+        onClickUserFeedback = { onNavigateToBrowser(BuildConfig.USER_FEEDBACK_URL) },
+    )
+}
+
+@Composable
+private fun MoreBottariScreen(
+    uiState: MoreUiState,
+    onChangeNickname: (String) -> Unit,
+    onSaveNickname: () -> Unit,
+    onClickPrivacyPolicy: () -> Unit,
+    onClickUserFeedback: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier =
             modifier
@@ -56,18 +72,18 @@ fun MoreBottariScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         NicknameBox(
-            nickname = uiState.value.editingNickname,
-            onChangeNickname = viewModel::updateNickname,
-            onSaveNickname = viewModel::saveNickname,
+            nickname = uiState.editingNickname,
+            onChangeNickname = onChangeNickname,
+            onSaveNickname = onSaveNickname,
             modifier = Modifier.fillMaxWidth(),
         )
         SettingItem(
             text = stringResource(R.string.setting_privacy_policy_title_text),
-            onClick = { onNavigateToBrowser(BuildConfig.PRIVACY_POLICY_URL) },
+            onClick = onClickPrivacyPolicy,
         )
         SettingItem(
             text = stringResource(R.string.setting_user_feedback_title_text),
-            onClick = { onNavigateToBrowser(BuildConfig.USER_FEEDBACK_URL) },
+            onClick = onClickUserFeedback,
         )
         SettingVersionItem(text = stringResource(R.string.setting_version_text))
     }
@@ -79,11 +95,9 @@ private fun SettingItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BottariBox(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .clickable(onClick = onClick),
+    BottariCard(
+        modifier = modifier.fillMaxWidth(),
+        onClick = onClick,
     ) {
         Text(
             text = text,
@@ -100,7 +114,7 @@ private fun SettingVersionItem(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    BottariBox(modifier = modifier.fillMaxWidth()) {
+    BottariCard(modifier = modifier.fillMaxWidth()) {
         Text(
             text = text,
             modifier = Modifier.align(Alignment.CenterStart),
@@ -123,13 +137,16 @@ private fun getAppVersionName(context: Context): String? {
     return packageInfo?.versionName
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun MoreBottariScreenPreview() {
     BottariTheme {
         MoreBottariScreen(
-            snackbarState = SnackbarHostState(),
-            onNavigateToBrowser = {},
+            uiState = MoreUiState(editingNickname = "닉네임"),
+            onChangeNickname = {},
+            onSaveNickname = {},
+            onClickPrivacyPolicy = {},
+            onClickUserFeedback = {},
         )
     }
 }

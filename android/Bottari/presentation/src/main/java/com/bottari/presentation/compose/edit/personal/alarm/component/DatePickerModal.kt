@@ -1,27 +1,21 @@
 package com.bottari.presentation.compose.edit.personal.alarm.component
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.SelectableDates
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.component.BottariButton
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -50,27 +44,24 @@ fun DatePickerModal(
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
-            DatePickerTextButton(
+            BottariButton(
+                text = "확인",
                 onClick = {
                     val selectedTimeMillis =
                         datePickerState.selectedDateMillis ?: System.currentTimeMillis()
                     onDateChange(selectedTimeMillis.toLocalDate())
                 },
-                text = "확인",
             )
         },
         modifier = modifier,
         dismissButton = {
-            DatePickerTextButton(
-                onClick = onDismiss,
+            BottariButton(
                 text = "취소",
+                onClick = onDismiss,
             )
         },
-        shape = RoundedCornerShape(16.dp),
-        colors =
-            DatePickerDefaults.colors(
-                containerColor = BottariTheme.colors.white,
-            ),
+        shape = BottariTheme.shapes.radiusLarge,
+        colors = DatePickerDefaults.colors(containerColor = BottariTheme.colors.white),
     ) {
         DatePickerContent(
             datePickerState = datePickerState,
@@ -98,39 +89,6 @@ private fun DatePickerContent(
         headline = null,
         showModeToggle = false,
     )
-}
-
-@Composable
-private fun DatePickerTextButton(
-    onClick: () -> Unit,
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    TextButton(
-        onClick = onClick,
-        modifier = modifier,
-        shape = RoundedCornerShape(12.dp),
-        colors =
-            ButtonDefaults.buttonColors(
-                containerColor = BottariTheme.colors.primary,
-                contentColor = Color.White,
-            ),
-        elevation =
-            ButtonDefaults.buttonElevation(
-                defaultElevation = 2.dp,
-                pressedElevation = 0.dp,
-            ),
-        contentPadding =
-            PaddingValues(
-                vertical = BottariTheme.spacing.spaceSmall,
-                horizontal = BottariTheme.spacing.space2xLarge,
-            ),
-    ) {
-        Text(
-            text = text,
-            style = BottariTheme.typography.semiBold16.toTextStyle(),
-        )
-    }
 }
 
 private fun LocalDate.toUtcTimeMillis(): Long =

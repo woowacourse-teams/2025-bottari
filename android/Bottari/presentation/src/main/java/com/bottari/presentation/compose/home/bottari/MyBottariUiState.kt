@@ -1,10 +1,12 @@
 package com.bottari.presentation.compose.home.bottari
 
+import androidx.compose.runtime.Immutable
 import com.bottari.presentation.compose.home.bottari.component.MyBottariDialogType
 import com.bottari.presentation.model.bottari.MyBottariUiModel
 import com.bottari.presentation.model.bottari.personal.BottariUiModel
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
 
+@Immutable
 data class MyBottariUiState(
     val isLoading: Boolean = false,
     val isPersonalFetched: Boolean = false,

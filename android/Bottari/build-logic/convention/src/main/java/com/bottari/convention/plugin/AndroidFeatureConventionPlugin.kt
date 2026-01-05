@@ -2,6 +2,7 @@ package com.bottari.convention.plugin
 
 import com.bottari.convention.internal.applyPlugins
 import com.bottari.convention.internal.implementation
+import com.bottari.convention.internal.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -17,8 +18,10 @@ internal class AndroidFeatureConventionPlugin : Plugin<Project> {
             pluginManager.apply("kotlin-parcelize")
 
             dependencies {
+                implementation(project(":core:ui"))
                 implementation(project(":core:domain"))
                 implementation(project(":logger"))
+                implementation(libs.findBundle("androidx.compose.navigation").get())
             }
         }
     }

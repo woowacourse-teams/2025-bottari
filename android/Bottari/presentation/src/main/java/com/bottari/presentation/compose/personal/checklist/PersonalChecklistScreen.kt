@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,9 +20,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.ChecklistToolTip
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.ChecklistToolTip
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.personal.component.ChecklistProgressHeader
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 
@@ -111,12 +110,14 @@ fun BottariCheckBox(isChecked: Boolean) {
 
 @Composable
 private fun BottariUncheckedBox() {
+    val shape = BottariTheme.shapes.radiusSmall
+
     Box(
         modifier =
             Modifier
                 .size(30.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .border(3.dp, BottariTheme.colors.gray400, RoundedCornerShape(8.dp)),
+                .clip(shape)
+                .border(width = 1.dp, color = BottariTheme.colors.gray400, shape = shape),
     )
 }
 
@@ -126,7 +127,7 @@ private fun BottariCheckedBox() {
         modifier =
             Modifier
                 .size(30.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .clip(BottariTheme.shapes.radiusSmall)
                 .background(BottariTheme.colors.primary),
     ) {
         Icon(

@@ -2,26 +2,24 @@ package com.bottari.presentation.compose.template.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.component.chip.DeletableChip
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.component.BottariChipGroup
+import com.bottari.bottari.designsystem.component.BottariIconButton
+import com.bottari.bottari.designsystem.component.BottariIconButtonTone
+import com.bottari.bottari.designsystem.theme.BottariTheme
 
 @Composable
 fun TemplateHashtagSection(
@@ -30,10 +28,10 @@ fun TemplateHashtagSection(
     hashtags: List<String>,
     canAddHashtag: Boolean,
     onClickAdd: () -> Unit,
-    onClickDelete: (String) -> Unit,
+    onUpdateHashtags: (List<String>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BottariBox(modifier = modifier.fillMaxWidth()) {
+    BottariCard(modifier) {
         Column {
             Text(
                 text = "해시태그",
@@ -59,7 +57,7 @@ fun TemplateHashtagSection(
 
             AddedHashTagContent(
                 hashtags = hashtags,
-                onClickDelete = onClickDelete,
+                onChipsChange = onUpdateHashtags,
             )
         }
     }
@@ -84,22 +82,12 @@ private fun HashtagInputSection(
 
         Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceXSmall))
 
-        IconButton(
+        BottariIconButton(
+            onClick = onClickAdd,
             enabled = canAddHashtag,
-            onClick = { onClickAdd() },
-            shape = RoundedCornerShape(12.dp),
-            colors =
-                IconButtonDefaults.iconButtonColors(
-                    containerColor = BottariTheme.colors.primary,
-                    disabledContainerColor = BottariTheme.colors.gray200,
-                    contentColor = BottariTheme.colors.white,
-                    disabledContentColor = BottariTheme.colors.gray500,
-                ),
+            tone = BottariIconButtonTone.Primary,
         ) {
-            Icon(
-                imageVector = Icons.Rounded.Add,
-                contentDescription = null,
-            )
+            Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
         }
     }
 }
@@ -107,26 +95,15 @@ private fun HashtagInputSection(
 @Composable
 private fun AddedHashTagContent(
     hashtags: List<String>,
-    onClickDelete: (String) -> Unit,
+    onChipsChange: (List<String>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (hashtags.isNotEmpty()) Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
-
-    FlowRow(
+    BottariChipGroup(
+        chips = hashtags.map { hashtag -> "#$hashtag" },
+        onChipsChange = onChipsChange,
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
-        verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
-    ) {
-        hashtags.forEach { hashtag ->
-            DeletableChip(
-                text = "#$hashtag",
-                onClick = { onClickDelete(hashtag) },
-                onDelete = { onClickDelete(hashtag) },
-                modifier = Modifier.height(32.dp),
-                textStyle = BottariTheme.typography.medium12.toTextStyle(),
-            )
-        }
-    }
+    )
 }
 
 @Preview
@@ -140,7 +117,7 @@ private fun TemplateHashtagSectionPreview() {
                 hashtags = listOf("보따리", "선물"),
                 canAddHashtag = true,
                 onClickAdd = {},
-                onClickDelete = {},
+                onUpdateHashtags = {},
             )
 
             TemplateHashtagSection(
@@ -149,7 +126,7 @@ private fun TemplateHashtagSectionPreview() {
                 hashtags = emptyList(),
                 canAddHashtag = false,
                 onClickAdd = {},
-                onClickDelete = {},
+                onUpdateHashtags = {},
             )
         }
     }

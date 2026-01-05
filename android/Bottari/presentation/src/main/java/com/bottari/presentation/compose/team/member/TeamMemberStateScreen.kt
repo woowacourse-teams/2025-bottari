@@ -22,9 +22,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.component.BottariCircularLoader
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.team.TeamSendRemindDialog
 import com.bottari.presentation.compose.team.TeamStateCard
 import com.bottari.presentation.compose.team.TeamStateListBox
@@ -48,14 +48,17 @@ fun TeamMemberStateScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                ComposeTeamMembersStatusUiEvent.FetchMembersStatusFailure ->
+                ComposeTeamMembersStatusUiEvent.FetchMembersStatusFailure -> {
                     snackbarHostState.showSnackbar("보따리를 불러오지 못했어요")
+                }
 
-                is ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess ->
+                is ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageSuccess -> {
                     snackbarHostState.showSnackbar("보채기에 성공했어요")
+                }
 
-                ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure ->
+                ComposeTeamMembersStatusUiEvent.SendRemindByMemberMessageFailure -> {
                     snackbarHostState.showSnackbar("보채기에 실패했어요")
+                }
             }
         }
     }
@@ -81,7 +84,7 @@ private fun TeamMemberStateScreen(
             .padding(BottariTheme.spacing.spaceMedium),
     ) {
         if (uiState.isInitialLoading) {
-            IndeterminateCircularIndicator()
+            BottariCircularLoader()
             return@Box
         }
 
@@ -127,7 +130,7 @@ private fun TeamMemberStateScreen(
         uiState.selectedMember?.let { member ->
             TeamSendRemindDialog(
                 title = member.member.nickname,
-                isRemindable = member.shouldHurryUp,
+                enableRemind = member.shouldHurryUp,
                 onDismissRequest = { onSelectMember(null) },
                 onClickRemind = { onSendRemind(member.member) },
             ) {

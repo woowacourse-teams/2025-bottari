@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,8 +21,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun TeamStateListBox(
@@ -36,7 +35,7 @@ fun TeamStateListBox(
     Box(
         modifier =
             modifier
-                .clip(RoundedCornerShape(16.dp))
+                .clip(BottariTheme.shapes.radiusLarge)
                 .background(BottariTheme.colors.white)
                 .background(color.copy(0.1f))
                 .fillMaxWidth()
@@ -66,7 +65,7 @@ fun TeamStateListBox(
                         modifier =
                             Modifier
                                 .padding(2.dp)
-                                .clip(RoundedCornerShape(16.dp))
+                                .clip(BottariTheme.shapes.radiusLarge)
                                 .background(BottariTheme.colors.white)
                                 .padding(
                                     horizontal = BottariTheme.spacing.spaceXSmall,

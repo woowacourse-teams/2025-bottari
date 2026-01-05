@@ -13,7 +13,6 @@ internal fun Project.configureCompose(extension: CommonExtension<*, *, *, *, *, 
         dependencies {
             implementation(platform(libs.findLibrary("androidx.compose.bom").get()))
             implementation(libs.findBundle("androidx.compose").get())
-            implementation(libs.findBundle("androidx.compose.navigation").get())
             debugImplementation(libs.findBundle("androidx.compose.debug").get())
         }
     }

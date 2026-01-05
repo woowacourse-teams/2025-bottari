@@ -1,7 +1,6 @@
 package com.bottari.presentation.compose.home.template.component
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
@@ -10,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun CreateTemplateFAB(
@@ -20,12 +19,12 @@ fun CreateTemplateFAB(
 ) {
     FloatingActionButton(
         onClick = onClickAdd,
-        shape = RoundedCornerShape(12.dp),
+        shape = BottariTheme.shapes.radiusMedium,
         containerColor = BottariTheme.colors.primary,
         contentColor = BottariTheme.colors.white,
         elevation =
             FloatingActionButtonDefaults.elevation(
-                defaultElevation = 2.dp,
+                defaultElevation = 1.dp,
                 pressedElevation = 0.dp,
                 hoveredElevation = 0.dp,
                 focusedElevation = 0.dp,

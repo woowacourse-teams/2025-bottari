@@ -1,7 +1,9 @@
 package com.bottari.presentation.compose.team.item
 
+import androidx.compose.runtime.Immutable
 import com.bottari.presentation.model.bottari.team.TeamBottariUiModelStatus
 
+@Immutable
 data class ComposeTeamBottariItemStatusUiState(
     val isLoading: Boolean = false,
     val isFetched: Boolean = false,

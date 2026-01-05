@@ -1,7 +1,6 @@
 package com.bottari.presentation.compose.personal.component
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -11,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.BottariCheckIndicator
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.component.BottariCheckIndicator
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun ChecklistProgressHeader(
@@ -22,18 +21,8 @@ fun ChecklistProgressHeader(
     totalQuantity: Int,
     modifier: Modifier = Modifier,
 ) {
-    val format =
-        stringResource(
-            R.string.checklist_current_status_items_count_text,
-        )
-    BottariBox(
-        modifier = modifier,
-        contentPadding =
-            PaddingValues(
-                vertical = BottariTheme.spacing.spaceXLarge,
-                horizontal = BottariTheme.spacing.spaceMedium,
-            ),
-    ) {
+    val format = stringResource(R.string.checklist_current_status_items_count_text)
+    BottariCard(modifier = modifier) {
         Column {
             Row {
                 Text(
@@ -54,7 +43,7 @@ fun ChecklistProgressHeader(
             BottariCheckIndicator(
                 checkedQuantity = checkedQuantity,
                 totalQuantity = totalQuantity,
-                modifier = Modifier.height(10.dp),
+                modifier = Modifier.height(8.dp),
             )
         }
     }

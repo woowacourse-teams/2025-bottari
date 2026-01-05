@@ -52,8 +52,8 @@ class CreateTemplateViewModel @Inject constructor(
         updateState { copy(writingHashtag = "", hashtags = hashtags + hashtag) }
     }
 
-    fun deleteHashtag(hashtag: String) {
-        updateState { copy(hashtags = hashtags - hashtag) }
+    fun updateHashtags(newHashtags: List<String>) {
+        updateState { copy(hashtags = newHashtags) }
     }
 
     fun createTemplate() {

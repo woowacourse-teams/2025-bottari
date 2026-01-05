@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.compose.home.template.component.CreateTemplateFAB
 import com.bottari.presentation.compose.home.template.component.PullToRefreshTemplateColumn
 import com.bottari.presentation.compose.home.template.component.TemplateItemType

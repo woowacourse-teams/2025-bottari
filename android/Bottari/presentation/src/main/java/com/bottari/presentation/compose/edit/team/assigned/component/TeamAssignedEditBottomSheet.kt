@@ -8,29 +8,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
@@ -46,14 +38,14 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariTextField
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.extension.noRippleClickable
+import com.bottari.core.ui.extension.topBottomFadingEdge
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.modifier.noRippleClickable
-import com.bottari.presentation.compose.common.modifier.topBottomFadingEdge
-import com.bottari.presentation.compose.common.theme.BottariTheme
 import com.bottari.presentation.compose.edit.team.assigned.TeamAssignedEditUiState
 import com.bottari.presentation.compose.edit.team.assigned.dummyMembers
 import com.bottari.presentation.compose.team.TeamStateListBox
@@ -72,58 +64,41 @@ fun TeamAssignedBottomSheet(
     onChangeInputText: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val focusManager = LocalFocusManager.current
+
     ModalBottomSheet(
         onDismissRequest = onBottomSheetClose,
         sheetState = sheetState,
         containerColor = BottariTheme.colors.white,
-        contentWindowInsets = { WindowInsets.navigationBars },
-        dragHandle = {
-            BottomSheetDefaults.DragHandle(
-                modifier =
-                    Modifier.noRippleClickable(
-                        true,
-                        {},
-                    ),
-            )
-        },
+        dragHandle = { BottomSheetDefaults.DragHandle() },
         modifier = Modifier.statusBarsPadding(),
     ) {
-        val focusManager = LocalFocusManager.current
         Column(
             modifier =
                 modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-                    .background(BottariTheme.colors.white)
                     .padding(BottariTheme.spacing.spaceMedium)
-                    .navigationBarsPadding()
                     .noRippleClickable(onClick = { focusManager.clearFocus() }),
         ) {
             BottomSheetHeader(
                 canSend = uiState.canSend,
                 onSaveItem = onSaveItem,
             )
-            Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceSmall))
-            BottomSheetHint("물건 이름을 입력하고 담당자를 지정해 주세요")
+            Text(
+                text = "물건 이름을 입력하고 담당자를 지정해 주세요",
+                style = BottariTheme.typography.regular14.toTextStyle(),
+                color = BottariTheme.colors.gray500,
+                modifier = Modifier.fillMaxWidth(),
+            )
 
-            Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
+            Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceSmall))
 
             SectionLabel(text = "물건 이름")
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
-            OutlinedTextField(
+            BottariTextField(
                 value = uiState.inputText,
-                onValueChange = { currentText -> onChangeInputText(currentText) },
+                onValueChange = onChangeInputText,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors =
-                    OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = BottariTheme.colors.white,
-                        focusedContainerColor = BottariTheme.colors.white,
-                        unfocusedBorderColor = BottariTheme.colors.gray500,
-                        focusedBorderColor = BottariTheme.colors.gray500,
-                        errorContainerColor = BottariTheme.colors.white,
-                    ),
-                textStyle = BottariTheme.typography.semiBold16.toTextStyle(),
                 isError = uiState.isAlreadyExist,
             )
 
@@ -190,18 +165,6 @@ private fun BottomSheetHeader(
             Text("저장", style = BottariTheme.typography.semiBold16.toTextStyle())
         }
     }
-}
-
-@Composable
-private fun BottomSheetHint(text: String) {
-    Text(
-        text = text,
-        style = BottariTheme.typography.regular14.toTextStyle(),
-        textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth(),
-    )
-    Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceXSmall))
-    HorizontalDivider(thickness = 2.dp, color = BottariTheme.colors.gray500)
 }
 
 @Composable
@@ -283,13 +246,13 @@ private fun TeamAssignedMemberItem(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(backgroundColor) // 변수 사용
+                .clip(BottariTheme.shapes.radiusLarge)
+                .background(backgroundColor)
                 .noRippleClickable(onClick = { onToggleMember(member.id) })
                 .border(
-                    2.dp,
-                    borderColor, // 변수 사용
-                    RoundedCornerShape(16.dp),
+                    width = 1.dp,
+                    color = borderColor,
+                    shape = BottariTheme.shapes.radiusLarge,
                 ).padding(BottariTheme.spacing.spaceXLarge),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -304,7 +267,7 @@ private fun TeamAssignedMemberItem(
             modifier =
                 Modifier
                     .size(20.dp)
-                    .clip(CircleShape)
+                    .clip(BottariTheme.shapes.circle)
                     .background(checkmarkColor)
                     .padding(4.dp),
         ) {

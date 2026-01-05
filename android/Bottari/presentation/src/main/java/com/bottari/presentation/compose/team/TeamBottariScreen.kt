@@ -19,11 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.component.BottariCircularLoader
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
+import com.bottari.core.ui.component.BottariTabBar
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariTabBar
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.personal.component.ChecklistTopBar
 import com.bottari.presentation.compose.personal.swipe.SwipeScreen
 import com.bottari.presentation.compose.team.checklist.ComposeTeamChecklistUiEvent
@@ -56,11 +56,13 @@ fun TeamBottariScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                ComposeTeamChecklistUiEvent.CheckItemFailure ->
+                ComposeTeamChecklistUiEvent.CheckItemFailure -> {
                     snackbarHostState.showSnackbar("물건을 챙기지 못했어요")
+                }
 
-                ComposeTeamChecklistUiEvent.FetchChecklistFailure ->
+                ComposeTeamChecklistUiEvent.FetchChecklistFailure -> {
                     snackbarHostState.showSnackbar("보따리를 불러오지 못했어요")
+                }
             }
         }
     }
@@ -80,7 +82,9 @@ fun TeamBottariScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
         when {
-            uiState.isInitialLoading -> IndeterminateCircularIndicator()
+            uiState.isInitialLoading -> {
+                BottariCircularLoader()
+            }
 
             isSwipeScreen -> {
                 SwipeScreen(
@@ -108,7 +112,7 @@ fun TeamBottariScreen(
                         pagerState = pagerState,
                     ) { page ->
                         when (page) {
-                            0 ->
+                            0 -> {
                                 TeamChecklistScreen(
                                     uiState = uiState,
                                     onClickSection = viewModel::toggleTypeExpanded,
@@ -120,18 +124,21 @@ fun TeamBottariScreen(
                                             .fillMaxSize()
                                             .padding(BottariTheme.spacing.spaceMedium),
                                 )
+                            }
 
-                            1 ->
+                            1 -> {
                                 TeamItemStateScreen(
                                     snackbarHostState = snackbarHostState,
                                     checkedState = uiState.bottariItems,
                                 )
+                            }
 
-                            2 ->
+                            2 -> {
                                 TeamMemberStateScreen(
                                     snackbarHostState = snackbarHostState,
                                     checkedState = uiState.bottariItems,
                                 )
+                            }
                         }
                     }
                 }

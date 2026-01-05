@@ -1,10 +1,7 @@
 package com.bottari.presentation.compose.personal.component
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -19,9 +16,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariButton
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun PersonalChecklistEmptyView(
@@ -53,23 +50,10 @@ fun PersonalChecklistEmptyView(
             color = BottariTheme.colors.gray500,
         )
         Spacer(Modifier.height(BottariTheme.spacing.spaceLarge))
-        BottariBox(
-            modifier =
-                Modifier
-                    .background(BottariTheme.colors.primary)
-                    .clickable(onClick = onClickEdit),
-            contentPadding =
-                PaddingValues(
-                    horizontal = BottariTheme.spacing.spaceLarge,
-                    vertical = BottariTheme.spacing.spaceSmall,
-                ),
-        ) {
-            Text(
-                text = stringResource(R.string.checklist_empty_view_edit_btn_text),
-                style = BottariTheme.typography.bold20.toTextStyle(),
-                color = BottariTheme.colors.white,
-            )
-        }
+        BottariButton(
+            onClick = onClickEdit,
+            text = stringResource(R.string.checklist_empty_view_edit_btn_text),
+        )
     }
 }
 

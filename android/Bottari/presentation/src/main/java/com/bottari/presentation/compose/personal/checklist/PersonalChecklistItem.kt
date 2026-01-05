@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -22,8 +21,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.model.bottari.PersonalChecklistItemUiModel
 import com.bottari.presentation.model.bottari.team.ChecklistItemUiModel
 
@@ -32,7 +31,7 @@ fun PersonalChecklistItem(
     bottariItem: ChecklistItemUiModel,
     onClick: () -> Unit,
 ) {
-    BottariBox(
+    BottariCard(
         modifier =
             Modifier
                 .fillMaxWidth()
@@ -50,7 +49,7 @@ fun PersonalChecklistItem(
                 modifier =
                     Modifier
                         .size(5.dp)
-                        .clip(shape = CircleShape)
+                        .clip(shape = BottariTheme.shapes.circle)
                         .background(BottariTheme.colors.black),
             )
             Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceMedium))

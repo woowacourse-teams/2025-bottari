@@ -1,15 +1,15 @@
 package com.bottari.presentation.compose.home.bottari.component
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,8 +18,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariIconButton
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun BottariMenuDropdown(
@@ -31,55 +32,59 @@ fun BottariMenuDropdown(
 ) {
     DropdownMenu(
         expanded = expanded,
+        modifier = modifier,
         onDismissRequest = onDismissRequest,
-        modifier =
-            modifier.padding(
-                horizontal = BottariTheme.spacing.space2xSmall,
-            ),
-        shape = RoundedCornerShape(12.dp),
+        shape = BottariTheme.shapes.radiusMedium,
         containerColor = BottariTheme.colors.white,
     ) {
         Row(
-            modifier = Modifier.height(48.dp),
+            modifier =
+                Modifier
+                    .height(48.dp)
+                    .padding(horizontal = BottariTheme.spacing.spaceXSmall),
             horizontalArrangement = Arrangement.spacedBy(BottariTheme.spacing.space2xSmall),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            IconButton(
-                onClick = {
-                    onBottariEdit()
-                    onDismissRequest()
-                },
-                modifier = Modifier.padding(BottariTheme.spacing.space2xSmall),
+            BottariMenuDropdownItem(
+                iconResId = R.drawable.ic_edit,
+                contentDescriptionResId = R.string.bottari_edit_btn_description,
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_edit),
-                    contentDescription = stringResource(R.string.bottari_edit_btn_description),
-                )
+                onBottariEdit()
+                onDismissRequest()
             }
 
             VerticalDivider(
-                modifier = Modifier.fillMaxHeight(0.8f),
+                modifier = Modifier.fillMaxHeight(),
                 thickness = 1.dp,
-                color = BottariTheme.colors.gray100,
+                color = BottariTheme.colors.gray200,
             )
 
-            IconButton(
-                onClick = {
-                    onBottariDelete()
-                    onDismissRequest()
-                },
-                modifier = Modifier.padding(BottariTheme.spacing.space2xSmall),
+            BottariMenuDropdownItem(
+                iconResId = R.drawable.ic_delete,
+                contentDescriptionResId = R.string.bottari_delete_btn_description,
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_delete),
-                    contentDescription = stringResource(R.string.bottari_delete_btn_description),
-                )
+                onBottariDelete()
+                onDismissRequest()
             }
         }
     }
 }
 
-@Preview
+@Composable
+private fun BottariMenuDropdownItem(
+    @DrawableRes iconResId: Int,
+    @StringRes contentDescriptionResId: Int,
+    onClick: () -> Unit,
+) {
+    BottariIconButton(onClick = onClick) {
+        Icon(
+            painter = painterResource(iconResId),
+            contentDescription = stringResource(contentDescriptionResId),
+        )
+    }
+}
+
+@Preview(showBackground = true)
 @Composable
 private fun BottariMenuDropdownPreview() {
     Box(modifier = Modifier.padding(150.dp)) {

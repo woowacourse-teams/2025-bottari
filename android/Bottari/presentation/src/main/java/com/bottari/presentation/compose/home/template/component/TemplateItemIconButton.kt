@@ -1,23 +1,23 @@
 package com.bottari.presentation.compose.home.template.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.component.BottariToggleButton
+import com.bottari.bottari.designsystem.component.BottariToggleButtonTone
+import com.bottari.bottari.designsystem.theme.BottariTheme
 
+@Immutable
 sealed interface TemplateItemType {
     data object MyTemplate : TemplateItemType
 
@@ -30,37 +30,19 @@ sealed interface TemplateItemType {
 fun TemplateItemIconButton(
     type: TemplateItemType,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    val defaultIconModifier = Modifier.padding(8.dp)
-
-    IconButton(
-        onClick = onClick,
-        modifier = modifier.setupIconButtonByTemplateItemType(type),
+    BottariToggleButton(
+        checked = type is TemplateItemType.Bookmark && type.isBookmarked,
+        onCheckedChange = { onClick() },
+        tone = BottariToggleButtonTone.Primary,
+        shape = BottariTheme.shapes.circle,
     ) {
         when (type) {
-            is TemplateItemType.MyTemplate -> MyTemplateIcon(defaultIconModifier)
-            is TemplateItemType.Bookmark ->
-                BookmarkIcon(
-                    isBookmarked = type.isBookmarked,
-                    modifier = defaultIconModifier,
-                )
+            is TemplateItemType.MyTemplate -> MyTemplateIcon()
+            is TemplateItemType.Bookmark -> BookmarkIcon(isBookmarked = type.isBookmarked)
         }
     }
 }
-
-@Composable
-private fun Modifier.setupIconButtonByTemplateItemType(type: TemplateItemType): Modifier =
-    when (type) {
-        is TemplateItemType.MyTemplate -> BottariTheme.colors.gray400.copy(0.2f)
-        is TemplateItemType.Bookmark -> {
-            if (type.isBookmarked) {
-                BottariTheme.colors.primary.copy(0.2f)
-            } else {
-                BottariTheme.colors.gray400.copy(0.2f)
-            }
-        }
-    }.let { bgColor -> background(color = bgColor, shape = CircleShape).size(40.dp) }
 
 @Composable
 private fun MyTemplateIcon(modifier: Modifier = Modifier) {

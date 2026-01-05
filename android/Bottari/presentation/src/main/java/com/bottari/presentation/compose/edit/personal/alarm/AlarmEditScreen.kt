@@ -10,7 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,8 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material3.Icon
@@ -43,11 +40,10 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bottari.bottari.designsystem.component.BottariCard
+import com.bottari.bottari.designsystem.component.BottariCircularLoader
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.component.BottariBox
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.theme.BottariTheme
-import com.bottari.presentation.compose.common.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.edit.personal.alarm.component.DatePickerModal
 import com.bottari.presentation.compose.edit.personal.alarm.component.DateSelector
 import com.bottari.presentation.compose.edit.personal.alarm.component.PermissionSettingDialog
@@ -91,15 +87,17 @@ fun AlarmEditScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                AlarmUiEvent.FetchAlarmFailure ->
+                AlarmUiEvent.FetchAlarmFailure -> {
                     snackbarHostState.showSnackbar(
                         context.getString(R.string.alarm_edit_fetch_failure_text),
                     )
+                }
 
-                AlarmUiEvent.SaveAlarmFailure ->
+                AlarmUiEvent.SaveAlarmFailure -> {
                     snackbarHostState.showSnackbar(
                         context.getString(R.string.alarm_edit_save_failure_text),
                     )
+                }
             }
         }
     }
@@ -168,14 +166,11 @@ private fun AlarmEditScreen(
             ),
     ) {
         if (state.isLoading) {
-            IndeterminateCircularIndicator()
+            BottariCircularLoader()
             return@Box
         }
 
-        BottariBox(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(BottariTheme.spacing.spaceXLarge),
-        ) {
+        BottariCard(modifier = Modifier.fillMaxWidth()) {
             Column {
                 AlarmEditHeader(
                     isActive = alarm.isActive,
@@ -215,7 +210,7 @@ private fun AlarmEditHeader(
                 Modifier
                     .size(48.dp)
                     .background(
-                        shape = CircleShape,
+                        shape = BottariTheme.shapes.circle,
                         color = BottariTheme.colors.primary.copy(alpha = 0.1f),
                     ),
         ) {
@@ -277,14 +272,14 @@ private fun AlarmEditBody(
             selectorProperties =
                 WheelPickerDefaults.selectorProperties(
                     enabled = true,
-                    shape = RoundedCornerShape(50),
+                    shape = BottariTheme.shapes.radiusLarge,
                     color = BottariTheme.colors.primary.copy(alpha = 0.1f),
                     border = BorderStroke(width = 0.dp, color = BottariTheme.colors.transparent),
                 ),
             onSnappedTime = onTimeChange,
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceXSmall))
 
         Text(
             text = "알람 시간",
@@ -292,14 +287,14 @@ private fun AlarmEditBody(
             style = BottariTheme.typography.regular16.toTextStyle(),
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceMedium))
 
         DateSelector(
             alarm = alarm,
             onCalendarClick = onCalendarClick,
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceXSmall))
 
         RepeatDaySelector(
             alarm = alarm,
@@ -334,11 +329,15 @@ private fun rememberPermissionLauncher(
                 }
             }
 
-            PermissionUtil.isPermanentlyDenied(activity) -> onRequireRuntimePermission()
-            else ->
+            PermissionUtil.isPermanentlyDenied(activity) -> {
+                onRequireRuntimePermission()
+            }
+
+            else -> {
                 coroutineScope.launch {
                     snackbarHostState.showSnackbar("권한 요청에 실패했어요")
                 }
+            }
         }
     }
 }
@@ -349,23 +348,15 @@ private fun AlarmEditScreenPreview() {
     var alarmState by remember { mutableStateOf(AlarmUiState()) }
 
     BottariTheme {
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(
-                        color = LocalBottariBgColor.current,
-                        shape = RoundedCornerShape(0.dp),
-                    ),
-        ) {
-            AlarmEditScreen(
-                state = alarmState,
-                onSwitchAlarmActivate = {},
-                onTimeChange = {},
-                onCalendarClick = {},
-                onRepeatDaysChange = {},
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
+        AlarmEditScreen(
+            state = alarmState,
+            onSwitchAlarmActivate = {
+                alarmState = alarmState.copy(alarm = alarmState.alarm.copy(isActive = it))
+            },
+            onTimeChange = {},
+            onCalendarClick = {},
+            onRepeatDaysChange = {},
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }

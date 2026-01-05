@@ -9,24 +9,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bottari.presentation.compose.common.component.IndeterminateCircularIndicator
-import com.bottari.presentation.compose.common.theme.BottariTheme
+import com.bottari.bottari.designsystem.component.BottariButton
+import com.bottari.bottari.designsystem.component.BottariCircularLoader
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedBottomSheet
 import com.bottari.presentation.compose.edit.team.assigned.component.TeamAssignedEditItem
 import com.bottari.presentation.compose.edit.team.component.TeamEditEmptyView
@@ -46,11 +42,21 @@ fun TeamAssignedScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
-                TeamAssignedEditUiEvent.CreateItemFailure -> snackbarHostState.showSnackbar("물건 생성에 실패했어요")
-                TeamAssignedEditUiEvent.DeleteItemFailure -> snackbarHostState.showSnackbar("물건 삭제에 실패했어요")
-                TeamAssignedEditUiEvent.FetchTeamAssignedItemsFailure ->
+                TeamAssignedEditUiEvent.CreateItemFailure -> {
+                    snackbarHostState.showSnackbar("물건 생성에 실패했어요")
+                }
+
+                TeamAssignedEditUiEvent.DeleteItemFailure -> {
+                    snackbarHostState.showSnackbar("물건 삭제에 실패했어요")
+                }
+
+                TeamAssignedEditUiEvent.FetchTeamAssignedItemsFailure -> {
                     snackbarHostState.showSnackbar("물건 불러오기에 실패했어요")
-                TeamAssignedEditUiEvent.SaveItemFailure -> snackbarHostState.showSnackbar("물건 저장에 실패했어요")
+                }
+
+                TeamAssignedEditUiEvent.SaveItemFailure -> {
+                    snackbarHostState.showSnackbar("물건 저장에 실패했어요")
+                }
             }
         }
     }
@@ -90,7 +96,12 @@ private fun TeamAssignedScreen(
     Box {
         Column(modifier = modifier.fillMaxSize()) {
             if (uiState.assignedItems.isEmpty()) {
-                TeamEditEmptyView(modifier = Modifier.fillMaxWidth().weight(1f))
+                TeamEditEmptyView(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                )
             } else {
                 LazyColumn(
                     modifier =
@@ -105,7 +116,8 @@ private fun TeamAssignedScreen(
                         TeamAssignedEditItem(
                             item.name,
                             type.members.map { member ->
-                                val memberIndex = uiState.members.indexOfFirst { it.id == member.id }
+                                val memberIndex =
+                                    uiState.members.indexOfFirst { it.id == member.id }
                                 Pair(member.nickname, memberIndex)
                             },
                             onClickEdit = { onEditItem(item.id) },
@@ -114,22 +126,14 @@ private fun TeamAssignedScreen(
                     }
                 }
             }
-            Button(
+            BottariButton(
+                text = "물건 추가",
                 onClick = onBottomSheetOpen,
                 modifier =
                     Modifier
                         .fillMaxWidth()
                         .padding(vertical = BottariTheme.spacing.spaceMedium),
-                colors =
-                    ButtonDefaults.buttonColors(
-                        containerColor = BottariTheme.colors.primary,
-                        contentColor = BottariTheme.colors.white,
-                        disabledContainerColor = BottariTheme.colors.primary,
-                        disabledContentColor = BottariTheme.colors.white,
-                    ),
-                shape = RoundedCornerShape(12.dp),
-                contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceMedium),
-            ) { Text(text = "물건 추가", style = BottariTheme.typography.semiBold24.toTextStyle()) }
+            )
             if (uiState.isSheetVisible) {
                 TeamAssignedBottomSheet(
                     uiState = uiState,
@@ -143,7 +147,7 @@ private fun TeamAssignedScreen(
                 )
             }
         }
-        if (uiState.isLoading) IndeterminateCircularIndicator()
+        if (uiState.isLoading) BottariCircularLoader()
     }
 }
 

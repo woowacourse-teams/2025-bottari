@@ -2,19 +2,22 @@ package com.bottari.presentation.compose.edit.personal.item.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
+import com.bottari.bottari.designsystem.component.BottariIconButton
+import com.bottari.bottari.designsystem.component.BottariTextField
+import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.presentation.R
-import com.bottari.presentation.compose.common.theme.BottariTheme
 
 @Composable
 fun ItemEditInputBar(
@@ -30,25 +33,42 @@ fun ItemEditInputBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        ItemTextField(
-            itemName = itemName,
-            onNameChange = onNameChange,
-            onSaveItem = onSaveItem,
+        BottariTextField(
+            value = itemName,
+            onValueChange = onNameChange,
             isError = isInvalidItem,
+            supportingText = if (isInvalidItem) "추가할 물건은 중복되거나 1-20자여야 해요" else null,
+            placeholder = stringResource(R.string.bottari_personal_item_edit_hint_text),
             modifier =
                 Modifier
-                    .height(48.dp)
                     .weight(1f)
                     .padding(start = BottariTheme.spacing.spaceSmall),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+            keyboardActions = KeyboardActions(onSend = { onSaveItem() }),
         )
-        IconButton(
+
+        BottariIconButton(
             onClick = onSaveItem,
             enabled = isSavable,
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.Send,
+                imageVector = Icons.Default.Add,
                 contentDescription = stringResource(R.string.bottari_btn_item_add_description),
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ItemEditInputBarPreview() {
+    BottariTheme {
+        ItemEditInputBar(
+            itemName = "",
+            isInvalidItem = false,
+            isSavable = false,
+            onNameChange = {},
+            onSaveItem = {},
+        )
     }
 }
