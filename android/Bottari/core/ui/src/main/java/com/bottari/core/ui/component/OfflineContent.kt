@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bottari.bottari.designsystem.component.BottariButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
 
 @Composable
@@ -48,7 +49,10 @@ fun OfflineContent(
             style = BottariTheme.typography.medium16.toTextStyle(),
         )
         Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
-        RetryButton(onRetryClick = onRetryClick)
+        BottariButton(
+            text = "다시 시도",
+            onClick = onRetryClick,
+        )
     }
 }
 
