@@ -1,6 +1,6 @@
-package com.bottari.presentation.view.main
+package com.bottari.bottari.splash
 
-data class MainUiState(
+data class SplashUiState(
     val hasPermissionFlag: Boolean = false,
     val isReady: Boolean = false,
 )

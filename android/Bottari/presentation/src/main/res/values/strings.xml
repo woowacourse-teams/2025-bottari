@@ -62,7 +62,6 @@
     <string name="common_alarm_permission_dialog_message_text">알람을 설정하려면 알람 및 리마인더 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
     <string name="common_permission_dialog_positive_btn_text">설정으로 가기</string>
     <string name="common_permission_dialog_negative_btn_text">나중에 하기</string>
-    <string name="common_permission_denied_text">권한이 거부되어 일부 기능이 제한돼요.\n기능 사용 시 다시 요청드릴게요.</string>
 
     <!-- Dialog: 데이터 저장 다이얼로그 텍스트-->
     <string name="common_alert_dialog_title_text">저장 알림</string>

@@ -30,7 +30,7 @@
         </provider>
 
         <activity
-            android:name=".main.ComposeMainActivity"
+            android:name=".splash.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.Bottari.Starting">
             <intent-filter>

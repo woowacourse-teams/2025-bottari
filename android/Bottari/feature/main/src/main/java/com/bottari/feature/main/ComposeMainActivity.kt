@@ -1,4 +1,4 @@
-package com.bottari.bottari.main
+package com.bottari.feature.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

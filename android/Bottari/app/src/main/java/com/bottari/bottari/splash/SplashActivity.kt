@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.main
+package com.bottari.bottari.splash
 
 import android.content.Intent
 import android.net.Uri
@@ -8,11 +8,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.bottari.presentation.R
+import com.bottari.bottari.R
+import com.bottari.bottari.databinding.ActivitySplashBinding
+import com.bottari.feature.main.ComposeMainActivity
 import com.bottari.presentation.common.base.BaseActivity
 import com.bottari.presentation.common.extension.showSnackbar
-import com.bottari.presentation.compose.home.ComposeHomeActivity
-import com.bottari.presentation.databinding.ActivityMainBinding
 import com.bottari.presentation.util.DeeplinkHelper.getInviteCode
 import com.bottari.presentation.util.DeeplinkHelper.validateUri
 import com.bottari.presentation.util.PermissionUtil
@@ -27,8 +27,8 @@ import com.bottari.presentation.view.invite.InviteActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
-    private val viewModel: MainViewModel by viewModels()
+class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding::inflate) {
+    private val viewModel: SplashViewModel by viewModels()
     private val permissionLauncher: ActivityResultLauncher<Array<String>> =
         registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions(),
@@ -59,20 +59,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         collectWithLifecycle(viewModel.uiEvent) { event ->
             when (event) {
-                is MainUiEvent.LoginSuccess ->
-                    checkPermissionAndNavigate(event.permissionFlag)
+                is SplashUiEvent.LoginSuccess -> checkPermissionAndNavigate(event.permissionFlag)
 
-                is MainUiEvent.Offline ->
-                    checkPermissionAndNavigate(event.permissionFlag)
+                is SplashUiEvent.Offline -> checkPermissionAndNavigate(event.permissionFlag)
 
-                MainUiEvent.IncompletePermissionFlow -> showPermissionDescriptionDialog()
+                SplashUiEvent.IncompletePermissionFlow -> showPermissionDescriptionDialog()
 
-                MainUiEvent.ForceUpdate -> showForceUpdateDialog()
+                SplashUiEvent.ForceUpdate -> showForceUpdateDialog()
 
-                MainUiEvent.RegisterFailure,
-                MainUiEvent.LoginFailure,
-                MainUiEvent.GetPermissionFlagFailure,
-                MainUiEvent.SavePermissionFlagFailure,
+                SplashUiEvent.RegisterFailure,
+                SplashUiEvent.LoginFailure,
+                SplashUiEvent.GetPermissionFlagFailure,
+                SplashUiEvent.SavePermissionFlagFailure,
                 -> finishAffinity()
             }
         }
@@ -118,7 +116,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     override fun onClickNegative() = viewModel.checkRegisteredMember()
 
                     override fun onClickPositive() {
-                        PermissionUtil.requestExactAlarmPermission(this@MainActivity)
+                        PermissionUtil.requestExactAlarmPermission(this@SplashActivity)
                         isNavigatedToSettings = true
                     }
                 },
@@ -139,7 +137,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun navigateToHome() {
-        val intent = Intent(this, ComposeHomeActivity::class.java)
+        val intent = Intent(this, ComposeMainActivity::class.java)
         startActivity(intent)
         finish()
     }

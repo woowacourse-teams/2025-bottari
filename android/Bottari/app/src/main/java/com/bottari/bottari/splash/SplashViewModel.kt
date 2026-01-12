@@ -1,4 +1,4 @@
-package com.bottari.presentation.view.main
+package com.bottari.bottari.splash
 
 import com.bottari.core.domain.network.NetworkManager
 import com.bottari.core.domain.usecase.appConfig.CheckForceUpdateUseCase
@@ -16,7 +16,7 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class SplashViewModel @Inject constructor(
     networkManager: NetworkManager,
     private val registerMemberUseCase: RegisterMemberUseCase,
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
@@ -24,8 +24,8 @@ class MainViewModel @Inject constructor(
     private val saveFcmTokenUseCase: SaveFcmTokenUseCase,
     private val getPermissionFlagUseCase: GetPermissionFlagUseCase,
     private val checkForceUpdateUseCase: CheckForceUpdateUseCase,
-) : NetworkBaseViewModel<MainUiState, MainUiEvent>(
-        initialState = MainUiState(),
+) : NetworkBaseViewModel<SplashUiState, SplashUiEvent>(
+        initialState = SplashUiState(),
         networkManager = networkManager,
     ) {
     init {
@@ -35,13 +35,13 @@ class MainViewModel @Inject constructor(
     fun savePermissionFlag() {
         launch {
             savePermissionFlagUseCase(true)
-                .onFailure { emitEvent(MainUiEvent.SavePermissionFlagFailure) }
+                .onFailure { emitEvent(SplashUiEvent.SavePermissionFlagFailure) }
         }
     }
 
     fun checkRegisteredMember() {
         if (isConnected.value.not()) {
-            emitEvent(MainUiEvent.Offline(false))
+            emitEvent(SplashUiEvent.Offline(false))
             return
         }
 
@@ -53,7 +53,7 @@ class MainViewModel @Inject constructor(
                         return@launch
                     }
                     registerMember()
-                }.onFailure { emitEvent(MainUiEvent.LoginFailure) }
+                }.onFailure { emitEvent(SplashUiEvent.LoginFailure) }
         }
     }
 
@@ -71,12 +71,12 @@ class MainViewModel @Inject constructor(
                     updateState { copy(hasPermissionFlag = permissionFlag, isReady = true) }
                     emitEvent(
                         if (permissionFlag) {
-                            MainUiEvent.Offline(true)
+                            SplashUiEvent.Offline(true)
                         } else {
-                            MainUiEvent.IncompletePermissionFlow
+                            SplashUiEvent.IncompletePermissionFlow
                         },
                     )
-                }.onFailure { emitEvent(MainUiEvent.GetPermissionFlagFailure) }
+                }.onFailure { emitEvent(SplashUiEvent.GetPermissionFlagFailure) }
         }
     }
 
@@ -87,11 +87,11 @@ class MainViewModel @Inject constructor(
                     updateState { copy(hasPermissionFlag = permissionFlag) }
                     if (!permissionFlag) {
                         updateState { copy(isReady = true) }
-                        emitEvent(MainUiEvent.IncompletePermissionFlow)
+                        emitEvent(SplashUiEvent.IncompletePermissionFlow)
                         return@launch
                     }
                     checkRegisteredMember()
-                }.onFailure { emitEvent(MainUiEvent.GetPermissionFlagFailure) }
+                }.onFailure { emitEvent(SplashUiEvent.GetPermissionFlagFailure) }
         }
     }
 
@@ -100,7 +100,7 @@ class MainViewModel @Inject constructor(
             checkForceUpdateUseCase(BuildConfig.APP_VERSION_CODE)
                 .onSuccess { isForceUpdate ->
                     if (isForceUpdate) {
-                        emitEvent(MainUiEvent.ForceUpdate)
+                        emitEvent(SplashUiEvent.ForceUpdate)
                         return@launch
                     }
                     checkPermissionFlag()
@@ -127,7 +127,7 @@ class MainViewModel @Inject constructor(
                     .onSuccess { onLoginReady() }
                     .onFailure { exception ->
                         BottariLogger.error(exception.message, exception)
-                        emitEvent(MainUiEvent.RegisterFailure)
+                        emitEvent(SplashUiEvent.RegisterFailure)
                     }
             }
         }
@@ -135,7 +135,7 @@ class MainViewModel @Inject constructor(
 
     private fun onLoginReady() {
         updateState { copy(isReady = true) }
-        emitEvent(MainUiEvent.LoginSuccess(currentState.hasPermissionFlag))
+        emitEvent(SplashUiEvent.LoginSuccess(currentState.hasPermissionFlag))
     }
 
     private suspend fun fetchFcmToken(): String? =

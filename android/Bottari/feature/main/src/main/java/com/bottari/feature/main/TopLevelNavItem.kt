@@ -1,11 +1,10 @@
-package com.bottari.bottari.main
+package com.bottari.feature.main
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.bottari.bottari.R
 import com.bottari.core.navigation.MainTabNavKey
 
 internal data class TopLevelNavItem(

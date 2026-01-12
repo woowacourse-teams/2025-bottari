@@ -1,4 +1,4 @@
-package com.bottari.bottari.main
+package com.bottari.feature.main
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.shape.RoundedCornerShape
