@@ -5,10 +5,10 @@ versionName = "2.1.0"
 
 # Android Gradle Plugin & Kotlin
 agp = "8.9.3"
-kotlin = "2.0.21"
+kotlin = "2.2.21"
 jetbrainsKotlinJvm = "2.0.21"
 kotlinxCoroutinesCore = "1.10.2"
-ksp = "2.0.21-1.0.28"
+ksp = "2.2.21-2.0.4"
 
 # AndroidX
 coreKtx = "1.16.0"
