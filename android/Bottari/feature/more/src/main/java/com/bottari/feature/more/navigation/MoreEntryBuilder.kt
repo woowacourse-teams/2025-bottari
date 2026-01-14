@@ -2,8 +2,8 @@ package com.bottari.feature.more.navigation
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
-import androidx.compose.ui.platform.LocalContext
+import androidx.activity.compose.LocalActivity
+import androidx.core.net.toUri
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import com.bottari.core.navigation.LocalNavigator
@@ -18,16 +18,16 @@ import dagger.multibindings.IntoSet
 fun EntryProviderScope<NavKey>.moreEntryBuilder() {
     entry<MainTabNavKey.MoreNavKey> {
         val navigator = LocalNavigator.current
-        val activity = LocalContext.current as Activity
+        val activity = LocalActivity.current
 
         MoreScreen(
-            onNavigateToBrowser = { activity.openUrl(it) },
+            onNavigateToBrowser = { url -> activity?.openUrl(url) },
         )
     }
 }
 
 fun Activity.openUrl(url: String) {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
     startActivity(intent)
 }
 
