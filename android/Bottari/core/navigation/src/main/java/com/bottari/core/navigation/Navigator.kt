@@ -1,5 +1,6 @@
 package com.bottari.core.navigation
 
+import android.util.Log
 import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation3.runtime.NavKey
 
@@ -14,6 +15,21 @@ class Navigator(
             in state.topLevelKeys -> goToTopLevel(key)
             else -> goToKey(key)
         }
+        Log.e(
+            "Navigator",
+            """
+            
+            ------------------------ Navigator --------------------------------
+            [navigate to $key]
+            currentTopLevelKey: ${state.currentTopLevelKey}
+            currentKey: ${state.currentKey}
+
+            topLevelStack: ${state.topLevelStack}
+            subStacks: ${state.subStacks}
+            currentSubStack: ${state.currentSubStack.size}
+            ------------------------------------------------------------------------
+            """.trimIndent(),
+        )
     }
 
     fun goBack() {

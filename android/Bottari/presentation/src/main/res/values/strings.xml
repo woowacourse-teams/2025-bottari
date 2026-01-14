@@ -82,22 +82,6 @@
     <string name="reset_bottari_items_check_state_dialog_title_text">체크리스트 초기화</string>
     <string name="reset_bottari_items_check_state_dialog_description_text">체크 상태를 모두 지우시겠어요?</string>
 
-    <!-- Dialog: 보따리 생성 다이얼로그 텍스트  -->
-    <string name="bottari_create_dialog_title_text">보따리 이름을 입력해 주세요</string>
-    <string name="bottari_create_dialog_description_text">이름은 나중에 언제든지 바꿀 수 있어요</string>
-    <string name="bottari_create_dialog_name_hint_text">보따리 이름을 입력해 주세요</string>
-    <string name="bottari_create_dialog_btn_text">보따리 만들기</string>
-    <string name="bottari_create_failure_text">보따리를 만들지 못했어요</string>
-    <string name="bottari_create_default_title_text">새 보따리</string>
-    <string name="bottari_create_success_text">보따리를 만들었어요</string>
-
-    <!-- Dialog: 우리 보따리 입장 다이얼로그 텍스트 -->
-    <string name="team_bottari_join_dialog_title_text">초대 코드를 입력해 주세요</string>
-    <string name="team_bottari_join_dialog_description_text">초대 코드를 입력하고 팀에 참여하세요</string>
-    <string name="team_bottari_join_invalid_invite_code_text">유효하지 않은 초대 코드예요</string>
-    <string name="team_bottari_join_dialog_name_hint_text">초대 코드를 입력해 주세요</string>
-    <string name="team_bottari_join_dialog_btn_text">참가하기</string>
-
     <!--Dialog: 강제 업데이트 다이얼로그 텍스트 -->
     <string name="force_update_dialog_title_text">업데이트가 필요해요</string>
     <string name="force_update_dialog_description_text">원활한 서비스 이용을 위해\n최신 버전으로 업데이트해 주세요</string>
@@ -120,18 +104,6 @@
     <string name="home_nav_template_title_text">모두의 보따리</string>
     <string name="home_nav_more_title_text">더보기</string>
 
-    <!-- My Bottari Screen -->
-    <string name="team_bottari_text">팀</string>
-    <string name="personal_bottari_text">개인</string>
-    <string name="all_bottari_text">전체</string>
-
-    <!-- Personal Bottari -->
-    <string name="bottari_home_fetch_failure_text">보따리 목록을 불러오지 못했어요</string>
-    <string name="bottari_home_fetch_bottari_failure_text">보따리를 불러오지 못했어요</string>
-    <string name="bottari_home_delete_success_text">보따리를 삭제했어요</string>
-    <string name="bottari_home_delete_failure_text">보따리를 삭제하지 못했어요</string>
-    <string name="bottari_home_empty_view_title_text">보따리가 없습니다</string>
-    <string name="bottari_home_empty_view_description_text">오른쪽 아래 버튼을 눌러 새 보따리를 만들거나,\n‘모두의 보따리’에서 원하는 보따리를 가져와보세요!</string>
     <string name="bottari_home_exit_confirm_text">한 번 더 누르면 앱이 종료돼요</string>
 
     <!-- Team Checklist -->
@@ -145,22 +117,6 @@
     <string name="team_checklist_current_items_status_progress_text">%d/%d</string>
     <string name="team_checklist_current_items_count_text">%d개 항목</string>
     <string name="team_checklist_current_item_status_percent_text">%1$d%% 완료</string>
-
-    <!-- Bottari Fab -->
-    <string name="personal_bottari_create_btn_text">개인 보따리 생성</string>
-    <string name="team_bottari_create_btn_text">팀 보따리 생성</string>
-    <string name="team_bottari_join_btn_text">코드로 참가</string>
-
-    <!--  Team Bottari  -->
-    <string name="join_team_bottari_success_text">팀 보따리에 참가했어요</string>
-    <string name="join_team_bottari_failure_text">팀 보따리에 참가하지 못했어요</string>
-    <string name="exit_team_bottari_success_text">팀 보따리에서 나갔어요</string>
-    <string name="exit_team_bottari_failure_text">팀 보따리에서 나가지 못했어요</string>
-
-    <!-- Bottari Item -->
-    <string name="bottari_item_alarm_repeat_everyday_text">매일 알람</string>
-    <string name="bottari_item_alarm_repeat_everyweek_text">매주 알람</string>
-    <string name="bottari_item_status_format">%d/%d</string>
 
     <!-- Checklist -->
     <string name="checklist_progress_header_title_text">완료된 항목</string>
@@ -216,6 +172,10 @@
     <string name="bottari_rename_dialog_title_text">보따리 이름 바꾸기</string>
     <string name="bottari_rename_dialog_btn_text">이름 저장</string>
     <string name="bottari_rename_dialog_hint_text">새 이름을 입력해 주세요</string>
+
+    <!--  Team Bottari  -->
+    <string name="join_team_bottari_success_text">팀 보따리에 참가했어요</string>
+    <string name="join_team_bottari_failure_text">팀 보따리에 참가하지 못했어요</string>
 
     <!-- Bottari Item Type -->
     <string name="bottari_item_type_shared_text">공통</string>
@@ -311,13 +271,8 @@
     <string name="team_status_send_remind_btn_text">보채기</string>
 
     <!-- Description 접근성 -->
-    <string name="bottari_edit_btn_description">보따리 수정 버튼</string>
-    <string name="bottari_delete_btn_description">보따리 삭제 버튼</string>
-    <string name="bottari_btn_create_description">보따리 만들기 메뉴 열기 버튼</string>
-    <string name="bottari_action_close_label_description">보따리 만들기 메뉴 닫기</string>
     <string name="bottari_btn_template_delete_description">보따리 템플릿 삭제 버튼</string>
     <string name="bottari_btn_item_add_description">물건 추가 버튼</string>
-    <string name="bottari_btn_more_description">더보기 버튼</string>
     <string name="bottari_icon_item_empty_description">빈 물건 아이콘</string>
     <string name="bottari_icon_home_description">보따리 아이콘 이미지</string>
     <string name="bottari_icon_type_description">보따리 타입 아이콘</string>

@@ -1,7 +1,7 @@
-package com.bottari.presentation.compose.home.bottari
+package com.bottari.feature.mybottari
 
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
-import com.bottari.core.domain.model.notification.Notification
 import com.bottari.core.domain.network.NetworkManager
 import com.bottari.core.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.core.domain.usecase.bottari.DeleteBottariUseCase
@@ -10,18 +10,18 @@ import com.bottari.core.domain.usecase.team.CreateTeamBottariUseCase
 import com.bottari.core.domain.usecase.team.ExitTeamBottariUseCase
 import com.bottari.core.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.core.domain.usecase.team.JoinTeamBottariUseCase
-import com.bottari.presentation.common.base.NetworkBaseViewModel
-import com.bottari.presentation.compose.home.bottari.component.MyBottariDialogType
-import com.bottari.presentation.model.bottari.MyBottariUiModel
-import com.bottari.presentation.model.bottari.personal.BottariUiModel
-import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
-import com.bottari.presentation.util.AlarmScheduler
+import com.bottari.core.ui.base.NetworkBaseViewModel
+import com.bottari.feature.mybottari.component.MyBottariDialogType
+import com.bottari.feature.mybottari.model.BottariUiModel
+import com.bottari.feature.mybottari.model.MyBottariUiModel
+import com.bottari.feature.mybottari.model.TeamBottariUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
+@Stable
 @HiltViewModel
 class MyBottariViewModel @Inject constructor(
     networkManager: NetworkManager,
@@ -32,7 +32,7 @@ class MyBottariViewModel @Inject constructor(
     private val deleteBottariUseCase: DeleteBottariUseCase,
     private val deleteTeamBottariUseCase: ExitTeamBottariUseCase,
     private val joinTeamBottariUseCase: JoinTeamBottariUseCase,
-    private val alarmScheduler: AlarmScheduler,
+//    private val alarmScheduler: AlarmScheduler,
 ) : NetworkBaseViewModel<MyBottariUiState, MyBottariUiEvent>(
         initialState = MyBottariUiState(),
         networkManager = networkManager,
@@ -55,7 +55,14 @@ class MyBottariViewModel @Inject constructor(
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.FetchBottariFailure)
                 }
-        }.invokeOnCompletion { updateState { copy(isLoading = false, isTeamFetched = true) } }
+        }.invokeOnCompletion {
+            updateState {
+                MyBottariUiState(
+                    isLoading = false,
+                    isTeamFetched = true,
+                )
+            }
+        }
     }
 
     fun deletePersonalBottari(bottariId: Long) {
@@ -133,14 +140,14 @@ class MyBottariViewModel @Inject constructor(
 
     private fun cancelAlarm(bottari: MyBottariUiModel) =
         bottari.alarm?.let { alarm ->
-            alarmScheduler.cancelAlarm(
-                notification =
-                    Notification(
-                        bottariId = bottari.id,
-                        bottariTitle = bottari.title,
-                        alarm = alarm.toDomain(),
-                    ),
-            )
+//            alarmScheduler.cancelAlarm(
+//                notification =
+//                    Notification(
+//                        bottariId = bottari.id,
+//                        bottariTitle = bottari.title,
+//                        alarm = alarm.toDomain(),
+//                    ),
+//            )
         }
 
     private fun fetchPersonalBottaries() =
@@ -148,7 +155,7 @@ class MyBottariViewModel @Inject constructor(
             .catch { emitEvent(MyBottariUiEvent.FetchBottariFailure) }
             .onEach { bottaries ->
                 updateState {
-                    copy(
+                    MyBottariUiState(
                         personalBottaries = bottaries.map(BottariUiModel::fromPersonalBottari),
                         isPersonalFetched = true,
                     )

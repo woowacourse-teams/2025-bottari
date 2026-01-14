@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.common.navigation.Navigation
 import com.bottari.presentation.compose.common.navigation.NavigationController
-import com.bottari.presentation.compose.home.bottari.MyBottariScreen
 import com.bottari.presentation.compose.home.template.TemplateBottariScreen
 import kotlinx.coroutines.launch
 
@@ -112,13 +111,6 @@ private fun HomeScreenRouter(
             }
 
             HomeScreenRoute.Bottari -> {
-                MyBottariScreen(
-                    snackbarState = snackbarState,
-                    onNavigateToPersonalEdit = navigateToPersonalBottariEdit,
-                    onNavigateToTeamEdit = navigateToTeamBottariEdit,
-                    onNavigateToPersonalChecklist = navigateToPersonalBottariChecklist,
-                    onNavigateToTeamChecklist = navigateToTeamBottariChecklist,
-                )
             }
 
             HomeScreenRoute.More -> {

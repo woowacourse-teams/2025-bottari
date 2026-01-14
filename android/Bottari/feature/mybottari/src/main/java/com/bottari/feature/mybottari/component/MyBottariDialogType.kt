@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.bottari.component
+package com.bottari.feature.mybottari.component
 
 enum class MyBottariDialogType {
     PERSONAL,

@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.bottari.component
+package com.bottari.feature.mybottari.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,8 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.presentation.model.bottari.MyBottariUiModel
-import com.bottari.presentation.model.bottari.personal.BottariUiModel
+import com.bottari.feature.mybottari.model.BottariUiModel
+import com.bottari.feature.mybottari.model.MyBottariUiModel
 
 @Composable
 fun BottariList(

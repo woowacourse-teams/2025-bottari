@@ -34,6 +34,7 @@ tasks.register("printVersionName") {
 
 dependencies {
     implementation(projects.core.domain)
+    implementation(projects.core.common)
     implementation(projects.feature.main)
 
     implementation(libs.androidx.hilt.work)

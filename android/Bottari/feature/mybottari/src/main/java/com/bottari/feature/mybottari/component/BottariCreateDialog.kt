@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.bottari.component
+package com.bottari.feature.mybottari.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +15,7 @@ import com.bottari.bottari.designsystem.component.BottariButton
 import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.component.BottariTextField
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.presentation.R
+import com.bottari.feature.mybottari.R
 
 @Composable
 fun BottariCreateDialog(

@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Layers
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.bottari.core.navigation.MainTabNavKey
 
@@ -29,7 +30,7 @@ internal val MY_BOTTARI =
 
 internal val MORE =
     TopLevelNavItem(
-        icon = Icons.Default.Layers,
+        icon = Icons.Default.MoreHoriz,
         iconTextId = R.string.top_level_nav_item_more_description,
         titleTextId = R.string.top_level_nav_item_more_title_text,
     )

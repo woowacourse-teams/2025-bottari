@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.bottari.component
+package com.bottari.feature.mybottari.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -23,11 +23,11 @@ import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.core.ui.component.BottariTabBar
 import com.bottari.core.ui.component.OfflineContent
-import com.bottari.presentation.R
-import com.bottari.presentation.compose.home.bottari.MyBottariUiState
-import com.bottari.presentation.model.bottari.MyBottariUiModel
-import com.bottari.presentation.model.bottari.personal.BottariUiModel
-import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
+import com.bottari.feature.mybottari.MyBottariUiState
+import com.bottari.feature.mybottari.R
+import com.bottari.feature.mybottari.model.BottariUiModel
+import com.bottari.feature.mybottari.model.MyBottariUiModel
+import com.bottari.feature.mybottari.model.TeamBottariUiModel
 import kotlinx.coroutines.delay
 
 @Composable
@@ -118,7 +118,9 @@ fun MyBottariContent(
                         )
                     }
 
-                    isEmpty -> MyBottariEmptyView()
+                    isEmpty -> {
+                        MyBottariEmptyView()
+                    }
 
                     else -> {
                         val currentListState =

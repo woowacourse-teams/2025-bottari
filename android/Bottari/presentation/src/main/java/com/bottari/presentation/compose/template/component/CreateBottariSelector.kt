@@ -36,12 +36,12 @@ import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.core.ui.component.CollapsedListLine
 import com.bottari.core.ui.extension.topBottomFadingEdge
-import com.bottari.presentation.R
 import com.bottari.presentation.model.bottari.BottariItemUiModel
 import com.bottari.presentation.model.bottari.personal.BottariDetailUiModel
 import com.bottari.presentation.model.bottari.personal.BottariItemTypeUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import com.bottari.core.designsystem.R as DSR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -197,7 +197,7 @@ private fun CreateBottariSelectorEmptyView(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_bottari),
+            painter = painterResource(DSR.drawable.ic_bottari),
             contentDescription = null,
             tint = BottariTheme.colors.gray400,
             modifier = Modifier.size(60.dp),

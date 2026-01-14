@@ -1,5 +1,6 @@
 package com.bottari.presentation.compose.template
 
+import androidx.compose.runtime.Stable
 import com.bottari.core.domain.model.bottari.template.HashtagName
 import com.bottari.core.domain.model.bottari.template.HashtagNameError
 import com.bottari.core.domain.usecase.bottari.FetchBottariesUseCase
@@ -10,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
+@Stable
 @HiltViewModel
 class CreateTemplateViewModel @Inject constructor(
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,

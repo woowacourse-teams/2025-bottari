@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.bottari.component
+package com.bottari.feature.mybottari.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,14 +11,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,16 +26,16 @@ import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.component.BottariIconButtonTone
 import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.common.util.formatWithPattern
 import com.bottari.core.ui.component.BottariCheckIndicator
 import com.bottari.core.ui.component.chooseBottariStateColor
-import com.bottari.presentation.R
-import com.bottari.presentation.common.extension.formatWithPattern
-import com.bottari.presentation.model.alarm.AlarmTypeUiModel
-import com.bottari.presentation.model.alarm.AlarmUiModel
-import com.bottari.presentation.model.alarm.RepeatDayUiModel
-import com.bottari.presentation.model.bottari.MyBottariUiModel
-import com.bottari.presentation.model.bottari.personal.BottariUiModel
-import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
+import com.bottari.feature.mybottari.R
+import com.bottari.feature.mybottari.model.AlarmTypeUiModel
+import com.bottari.feature.mybottari.model.AlarmUiModel
+import com.bottari.feature.mybottari.model.BottariUiModel
+import com.bottari.feature.mybottari.model.MyBottariUiModel
+import com.bottari.feature.mybottari.model.RepeatDayUiModel
+import com.bottari.feature.mybottari.model.TeamBottariUiModel
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -79,10 +79,6 @@ fun BottariItem(
             BottariCheckInfo(
                 checkedQuantity = bottari.checkedQuantity,
                 totalQuantity = bottari.totalQuantity,
-                format =
-                    stringResource(
-                        R.string.team_management_member_head_count,
-                    ),
                 modifier = Modifier.padding(end = BottariTheme.spacing.spaceMedium),
             )
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceXSmall))
@@ -139,9 +135,8 @@ private fun BottariInfo(
             tone = BottariIconButtonTone.None,
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_more_horizontal),
+                imageVector = Icons.Default.MoreVert,
                 contentDescription = stringResource(R.string.bottari_btn_more_description),
-                modifier = Modifier.rotate(90f),
             )
 
             BottariMenuDropdown(
@@ -233,7 +228,6 @@ private fun dateText(
 private fun BottariCheckInfo(
     checkedQuantity: Int,
     totalQuantity: Int,
-    format: String,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -250,11 +244,7 @@ private fun BottariCheckInfo(
         )
         Spacer(modifier = Modifier.width(BottariTheme.spacing.space2xLarge))
         Text(
-            text =
-                format.format(
-                    checkedQuantity,
-                    totalQuantity,
-                ),
+            text = "$checkedQuantity/$totalQuantity",
             style = BottariTheme.typography.regular14.toTextStyle(),
         )
     }

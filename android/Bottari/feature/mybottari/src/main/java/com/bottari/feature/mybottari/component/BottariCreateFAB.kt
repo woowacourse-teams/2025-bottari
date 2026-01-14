@@ -1,8 +1,10 @@
-package com.bottari.presentation.compose.home.bottari.component
+package com.bottari.feature.mybottari.component
 
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButtonMenu
 import androidx.compose.material3.FloatingActionButtonMenuItem
@@ -43,7 +45,7 @@ import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.presentation.R
+import com.bottari.feature.mybottari.R
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -139,7 +141,7 @@ private fun BottariCreateToggleFloatingActionButton(
             ),
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_plus),
+            imageVector = Icons.Default.Add,
             contentDescription = null,
             tint = contentColor,
             modifier =

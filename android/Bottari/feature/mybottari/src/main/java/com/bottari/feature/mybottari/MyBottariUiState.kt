@@ -1,10 +1,10 @@
-package com.bottari.presentation.compose.home.bottari
+package com.bottari.feature.mybottari
 
 import androidx.compose.runtime.Immutable
-import com.bottari.presentation.compose.home.bottari.component.MyBottariDialogType
-import com.bottari.presentation.model.bottari.MyBottariUiModel
-import com.bottari.presentation.model.bottari.personal.BottariUiModel
-import com.bottari.presentation.model.bottari.team.TeamBottariUiModel
+import com.bottari.feature.mybottari.component.MyBottariDialogType
+import com.bottari.feature.mybottari.model.BottariUiModel
+import com.bottari.feature.mybottari.model.MyBottariUiModel
+import com.bottari.feature.mybottari.model.TeamBottariUiModel
 
 @Immutable
 data class MyBottariUiState(

@@ -57,7 +57,7 @@ fun CreateTemplateScreen(
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
                 is CreateTemplateUiEvent.FetchMyBottariesFailure -> {
-                    snackbarHostState.showSnackbar(context.getString(R.string.bottari_home_fetch_failure_text))
+                    snackbarHostState.showSnackbar("보따리 목록을 불러오지 못했어요")
                 }
 
                 is CreateTemplateUiEvent.CreateTemplateSuccess -> {

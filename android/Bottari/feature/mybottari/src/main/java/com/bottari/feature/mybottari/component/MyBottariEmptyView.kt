@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.bottari.component
+package com.bottari.feature.mybottari.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,13 +16,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.presentation.R
+import com.bottari.feature.mybottari.R
+import com.bottari.core.designsystem.R as DSR
 
 @Composable
 fun MyBottariEmptyView() {
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_bottari),
+            painter = painterResource(id = DSR.drawable.ic_bottari),
             contentDescription = stringResource(R.string.bottari_icon_home_description),
             modifier = Modifier.size(80.dp),
             tint = BottariTheme.colors.gray500,

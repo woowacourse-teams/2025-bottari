@@ -62,10 +62,12 @@ fun App(entryBuilders: Set<EntryProviderScope<NavKey>.() -> Unit>) {
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarState) },
             bottomBar = {
-                MainBottomNavigation(
-                    selectedTab = navigationState.currentKey,
-                    onTabSelected = navigator::navigate,
-                )
+                if (navigationState.currentKey in TOP_LEVEL_NAV_ITEMS.keys) {
+                    MainBottomNavigation(
+                        selectedTab = navigationState.currentKey,
+                        onTabSelected = navigator::navigate,
+                    )
+                }
             },
             containerColor = BottariTheme.colors.white,
         ) { innerPadding ->
