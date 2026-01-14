@@ -250,6 +250,7 @@ androidx-compose-navigation = [
     "androidx-navigation3-runtime",
     "androidx-navigation3-ui",
     "androidx-lifecycle-viewmodel-navigation3",
+    "androidx-hilt-navigation-compose",
     "kotlinx-serialization-core"
 ]
 
