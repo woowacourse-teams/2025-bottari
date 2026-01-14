@@ -1,4 +1,4 @@
-package com.bottari.presentation.common.extension
+package com.bottari.common.util
 
 import java.time.LocalDate
 import java.time.LocalTime
