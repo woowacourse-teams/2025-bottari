@@ -7,5 +7,6 @@ android {
 }
 
 dependencies {
-    api(project(":core:designsystem"))
+    api(projects.core.designsystem)
+    implementation(projects.logger)
 }

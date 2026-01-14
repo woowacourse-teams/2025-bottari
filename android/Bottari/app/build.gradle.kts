@@ -10,6 +10,19 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
+    }
+
+    defaultConfig {
+        buildConfigField(
+            "int",
+            "APP_VERSION_CODE",
+            "${
+                System.getenv("VERSION_CODE")?.toIntOrNull() ?: libs.versions.versionCode
+                    .get()
+                    .toInt()
+            }",
+        )
     }
 }
 
