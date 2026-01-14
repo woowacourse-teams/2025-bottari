@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.more
+package com.bottari.feature.more
 
 data class MoreUiState(
     val isLoading: Boolean = false,

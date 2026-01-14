@@ -19,11 +19,8 @@ import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
 import com.bottari.presentation.compose.common.navigation.Navigation
 import com.bottari.presentation.compose.common.navigation.NavigationController
 import com.bottari.presentation.compose.home.bottari.MyBottariScreen
-import com.bottari.presentation.compose.home.more.MoreBottariScreen
 import com.bottari.presentation.compose.home.template.TemplateBottariScreen
 import kotlinx.coroutines.launch
-
-private const val BACK_PRESS_EXIT_TIMEOUT = 2000L
 
 @Composable
 fun HomeScreen(
@@ -47,7 +44,7 @@ fun HomeScreen(
 
     BackHandler(enabled = true) {
         val currentTime = System.currentTimeMillis()
-        if (currentTime - backPressedTime > BACK_PRESS_EXIT_TIMEOUT) {
+        if (currentTime - backPressedTime > 2) {
             backPressedTime = currentTime
             scope.launch { snackbarHostState.showSnackbar("한 번 더 누르면 종료됩니다") }
             return@BackHandler
@@ -125,10 +122,6 @@ private fun HomeScreenRouter(
             }
 
             HomeScreenRoute.More -> {
-                MoreBottariScreen(
-                    snackbarState = snackbarState,
-                    onNavigateToBrowser = navigateToBrowser,
-                )
             }
         }
     }

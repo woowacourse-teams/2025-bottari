@@ -162,13 +162,6 @@
     <string name="bottari_item_alarm_repeat_everyweek_text">매주 알람</string>
     <string name="bottari_item_status_format">%d/%d</string>
 
-    <!-- Setting -->
-    <string name="setting_toolbar_title_text">설정</string>
-    <string name="setting_privacy_policy_title_text">개인정보 처리 방침</string>
-    <string name="setting_user_feedback_title_text">의견 보내기</string>
-    <string name="setting_version_text">보따리 버전</string>
-    <string name="setting_unknown_version_text">알 수 없음</string>
-
     <!-- Checklist -->
     <string name="checklist_progress_header_title_text">완료된 항목</string>
     <string name="checklist_tooltip_title_text">개인 보따리</string>
@@ -301,14 +294,6 @@
     <string name="template_my_empty_view_title_text">아직 공유한 보따리가 없어요</string>
     <string name="template_my_empty_view_description_text">모두의 보따리에서 나만의 보따리를 소개해보세요</string>
 
-    <!-- Profile -->
-    <string name="profile_nickname_title">닉네임</string>
-    <string name="profile_nickname_hint_text">닉네임을 입력해 주세요</string>
-    <string name="profile_fetch_failure_text">프로필 정보를 불러오지 못했어요</string>
-    <string name="profile_nickname_save_success_text">닉네임을 저장했어요</string>
-    <string name="profile_nickname_save_failure_text">닉네임을 저장하지 못했어요</string>
-    <string name="profile_invalid_nickname_rule_text">닉네임은 3~10자로 입력해 주세요</string>
-
     <!-- Menu -->
     <string name="menu_create_template_title_text">모두의 보따리에 등록하기</string>
     <string name="menu_bottari_rename_title_text">보따리 이름 바꾸기</string>
@@ -344,7 +329,6 @@
     <string name="checklist_icon_swipe_overlay_unchecked_description">미체크 오버레이 아이콘</string>
     <string name="checklist_icon_swipe_overlay_checked_description">체크 오버레이 아이콘</string>
     <string name="common_btn_item_delete_description">물건 삭제 버튼</string>
-    <string name="common_btn_nickname_edit_description">닉네임 수정 버튼</string>
     <string name="common_icon_search_description">검색 아이콘</string>
     <string name="common_state_open_description">열림</string>
     <string name="common_state_close_description">닫힘</string>

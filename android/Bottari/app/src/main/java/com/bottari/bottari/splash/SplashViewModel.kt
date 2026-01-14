@@ -1,5 +1,6 @@
 package com.bottari.bottari.splash
 
+import com.bottari.bottari.BuildConfig
 import com.bottari.core.domain.network.NetworkManager
 import com.bottari.core.domain.usecase.appConfig.CheckForceUpdateUseCase
 import com.bottari.core.domain.usecase.appConfig.GetPermissionFlagUseCase
@@ -8,7 +9,6 @@ import com.bottari.core.domain.usecase.fcm.SaveFcmTokenUseCase
 import com.bottari.core.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.core.domain.usecase.member.RegisterMemberUseCase
 import com.bottari.logger.BottariLogger
-import com.bottari.presentation.BuildConfig
 import com.bottari.presentation.common.base.NetworkBaseViewModel
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel

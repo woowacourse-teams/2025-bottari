@@ -2,6 +2,7 @@ package com.bottari.feature.template.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
+import com.bottari.core.navigation.LocalNavigator
 import com.bottari.core.navigation.MainTabNavKey
 import com.bottari.feature.template.TemplateScreen
 import dagger.Module
@@ -12,6 +13,7 @@ import dagger.multibindings.IntoSet
 
 fun EntryProviderScope<NavKey>.templateEntryBuilder() {
     entry<MainTabNavKey.TemplateNavKey> {
+        val navigator = LocalNavigator.current
         TemplateScreen()
     }
 }

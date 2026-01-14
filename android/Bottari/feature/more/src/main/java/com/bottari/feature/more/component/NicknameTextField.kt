@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.more.component
+package com.bottari.feature.more.component
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
@@ -22,7 +22,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.presentation.R
+import com.bottari.feature.more.R
 
 @Composable
 fun NicknameTextField(
@@ -33,7 +33,10 @@ fun NicknameTextField(
 ) {
     TextField(
         state = textFieldState,
-        modifier = modifier.focusRequester(focusRequester).height(20.dp),
+        modifier =
+            modifier
+                .focusRequester(focusRequester)
+                .height(20.dp),
         textStyle = BottariTheme.typography.medium16.toTextStyle(),
         readOnly = !isEditing,
         inputTransformation = InputTransformation.maxLength(10),

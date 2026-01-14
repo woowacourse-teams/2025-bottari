@@ -1,4 +1,4 @@
-package com.bottari.presentation.compose.home.more
+package com.bottari.feature.more
 
 sealed interface MoreUiEvent {
     data object FetchMemberInfoFailure : MoreUiEvent

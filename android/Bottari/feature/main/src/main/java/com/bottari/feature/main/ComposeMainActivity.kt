@@ -67,6 +67,7 @@ fun App(entryBuilders: Set<EntryProviderScope<NavKey>.() -> Unit>) {
                     onTabSelected = navigator::navigate,
                 )
             },
+            containerColor = BottariTheme.colors.white,
         ) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
                 NavDisplay(
