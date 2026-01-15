@@ -6,7 +6,9 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.bottari.core.navigation.MainTabNavKey
+import com.bottari.feature.more.navigation.MoreNavKey
+import com.bottari.feature.mybottari.navigation.MyBottariNavKey
+import com.bottari.feature.template.navigation.TemplateNavKey
 
 internal data class TopLevelNavItem(
     val icon: ImageVector,
@@ -37,7 +39,7 @@ internal val MORE =
 
 internal val TOP_LEVEL_NAV_ITEMS =
     mapOf(
-        MainTabNavKey.TemplateNavKey to TEMPLATE,
-        MainTabNavKey.MyBottariNavKey to MY_BOTTARI,
-        MainTabNavKey.MoreNavKey to MORE,
+        TemplateNavKey to TEMPLATE,
+        MyBottariNavKey to MY_BOTTARI,
+        MoreNavKey to MORE,
     )

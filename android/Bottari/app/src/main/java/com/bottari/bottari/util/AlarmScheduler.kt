@@ -9,7 +9,7 @@ import android.content.Intent
 import com.bottari.bottari.receiver.AlarmReceiver
 import com.bottari.core.domain.model.alarm.AlarmTriggerTimeCalculator
 import com.bottari.core.domain.model.notification.Notification
-import com.bottari.feature.main.ComposeMainActivity
+import com.bottari.feature.main.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import com.bottari.common.util.AlarmScheduler as AlarmSchedulerContract
@@ -51,7 +51,7 @@ class AlarmScheduler @Inject constructor(
         return PendingIntent.getActivity(
             context,
             notification.bottariId.toInt(),
-            Intent(context, ComposeMainActivity::class.java),
+            Intent(context, MainActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
     }

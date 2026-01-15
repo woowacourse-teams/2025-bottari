@@ -9,5 +9,4 @@ android {
 dependencies {
     implementation(projects.core.common)
     implementation(projects.feature.personalChecklist)
-    implementation(projects.core.ui)
 }

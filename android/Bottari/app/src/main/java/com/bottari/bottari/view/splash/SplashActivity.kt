@@ -25,7 +25,7 @@ import com.bottari.bottari.view.alert.DialogPresetType
 import com.bottari.common.util.DeeplinkHelper.getInviteCode
 import com.bottari.common.util.DeeplinkHelper.validateUri
 import com.bottari.core.ui.extension.showSnackbar
-import com.bottari.feature.main.ComposeMainActivity
+import com.bottari.feature.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -156,14 +156,14 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun navigateToHome() {
-        val intent = Intent(this, ComposeMainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
 
     private fun navigateToInvite(uri: Uri) {
         val inviteCode = getInviteCode(uri) ?: return
-        val intent = ComposeMainActivity.newIntentForInvite(this, inviteCode)
+        val intent = MainActivity.newIntentForInvite(this, inviteCode)
         startActivity(intent)
         finish()
     }

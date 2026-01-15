@@ -6,8 +6,6 @@ import androidx.activity.compose.LocalActivity
 import androidx.core.net.toUri
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.bottari.core.navigation.LocalNavigator
-import com.bottari.core.navigation.MainTabNavKey
 import com.bottari.feature.more.MoreScreen
 import dagger.Module
 import dagger.Provides
@@ -16,8 +14,7 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.multibindings.IntoSet
 
 fun EntryProviderScope<NavKey>.moreEntryBuilder() {
-    entry<MainTabNavKey.MoreNavKey> {
-        val navigator = LocalNavigator.current
+    entry<MoreNavKey> {
         val activity = LocalActivity.current
 
         MoreScreen(

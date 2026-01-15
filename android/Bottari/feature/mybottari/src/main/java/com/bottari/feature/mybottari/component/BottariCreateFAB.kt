@@ -214,7 +214,7 @@ private fun FloatingActionButtonMenuScope.BottariFabMenuItem(
 }
 
 private data class FabMenuItem(
-    @DrawableRes val iconRes: Int,
+    @param:DrawableRes val iconRes: Int,
     val text: String,
     val onClick: () -> Unit,
 )

@@ -2,6 +2,7 @@ import com.bottari.convention.external.getPropertyOrThrow
 
 plugins {
     alias(libs.plugins.bottari.android.feature)
+    alias(libs.plugins.serialization)
 }
 
 android {
