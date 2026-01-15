@@ -21,7 +21,7 @@ internal class AndroidFeatureConventionPlugin : Plugin<Project> {
                 implementation(project(":core:ui"))
                 implementation(project(":core:domain"))
                 implementation(project(":core:navigation"))
-                implementation(project(":logger"))
+                implementation(project(":core:logger"))
                 implementation(libs.findBundle("androidx.compose.navigation").get())
             }
         }

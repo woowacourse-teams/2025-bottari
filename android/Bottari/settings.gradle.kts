@@ -28,7 +28,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "Bottari"
 include(":app")
 
-include(":logger")
+include(":core:logger")
 include(":core:data")
 include(":core:network")
 include(":core:local")

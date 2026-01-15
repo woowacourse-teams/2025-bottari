@@ -14,7 +14,7 @@ android {
 dependencies {
     api(projects.core.designsystem)
     implementation(projects.core.domain) // NetworkManger 때문에 추가함
-    implementation(projects.logger)
+    implementation(projects.core.logger)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)

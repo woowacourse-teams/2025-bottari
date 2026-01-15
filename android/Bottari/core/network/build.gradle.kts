@@ -29,7 +29,7 @@ android {
 
 dependencies {
     implementation(project(":core:domain"))
-    implementation(project(":logger"))
+    implementation(project(":core:logger"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.bundles.network)
