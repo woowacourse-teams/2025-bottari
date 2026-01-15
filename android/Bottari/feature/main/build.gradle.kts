@@ -7,7 +7,14 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.template)
+    implementation(projects.feature.invite)
     implementation(projects.feature.mybottari)
     implementation(projects.feature.more)
+    implementation(projects.feature.personalChecklist)
+    implementation(projects.feature.personalEdit)
+    implementation(projects.feature.teamChecklist)
+    implementation(projects.feature.teamEdit)
+    implementation(projects.feature.template)
+    implementation(projects.feature.templateCreate)
+    implementation(projects.feature.templateDetail)
 }

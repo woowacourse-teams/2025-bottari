@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.bottari.feature.template"
 }
+
+dependencies {
+    implementation(projects.core.common)
+}

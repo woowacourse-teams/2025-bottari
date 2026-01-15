@@ -9,5 +9,5 @@ android {
 dependencies {
     implementation(projects.core.common)
 
-    implementation(projects.presentation)
+    implementation(projects.core.ui)
 }

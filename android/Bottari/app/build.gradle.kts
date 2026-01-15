@@ -35,13 +35,18 @@ tasks.register("printVersionName") {
 dependencies {
     implementation(projects.core.domain)
     implementation(projects.core.common)
+    implementation(projects.core.ui)
     implementation(projects.feature.main)
 
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.bundles.androidx.compose.navigation)
     implementation(libs.androidx.core.splashscreen)
 
-    // compose migration 완료 후 제거
-    implementation(libs.androidx.appcompat)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
 }

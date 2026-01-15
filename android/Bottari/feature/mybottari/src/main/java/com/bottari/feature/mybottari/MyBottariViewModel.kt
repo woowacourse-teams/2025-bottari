@@ -2,6 +2,8 @@ package com.bottari.feature.mybottari
 
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
+import com.bottari.common.util.AlarmScheduler
+import com.bottari.core.domain.model.notification.Notification
 import com.bottari.core.domain.network.NetworkManager
 import com.bottari.core.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.core.domain.usecase.bottari.DeleteBottariUseCase
@@ -32,7 +34,7 @@ class MyBottariViewModel @Inject constructor(
     private val deleteBottariUseCase: DeleteBottariUseCase,
     private val deleteTeamBottariUseCase: ExitTeamBottariUseCase,
     private val joinTeamBottariUseCase: JoinTeamBottariUseCase,
-//    private val alarmScheduler: AlarmScheduler,
+    private val alarmScheduler: AlarmScheduler,
 ) : NetworkBaseViewModel<MyBottariUiState, MyBottariUiEvent>(
         initialState = MyBottariUiState(),
         networkManager = networkManager,
@@ -140,14 +142,14 @@ class MyBottariViewModel @Inject constructor(
 
     private fun cancelAlarm(bottari: MyBottariUiModel) =
         bottari.alarm?.let { alarm ->
-//            alarmScheduler.cancelAlarm(
-//                notification =
-//                    Notification(
-//                        bottariId = bottari.id,
-//                        bottariTitle = bottari.title,
-//                        alarm = alarm.toDomain(),
-//                    ),
-//            )
+            alarmScheduler.cancelAlarm(
+                notification =
+                    Notification(
+                        bottariId = bottari.id,
+                        bottariTitle = bottari.title,
+                        alarm = alarm.toDomain(),
+                    ),
+            )
         }
 
     private fun fetchPersonalBottaries() =

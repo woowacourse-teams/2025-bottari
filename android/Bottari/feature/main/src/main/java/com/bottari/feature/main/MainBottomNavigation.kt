@@ -1,6 +1,7 @@
 package com.bottari.feature.main
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -51,6 +52,7 @@ private fun MainBottomNavigationIcon(navItem: TopLevelNavItem) {
     Icon(
         imageVector = navItem.icon,
         contentDescription = stringResource(navItem.iconTextId),
+        modifier = Modifier.size(32.dp),
     )
 }
 

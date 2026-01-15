@@ -43,7 +43,7 @@
     <!-- Bottari Item -->
     <string name="bottari_item_alarm_repeat_everyday_text">매일 알람</string>
     <string name="bottari_item_alarm_repeat_everyweek_text">매주 알람</string>
-    <string name="bottari_item_status_format">%d/%d</string>
+    <string name="bottari_item_status_format">%1$d/%2$d</string>
 
     <!-- Common: 포맷 -->
     <string name="common_format_date_alarm">M월 d일</string>

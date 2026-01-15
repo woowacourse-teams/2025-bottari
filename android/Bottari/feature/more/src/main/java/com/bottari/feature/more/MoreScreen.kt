@@ -65,7 +65,7 @@ private fun MoreBottariScreen(
                 .fillMaxSize()
                 .padding(
                     horizontal = BottariTheme.spacing.spaceLarge,
-                    vertical = BottariTheme.spacing.spaceXSmall,
+                    vertical = BottariTheme.spacing.spaceMedium,
                 ),
         verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
