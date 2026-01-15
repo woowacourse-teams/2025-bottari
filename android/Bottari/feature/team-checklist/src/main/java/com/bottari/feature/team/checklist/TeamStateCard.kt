@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun TeamStateCard(
@@ -61,7 +61,7 @@ private fun TeamStateCardPreview() {
     TeamStateCard(
         title = "전체 완료율",
         value = "100%",
-        painter = painterResource(PresentationR.drawable.ic_progress),
+        painter = painterResource(UIR.drawable.ic_progress),
         color = BottariTheme.colors.primary,
         modifier = Modifier.width(200.dp),
     )

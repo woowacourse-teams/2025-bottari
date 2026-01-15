@@ -15,7 +15,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.bottari.bottari.designsystem.component.BottariButton
 import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun TeamSendRemindDialog(
@@ -43,7 +43,7 @@ fun TeamSendRemindDialog(
                         onClick = onClickRemind,
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(id = PresentationR.drawable.iv_notification),
+                                painter = painterResource(id = UIR.drawable.iv_notification),
                                 contentDescription = null,
                                 tint = BottariTheme.colors.white,
                             )
@@ -61,14 +61,14 @@ private fun TeamSendRemindDialogPreview() {
     TeamSendRemindDialog(title = "시아", true, {}, {}) {
         TeamStateListBox(
             text = "해당 물건을 챙겼습니다",
-            painter = painterResource(id = PresentationR.drawable.ic_bottari_item_empty_view),
+            painter = painterResource(id = UIR.drawable.ic_bottari_item_empty_view),
             color = BottariTheme.colors.primary,
             items = listOf("하나", "둘", "셋", "넷", "다섯"),
         )
         Spacer(Modifier.height(BottariTheme.spacing.spaceXSmall))
         TeamStateListBox(
             text = "해당 물건을 챙기지 않았습니다.",
-            painter = painterResource(id = PresentationR.drawable.ic_bottari_item_empty_view),
+            painter = painterResource(id = UIR.drawable.ic_bottari_item_empty_view),
             color = BottariTheme.colors.red,
             items = listOf("하나", "둘", "셋", "넷", "다섯"),
         )

@@ -49,7 +49,7 @@ import com.bottari.core.ui.model.bottari.team.member.TeamMemberUiModel
 import com.bottari.feature.team.checklist.TeamStateListBox
 import com.bottari.feature.team.edit.assigned.TeamAssignedEditUiState
 import com.bottari.feature.team.edit.assigned.dummyMembers
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -115,7 +115,7 @@ fun TeamAssignedBottomSheet(
                         .filter { member -> member.isHost }
                         .map { member -> member.nickname },
                 text = "${uiState.members.filter { member -> member.isHost }.size} 명이 선택되었습니다",
-                painter = painterResource(PresentationR.drawable.ic_assigned),
+                painter = painterResource(UIR.drawable.ic_assigned),
                 color = BottariTheme.colors.primary,
             )
             Spacer(Modifier.padding(vertical = BottariTheme.spacing.spaceMedium))
@@ -272,7 +272,7 @@ private fun TeamAssignedMemberItem(
                     .padding(4.dp),
         ) {
             Icon(
-                painter = painterResource(PresentationR.drawable.ic_check),
+                painter = painterResource(UIR.drawable.ic_check),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 tint = BottariTheme.colors.white,

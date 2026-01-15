@@ -35,10 +35,10 @@ import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.common.util.DeeplinkHelper.createDeeplink
-import com.bottari.core.ui.R
 import com.bottari.core.ui.model.bottari.team.member.TeamMemberUiModel
+import com.bottari.feature.team.edit.R
 import kotlinx.coroutines.flow.collectLatest
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun MemberEditScreen(
@@ -65,7 +65,6 @@ fun MemberEditScreen(
     }
 
     MemberEditContent(
-        bottariTitle = bottariTitle,
         uiState = uiState,
         onShareClick = {
             shareInvite(
@@ -80,7 +79,6 @@ fun MemberEditScreen(
 
 @Composable
 private fun MemberEditContent(
-    bottariTitle: String,
     uiState: TeamManagementUiState,
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -126,7 +124,7 @@ private fun ShareInviteItem(onShareClick: () -> Unit) {
             )
             BottariIconButton(onClick = onShareClick) {
                 Icon(
-                    painter = painterResource(id = PresentationR.drawable.ic_share),
+                    painter = painterResource(id = UIR.drawable.ic_share),
                     contentDescription = stringResource(R.string.team_btn_share_link_description),
                 )
             }
@@ -241,7 +239,6 @@ private fun generateShareMessage(
 @Composable
 private fun MemberEditScreenPreview() {
     MemberEditContent(
-        bottariTitle = "테스트보따리",
         uiState =
             TeamManagementUiState(
                 members =

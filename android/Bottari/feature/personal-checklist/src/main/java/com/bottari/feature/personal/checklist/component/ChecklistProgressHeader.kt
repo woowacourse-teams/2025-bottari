@@ -12,8 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
 import com.bottari.core.ui.component.BottariCheckIndicator
+import com.bottari.feature.personal.checklist.R
 
 @Composable
 fun ChecklistProgressHeader(

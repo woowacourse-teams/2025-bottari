@@ -23,9 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
 import com.bottari.core.ui.component.BottariTabBar
 import com.bottari.core.ui.provider.LocalSnackbarHostState
+import com.bottari.feature.personal.edit.R
 import com.bottari.feature.personal.edit.alarm.AlarmEditScreen
 import com.bottari.feature.personal.edit.component.PersonalBottariEditTopAppBar
 import com.bottari.feature.personal.edit.item.PersonalItemEditScreen

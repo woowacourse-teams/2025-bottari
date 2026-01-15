@@ -1,10 +1,11 @@
 package com.bottari.common.util
 
 import android.net.Uri
+import androidx.core.net.toUri
+import com.bottari.common.BuildConfig
 
 object DeeplinkHelper {
-    //    private val BASE_URI = BuildConfig.BASE_URL.toUri()
-    private val BASE_URI = Uri.parse("https://bottari.app")
+    private val BASE_URI = BuildConfig.BASE_URL.toUri()
     private const val DEEPLINK_URI_PATH = "team"
     private const val KEY_INVITE_CODE = "code"
 
@@ -18,7 +19,7 @@ object DeeplinkHelper {
 
     fun getInviteCode(uri: Uri): String? = uri.getQueryParameter(KEY_INVITE_CODE)
 
-    fun getInviteCode(uriString: String): String? = runCatching { getInviteCode(Uri.parse(uriString)) }.getOrNull()
+    fun getInviteCode(uriString: String): String? = runCatching { getInviteCode(uriString.toUri()) }.getOrNull()
 
     fun createDeeplink(inviteCode: String): String =
         Uri

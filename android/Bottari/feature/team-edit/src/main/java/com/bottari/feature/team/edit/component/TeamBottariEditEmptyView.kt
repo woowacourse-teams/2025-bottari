@@ -15,7 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun TeamEditEmptyView(modifier: Modifier = Modifier) {
@@ -25,7 +25,7 @@ fun TeamEditEmptyView(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
-            painter = painterResource(id = PresentationR.drawable.ic_bottari_item_empty_view),
+            painter = painterResource(id = UIR.drawable.ic_bottari_item_empty_view),
             contentDescription = null,
             modifier = Modifier.size(80.dp),
             tint = BottariTheme.colors.gray500,

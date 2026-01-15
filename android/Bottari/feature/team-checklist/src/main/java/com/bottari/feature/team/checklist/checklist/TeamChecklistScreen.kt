@@ -31,13 +31,13 @@ import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
 import com.bottari.core.ui.component.ChecklistToolTip
 import com.bottari.core.ui.extension.noRippleClickable
 import com.bottari.core.ui.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.core.ui.model.bottari.team.TeamChecklistItemUiModel
 import com.bottari.feature.personal.checklist.component.ChecklistProgressHeader
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.feature.team.checklist.R
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun TeamChecklistScreen(
@@ -60,7 +60,7 @@ fun TeamChecklistScreen(
                     ChecklistToolTip(
                         icon = {
                             Icon(
-                                painter = painterResource(PresentationR.drawable.ic_shared),
+                                painter = painterResource(UIR.drawable.ic_shared),
                                 contentDescription = null,
                                 tint = BottariTheme.colors.white,
                             )
@@ -161,9 +161,9 @@ private fun SectionHeader(
 ) {
     val painter =
         when (section) {
-            is BottariItemTypeUiModel.ASSIGNED -> painterResource(PresentationR.drawable.ic_assigned)
-            BottariItemTypeUiModel.PERSONAL -> painterResource(PresentationR.drawable.ic_personal)
-            BottariItemTypeUiModel.SHARED -> painterResource(PresentationR.drawable.ic_shared)
+            is BottariItemTypeUiModel.ASSIGNED -> painterResource(UIR.drawable.ic_assigned)
+            BottariItemTypeUiModel.PERSONAL -> painterResource(UIR.drawable.ic_personal)
+            BottariItemTypeUiModel.SHARED -> painterResource(UIR.drawable.ic_shared)
         }
 
     val color =
@@ -205,14 +205,14 @@ private fun SectionHeader(
         Spacer(Modifier.weight(1f))
         if (isOpened) {
             Icon(
-                painter = painterResource(PresentationR.drawable.ic_arrow_up),
+                painter = painterResource(UIR.drawable.ic_arrow_up),
                 contentDescription = null,
                 tint = BottariTheme.colors.gray400,
             )
             return@Row
         }
         Icon(
-            painter = painterResource(PresentationR.drawable.ic_arrow_up),
+            painter = painterResource(UIR.drawable.ic_arrow_up),
             contentDescription = null,
             modifier = Modifier.rotate(180f),
             tint = BottariTheme.colors.gray400,

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Template Detail -->
+    <string name="template_detail_template_btn_text">이 보따리 가져오기</string>
+    <string name="template_detail_fetch_failure_text">템플릿 상세 조회에 실패했어요</string>
+    <string name="template_detail_take_failure_text">나의 보따리로 가져오는데 실패했어요</string>
+
+    <!-- Menu -->
+    <string name="menu_template_report_title_text">신고하기</string>
+</resources>

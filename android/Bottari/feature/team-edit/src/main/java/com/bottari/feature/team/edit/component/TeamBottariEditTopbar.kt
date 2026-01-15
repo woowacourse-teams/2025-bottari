@@ -2,7 +2,6 @@ package com.bottari.feature.team.edit.component
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -10,7 +9,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.component.BottariTopAppBar
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,7 +33,7 @@ fun TeamEditTopbar(
             if (!isMemberScreen) {
                 BottariIconButton(onMemberClick) {
                     Icon(
-                        painter = painterResource(PresentationR.drawable.ic_team),
+                        painter = painterResource(UIR.drawable.ic_team),
                         contentDescription = "팀 멤버 편집",
                     )
                 }

@@ -24,11 +24,10 @@ import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
 import com.bottari.core.ui.extension.topBottomFadingEdge
 import com.bottari.core.ui.model.bottari.PersonalChecklistItemUiModel
 import com.bottari.core.ui.model.bottari.team.ChecklistItemUiModel
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun ItemEditLazyColumn(
@@ -84,8 +83,8 @@ private fun BottariItem(
             )
             BottariIconButton(onClick = { onDeleteClick(item.id) }) {
                 Icon(
-                    painter = painterResource(PresentationR.drawable.ic_delete),
-                    contentDescription = stringResource(R.string.common_btn_item_delete_description),
+                    painter = painterResource(UIR.drawable.ic_delete),
+                    contentDescription = stringResource(UIR.string.common_btn_item_delete_description),
                     modifier = Modifier.padding(BottariTheme.spacing.spaceXSmall),
                     tint = BottariTheme.colors.gray600,
                 )

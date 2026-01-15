@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun TeamAssignedEditItem(
@@ -75,11 +75,11 @@ private fun ItemHeader(
             modifier = Modifier.weight(1f),
         )
         BottariIconButton(onClick = onClickEdit) {
-            Icon(painter = painterResource(PresentationR.drawable.ic_pen), contentDescription = "수정 버튼")
+            Icon(painter = painterResource(UIR.drawable.ic_pen), contentDescription = "수정 버튼")
         }
         BottariIconButton(onClick = onClickDelete) {
             Icon(
-                painter = painterResource(PresentationR.drawable.ic_delete),
+                painter = painterResource(UIR.drawable.ic_delete),
                 contentDescription = "삭제 버튼",
             )
         }

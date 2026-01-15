@@ -15,8 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.feature.personal.edit.R
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun ItemEditEmptyView(modifier: Modifier = Modifier) {
@@ -26,8 +26,8 @@ fun ItemEditEmptyView(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            painter = painterResource(PresentationR.drawable.ic_bottari_item_empty_view),
-            contentDescription = stringResource(R.string.bottari_icon_item_empty_description),
+            painter = painterResource(UIR.drawable.ic_bottari_item_empty_view),
+            contentDescription = stringResource(UIR.string.bottari_icon_item_empty_description),
             modifier = Modifier.size(80.dp),
             alpha = 0.25f,
         )

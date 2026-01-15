@@ -52,9 +52,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
 import com.bottari.core.ui.model.alarm.AlarmUiModel
 import com.bottari.core.ui.model.alarm.RepeatDayUiModel
+import com.bottari.feature.personal.edit.R
 import com.bottari.feature.personal.edit.alarm.component.DatePickerModal
 import com.bottari.feature.personal.edit.alarm.component.DateSelector
 import com.bottari.feature.personal.edit.alarm.component.PermissionSettingDialog

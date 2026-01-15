@@ -18,8 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.component.BottariButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.feature.personal.checklist.R
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun PersonalChecklistEmptyView(
@@ -32,8 +32,8 @@ fun PersonalChecklistEmptyView(
         verticalArrangement = Arrangement.Center,
     ) {
         Icon(
-            painter = painterResource(PresentationR.drawable.ic_bottari_item_empty_view),
-            contentDescription = stringResource(R.string.bottari_icon_item_empty_description),
+            painter = painterResource(UIR.drawable.ic_bottari_item_empty_view),
+            contentDescription = stringResource(UIR.string.bottari_icon_item_empty_description),
             tint = BottariTheme.colors.gray500,
             modifier = Modifier.size(80.dp),
         )

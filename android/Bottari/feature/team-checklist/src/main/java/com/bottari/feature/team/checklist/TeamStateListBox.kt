@@ -22,7 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun TeamStateListBox(
@@ -84,7 +84,7 @@ private fun TeamStateListBoxPreview() {
     TeamStateListBox(
         listOf("하나", "둘", "셋", "넷", "다섯"),
         "해당 물건을 챙겼습니다",
-        painterResource(id = PresentationR.drawable.ic_bottari_item_empty_view),
+        painterResource(id = UIR.drawable.ic_bottari_item_empty_view),
         color = BottariTheme.colors.primary,
         modifier = Modifier.width(300.dp),
     )

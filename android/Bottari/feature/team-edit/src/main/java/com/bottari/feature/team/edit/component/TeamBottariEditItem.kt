@@ -14,10 +14,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
 import com.bottari.core.ui.model.bottari.BottariItemUiModel
 import com.bottari.core.ui.model.bottari.personal.BottariItemTypeUiModel
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun TeamChecklistItem(
@@ -59,8 +58,8 @@ private fun TeamChecklistItemContent(
         )
         BottariIconButton(onClick = { onDeleteClick(item.id) }) {
             Icon(
-                painter = painterResource(PresentationR.drawable.ic_delete),
-                contentDescription = stringResource(R.string.common_btn_item_delete_description),
+                painter = painterResource(UIR.drawable.ic_delete),
+                contentDescription = stringResource(UIR.string.common_btn_item_delete_description),
                 tint = BottariTheme.colors.gray600,
             )
         }

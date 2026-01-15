@@ -32,7 +32,7 @@ import com.bottari.feature.team.checklist.TeamStateCard
 import com.bottari.feature.team.checklist.TeamStateListBox
 import com.bottari.feature.team.checklist.checklist.TeamChecklistEmptyView
 import teamMemberStatusDummyUiState
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun TeamMemberStateScreen(
@@ -97,7 +97,7 @@ private fun TeamMemberStateScreen(
                 TeamStateCard(
                     title = "완료 인원",
                     value = uiState.checkedMembers.size.toString(),
-                    painter = painterResource(PresentationR.drawable.ic_complete),
+                    painter = painterResource(UIR.drawable.ic_complete),
                     color = BottariTheme.colors.green,
                     modifier = Modifier.weight(1f),
                 )
@@ -105,7 +105,7 @@ private fun TeamMemberStateScreen(
                 TeamStateCard(
                     title = "미완료 인원",
                     value = uiState.uncheckedMembers.size.toString(),
-                    painter = painterResource(PresentationR.drawable.ic_close),
+                    painter = painterResource(UIR.drawable.ic_close),
                     color = BottariTheme.colors.red,
                     modifier = Modifier.weight(1f),
                 )
@@ -146,7 +146,7 @@ private fun TeamMemberStateScreen(
                     if (member.checkedItems.isNotEmpty()) {
                         TeamStateListBox(
                             text = "해당 물건을 챙겼습니다",
-                            painter = painterResource(id = PresentationR.drawable.ic_bottari_item_empty_view),
+                            painter = painterResource(id = UIR.drawable.ic_bottari_item_empty_view),
                             color = BottariTheme.colors.primary,
                             items = member.checkedItems.map { item -> item.name },
                         )
@@ -154,7 +154,7 @@ private fun TeamMemberStateScreen(
                     if (member.unCheckedItems.isNotEmpty()) {
                         TeamStateListBox(
                             text = "해당 물건을 챙기지 않았습니다.",
-                            painter = painterResource(id = PresentationR.drawable.ic_bottari_item_empty_view),
+                            painter = painterResource(id = UIR.drawable.ic_bottari_item_empty_view),
                             color = BottariTheme.colors.red,
                             items = member.unCheckedItems.map { item -> item.name },
                         )

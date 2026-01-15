@@ -11,8 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.component.BottariTopAppBar
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.feature.personal.checklist.R
 import com.bottari.core.ui.R as UIR
 
 @Composable
@@ -32,7 +31,7 @@ fun ChecklistTopBar(
                 modifier = Modifier.size(48.dp),
             ) {
                 Icon(
-                    painter = painterResource(PresentationR.drawable.ic_previous),
+                    painter = painterResource(UIR.drawable.ic_previous),
                     contentDescription = stringResource(UIR.string.common_previous_btn_description),
                     modifier = Modifier.size(24.dp),
                 )
@@ -42,7 +41,7 @@ fun ChecklistTopBar(
             if (isResetIconVisible) {
                 BottariIconButton(onClick = onResetClick) {
                     Icon(
-                        painter = painterResource(PresentationR.drawable.ic_reset),
+                        painter = painterResource(UIR.drawable.ic_reset),
                         contentDescription = stringResource(R.string.checklist_btn_reset_description),
                         modifier = Modifier.size(24.dp),
                     )
@@ -51,7 +50,7 @@ fun ChecklistTopBar(
             if (isSwipeIconVisible) {
                 BottariIconButton(onClick = onSwipeClick) {
                     Icon(
-                        painter = painterResource(PresentationR.drawable.ic_swipe),
+                        painter = painterResource(UIR.drawable.ic_swipe),
                         contentDescription = stringResource(R.string.checklist_btn_swipe_description),
                     )
                 }

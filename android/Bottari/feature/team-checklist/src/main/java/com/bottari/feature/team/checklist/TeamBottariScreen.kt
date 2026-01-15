@@ -19,13 +19,13 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
 import com.bottari.core.ui.component.BottariTabBar
 import com.bottari.core.ui.extension.showSnackbar
 import com.bottari.core.ui.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.core.ui.model.bottari.team.TeamChecklistItemUiModel
 import com.bottari.feature.personal.checklist.component.ChecklistTopBar
 import com.bottari.feature.personal.checklist.swipe.SwipeScreen
+import com.bottari.feature.team.checklist.R
 import com.bottari.feature.team.checklist.checklist.ComposeTeamChecklistUiEvent
 import com.bottari.feature.team.checklist.checklist.ComposeTeamChecklistUiState
 import com.bottari.feature.team.checklist.checklist.ComposeTeamChecklistViewModel

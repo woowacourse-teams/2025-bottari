@@ -19,8 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.component.BottariButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.feature.personal.checklist.R
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun CardStackEndScreen(
@@ -52,7 +52,7 @@ private fun SwipeCompletedView(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
     ) {
         Icon(
-            painter = painterResource(PresentationR.drawable.ic_swipe_all_checked),
+            painter = painterResource(UIR.drawable.ic_swipe_all_checked),
             contentDescription = stringResource(R.string.checklist_icon_swipe_all_checked_description),
             modifier = Modifier.size(60.dp),
         )
@@ -76,7 +76,7 @@ private fun SwipeNotCompletedView(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
     ) {
         Icon(
-            painter = painterResource(PresentationR.drawable.ic_swipe_not_all_checked),
+            painter = painterResource(UIR.drawable.ic_swipe_not_all_checked),
             contentDescription = stringResource(R.string.checklist_icon_swipe_partial_unchecked_description),
             modifier = Modifier.size(60.dp),
         )

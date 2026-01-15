@@ -26,16 +26,16 @@ import com.bottari.bottari.designsystem.component.BottariButton
 import com.bottari.bottari.designsystem.component.BottariButtonStyle
 import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
 import com.bottari.core.ui.model.bottari.PersonalChecklistItemUiModel
 import com.bottari.core.ui.model.bottari.team.ChecklistItemUiModel
+import com.bottari.feature.personal.checklist.R
 import com.spartapps.swipeablecards.state.SwipeableCardsState
 import com.spartapps.swipeablecards.ui.SwipeableCardDirection
 import com.spartapps.swipeablecards.ui.SwipeableCardsProperties
 import com.spartapps.swipeablecards.ui.lazy.LazySwipeableCards
 import com.spartapps.swipeablecards.ui.lazy.items
 import kotlin.math.min
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun CardStackScreen(
@@ -126,7 +126,7 @@ private fun SwipeableChecklistItem(item: ChecklistItemUiModel) {
                     horizontalArrangement = Arrangement.End,
                 ) {
                     Icon(
-                        painter = painterResource(PresentationR.drawable.ic_previous),
+                        painter = painterResource(UIR.drawable.ic_previous),
                         contentDescription = null,
                         tint = BottariTheme.colors.red,
                     )
@@ -151,7 +151,7 @@ private fun SwipeableChecklistItem(item: ChecklistItemUiModel) {
                     )
                     Spacer(modifier = Modifier.width(BottariTheme.spacing.spaceMedium))
                     Icon(
-                        painter = painterResource(PresentationR.drawable.ic_previous),
+                        painter = painterResource(UIR.drawable.ic_previous),
                         contentDescription = null,
                         tint = BottariTheme.colors.primary,
                         modifier = Modifier.rotate(180f),

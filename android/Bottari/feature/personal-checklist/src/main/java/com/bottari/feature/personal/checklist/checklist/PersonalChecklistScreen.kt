@@ -21,11 +21,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
 import com.bottari.core.ui.component.ChecklistToolTip
 import com.bottari.core.ui.model.bottari.PersonalChecklistItemUiModel
+import com.bottari.feature.personal.checklist.R
 import com.bottari.feature.personal.checklist.component.ChecklistProgressHeader
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun PersonalChecklistScreen(
@@ -67,7 +67,7 @@ fun PersonalChecklistTooltip(onCloseToolTip: () -> Unit) {
         text = text,
         icon = {
             Icon(
-                painter = painterResource(PresentationR.drawable.ic_person),
+                painter = painterResource(UIR.drawable.ic_person),
                 contentDescription = null,
                 tint = BottariTheme.colors.white,
             )
@@ -129,7 +129,7 @@ private fun BottariCheckedBox() {
                 .background(BottariTheme.colors.primary),
     ) {
         Icon(
-            painter = painterResource(PresentationR.drawable.ic_check),
+            painter = painterResource(UIR.drawable.ic_check),
             contentDescription = null,
             modifier =
                 Modifier

@@ -14,7 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun TeamChecklistEmptyView(modifier: Modifier = Modifier) {
@@ -25,7 +25,7 @@ fun TeamChecklistEmptyView(modifier: Modifier = Modifier) {
     ) {
         Spacer(Modifier.height(BottariTheme.spacing.spaceSmall))
         Icon(
-            painter = painterResource(PresentationR.drawable.ic_bottari_item_empty_view),
+            painter = painterResource(UIR.drawable.ic_bottari_item_empty_view),
             contentDescription = null,
             modifier = Modifier.size(48.dp),
             tint = BottariTheme.colors.gray500,

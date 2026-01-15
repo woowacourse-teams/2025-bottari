@@ -1,5 +1,6 @@
 package com.bottari.feature.team.checklist.item
 
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
 import com.bottari.common.util.debounce
 import com.bottari.core.domain.model.event.EventState
@@ -26,6 +27,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+@Stable
 @HiltViewModel(assistedFactory = ComposeTeamBottariItemStatusViewModel.Factory::class)
 class ComposeTeamBottariItemStatusViewModel @AssistedInject constructor(
     @Assisted private val teamBottariId: Long,

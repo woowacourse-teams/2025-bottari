@@ -38,7 +38,6 @@ import com.bottari.core.ui.extension.topBottomFadingEdge
 import com.bottari.core.ui.model.template.BottariTemplateItemUiModel
 import com.bottari.feature.template.detail.report.ReportDialog
 import kotlinx.coroutines.launch
-import com.bottari.core.ui.R as PresentationR
 import com.bottari.core.ui.R as UIR
 
 @Composable
@@ -67,14 +66,14 @@ fun TemplateDetailScreen(
                 TemplateDetailUiEvent.FetchBottariDetailFailure -> {
                     showSnackbar(
                         snackbarState = snackbarState,
-                        message = context.getString(PresentationR.string.template_detail_fetch_failure_text),
+                        message = context.getString(R.string.template_detail_fetch_failure_text),
                     )
                 }
 
                 TemplateDetailUiEvent.TakeBottariTemplateFailure -> {
                     showSnackbar(
                         snackbarState = snackbarState,
-                        message = context.getString(PresentationR.string.template_detail_take_failure_text),
+                        message = context.getString(R.string.template_detail_take_failure_text),
                     )
                 }
 
@@ -147,7 +146,7 @@ private fun TemplateDetailScreen(
             }
 
             BottariButton(
-                text = stringResource(PresentationR.string.template_detail_template_btn_text),
+                text = stringResource(R.string.template_detail_template_btn_text),
                 onClick = onTakeTemplateClick,
                 modifier =
                     Modifier
@@ -176,7 +175,7 @@ private fun TemplateDetailTopBar(
         navigationIcon = {
             BottariIconButton(onClick = onBackClick) {
                 Icon(
-                    painter = painterResource(PresentationR.drawable.ic_previous),
+                    painter = painterResource(UIR.drawable.ic_previous),
                     contentDescription = stringResource(UIR.string.common_previous_btn_description),
                 )
             }
@@ -185,7 +184,7 @@ private fun TemplateDetailTopBar(
             if (isMenuVisible) {
                 BottariIconButton(onClick = { onMenuExpandedChange(true) }) {
                     Icon(
-                        painter = painterResource(PresentationR.drawable.ic_more),
+                        painter = painterResource(UIR.drawable.ic_more),
                         contentDescription = stringResource(UIR.string.common_option_btn_description),
                     )
                 }
@@ -196,7 +195,7 @@ private fun TemplateDetailTopBar(
                 ) {
                     DropdownMenuItem(
                         text = {
-                            Text(text = stringResource(PresentationR.string.menu_template_report_title_text))
+                            Text(text = stringResource(R.string.menu_template_report_title_text))
                         },
                         onClick = {
                             onReportClick()

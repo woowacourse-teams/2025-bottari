@@ -31,7 +31,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bottari.bottari.designsystem.component.BottariButton
 import com.bottari.bottari.designsystem.component.BottariIconButton
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R as PresentationR
 import com.bottari.core.ui.R as UIR
 
 @Composable
@@ -102,21 +101,21 @@ private fun ReportDialog(
                     verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
                 ) {
                     Text(
-                        text = stringResource(PresentationR.string.common_report_dialog_title_text),
+                        text = stringResource(UIR.string.common_report_dialog_title_text),
                         style = BottariTheme.typography.semiBold20.toTextStyle(),
                         color = BottariTheme.colors.black,
                     )
                     Text(
-                        text = stringResource(PresentationR.string.common_report_dialog_description_text),
+                        text = stringResource(UIR.string.common_report_dialog_description_text),
                         style = BottariTheme.typography.regular14.toTextStyle(),
                         color = BottariTheme.colors.gray700,
                     )
 
                     listOf(
-                        PresentationR.string.common_report_dialog_spam_or_ad_radio_button_text,
-                        PresentationR.string.common_report_dialog_inappropriate_content_radio_button_text,
-                        PresentationR.string.common_report_dialog_false_information_radio_button_text,
-                        PresentationR.string.common_report_dialog_privacy_exposure_radio_button_text,
+                        UIR.string.common_report_dialog_spam_or_ad_radio_button_text,
+                        UIR.string.common_report_dialog_inappropriate_content_radio_button_text,
+                        UIR.string.common_report_dialog_false_information_radio_button_text,
+                        UIR.string.common_report_dialog_privacy_exposure_radio_button_text,
                     ).forEach { resId ->
                         val reason = stringResource(resId)
                         ReportReasonOption(
@@ -127,7 +126,7 @@ private fun ReportDialog(
                     }
 
                     BottariButton(
-                        text = stringResource(PresentationR.string.common_report_dialog_report_button_text),
+                        text = stringResource(UIR.string.common_report_dialog_report_button_text),
                         onClick = onReportClick,
                         enabled = uiState.isButtonEnabled && !uiState.isLoading,
                         modifier = Modifier.fillMaxWidth(),
@@ -139,7 +138,7 @@ private fun ReportDialog(
                     modifier = Modifier.align(Alignment.TopEnd),
                 ) {
                     Icon(
-                        painter = painterResource(PresentationR.drawable.ic_close),
+                        painter = painterResource(UIR.drawable.ic_close),
                         contentDescription = stringResource(UIR.string.common_close_btn_description),
                     )
                 }

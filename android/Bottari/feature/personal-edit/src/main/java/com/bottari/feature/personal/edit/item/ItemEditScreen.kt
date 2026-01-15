@@ -19,9 +19,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
 import com.bottari.core.ui.extension.noRippleClickable
 import com.bottari.core.ui.model.bottari.PersonalChecklistItemUiModel
+import com.bottari.feature.personal.edit.R
 import com.bottari.feature.personal.edit.item.component.ItemEditEmptyView
 import com.bottari.feature.personal.edit.item.component.ItemEditInputBar
 import com.bottari.feature.personal.edit.item.component.ItemEditLazyColumn

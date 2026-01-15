@@ -1,5 +1,6 @@
 package com.bottari.feature.team.edit.member
 
+import androidx.compose.runtime.Stable
 import com.bottari.core.domain.model.event.EventData
 import com.bottari.core.domain.model.event.EventState
 import com.bottari.core.domain.model.team.member.TeamStatus
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
+@Stable
 @HiltViewModel(assistedFactory = TeamManagementViewModel.Factory::class)
 class TeamManagementViewModel @AssistedInject constructor(
     @Assisted private val teamBottariId: Long,

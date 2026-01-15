@@ -28,15 +28,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bottari.bottari.designsystem.component.BottariCard
 import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.bottari.designsystem.theme.BottariTheme
-import com.bottari.core.ui.R
 import com.bottari.core.ui.component.BottariCheckIndicator
 import com.bottari.core.ui.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.core.ui.model.bottari.team.TeamBottariUiModelStatus
 import com.bottari.core.ui.model.bottari.team.TeamChecklistItemUiModel
+import com.bottari.feature.team.checklist.R
 import com.bottari.feature.team.checklist.TeamSendRemindDialog
 import com.bottari.feature.team.checklist.TeamStateCard
 import com.bottari.feature.team.checklist.TeamStateListBox
-import com.bottari.core.ui.R as PresentationR
+import com.bottari.core.ui.R as UIR
 
 @Composable
 fun TeamItemStateScreen(
@@ -111,7 +111,7 @@ private fun TeamItemStateScreen(
                             R.string.team_checklist_current_items_status_percent_text,
                             uiState.checkedProgress,
                         ),
-                    painter = painterResource(PresentationR.drawable.ic_progress),
+                    painter = painterResource(UIR.drawable.ic_progress),
                     color = BottariTheme.colors.primary,
                     modifier = Modifier.weight(1f),
                 )
@@ -119,7 +119,7 @@ private fun TeamItemStateScreen(
                 TeamStateCard(
                     title = stringResource(R.string.team_checklist_current_items_status_count_title),
                     value = uiState.completedItems.toString(),
-                    painter = painterResource(PresentationR.drawable.ic_complete),
+                    painter = painterResource(UIR.drawable.ic_complete),
                     color = BottariTheme.colors.green,
                     modifier = Modifier.weight(1f),
                 )
@@ -152,7 +152,7 @@ private fun TeamItemStateScreen(
                     if (product.checkedMember.isNotEmpty()) {
                         TeamStateListBox(
                             text = "해당 물건을 챙겼습니다",
-                            painter = painterResource(id = PresentationR.drawable.ic_bottari_item_empty_view),
+                            painter = painterResource(id = UIR.drawable.ic_bottari_item_empty_view),
                             color = BottariTheme.colors.primary,
                             items = product.checkedMember,
                         )
@@ -160,7 +160,7 @@ private fun TeamItemStateScreen(
                     if (product.uncheckedMember.isNotEmpty()) {
                         TeamStateListBox(
                             text = "해당 물건을 챙기지 않았습니다.",
-                            painter = painterResource(id = PresentationR.drawable.ic_bottari_item_empty_view),
+                            painter = painterResource(id = UIR.drawable.ic_bottari_item_empty_view),
                             color = BottariTheme.colors.red,
                             items = product.uncheckedMember,
                         )
