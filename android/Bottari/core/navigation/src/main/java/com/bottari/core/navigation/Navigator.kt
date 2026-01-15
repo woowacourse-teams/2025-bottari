@@ -60,9 +60,3 @@ class Navigator(
         }
     }
 }
-
-interface NavigatorHost {
-    fun navigate(key: NavKey)
-
-    fun goBack()
-}
