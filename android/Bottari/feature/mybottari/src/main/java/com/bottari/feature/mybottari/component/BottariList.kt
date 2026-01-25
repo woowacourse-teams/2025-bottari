@@ -1,0 +1,69 @@
+package com.bottari.feature.mybottari.component
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.feature.mybottari.model.BottariUiModel
+import com.bottari.feature.mybottari.model.MyBottariUiModel
+
+@Composable
+fun BottariList(
+    listState: LazyListState,
+    onBottariClick: (MyBottariUiModel) -> Unit,
+    onDeletePersonalBottari: (Long) -> Unit,
+    onDeleteTeamBottari: (Long) -> Unit,
+    onEditPersonalBottari: (Long) -> Unit,
+    onEditTeamBottari: (Long) -> Unit,
+    bottaries: List<MyBottariUiModel>,
+    modifier: Modifier = Modifier,
+) {
+    var openedMenuBottari by remember { mutableStateOf<Any?>(null) }
+
+    LazyColumn(
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(horizontal = BottariTheme.spacing.spaceMedium),
+        state = listState,
+        contentPadding = PaddingValues(vertical = BottariTheme.spacing.spaceSmall),
+        verticalArrangement = Arrangement.spacedBy(BottariTheme.spacing.spaceXSmall),
+    ) {
+        items(
+            items = bottaries,
+            key = { bottari -> bottari.id to bottari::class.simpleName },
+        ) { bottari ->
+            BottariItem(
+                bottari = bottari,
+                onBottariClick = { onBottariClick(bottari) },
+                isMenuShown = (openedMenuBottari == bottari),
+                onShowMenu = { openedMenuBottari = bottari },
+                onCloseMenu = { openedMenuBottari = null },
+                onBottariDelete = onBottariDelete@{
+                    if (bottari is BottariUiModel) {
+                        onDeletePersonalBottari(bottari.id)
+                        return@onBottariDelete
+                    }
+                    onDeleteTeamBottari(bottari.id)
+                },
+                onBottariEdit = onBottariEdit@{
+                    if (bottari is BottariUiModel) {
+                        onEditPersonalBottari(bottari.id)
+                        return@onBottariEdit
+                    }
+                    onEditTeamBottari(bottari.id)
+                },
+            )
+        }
+    }
+}

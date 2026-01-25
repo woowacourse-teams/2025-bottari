@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Profile -->
+    <string name="profile_nickname_title">닉네임</string>
+    <string name="profile_nickname_hint_text">닉네임을 입력해 주세요</string>
+    <string name="profile_fetch_failure_text">프로필 정보를 불러오지 못했어요</string>
+    <string name="profile_nickname_save_success_text">닉네임을 저장했어요</string>
+    <string name="profile_nickname_save_failure_text">닉네임을 저장하지 못했어요</string>
+    <string name="profile_invalid_nickname_rule_text">닉네임은 3~10자로 입력해 주세요</string>
+
+    <!-- Setting -->
+    <string name="setting_toolbar_title_text">설정</string>
+    <string name="setting_privacy_policy_title_text">개인정보 처리 방침</string>
+    <string name="setting_user_feedback_title_text">의견 보내기</string>
+    <string name="setting_version_text">보따리 버전</string>
+    <string name="setting_unknown_version_text">알 수 없음</string>
+
+    <!-- Description -->
+    <string name="btn_nickname_edit_description">닉네임 수정 버튼</string>
+</resources>

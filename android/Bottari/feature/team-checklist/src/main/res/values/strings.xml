@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Team Checklist -->
+    <string name="team_checklist_tap_checklist_text">체크리스트</string>
+    <string name="team_checklist_tap_team_current_text">물건 현황</string>
+    <string name="team_checklist_tap_member_checklist_text">멤버 현황</string>
+    <string name="team_checklist_empty_view_title_text">이곳은 아직 비어있어요.</string>
+    <string name="team_checklist_current_items_status_percent_title">전체 완료율</string>
+    <string name="team_checklist_current_items_status_percent_text">%1$d%%</string>
+    <string name="team_checklist_current_items_status_count_title">완료 항목</string>
+    <string name="team_checklist_current_items_status_progress_text">%1$d/%2$d</string>
+    <string name="team_checklist_current_items_count_text">%d개 항목</string>
+    <string name="team_checklist_current_item_status_percent_text">%1$d%% 완료</string>
+
+    <!-- Team Members Status -->
+    <string name="team_members_status_hurry_up_btn_text">보채기</string>
+    <string name="team_members_status_items_count_text">%1$d/%2$d 챙김</string>
+    <string name="team_members_status_items_empty_text">챙길 물건이 없어요</string>
+    <string name="team_members_status_fetch_failure_text">팀원 현황을 조회하는데 실패했어요</string>
+    <string name="team_members_status_send_remind_message_success_text">%s에게 알림을 전송했어요</string>
+    <string name="team_members_status_send_remind_message_failure_text">보채기에 실패했어요</string>
+    <string name="team_members_status_fetch_member_id_failure_text">내 아이디 불러오기에 실패했어요</string>
+
+    <!-- Team Bottari -->
+    <string name="team_product_status_format">%1$d / %2$d</string>
+    <string name="team_product_status_fetch_failure_text">물건 현황을 불러오지 못했어요</string>
+    <string name="team_status_empty_view_title">확인할 물건이 보이지 않아요</string>
+    <string name="team_status_empty_view_text">팀원들과 함께 보따리를 만들어보세요!</string>
+    <string name="team_status_send_remind_success_text">알림을 전송했어요</string>
+    <string name="team_status_send_remind_failure_text">보채기에 실패했어</string>
+    <string name="team_status_send_remind_btn_text">보채기</string>
+
+    <!-- Bottari Item Type -->
+    <string name="bottari_item_type_shared_text">공통</string>
+    <string name="bottari_item_type_assigned_text">담당</string>
+    <string name="bottari_item_type_personal_text">개인</string>
+</resources>

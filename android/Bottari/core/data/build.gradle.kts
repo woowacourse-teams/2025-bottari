@@ -11,7 +11,7 @@ dependencies {
     implementation(project(":core:local"))
     implementation(project(":core:network"))
     implementation(project(":core:domain"))
-    implementation(project(":logger"))
+    implementation(project(":core:logger"))
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.retrofit)

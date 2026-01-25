@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
@@ -36,7 +37,6 @@ import com.bottari.bottari.designsystem.theme.BottariTheme
 @Composable
 fun BottariTopAppBar(
     title: String,
-    modifier: Modifier = Modifier,
     navigationIcon: (@Composable () -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
     centerAligned: Boolean = true,
@@ -57,19 +57,19 @@ fun BottariTopAppBar(
 
     if (centerAligned) {
         CenterAlignedTopAppBar(
-            modifier = modifier,
             title = titleContent,
             navigationIcon = navigationIcon ?: {},
             actions = actions,
             colors = colors,
+            windowInsets = WindowInsets(top = 0.dp),
         )
     } else {
         TopAppBar(
-            modifier = modifier,
             title = titleContent,
             navigationIcon = navigationIcon ?: {},
             actions = actions,
             colors = colors,
+            windowInsets = WindowInsets(top = 0.dp),
         )
     }
 }

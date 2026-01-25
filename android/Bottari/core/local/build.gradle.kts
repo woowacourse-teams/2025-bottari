@@ -10,7 +10,7 @@ android {
 
 dependencies {
     implementation(project(":core:domain"))
-    implementation(project(":logger"))
+    implementation(project(":core:logger"))
 
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.core.ktx)

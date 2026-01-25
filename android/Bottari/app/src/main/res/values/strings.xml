@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">보따리</string>
+
+    <string name="common_permission_denied_text">권한이 거부되어 일부 기능이 제한돼요.\n기능 사용 시 다시 요청드릴게요.</string>
+
+    <!--  Notification: 보따리 알림  -->
+    <string name="notification_personal_bottari_channel_name">나의 보따리 알림</string>
+    <string name="notification_bottari_title_format">%s 챙길 시간이에요!</string>
+    <string name="notification_bottari_remind_message">보따리를 열어보고 준비 완료했는지 확인해보세요!</string>
+    <string name="notification_remind_by_member_message">아직 챙기지 않은 물건이 있어요.</string>
+    <string name="notification_team_bottari_remind_by_item_message">%s 챙겨 주세요.</string>
+    <string name="notification_team_bottari_notification_exit_message">%1$s님이 %2$s에서 나갔어요.</string>
 </resources>

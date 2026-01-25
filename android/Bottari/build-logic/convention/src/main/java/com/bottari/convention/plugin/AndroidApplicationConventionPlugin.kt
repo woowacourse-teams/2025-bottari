@@ -37,8 +37,7 @@ internal class AndroidApplicationConventionPlugin : Plugin<Project> {
 
             dependencies {
                 implementation(project(":core:data"))
-                implementation(project(":presentation"))
-                implementation(project(":logger"))
+                implementation(project(":core:logger"))
             }
         }
     }

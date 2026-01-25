@@ -1,9 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Common: 실패/성공 메시지 -->
+
+    <!--
+        [String Resource 네이밍 컨벤션]
+
+        이름 형식: [접두사]_[기능 요소]_[의미 접미사]
+
+        - 접두사(화면 또는 범위):
+            alarm, bottari, checklist, market, profile, common 등
+        - 기능 요소(역할 또는 위치):
+            btn (버튼), title (타이틀), text (일반 문구), description (접근성/설명),
+            hint (입력 안내), dialog (다이얼로그), format (포맷), item (리스트 항목) 등
+        - 의미 접미사:
+            success, failure, hint, text, description 등 맥락에 맞게 부착
+
+        예시:
+            - bottari_create_dialog_title_text
+            - common_permission_dialog_message_text
+            - checklist_check_failure_text
+            - item_delete_btn_description
+
+        ※ 공통 요소는 common_ 접두사 사용
+        ※ 접근성 설명은 [접두사]_[기능 요소]_description
+        ※ Home Navigation은 home_nav_ 접두사 사용
+
+        [라이팅 컨벤션]
+
+        - 톤 & 매너: 따뜻하고 친절한 말투 (부담 없이 안내하는 어조)
+        - 실패/성공 메시지:
+            ✗ 저장에 실패했어요 → ✔ 저장하지 못했어요
+            ✗ 저장되었습니다 → ✔ 저장했어요!
+        - 사용자 행위 유도 시:
+            ✗ 이름을 작성해주세요 → ✔ 이름을 입력해 주세요
+        - 다이얼로그 메시지:
+            ✗ 이동하시겠어요? → ✔ 설정 화면으로 이동할까요?
+        - 텍스트는 모두 ‘말하듯 자연스럽게’ 작성
+        - 중복되는 표현 최소화, 지나치게 기계적인 단어 사용 지양
+
+        예시:
+            - common_fetch_failure_text: 정보 불러오지 못했어요
+            - profile_nickname_hint_text: 닉네임을 입력해 주세요
+            - alarm_edit_confirm_btn_text: 알람 저장
+            - bottari_create_btn_description: 보따리 만들기 버튼
+    -->
+
+    <!-- Common: 포맷 -->
+    <string name="common_format_date_alarm">M월 d일</string>
+    <string name="common_format_time_alarm">HH:mm</string>
+    <string name="common_separator_text">\u00A0|\u00A0</string>
     <string name="common_save_failure_text">저장하지 못했어요</string>
 
-    <!-- Common: 접근성 -->
+    <!-- Dialog: 권한 다이얼로그 -->
+    <string name="common_permission_notice_dialog_title_text">보따리를 편하게 챙기려면\n다음과 같은 권한이 필요해요</string>
+    <string name="common_notification_permission_text">알림 (선택)</string>
+    <string name="common_alarm_permission_text">알람 및 리마인더 (선택)</string>
+    <string name="common_notification_permission_description_text">보따리 관련 알림 수신</string>
+    <string name="common_alarm_permission_description_text">설정한 날짜 및 시간에 알람 생성</string>
+    <string name="common_permission_description_text">권한 접근을 허용하지 않아도 보따리를 챙길 수 있어요.\n하지만 알림 등 일부 기능이 제한될 수 있어요.</string>
+    <string name="common_permission_check_btn_text">확인했어요</string>
+    <string name="common_permission_dialog_title_text">권한 안내</string>
+    <string name="common_notification_permission_dialog_message_text">알림을 받으려면 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
+    <string name="common_alarm_permission_dialog_message_text">알람을 설정하려면 알람 및 리마인더 권한이 필요해요.\n설정 화면으로 이동할까요?</string>
+    <string name="common_permission_dialog_positive_btn_text">설정으로 가기</string>
+    <string name="common_permission_dialog_negative_btn_text">나중에 하기</string>
+
+    <!-- Dialog: 데이터 저장 다이얼로그 텍스트-->
+    <string name="common_alert_dialog_title_text">저장 알림</string>
+    <string name="common_alert_unsaved_dialog_message_text">저장하지 않고 나가시겠어요?</string>
+
+    <!-- Dialog: 신고 다이얼로그 텍스트 -->
+    <string name="common_report_dialog_title_text">신고 내용 확인</string>
+    <string name="common_report_dialog_report_button_text">신고하기</string>
+    <string name="common_report_dialog_description_text">신고 사유를 선택해 주세요</string>
+    <string name="common_report_dialog_spam_or_ad_radio_button_text">스팸 또는 광고</string>
+    <string name="common_report_dialog_inappropriate_content_radio_button_text">부적절한 콘텐츠</string>
+    <string name="common_report_dialog_false_information_radio_button_text">허위 정보</string>
+    <string name="common_report_dialog_privacy_exposure_radio_button_text">개인정보 노출</string>
+    <string name="common_report_dialog_submit_success_text">신고가 정상적으로 접수되었어요</string>
+    <string name="common_report_dialog_submit_failure_text">신고 접수에 실패했어요</string>
+
+    <!-- Dialog: 체크리스트 초기화 다이얼로그 텍스트 -->
+    <string name="reset_bottari_items_check_state_dialog_title_text">체크리스트 초기화</string>
+    <string name="reset_bottari_items_check_state_dialog_description_text">체크 상태를 모두 지우시겠어요?</string>
+
+    <!--Dialog: 강제 업데이트 다이얼로그 텍스트 -->
+    <string name="force_update_dialog_title_text">업데이트가 필요해요</string>
+    <string name="force_update_dialog_description_text">원활한 서비스 이용을 위해\n최신 버전으로 업데이트해 주세요</string>
+    <string name="force_update_dialog_update_btn_text">업데이트하기</string>
+    <string name="force_update_dialog_close_btn_text">앱 종료</string>
+
+    <!-- Home Navigation -->
+    <string name="home_nav_personal_bottari_title_text">나의 보따리</string>
+    <string name="home_nav_my_bottari_title_text">나의 보따리</string>
+    <string name="home_nav_template_title_text">모두의 보따리</string>
+    <string name="home_nav_more_title_text">더보기</string>
+
+    <string name="bottari_home_exit_confirm_text">한 번 더 누르면 앱이 종료돼요</string>
+
+
+    <!--  Team Bottari  -->
+    <string name="join_team_bottari_success_text">팀 보따리에 참가했어요</string>
+    <string name="join_team_bottari_failure_text">팀 보따리에 참가하지 못했어요</string>
+
+
+    <!--  Calendar  -->
+    <string name="calendar_title_format_text">%d년 %d월</string>
+
+    <!-- Menu -->
+    <string name="menu_edit_title_text">내용 편집하기</string>
+    <string name="menu_delete_title_text">삭제하기</string>
+
+
+    <!-- Description 접근성 -->
+    <string name="bottari_btn_template_delete_description">보따리 템플릿 삭제 버튼</string>
+    <string name="bottari_icon_item_empty_description">빈 물건 아이콘</string>
+    <string name="bottari_icon_type_description">보따리 타입 아이콘</string>
+    <string name="personal_bottari_btn_create_description">개인 보따리 만들기 버튼</string>
+    <string name="common_btn_item_delete_description">물건 삭제 버튼</string>
+    <string name="common_icon_search_description">검색 아이콘</string>
+    <string name="common_state_open_description">열림</string>
+    <string name="common_state_close_description">닫힘</string>
+    <string name="alarm_btn_location_edit_description">위치 설정 버튼</string>
+    <string name="alarm_btn_date_edit_description">날짜 수정 버튼</string>
+    <string name="alarm_icon_permission_description">알람 및 리마인더 권한 이미지</string>
+    <string name="notification_icon_permission_description">알림 권한 이미지</string>
+    <string name="location_icon_permission_description">위치 권한 이미지</string>
+
     <string name="common_previous_btn_description">뒤로가기 버튼</string>
     <string name="common_close_btn_description">닫기 버튼</string>
     <string name="common_option_btn_description">옵션 버튼</string>

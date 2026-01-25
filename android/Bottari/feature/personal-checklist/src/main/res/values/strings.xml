@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Checklist -->
+    <string name="checklist_progress_header_title_text">완료된 항목</string>
+    <string name="checklist_tooltip_title_text">개인 보따리</string>
+    <string name="checklist_tooltip_description_text">오른쪽 상단 버튼을 통해,\n스와이프 화면으로 이동할 수 있어요.</string>
+    <string name="checklist_current_status_items_count_text">%1$d / %2$d</string>
+    <string name="checklist_fetch_failure_text">체크리스트를 불러오지 못했어요</string>
+    <string name="checklist_reset_failure_text">체크리스트를 초기화하지 못했어요</string>
+    <string name="checklist_check_failure_text">체크에 실패했어요</string>
+    <string name="checklist_empty_view_edit_btn_text">편집하기</string>
+    <string name="checklist_empty_view_title_text">챙길 물건이 보이지 않아요</string>
+    <string name="checklist_empty_view_description_text">지금 편집하기를 눌러서\n보따리에 물건을 넣어보세요</string>
+    <string name="checklist_swipe_title_text">체크리스트</string>
+    <string name="checklist_swipe_sub_title_text">챙기셨나요?</string>
+    <string name="checklist_swipe_description_text">좌우로 스와이프하거나 아래 버튼을 눌러주세요</string>
+    <string name="checklist_swipe_not_btn_text">아직이에요</string>
+    <string name="checklist_swipe_yes_btn_text">챙겼어요</string>
+    <string name="checklist_swipe_yes_overlay_view_text">챙겼어요!</string>
+    <string name="checklist_swipe_no_overlay_view_text">아직이에요</string>
+    <string name="checklist_swipe_complete_title">보따리를 모두 점검했어요!</string>
+    <string name="checklist_swipe_complete_all_text">모든 준비 완료! 출발만 남았어요!</string>
+    <string name="checklist_swipe_complete_not_all_text">아직 챙기지 않은 물건이 있어요. 마저 챙겨볼까요?</string>
+    <string name="checklist_swipe_return_btn_text">돌아가기</string>
+    <string name="checklist_swipe_empty_view_description_text">보따리를 편집해서 물건을 챙겨보아요!</string>
+
+    <!-- Description 접근성 -->
+    <string name="checklist_btn_swipe_description">스와이프 전환 버튼</string>
+    <string name="checklist_btn_reset_description">체크리스트 초기화 버튼</string>
+    <string name="checklist_icon_swipe_partial_unchecked_description">보따리 일부 품목 미체크 이미지</string>
+    <string name="checklist_icon_swipe_all_checked_description">보따리 모든 품목 체크 이미지</string>
+    <string name="checklist_icon_swipe_overlay_unchecked_description">미체크 오버레이 아이콘</string>
+    <string name="checklist_icon_swipe_overlay_checked_description">체크 오버레이 아이콘</string>
+</resources>

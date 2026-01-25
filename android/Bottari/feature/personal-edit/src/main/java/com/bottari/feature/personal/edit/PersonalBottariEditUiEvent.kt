@@ -1,0 +1,11 @@
+package com.bottari.feature.personal.edit
+
+sealed interface PersonalBottariEditUiEvent {
+    data object FindBottariFailure : PersonalBottariEditUiEvent
+
+    data object CreateTemplateSuccess : PersonalBottariEditUiEvent
+
+    data object CreateTemplateFailure : PersonalBottariEditUiEvent
+
+    data object ToggleAlarmStateFailure : PersonalBottariEditUiEvent
+}

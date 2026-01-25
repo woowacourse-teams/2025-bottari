@@ -69,7 +69,7 @@ jobs:
             VERSION_NAME="${{ github.event.inputs.versionName }}"
           else
             echo "ℹ️ versionName not provided, using Gradle output..."
-            VERSION_NAME=$(./gradlew -q printVersionName)
+            VERSION_NAME=$(./gradlew -q printVersionName --no-configuration-cache)
           fi
           echo "VERSION_NAME=${VERSION_NAME}" >> $GITHUB_ENV
 
