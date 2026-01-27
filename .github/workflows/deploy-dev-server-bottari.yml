@@ -10,15 +10,6 @@ env:
   IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/bottari-app
   IMAGE_TAG: ${{ github.sha }}
 
-  # AWS / S3 관련 (리전/버킷 이름은 실제 값으로 교체)
-  AWS_REGION: ap-northeast-2                  # 사용하는 리전
-  S3_BUCKET: bottari-deploy-artifacts         # 배포용 S3 버킷 이름
-  S3_PREFIX: docker-images/bottari            # S3 내부 경로 prefix
-
-  # private EC2 SSH 접속 정보
-  PRIVATE_EC2_USER: root                    # TODO: ubuntu / ec2-user 등
-  PRIVATE_EC2_HOST: 10.0.134.7                 # TODO: private subnet EC2의 프라이빗 IP 또는 VPC DNS
-
 jobs:
   build:
     name: Build & Push to GHCR
@@ -73,23 +64,11 @@ jobs:
           cache-to: type=gha,mode=max
 
   deploy:
-    name: Deploy to Dev Server (via S3 + SSH)
+    name: Deploy to Dev Server
     needs: build
-
-    # 여기 runner가 public subnet EC2에 있는 self-hosted runner
-    runs-on: [self-hosted, bottari-prod]
+    runs-on: [self-hosted, bottari-dev]
 
     steps:
-      # 1. AWS 자격 증명 설정 (S3 업로드용)
-      #    AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY는 GitHub Secrets로 저장해둔다.
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ env.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      # 2. GHCR 로그인
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
@@ -97,77 +76,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 3. GHCR에서 방금 빌드된 이미지 pull
-      - name: Pull image from GHCR
+      - name: Pull latest image from GHCR
         run: |
           docker pull $IMAGE_NAME:$IMAGE_TAG
 
-      # 4. 도커 이미지를 tar.gz로 저장
-      - name: Save Docker image as tar.gz
+      - name: Run Blue-Green Deploy
+        working-directory: /home/ubuntu/
         run: |
-          mkdir -p artifacts
-          docker save $IMAGE_NAME:$IMAGE_TAG | gzip > artifacts/bottari-${IMAGE_TAG}.tar.gz
-          ls -lh artifacts
-
-      # 5. S3에 tar.gz 업로드
-      - name: Upload image tar to S3
-        run: |
-          S3_KEY="${S3_PREFIX}/bottari-${IMAGE_TAG}.tar.gz"
-          echo "S3_KEY=${S3_KEY}" >> $GITHUB_ENV
-
-          aws s3 cp artifacts/bottari-${IMAGE_TAG}.tar.gz \
-            s3://${S3_BUCKET}/${S3_KEY}
-
-      # 6. SSH 키 준비 (private EC2 접속용)
-      #    SSH_PRIVATE_KEY는 GitHub Secrets에 등록 (해당 EC2에 등록된 public key와 매칭)
-      # - name: Prepare SSH key
-      #   run: |
-      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_key.pem
-      #     chmod 600 ssh_key.pem
-
-      # 7. SSH로 private subnet EC2에 접속해서 S3에서 tar를 내려받고 컨테이너 재배포
-      #    무중단 배포 없이 단순 stop → rm → run
-      - name: Deploy on private EC2 via SSH
-        env:
-          S3_KEY: ${{ env.S3_KEY }}
-        run: |
-          cd ~
-          ssh -i bottari-prod.pem -o StrictHostKeyChecking=no \
-            ${{ env.PRIVATE_EC2_USER }}@${{ env.PRIVATE_EC2_HOST }} \
-            "set -e
-
-             APP_NAME='bottari-app'
-             IMAGE_NAME='${IMAGE_NAME}'
-             IMAGE_TAG='${IMAGE_TAG}'
-             S3_BUCKET='${S3_BUCKET}'
-             S3_KEY='${S3_KEY}'
-             WORK_DIR='/opt/deploy'
-             TAR_PATH=\"\$WORK_DIR/bottari-\${IMAGE_TAG}.tar.gz\"
-             
-             FIREBASE_SERVICE_ACCOUNT_JSON='${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}'
-
-             echo \"[deploy] app: \$APP_NAME\"
-             echo \"[deploy] image: \$IMAGE_NAME:\$IMAGE_TAG\"
-             echo \"[deploy] from s3://\$S3_BUCKET/\$S3_KEY\"
-
-             mkdir -p \"\$WORK_DIR\"
-
-             # S3에서 tar.gz 다운로드 (private EC2에는 awscli + S3 읽기 권한 필요)
-             aws s3 cp \"s3://\$S3_BUCKET/\$S3_KEY\" \"\$TAR_PATH\"
-
-             echo \"[deploy] docker load\"
-             gunzip -c \"\$TAR_PATH\" | docker load
-
-             echo \"[deploy] stop/remove old container\"
-             docker stop \"\$APP_NAME\" || true
-             docker rm \"\$APP_NAME\" || true
-
-             echo \"[deploy] run new container\"
-             # 8080 포트는 실제 서비스 포트에 맞게 수정해줘.
-             docker run -d --name \"\$APP_NAME\" \
-               -p 8080:8080 \
-               -e FIREBASE_SERVICE_ACCOUNT_JSON=\"\$FIREBASE_SERVICE_ACCOUNT_JSON\" \
-               \"\$IMAGE_NAME:\$IMAGE_TAG\"
-
-             echo \"[deploy] done\"
-            "
+          export BOTTARI_APP_IMAGE=${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          export FIREBASE_SERVICE_ACCOUNT_JSON='${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}'
+          ./deploy-app.sh
