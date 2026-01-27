@@ -1,8 +1,8 @@
 package com.bottari.alarm.controller;
 
-import com.bottari.alarm.service.AlarmService;
 import com.bottari.alarm.dto.CreateAlarmRequest;
 import com.bottari.alarm.dto.UpdateAlarmRequest;
+import com.bottari.alarm.service.AlarmService;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

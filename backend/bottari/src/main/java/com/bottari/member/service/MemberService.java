@@ -2,13 +2,13 @@ package com.bottari.member.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import com.bottari.push.notification.fcm.domain.FcmToken;
-import com.bottari.push.notification.fcm.repository.FcmTokenRepository;
 import com.bottari.member.domain.Member;
 import com.bottari.member.dto.CheckRegistrationResponse;
 import com.bottari.member.dto.CreateMemberRequest;
 import com.bottari.member.dto.UpdateMemberRequest;
 import com.bottari.member.repository.MemberRepository;
+import com.bottari.push.notification.fcm.domain.FcmToken;
+import com.bottari.push.notification.fcm.repository.FcmTokenRepository;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;

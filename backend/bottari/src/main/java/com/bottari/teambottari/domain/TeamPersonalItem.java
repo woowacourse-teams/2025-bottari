@@ -2,8 +2,8 @@ package com.bottari.teambottari.domain;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
-import jakarta.persistence.Column;
 import com.bottari.vo.ItemName;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

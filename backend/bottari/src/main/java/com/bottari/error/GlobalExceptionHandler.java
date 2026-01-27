@@ -1,8 +1,8 @@
 package com.bottari.error;
 
-import com.bottari.log.entry.ExceptionLogEntry;
 import com.bottari.log.LogFormatter;
 import com.bottari.log.entry.BusinessExceptionLogEntry;
+import com.bottari.log.entry.ExceptionLogEntry;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

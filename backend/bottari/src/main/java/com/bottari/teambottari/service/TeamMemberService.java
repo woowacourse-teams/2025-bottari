@@ -4,7 +4,6 @@ import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.member.domain.Member;
 import com.bottari.member.repository.MemberRepository;
-import com.bottari.push.ChannelType;
 import com.bottari.push.PushManager;
 import com.bottari.push.message.MessageEventType;
 import com.bottari.push.message.MessageResourceType;

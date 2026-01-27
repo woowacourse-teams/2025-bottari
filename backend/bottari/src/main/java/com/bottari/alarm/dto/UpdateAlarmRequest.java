@@ -1,8 +1,8 @@
 package com.bottari.alarm.dto;
 
 import com.bottari.alarm.domain.LocationAlarm;
-import com.bottari.alarm.domain.RoutineAlarm;
 import com.bottari.alarm.domain.RepeatType;
+import com.bottari.alarm.domain.RoutineAlarm;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
