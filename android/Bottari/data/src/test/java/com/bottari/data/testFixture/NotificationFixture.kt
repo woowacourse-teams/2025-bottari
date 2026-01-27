@@ -1,6 +1,6 @@
 package com.bottari.data.testFixture
 
-import com.bottari.data.mapper.NotificationMapper.toEntity
+import com.bottari.data.model.local.notification.NotificationEntity
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.model.alarm.AlarmType
 import com.bottari.domain.model.notification.Notification
@@ -21,6 +21,6 @@ val NOTIFICATION_FIXTURE =
             ),
     )
 
-val NOTIFICATION_ENTITY_FIXTURE = NOTIFICATION_FIXTURE.toEntity()
+val NOTIFICATION_ENTITY_FIXTURE = NotificationEntity.fromDomain(NOTIFICATION_FIXTURE)
 
 val NOTIFICATION_ENTITIES_FIXTURE = List(3) { NOTIFICATION_ENTITY_FIXTURE }

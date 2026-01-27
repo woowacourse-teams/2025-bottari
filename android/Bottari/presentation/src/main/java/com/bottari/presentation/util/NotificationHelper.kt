@@ -8,13 +8,14 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
-import com.bottari.di.ApplicationContextProvider
 import com.bottari.presentation.R
-import com.bottari.presentation.view.checklist.personal.ChecklistActivity
-import com.bottari.presentation.view.checklist.team.TeamChecklistActivity
+import com.bottari.presentation.compose.personal.ComposePersonalChecklistActivity
+import com.bottari.presentation.compose.team.ComposeTeamChecklistActivity
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class NotificationHelper(
-    private val context: Context = ApplicationContextProvider.applicationContext,
+class NotificationHelper @Inject constructor(
+    @ApplicationContext private val context: Context,
 ) {
     private val manager: NotificationManager =
         context.getSystemService(NotificationManager::class.java)
@@ -61,7 +62,7 @@ class NotificationHelper(
         bottariTitle: String,
     ): PendingIntent {
         val intent =
-            ChecklistActivity.newIntentForNotification(
+            ComposePersonalChecklistActivity.newIntentForNotification(
                 context,
                 bottariId,
                 bottariTitle,
@@ -80,10 +81,10 @@ class NotificationHelper(
     ): Notification =
         NotificationCompat
             .Builder(context, BOTTARI_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_bottari_logo)
+            .setSmallIcon(R.drawable.img_bottari_logo)
             .setContentTitle(
-                context.getString(R.string.common_bottari_notification_title, bottariTitle),
-            ).setContentText(context.getString(R.string.common_bottari_notification_message))
+                context.getString(R.string.notification_bottari_title_format, bottariTitle),
+            ).setContentText(context.getString(R.string.notification_bottari_remind_message))
             .setContentIntent(intent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
@@ -94,7 +95,7 @@ class NotificationHelper(
         teamBottariTitle: String,
     ): PendingIntent {
         val intent =
-            TeamChecklistActivity.newIntentForNotification(
+            ComposeTeamChecklistActivity.newIntentForNotification(
                 context,
                 teamBottariId,
                 teamBottariTitle,
@@ -114,13 +115,9 @@ class NotificationHelper(
     ): Notification =
         NotificationCompat
             .Builder(context, TEAM_BOTTARI_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_bottari_logo)
-            .setContentTitle(
-                context.getString(
-                    R.string.common_team_bottari_notification_title_text,
-                    bottariTitle,
-                ),
-            ).setContentText(message)
+            .setSmallIcon(R.drawable.img_bottari_logo)
+            .setContentTitle(bottariTitle)
+            .setContentText(message)
             .setContentIntent(intent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
@@ -130,7 +127,7 @@ class NotificationHelper(
         val audioAttributes = createAudioAttributes()
         return NotificationChannel(
             channelId,
-            context.getString(R.string.common_bottari_notification_channel_name),
+            context.getString(R.string.notification_personal_bottari_channel_name),
             NotificationManager.IMPORTANCE_HIGH,
         ).apply {
             enableLights(true)

@@ -1,12 +1,13 @@
 package com.bottari.domain.usecase.team
 
-import com.bottari.domain.repository.TeamBottariRepository
+import com.bottari.domain.repository.TeamBottariItemsRepository
+import javax.inject.Inject
 
-class CreateTeamSharedItemUseCase(
-    private val teamBottariRepository: TeamBottariRepository,
+class CreateTeamSharedItemUseCase @Inject constructor(
+    private val teamBottariItemsRepository: TeamBottariItemsRepository,
 ) {
     suspend operator fun invoke(
         bottariId: Long,
         name: String,
-    ): Result<Unit> = teamBottariRepository.createTeamBottariSharedItem(bottariId, name)
+    ): Result<Unit> = teamBottariItemsRepository.createTeamBottariSharedItem(bottariId, name)
 }

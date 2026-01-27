@@ -63,9 +63,9 @@ jobs:
           cache-to: type=gha,mode=max
 
   deploy:
-    name: Deploy to Dev Server
+    name: Deploy to Dev SSE Server
     needs: build
-    runs-on: [self-hosted, sse-dev]
+    runs-on: [self-hosted, bottari-dev]
 
     steps:
       - name: Log in to GHCR
@@ -79,9 +79,8 @@ jobs:
         run: |
           docker pull $IMAGE_NAME:$IMAGE_TAG
 
-      - name: Deploy using Docker Compose
-        working-directory: /home/ubuntu
+      - name: Run Blue-Green Deploy
+        working-directory: /home/ubuntu/
         run: |
-          IMAGE_NAME=$IMAGE_NAME \
-          IMAGE_TAG=$IMAGE_TAG \
-          docker compose -f docker-compose.dev.yml up -d --force-recreate
+          export BOTTARI_SSE_IMAGE=${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          ./deploy-sse.sh

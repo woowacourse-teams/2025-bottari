@@ -1,24 +1,28 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.AlarmMapper.toRequest
-import com.bottari.data.source.remote.AlarmRemoteDataSource
+import com.bottari.data.model.local.bottari.AlarmEntity
+import com.bottari.data.source.local.bottari.AlarmLocalDataSource
 import com.bottari.domain.model.alarm.Alarm
 import com.bottari.domain.repository.AlarmRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class AlarmRepositoryImpl(
-    private val alarmRemoteDataSource: AlarmRemoteDataSource,
+class AlarmRepositoryImpl @Inject constructor(
+    private val alarmLocalDataSource: AlarmLocalDataSource,
 ) : AlarmRepository {
-    override suspend fun saveAlarm(
-        id: Long,
-        alarm: Alarm,
-    ): Result<Unit> = alarmRemoteDataSource.saveAlarm(id, alarm.toRequest())
+    override fun findAlarm(bottariId: Long): Flow<Alarm?> =
+        alarmLocalDataSource
+            .findAlarm(bottariId)
+            .map { alarm -> alarm?.toDomain() }
 
-    override suspend fun createAlarm(
+    override suspend fun saveAlarm(
         bottariId: Long,
         alarm: Alarm,
-    ): Result<Unit> = alarmRemoteDataSource.createAlarm(bottariId, alarm.toRequest())
+    ): Result<Unit> = alarmLocalDataSource.saveAlarm(AlarmEntity.fromDomain(bottariId, alarm))
 
-    override suspend fun activeAlarm(alarmId: Long): Result<Unit> = alarmRemoteDataSource.activeAlarmState(id = alarmId)
-
-    override suspend fun inactiveAlarm(alarmId: Long): Result<Unit> = alarmRemoteDataSource.inactiveAlarmState(id = alarmId)
+    override suspend fun updateAlarmActivate(
+        id: Long,
+        isActive: Boolean,
+    ): Result<Unit> = alarmLocalDataSource.updateAlarmActivate(id, isActive)
 }

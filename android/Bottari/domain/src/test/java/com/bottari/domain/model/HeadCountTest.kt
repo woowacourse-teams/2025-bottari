@@ -1,6 +1,6 @@
 package com.bottari.domain.model
 
-import com.bottari.domain.model.team.HeadCount
+import com.bottari.domain.model.team.member.HeadCount
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.ints.shouldBeLessThan

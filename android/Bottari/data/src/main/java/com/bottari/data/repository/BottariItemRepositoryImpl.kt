@@ -1,37 +1,35 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.BottariItemMapper.toDomain
-import com.bottari.data.model.item.SaveBottariItemsRequest
-import com.bottari.data.source.remote.BottariItemRemoteDataSource
-import com.bottari.domain.model.bottari.ChecklistItem
+import com.bottari.data.model.local.bottari.ItemEntity
+import com.bottari.data.source.local.bottari.ItemLocalDataSource
+import com.bottari.domain.model.bottari.item.ChecklistItem
 import com.bottari.domain.repository.BottariItemRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class BottariItemRepositoryImpl(
-    private val bottariItemRemoteDataSource: BottariItemRemoteDataSource,
+class BottariItemRepositoryImpl @Inject constructor(
+    private val itemLocalDataSource: ItemLocalDataSource,
 ) : BottariItemRepository {
-    override suspend fun fetchChecklist(bottariId: Long): Result<List<ChecklistItem>> =
-        bottariItemRemoteDataSource
-            .fetchChecklist(bottariId)
-            .mapCatching { checklist -> checklist.map { bottariItem -> bottariItem.toDomain() } }
+    override fun fetchItems(bottariId: Long): Flow<List<ChecklistItem>> =
+        itemLocalDataSource
+            .fetchItems(bottariId)
+            .map { items -> items.map(ItemEntity::toDomain) }
 
-    override suspend fun uncheckBottariItem(bottariItemId: Long): Result<Unit> =
-        bottariItemRemoteDataSource.uncheckBottariItem(bottariItemId)
-
-    override suspend fun checkBottariItem(bottariItemId: Long): Result<Unit> = bottariItemRemoteDataSource.checkBottariItem(bottariItemId)
-
-    override suspend fun saveBottariItems(
+    override suspend fun saveItem(
         bottariId: Long,
-        deleteItemIds: List<Long>,
-        createItemNames: List<String>,
-    ): Result<Unit> =
-        bottariItemRemoteDataSource.saveBottariItems(
-            bottariId,
-            SaveBottariItemsRequest(
-                deleteItemIds = deleteItemIds,
-                createItemNames = createItemNames,
-            ),
-        )
+        itemName: String,
+    ): Result<Unit> {
+        val itemEntity = ItemEntity.from(bottariId, itemName)
+        return itemLocalDataSource.saveItem(itemEntity)
+    }
 
-    override suspend fun resetBottariItemCheckState(bottariId: Long): Result<Unit> =
-        bottariItemRemoteDataSource.resetBottariItemCheckState(bottariId)
+    override suspend fun deleteItem(id: Long): Result<Unit> = itemLocalDataSource.deleteItem(id)
+
+    override suspend fun updateCheckState(
+        id: Long,
+        isChecked: Boolean,
+    ): Result<Unit> = itemLocalDataSource.updateCheckState(id, isChecked)
+
+    override suspend fun resetCheckState(bottariId: Long): Result<Unit> = itemLocalDataSource.resetCheckState(bottariId)
 }

@@ -1,25 +1,47 @@
 package com.bottari.data.repository
 
-import com.bottari.data.mapper.BottariTemplateMapper.toDomain
-import com.bottari.data.model.template.CreateBottariTemplateRequest
+import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
+import com.bottari.data.model.remote.common.PageableRequest
 import com.bottari.data.source.remote.BottariTemplateRemoteDataSource
-import com.bottari.domain.model.template.BottariTemplate
+import com.bottari.domain.model.bottari.template.BottariTemplate
+import com.bottari.domain.model.common.Pageable
 import com.bottari.domain.repository.BottariTemplateRepository
+import javax.inject.Inject
 
-class BottariTemplateRepositoryImpl(
+class BottariTemplateRepositoryImpl @Inject constructor(
     private val bottariTemplateRemoteDataSource: BottariTemplateRemoteDataSource,
 ) : BottariTemplateRepository {
-    override suspend fun fetchBottariTemplates(searchWord: String?): Result<List<BottariTemplate>> =
+    override suspend fun searchTemplatesByTitle(
+        title: String,
+        pageable: Pageable<BottariTemplate>,
+    ): Result<Pageable<BottariTemplate>> =
         bottariTemplateRemoteDataSource
-            .fetchBottariTemplates(searchWord)
-            .mapCatching { response -> response.map { it.toDomain() } }
+            .searchTemplatesByTitle(title, PageableRequest.of(pageable))
+            .mapCatching { response -> response.toDomain { contents -> contents.toDomain() } }
+
+    override suspend fun searchTemplatesByHashtag(
+        hashtagId: Long,
+        pageable: Pageable<BottariTemplate>,
+    ): Result<Pageable<BottariTemplate>> =
+        bottariTemplateRemoteDataSource
+            .searchTemplatesByHashtag(hashtagId, PageableRequest.of(pageable))
+            .mapCatching { response -> response.toDomain { contents -> contents.toDomain() } }
 
     override suspend fun createBottariTemplate(
         title: String,
+        description: String,
         items: List<String>,
-    ): Result<Long?> =
-        bottariTemplateRemoteDataSource
-            .createBottariTemplate(CreateBottariTemplateRequest(items, title))
+        hashtag: List<String>,
+    ): Result<Long> {
+        val request =
+            BottariTemplateCreateRequest(
+                title = title,
+                description = description,
+                bottariTemplateItems = items,
+                hashtagNames = hashtag,
+            )
+        return bottariTemplateRemoteDataSource.createBottariTemplate(request)
+    }
 
     override suspend fun fetchBottariTemplate(bottariId: Long): Result<BottariTemplate> =
         bottariTemplateRemoteDataSource

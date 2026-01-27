@@ -1,6 +1,7 @@
 package com.bottari.presentation.util
 
 import android.Manifest
+import android.app.Activity
 import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
@@ -9,7 +10,6 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
 
 object PermissionUtil {
     val requiredPermissions: Array<String> by lazy {
@@ -43,13 +43,13 @@ object PermissionUtil {
         navigateToSettings(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, context)
     }
 
-    fun isPermanentlyDenied(fragment: Fragment): Boolean =
+    fun isPermanentlyDenied(activity: Activity): Boolean =
         requiredPermissions.any { permission ->
             ContextCompat.checkSelfPermission(
-                fragment.requireContext(),
+                activity,
                 permission,
             ) != PackageManager.PERMISSION_GRANTED &&
-                !fragment.shouldShowRequestPermissionRationale(permission)
+                !activity.shouldShowRequestPermissionRationale(permission)
         }
 
     private fun navigateToSettings(

@@ -1,0 +1,71 @@
+package com.bottari.presentation.compose.home.more
+
+import com.bottari.domain.usecase.member.CheckRegisteredMemberUseCase
+import com.bottari.domain.usecase.member.SaveMemberNicknameUseCase
+import com.bottari.logger.BottariLogger
+import com.bottari.logger.model.UiEventType
+import com.bottari.presentation.common.base.FlowBaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+
+@HiltViewModel
+class MoreViewModel @Inject constructor(
+    private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
+    private val saveMemberNicknameUseCase: SaveMemberNicknameUseCase,
+) : FlowBaseViewModel<MoreUiState, MoreUiEvent>(MoreUiState()) {
+    init {
+        fetchMemberInfo()
+    }
+
+    fun updateNickname(nickname: String) {
+        updateState { copy(editingNickname = nickname) }
+    }
+
+    fun saveNickname() {
+        if (currentState.isNicknameChanged.not()) return
+        if (currentState.isLoading) return
+
+        updateState { copy(isLoading = true) }
+        val editingNickname = currentState.editingNickname
+
+        launch {
+            saveMemberNicknameUseCase(editingNickname)
+                .onSuccess {
+                    updateState { copy(nickname = editingNickname) }
+                    emitEvent(MoreUiEvent.SaveMemberNicknameSuccess)
+                    logSaveNickname(editingNickname)
+                }.onFailure { error ->
+                    updateState { copy(editingNickname = this.nickname) }
+                    emitEvent(
+                        when (error) {
+                            is IllegalArgumentException -> MoreUiEvent.InvalidNicknameRule
+                            else -> MoreUiEvent.SaveMemberNicknameFailure
+                        },
+                    )
+                }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
+    }
+
+    private fun fetchMemberInfo() {
+        updateState { copy(isLoading = true) }
+
+        launch {
+            checkRegisteredMemberUseCase()
+                .onSuccess {
+                    updateState {
+                        copy(nickname = it.name.orEmpty(), editingNickname = it.name.orEmpty())
+                    }
+                }.onFailure { emitEvent(MoreUiEvent.FetchMemberInfoFailure) }
+        }.invokeOnCompletion { updateState { copy(isLoading = false) } }
+    }
+
+    private fun logSaveNickname(editingNickname: String) {
+        BottariLogger.ui(
+            UiEventType.NICKNAME_EDIT,
+            mapOf(
+                "old_nickname" to currentState.nickname,
+                "new_nickname" to editingNickname,
+            ),
+        )
+    }
+}

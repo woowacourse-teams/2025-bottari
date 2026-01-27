@@ -1,31 +1,37 @@
 package com.bottari.data.service
 
-import com.bottari.data.model.template.CreateBottariTemplateRequest
-import com.bottari.data.model.template.FetchBottariTemplateResponse
-import com.bottari.data.model.template.FetchMyBottariTemplatesResponse
+import com.bottari.data.model.remote.bottari.template.BottariTemplateCreateRequest
+import com.bottari.data.model.remote.bottari.template.BottariTemplateCursorFetchResponse
+import com.bottari.data.model.remote.bottari.template.BottariTemplateFetchResponse
+import com.bottari.data.model.remote.common.PageableResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 interface BottariTemplateService {
-    @GET("/templates")
-    suspend fun fetchBottariTemplates(
-        @Query("query") searchWord: String?,
-    ): Response<List<FetchBottariTemplateResponse>>
+    @GET("/templates/title")
+    suspend fun searchTemplatesByTitle(
+        @QueryMap params: Map<String, String>,
+    ): Response<PageableResponse<BottariTemplateCursorFetchResponse>>
+
+    @GET("/templates/hashtag")
+    suspend fun searchTemplatesByHashtag(
+        @QueryMap params: Map<String, String>,
+    ): Response<PageableResponse<BottariTemplateCursorFetchResponse>>
 
     @POST("/templates")
     suspend fun createBottariTemplate(
-        @Body request: CreateBottariTemplateRequest,
+        @Body request: BottariTemplateCreateRequest,
     ): Response<Unit>
 
     @GET("/templates/{bottariId}")
     suspend fun fetchBottariTemplateDetail(
         @Path("bottariId") bottariId: Long,
-    ): Response<FetchBottariTemplateResponse>
+    ): Response<BottariTemplateFetchResponse>
 
     @POST("/templates/{bottariId}/create-bottari")
     suspend fun takeBottariTemplate(
@@ -33,7 +39,7 @@ interface BottariTemplateService {
     ): Response<Unit>
 
     @GET("/templates/me")
-    suspend fun fetchMyBottariTemplates(): Response<List<FetchMyBottariTemplatesResponse>>
+    suspend fun fetchMyBottariTemplates(): Response<List<BottariTemplateFetchResponse>>
 
     @DELETE("/templates/{id}")
     suspend fun deleteMyBottariTemplate(

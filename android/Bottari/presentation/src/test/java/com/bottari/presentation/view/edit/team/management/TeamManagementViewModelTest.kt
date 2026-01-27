@@ -6,6 +6,7 @@ import com.bottari.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.domain.usecase.team.FetchTeamMembersUseCase
 import com.bottari.presentation.CoroutinesTestExtension
 import com.bottari.presentation.InstantTaskExecutorExtension
+import com.bottari.presentation.compose.edit.team.member.TeamManagementViewModel
 import com.bottari.presentation.fixture.TEAM_MEMBERS_FIXTURE
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.shouldBe
@@ -32,29 +33,27 @@ class TeamManagementViewModelTest {
         fetchTeamMembersUseCase = mockk<FetchTeamMembersUseCase>()
         connectTeamEventUseCase = mockk<ConnectTeamEventUseCase>()
         disconnectTeamEventUseCase = mockk<DisconnectTeamEventUseCase>()
-        stateHandle = SavedStateHandle(mapOf("KEY_TEAM_BOTTARI_ID" to 1L))
-        viewModel =
-            TeamManagementViewModel(
-                stateHandle,
-                fetchTeamMembersUseCase,
-                connectTeamEventUseCase,
-                disconnectTeamEventUseCase,
-            )
+        stateHandle = SavedStateHandle(mapOf("KEY_BOTTARI_ID" to 1L, "KEY_TEAM_BOTTARI_NAME" to "테스트"))
     }
 
     @DisplayName("팀원 정보를 조회한다")
     @Test
     fun fetchTeamMembersTest() =
         runTest {
-            // given
+            // given + when
             val id = 1L
             coEvery { fetchTeamMembersUseCase(id) } returns Result.success(TEAM_MEMBERS_FIXTURE)
 
-            // when
-            viewModel.fetchTeamMembers()
+            viewModel =
+                TeamManagementViewModel(
+                    stateHandle,
+                    fetchTeamMembersUseCase,
+                    connectTeamEventUseCase,
+                    disconnectTeamEventUseCase,
+                )
 
             // then
-            assertSoftly(viewModel.uiState.value!!) {
+            assertSoftly(viewModel.uiState.value) {
                 inviteCode shouldBe "INVITE123"
                 teamMemberHeadCount shouldBe 3
                 maxHeadCount shouldBe 10

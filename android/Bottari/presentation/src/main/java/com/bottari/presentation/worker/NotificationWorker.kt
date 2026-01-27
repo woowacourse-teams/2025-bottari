@@ -1,25 +1,26 @@
 package com.bottari.presentation.worker
 
 import android.content.Context
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.bottari.di.UseCaseProvider
 import com.bottari.domain.model.notification.Notification
-import com.bottari.domain.usecase.notification.GetNotificationsUseCase
+import com.bottari.domain.usecase.notification.FetchNotificationsUseCase
 import com.bottari.logger.BottariLogger
-import com.bottari.presentation.mapper.NotificationMapper.toUiModel
 import com.bottari.presentation.util.AlarmScheduler
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 
-class NotificationWorker(
-    context: Context,
-    workerParams: WorkerParameters,
+@HiltWorker
+class NotificationWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted workerParams: WorkerParameters,
+    private val fetchNotificationsUseCase: FetchNotificationsUseCase,
+    private val alarmScheduler: AlarmScheduler,
 ) : CoroutineWorker(context, workerParams) {
-    private val getNotificationsUseCase: GetNotificationsUseCase by lazy { UseCaseProvider.getNotificationsUseCase }
-    private val scheduler: AlarmScheduler by lazy { AlarmScheduler() }
-
     override suspend fun doWork(): Result =
-        getNotificationsUseCase()
-            .mapCatching(::scheduleActiveAlarms)
+        fetchNotificationsUseCase()
+            .mapCatching(::scheduleAlarms)
             .fold(
                 onSuccess = { Result.success() },
                 onFailure = { exception ->
@@ -28,12 +29,5 @@ class NotificationWorker(
                 },
             )
 
-    private fun scheduleActiveAlarms(notifications: List<Notification>) =
-        notifications.forEach { notification ->
-            if (notification.alarm.isActive) {
-                scheduler.scheduleAlarm(
-                    notification.toUiModel(),
-                )
-            }
-        }
+    private fun scheduleAlarms(notifications: List<Notification>) = notifications.forEach(alarmScheduler::scheduleAlarm)
 }
