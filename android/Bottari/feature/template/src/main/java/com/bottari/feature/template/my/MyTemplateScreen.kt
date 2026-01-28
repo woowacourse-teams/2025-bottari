@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -20,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.OfflineContent
 import com.bottari.core.ui.model.template.BottariTemplateHashtagUiModel
 import com.bottari.core.ui.model.template.BottariTemplateUiModel
 import com.bottari.feature.template.component.CreateTemplateFAB
@@ -36,7 +38,8 @@ fun MyTemplateScreen(
     viewModel: MyTemplateViewModel = hiltViewModel(),
 ) {
     val listState = rememberLazyListState()
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val isConnected = viewModel.isConnected.collectAsStateWithLifecycle().value
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
@@ -47,15 +50,26 @@ fun MyTemplateScreen(
         }
     }
 
-    MyTemplateScreen(
-        uiState = uiState.value,
-        listState = listState,
-        onClickDetail = onClickDetail,
-        onClickDelete = viewModel::deleteTemplate,
-        onClickCreate = onClickCreate,
-        onRefresh = viewModel::fetchMyTemplates,
-        modifier = modifier,
-    )
+    LaunchedEffect(isConnected) {
+        viewModel.fetchMyTemplates()
+    }
+
+    if (isConnected) {
+        MyTemplateScreen(
+            uiState = uiState,
+            listState = listState,
+            onClickDetail = onClickDetail,
+            onClickDelete = viewModel::deleteTemplate,
+            onClickCreate = onClickCreate,
+            onRefresh = viewModel::fetchMyTemplates,
+            modifier = modifier,
+        )
+    } else {
+        OfflineContent(
+            onRetryClick = viewModel::fetchMyTemplates,
+            modifier = modifier.fillMaxSize(),
+        )
+    }
 }
 
 @Composable
