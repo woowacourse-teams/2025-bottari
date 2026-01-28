@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bottari.bottari.designsystem.component.BottariInputChip
 import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.core.ui.component.BottariHashChipSearchBar
+import com.bottari.core.ui.component.OfflineContent
 import com.bottari.core.ui.extension.rememberBlockParentAfterChild
 import com.bottari.core.ui.extension.rememberScrolledToEnd
 import com.bottari.core.ui.extension.startEndFadingEdge
@@ -47,7 +48,8 @@ fun MainTemplateScreen(
     modifier: Modifier = Modifier,
     viewModel: MainTemplateViewModel = hiltViewModel(),
 ) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val isConnected = viewModel.isConnected.collectAsStateWithLifecycle().value
     val listState = rememberLazyListState()
     val isScrolledToEnd by listState.rememberScrolledToEnd(5)
     val isScrolledToTop by remember(listState) { derivedStateOf { listState.firstVisibleItemIndex == 0 } }
@@ -70,17 +72,28 @@ fun MainTemplateScreen(
             .collect { viewModel.loadNextPage() }
     }
 
-    MainTemplateScreen(
-        uiState = uiState.value,
-        listState = listState,
-        showSearchBar = isScrolledToTop,
-        onQueryChange = viewModel::updateSearchWord,
-        onChipChange = viewModel::updateChip,
-        onRefresh = viewModel::refresh,
-        onClickDetail = onClickDetail,
-        onClickBookmark = viewModel::toggleBookmark,
-        modifier = modifier.fillMaxSize(),
-    )
+    LaunchedEffect(isConnected) {
+        viewModel.refresh()
+    }
+
+    if (isConnected) {
+        MainTemplateScreen(
+            uiState = uiState,
+            listState = listState,
+            showSearchBar = isScrolledToTop,
+            onQueryChange = viewModel::updateSearchWord,
+            onChipChange = viewModel::updateChip,
+            onRefresh = viewModel::refresh,
+            onClickDetail = onClickDetail,
+            onClickBookmark = viewModel::toggleBookmark,
+            modifier = modifier.fillMaxSize(),
+        )
+    } else {
+        OfflineContent(
+            onRetryClick = viewModel::refresh,
+            modifier = modifier.fillMaxSize(),
+        )
+    }
 }
 
 @Composable
