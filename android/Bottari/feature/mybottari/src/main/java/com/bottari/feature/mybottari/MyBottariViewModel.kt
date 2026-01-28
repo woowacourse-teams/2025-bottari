@@ -57,14 +57,7 @@ class MyBottariViewModel @Inject constructor(
                 }.onFailure {
                     emitEvent(MyBottariUiEvent.FetchBottariFailure)
                 }
-        }.invokeOnCompletion {
-            updateState {
-                MyBottariUiState(
-                    isLoading = false,
-                    isTeamFetched = true,
-                )
-            }
-        }
+        }.invokeOnCompletion { updateState { copy(isLoading = false, isTeamFetched = true) } }
     }
 
     fun deletePersonalBottari(bottariId: Long) {
@@ -157,7 +150,7 @@ class MyBottariViewModel @Inject constructor(
             .catch { emitEvent(MyBottariUiEvent.FetchBottariFailure) }
             .onEach { bottaries ->
                 updateState {
-                    MyBottariUiState(
+                    copy(
                         personalBottaries = bottaries.map(BottariUiModel::fromPersonalBottari),
                         isPersonalFetched = true,
                     )
