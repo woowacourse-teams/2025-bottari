@@ -14,7 +14,8 @@ dependencies {
     implementation(projects.feature.personalEdit)
     implementation(projects.feature.teamChecklist)
     implementation(projects.feature.teamEdit)
-    implementation(projects.feature.template)
+    implementation(projects.feature.template.api)
+    implementation(projects.feature.template.impl)
     implementation(projects.feature.templateCreate)
     implementation(projects.feature.templateDetail)
 }
