@@ -23,6 +23,9 @@ public enum ErrorCode {
     BOTTARI_NOT_FOUND(HttpStatus.NOT_FOUND, "보따리를 찾을 수 없습니다."),
     BOTTARI_NOT_OWNED(HttpStatus.FORBIDDEN, "해당 보따리에 접근할 수 있는 권한이 없습니다."),
 
+    // ===== BOTTARI BACKUP 관련 =====
+    BOTTARI_BACKUP_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "보따리 백업에 실패했습니다."),
+
     // ===== BOTTARI TITLE 관련 =====
     BOTTARI_TITLE_UNCHANGED(HttpStatus.BAD_REQUEST, "기존의 보따리 이름과 동일한 이름으로는 변경할 수 없습니다."),
     BOTTARI_TITLE_BLANK(HttpStatus.BAD_REQUEST, "보따리 제목은 공백일 수 없습니다."),
