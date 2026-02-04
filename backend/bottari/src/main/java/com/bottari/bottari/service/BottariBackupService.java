@@ -1,4 +1,4 @@
-package com.bottari.bottari.controller;
+package com.bottari.bottari.service;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;

@@ -1,5 +1,6 @@
 package com.bottari.bottari.controller;
 
+import com.bottari.bottari.service.BottariBackupService;
 import com.bottari.config.MemberIdentifier;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class BottariBackupController implements BottariBackupApiDocs {
     private final BottariBackupService bottariBackupService;
 
     @GetMapping("/load")
+    @Override
     public ResponseEntity<Resource> load(
             @MemberIdentifier final String ssaid
     ) {
@@ -30,6 +32,7 @@ public class BottariBackupController implements BottariBackupApiDocs {
     }
 
     @PostMapping(value = "/backup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Override
     public ResponseEntity<Map<?, ?>> backup(
             @RequestPart("file") final MultipartFile file,
             @MemberIdentifier final String ssaid
