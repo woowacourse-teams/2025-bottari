@@ -1,5 +1,7 @@
 package com.bottari.bottari.controller;
 
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import com.bottari.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,14 @@ public class BottariBackupService {
             final String ssaid,
             final MultipartFile file
     ) {
-        return s3Service.upload(
-                file,
-                BOTTARI_BACKUP_PREFIX,
-                "ssaid" + "_" + ssaid
-        );
+        try {
+            return s3Service.upload(
+                    file,
+                    BOTTARI_BACKUP_PREFIX,
+                    "ssaid" + "_" + ssaid
+            );
+        } catch (final BusinessException e) {
+            throw new BusinessException(ErrorCode.BOTTARI_BACKUP_FAILED, e.getDetailCause());
+        }
     }
 }

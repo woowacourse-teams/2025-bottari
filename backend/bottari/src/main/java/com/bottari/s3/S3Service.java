@@ -32,7 +32,7 @@ public class S3Service {
             s3Operations.upload(bucket, key, inputStream);
         } catch (final IOException e) {
             log.warn("S3 upload failed. bucket={}, key={}", bucket, key, e);
-            throw new BusinessException(ErrorCode.BOTTARI_BACKUP_FAILED, "bucket=" + bucket + ", key=" + key);
+            throw new BusinessException(ErrorCode.S3_UPLOAD_FAILED, "bucket=" + bucket + ", key=" + key);
         }
         log.info("S3 upload complete. bucket={}, key={}", bucket, key);
 
