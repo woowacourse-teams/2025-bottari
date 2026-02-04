@@ -8,11 +8,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.bottari.bottari.dto.BackupBottariResponse;
 import com.bottari.bottari.service.BottariBackupService;
 import com.bottari.log.LogFormatter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,9 +68,10 @@ class BottariBackupControllerTest {
                 "application/zip",
                 "backup-content".getBytes()
         );
+        final BackupBottariResponse response = new BackupBottariResponse("bottari/1/backup.csv");
 
         given(bottariBackupService.backup(eq(ssaid), any(MultipartFile.class)))
-                .willReturn("bottari/1/backup.csv");
+                .willReturn(response);
 
         // when & then
 
@@ -79,10 +80,6 @@ class BottariBackupControllerTest {
                         .header("ssaid", ssaid)
                         .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
                 .andExpect(status().isOk())
-                .andExpect(content().json(
-                        objectMapper.writeValueAsString(
-                                Map.of("key", "bottari/1/backup.csv")
-                        )
-                ));
+                .andExpect(content().json(objectMapper.writeValueAsString(response)));
     }
 }

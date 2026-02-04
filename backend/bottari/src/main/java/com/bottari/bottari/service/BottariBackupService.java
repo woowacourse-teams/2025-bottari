@@ -1,5 +1,6 @@
 package com.bottari.bottari.service;
 
+import com.bottari.bottari.dto.BackupBottariResponse;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.member.service.MemberService;
@@ -30,17 +31,19 @@ public class BottariBackupService {
         }
     }
 
-    public String backup(
+    public BackupBottariResponse backup(
             final String ssaid,
             final MultipartFile file
     ) {
         verifySsaid(ssaid);
         try {
-            return s3Service.upload(
+            final String key = s3Service.upload(
                     file,
                     BOTTARI_BACKUP_PREFIX,
                     getKeyName(ssaid)
             );
+
+            return new BackupBottariResponse(key);
         } catch (final Exception e) {
             throw new BusinessException(ErrorCode.BOTTARI_BACKUP_FAILED, e.getMessage());
         }

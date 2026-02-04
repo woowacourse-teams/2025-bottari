@@ -1,8 +1,8 @@
 package com.bottari.bottari.controller;
 
+import com.bottari.bottari.dto.BackupBottariResponse;
 import com.bottari.bottari.service.BottariBackupService;
 import com.bottari.config.MemberIdentifier;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -33,12 +33,12 @@ public class BottariBackupController implements BottariBackupApiDocs {
 
     @PostMapping(value = "/backup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Override
-    public ResponseEntity<Map<?, ?>> backup(
+    public ResponseEntity<BackupBottariResponse> backup(
             @RequestPart("file") final MultipartFile file,
             @MemberIdentifier final String ssaid
     ) {
-        final String key = bottariBackupService.backup(ssaid, file);
+        final BackupBottariResponse response = bottariBackupService.backup(ssaid, file);
 
-        return ResponseEntity.ok(Map.of("key", key));
+        return ResponseEntity.ok(response);
     }
 }

@@ -1,5 +1,6 @@
 package com.bottari.bottari.controller;
 
+import com.bottari.bottari.dto.BackupBottariResponse;
 import com.bottari.error.ApiErrorCodes;
 import com.bottari.error.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -7,7 +8,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Map;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,7 +33,7 @@ public interface BottariBackupApiDocs {
     @ApiErrorCodes({
             ErrorCode.BOTTARI_BACKUP_FAILED
     })
-    ResponseEntity<Map<?, ?>> backup(
+    ResponseEntity<BackupBottariResponse> backup(
             final MultipartFile file,
             @Parameter(hidden = true) final String ssaid
     );
