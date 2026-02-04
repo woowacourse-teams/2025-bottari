@@ -46,3 +46,7 @@ management:
 firebase:
   service:
     key-path: ${FIREBASE_SERVICE_ACCOUNT_JSON}
+
+app:
+  s3:
+    bucket: bottari-prod
