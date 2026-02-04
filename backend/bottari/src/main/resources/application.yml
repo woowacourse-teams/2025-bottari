@@ -44,6 +44,12 @@ spring:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
+      credentials:
+        instance-profile: false
 firebase:
   service:
     key-path: ${FIREBASE_SERVICE_ACCOUNT_JSON}
