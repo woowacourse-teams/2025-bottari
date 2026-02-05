@@ -21,7 +21,7 @@ public class BottariBackupController implements BottariBackupApiDocs {
 
     private final BottariBackupService bottariBackupService;
 
-    @GetMapping("/load")
+    @GetMapping("/backup")
     @Override
     public ResponseEntity<Resource> load(
             @MemberIdentifier final String ssaid

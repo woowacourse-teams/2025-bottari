@@ -51,7 +51,7 @@ class BottariBackupControllerTest {
                 .willReturn(resource);
 
         // when & then
-        mockMvc.perform(get("/bottaries/load")
+        mockMvc.perform(get("/bottaries/backup")
                         .header("ssaid", ssaid))
                 .andExpect(status().isOk())
                 .andExpect(content().bytes(bytes));
