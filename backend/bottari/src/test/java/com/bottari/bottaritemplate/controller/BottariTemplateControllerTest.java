@@ -18,7 +18,6 @@ import com.bottari.bottaritemplate.dto.ReadBottariTemplateResponse.HashtagRespon
 import com.bottari.bottaritemplate.dto.ReadNextBottariTemplateResponse;
 import com.bottari.bottaritemplate.service.BottariTemplateService;
 import com.bottari.log.LogFormatter;
-import com.bottari.member.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.util.List;
