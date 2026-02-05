@@ -22,7 +22,6 @@ spring:
         username: ${READ_DATABASE_USERNAME}
         password: ${READ_DATABASE_PASSWORD}
         driver-class-name: com.mysql.cj.jdbc.Driver
-
   sql:
     init:
       mode: never
@@ -32,6 +31,13 @@ spring:
         static: ap-northeast-2
       credentials:
         instance-profile: true
+  servlet:
+    multipart:
+      enabled: true # 멀티파트 업로드 지원여부 (default: true)
+      file-size-threshold: 0B # 파일을 디스크에 저장하지 않고 메모리에 저장하는 최소 크기 (default: 0B)
+      max-file-size: 100MB # 한개 파일의 최대 사이즈 (default: 1MB)
+      max-request-size: 100MB # 한개 요청의 최대 사이즈 (default: 10MB)
+
 management:
   metrics:
     enable:
