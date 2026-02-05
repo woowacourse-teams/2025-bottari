@@ -12,7 +12,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @RequiredArgsConstructor
 public class RedisConfig {
 
-    private final RedisAsyncProperties redisAsyncProperties;
+    private final RedisTaskExecutorProperties redisTaskExecutorProperties;
 
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(
@@ -31,20 +31,20 @@ public class RedisConfig {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 
         // 기본 스레드 수 (항상 유지되는 스레드)
-        executor.setCorePoolSize(redisAsyncProperties.getCorePoolSize());
+        executor.setCorePoolSize(redisTaskExecutorProperties.getCorePoolSize());
 
         // 최대 스레드 수 (부하가 높을 때 증가)
-        executor.setMaxPoolSize(redisAsyncProperties.getMaxPoolSize());
+        executor.setMaxPoolSize(redisTaskExecutorProperties.getMaxPoolSize());
 
         // 큐 용량 (스레드가 모두 사용 중일 때 대기)
-        executor.setQueueCapacity(redisAsyncProperties.getQueueCapacity());
+        executor.setQueueCapacity(redisTaskExecutorProperties.getQueueCapacity());
 
         // 스레드 이름 prefix
-        executor.setThreadNamePrefix(redisAsyncProperties.getThreadNamePrefix());
+        executor.setThreadNamePrefix(redisTaskExecutorProperties.getThreadNamePrefix());
 
         // 종료 대기 시간
-        executor.setWaitForTasksToCompleteOnShutdown(redisAsyncProperties.isWaitForTasksToCompleteOnShutdown());
-        executor.setAwaitTerminationSeconds(redisAsyncProperties.getAwaitTerminationSeconds());
+        executor.setWaitForTasksToCompleteOnShutdown(redisTaskExecutorProperties.isWaitForTasksToCompleteOnShutdown());
+        executor.setAwaitTerminationSeconds(redisTaskExecutorProperties.getAwaitTerminationSeconds());
 
         executor.setTaskDecorator(new ObservabilityTaskDecorator());
 

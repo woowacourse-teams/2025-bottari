@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "sse.async")
 @Getter
 @Setter
-public class RedisAsyncProperties {
+public class RedisTaskExecutorProperties {
 
     /**
      * 기본 스레드 수 (항상 유지되는 스레드)
