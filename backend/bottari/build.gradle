@@ -51,6 +51,7 @@ dependencies {
     // AWS S3
     implementation(enforcedPlatform("io.awspring.cloud:spring-cloud-aws-dependencies:3.4.0"))
     implementation("io.awspring.cloud:spring-cloud-aws-starter-s3")
+    implementation("software.amazon.awssdk:apache-client:2.41.21")
 
     implementation 'io.opentelemetry:opentelemetry-api:1.45.0'
     implementation 'io.opentelemetry:opentelemetry-context:1.45.0'
