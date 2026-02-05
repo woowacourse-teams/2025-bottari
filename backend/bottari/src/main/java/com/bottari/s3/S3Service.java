@@ -22,6 +22,22 @@ public class S3Service {
     @Value("${app.s3.bucket}")
     private String bucket;
 
+    public Resource download(
+            final String keyPrefix,
+            final String keyName
+    ) {
+        final String key = getS3Key(keyPrefix, keyName);
+        try {
+            final Resource resource = s3Operations.download(bucket, key);
+            log.info("S3 download complete. bucket={}, key={}", bucket, key);
+
+            return resource;
+        } catch (final Exception e) {
+            log.warn("S3 download failed. bucket={}, key={}", bucket, key, e);
+            throw new BusinessException(ErrorCode.S3_DOWNLOAD_FAILED, "bucket=" + bucket + ", key=" + key);
+        }
+    }
+
     public String upload(
             final MultipartFile file,
             final String keyPrefix,
@@ -37,22 +53,6 @@ public class S3Service {
         log.info("S3 upload complete. bucket={}, key={}", bucket, key);
 
         return key;
-    }
-
-    public Resource download(
-            final String keyPrefix,
-            final String keyName
-    ) {
-        final String key = getS3Key(keyPrefix, keyName);
-        try {
-            final Resource resource = s3Operations.download(bucket, key);
-            log.info("S3 download complete. bucket={}, key={}", bucket, key);
-
-            return resource;
-        } catch (final Exception e) {
-            log.warn("S3 download failed. bucket={}, key={}", bucket, key, e);
-            throw new BusinessException(ErrorCode.S3_DOWNLOAD_FAILED, "bucket=" + bucket + ", key=" + key);
-        }
     }
 
     private String getS3Key(
