@@ -44,7 +44,7 @@ public class S3Service {
             final String keyName
     ) {
         final String key = getS3Key(keyPrefix, keyName);
-        try (InputStream inputStream = file.getInputStream()) {
+        try (final InputStream inputStream = file.getInputStream()) {
             s3Operations.upload(bucket, key, inputStream);
         } catch (final IOException e) {
             log.warn("S3 upload failed. bucket={}, key={}", bucket, key, e);
