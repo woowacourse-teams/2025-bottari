@@ -50,3 +50,8 @@ firebase:
   service:
     key-path: ${FIREBASE_SERVICE_ACCOUNT_JSON}
 
+bottari:
+  openapi:
+    server-url: https://dev.bottari.app
+    description: Dev
+
