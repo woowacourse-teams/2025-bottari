@@ -3,6 +3,7 @@ package com.bottari.push;
 import com.bottari.push.connection.ConnectionChannels;
 import com.bottari.push.message.PushMessage;
 import com.bottari.push.notification.NotificationChannels;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,12 +16,13 @@ public class PushManager {
 
     private final NotificationChannels notificationChannels;
     private final ConnectionChannels connectionChannels;
+    private final ScheduledChannels scheduledChannels;
 
     public StartChain message(final PushMessage message) {
         return new StartChain(message);
     }
 
-    public final class StartChain {
+    public class StartChain {
 
         private final PushMessage message;
         private final List<Long> memberIds = new ArrayList<>();
@@ -37,6 +39,10 @@ public class PushManager {
         public StartChain to(final Collection<Long> memberIds) {
             this.memberIds.addAll(memberIds);
             return this;
+        }
+
+        public ScheduledChannelChain scheduledAt(final LocalDateTime scheduledAt) {
+            return new ScheduledChannelChain(message, memberIds, scheduledAt);
         }
 
         public ActionStep unicast() {
@@ -84,6 +90,7 @@ public class PushManager {
             actions.add(() -> channelExecutor.executeConnection(message, memberIds, channelType));
             return this;
         }
+
         @Override
         public ActionOrSendStep viaNotification() {
             actions.add(() -> channelExecutor.executeNotification(message, memberIds));
@@ -219,6 +226,55 @@ public class PushManager {
         @Override
         public void executeAsync(final List<Runnable> actions) {
             throw new UnsupportedOperationException();
+        }
+    }
+
+    public class ScheduledChannelChain {
+
+        private final PushMessage message;
+        private final List<Long> memberIds = new ArrayList<>();
+        private final LocalDateTime sendAt;
+
+        public ScheduledChannelChain(
+                final PushMessage message,
+                final List<Long> memberIds,
+                final LocalDateTime sendAt
+        ) {
+            this.message = message;
+            this.memberIds.addAll(memberIds);
+            this.sendAt = sendAt;
+        }
+
+        public ScheduledChain via(final ChannelType channelType) {
+            return new ScheduledChain(message, channelType, memberIds, sendAt);
+        }
+    }
+
+    public class ScheduledChain {
+
+        private final PushMessage message;
+        private final ChannelType channelType;
+        private final List<Long> memberIds;
+        private final LocalDateTime sendAt;
+
+        public ScheduledChain(
+                final PushMessage message,
+                final ChannelType channelType,
+                final List<Long> memberIds,
+                final LocalDateTime sendAt
+        ) {
+            this.message = message;
+            this.channelType = channelType;
+            this.memberIds = memberIds;
+            this.sendAt = sendAt;
+        }
+
+        public void unicast() {
+            scheduledChannels.unicast(message, channelType, memberIds.getFirst(), sendAt);
+        }
+
+        public void multicast() {
+            scheduledChannels.multicast(message, channelType, memberIds, sendAt);
         }
     }
 }
