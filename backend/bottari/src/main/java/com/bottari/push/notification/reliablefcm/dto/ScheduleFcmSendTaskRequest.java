@@ -1,4 +1,4 @@
-package com.bottari.push.notification.reliablefcm;
+package com.bottari.push.notification.reliablefcm.dto;
 
 import com.bottari.push.message.PushMessage;
 import java.time.LocalDateTime;

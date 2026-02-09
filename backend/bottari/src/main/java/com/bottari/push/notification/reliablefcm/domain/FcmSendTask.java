@@ -1,4 +1,4 @@
-package com.bottari.push.notification.reliablefcm;
+package com.bottari.push.notification.reliablefcm.domain;
 
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;

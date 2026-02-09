@@ -1,4 +1,4 @@
-package com.bottari.push.notification.reliablefcm;
+package com.bottari.push.notification.reliablefcm.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

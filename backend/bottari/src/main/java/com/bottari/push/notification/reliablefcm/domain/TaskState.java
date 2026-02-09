@@ -1,4 +1,4 @@
-package com.bottari.push.notification.reliablefcm;
+package com.bottari.push.notification.reliablefcm.domain;
 
 public enum TaskState {
 
