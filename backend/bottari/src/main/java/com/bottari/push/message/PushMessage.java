@@ -1,5 +1,7 @@
 package com.bottari.push.message;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import lombok.Getter;
 
@@ -31,5 +33,18 @@ public class PushMessage {
         this.event = event;
         this.data = data;
         this.publishedAt = LocalDateTime.now();
+    }
+
+    @JsonCreator
+    public PushMessage(
+            @JsonProperty("resource") final String resource,
+            @JsonProperty("event") final String event,
+            @JsonProperty("data") final Object data,
+            @JsonProperty("publishedAt") final LocalDateTime publishedAt
+    ) {
+        this.resource = resource;
+        this.event = event;
+        this.data = data;
+        this.publishedAt = publishedAt;
     }
 }
