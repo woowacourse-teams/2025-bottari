@@ -21,4 +21,15 @@ public class PushMessage {
         this.data = data;
         this.publishedAt = LocalDateTime.now();
     }
+
+    public PushMessage(
+            final String resource,
+            final String event,
+            final Object data
+    ) {
+        this.resource = resource;
+        this.event = event;
+        this.data = data;
+        this.publishedAt = LocalDateTime.now();
+    }
 }

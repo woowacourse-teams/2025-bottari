@@ -116,14 +116,17 @@ public enum ErrorCode {
     FCM_INVALID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰으로 인해 FCM 메시지 전송을 실패하였습니다."),
     FCM_MESSAGE_CONVERT_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 메시지 변환을 실패하였습니다."),
 
-    // ===== SSE CONNECTION 관련 =====
+    // ===== Reliable FCM 관련 =====
+    FCM_SEND_TASK_ALREADY_FINISHED(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업이 이미 완료되었습니다."),
+    FCM_SEND_TASK_SAME_STATE(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업이 이미 동일한 상태로 표시되어 있습니다."),
+
+    // ===== SSE CONNECTION 관련 =====,
     SSE_CONNECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결에 실패했습니다."),
 
-    // ===== 기타 =====
+    // ===== 기타 =====,
     DATE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 날짜 형식입니다."),
     NUMBER_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 숫자 형식입니다."),
-    INVALID_TOPIC_NAME(HttpStatus.INTERNAL_SERVER_ERROR, "올바르지 않은 토픽 이름입니다."),
-    ;
+    INVALID_TOPIC_NAME(HttpStatus.INTERNAL_SERVER_ERROR, "올바르지 않은 토픽 이름입니다.");
 
     private final HttpStatus status;
     private final String message;
