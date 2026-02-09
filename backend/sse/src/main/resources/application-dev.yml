@@ -21,5 +21,6 @@ spring:
 
 bottari:
   openapi:
-    server-url: https://dev.bottari.app
-    description: Dev
+    server:
+      url: https://dev.bottari.app
+      description: Dev

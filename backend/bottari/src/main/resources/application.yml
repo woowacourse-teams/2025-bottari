@@ -50,5 +50,6 @@ firebase:
 
 bottari:
   openapi:
-    server-url: http://localhost:8080
-    description: Local
+    server:
+      url: http://localhost:8080
+      description: Local

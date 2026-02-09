@@ -43,5 +43,6 @@ firebase:
 
 bottari:
   openapi:
-    server-url: https://bottari.app
-    description: Prod
+    server:
+      url: https://bottari.app
+      description: Prod
