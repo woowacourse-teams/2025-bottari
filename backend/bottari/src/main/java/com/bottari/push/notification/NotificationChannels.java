@@ -36,6 +36,17 @@ public class NotificationChannels {
         }
     }
 
+    public void unicast(
+            final PushMessage pushMessage,
+            final ChannelType channelType,
+            final Long memberId
+    ) {
+        final NotificationChannel channel = notificationChannels.get(channelType);
+        if (channel != null) {
+            channel.unicast(pushMessage, memberId);
+        }
+    }
+
     public void multicast(
             final PushMessage pushMessage,
             final List<Long> memberIds
@@ -46,6 +57,17 @@ public class NotificationChannels {
             if (channel != null) {
                 channel.multicast(pushMessage, channelByMembers.get(channelType));
             }
+        }
+    }
+
+    public void multicast(
+            final PushMessage pushMessage,
+            final ChannelType channelType,
+            final List<Long> memberIds
+    ) {
+        final NotificationChannel channel = notificationChannels.get(channelType);
+        if (channel != null) {
+            channel.multicast(pushMessage, memberIds);
         }
     }
 }

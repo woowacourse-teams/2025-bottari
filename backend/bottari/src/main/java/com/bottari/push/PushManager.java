@@ -55,6 +55,7 @@ public class PushManager {
     public interface ActionStep {
         ActionOrSendStep viaConnection(final ChannelType channelType);
         ActionOrSendStep viaNotification();
+        ActionOrSendStep viaNotification(final ChannelType channelType);
     }
 
     public interface ActionOrSendStep extends ActionStep {
@@ -90,6 +91,12 @@ public class PushManager {
         }
 
         @Override
+        public ActionOrSendStep viaNotification(final ChannelType channelType) {
+            actions.add(() -> channelExecutor.executeNotification(message, memberIds, channelType));
+            return this;
+        }
+
+        @Override
         public void send() {
             new ChainActionsExecutor().execute(actions);
         }
@@ -106,6 +113,12 @@ public class PushManager {
         void executeNotification(
                 final PushMessage message,
                 final List<Long> memberIds
+        );
+
+        void executeNotification(
+                final PushMessage message,
+                final List<Long> memberIds,
+                final ChannelType channelType
         );
     }
 
@@ -127,6 +140,15 @@ public class PushManager {
         ) {
             notificationChannels.unicast(message, memberIds.getFirst());
         }
+
+        @Override
+        public void executeNotification(
+                final PushMessage message,
+                final List<Long> memberIds,
+                final ChannelType channelType
+        ) {
+            notificationChannels.unicast(message, channelType, memberIds.getFirst());
+        }
     }
 
     public final class MulticastExecutor implements ChannelExecutor {
@@ -147,6 +169,15 @@ public class PushManager {
         ) {
             notificationChannels.multicast(message, memberIds);
         }
+
+        @Override
+        public void executeNotification(
+                final PushMessage message,
+                final List<Long> memberIds,
+                final ChannelType channelType
+        ) {
+            notificationChannels.multicast(message, channelType, memberIds);
+        }
     }
 
     public final class BroadcastExecutor implements ChannelExecutor {
@@ -164,6 +195,15 @@ public class PushManager {
         public void executeNotification(
                 final PushMessage message,
                 final List<Long> memberIds
+        ) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void executeNotification(
+                final PushMessage message,
+                final List<Long> memberIds,
+                final ChannelType channelType
         ) {
             throw new UnsupportedOperationException();
         }
