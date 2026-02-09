@@ -40,3 +40,9 @@ management:
 firebase:
   service:
     key-path: ${FIREBASE_SERVICE_ACCOUNT_JSON}
+
+bottari:
+  openapi:
+    server:
+      url: https://bottari.app
+      description: Prod

@@ -47,3 +47,9 @@ spring:
 firebase:
   service:
     key-path: ${FIREBASE_SERVICE_ACCOUNT_JSON}
+
+bottari:
+  openapi:
+    server:
+      url: http://localhost:8080
+      description: Local
