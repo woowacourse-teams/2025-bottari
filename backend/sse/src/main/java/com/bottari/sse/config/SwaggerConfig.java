@@ -16,10 +16,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
-    @Value("${bottari.openapi.server:url:http://localhost:8080}")
+    @Value("${bottari.openapi.server.url:http://localhost:8080}")
     private String serverUrl;
 
-    @Value("${bottari.openapi.server:description:Local}")
+    @Value("${bottari.openapi.server.description:Local}")
     private String serverDescription;
 
     @Bean
