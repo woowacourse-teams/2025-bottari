@@ -18,3 +18,8 @@ spring:
       host: ${REDIS_DEV_HOST}
       port: ${REDIS_DEV_PORT}
       password: ${REDIS_DEV_PASSWORD}
+
+bottari:
+  openapi:
+    server-url: https://dev.bottari.app
+    description: Dev

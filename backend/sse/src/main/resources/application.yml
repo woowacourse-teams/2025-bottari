@@ -19,3 +19,8 @@ sse:
     thread-name-prefix: ${SSE_ASYNC_THREAD_NAME_PREFIX:sse-async-}
     wait-for-tasks-to-complete-on-shutdown: ${SSE_ASYNC_WAIT_FOR_TASKS:true}
     await-termination-seconds: ${SSE_ASYNC_AWAIT_TERMINATION_SECONDS:30}
+
+bottari:
+  openapi:
+    server-url: http://localhost:8080
+    description: Local
