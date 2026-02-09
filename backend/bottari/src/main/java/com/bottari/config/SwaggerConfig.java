@@ -6,17 +6,27 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import java.util.List;
 import org.springdoc.core.customizers.OperationCustomizer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
 
+    @Value("${bottari.openapi.server-url:http://localhost:8080}")
+    private String serverUrl;
+
+    @Value("${bottari.openapi.server-description:Local}")
+    private String serverDescription;
+
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
                 .info(apiInfo())
+                .servers(List.of(new Server().url(serverUrl).description(serverDescription)))
                 .addSecurityItem(getSecurityRequirement())
                 .components(getComponents());
     }
