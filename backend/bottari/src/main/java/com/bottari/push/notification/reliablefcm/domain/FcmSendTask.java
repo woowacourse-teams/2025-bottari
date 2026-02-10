@@ -52,11 +52,12 @@ public class FcmSendTask {
         this.attemptCount = 0;
     }
 
-    public void markPending() {
+    public void markPending(final LocalDateTime scheduledAt) {
         validateIsNotFinished();
         final TaskState markingState = TaskState.PENDING;
         validateIsSameState(markingState, this.state);
         this.state = markingState;
+        this.scheduledAt = scheduledAt;
     }
 
     public void markInProgress() {

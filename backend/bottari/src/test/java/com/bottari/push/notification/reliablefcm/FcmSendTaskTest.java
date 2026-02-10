@@ -59,12 +59,16 @@ class FcmSendTaskTest {
                     1L
             );
             task.markInProgress();
+            final LocalDateTime scheduledAt = LocalDateTime.now().plusMinutes(5);
 
             // when
-            task.markPending();
+            task.markPending(scheduledAt);
 
             // then
-            assertThat(task.getState()).isEqualTo(TaskState.PENDING);
+            assertAll(
+                    () -> assertThat(task.getState()).isEqualTo(TaskState.PENDING),
+                    () -> assertThat(task.getScheduledAt()).isEqualTo(scheduledAt)
+            );
         }
 
         @DisplayName("FcmSendTask 상태를 IN_PROGRESS로 변경한다.")
@@ -161,7 +165,7 @@ class FcmSendTaskTest {
             task.markFailed();
 
             // when & then
-            assertThatThrownBy(task::markPending)
+            assertThatThrownBy(() -> task.markPending(LocalDateTime.now().plusMinutes(5)))
                     .isInstanceOf(BusinessException.class)
                     .hasMessageContaining("FCM 전송 작업이 이미 완료되었습니다.");
         }
@@ -177,7 +181,7 @@ class FcmSendTaskTest {
             );
 
             // when & then
-            assertThatThrownBy(task::markPending)
+            assertThatThrownBy(() -> task.markPending(LocalDateTime.now().plusMinutes(5)))
                     .isInstanceOf(BusinessException.class)
                     .hasMessageContaining("FCM 전송 작업이 이미 동일한 상태로 표시되어 있습니다.");
         }
