@@ -27,18 +27,33 @@ public class FcmSendTaskScheduler {
                 // 1) 전송 성공: 작업 완료 처리
                 fcmSendTaskService.completeTask(task);
             } catch (final BusinessException e) {
-                // 2) 토큰 문제: 영구 실패
-                if (ErrorCode.FCM_INVALID_TOKEN == e.getErrorCode()) {
-                    fcmSendTaskService.failTask(task, FailedCause.INVALID_TOKEN);
-                    continue;
-                }
-                // 3) 전송 실패(일시적): 재시도
-                fcmSendTaskService.retryTask(task, calculateRetryDelay(task));
+                handleBusinessException(task, e);
             } catch (final Exception e) {
-                // 4) 기타 예외 발생: 재시도
-                fcmSendTaskService.retryTask(task, calculateRetryDelay(task));
+                handleRetryOrFail(task);
             }
         }
+    }
+
+    private void handleBusinessException(
+            final FcmSendTask task,
+            final BusinessException e
+    ) {
+        // 2) 토큰 문제: 영구 실패
+        if (e.getErrorCode() == ErrorCode.FCM_INVALID_TOKEN) {
+            fcmSendTaskService.failTask(task, FailedCause.INVALID_TOKEN);
+            return;
+        }
+        handleRetryOrFail(task);
+    }
+
+    private void handleRetryOrFail(final FcmSendTask task) {
+        // 3-1) 전송 실패(일시적): 시도 횟수 초과 시 영구 실패
+        if (task.isRetryLimitExceeded()) {
+            fcmSendTaskService.failTask(task, FailedCause.RETRY_LIMIT_EXCEEDED);
+            return;
+        }
+        // 3-2) 전송 실패(일시적): 시도 횟수 남을 시 재시도
+        fcmSendTaskService.retryTask(task, calculateRetryDelay(task));
     }
 
     private Duration calculateRetryDelay(final FcmSendTask task) {

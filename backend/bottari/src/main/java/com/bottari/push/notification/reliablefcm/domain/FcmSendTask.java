@@ -94,6 +94,10 @@ public class FcmSendTask {
         this.failedCause = failedCause;
     }
 
+    public boolean isRetryLimitExceeded() {
+        return this.attemptCount >= MAX_ATTEMPT_COUNT;
+    }
+
     private void validateIsNotFinished() {
         if (isFinish()) {
             throw new BusinessException(ErrorCode.FCM_SEND_TASK_ALREADY_FINISHED, "taskId: " + this.id);

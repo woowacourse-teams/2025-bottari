@@ -84,7 +84,7 @@ class FcmSendTaskSchedulerTest {
         verify(fcmSendTaskService, never()).retryTask(any(), any());
     }
 
-    @DisplayName("FCM 전송 실패 시 작업을 재시도 처리한다")
+    @DisplayName("FCM 전송 실패 시 작업을 재시도 처리한다 - BusinessException")
     @Test
     void retry() {
         // given
@@ -104,6 +104,77 @@ class FcmSendTaskSchedulerTest {
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
         verify(fcmSendTaskService, times(1)).retryTask(eq(task), any());
         verify(fcmSendTaskService, never()).failTask(any(), any());
+        verify(fcmSendTaskService, never()).completeTask(any());
+    }
+
+    @DisplayName("FCM 전송 실패 시 작업을 재시도 처리한다 - RuntimeException")
+    @Test
+    void retry2() {
+        // given
+        final FcmSendTask task = mock(FcmSendTask.class);
+
+        when(fcmSendTaskService.claimPendingTasks(100)).thenReturn(List.of(task));
+        when(task.getMessage()).thenReturn(mock(PushMessage.class));
+        when(task.getTargetMemberId()).thenReturn(1L);
+        doThrow(new RuntimeException())
+                .when(fcmChannel)
+                .unicast(any(), eq(1L));
+
+        // when
+        fcmSendTaskScheduler.pollAndSendTasks();
+
+        // then
+        verify(fcmChannel, times(1)).unicast(any(), eq(1L));
+        verify(fcmSendTaskService, times(1)).retryTask(eq(task), any());
+        verify(fcmSendTaskService, never()).failTask(any(), any());
+        verify(fcmSendTaskService, never()).completeTask(any());
+    }
+
+    @DisplayName("FCM 전송 실패 및 작업 시도 횟수 초과 시 실패 처리한다 - BusinessException")
+    @Test
+    void failed_retry_limit_exceeded() {
+        // given
+        final FcmSendTask task = mock(FcmSendTask.class);
+
+        when(fcmSendTaskService.claimPendingTasks(100)).thenReturn(List.of(task));
+        when(task.getMessage()).thenReturn(mock(PushMessage.class));
+        when(task.getTargetMemberId()).thenReturn(1L);
+        when(task.isRetryLimitExceeded()).thenReturn(true);
+        doThrow(new BusinessException(ErrorCode.FCM_MESSAGE_SEND_FAIL))
+                .when(fcmChannel)
+                .unicast(any(), eq(1L));
+
+        // when
+        fcmSendTaskScheduler.pollAndSendTasks();
+
+        // then
+        verify(fcmChannel, times(1)).unicast(any(), eq(1L));
+        verify(fcmSendTaskService, times(1)).failTask(eq(task), any());
+        verify(fcmSendTaskService, never()).retryTask(any(), any());
+        verify(fcmSendTaskService, never()).completeTask(any());
+    }
+
+    @DisplayName("FCM 전송 실패 및 작업 시도 횟수 초과 시 실패 처리한다 - RuntimeException")
+    @Test
+    void failed_retry_limit_exceeded2() {
+        // given
+        final FcmSendTask task = mock(FcmSendTask.class);
+
+        when(fcmSendTaskService.claimPendingTasks(100)).thenReturn(List.of(task));
+        when(task.getMessage()).thenReturn(mock(PushMessage.class));
+        when(task.getTargetMemberId()).thenReturn(1L);
+        when(task.isRetryLimitExceeded()).thenReturn(true);
+        doThrow(new RuntimeException())
+                .when(fcmChannel)
+                .unicast(any(), eq(1L));
+
+        // when
+        fcmSendTaskScheduler.pollAndSendTasks();
+
+        // then
+        verify(fcmChannel, times(1)).unicast(any(), eq(1L));
+        verify(fcmSendTaskService, times(1)).failTask(eq(task), any());
+        verify(fcmSendTaskService, never()).retryTask(any(), any());
         verify(fcmSendTaskService, never()).completeTask(any());
     }
 

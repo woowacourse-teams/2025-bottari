@@ -9,6 +9,7 @@ import com.bottari.push.message.PushMessage;
 import com.bottari.push.notification.reliablefcm.domain.FailedCause;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
 import com.bottari.push.notification.reliablefcm.domain.TaskState;
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -202,6 +203,39 @@ class FcmSendTaskTest {
             assertThatThrownBy(task::markInProgress)
                     .isInstanceOf(BusinessException.class)
                     .hasMessageContaining("FCM 전송 작업이 이미 동일한 상태로 표시되어 있습니다.");
+        }
+    }
+
+    @DisplayName("FcmSendTask의 재시도 한도 초과 여부를 확인한다.")
+    @Test
+    void isRetryLimitExceeded() {
+        // given
+        final FcmSendTask task = new FcmSendTask(
+                LocalDateTime.now().plusMinutes(5),
+                new PushMessage("test", "test", "null"),
+                1L
+        );
+
+        // when & then
+        assertAll(
+                () -> assertThat(task.isRetryLimitExceeded()).isFalse(),
+                () -> {
+                    setAttemptCount(task, 3);
+                    assertThat(task.isRetryLimitExceeded()).isTrue();
+                }
+        );
+    }
+
+    private static void setAttemptCount(
+            final FcmSendTask task,
+            final int attemptCount
+    ) {
+        try {
+            final Field field = FcmSendTask.class.getDeclaredField("attemptCount");
+            field.setAccessible(true);
+            field.set(task, attemptCount);
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
