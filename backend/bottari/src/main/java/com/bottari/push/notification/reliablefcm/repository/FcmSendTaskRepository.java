@@ -13,6 +13,7 @@ public interface FcmSendTaskRepository extends JpaRepository<FcmSendTask, Long> 
                 FROM fcm_send_task
                 WHERE state = 'PENDING'
                   AND scheduled_at <= :now
+                  AND attempt_count <= 3
                 ORDER BY scheduled_at
                 LIMIT :limit
                 FOR UPDATE SKIP LOCKED

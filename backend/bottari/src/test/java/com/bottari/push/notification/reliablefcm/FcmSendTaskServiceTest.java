@@ -38,7 +38,7 @@ class FcmSendTaskServiceTest {
     @Nested
     class ClaimPendingTasks {
 
-        @DisplayName("대기 중인 FCM 전송 작업들을 조회하고 진행 중으로 상태를 변경한다.")
+        @DisplayName("PENDING 상태의 FCM 전송 작업들을 조회하고 진행 중으로 상태를 변경한다.")
         @Test
         void claimPendingTasks() {
             // given
@@ -74,6 +74,65 @@ class FcmSendTaskServiceTest {
                     () -> assertThat(states).isNotNull(),
                     () -> assertThat(states).hasSize(2)
             );
+        }
+
+        @DisplayName("시도 횟수가 3회를 초과한 작업은 조회하지 않는다.")
+        @Test
+        void claimPendingTasks_attempt_count() {
+            // given
+            final LocalDateTime scheduledAt = LocalDateTime.now().minusMinutes(1);
+            final PushMessage message = new PushMessage(
+                    "test",
+                    "test",
+                    "test"
+            );
+            final Long targetMemberId = 1L;
+            final ScheduleFcmSendTaskRequest request = new ScheduleFcmSendTaskRequest(
+                    scheduledAt,
+                    message,
+                    targetMemberId
+            );
+            final Long taskId = fcmSendTaskService.scheduleFcmSendTask(request);
+            entityManager.flush();
+            entityManager.createQuery("UPDATE FcmSendTask t SET t.attemptCount = 4 WHERE t.id = :taskId")
+                    .setParameter("taskId", taskId)
+                    .executeUpdate();
+            entityManager.clear();
+
+            // when
+            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(10);
+
+            assertThat(pollTasks).isEmpty();
+        }
+
+        @DisplayName("PENDING 상태가 아닌 작업은 조회하지 않는다.")
+        @Test
+        void claimPendingTasks_not_pending() {
+            // given
+            final LocalDateTime scheduledAt = LocalDateTime.now().minusMinutes(1);
+            final PushMessage message = new PushMessage(
+                    "test",
+                    "test",
+                    "test"
+            );
+            final Long targetMemberId = 1L;
+            final ScheduleFcmSendTaskRequest request = new ScheduleFcmSendTaskRequest(
+                    scheduledAt,
+                    message,
+                    targetMemberId
+            );
+            final Long taskId = fcmSendTaskService.scheduleFcmSendTask(request);
+            entityManager.flush();
+            entityManager.createQuery("UPDATE FcmSendTask t SET t.state = :state WHERE t.id = :taskId")
+                    .setParameter("state", TaskState.IN_PROGRESS)
+                    .setParameter("taskId", taskId)
+                    .executeUpdate();
+            entityManager.clear();
+
+            // when
+            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(10);
+
+            assertThat(pollTasks).isEmpty();
         }
     }
 
