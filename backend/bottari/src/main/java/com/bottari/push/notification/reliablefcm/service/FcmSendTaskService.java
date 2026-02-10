@@ -24,7 +24,8 @@ public class FcmSendTaskService {
     @Transactional
     public List<FcmSendTask> claimPendingTasks(final int limit) {
         final LocalDateTime now = LocalDateTime.now();
-        final List<FcmSendTask> tasks = fcmSendTaskRepository.findDuePendingTasksForUpdate(now, limit);
+        final List<FcmSendTask> tasks =
+                fcmSendTaskRepository.findDuePendingTasksForUpdate(now, FcmSendTask.MAX_ATTEMPT_COUNT, limit);
         for (final FcmSendTask task : tasks) {
             task.markInProgress();
             final FcmSendTaskState state = new FcmSendTaskState(task, TaskState.IN_PROGRESS);

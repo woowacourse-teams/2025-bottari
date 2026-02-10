@@ -77,7 +77,7 @@ class FcmSendTaskServiceTest {
             );
         }
 
-        @DisplayName("시도 횟수가 3회를 초과한 작업은 조회하지 않는다.")
+        @DisplayName("이미 최대 시도 횟수 이상만큼 시도한 작업은 조회하지 않는다.")
         @Test
         void claimPendingTasks_attempt_count() {
             // given
@@ -95,7 +95,7 @@ class FcmSendTaskServiceTest {
             );
             final Long taskId = fcmSendTaskService.scheduleFcmSendTask(request);
             entityManager.flush();
-            entityManager.createQuery("UPDATE FcmSendTask t SET t.attemptCount = 4 WHERE t.id = :taskId")
+            entityManager.createQuery("UPDATE FcmSendTask t SET t.attemptCount = 3 WHERE t.id = :taskId")
                     .setParameter("taskId", taskId)
                     .executeUpdate();
             entityManager.clear();

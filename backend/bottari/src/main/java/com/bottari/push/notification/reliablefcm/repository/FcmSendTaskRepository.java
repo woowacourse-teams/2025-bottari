@@ -13,13 +13,14 @@ public interface FcmSendTaskRepository extends JpaRepository<FcmSendTask, Long> 
                 FROM fcm_send_task
                 WHERE state = 'PENDING'
                   AND scheduled_at <= :now
-                  AND attempt_count <= 3
+                  AND attempt_count < :maxAttemptCount
                 ORDER BY scheduled_at
                 LIMIT :limit
                 FOR UPDATE SKIP LOCKED
             """, nativeQuery = true)
     List<FcmSendTask> findDuePendingTasksForUpdate(
             final LocalDateTime now,
+            final int maxAttemptCount,
             final int limit
     );
 

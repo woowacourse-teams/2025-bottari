@@ -22,6 +22,8 @@ import org.hibernate.type.SqlTypes;
 @Getter
 public class FcmSendTask {
 
+    public static final int MAX_ATTEMPT_COUNT = 3;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
