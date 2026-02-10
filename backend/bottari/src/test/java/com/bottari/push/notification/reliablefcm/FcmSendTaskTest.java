@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.error.BusinessException;
 import com.bottari.push.message.PushMessage;
+import com.bottari.push.notification.reliablefcm.domain.FailedCause;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
 import com.bottari.push.notification.reliablefcm.domain.TaskState;
 import java.time.LocalDateTime;
@@ -123,7 +124,7 @@ class FcmSendTaskTest {
             );
 
             // when
-            task.markFailed();
+            task.markFailed(FailedCause.RETRY_LIMIT_EXCEEDED);
 
             // then
             assertAll(
@@ -162,7 +163,7 @@ class FcmSendTaskTest {
                     new PushMessage("test", "test", "null"),
                     1L
             );
-            task.markFailed();
+            task.markFailed(FailedCause.INVALID_TOKEN);
 
             // when & then
             assertThatThrownBy(() -> task.markPending(LocalDateTime.now().plusMinutes(5)))

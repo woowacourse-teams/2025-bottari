@@ -58,7 +58,7 @@ class FcmSendTaskSchedulerTest {
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
         verify(fcmSendTaskService, times(1)).completeTask(task);
         verify(fcmSendTaskService, never()).retryTask(any(), any());
-        verify(fcmSendTaskService, never()).failTask(any());
+        verify(fcmSendTaskService, never()).failTask(any(), any());
     }
 
     @DisplayName("FCM 토큰 문제로 실패하면 작업을 실패 처리한다")
@@ -79,7 +79,7 @@ class FcmSendTaskSchedulerTest {
 
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
-        verify(fcmSendTaskService, times(1)).failTask(task);
+        verify(fcmSendTaskService, times(1)).failTask(eq(task), any());
         verify(fcmSendTaskService, never()).completeTask(any());
         verify(fcmSendTaskService, never()).retryTask(any(), any());
     }
@@ -103,7 +103,7 @@ class FcmSendTaskSchedulerTest {
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
         verify(fcmSendTaskService, times(1)).retryTask(eq(task), any());
-        verify(fcmSendTaskService, never()).failTask(any());
+        verify(fcmSendTaskService, never()).failTask(any(), any());
         verify(fcmSendTaskService, never()).completeTask(any());
     }
 

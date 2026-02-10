@@ -26,6 +26,8 @@ public class FcmSendTask {
 
     private TaskState state;
 
+    private FailedCause failedCause;
+
     private LocalDateTime scheduledAt;
 
     private LocalDateTime inProgressAt;
@@ -77,12 +79,13 @@ public class FcmSendTask {
         this.finishedAt = LocalDateTime.now();
     }
 
-    public void markFailed() {
+    public void markFailed(final FailedCause failedCause) {
         validateIsNotFinished();
         final TaskState markingState = TaskState.FAILED;
         validateIsSameState(markingState, this.state);
         this.state = TaskState.FAILED;
         this.finishedAt = LocalDateTime.now();
+        this.failedCause = failedCause;
     }
 
     private void validateIsNotFinished() {

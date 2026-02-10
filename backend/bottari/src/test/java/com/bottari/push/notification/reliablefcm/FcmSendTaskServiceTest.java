@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.push.message.PushMessage;
+import com.bottari.push.notification.reliablefcm.domain.FailedCause;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTaskState;
 import com.bottari.push.notification.reliablefcm.domain.TaskState;
@@ -343,7 +344,7 @@ class FcmSendTaskServiceTest {
             final FcmSendTask task = pollTasks.getFirst();
 
             // when
-            fcmSendTaskService.failTask(task);
+            fcmSendTaskService.failTask(task, FailedCause.RETRY_LIMIT_EXCEEDED);
 
             // then
             final List<FcmSendTaskState> states = entityManager.createQuery(

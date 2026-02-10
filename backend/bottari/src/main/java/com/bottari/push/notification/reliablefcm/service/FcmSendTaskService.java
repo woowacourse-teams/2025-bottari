@@ -1,5 +1,6 @@
 package com.bottari.push.notification.reliablefcm.service;
 
+import com.bottari.push.notification.reliablefcm.domain.FailedCause;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTaskState;
 import com.bottari.push.notification.reliablefcm.domain.TaskState;
@@ -85,8 +86,11 @@ public class FcmSendTaskService {
     }
 
     @Transactional
-    public void failTask(final FcmSendTask task) {
-        task.markFailed();
+    public void failTask(
+            final FcmSendTask task,
+            final FailedCause failedCause
+    ) {
+        task.markFailed(failedCause);
         final FcmSendTaskState state = new FcmSendTaskState(task, TaskState.FAILED);
         fcmSendTaskStateRepository.save(state);
     }

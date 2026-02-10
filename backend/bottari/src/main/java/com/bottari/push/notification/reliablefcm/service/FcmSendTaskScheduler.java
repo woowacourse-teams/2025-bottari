@@ -3,6 +3,7 @@ package com.bottari.push.notification.reliablefcm.service;
 import com.bottari.error.BusinessException;
 import com.bottari.error.ErrorCode;
 import com.bottari.push.notification.fcm.service.FcmChannel;
+import com.bottari.push.notification.reliablefcm.domain.FailedCause;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
 import java.time.Duration;
 import java.util.List;
@@ -28,7 +29,7 @@ public class FcmSendTaskScheduler {
             } catch (final BusinessException e) {
                 // 2) 토큰 문제: 영구 실패
                 if (ErrorCode.FCM_INVALID_TOKEN == e.getErrorCode()) {
-                    fcmSendTaskService.failTask(task);
+                    fcmSendTaskService.failTask(task, FailedCause.INVALID_TOKEN);
                     continue;
                 }
                 // 3) 전송 실패(일시적): 재시도
