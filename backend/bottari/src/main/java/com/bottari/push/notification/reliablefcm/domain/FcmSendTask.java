@@ -5,6 +5,8 @@ import com.bottari.error.ErrorCode;
 import com.bottari.push.message.PushMessage;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,8 +26,10 @@ public class FcmSendTask {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private TaskState state;
 
+    @Enumerated(EnumType.STRING)
     private FailedCause failedCause;
 
     private LocalDateTime scheduledAt;

@@ -138,6 +138,48 @@ class FcmSendTaskServiceTest {
     }
 
     @Nested
+    class GetStuckTasks {
+
+        @DisplayName("지정된 시간 이상 진행 중 상태로 머문 FCM 전송 작업들을 조회한다.")
+        @Test
+        void getStuckTasks() {
+            // given
+            final LocalDateTime scheduledAt = LocalDateTime.now();
+            final PushMessage message = new PushMessage(
+                    "test",
+                    "test",
+                    "test"
+            );
+            final Long targetMemberId = 1L;
+            final ScheduleFcmSendTaskRequest request = new ScheduleFcmSendTaskRequest(
+                    scheduledAt,
+                    message,
+                    targetMemberId
+            );
+            final Long taskId = fcmSendTaskService.scheduleFcmSendTask(request);
+            fcmSendTaskService.claimPendingTasks(10);
+            entityManager.flush();
+            entityManager.createQuery(
+                            "UPDATE FcmSendTask t SET t.inProgressAt = :inProgressAt WHERE t.id = :taskId"
+                    )
+                    .setParameter("inProgressAt", LocalDateTime.now().minusMinutes(100))
+                    .setParameter("taskId", taskId)
+                    .executeUpdate();
+            final Duration stuckDuration = Duration.ofMinutes(10);
+            entityManager.clear();
+
+            // when
+            final List<FcmSendTask> stuckTasks = fcmSendTaskService.getStuckTasks(stuckDuration);
+
+            // then
+            assertAll(
+                    () -> assertThat(stuckTasks).hasSize(1),
+                    () -> assertThat(stuckTasks.getFirst().getId()).isEqualTo(taskId)
+            );
+        }
+    }
+
+    @Nested
     class ScheduleFcmSendTask {
 
         @DisplayName("FCM 전송 작업을 스케줄링한다.")

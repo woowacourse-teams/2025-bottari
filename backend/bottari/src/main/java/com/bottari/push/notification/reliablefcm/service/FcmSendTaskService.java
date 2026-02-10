@@ -34,6 +34,13 @@ public class FcmSendTaskService {
         return tasks;
     }
 
+    @Transactional(readOnly = true)
+    public List<FcmSendTask> getStuckTasks(final Duration stuckDuration) {
+        final LocalDateTime thresholdTime = LocalDateTime.now().minus(stuckDuration);
+
+        return fcmSendTaskRepository.findStuckInProgressTasks(thresholdTime);
+    }
+
     @Transactional
     public Long scheduleFcmSendTask(final ScheduleFcmSendTaskRequest request) {
         final FcmSendTask task = new FcmSendTask(
