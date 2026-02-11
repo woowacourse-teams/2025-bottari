@@ -1,0 +1,34 @@
+package com.bottari.push.notification.reliablefcm.service;
+
+import com.bottari.push.notification.reliablefcm.domain.FailedCause;
+import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
+import java.time.Duration;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+@Component
+@RequiredArgsConstructor
+public class FcmSendTaskIncidentHandler {
+
+    private final FcmSendTaskService fcmSendTaskService;
+
+    /*
+    IN_PROGRESS 상태로 오래 머문 작업들을 찾아서 재시도하거나 실패로 처리하는 스케줄러
+    전송 작업 수행 후, 작업 결과를 DB에 반영하지 못한 Task들을 복구하기 위함
+     */
+    @Scheduled(fixedRate = 10_000) // 10초
+    @Transactional
+    public void handleStuckTasks() {
+        final List<FcmSendTask> tasks = fcmSendTaskService.getStuckTasks(Duration.ofMinutes(1));
+        for (final FcmSendTask task : tasks) {
+            if (task.isRetryLimitExceeded()) {
+                fcmSendTaskService.failTask(task, FailedCause.RETRY_LIMIT_EXCEEDED);
+                continue;
+            }
+            fcmSendTaskService.retryTask(task, Duration.ZERO);
+        }
+    }
+}
