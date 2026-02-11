@@ -29,10 +29,10 @@ public class FcmSendTaskIncidentHandler {
         final List<FcmSendTask> tasks = fcmSendTaskService.getStuckTasks(Duration.ofMinutes(1));
         for (final FcmSendTask task : tasks) {
             if (task.isRetryLimitExceeded()) {
-                fcmSendTaskService.failTask(task, FailedCause.RETRY_LIMIT_EXCEEDED);
+                fcmSendTaskService.failTask(task.getId(), FailedCause.RETRY_LIMIT_EXCEEDED);
                 continue;
             }
-            fcmSendTaskService.retryTask(task, Duration.ZERO);
+            fcmSendTaskService.retryTask(task.getId(), Duration.ZERO);
         }
     }
 
@@ -40,7 +40,10 @@ public class FcmSendTaskIncidentHandler {
     public void handleFailedTasks() {
         final List<FcmSendFailedTask> failedTasks = fcmSendFailedTaskService.getPendingFailedTasks();
         alertService.send(buildAlertMessage(failedTasks));
-        fcmSendFailedTaskService.alertedFailedTasks(failedTasks);
+        final List<Long> failedTaskIds = failedTasks.stream()
+                .map(FcmSendFailedTask::getId)
+                .toList();
+        fcmSendFailedTaskService.alertedFailedTasks(failedTaskIds);
     }
 
     private String buildAlertMessage(final List<FcmSendFailedTask> failedTasks) {

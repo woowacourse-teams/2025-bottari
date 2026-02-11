@@ -43,7 +43,7 @@ class FcmSendTaskIncidentHandlerTest {
 
         // then
         verify(fcmSendTaskService, times(1))
-                .retryTask(eq(task), eq(Duration.ZERO));
+                .retryTask(eq(task.getId()), eq(Duration.ZERO));
         verify(fcmSendTaskService, never()).failTask(any(), any());
     }
 
@@ -61,7 +61,7 @@ class FcmSendTaskIncidentHandlerTest {
 
         // then
         verify(fcmSendTaskService, times(1))
-                .failTask(eq(task), eq(FailedCause.RETRY_LIMIT_EXCEEDED));
+                .failTask(eq(task.getId()), eq(FailedCause.RETRY_LIMIT_EXCEEDED));
         verify(fcmSendTaskService, never()).retryTask(any(), any());
     }
 }

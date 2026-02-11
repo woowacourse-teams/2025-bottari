@@ -119,6 +119,7 @@ public enum ErrorCode {
     // ===== Reliable FCM 관련 =====
     FCM_SEND_TASK_ALREADY_FINISHED(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업이 이미 완료되었습니다."),
     FCM_SEND_TASK_SAME_STATE(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업이 이미 동일한 상태로 표시되어 있습니다."),
+    FCM_SEND_TASK_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업을 찾을 수 없습니다."),
 
     // ===== SSE CONNECTION 관련 =====,
     SSE_CONNECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결에 실패했습니다."),

@@ -19,7 +19,8 @@ public class FcmSendFailedTaskService {
     }
 
     @Transactional
-    public void alertedFailedTasks(final List<FcmSendFailedTask> failedTasks) {
+    public void alertedFailedTasks(final List<Long> failedTaskIds) {
+        final List<FcmSendFailedTask> failedTasks = fcmSendTaskFailedRepository.findAllById(failedTaskIds);
         failedTasks.forEach(FcmSendFailedTask::markAlerted);
     }
 }

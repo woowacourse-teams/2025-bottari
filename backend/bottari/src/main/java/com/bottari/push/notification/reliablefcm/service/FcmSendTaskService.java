@@ -1,5 +1,7 @@
 package com.bottari.push.notification.reliablefcm.service;
 
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import com.bottari.push.notification.reliablefcm.domain.FailedCause;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendFailedTask;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
@@ -79,7 +81,9 @@ public class FcmSendTaskService {
     }
 
     @Transactional
-    public void completeTask(final FcmSendTask task) {
+    public void completeTask(final Long taskId) {
+        final FcmSendTask task = fcmSendTaskRepository.findById(taskId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.FCM_SEND_TASK_NOT_FOUND, "taskId: " + taskId));
         task.markCompleted();
         final FcmSendTaskState state = new FcmSendTaskState(task, TaskState.COMPLETED);
         fcmSendTaskStateRepository.save(state);
@@ -87,9 +91,11 @@ public class FcmSendTaskService {
 
     @Transactional
     public void retryTask(
-            final FcmSendTask task,
+            final Long taskId,
             final Duration retryDelay
     ) {
+        final FcmSendTask task = fcmSendTaskRepository.findById(taskId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.FCM_SEND_TASK_NOT_FOUND, "taskId: " + taskId));
         final LocalDateTime scheduledAt = LocalDateTime.now().plus(retryDelay);
         task.markPending(scheduledAt);
         final FcmSendTaskState state = new FcmSendTaskState(task, TaskState.PENDING);
@@ -98,9 +104,11 @@ public class FcmSendTaskService {
 
     @Transactional
     public void failTask(
-            final FcmSendTask task,
+            final Long taskId,
             final FailedCause failedCause
     ) {
+        final FcmSendTask task = fcmSendTaskRepository.findById(taskId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.FCM_SEND_TASK_NOT_FOUND, "taskId: " + taskId));
         task.markFailed();
         final FcmSendTaskState state = new FcmSendTaskState(task, TaskState.FAILED);
         fcmSendTaskStateRepository.save(state);

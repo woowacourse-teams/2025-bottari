@@ -41,6 +41,14 @@ class FcmSendTaskSchedulerTest {
     @InjectMocks
     private FcmSendTaskScheduler fcmSendTaskScheduler;
 
+    private static Stream<Arguments> provideAttemptAndDuration() {
+        return Stream.of(
+                Arguments.of(1, Duration.ofMinutes(1)),
+                Arguments.of(2, Duration.ofMinutes(2)),
+                Arguments.of(3, Duration.ofMinutes(4))
+        );
+    }
+
     @DisplayName("FCM 전송이 성공하면 작업을 완료 처리한다")
     @Test
     void success() {
@@ -56,7 +64,7 @@ class FcmSendTaskSchedulerTest {
 
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
-        verify(fcmSendTaskService, times(1)).completeTask(task);
+        verify(fcmSendTaskService, times(1)).completeTask(task.getId());
         verify(fcmSendTaskService, never()).retryTask(any(), any());
         verify(fcmSendTaskService, never()).failTask(any(), any());
     }
@@ -79,7 +87,7 @@ class FcmSendTaskSchedulerTest {
 
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
-        verify(fcmSendTaskService, times(1)).failTask(eq(task), any());
+        verify(fcmSendTaskService, times(1)).failTask(eq(task.getId()), any());
         verify(fcmSendTaskService, never()).completeTask(any());
         verify(fcmSendTaskService, never()).retryTask(any(), any());
     }
@@ -102,7 +110,7 @@ class FcmSendTaskSchedulerTest {
 
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
-        verify(fcmSendTaskService, times(1)).retryTask(eq(task), any());
+        verify(fcmSendTaskService, times(1)).retryTask(eq(task.getId()), any());
         verify(fcmSendTaskService, never()).failTask(any(), any());
         verify(fcmSendTaskService, never()).completeTask(any());
     }
@@ -125,7 +133,7 @@ class FcmSendTaskSchedulerTest {
 
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
-        verify(fcmSendTaskService, times(1)).retryTask(eq(task), any());
+        verify(fcmSendTaskService, times(1)).retryTask(eq(task.getId()), any());
         verify(fcmSendTaskService, never()).failTask(any(), any());
         verify(fcmSendTaskService, never()).completeTask(any());
     }
@@ -149,7 +157,7 @@ class FcmSendTaskSchedulerTest {
 
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
-        verify(fcmSendTaskService, times(1)).failTask(eq(task), any());
+        verify(fcmSendTaskService, times(1)).failTask(eq(task.getId()), any());
         verify(fcmSendTaskService, never()).retryTask(any(), any());
         verify(fcmSendTaskService, never()).completeTask(any());
     }
@@ -173,7 +181,7 @@ class FcmSendTaskSchedulerTest {
 
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
-        verify(fcmSendTaskService, times(1)).failTask(eq(task), any());
+        verify(fcmSendTaskService, times(1)).failTask(eq(task.getId()), any());
         verify(fcmSendTaskService, never()).retryTask(any(), any());
         verify(fcmSendTaskService, never()).completeTask(any());
     }
@@ -202,15 +210,7 @@ class FcmSendTaskSchedulerTest {
 
         // then
         final ArgumentCaptor<Duration> captor = ArgumentCaptor.forClass(Duration.class);
-        verify(fcmSendTaskService).retryTask(eq(task), captor.capture());
+        verify(fcmSendTaskService).retryTask(eq(task.getId()), captor.capture());
         assertThat(captor.getValue()).isEqualTo(expected);
-    }
-
-    private static Stream<Arguments> provideAttemptAndDuration() {
-        return Stream.of(
-                Arguments.of(1, Duration.ofMinutes(1)),
-                Arguments.of(2, Duration.ofMinutes(2)),
-                Arguments.of(3, Duration.ofMinutes(4))
-        );
     }
 }

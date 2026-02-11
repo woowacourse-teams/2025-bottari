@@ -63,7 +63,7 @@ class FcmSendFailedTaskServiceTest {
         entityManager.persist(task2);
 
         // when
-        fcmSendFailedTaskService.alertedFailedTasks(List.of(task1, task2));
+        fcmSendFailedTaskService.alertedFailedTasks(List.of(task1.getId(), task2.getId()));
         entityManager.flush();
 
         // then

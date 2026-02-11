@@ -282,7 +282,7 @@ class FcmSendTaskServiceTest {
             final FcmSendTask task = pollTasks.getFirst();
 
             // when
-            fcmSendTaskService.completeTask(task);
+            fcmSendTaskService.completeTask(task.getId());
 
             // then
             final List<FcmSendTaskState> states = entityManager.createQuery(
@@ -334,7 +334,7 @@ class FcmSendTaskServiceTest {
             final Duration retryDelay = Duration.ofMinutes(2);
 
             // when
-            fcmSendTaskService.retryTask(task, retryDelay);
+            fcmSendTaskService.retryTask(task.getId(), retryDelay);
 
             // then
             final List<FcmSendTaskState> states = entityManager.createQuery(
@@ -387,7 +387,7 @@ class FcmSendTaskServiceTest {
             final FcmSendTask task = pollTasks.getFirst();
 
             // when
-            fcmSendTaskService.failTask(task, FailedCause.RETRY_LIMIT_EXCEEDED);
+            fcmSendTaskService.failTask(task.getId(), FailedCause.RETRY_LIMIT_EXCEEDED);
 
             // then
             final List<FcmSendTaskState> states = entityManager.createQuery(
