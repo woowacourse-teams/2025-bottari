@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.push.message.PushMessage;
 import com.bottari.push.notification.reliablefcm.domain.FailedCause;
+import com.bottari.push.notification.reliablefcm.domain.FcmSendFailedTask;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTaskState;
 import com.bottari.push.notification.reliablefcm.domain.TaskState;
@@ -396,10 +397,19 @@ class FcmSendTaskServiceTest {
                     .setParameter("taskId", taskId)
                     .getResultList();
 
+            assertThat(states).isNotNull().isNotEmpty();
+
             states.sort(Comparator.comparing(FcmSendTaskState::getCreatedAt));
             final List<TaskState> orderedStates = states.stream()
                     .map(FcmSendTaskState::getState)
                     .toList();
+
+            final FcmSendFailedTask failedTask = entityManager.createQuery(
+                            "SELECT f FROM FcmSendFailedTask f WHERE f.fcmSendTask.id = :taskId",
+                            FcmSendFailedTask.class
+                    )
+                    .setParameter("taskId", taskId)
+                    .getSingleResult();
 
             assertAll(
                     () -> assertThat(task.getState()).isEqualTo(TaskState.FAILED),
@@ -408,7 +418,9 @@ class FcmSendTaskServiceTest {
                                     TaskState.PENDING,
                                     TaskState.IN_PROGRESS,
                                     TaskState.FAILED
-                            )
+                            ),
+                    () -> assertThat(failedTask).isNotNull(),
+                    () -> assertThat(failedTask.getFailedCause()).isEqualTo(FailedCause.RETRY_LIMIT_EXCEEDED)
             );
         }
     }

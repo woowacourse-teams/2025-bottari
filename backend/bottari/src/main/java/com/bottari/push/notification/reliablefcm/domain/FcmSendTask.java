@@ -31,9 +31,6 @@ public class FcmSendTask {
     @Enumerated(EnumType.STRING)
     private TaskState state;
 
-    @Enumerated(EnumType.STRING)
-    private FailedCause failedCause;
-
     private LocalDateTime scheduledAt;
 
     private LocalDateTime inProgressAt;
@@ -85,13 +82,12 @@ public class FcmSendTask {
         this.finishedAt = LocalDateTime.now();
     }
 
-    public void markFailed(final FailedCause failedCause) {
+    public void markFailed() {
         validateIsNotFinished();
         final TaskState markingState = TaskState.FAILED;
         validateIsSameState(markingState, this.state);
         this.state = TaskState.FAILED;
         this.finishedAt = LocalDateTime.now();
-        this.failedCause = failedCause;
     }
 
     public boolean isRetryLimitExceeded() {

@@ -1,10 +1,12 @@
 package com.bottari.push.notification.reliablefcm.service;
 
 import com.bottari.push.notification.reliablefcm.domain.FailedCause;
+import com.bottari.push.notification.reliablefcm.domain.FcmSendFailedTask;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTaskState;
 import com.bottari.push.notification.reliablefcm.domain.TaskState;
 import com.bottari.push.notification.reliablefcm.dto.ScheduleFcmSendTaskRequest;
+import com.bottari.push.notification.reliablefcm.repository.FcmSendTaskFailedRepository;
 import com.bottari.push.notification.reliablefcm.repository.FcmSendTaskRepository;
 import com.bottari.push.notification.reliablefcm.repository.FcmSendTaskStateRepository;
 import java.time.Duration;
@@ -20,6 +22,7 @@ public class FcmSendTaskService {
 
     private final FcmSendTaskRepository fcmSendTaskRepository;
     private final FcmSendTaskStateRepository fcmSendTaskStateRepository;
+    private final FcmSendTaskFailedRepository fcmSendTaskFailedRepository;
 
     @Transactional
     public List<FcmSendTask> claimPendingTasks(final int limit) {
@@ -98,8 +101,10 @@ public class FcmSendTaskService {
             final FcmSendTask task,
             final FailedCause failedCause
     ) {
-        task.markFailed(failedCause);
+        task.markFailed();
         final FcmSendTaskState state = new FcmSendTaskState(task, TaskState.FAILED);
         fcmSendTaskStateRepository.save(state);
+        final FcmSendFailedTask failedTask = new FcmSendFailedTask(task, failedCause);
+        fcmSendTaskFailedRepository.save(failedTask);
     }
 }

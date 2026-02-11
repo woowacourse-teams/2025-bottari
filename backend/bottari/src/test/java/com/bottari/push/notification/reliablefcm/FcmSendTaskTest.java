@@ -125,7 +125,7 @@ class FcmSendTaskTest {
             );
 
             // when
-            task.markFailed(FailedCause.RETRY_LIMIT_EXCEEDED);
+            task.markFailed();
 
             // then
             assertAll(
@@ -164,7 +164,7 @@ class FcmSendTaskTest {
                     new PushMessage("test", "test", "null"),
                     1L
             );
-            task.markFailed(FailedCause.INVALID_TOKEN);
+            task.markFailed();
 
             // when & then
             assertThatThrownBy(() -> task.markPending(LocalDateTime.now().plusMinutes(5)))
