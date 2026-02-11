@@ -39,7 +39,7 @@ public class FcmSendTaskScheduler {
             final BusinessException e
     ) {
         // 2) 토큰 문제: 영구 실패
-        if (e.getErrorCode() == ErrorCode.FCM_INVALID_TOKEN) {
+        if (isPermanentError(e.getErrorCode())) {
             fcmSendTaskService.failTask(task.getId(), FailedCause.INVALID_TOKEN);
             return;
         }
@@ -54,6 +54,13 @@ public class FcmSendTaskScheduler {
         }
         // 3-2) 전송 실패(일시적): 시도 횟수 남을 시 재시도
         fcmSendTaskService.retryTask(task.getId(), calculateRetryDelay(task));
+    }
+
+    private boolean isPermanentError(final ErrorCode errorCode) {
+        return ErrorCode.FCM_TOKEN_NOT_FOUND == errorCode ||
+               ErrorCode.FCM_INITIALIZED_FAIL == errorCode ||
+               ErrorCode.FCM_INVALID_TOKEN == errorCode ||
+               ErrorCode.FCM_MESSAGE_CONVERT_FAIL == errorCode;
     }
 
     private Duration calculateRetryDelay(final FcmSendTask task) {
