@@ -25,7 +25,12 @@ public class FcmSendFailedTask {
     @Enumerated(EnumType.STRING)
     private FailedCause failedCause;
 
+    @Enumerated(EnumType.STRING)
+    private FailedTaskState state;
+
     private LocalDateTime failedAt;
+
+    private LocalDateTime alertedAt;
 
     @OneToOne
     @JoinColumn(name = "fcm_send_task_id")
@@ -37,6 +42,12 @@ public class FcmSendFailedTask {
     ) {
         this.fcmSendTask = fcmSendTask;
         this.failedCause = failedCause;
+        this.state = FailedTaskState.PENDING;
         this.failedAt = LocalDateTime.now();
+    }
+
+    public void markAlerted() {
+        this.state = FailedTaskState.ALERTED;
+        this.alertedAt = LocalDateTime.now();
     }
 }

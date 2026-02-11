@@ -1,6 +1,8 @@
 package com.bottari.push.notification.reliablefcm.service;
 
+import com.bottari.alert.AlertService;
 import com.bottari.push.notification.reliablefcm.domain.FailedCause;
+import com.bottari.push.notification.reliablefcm.domain.FcmSendFailedTask;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
 import java.time.Duration;
 import java.util.List;
@@ -14,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class FcmSendTaskIncidentHandler {
 
     private final FcmSendTaskService fcmSendTaskService;
+    private final FcmSendFailedTaskService fcmSendFailedTaskService;
+    private final AlertService alertService;
 
     /*
     IN_PROGRESS 상태로 오래 머문 작업들을 찾아서 재시도하거나 실패로 처리하는 스케줄러
@@ -30,5 +34,28 @@ public class FcmSendTaskIncidentHandler {
             }
             fcmSendTaskService.retryTask(task, Duration.ZERO);
         }
+    }
+
+    @Scheduled(fixedRate = 60_000) // 1분
+    public void handleFailedTasks() {
+        final List<FcmSendFailedTask> failedTasks = fcmSendFailedTaskService.getPendingFailedTasks();
+        alertService.send(buildAlertMessage(failedTasks));
+        fcmSendFailedTaskService.alertedFailedTasks(failedTasks);
+    }
+
+    private String buildAlertMessage(final List<FcmSendFailedTask> failedTasks) {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("The following FCM send tasks have failed:\n");
+        for (final FcmSendFailedTask task : failedTasks) {
+            sb.append("Task ID: ")
+                    .append(task.getFcmSendTask().getId())
+                    .append(", Cause: ")
+                    .append(task.getFailedCause())
+                    .append(", Failed At: ")
+                    .append(task.getFailedAt())
+                    .append("\n");
+        }
+
+        return sb.toString();
     }
 }
