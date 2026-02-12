@@ -121,10 +121,10 @@ public enum ErrorCode {
     FCM_SEND_TASK_SAME_STATE(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업이 이미 동일한 상태로 표시되어 있습니다."),
     FCM_SEND_TASK_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업을 찾을 수 없습니다."),
 
-    // ===== SSE CONNECTION 관련 =====,
+    // ===== SSE CONNECTION 관련 =====
     SSE_CONNECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결에 실패했습니다."),
 
-    // ===== 기타 =====,
+    // ===== 기타 =====
     DATE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 날짜 형식입니다."),
     NUMBER_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 숫자 형식입니다."),
     INVALID_TOPIC_NAME(HttpStatus.INTERNAL_SERVER_ERROR, "올바르지 않은 토픽 이름입니다.");
