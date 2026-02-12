@@ -124,7 +124,10 @@ public enum ErrorCode {
     // ===== SSE CONNECTION 관련 =====
     SSE_CONNECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결에 실패했습니다."),
 
-    // ===== 기타 =====
+    // ===== PUSH_MANAGER 관련 =====
+    PUSH_SCHEDULED_AT_MUST_NOT_BE_NULL(HttpStatus.INTERNAL_SERVER_ERROR, "예약 전송 시각은 null일 수 없습니다."),
+
+    // ===== 기타 =====,
     DATE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 날짜 형식입니다."),
     NUMBER_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 숫자 형식입니다."),
     INVALID_TOPIC_NAME(HttpStatus.INTERNAL_SERVER_ERROR, "올바르지 않은 토픽 이름입니다.");

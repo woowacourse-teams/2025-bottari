@@ -1,5 +1,7 @@
 package com.bottari.push;
 
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import com.bottari.push.connection.ConnectionChannels;
 import com.bottari.push.message.PushMessage;
 import com.bottari.push.notification.NotificationChannels;
@@ -42,6 +44,9 @@ public class PushManager {
         }
 
         public ScheduledChannelChain scheduledAt(final LocalDateTime scheduledAt) {
+            if (scheduledAt == null) {
+                throw new BusinessException(ErrorCode.PUSH_SCHEDULED_AT_MUST_NOT_BE_NULL);
+            }
             return new ScheduledChannelChain(message, memberIds, scheduledAt);
         }
 
