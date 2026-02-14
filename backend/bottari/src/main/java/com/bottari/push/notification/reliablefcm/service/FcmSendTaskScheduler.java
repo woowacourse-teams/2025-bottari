@@ -57,10 +57,10 @@ public class FcmSendTaskScheduler {
     }
 
     private boolean isPermanentError(final ErrorCode errorCode) {
-        return ErrorCode.FCM_TOKEN_NOT_FOUND == errorCode ||
-               ErrorCode.FCM_INITIALIZED_FAIL == errorCode ||
-               ErrorCode.FCM_INVALID_TOKEN == errorCode ||
-               ErrorCode.FCM_MESSAGE_CONVERT_FAIL == errorCode;
+        return ErrorCode.FCM_TOKEN_NOT_FOUND == errorCode
+               || ErrorCode.FCM_INITIALIZED_FAIL == errorCode
+               || ErrorCode.FCM_INVALID_TOKEN == errorCode
+               || ErrorCode.FCM_MESSAGE_CONVERT_FAIL == errorCode;
     }
 
     private Duration calculateRetryDelay(final FcmSendTask task) {
