@@ -6,14 +6,13 @@ import com.bottari.core.domain.model.bottari.template.BookmarkTemplate
 import com.bottari.core.domain.model.bottari.template.BottariTemplate
 import com.bottari.core.domain.model.bottari.template.PopularHashtag
 import com.bottari.core.domain.model.common.Pageable
-import com.bottari.core.domain.network.NetworkManager
 import com.bottari.core.domain.usecase.bookmark.AddBookmarkUseCase
 import com.bottari.core.domain.usecase.bookmark.DeleteBookmarkUseCase
 import com.bottari.core.domain.usecase.bookmark.ObserveAllBookmarksUseCase
 import com.bottari.core.domain.usecase.hashtag.FetchPopularHashtagsUseCase
 import com.bottari.core.domain.usecase.template.SearchTemplatesByHashtagUseCase
 import com.bottari.core.domain.usecase.template.SearchTemplatesByTitleUseCase
-import com.bottari.core.ui.base.NetworkBaseViewModel
+import com.bottari.core.ui.base.FlowBaseViewModel
 import com.bottari.core.ui.model.template.BottariTemplateHashtagUiModel
 import com.bottari.core.ui.model.template.BottariTemplateUiModel
 import com.bottari.logger.BottariLogger
@@ -25,17 +24,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainTemplateViewModel @Inject constructor(
-    networkManager: NetworkManager,
     private val searchTemplatesByTitleUseCase: SearchTemplatesByTitleUseCase,
     private val searchTemplatesByHashtagUseCase: SearchTemplatesByHashtagUseCase,
     private val fetchPopularHashtagsUseCase: FetchPopularHashtagsUseCase,
     private val addBookmarkUseCase: AddBookmarkUseCase,
     private val deleteBookmarkUseCase: DeleteBookmarkUseCase,
     private val observeAllBookmarksUseCase: ObserveAllBookmarksUseCase,
-) : NetworkBaseViewModel<MainTemplateUiState, MainTemplateUiEvent>(
-        initialState = MainTemplateUiState(),
-        networkManager = networkManager,
-    ) {
+) : FlowBaseViewModel<MainTemplateUiState, MainTemplateUiEvent>(MainTemplateUiState()) {
     private var pageable: Pageable<BottariTemplate> = Pageable()
     private val debouncedSearch: (Unit) -> Unit =
         viewModelScope.debounce(DEBOUND_SEARCH_DELAY) { loadNextPageBySearchWord(reset = true) }
@@ -47,11 +42,6 @@ class MainTemplateViewModel @Inject constructor(
     }
 
     fun refresh() {
-        if (isConnected.value.not()) {
-            updateState { copy(isFetched = true) }
-            return
-        }
-
         pageable = Pageable()
 
         if (currentState.chip != null) {
@@ -93,11 +83,6 @@ class MainTemplateViewModel @Inject constructor(
     }
 
     private fun loadNextPageBySearchWord(reset: Boolean) {
-        if (isConnected.value.not()) {
-            updateState { copy(isFetched = true) }
-            return
-        }
-
         val wordPageable = if (reset) Pageable() else pageable.nextRequest()
 
         launch {

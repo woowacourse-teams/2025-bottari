@@ -20,7 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -36,6 +39,7 @@ import com.bottari.core.ui.extension.rememberScrolledToEnd
 import com.bottari.core.ui.extension.startEndFadingEdge
 import com.bottari.core.ui.model.template.BottariTemplateHashtagUiModel
 import com.bottari.core.ui.model.template.BottariTemplateUiModel
+import com.bottari.core.ui.provider.LocalNetworkManager
 import com.bottari.feature.template.impl.component.PullToRefreshTemplateColumn
 import com.bottari.feature.template.impl.component.TemplateItemType
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -49,7 +53,9 @@ fun MainTemplateScreen(
     viewModel: MainTemplateViewModel = hiltViewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    val isConnected = viewModel.isConnected.collectAsStateWithLifecycle().value
+    val networkManager = LocalNetworkManager.current
+    val isConnected = networkManager.isConnected.collectAsStateWithLifecycle().value
+    var hasLaunched by rememberSaveable { mutableStateOf(false) }
     val listState = rememberLazyListState()
     val isScrolledToEnd by listState.rememberScrolledToEnd(5)
     val isScrolledToTop by remember(listState) { derivedStateOf { listState.firstVisibleItemIndex == 0 } }
@@ -73,7 +79,8 @@ fun MainTemplateScreen(
     }
 
     LaunchedEffect(isConnected) {
-        viewModel.refresh()
+        if (hasLaunched && isConnected) viewModel.refresh()
+        hasLaunched = true
     }
 
     if (isConnected) {
