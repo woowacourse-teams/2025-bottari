@@ -60,7 +60,7 @@ public class FcmSendTask {
     public void markPending(final LocalDateTime scheduledAt) {
         validateIsNotFinished();
         final TaskState markingState = TaskState.PENDING;
-        validateIsSameState(markingState, this.state);
+        validateIsNotSameState(markingState, this.state);
         this.state = markingState;
         this.scheduledAt = scheduledAt;
     }
@@ -68,7 +68,7 @@ public class FcmSendTask {
     public void markInProgress() {
         validateIsNotFinished();
         final TaskState markingState = TaskState.IN_PROGRESS;
-        validateIsSameState(markingState, this.state);
+        validateIsNotSameState(markingState, this.state);
         this.state = TaskState.IN_PROGRESS;
         this.inProgressAt = LocalDateTime.now();
         this.attemptCount += 1;
@@ -77,7 +77,7 @@ public class FcmSendTask {
     public void markCompleted() {
         validateIsNotFinished();
         final TaskState markingState = TaskState.COMPLETED;
-        validateIsSameState(markingState, this.state);
+        validateIsNotSameState(markingState, this.state);
         this.state = TaskState.COMPLETED;
         this.finishedAt = LocalDateTime.now();
     }
@@ -85,7 +85,7 @@ public class FcmSendTask {
     public void markFailed() {
         validateIsNotFinished();
         final TaskState markingState = TaskState.FAILED;
-        validateIsSameState(markingState, this.state);
+        validateIsNotSameState(markingState, this.state);
         this.state = TaskState.FAILED;
         this.finishedAt = LocalDateTime.now();
     }
@@ -104,7 +104,7 @@ public class FcmSendTask {
         return this.state == TaskState.COMPLETED || this.state == TaskState.FAILED;
     }
 
-    private void validateIsSameState(
+    private void validateIsNotSameState(
             final TaskState markingState,
             final TaskState state
     ) {
