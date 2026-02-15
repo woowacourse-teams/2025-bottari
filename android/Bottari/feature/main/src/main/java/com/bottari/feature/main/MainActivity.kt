@@ -10,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.domain.network.NetworkManager
 import com.bottari.feature.invite.navigation.InviteNavKey
 import com.bottari.feature.mybottari.navigation.MyBottariNavKey
 import com.bottari.feature.personal.checklist.navigation.PersonalChecklistNavKey
@@ -19,6 +20,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var networkManager: NetworkManager
+
     @Inject
     lateinit var entryBuilders: Set<@JvmSuppressWildcards EntryProviderScope<NavKey>.() -> Unit>
 
@@ -31,6 +35,7 @@ class MainActivity : ComponentActivity() {
                 App(
                     entryBuilders = entryBuilders,
                     startKey = intent.getNavKey(),
+                    networkManager = networkManager,
                 )
             }
         }
