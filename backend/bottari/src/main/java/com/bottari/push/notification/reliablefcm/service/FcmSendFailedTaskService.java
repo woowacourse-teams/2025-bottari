@@ -14,8 +14,8 @@ public class FcmSendFailedTaskService {
     private final FcmSendTaskFailedRepository fcmSendTaskFailedRepository;
 
     @Transactional(readOnly = true)
-    public List<FcmSendFailedTask> getPendingFailedTasks() {
-        return fcmSendTaskFailedRepository.findPendingFailedTasks();
+    public List<FcmSendFailedTask> getPendingFailedTasks(final int limit) {
+        return fcmSendTaskFailedRepository.findPendingFailedTasks(limit);
     }
 
     @Transactional

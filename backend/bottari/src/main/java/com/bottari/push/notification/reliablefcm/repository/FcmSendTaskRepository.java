@@ -24,11 +24,15 @@ public interface FcmSendTaskRepository extends JpaRepository<FcmSendTask, Long> 
             final int limit
     );
 
-    @Query("""
-            SELECT t
-            FROM FcmSendTask t
-            WHERE t.state = 'IN_PROGRESS'
-              AND t.inProgressAt <= :thresholdTime
-            """)
-    List<FcmSendTask> findStuckInProgressTasks(final LocalDateTime thresholdTime);
+    @Query(value = """
+            SELECT *
+            FROM fcm_send_task
+            WHERE state = 'IN_PROGRESS'
+              AND in_progress_at <= :thresholdTime
+            LIMIT :limit
+            """, nativeQuery = true)
+    List<FcmSendTask> findStuckInProgressTasks(
+            final LocalDateTime thresholdTime,
+            final int limit
+    );
 }

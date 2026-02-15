@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface FcmSendTaskFailedRepository extends JpaRepository<FcmSendFailedTask, Long> {
 
-    @Query("""
-            SELECT t
-            FROM FcmSendFailedTask t
-            WHERE t.state = 'PENDING'
-            """)
-    List<FcmSendFailedTask> findPendingFailedTasks();
+    @Query(value = """
+            SELECT *
+            FROM fcm_send_failed_task
+            WHERE state = 'PENDING'
+            LIMIT :limit
+            """, nativeQuery = true)
+    List<FcmSendFailedTask> findPendingFailedTasks(final int limit);
 }

@@ -1,7 +1,7 @@
 package com.bottari.push.notification.reliablefcm.service;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -35,7 +35,7 @@ class FcmSendTaskIncidentHandlerTest {
         // given
         final FcmSendTask task = mock(FcmSendTask.class);
 
-        when(fcmSendTaskService.getStuckTasks(any())).thenReturn(List.of(task));
+        when(fcmSendTaskService.getStuckTasks(any(), anyInt())).thenReturn(List.of(task));
         when(task.isRetryLimitExceeded()).thenReturn(false);
 
         // when
@@ -53,7 +53,7 @@ class FcmSendTaskIncidentHandlerTest {
         // given
         final FcmSendTask task = mock(FcmSendTask.class);
 
-        when(fcmSendTaskService.getStuckTasks(any())).thenReturn(List.of(task));
+        when(fcmSendTaskService.getStuckTasks(any(), anyInt())).thenReturn(List.of(task));
         when(task.isRetryLimitExceeded()).thenReturn(true);
 
         // when

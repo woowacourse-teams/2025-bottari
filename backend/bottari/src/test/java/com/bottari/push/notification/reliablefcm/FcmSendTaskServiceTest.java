@@ -170,7 +170,7 @@ class FcmSendTaskServiceTest {
             entityManager.clear();
 
             // when
-            final List<FcmSendTask> stuckTasks = fcmSendTaskService.getStuckTasks(stuckDuration);
+            final List<FcmSendTask> stuckTasks = fcmSendTaskService.getStuckTasks(stuckDuration, 100);
 
             // then
             assertAll(

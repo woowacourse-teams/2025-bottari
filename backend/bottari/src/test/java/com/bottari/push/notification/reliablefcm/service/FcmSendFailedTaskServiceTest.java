@@ -42,7 +42,7 @@ class FcmSendFailedTaskServiceTest {
         entityManager.flush();
 
         // when
-        final List<FcmSendFailedTask> tasks = fcmSendFailedTaskService.getPendingFailedTasks();
+        final List<FcmSendFailedTask> tasks = fcmSendFailedTaskService.getPendingFailedTasks(100);
 
         // then
         assertAll(

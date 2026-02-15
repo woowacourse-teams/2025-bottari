@@ -41,10 +41,13 @@ public class FcmSendTaskService {
     }
 
     @Transactional(readOnly = true)
-    public List<FcmSendTask> getStuckTasks(final Duration stuckDuration) {
+    public List<FcmSendTask> getStuckTasks(
+            final Duration stuckDuration,
+            final int limit
+    ) {
         final LocalDateTime thresholdTime = LocalDateTime.now().minus(stuckDuration);
 
-        return fcmSendTaskRepository.findStuckInProgressTasks(thresholdTime);
+        return fcmSendTaskRepository.findStuckInProgressTasks(thresholdTime, limit);
     }
 
     @Transactional
