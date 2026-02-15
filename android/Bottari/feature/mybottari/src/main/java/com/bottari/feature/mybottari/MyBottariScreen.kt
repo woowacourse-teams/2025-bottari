@@ -35,9 +35,11 @@ fun MyBottariScreen(
     val clipboard = LocalClipboard.current
 
     var dialogText by rememberSaveable { mutableStateOf("") }
+    var hasLaunched by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(isConnected) {
-        if (isConnected) viewModel.fetchTeamBottaries()
+        if (hasLaunched && isConnected) viewModel.fetchTeamBottaries()
+        hasLaunched = true
     }
 
     LaunchedEffect(uiState.showDialogType) {
