@@ -12,10 +12,9 @@ import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bottari.common.util.DeeplinkHelper
+import com.bottari.core.ui.provider.LocalNetworkManager
 import com.bottari.feature.mybottari.component.MyBottariContent
 import com.bottari.feature.mybottari.component.MyBottariDialogType
 import com.bottari.feature.mybottari.component.MyBottariDialogs
@@ -30,18 +29,15 @@ fun MyBottariScreen(
     viewModel: MyBottariViewModel = hiltViewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    val isConnected = viewModel.isConnected.collectAsStateWithLifecycle().value
+    val networkManager = LocalNetworkManager.current
+    val isConnected = networkManager.isConnected.collectAsStateWithLifecycle().value
     val context = LocalContext.current
     val clipboard = LocalClipboard.current
 
     var dialogText by rememberSaveable { mutableStateOf("") }
 
-    LifecycleEventEffect(Lifecycle.Event.ON_START) {
-        viewModel.fetchTeamBottaries()
-    }
-
     LaunchedEffect(isConnected) {
-        viewModel.fetchTeamBottaries()
+        if (isConnected) viewModel.fetchTeamBottaries()
     }
 
     LaunchedEffect(uiState.showDialogType) {

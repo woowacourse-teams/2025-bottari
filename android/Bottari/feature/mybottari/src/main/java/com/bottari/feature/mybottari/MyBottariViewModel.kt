@@ -4,7 +4,6 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
 import com.bottari.common.util.AlarmScheduler
 import com.bottari.core.domain.model.notification.Notification
-import com.bottari.core.domain.network.NetworkManager
 import com.bottari.core.domain.usecase.bottari.CreateBottariUseCase
 import com.bottari.core.domain.usecase.bottari.DeleteBottariUseCase
 import com.bottari.core.domain.usecase.bottari.FetchBottariesUseCase
@@ -12,7 +11,7 @@ import com.bottari.core.domain.usecase.team.CreateTeamBottariUseCase
 import com.bottari.core.domain.usecase.team.ExitTeamBottariUseCase
 import com.bottari.core.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.core.domain.usecase.team.JoinTeamBottariUseCase
-import com.bottari.core.ui.base.NetworkBaseViewModel
+import com.bottari.core.ui.base.FlowBaseViewModel
 import com.bottari.feature.mybottari.component.MyBottariDialogType
 import com.bottari.feature.mybottari.model.BottariUiModel
 import com.bottari.feature.mybottari.model.MyBottariUiModel
@@ -26,7 +25,6 @@ import javax.inject.Inject
 @Stable
 @HiltViewModel
 class MyBottariViewModel @Inject constructor(
-    networkManager: NetworkManager,
     private val fetchBottariesUseCase: FetchBottariesUseCase,
     private val fetchTeamBottariesUseCase: FetchTeamBottariesUseCase,
     private val createBottariUseCase: CreateBottariUseCase,
@@ -35,20 +33,13 @@ class MyBottariViewModel @Inject constructor(
     private val deleteTeamBottariUseCase: ExitTeamBottariUseCase,
     private val joinTeamBottariUseCase: JoinTeamBottariUseCase,
     private val alarmScheduler: AlarmScheduler,
-) : NetworkBaseViewModel<MyBottariUiState, MyBottariUiEvent>(
-        initialState = MyBottariUiState(),
-        networkManager = networkManager,
-    ) {
+) : FlowBaseViewModel<MyBottariUiState, MyBottariUiEvent>(MyBottariUiState()) {
     init {
         fetchPersonalBottaries()
+        fetchTeamBottaries()
     }
 
     fun fetchTeamBottaries() {
-        if (isConnected.value.not()) {
-            updateState { copy(isTeamFetched = true) }
-            return
-        }
-
         launch {
             updateState { copy(isLoading = true) }
             fetchTeamBottariesUseCase()
