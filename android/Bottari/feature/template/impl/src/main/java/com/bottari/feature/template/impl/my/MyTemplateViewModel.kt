@@ -1,9 +1,8 @@
 package com.bottari.feature.template.impl.my
 
-import com.bottari.core.domain.network.NetworkManager
 import com.bottari.core.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.core.domain.usecase.template.FetchMyBottariTemplatesUseCase
-import com.bottari.core.ui.base.NetworkBaseViewModel
+import com.bottari.core.ui.base.FlowBaseViewModel
 import com.bottari.core.ui.model.template.BottariTemplateUiModel
 import com.bottari.logger.BottariLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,23 +10,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyTemplateViewModel @Inject constructor(
-    networkManager: NetworkManager,
     private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
     private val deleteMyBottariTemplateUseCase: DeleteMyBottariTemplateUseCase,
-) : NetworkBaseViewModel<MyTemplateUiState, MyTemplateUiEvent>(
-        initialState = MyTemplateUiState(),
-        networkManager = networkManager,
-    ) {
+) : FlowBaseViewModel<MyTemplateUiState, MyTemplateUiEvent>(MyTemplateUiState()) {
     init {
         fetchMyTemplates()
     }
 
     fun fetchMyTemplates() {
-        if (isConnected.value.not()) {
-            updateState { copy(isFetched = true) }
-            return
-        }
-
         launch {
             updateState { copy(isLoading = true) }
 

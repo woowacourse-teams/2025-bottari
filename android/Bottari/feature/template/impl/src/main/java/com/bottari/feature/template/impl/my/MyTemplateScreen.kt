@@ -24,6 +24,7 @@ import com.bottari.bottari.designsystem.theme.BottariTheme
 import com.bottari.core.ui.component.OfflineContent
 import com.bottari.core.ui.model.template.BottariTemplateHashtagUiModel
 import com.bottari.core.ui.model.template.BottariTemplateUiModel
+import com.bottari.core.ui.provider.LocalNetworkManager
 import com.bottari.feature.template.impl.component.CreateTemplateFAB
 import com.bottari.feature.template.impl.component.PullToRefreshTemplateColumn
 import com.bottari.feature.template.impl.component.TemplateItemType
@@ -39,7 +40,8 @@ fun MyTemplateScreen(
 ) {
     val listState = rememberLazyListState()
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    val isConnected = viewModel.isConnected.collectAsStateWithLifecycle().value
+    val networkManager = LocalNetworkManager.current
+    val isConnected = networkManager.isConnected.collectAsStateWithLifecycle().value
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
@@ -51,7 +53,7 @@ fun MyTemplateScreen(
     }
 
     LaunchedEffect(isConnected) {
-        viewModel.fetchMyTemplates()
+        if (isConnected) viewModel.fetchMyTemplates()
     }
 
     if (isConnected) {
