@@ -4,7 +4,7 @@ import androidx.compose.runtime.Stable
 import com.bottari.core.domain.usecase.bookmark.FindBookmarkUseCase
 import com.bottari.core.domain.usecase.template.FetchBottariTemplateDetailUseCase
 import com.bottari.core.domain.usecase.template.TakeBottariTemplateDetailUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.template.BottariTemplateItemUiModel
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
@@ -21,7 +21,7 @@ class TemplateDetailViewModel @AssistedInject constructor(
     private val fetchBottariTemplateDetailUseCase: FetchBottariTemplateDetailUseCase,
     private val findBookmarkUseCase: FindBookmarkUseCase,
     private val takeBottariTemplateDetailUseCase: TakeBottariTemplateDetailUseCase,
-) : FlowBaseViewModel<TemplateDetailUiState, TemplateDetailUiEvent>(TemplateDetailUiState()) {
+) : BaseViewModel<TemplateDetailUiState, TemplateDetailUiEvent>(TemplateDetailUiState()) {
     init {
         if (isBookmark) fetchBookmark() else fetchBottariTemplateDetail()
     }

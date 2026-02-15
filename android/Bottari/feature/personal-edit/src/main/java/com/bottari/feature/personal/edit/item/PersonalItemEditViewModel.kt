@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bottari.core.domain.usecase.item.DeleteItemUseCase
 import com.bottari.core.domain.usecase.item.FetchItemsUseCase
 import com.bottari.core.domain.usecase.item.SaveItemUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.bottari.PersonalChecklistItemUiModel
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
@@ -24,7 +24,7 @@ class PersonalItemEditViewModel @AssistedInject constructor(
     private val fetchItemsUseCase: FetchItemsUseCase,
     private val saveItemUseCase: SaveItemUseCase,
     private val deleteItemUseCase: DeleteItemUseCase,
-) : FlowBaseViewModel<PersonalItemEditUiState, PersonalItemEditUiEvent>(
+) : BaseViewModel<PersonalItemEditUiState, PersonalItemEditUiEvent>(
         PersonalItemEditUiState(bottariId = bottariId),
     ) {
     init {

@@ -2,7 +2,7 @@ package com.bottari.feature.template.detail.report
 
 import androidx.compose.runtime.Stable
 import com.bottari.core.domain.usecase.report.ReportTemplateUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import dagger.assisted.Assisted
@@ -15,7 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 class ReportViewModel @AssistedInject constructor(
     @Assisted private val templateId: Long,
     private val reportTemplateUseCase: ReportTemplateUseCase,
-) : FlowBaseViewModel<ReportUiState, ReportUiEvent>(ReportUiState()) {
+) : BaseViewModel<ReportUiState, ReportUiEvent>(ReportUiState()) {
     fun updateSelectedReason(reason: String) {
         updateState { copy(reason = reason) }
     }

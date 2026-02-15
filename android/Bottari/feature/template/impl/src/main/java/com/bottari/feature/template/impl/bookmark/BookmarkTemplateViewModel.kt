@@ -3,7 +3,7 @@ package com.bottari.feature.template.impl.bookmark
 import androidx.lifecycle.viewModelScope
 import com.bottari.core.domain.usecase.bookmark.DeleteBookmarkUseCase
 import com.bottari.core.domain.usecase.bookmark.ObserveAllBookmarksUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.template.BookmarkedTemplateUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class BookmarkTemplateViewModel @Inject constructor(
     private val observeAllBookmarksUseCase: ObserveAllBookmarksUseCase,
     private val deleteBookmarkUseCase: DeleteBookmarkUseCase,
-) : FlowBaseViewModel<BookmarkTemplateUiState, BookmarkTemplateEvent>(BookmarkTemplateUiState()) {
+) : BaseViewModel<BookmarkTemplateUiState, BookmarkTemplateEvent>(BookmarkTemplateUiState()) {
     init {
         fetchBookmarks()
     }

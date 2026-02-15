@@ -5,7 +5,7 @@ import com.bottari.core.domain.model.bottari.template.HashtagName
 import com.bottari.core.domain.model.bottari.template.HashtagNameError
 import com.bottari.core.domain.usecase.bottari.FetchBottariesUseCase
 import com.bottari.core.domain.usecase.template.CreateBottariTemplateUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.bottari.personal.BottariDetailUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class CreateTemplateViewModel @Inject constructor(
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
     private val fetchBottariesUseCase: FetchBottariesUseCase,
-) : FlowBaseViewModel<CreateTemplateUiState, CreateTemplateUiEvent>(CreateTemplateUiState()) {
+) : BaseViewModel<CreateTemplateUiState, CreateTemplateUiEvent>(CreateTemplateUiState()) {
     init {
         fetchBottaries()
     }

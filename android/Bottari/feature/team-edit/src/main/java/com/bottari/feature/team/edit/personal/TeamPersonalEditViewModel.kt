@@ -4,7 +4,7 @@ import com.bottari.core.domain.model.team.bottari.item.TeamBottariItemType
 import com.bottari.core.domain.usecase.team.CreateTeamPersonalItemUseCase
 import com.bottari.core.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.core.domain.usecase.team.FetchTeamPersonalItemsUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.bottari.BottariItemUiModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -17,7 +17,7 @@ class TeamPersonalEditViewModel @AssistedInject constructor(
     private val fetchTeamPersonalItemsUseCase: FetchTeamPersonalItemsUseCase,
     private val createTeamPersonalItemUseCase: CreateTeamPersonalItemUseCase,
     private val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase,
-) : FlowBaseViewModel<TeamPersonalEditUiState, TeamPersonalEditUiEvent>(
+) : BaseViewModel<TeamPersonalEditUiState, TeamPersonalEditUiEvent>(
         TeamPersonalEditUiState(),
     ) {
     init {

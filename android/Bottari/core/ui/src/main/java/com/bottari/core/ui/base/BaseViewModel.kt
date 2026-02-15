@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-abstract class FlowBaseViewModel<UiState, UiEvent>(
+abstract class BaseViewModel<UiState, UiEvent>(
     initialState: UiState,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(initialState)

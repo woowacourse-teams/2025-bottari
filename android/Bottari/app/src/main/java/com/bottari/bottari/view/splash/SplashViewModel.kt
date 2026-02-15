@@ -8,7 +8,7 @@ import com.bottari.core.domain.usecase.appConfig.SavePermissionFlagUseCase
 import com.bottari.core.domain.usecase.fcm.SaveFcmTokenUseCase
 import com.bottari.core.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.core.domain.usecase.member.RegisterMemberUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.logger.BottariLogger
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +24,7 @@ class SplashViewModel @Inject constructor(
     private val saveFcmTokenUseCase: SaveFcmTokenUseCase,
     private val getPermissionFlagUseCase: GetPermissionFlagUseCase,
     private val checkForceUpdateUseCase: CheckForceUpdateUseCase,
-) : FlowBaseViewModel<SplashUiState, SplashUiEvent>(SplashUiState()) {
+) : BaseViewModel<SplashUiState, SplashUiEvent>(SplashUiState()) {
     private val isConnected: Boolean = networkManager.isConnected.value
 
     init {

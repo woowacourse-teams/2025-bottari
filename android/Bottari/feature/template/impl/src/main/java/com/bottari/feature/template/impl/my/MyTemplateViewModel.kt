@@ -2,7 +2,7 @@ package com.bottari.feature.template.impl.my
 
 import com.bottari.core.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.core.domain.usecase.template.FetchMyBottariTemplatesUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.template.BottariTemplateUiModel
 import com.bottari.logger.BottariLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +12,7 @@ import javax.inject.Inject
 class MyTemplateViewModel @Inject constructor(
     private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
     private val deleteMyBottariTemplateUseCase: DeleteMyBottariTemplateUseCase,
-) : FlowBaseViewModel<MyTemplateUiState, MyTemplateUiEvent>(MyTemplateUiState()) {
+) : BaseViewModel<MyTemplateUiState, MyTemplateUiEvent>(MyTemplateUiState()) {
     init {
         fetchMyTemplates()
     }

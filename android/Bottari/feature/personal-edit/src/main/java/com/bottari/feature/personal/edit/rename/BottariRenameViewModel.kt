@@ -1,7 +1,7 @@
 package com.bottari.feature.personal.edit.rename
 
 import com.bottari.core.domain.usecase.bottari.SaveBottariTitleUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import dagger.assisted.Assisted
@@ -13,7 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 class BottariRenameViewModel @AssistedInject constructor(
     @Assisted private val bottariId: Long,
     private val saveBottariTitleUseCase: SaveBottariTitleUseCase,
-) : FlowBaseViewModel<BottariRenameUiState, BottariRenameUiEvent>(BottariRenameUiState()) {
+) : BaseViewModel<BottariRenameUiState, BottariRenameUiEvent>(BottariRenameUiState()) {
     fun setInitialTitle(title: String) {
         updateState { copy(initialTitle = title, title = title) }
     }

@@ -11,7 +11,7 @@ import com.bottari.core.domain.usecase.team.CreateTeamBottariUseCase
 import com.bottari.core.domain.usecase.team.ExitTeamBottariUseCase
 import com.bottari.core.domain.usecase.team.FetchTeamBottariesUseCase
 import com.bottari.core.domain.usecase.team.JoinTeamBottariUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.feature.mybottari.component.MyBottariDialogType
 import com.bottari.feature.mybottari.model.BottariUiModel
 import com.bottari.feature.mybottari.model.MyBottariUiModel
@@ -33,7 +33,7 @@ class MyBottariViewModel @Inject constructor(
     private val deleteTeamBottariUseCase: ExitTeamBottariUseCase,
     private val joinTeamBottariUseCase: JoinTeamBottariUseCase,
     private val alarmScheduler: AlarmScheduler,
-) : FlowBaseViewModel<MyBottariUiState, MyBottariUiEvent>(MyBottariUiState()) {
+) : BaseViewModel<MyBottariUiState, MyBottariUiEvent>(MyBottariUiState()) {
     init {
         fetchPersonalBottaries()
         fetchTeamBottaries()

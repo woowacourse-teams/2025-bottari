@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bottari.core.domain.model.notification.Notification
 import com.bottari.core.domain.usecase.bottari.FindBottariUseCase
 import com.bottari.core.domain.usecase.template.CreateBottariTemplateUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.alarm.AlarmUiModel
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
@@ -23,7 +23,7 @@ class PersonalBottariEditViewModel @AssistedInject constructor(
     @Assisted private val bottariId: Long,
     private val findBottariUseCase: FindBottariUseCase,
     private val createBottariTemplateUseCase: CreateBottariTemplateUseCase,
-) : FlowBaseViewModel<PersonalBottariEditUiState, PersonalBottariEditUiEvent>(
+) : BaseViewModel<PersonalBottariEditUiState, PersonalBottariEditUiEvent>(
         PersonalBottariEditUiState(bottariId = bottariId),
     ) {
     init {

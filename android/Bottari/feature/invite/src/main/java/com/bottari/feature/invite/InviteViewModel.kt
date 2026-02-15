@@ -2,7 +2,7 @@ package com.bottari.feature.invite
 
 import androidx.compose.runtime.Stable
 import com.bottari.core.domain.usecase.team.JoinTeamBottariUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -10,7 +10,7 @@ import javax.inject.Inject
 @HiltViewModel
 class InviteViewModel @Inject constructor(
     private val joinTeamBottariUseCase: JoinTeamBottariUseCase,
-) : FlowBaseViewModel<InviteUiState, InviteUiEvent>(InviteUiState()) {
+) : BaseViewModel<InviteUiState, InviteUiEvent>(InviteUiState()) {
     fun joinTeamBottari(inviteCode: String) {
         updateState { copy(isLoading = true) }
         launch {

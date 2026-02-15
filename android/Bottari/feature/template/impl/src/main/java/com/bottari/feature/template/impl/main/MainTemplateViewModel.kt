@@ -12,7 +12,7 @@ import com.bottari.core.domain.usecase.bookmark.ObserveAllBookmarksUseCase
 import com.bottari.core.domain.usecase.hashtag.FetchPopularHashtagsUseCase
 import com.bottari.core.domain.usecase.template.SearchTemplatesByHashtagUseCase
 import com.bottari.core.domain.usecase.template.SearchTemplatesByTitleUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.template.BottariTemplateHashtagUiModel
 import com.bottari.core.ui.model.template.BottariTemplateUiModel
 import com.bottari.logger.BottariLogger
@@ -30,7 +30,7 @@ class MainTemplateViewModel @Inject constructor(
     private val addBookmarkUseCase: AddBookmarkUseCase,
     private val deleteBookmarkUseCase: DeleteBookmarkUseCase,
     private val observeAllBookmarksUseCase: ObserveAllBookmarksUseCase,
-) : FlowBaseViewModel<MainTemplateUiState, MainTemplateUiEvent>(MainTemplateUiState()) {
+) : BaseViewModel<MainTemplateUiState, MainTemplateUiEvent>(MainTemplateUiState()) {
     private var pageable: Pageable<BottariTemplate> = Pageable()
     private val debouncedSearch: (Unit) -> Unit =
         viewModelScope.debounce(DEBOUND_SEARCH_DELAY) { loadNextPageBySearchWord(reset = true) }
