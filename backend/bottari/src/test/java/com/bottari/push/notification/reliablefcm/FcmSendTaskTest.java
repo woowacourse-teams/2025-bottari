@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.bottari.error.BusinessException;
 import com.bottari.push.message.PushMessage;
-import com.bottari.push.notification.reliablefcm.domain.FailedCause;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
 import com.bottari.push.notification.reliablefcm.domain.TaskState;
 import java.lang.reflect.Field;
@@ -14,8 +13,36 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 class FcmSendTaskTest {
+
+    private static void setState(
+            final FcmSendTask task,
+            final TaskState state
+    ) {
+        try {
+            final Field field = FcmSendTask.class.getDeclaredField("state");
+            field.setAccessible(true);
+            field.set(task, state);
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void setAttemptCount(
+            final FcmSendTask task,
+            final int attemptCount
+    ) {
+        try {
+            final Field field = FcmSendTask.class.getDeclaredField("attemptCount");
+            field.setAccessible(true);
+            field.set(task, attemptCount);
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @DisplayName("FcmSendTask를 생성한다.")
     @Test
@@ -48,164 +75,6 @@ class FcmSendTaskTest {
         );
     }
 
-    @Nested
-    class MarkStateTest {
-
-        @DisplayName("FcmSendTask 상태를 PENDING으로 변경한다.")
-        @Test
-        void markPending() {
-            // given
-            final FcmSendTask task = new FcmSendTask(
-                    LocalDateTime.now().plusMinutes(5),
-                    new PushMessage("test", "test", "null"),
-                    1L
-            );
-            task.markInProgress();
-            final LocalDateTime scheduledAt = LocalDateTime.now().plusMinutes(5);
-
-            // when
-            task.markPending(scheduledAt);
-
-            // then
-            assertAll(
-                    () -> assertThat(task.getState()).isEqualTo(TaskState.PENDING),
-                    () -> assertThat(task.getScheduledAt()).isEqualTo(scheduledAt)
-            );
-        }
-
-        @DisplayName("FcmSendTask 상태를 IN_PROGRESS로 변경한다.")
-        @Test
-        void markInProgress() {
-            // given
-            final FcmSendTask task = new FcmSendTask(
-                    LocalDateTime.now().plusMinutes(5),
-                    new PushMessage("test", "test", "null"),
-                    1L
-            );
-
-            // when
-            task.markInProgress();
-
-            // then
-            assertAll(
-                    () -> assertThat(task.getState()).isEqualTo(TaskState.IN_PROGRESS),
-                    () -> assertThat(task.getInProgressAt()).isNotNull(),
-                    () -> assertThat(task.getAttemptCount()).isGreaterThanOrEqualTo(1)
-            );
-        }
-
-        @DisplayName("FcmSendTask 상태를 COMPLETED로 변경한다.")
-        @Test
-        void markCompleted() {
-            // given
-            final FcmSendTask task = new FcmSendTask(
-                    LocalDateTime.now().plusMinutes(5),
-                    new PushMessage("test", "test", "null"),
-                    1L
-            );
-
-            // when
-            task.markCompleted();
-
-            // then
-            assertAll(
-                    () -> assertThat(task.getState()).isEqualTo(TaskState.COMPLETED),
-                    () -> assertThat(task.getFinishedAt()).isNotNull()
-            );
-        }
-
-        @DisplayName("FcmSendTask 상태를 FAILED로 변경한다.")
-        @Test
-        void markFailed() {
-            // given
-            final FcmSendTask task = new FcmSendTask(
-                    LocalDateTime.now().plusMinutes(5),
-                    new PushMessage("test", "test", "null"),
-                    1L
-            );
-
-            // when
-            task.markFailed();
-
-            // then
-            assertAll(
-                    () -> assertThat(task.getState()).isEqualTo(TaskState.FAILED),
-                    () -> assertThat(task.getFinishedAt()).isNotNull()
-            );
-        }
-    }
-
-    @Nested
-    class InvalidCaseTest {
-
-        @DisplayName("이미 완료된 FcmSendTask의 상태를 변경하려고 하면 예외가 발생한다. - IN_PROGRESS")
-        @Test
-        void changeStateAfterFinished1() {
-            // given
-            final FcmSendTask task = new FcmSendTask(
-                    LocalDateTime.now().plusMinutes(5),
-                    new PushMessage("test", "test", "null"),
-                    1L
-            );
-            task.markCompleted();
-
-            // when & then
-            assertThatThrownBy(task::markInProgress)
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessageContaining("FCM 전송 작업이 이미 완료되었습니다.");
-        }
-
-        @DisplayName("이미 완료된 FcmSendTask의 상태를 변경하려고 하면 예외가 발생한다. - FAILED")
-        @Test
-        void changeStateAfterFinished2() {
-            // given
-            final FcmSendTask task = new FcmSendTask(
-                    LocalDateTime.now().plusMinutes(5),
-                    new PushMessage("test", "test", "null"),
-                    1L
-            );
-            task.markFailed();
-
-            // when & then
-            assertThatThrownBy(() -> task.markPending(LocalDateTime.now().plusMinutes(5)))
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessageContaining("FCM 전송 작업이 이미 완료되었습니다.");
-        }
-
-        @DisplayName("현재 상태와 동일한 상태로 변경하려고 하면 예외가 발생한다. - PENDING")
-        @Test
-        void changeToSameState1() {
-            // given
-            final FcmSendTask task = new FcmSendTask(
-                    LocalDateTime.now().plusMinutes(5),
-                    new PushMessage("test", "test", "null"),
-                    1L
-            );
-
-            // when & then
-            assertThatThrownBy(() -> task.markPending(LocalDateTime.now().plusMinutes(5)))
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessageContaining("FCM 전송 작업이 이미 동일한 상태로 표시되어 있습니다.");
-        }
-
-        @DisplayName("현재 상태와 동일한 상태로 변경하려고 하면 예외가 발생한다. - IN_PROGRESS")
-        @Test
-        void changeToSameState2() {
-            // given
-            final FcmSendTask task = new FcmSendTask(
-                    LocalDateTime.now().plusMinutes(5),
-                    new PushMessage("test", "test", "null"),
-                    1L
-            );
-            task.markInProgress();
-
-            // when & then
-            assertThatThrownBy(task::markInProgress)
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessageContaining("FCM 전송 작업이 이미 동일한 상태로 표시되어 있습니다.");
-        }
-    }
-
     @DisplayName("FcmSendTask의 재시도 한도 초과 여부를 확인한다.")
     @Test
     void isRetryLimitExceeded() {
@@ -226,16 +95,193 @@ class FcmSendTaskTest {
         );
     }
 
-    private static void setAttemptCount(
-            final FcmSendTask task,
-            final int attemptCount
-    ) {
-        try {
-            final Field field = FcmSendTask.class.getDeclaredField("attemptCount");
-            field.setAccessible(true);
-            field.set(task, attemptCount);
-        } catch (final Exception e) {
-            throw new RuntimeException(e);
+    @Nested
+    class MarkPendingTest {
+
+        @DisplayName("FcmSendTask 상태를 IN_PROGRESS에서 PENDING으로 변경한다.")
+        @Test
+        void markPending() {
+            // given
+            final FcmSendTask task = new FcmSendTask(
+                    LocalDateTime.now().plusMinutes(5),
+                    new PushMessage("test", "test", "null"),
+                    1L
+            );
+            setState(task, TaskState.IN_PROGRESS);
+            final LocalDateTime scheduledAt = LocalDateTime.now().plusMinutes(5);
+
+            // when
+            task.markPending(scheduledAt);
+
+            // then
+            assertAll(
+                    () -> assertThat(task.getState()).isEqualTo(TaskState.PENDING),
+                    () -> assertThat(task.getScheduledAt()).isEqualTo(scheduledAt)
+            );
+        }
+
+        @DisplayName("FcmSendTask IN_PROGRESS가 아닌 상태에서 PENDING으로 변경하면 예외가 발생한다.")
+        @ParameterizedTest
+        @EnumSource(
+                value = TaskState.class,
+                mode = EnumSource.Mode.EXCLUDE,
+                names = {"IN_PROGRESS"}
+        )
+        void markPending_invalid_transition(final TaskState currentState) {
+            // given
+            final FcmSendTask task = new FcmSendTask(
+                    LocalDateTime.now().plusMinutes(5),
+                    new PushMessage("test", "test", "null"),
+                    1L
+            );
+            setState(task, currentState);
+            final LocalDateTime scheduledAt = LocalDateTime.now().plusMinutes(5);
+
+            // when & then
+            assertThatThrownBy(() -> task.markPending(scheduledAt))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining("FCM 전송 작업의 상태 전이가 올바르지 않습니다.");
+        }
+    }
+
+    @Nested
+    class MarkInProgressTest {
+
+        @DisplayName("FcmSendTask 상태를 PENDING에서 IN_PROGRESS로 변경한다.")
+        @Test
+        void markInProgress() {
+            // given
+            final FcmSendTask task = new FcmSendTask(
+                    LocalDateTime.now().plusMinutes(5),
+                    new PushMessage("test", "test", "null"),
+                    1L
+            );
+
+            // when
+            task.markInProgress();
+
+            // then
+            assertAll(
+                    () -> assertThat(task.getState()).isEqualTo(TaskState.IN_PROGRESS),
+                    () -> assertThat(task.getInProgressAt()).isNotNull(),
+                    () -> assertThat(task.getAttemptCount()).isGreaterThanOrEqualTo(1)
+            );
+        }
+
+        @DisplayName("FcmSendTask PENDING이 아닌 상태에서 IN_PROGRESS로 변경하면 예외가 발생한다.")
+        @ParameterizedTest
+        @EnumSource(
+                value = TaskState.class,
+                mode = EnumSource.Mode.EXCLUDE,
+                names = {"PENDING"}
+        )
+        void markInProgress_invalid_transition(final TaskState currentState) {
+            // given
+            final FcmSendTask task = new FcmSendTask(
+                    LocalDateTime.now().plusMinutes(5),
+                    new PushMessage("test", "test", "null"),
+                    1L
+            );
+            setState(task, currentState);
+
+            // when & then
+            assertThatThrownBy(task::markInProgress)
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining("FCM 전송 작업의 상태 전이가 올바르지 않습니다.");
+        }
+    }
+
+    @Nested
+    class MarkCompletedTest {
+
+        @DisplayName("FcmSendTask 상태를 IN_PROGRESS에서 COMPLETED로 변경한다.")
+        @Test
+        void markCompleted() {
+            // given
+            final FcmSendTask task = new FcmSendTask(
+                    LocalDateTime.now().plusMinutes(5),
+                    new PushMessage("test", "test", "null"),
+                    1L
+            );
+            setState(task, TaskState.IN_PROGRESS);
+
+            // when
+            task.markCompleted();
+
+            // then
+            assertAll(
+                    () -> assertThat(task.getState()).isEqualTo(TaskState.COMPLETED),
+                    () -> assertThat(task.getFinishedAt()).isNotNull()
+            );
+        }
+
+        @DisplayName("FcmSendTask IN_PROGRESS가 아닌 상태에서 COMPLETED로 변경하면 예외가 발생한다.")
+        @ParameterizedTest
+        @EnumSource(
+                value = TaskState.class,
+                mode = EnumSource.Mode.EXCLUDE,
+                names = {"IN_PROGRESS"}
+        )
+        void markCompleted_invalid_transition(final TaskState currentState) {
+            // given
+            final FcmSendTask task = new FcmSendTask(
+                    LocalDateTime.now().plusMinutes(5),
+                    new PushMessage("test", "test", "null"),
+                    1L
+            );
+            setState(task, currentState);
+
+            // when & then
+            assertThatThrownBy(task::markCompleted)
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining("FCM 전송 작업의 상태 전이가 올바르지 않습니다.");
+        }
+    }
+
+    @Nested
+    class MarkFailedTest {
+
+        @DisplayName("FcmSendTask 상태를 IN_PROGRESS에서 FAILED로 변경한다.")
+        @Test
+        void markFailed() {
+            // given
+            final FcmSendTask task = new FcmSendTask(
+                    LocalDateTime.now().plusMinutes(5),
+                    new PushMessage("test", "test", "null"),
+                    1L
+            );
+            setState(task, TaskState.IN_PROGRESS);
+
+            // when
+            task.markFailed();
+
+            // then
+            assertAll(
+                    () -> assertThat(task.getState()).isEqualTo(TaskState.FAILED),
+                    () -> assertThat(task.getFinishedAt()).isNotNull()
+            );
+        }
+
+        @DisplayName("FcmSendTask IN_PROGRESS가 아닌 상태에서 FAILED로 변경하면 예외가 발생한다.")
+        @ParameterizedTest
+        @EnumSource(
+                value = TaskState.class,
+                mode = EnumSource.Mode.EXCLUDE,
+                names = {"IN_PROGRESS"}
+        )
+        void markFailed_invalid_transition(final TaskState currentState) {
+            // given
+            final FcmSendTask task = new FcmSendTask(
+                    LocalDateTime.now().plusMinutes(5),
+                    new PushMessage("test", "test", "null"),
+                    1L
+            );
+            setState(task, currentState);
+
+            // when & then
+            assertThatThrownBy(task::markFailed)
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining("FCM 전송 작업의 상태 전이가 올바르지 않습니다.");
         }
     }
 }

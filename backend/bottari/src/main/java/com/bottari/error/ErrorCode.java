@@ -117,8 +117,7 @@ public enum ErrorCode {
     FCM_MESSAGE_CONVERT_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 메시지 변환을 실패하였습니다."),
 
     // ===== Reliable FCM 관련 =====
-    FCM_SEND_TASK_ALREADY_FINISHED(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업이 이미 완료되었습니다."),
-    FCM_SEND_TASK_SAME_STATE(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업이 이미 동일한 상태로 표시되어 있습니다."),
+    FCM_SEND_TASK_INVALID_STATE_TRANSITION(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업의 상태 전이가 올바르지 않습니다."),
     FCM_SEND_TASK_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업을 찾을 수 없습니다."),
 
     // ===== SSE CONNECTION 관련 =====

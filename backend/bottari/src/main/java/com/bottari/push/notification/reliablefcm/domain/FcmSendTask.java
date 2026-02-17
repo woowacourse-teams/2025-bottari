@@ -58,58 +58,42 @@ public class FcmSendTask {
     }
 
     public void markPending(final LocalDateTime scheduledAt) {
-        validateIsNotFinished();
-        final TaskState markingState = TaskState.PENDING;
-        validateIsNotSameState(markingState, this.state);
-        this.state = markingState;
+        if (this.state != TaskState.IN_PROGRESS) {
+            throw new BusinessException(ErrorCode.FCM_SEND_TASK_INVALID_STATE_TRANSITION, "current: " + this.state);
+        }
+        this.state = TaskState.PENDING;
         this.scheduledAt = scheduledAt;
     }
 
     public void markInProgress() {
-        validateIsNotFinished();
-        final TaskState markingState = TaskState.IN_PROGRESS;
-        validateIsNotSameState(markingState, this.state);
+        if (this.state != TaskState.PENDING) {
+            throw new BusinessException(ErrorCode.FCM_SEND_TASK_INVALID_STATE_TRANSITION, "current: " + this.state);
+        }
+        if (isRetryLimitExceeded()) {
+            throw new BusinessException(ErrorCode.FCM_SEND_TASK_INVALID_STATE_TRANSITION, "attempt exceeded");
+        }
         this.state = TaskState.IN_PROGRESS;
         this.inProgressAt = LocalDateTime.now();
         this.attemptCount += 1;
     }
 
     public void markCompleted() {
-        validateIsNotFinished();
-        final TaskState markingState = TaskState.COMPLETED;
-        validateIsNotSameState(markingState, this.state);
+        if (this.state != TaskState.IN_PROGRESS) {
+            throw new BusinessException(ErrorCode.FCM_SEND_TASK_INVALID_STATE_TRANSITION, "current: " + this.state);
+        }
         this.state = TaskState.COMPLETED;
         this.finishedAt = LocalDateTime.now();
     }
 
     public void markFailed() {
-        validateIsNotFinished();
-        final TaskState markingState = TaskState.FAILED;
-        validateIsNotSameState(markingState, this.state);
+        if (this.state != TaskState.IN_PROGRESS) {
+            throw new BusinessException(ErrorCode.FCM_SEND_TASK_INVALID_STATE_TRANSITION, "current: " + this.state);
+        }
         this.state = TaskState.FAILED;
         this.finishedAt = LocalDateTime.now();
     }
 
     public boolean isRetryLimitExceeded() {
         return this.attemptCount >= MAX_ATTEMPT_COUNT;
-    }
-
-    private void validateIsNotFinished() {
-        if (isFinish()) {
-            throw new BusinessException(ErrorCode.FCM_SEND_TASK_ALREADY_FINISHED, "taskId: " + this.id);
-        }
-    }
-
-    private boolean isFinish() {
-        return this.state == TaskState.COMPLETED || this.state == TaskState.FAILED;
-    }
-
-    private void validateIsNotSameState(
-            final TaskState markingState,
-            final TaskState state
-    ) {
-        if (markingState == state) {
-            throw new BusinessException(ErrorCode.FCM_SEND_TASK_SAME_STATE, "taskId: " + this.id + ", state: " + state);
-        }
     }
 }
