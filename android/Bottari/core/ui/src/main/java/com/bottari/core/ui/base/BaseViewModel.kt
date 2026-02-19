@@ -32,7 +32,7 @@ abstract class BaseViewModel<UiState, UiEvent>(
         }
 
     protected fun updateState(reducer: UiState.() -> UiState) {
-        _uiState.update { currentState.reducer() }
+        _uiState.update { state -> state.reducer() }
     }
 
     protected fun emitEvent(event: UiEvent) {
