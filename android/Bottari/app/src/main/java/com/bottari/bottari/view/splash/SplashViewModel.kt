@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    networkManager: NetworkManager,
+    private val networkManager: NetworkManager,
     private val registerMemberUseCase: RegisterMemberUseCase,
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
     private val savePermissionFlagUseCase: SavePermissionFlagUseCase,
@@ -25,7 +25,8 @@ class SplashViewModel @Inject constructor(
     private val getPermissionFlagUseCase: GetPermissionFlagUseCase,
     private val checkForceUpdateUseCase: CheckForceUpdateUseCase,
 ) : BaseViewModel<SplashUiState, SplashUiEvent>(SplashUiState()) {
-    private val isConnected: Boolean = networkManager.isConnected.value
+    private val isConnected: Boolean
+        get() = networkManager.isConnected.value
 
     init {
         initializeApp()
