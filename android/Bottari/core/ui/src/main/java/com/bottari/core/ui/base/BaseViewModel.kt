@@ -18,13 +18,13 @@ abstract class BaseViewModel<UiState, UiEvent>(
     initialState: UiState,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(initialState)
-    val uiState: StateFlow<UiState> get() = _uiState.asStateFlow()
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     protected val currentState: UiState
         get() = _uiState.value
 
     private val _uiEvent = Channel<UiEvent>()
-    val uiEvent: Flow<UiEvent> get() = _uiEvent.receiveAsFlow()
+    val uiEvent: Flow<UiEvent> = _uiEvent.receiveAsFlow()
 
     protected val exceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
