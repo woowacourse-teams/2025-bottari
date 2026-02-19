@@ -1,5 +1,6 @@
 package com.bottari.feature.template.impl.my
 
+import androidx.compose.runtime.Stable
 import com.bottari.core.domain.usecase.template.DeleteMyBottariTemplateUseCase
 import com.bottari.core.domain.usecase.template.FetchMyBottariTemplatesUseCase
 import com.bottari.core.ui.base.BaseViewModel
@@ -8,15 +9,12 @@ import com.bottari.logger.BottariLogger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+@Stable
 @HiltViewModel
 class MyTemplateViewModel @Inject constructor(
     private val fetchMyBottariTemplatesUseCase: FetchMyBottariTemplatesUseCase,
     private val deleteMyBottariTemplateUseCase: DeleteMyBottariTemplateUseCase,
 ) : BaseViewModel<MyTemplateUiState, MyTemplateUiEvent>(MyTemplateUiState()) {
-    init {
-        fetchMyTemplates()
-    }
-
     fun fetchMyTemplates() {
         launch {
             updateState { copy(isLoading = true) }

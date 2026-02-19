@@ -14,7 +14,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,8 +43,6 @@ fun MyTemplateScreen(
     val networkManager = LocalNetworkManager.current
     val isConnected = networkManager.isConnected.collectAsStateWithLifecycle().value
 
-    var hasLaunched by rememberSaveable { mutableStateOf(false) }
-
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { uiEvent ->
             when (uiEvent) {
@@ -56,8 +53,7 @@ fun MyTemplateScreen(
     }
 
     LaunchedEffect(isConnected) {
-        if (hasLaunched && isConnected) viewModel.fetchMyTemplates()
-        hasLaunched = true
+        if (isConnected) viewModel.fetchMyTemplates()
     }
 
     if (isConnected) {

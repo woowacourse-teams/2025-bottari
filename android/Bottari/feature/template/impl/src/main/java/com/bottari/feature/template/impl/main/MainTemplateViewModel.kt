@@ -1,5 +1,6 @@
 package com.bottari.feature.template.impl.main
 
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
 import com.bottari.common.util.debounce
 import com.bottari.core.domain.model.bottari.template.BookmarkTemplate
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
+@Stable
 @HiltViewModel
 class MainTemplateViewModel @Inject constructor(
     private val searchTemplatesByTitleUseCase: SearchTemplatesByTitleUseCase,
