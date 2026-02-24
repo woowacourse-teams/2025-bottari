@@ -48,6 +48,7 @@ class SplashActivity : AppCompatActivity() {
             setKeepOnScreenCondition { !isReady }
         }
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
         setupObserver()
     }
 

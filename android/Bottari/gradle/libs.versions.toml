@@ -229,6 +229,8 @@ bottari-android-application-compose = { id = "bottari.android.application.compos
 bottari-android-library = { id = "bottari.android.library", version = "unspecified" }
 bottari-android-library-compose = { id = "bottari.android.library.compose", version = "unspecified" }
 bottari-android-feature = { id = "bottari.android.feature", version = "unspecified" }
+bottari-android-feature-api = { id = "bottari.android.feature.api", version = "unspecified" }
+bottari-android-feature-impl = { id = "bottari.android.feature.impl", version = "unspecified" }
 bottari-android-hilt = { id = "bottari.android.hilt", version = "unspecified" }
 bottari-jvm-kotlin = { id = "bottari.jvm.kotlin", version = "unspecified" }
 

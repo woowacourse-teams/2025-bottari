@@ -1,48 +1,47 @@
 package com.bottari.core.ui.base
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bottari.logger.BottariLogger
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<UiState, UiEvent>(
     initialState: UiState,
 ) : ViewModel() {
-    private val _uiState = MutableLiveData(initialState)
-    val uiState: LiveData<UiState> get() = _uiState
+    private val _uiState = MutableStateFlow(initialState)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     protected val currentState: UiState
-        get() = _uiState.value ?: error(ERROR_STATE_IS_NOT_INITIALIZED)
+        get() = _uiState.value
 
-    private val _uiEvent = SingleLiveEvent<UiEvent>()
-    val uiEvent: LiveData<UiEvent> get() = _uiEvent
+    private val _uiEvent = Channel<UiEvent>()
+    val uiEvent: Flow<UiEvent> = _uiEvent.receiveAsFlow()
 
-    private val exceptionHandler =
+    protected val exceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
             handleError(throwable)
         }
 
     protected fun updateState(reducer: UiState.() -> UiState) {
-        _uiState.value = currentState.reducer()
+        _uiState.update { state -> state.reducer() }
     }
 
     protected fun emitEvent(event: UiEvent) {
-        _uiEvent.value = event
+        launch { _uiEvent.send(event) }
     }
 
-    protected fun launch(block: suspend CoroutineScope.() -> Unit) {
-        viewModelScope.launch(exceptionHandler, block = block)
-    }
+    protected fun launch(block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch(exceptionHandler, block = block)
 
     protected open fun handleError(throwable: Throwable) {
         BottariLogger.error(throwable.localizedMessage, throwable)
-    }
-
-    companion object {
-        private const val ERROR_STATE_IS_NOT_INITIALIZED = "[ERROR] UiState가 초기화되지 않았습니다"
     }
 }

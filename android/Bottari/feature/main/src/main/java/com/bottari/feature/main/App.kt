@@ -13,16 +13,19 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import com.bottari.bottari.designsystem.theme.LocalBottariBgColor
+import com.bottari.core.domain.network.NetworkManager
 import com.bottari.core.navigation.LocalNavigator
 import com.bottari.core.navigation.Navigator
 import com.bottari.core.navigation.rememberNavigationState
 import com.bottari.core.navigation.toEntries
+import com.bottari.core.ui.provider.LocalNetworkManager
 import com.bottari.core.ui.provider.LocalSnackbarHostState
 
 @Composable
 fun App(
     entryBuilders: Set<EntryProviderScope<NavKey>.() -> Unit>,
     startKey: NavKey,
+    networkManager: NetworkManager,
 ) {
     val navigationState = rememberNavigationState(startKey, TOP_LEVEL_NAV_ITEMS.keys)
     val navigator = remember { Navigator(navigationState) }
@@ -36,6 +39,7 @@ fun App(
     CompositionLocalProvider(
         LocalNavigator provides navigator,
         LocalSnackbarHostState provides snackbarState,
+        LocalNetworkManager provides networkManager,
     ) {
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarState) },

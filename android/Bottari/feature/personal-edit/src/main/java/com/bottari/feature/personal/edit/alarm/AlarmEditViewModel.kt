@@ -7,7 +7,7 @@ import com.bottari.core.domain.model.alarm.Alarm
 import com.bottari.core.domain.model.notification.Notification
 import com.bottari.core.domain.usecase.alarm.FindAlarmUseCase
 import com.bottari.core.domain.usecase.alarm.SaveAlarmUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.alarm.AlarmTypeUiModel
 import com.bottari.core.ui.model.alarm.AlarmUiModel
 import com.bottari.core.ui.model.alarm.RepeatDayUiModel
@@ -31,7 +31,7 @@ class AlarmEditViewModel @AssistedInject constructor(
     private val findAlarmUseCase: FindAlarmUseCase,
     private val saveAlarmUseCase: SaveAlarmUseCase,
     private val alarmScheduler: AlarmScheduler,
-) : FlowBaseViewModel<AlarmUiState, AlarmUiEvent>(AlarmUiState()) {
+) : BaseViewModel<AlarmUiState, AlarmUiEvent>(AlarmUiState()) {
     private val debouncedAlarmSave: (Unit) -> Unit
 
     init {

@@ -8,7 +8,7 @@ import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.bottari.feature.more.navigation.MoreNavKey
 import com.bottari.feature.mybottari.navigation.MyBottariNavKey
-import com.bottari.feature.template.navigation.TemplateNavKey
+import com.bottari.feature.template.api.TemplateNavKey
 
 internal data class TopLevelNavItem(
     val icon: ImageVector,

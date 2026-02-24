@@ -7,7 +7,7 @@ import com.bottari.core.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.core.domain.usecase.team.CreateTeamSharedItemUseCase
 import com.bottari.core.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.core.domain.usecase.team.FetchTeamSharedItemsUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.bottari.BottariItemUiModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -26,7 +26,7 @@ class TeamSharedEditViewModel @AssistedInject constructor(
     private val createTeamSharedItemUseCase: CreateTeamSharedItemUseCase,
     private val deleteTeamBottariItemUseCase: DeleteTeamBottariItemUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
-) : FlowBaseViewModel<TeamSharedEditUiState, TeamSharedEditUiEvent>(
+) : BaseViewModel<TeamSharedEditUiState, TeamSharedEditUiEvent>(
         TeamSharedEditUiState(),
     ) {
     init {

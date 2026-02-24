@@ -8,7 +8,7 @@ import com.bottari.core.domain.usecase.item.ResetItemsCheckStateUseCase
 import com.bottari.core.domain.usecase.item.UpdateItemCheckStateUseCase
 import com.bottari.core.domain.usecase.tooltip.FetchTooltipStatusUseCase
 import com.bottari.core.domain.usecase.tooltip.UpdateTooltipStatusUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.bottari.PersonalChecklistItemUiModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -27,7 +27,7 @@ class PersonalChecklistViewModel @AssistedInject constructor(
     private val updateTooltipStatusUseCase: UpdateTooltipStatusUseCase,
     private val updateItemCheckStateUseCase: UpdateItemCheckStateUseCase,
     private val resetItemsCheckStateUseCase: ResetItemsCheckStateUseCase,
-) : FlowBaseViewModel<PersonalChecklistUiState, PersonalChecklistUiEvent>(PersonalChecklistUiState()) {
+) : BaseViewModel<PersonalChecklistUiState, PersonalChecklistUiEvent>(PersonalChecklistUiState()) {
     init {
         fetchChecklist()
         checkIfTooltipWasDismissed()

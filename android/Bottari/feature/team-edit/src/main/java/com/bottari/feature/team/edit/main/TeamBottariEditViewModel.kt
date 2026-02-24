@@ -6,7 +6,7 @@ import com.bottari.core.domain.model.team.bottari.TeamBottariDetail
 import com.bottari.core.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.core.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.core.domain.usecase.team.FetchTeamBottariDetailUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.alarm.AlarmUiModel
 import com.bottari.core.ui.model.bottari.BottariItemUiModel
 import dagger.assisted.Assisted
@@ -28,7 +28,7 @@ class TeamBottariEditViewModel @AssistedInject constructor(
     private val fetchTeamBottariDetailUseCase: FetchTeamBottariDetailUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
-) : FlowBaseViewModel<TeamBottariEditUiState, TeamBottariEditUiEvent>(TeamBottariEditUiState()) {
+) : BaseViewModel<TeamBottariEditUiState, TeamBottariEditUiEvent>(TeamBottariEditUiState()) {
     init {
         handleEvent()
         fetchTeamBottariDetail()

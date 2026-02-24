@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -12,10 +13,9 @@ import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bottari.common.util.DeeplinkHelper
+import com.bottari.core.ui.provider.LocalNetworkManager
 import com.bottari.feature.mybottari.component.MyBottariContent
 import com.bottari.feature.mybottari.component.MyBottariDialogType
 import com.bottari.feature.mybottari.component.MyBottariDialogs
@@ -30,18 +30,17 @@ fun MyBottariScreen(
     viewModel: MyBottariViewModel = hiltViewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    val isConnected = viewModel.isConnected.collectAsStateWithLifecycle().value
+    val networkManager = LocalNetworkManager.current
+    val isConnected = networkManager.isConnected.collectAsStateWithLifecycle().value
     val context = LocalContext.current
     val clipboard = LocalClipboard.current
 
     var dialogText by rememberSaveable { mutableStateOf("") }
-
-    LifecycleEventEffect(Lifecycle.Event.ON_START) {
-        viewModel.fetchTeamBottaries()
-    }
+    var hasLaunched by remember { mutableStateOf(false) }
 
     LaunchedEffect(isConnected) {
-        viewModel.fetchTeamBottaries()
+        if (hasLaunched && isConnected) viewModel.fetchTeamBottaries()
+        hasLaunched = true
     }
 
     LaunchedEffect(uiState.showDialogType) {

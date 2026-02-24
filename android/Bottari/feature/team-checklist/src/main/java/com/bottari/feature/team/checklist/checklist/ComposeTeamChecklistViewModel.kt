@@ -16,7 +16,7 @@ import com.bottari.core.domain.usecase.team.FetchTeamChecklistUseCase
 import com.bottari.core.domain.usecase.team.UncheckTeamBottariItemUseCase
 import com.bottari.core.domain.usecase.tooltip.FetchTooltipStatusUseCase
 import com.bottari.core.domain.usecase.tooltip.UpdateTooltipStatusUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.core.ui.model.bottari.team.TeamChecklistItemUiModel
 import dagger.assisted.Assisted
@@ -48,7 +48,7 @@ class ComposeTeamChecklistViewModel @AssistedInject constructor(
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
     private val fetchTooltipStatusUseCase: FetchTooltipStatusUseCase,
     private val updateTooltipStatusUseCase: UpdateTooltipStatusUseCase,
-) : FlowBaseViewModel<ComposeTeamChecklistUiState, ComposeTeamChecklistUiEvent>(
+) : BaseViewModel<ComposeTeamChecklistUiState, ComposeTeamChecklistUiEvent>(
         ComposeTeamChecklistUiState(),
     ) {
     private var memberId: Long = -1

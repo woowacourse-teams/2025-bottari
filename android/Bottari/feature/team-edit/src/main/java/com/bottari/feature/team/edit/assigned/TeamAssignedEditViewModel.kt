@@ -11,7 +11,7 @@ import com.bottari.core.domain.usecase.team.DeleteTeamBottariItemUseCase
 import com.bottari.core.domain.usecase.team.FetchTeamAssignedItemsUseCase
 import com.bottari.core.domain.usecase.team.FetchTeamBottariMembersUseCase
 import com.bottari.core.domain.usecase.team.SaveTeamBottariAssignedItemUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.bottari.personal.BottariItemTypeUiModel
 import com.bottari.core.ui.model.bottari.personal.SelectableItemUiModel
 import com.bottari.core.ui.model.bottari.team.member.TeamMemberUiModel
@@ -35,7 +35,7 @@ class TeamAssignedEditViewModel @AssistedInject constructor(
     private val fetchTeamBottariMembersUseCase: FetchTeamBottariMembersUseCase,
     private val saveTeamBottariAssignedItemUseCase: SaveTeamBottariAssignedItemUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
-) : FlowBaseViewModel<TeamAssignedEditUiState, TeamAssignedEditUiEvent>(
+) : BaseViewModel<TeamAssignedEditUiState, TeamAssignedEditUiEvent>(
         TeamAssignedEditUiState(),
     ) {
     init {

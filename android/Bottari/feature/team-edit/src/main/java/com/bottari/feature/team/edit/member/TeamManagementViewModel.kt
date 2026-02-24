@@ -7,7 +7,7 @@ import com.bottari.core.domain.model.team.member.TeamStatus
 import com.bottari.core.domain.usecase.event.ConnectTeamEventUseCase
 import com.bottari.core.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.core.domain.usecase.team.FetchTeamMembersUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.bottari.team.member.TeamMemberUiModel
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
@@ -31,7 +31,7 @@ class TeamManagementViewModel @AssistedInject constructor(
     private val fetchTeamMembersUseCase: FetchTeamMembersUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
-) : FlowBaseViewModel<TeamManagementUiState, TeamManagementUiEvent>(
+) : BaseViewModel<TeamManagementUiState, TeamManagementUiEvent>(
         TeamManagementUiState(),
     ) {
     init {

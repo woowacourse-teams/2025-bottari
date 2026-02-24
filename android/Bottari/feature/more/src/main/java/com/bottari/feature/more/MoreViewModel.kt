@@ -3,7 +3,7 @@ package com.bottari.feature.more
 import androidx.compose.runtime.Stable
 import com.bottari.core.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.core.domain.usecase.member.SaveMemberNicknameUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.logger.BottariLogger
 import com.bottari.logger.model.UiEventType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class MoreViewModel @Inject constructor(
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
     private val saveMemberNicknameUseCase: SaveMemberNicknameUseCase,
-) : FlowBaseViewModel<MoreUiState, MoreUiEvent>(MoreUiState()) {
+) : BaseViewModel<MoreUiState, MoreUiEvent>(MoreUiState()) {
     init {
         fetchMemberInfo()
     }

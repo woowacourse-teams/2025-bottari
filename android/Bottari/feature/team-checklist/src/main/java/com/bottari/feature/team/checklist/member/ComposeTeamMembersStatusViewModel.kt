@@ -10,7 +10,7 @@ import com.bottari.core.domain.usecase.event.DisconnectTeamEventUseCase
 import com.bottari.core.domain.usecase.member.GetMemberIdUseCase
 import com.bottari.core.domain.usecase.team.FetchTeamMembersStatusUseCase
 import com.bottari.core.domain.usecase.team.SendRemindByMemberMessageUseCase
-import com.bottari.core.ui.base.FlowBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.core.ui.model.bottari.team.member.TeamMemberStatusUiModel
 import com.bottari.core.ui.model.bottari.team.member.TeamMemberUiModel
 import dagger.assisted.Assisted
@@ -36,7 +36,7 @@ class ComposeTeamMembersStatusViewModel @AssistedInject constructor(
     private val getMemberIdUseCase: GetMemberIdUseCase,
     private val connectTeamEventUseCase: ConnectTeamEventUseCase,
     private val disconnectTeamEventUseCase: DisconnectTeamEventUseCase,
-) : FlowBaseViewModel<ComposeTeamMembersStatusUiState, ComposeTeamMembersStatusUiEvent>(
+) : BaseViewModel<ComposeTeamMembersStatusUiState, ComposeTeamMembersStatusUiEvent>(
         ComposeTeamMembersStatusUiState(),
     ) {
     val debouncedSendRemindMessage: (member: TeamMemberUiModel) -> Unit =

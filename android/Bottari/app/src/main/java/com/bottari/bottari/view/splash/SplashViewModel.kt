@@ -8,7 +8,7 @@ import com.bottari.core.domain.usecase.appConfig.SavePermissionFlagUseCase
 import com.bottari.core.domain.usecase.fcm.SaveFcmTokenUseCase
 import com.bottari.core.domain.usecase.member.CheckRegisteredMemberUseCase
 import com.bottari.core.domain.usecase.member.RegisterMemberUseCase
-import com.bottari.core.ui.base.NetworkBaseViewModel
+import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.logger.BottariLogger
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,17 +17,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    networkManager: NetworkManager,
+    private val networkManager: NetworkManager,
     private val registerMemberUseCase: RegisterMemberUseCase,
     private val checkRegisteredMemberUseCase: CheckRegisteredMemberUseCase,
     private val savePermissionFlagUseCase: SavePermissionFlagUseCase,
     private val saveFcmTokenUseCase: SaveFcmTokenUseCase,
     private val getPermissionFlagUseCase: GetPermissionFlagUseCase,
     private val checkForceUpdateUseCase: CheckForceUpdateUseCase,
-) : NetworkBaseViewModel<SplashUiState, SplashUiEvent>(
-        initialState = SplashUiState(),
-        networkManager = networkManager,
-    ) {
+) : BaseViewModel<SplashUiState, SplashUiEvent>(SplashUiState()) {
+    private val isConnected: Boolean
+        get() = networkManager.isConnected.value
+
     init {
         initializeApp()
     }
@@ -40,7 +40,7 @@ class SplashViewModel @Inject constructor(
     }
 
     fun checkRegisteredMember() {
-        if (isConnected.value.not()) {
+        if (isConnected.not()) {
             emitEvent(SplashUiEvent.Offline(false))
             return
         }
@@ -59,7 +59,7 @@ class SplashViewModel @Inject constructor(
 
     private fun initializeApp() =
         when {
-            isConnected.value.not() -> handleOffline()
+            isConnected.not() -> handleOffline()
             BuildConfig.DEBUG -> checkPermissionFlag()
             else -> handleForceUpdate()
         }
