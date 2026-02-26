@@ -1,8 +1,10 @@
 package com.bottari.push.notification.reliablefcm;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.bottari.error.BusinessException;
 import com.bottari.push.message.PushMessage;
 import com.bottari.push.notification.reliablefcm.domain.FailedCause;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendFailedTask;
@@ -289,7 +291,7 @@ class FcmSendTaskServiceTest {
             final FcmSendTask task = pollTasks.getFirst();
 
             // when
-            fcmSendTaskService.completeTask(task.getId());
+            fcmSendTaskService.completeTask(task.getId(), claimId);
 
             // then
             final List<FcmSendTaskState> states = entityManager.createQuery(
@@ -313,6 +315,34 @@ class FcmSendTaskServiceTest {
                                     TaskState.COMPLETED
                             )
             );
+        }
+
+        @DisplayName("claimId가 다르다면 FCM 전송 작업을 완료 처리할 수 없다.")
+        @Test
+        void completeTask_invalid_claim() {
+            // given
+            final LocalDateTime scheduledAt = LocalDateTime.now().minusMinutes(1);
+            final PushMessage message = new PushMessage(
+                    "test",
+                    "test",
+                    "test"
+            );
+            final Long targetMemberId = 1L;
+            final ScheduleFcmSendTaskRequest request = new ScheduleFcmSendTaskRequest(
+                    scheduledAt,
+                    message,
+                    targetMemberId
+            );
+            fcmSendTaskService.scheduleFcmSendTask(request);
+            final UUID claimId = UuidCreator.getTimeOrderedEpochFast();
+            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(claimId, 10);
+            final FcmSendTask task = pollTasks.getFirst();
+            final UUID invalidClaimId = UuidCreator.getTimeOrderedEpochFast();
+
+            // when & then
+            assertThatThrownBy(() -> fcmSendTaskService.completeTask(task.getId(), invalidClaimId))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining("FCM 전송 작업의 claimId가 일치하지 않습니다.");
         }
     }
 
@@ -342,7 +372,7 @@ class FcmSendTaskServiceTest {
             final Duration retryDelay = Duration.ofMinutes(2);
 
             // when
-            fcmSendTaskService.retryTask(task.getId(), retryDelay);
+            fcmSendTaskService.retryTask(task.getId(), retryDelay, claimId);
 
             // then
             final List<FcmSendTaskState> states = entityManager.createQuery(
@@ -366,8 +396,38 @@ class FcmSendTaskServiceTest {
                                     TaskState.PENDING,
                                     TaskState.IN_PROGRESS,
                                     TaskState.PENDING
-                            )
+                            ),
+                    () -> assertThat(task.getClaimId()).isNull()
             );
+        }
+
+        @DisplayName("claimId가 다르다면 FCM 전송 작업을 재시도 처리할 수 없다.")
+        @Test
+        void retryTask_invalid_claim() {
+            // given
+            final LocalDateTime scheduledAt = LocalDateTime.now().minusMinutes(1);
+            final PushMessage message = new PushMessage(
+                    "test",
+                    "test",
+                    "test"
+            );
+            final Long targetMemberId = 1L;
+            final ScheduleFcmSendTaskRequest request = new ScheduleFcmSendTaskRequest(
+                    scheduledAt,
+                    message,
+                    targetMemberId
+            );
+            fcmSendTaskService.scheduleFcmSendTask(request);
+            final UUID claimId = UuidCreator.getTimeOrderedEpochFast();
+            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(claimId, 10);
+            final FcmSendTask task = pollTasks.getFirst();
+            final Duration retryDelay = Duration.ofMinutes(2);
+            final UUID invalidClaimId = UuidCreator.getTimeOrderedEpochFast();
+
+            // when & then
+            assertThatThrownBy(() -> fcmSendTaskService.retryTask(task.getId(), retryDelay, invalidClaimId))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining("FCM 전송 작업의 claimId가 일치하지 않습니다.");
         }
     }
 
@@ -396,7 +456,7 @@ class FcmSendTaskServiceTest {
             final FcmSendTask task = pollTasks.getFirst();
 
             // when
-            fcmSendTaskService.failTask(task.getId(), FailedCause.RETRY_LIMIT_EXCEEDED);
+            fcmSendTaskService.failTask(task.getId(), FailedCause.RETRY_LIMIT_EXCEEDED, claimId);
 
             // then
             final List<FcmSendTaskState> states = entityManager.createQuery(
@@ -431,6 +491,37 @@ class FcmSendTaskServiceTest {
                     () -> assertThat(failedTask).isNotNull(),
                     () -> assertThat(failedTask.getFailedCause()).isEqualTo(FailedCause.RETRY_LIMIT_EXCEEDED)
             );
+        }
+
+        @DisplayName("claimId가 다르다면 FCM 전송 작업을 완료 처리할 수 없다.")
+        @Test
+        void failTask_invalid_claim() {
+            // given
+            final LocalDateTime scheduledAt = LocalDateTime.now().minusMinutes(1);
+            final PushMessage message = new PushMessage(
+                    "test",
+                    "test",
+                    "test"
+            );
+            final Long targetMemberId = 1L;
+            final ScheduleFcmSendTaskRequest request = new ScheduleFcmSendTaskRequest(
+                    scheduledAt,
+                    message,
+                    targetMemberId
+            );
+            fcmSendTaskService.scheduleFcmSendTask(request);
+            final UUID claimId = UuidCreator.getTimeOrderedEpochFast();
+            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(claimId, 10);
+            final FcmSendTask task = pollTasks.getFirst();
+            final UUID invalidClaimId = UuidCreator.getTimeOrderedEpochFast();
+
+            // when & then
+            assertThatThrownBy(() -> fcmSendTaskService.failTask(
+                    task.getId(),
+                    FailedCause.RETRY_LIMIT_EXCEEDED,
+                    invalidClaimId))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining("FCM 전송 작업의 claimId가 일치하지 않습니다.");
         }
     }
 }

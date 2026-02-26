@@ -119,11 +119,12 @@ public enum ErrorCode {
     // ===== Reliable FCM 관련 =====
     FCM_SEND_TASK_INVALID_STATE_TRANSITION(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업의 상태 전이가 올바르지 않습니다."),
     FCM_SEND_TASK_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업을 찾을 수 없습니다."),
+    FCM_SEND_TASK_CLAIM_MISMATCH(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업의 claimId가 일치하지 않습니다."),
 
     // ===== SSE CONNECTION 관련 =====
     SSE_CONNECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결에 실패했습니다."),
 
-    // ===== PUSH_MANAGER 관련 =====
+    // ===== PUSH_MANAGER 관련 =====,
     PUSH_SCHEDULED_AT_MUST_NOT_BE_NULL(HttpStatus.INTERNAL_SERVER_ERROR, "예약 전송 시각은 null일 수 없습니다."),
 
     // ===== 기타 =====,

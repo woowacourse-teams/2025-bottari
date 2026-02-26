@@ -28,35 +28,39 @@ public class FcmSendTaskScheduler {
             try {
                 fcmChannel.unicast(task.getMessage(), task.getTargetMemberId());
                 // 1) 전송 성공: 작업 완료 처리
-                fcmSendTaskService.completeTask(task.getId());
+                fcmSendTaskService.completeTask(task.getId(), claimId);
             } catch (final BusinessException e) {
-                handleBusinessException(task, e);
+                handleBusinessException(task, e, claimId);
             } catch (final Exception e) {
-                handleRetryOrFail(task);
+                handleRetryOrFail(task, claimId);
             }
         }
     }
 
     private void handleBusinessException(
             final FcmSendTask task,
-            final BusinessException e
+            final BusinessException e,
+            final UUID claimId
     ) {
         // 2) 토큰 문제: 영구 실패
         if (isPermanentError(e.getErrorCode())) {
-            fcmSendTaskService.failTask(task.getId(), FailedCause.INVALID_TOKEN);
+            fcmSendTaskService.failTask(task.getId(), FailedCause.INVALID_TOKEN, claimId);
             return;
         }
-        handleRetryOrFail(task);
+        handleRetryOrFail(task, claimId);
     }
 
-    private void handleRetryOrFail(final FcmSendTask task) {
+    private void handleRetryOrFail(
+            final FcmSendTask task,
+            final UUID claimId
+    ) {
         // 3-1) 전송 실패(일시적): 시도 횟수 초과 시 영구 실패
         if (task.isRetryLimitExceeded()) {
-            fcmSendTaskService.failTask(task.getId(), FailedCause.RETRY_LIMIT_EXCEEDED);
+            fcmSendTaskService.failTask(task.getId(), FailedCause.RETRY_LIMIT_EXCEEDED, claimId);
             return;
         }
         // 3-2) 전송 실패(일시적): 시도 횟수 남을 시 재시도
-        fcmSendTaskService.retryTask(task.getId(), calculateRetryDelay(task));
+        fcmSendTaskService.retryTask(task.getId(), calculateRetryDelay(task), claimId);
     }
 
     private boolean isPermanentError(final ErrorCode errorCode) {

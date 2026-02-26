@@ -43,8 +43,8 @@ class FcmSendTaskIncidentHandlerTest {
 
         // then
         verify(fcmSendTaskService, times(1))
-                .retryTask(eq(task.getId()), eq(Duration.ZERO));
-        verify(fcmSendTaskService, never()).failTask(any(), any());
+                .retryTask(eq(task.getId()), eq(Duration.ZERO), any());
+        verify(fcmSendTaskService, never()).failTask(any(), any(), any());
     }
 
     @DisplayName("오래된 IN_PROGRESS 작업들 중 시도 횟수를 초과한 작업은 실패 처리한다")
@@ -61,7 +61,7 @@ class FcmSendTaskIncidentHandlerTest {
 
         // then
         verify(fcmSendTaskService, times(1))
-                .failTask(eq(task.getId()), eq(FailedCause.RETRY_LIMIT_EXCEEDED));
-        verify(fcmSendTaskService, never()).retryTask(any(), any());
+                .failTask(eq(task.getId()), eq(FailedCause.RETRY_LIMIT_EXCEEDED), any());
+        verify(fcmSendTaskService, never()).retryTask(any(), any(), any());
     }
 }

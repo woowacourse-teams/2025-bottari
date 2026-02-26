@@ -64,9 +64,9 @@ class FcmSendTaskSchedulerTest {
 
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
-        verify(fcmSendTaskService, times(1)).completeTask(task.getId());
-        verify(fcmSendTaskService, never()).retryTask(any(), any());
-        verify(fcmSendTaskService, never()).failTask(any(), any());
+        verify(fcmSendTaskService, times(1)).completeTask(eq(task.getId()), any());
+        verify(fcmSendTaskService, never()).retryTask(any(), any(), any());
+        verify(fcmSendTaskService, never()).failTask(any(), any(), any());
     }
 
     @DisplayName("FCM 토큰 문제로 실패하면 작업을 실패 처리한다")
@@ -87,9 +87,9 @@ class FcmSendTaskSchedulerTest {
 
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
-        verify(fcmSendTaskService, times(1)).failTask(eq(task.getId()), any());
-        verify(fcmSendTaskService, never()).completeTask(any());
-        verify(fcmSendTaskService, never()).retryTask(any(), any());
+        verify(fcmSendTaskService, times(1)).failTask(eq(task.getId()), any(), any());
+        verify(fcmSendTaskService, never()).completeTask(any(), any());
+        verify(fcmSendTaskService, never()).retryTask(any(), any(), any());
     }
 
     @DisplayName("FCM 전송 실패 시 작업을 재시도 처리한다 - BusinessException")
@@ -110,9 +110,9 @@ class FcmSendTaskSchedulerTest {
 
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
-        verify(fcmSendTaskService, times(1)).retryTask(eq(task.getId()), any());
-        verify(fcmSendTaskService, never()).failTask(any(), any());
-        verify(fcmSendTaskService, never()).completeTask(any());
+        verify(fcmSendTaskService, times(1)).retryTask(eq(task.getId()), any(), any());
+        verify(fcmSendTaskService, never()).failTask(any(), any(), any());
+        verify(fcmSendTaskService, never()).completeTask(any(), any());
     }
 
     @DisplayName("FCM 전송 실패 시 작업을 재시도 처리한다 - RuntimeException")
@@ -133,9 +133,9 @@ class FcmSendTaskSchedulerTest {
 
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
-        verify(fcmSendTaskService, times(1)).retryTask(eq(task.getId()), any());
-        verify(fcmSendTaskService, never()).failTask(any(), any());
-        verify(fcmSendTaskService, never()).completeTask(any());
+        verify(fcmSendTaskService, times(1)).retryTask(eq(task.getId()), any(), any());
+        verify(fcmSendTaskService, never()).failTask(any(), any(), any());
+        verify(fcmSendTaskService, never()).completeTask(any(), any());
     }
 
     @DisplayName("FCM 전송 실패 및 작업 시도 횟수 초과 시 실패 처리한다 - BusinessException")
@@ -157,9 +157,9 @@ class FcmSendTaskSchedulerTest {
 
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
-        verify(fcmSendTaskService, times(1)).failTask(eq(task.getId()), any());
-        verify(fcmSendTaskService, never()).retryTask(any(), any());
-        verify(fcmSendTaskService, never()).completeTask(any());
+        verify(fcmSendTaskService, times(1)).failTask(eq(task.getId()), any(), any());
+        verify(fcmSendTaskService, never()).retryTask(any(), any(), any());
+        verify(fcmSendTaskService, never()).completeTask(any(), any());
     }
 
     @DisplayName("FCM 전송 실패 및 작업 시도 횟수 초과 시 실패 처리한다 - RuntimeException")
@@ -181,9 +181,9 @@ class FcmSendTaskSchedulerTest {
 
         // then
         verify(fcmChannel, times(1)).unicast(any(), eq(1L));
-        verify(fcmSendTaskService, times(1)).failTask(eq(task.getId()), any());
-        verify(fcmSendTaskService, never()).retryTask(any(), any());
-        verify(fcmSendTaskService, never()).completeTask(any());
+        verify(fcmSendTaskService, times(1)).failTask(eq(task.getId()), any(), any());
+        verify(fcmSendTaskService, never()).retryTask(any(), any(), any());
+        verify(fcmSendTaskService, never()).completeTask(any(), any());
     }
 
     @DisplayName("재시도 횟수에 따라 retry delay 계산한다.")
@@ -210,7 +210,7 @@ class FcmSendTaskSchedulerTest {
 
         // then
         final ArgumentCaptor<Duration> captor = ArgumentCaptor.forClass(Duration.class);
-        verify(fcmSendTaskService).retryTask(eq(task.getId()), captor.capture());
+        verify(fcmSendTaskService).retryTask(eq(task.getId()), captor.capture(), any());
         assertThat(captor.getValue()).isEqualTo(expected);
     }
 }

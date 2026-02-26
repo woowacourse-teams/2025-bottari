@@ -29,10 +29,10 @@ public class FcmSendTaskIncidentHandler {
         final List<FcmSendTask> tasks = fcmSendTaskService.getStuckTasks(Duration.ofMinutes(1), 100);
         for (final FcmSendTask task : tasks) {
             if (task.isRetryLimitExceeded()) {
-                fcmSendTaskService.failTask(task.getId(), FailedCause.RETRY_LIMIT_EXCEEDED);
+                fcmSendTaskService.failTask(task.getId(), FailedCause.RETRY_LIMIT_EXCEEDED, task.getClaimId());
                 continue;
             }
-            fcmSendTaskService.retryTask(task.getId(), Duration.ZERO);
+            fcmSendTaskService.retryTask(task.getId(), Duration.ZERO, task.getClaimId());
         }
     }
 

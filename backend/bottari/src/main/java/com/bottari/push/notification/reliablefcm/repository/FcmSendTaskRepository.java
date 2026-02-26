@@ -1,9 +1,12 @@
 package com.bottari.push.notification.reliablefcm.repository;
 
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
+import jakarta.persistence.LockModeType;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
 public interface FcmSendTaskRepository extends JpaRepository<FcmSendTask, Long> {
@@ -36,4 +39,12 @@ public interface FcmSendTaskRepository extends JpaRepository<FcmSendTask, Long> 
             final LocalDateTime thresholdTime,
             final int limit
     );
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+            select t
+            from FcmSendTask t
+            where t.id = :taskId
+           """)
+    Optional<FcmSendTask> findByIdForUpdate(final Long taskId);
 }

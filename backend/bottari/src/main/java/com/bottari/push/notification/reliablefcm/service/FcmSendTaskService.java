@@ -87,9 +87,12 @@ public class FcmSendTaskService {
     }
 
     @Transactional
-    public void completeTask(final Long taskId) {
-        final FcmSendTask task = fcmSendTaskRepository.findById(taskId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.FCM_SEND_TASK_NOT_FOUND, "taskId: " + taskId));
+    public void completeTask(
+            final Long taskId,
+            final UUID claimId
+    ) {
+        final FcmSendTask task = getFcmSendTaskForUpdate(taskId);
+        validateClaimOwnership(task, claimId);
         task.markCompleted();
         final FcmSendTaskState state = new FcmSendTaskState(task);
         fcmSendTaskStateRepository.save(state);
@@ -98,10 +101,11 @@ public class FcmSendTaskService {
     @Transactional
     public void retryTask(
             final Long taskId,
-            final Duration retryDelay
+            final Duration retryDelay,
+            final UUID claimId
     ) {
-        final FcmSendTask task = fcmSendTaskRepository.findById(taskId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.FCM_SEND_TASK_NOT_FOUND, "taskId: " + taskId));
+        final FcmSendTask task = getFcmSendTaskForUpdate(taskId);
+        validateClaimOwnership(task, claimId);
         final LocalDateTime scheduledAt = LocalDateTime.now().plus(retryDelay);
         task.markPending(scheduledAt);
         final FcmSendTaskState state = new FcmSendTaskState(task);
@@ -111,14 +115,32 @@ public class FcmSendTaskService {
     @Transactional
     public void failTask(
             final Long taskId,
-            final FailedCause failedCause
+            final FailedCause failedCause,
+            final UUID claimId
     ) {
-        final FcmSendTask task = fcmSendTaskRepository.findById(taskId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.FCM_SEND_TASK_NOT_FOUND, "taskId: " + taskId));
+        final FcmSendTask task = getFcmSendTaskForUpdate(taskId);
+        validateClaimOwnership(task, claimId);
         task.markFailed();
         final FcmSendTaskState state = new FcmSendTaskState(task);
         fcmSendTaskStateRepository.save(state);
         final FcmSendFailedTask failedTask = new FcmSendFailedTask(task, failedCause);
         fcmSendTaskFailedRepository.save(failedTask);
+    }
+
+    private FcmSendTask getFcmSendTaskForUpdate(final Long taskId) {
+        return fcmSendTaskRepository.findByIdForUpdate(taskId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.FCM_SEND_TASK_NOT_FOUND, "taskId: " + taskId));
+    }
+
+    private void validateClaimOwnership(
+            final FcmSendTask task,
+            final UUID claimId
+    ) {
+        if (!task.isClaimedBy(claimId)) {
+            throw new BusinessException(
+                    ErrorCode.FCM_SEND_TASK_CLAIM_MISMATCH,
+                    "taskId: " + task.getId() + ", claimId: " + claimId + ", taskClaimId: " + task.getClaimId()
+            );
+        }
     }
 }

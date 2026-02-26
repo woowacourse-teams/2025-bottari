@@ -98,6 +98,26 @@ class FcmSendTaskTest {
         );
     }
 
+    @DisplayName("FcmSendTask의 점유자를 비교한다.")
+    @Test
+    void isClaimedBy() {
+        // given
+        final FcmSendTask task = new FcmSendTask(
+                LocalDateTime.now().plusMinutes(5),
+                new PushMessage("test", "test", "null"),
+                1L
+        );
+        final UUID uuid = UuidCreator.getTimeOrderedEpochFast();
+        final UUID anotherUuid = UuidCreator.getTimeOrderedEpochFast();
+        task.markInProgress(uuid);
+
+        // when & then
+        assertAll(
+                () -> assertThat(task.isClaimedBy(uuid)).isTrue(),
+                () -> assertThat(task.isClaimedBy(anotherUuid)).isFalse()
+        );
+    }
+
     @Nested
     class MarkPendingTest {
 

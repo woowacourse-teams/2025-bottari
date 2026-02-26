@@ -106,4 +106,8 @@ public class FcmSendTask {
     public boolean isRetryLimitExceeded() {
         return this.attemptCount >= MAX_ATTEMPT_COUNT;
     }
+
+    public boolean isClaimedBy(final UUID claimId) {
+        return this.claimId.equals(claimId);
+    }
 }
