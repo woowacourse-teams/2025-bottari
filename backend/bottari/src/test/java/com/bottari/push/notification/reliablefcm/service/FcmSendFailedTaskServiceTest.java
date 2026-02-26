@@ -3,10 +3,14 @@ package com.bottari.push.notification.reliablefcm.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.bottari.push.message.PushMessage;
 import com.bottari.push.notification.reliablefcm.domain.FailedCause;
 import com.bottari.push.notification.reliablefcm.domain.FailedTaskState;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendFailedTask;
+import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
+import com.github.f4b6a3.uuid.UuidCreator;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,13 +36,34 @@ class FcmSendFailedTaskServiceTest {
     @Test
     void getPendingFailedTasks() {
         // given
-        final FcmSendFailedTask task1 = new FcmSendFailedTask(null, FailedCause.RETRY_LIMIT_EXCEEDED);
-        final FcmSendFailedTask task2 = new FcmSendFailedTask(null, FailedCause.RETRY_LIMIT_EXCEEDED);
-        final FcmSendFailedTask task3 = new FcmSendFailedTask(null, FailedCause.RETRY_LIMIT_EXCEEDED);
-        task3.markAlerted();
+        final FcmSendTask task1 = new FcmSendTask(
+                LocalDateTime.now().plusMinutes(5),
+                new PushMessage("test", "test", "null"),
+                1L
+        );
+        task1.markInProgress(UuidCreator.getTimeOrderedEpochFast());
+        final FcmSendTask task2 = new FcmSendTask(
+                LocalDateTime.now().plusMinutes(5),
+                new PushMessage("test", "test", "null"),
+                1L
+        );
+        task2.markInProgress(UuidCreator.getTimeOrderedEpochFast());
+        final FcmSendTask task3 = new FcmSendTask(
+                LocalDateTime.now().plusMinutes(5),
+                new PushMessage("test", "test", "null"),
+                1L
+        );
+        task3.markInProgress(UuidCreator.getTimeOrderedEpochFast());
+        final FcmSendFailedTask failedTask1 = new FcmSendFailedTask(task1, FailedCause.RETRY_LIMIT_EXCEEDED);
+        final FcmSendFailedTask failedTask2 = new FcmSendFailedTask(task2, FailedCause.RETRY_LIMIT_EXCEEDED);
+        final FcmSendFailedTask failedTask3 = new FcmSendFailedTask(task3, FailedCause.RETRY_LIMIT_EXCEEDED);
+        failedTask3.markAlerted();
         entityManager.persist(task1);
         entityManager.persist(task2);
         entityManager.persist(task3);
+        entityManager.persist(failedTask1);
+        entityManager.persist(failedTask2);
+        entityManager.persist(failedTask3);
         entityManager.flush();
 
         // when
@@ -47,7 +72,7 @@ class FcmSendFailedTaskServiceTest {
         // then
         assertAll(
                 () -> assertThat(tasks.size()).isEqualTo(2),
-                () -> assertThat(tasks).containsExactlyInAnyOrder(task1, task2)
+                () -> assertThat(tasks).containsExactlyInAnyOrder(failedTask1, failedTask2)
         );
     }
 
@@ -55,23 +80,37 @@ class FcmSendFailedTaskServiceTest {
     @Test
     void alertedFailedTasks() {
         // given
-        final FcmSendFailedTask task1 = new FcmSendFailedTask(null, FailedCause.RETRY_LIMIT_EXCEEDED);
-        final FcmSendFailedTask task2 = new FcmSendFailedTask(null, FailedCause.RETRY_LIMIT_EXCEEDED);
-        task1.markAlerted();
-        task2.markAlerted();
+        final FcmSendTask task1 = new FcmSendTask(
+                LocalDateTime.now().plusMinutes(5),
+                new PushMessage("test", "test", "null"),
+                1L
+        );
+        task1.markInProgress(UuidCreator.getTimeOrderedEpochFast());
+        final FcmSendTask task2 = new FcmSendTask(
+                LocalDateTime.now().plusMinutes(5),
+                new PushMessage("test", "test", "null"),
+                1L
+        );
+        task2.markInProgress(UuidCreator.getTimeOrderedEpochFast());
+        final FcmSendFailedTask failedTask1 = new FcmSendFailedTask(task1, FailedCause.RETRY_LIMIT_EXCEEDED);
+        final FcmSendFailedTask failedTask2 = new FcmSendFailedTask(task2, FailedCause.RETRY_LIMIT_EXCEEDED);
+        failedTask1.markAlerted();
+        failedTask2.markAlerted();
         entityManager.persist(task1);
         entityManager.persist(task2);
+        entityManager.persist(failedTask1);
+        entityManager.persist(failedTask2);
 
         // when
-        fcmSendFailedTaskService.alertedFailedTasks(List.of(task1.getId(), task2.getId()));
+        fcmSendFailedTaskService.alertedFailedTasks(List.of(failedTask1.getId(), failedTask2.getId()));
         entityManager.flush();
 
         // then
         final List<FcmSendFailedTask> actual = entityManager.createQuery(
                         "SELECT t FROM FcmSendFailedTask t WHERE t.id IN (:task1Id,:task2Id)",
                         FcmSendFailedTask.class)
-                .setParameter("task1Id", task1.getId())
-                .setParameter("task2Id", task2.getId())
+                .setParameter("task1Id", failedTask1.getId())
+                .setParameter("task2Id", failedTask2.getId())
                 .getResultList();
 
         assertAll(

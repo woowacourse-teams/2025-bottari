@@ -55,7 +55,7 @@ class FcmSendTaskSchedulerTest {
         // given
         final FcmSendTask task = mock(FcmSendTask.class);
 
-        when(fcmSendTaskService.claimPendingTasks(100)).thenReturn(List.of(task));
+        when(fcmSendTaskService.claimPendingTasks(any(), eq(100))).thenReturn(List.of(task));
         when(task.getMessage()).thenReturn(mock(PushMessage.class));
         when(task.getTargetMemberId()).thenReturn(1L);
 
@@ -75,7 +75,7 @@ class FcmSendTaskSchedulerTest {
         // given
         final FcmSendTask task = mock(FcmSendTask.class);
 
-        when(fcmSendTaskService.claimPendingTasks(100)).thenReturn(List.of(task));
+        when(fcmSendTaskService.claimPendingTasks(any(), eq(100))).thenReturn(List.of(task));
         when(task.getMessage()).thenReturn(mock(PushMessage.class));
         when(task.getTargetMemberId()).thenReturn(1L);
         doThrow(new BusinessException(ErrorCode.FCM_INVALID_TOKEN))
@@ -98,7 +98,7 @@ class FcmSendTaskSchedulerTest {
         // given
         final FcmSendTask task = mock(FcmSendTask.class);
 
-        when(fcmSendTaskService.claimPendingTasks(100)).thenReturn(List.of(task));
+        when(fcmSendTaskService.claimPendingTasks(any(), eq(100))).thenReturn(List.of(task));
         when(task.getMessage()).thenReturn(mock(PushMessage.class));
         when(task.getTargetMemberId()).thenReturn(1L);
         doThrow(new BusinessException(ErrorCode.FCM_MESSAGE_SEND_FAIL))
@@ -121,7 +121,7 @@ class FcmSendTaskSchedulerTest {
         // given
         final FcmSendTask task = mock(FcmSendTask.class);
 
-        when(fcmSendTaskService.claimPendingTasks(100)).thenReturn(List.of(task));
+        when(fcmSendTaskService.claimPendingTasks(any(), eq(100))).thenReturn(List.of(task));
         when(task.getMessage()).thenReturn(mock(PushMessage.class));
         when(task.getTargetMemberId()).thenReturn(1L);
         doThrow(new RuntimeException())
@@ -144,7 +144,7 @@ class FcmSendTaskSchedulerTest {
         // given
         final FcmSendTask task = mock(FcmSendTask.class);
 
-        when(fcmSendTaskService.claimPendingTasks(100)).thenReturn(List.of(task));
+        when(fcmSendTaskService.claimPendingTasks(any(), eq(100))).thenReturn(List.of(task));
         when(task.getMessage()).thenReturn(mock(PushMessage.class));
         when(task.getTargetMemberId()).thenReturn(1L);
         when(task.isRetryLimitExceeded()).thenReturn(true);
@@ -168,7 +168,7 @@ class FcmSendTaskSchedulerTest {
         // given
         final FcmSendTask task = mock(FcmSendTask.class);
 
-        when(fcmSendTaskService.claimPendingTasks(100)).thenReturn(List.of(task));
+        when(fcmSendTaskService.claimPendingTasks(any(), eq(100))).thenReturn(List.of(task));
         when(task.getMessage()).thenReturn(mock(PushMessage.class));
         when(task.getTargetMemberId()).thenReturn(1L);
         when(task.isRetryLimitExceeded()).thenReturn(true);
@@ -196,7 +196,7 @@ class FcmSendTaskSchedulerTest {
         // given
         final FcmSendTask task = mock(FcmSendTask.class);
 
-        when(fcmSendTaskService.claimPendingTasks(100)).thenReturn(List.of(task));
+        when(fcmSendTaskService.claimPendingTasks(any(), eq(100))).thenReturn(List.of(task));
         when(task.getMessage()).thenReturn(mock(PushMessage.class));
         when(task.getTargetMemberId()).thenReturn(1L);
         when(task.getAttemptCount()).thenReturn(attempt);

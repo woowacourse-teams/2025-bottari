@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,10 @@ public class FcmSendTask {
 
     @Enumerated(EnumType.STRING)
     private TaskState state;
+
+    @JdbcTypeCode(SqlTypes.BINARY)
+    @Column(length = 16)
+    private UUID claimId;
 
     private LocalDateTime scheduledAt;
 
@@ -62,17 +67,22 @@ public class FcmSendTask {
             throw new BusinessException(ErrorCode.FCM_SEND_TASK_INVALID_STATE_TRANSITION, "current: " + this.state);
         }
         this.state = TaskState.PENDING;
+        this.claimId = null;
         this.scheduledAt = scheduledAt;
     }
 
-    public void markInProgress() {
+    public void markInProgress(final UUID claimId) {
         if (this.state != TaskState.PENDING) {
             throw new BusinessException(ErrorCode.FCM_SEND_TASK_INVALID_STATE_TRANSITION, "current: " + this.state);
         }
         if (isRetryLimitExceeded()) {
             throw new BusinessException(ErrorCode.FCM_SEND_TASK_INVALID_STATE_TRANSITION, "attempt exceeded");
         }
+        if (claimId == null) {
+            throw new IllegalArgumentException("claimId cannot be null");
+        }
         this.state = TaskState.IN_PROGRESS;
+        this.claimId = claimId;
         this.inProgressAt = LocalDateTime.now();
         this.attemptCount += 1;
     }

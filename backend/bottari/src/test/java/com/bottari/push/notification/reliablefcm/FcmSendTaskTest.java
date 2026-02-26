@@ -8,8 +8,10 @@ import com.bottari.error.BusinessException;
 import com.bottari.push.message.PushMessage;
 import com.bottari.push.notification.reliablefcm.domain.FcmSendTask;
 import com.bottari.push.notification.reliablefcm.domain.TaskState;
+import com.github.f4b6a3.uuid.UuidCreator;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -71,7 +73,8 @@ class FcmSendTaskTest {
                 () -> assertThat(task.getFinishedAt()).isNull(),
                 () -> assertThat(task.getAttemptCount()).isZero(),
                 () -> assertThat(task.getMessage()).isEqualTo(message),
-                () -> assertThat(task.getTargetMemberId()).isEqualTo(targetMemberId)
+                () -> assertThat(task.getTargetMemberId()).isEqualTo(targetMemberId),
+                () -> assertThat(task.getClaimId()).isNull()
         );
     }
 
@@ -116,7 +119,8 @@ class FcmSendTaskTest {
             // then
             assertAll(
                     () -> assertThat(task.getState()).isEqualTo(TaskState.PENDING),
-                    () -> assertThat(task.getScheduledAt()).isEqualTo(scheduledAt)
+                    () -> assertThat(task.getScheduledAt()).isEqualTo(scheduledAt),
+                    () -> assertThat(task.getClaimId()).isNull()
             );
         }
 
@@ -156,15 +160,17 @@ class FcmSendTaskTest {
                     new PushMessage("test", "test", "null"),
                     1L
             );
+            final UUID claimId = UuidCreator.getTimeOrderedEpochFast();
 
             // when
-            task.markInProgress();
+            task.markInProgress(claimId);
 
             // then
             assertAll(
                     () -> assertThat(task.getState()).isEqualTo(TaskState.IN_PROGRESS),
                     () -> assertThat(task.getInProgressAt()).isNotNull(),
-                    () -> assertThat(task.getAttemptCount()).isGreaterThanOrEqualTo(1)
+                    () -> assertThat(task.getAttemptCount()).isGreaterThanOrEqualTo(1),
+                    () -> assertThat(task.getClaimId()).isEqualTo(claimId)
             );
         }
 
@@ -182,10 +188,11 @@ class FcmSendTaskTest {
                     new PushMessage("test", "test", "null"),
                     1L
             );
+            final UUID claimId = UuidCreator.getTimeOrderedEpochFast();
             setState(task, currentState);
 
             // when & then
-            assertThatThrownBy(task::markInProgress)
+            assertThatThrownBy(() -> task.markInProgress(claimId))
                     .isInstanceOf(BusinessException.class)
                     .hasMessageContaining("FCM 전송 작업의 상태 전이가 올바르지 않습니다.");
         }

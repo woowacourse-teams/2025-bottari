@@ -11,11 +11,13 @@ import com.bottari.push.notification.reliablefcm.domain.FcmSendTaskState;
 import com.bottari.push.notification.reliablefcm.domain.TaskState;
 import com.bottari.push.notification.reliablefcm.dto.ScheduleFcmSendTaskRequest;
 import com.bottari.push.notification.reliablefcm.service.FcmSendTaskService;
+import com.github.f4b6a3.uuid.UuidCreator;
 import jakarta.persistence.EntityManager;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -57,9 +59,10 @@ class FcmSendTaskServiceTest {
                     targetMemberId
             );
             final Long taskId = fcmSendTaskService.scheduleFcmSendTask(request);
+            final UUID claimId = UuidCreator.getTimeOrderedEpochFast();
 
             // when
-            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(10);
+            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(claimId, 10);
 
             // then
             final List<FcmSendTaskState> states = entityManager.createQuery(
@@ -100,9 +103,10 @@ class FcmSendTaskServiceTest {
                     .setParameter("taskId", taskId)
                     .executeUpdate();
             entityManager.clear();
+            final UUID claimId = UuidCreator.getTimeOrderedEpochFast();
 
             // when
-            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(10);
+            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(claimId, 10);
 
             assertThat(pollTasks).isEmpty();
         }
@@ -130,9 +134,10 @@ class FcmSendTaskServiceTest {
                     .setParameter("taskId", taskId)
                     .executeUpdate();
             entityManager.clear();
+            final UUID claimId = UuidCreator.getTimeOrderedEpochFast();
 
             // when
-            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(10);
+            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(claimId, 10);
 
             assertThat(pollTasks).isEmpty();
         }
@@ -158,7 +163,8 @@ class FcmSendTaskServiceTest {
                     targetMemberId
             );
             final Long taskId = fcmSendTaskService.scheduleFcmSendTask(request);
-            fcmSendTaskService.claimPendingTasks(10);
+            final UUID claimId = UuidCreator.getTimeOrderedEpochFast();
+            fcmSendTaskService.claimPendingTasks(claimId, 10);
             entityManager.flush();
             entityManager.createQuery(
                             "UPDATE FcmSendTask t SET t.inProgressAt = :inProgressAt WHERE t.id = :taskId"
@@ -278,7 +284,8 @@ class FcmSendTaskServiceTest {
                     targetMemberId
             );
             final Long taskId = fcmSendTaskService.scheduleFcmSendTask(request);
-            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(10);
+            final UUID claimId = UuidCreator.getTimeOrderedEpochFast();
+            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(claimId, 10);
             final FcmSendTask task = pollTasks.getFirst();
 
             // when
@@ -329,7 +336,8 @@ class FcmSendTaskServiceTest {
                     targetMemberId
             );
             final Long taskId = fcmSendTaskService.scheduleFcmSendTask(request);
-            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(10);
+            final UUID claimId = UuidCreator.getTimeOrderedEpochFast();
+            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(claimId, 10);
             final FcmSendTask task = pollTasks.getFirst();
             final Duration retryDelay = Duration.ofMinutes(2);
 
@@ -383,7 +391,8 @@ class FcmSendTaskServiceTest {
                     targetMemberId
             );
             final Long taskId = fcmSendTaskService.scheduleFcmSendTask(request);
-            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(10);
+            final UUID claimId = UuidCreator.getTimeOrderedEpochFast();
+            final List<FcmSendTask> pollTasks = fcmSendTaskService.claimPendingTasks(claimId, 10);
             final FcmSendTask task = pollTasks.getFirst();
 
             // when
