@@ -26,7 +26,7 @@ public class FcmSendTaskIncidentHandler {
     @Scheduled(fixedRate = 10_000) // 10초
     @Transactional
     public void handleStuckTasks() {
-        final List<FcmSendTask> tasks = fcmSendTaskService.getStuckTasks(Duration.ofMinutes(1), 100);
+        final List<FcmSendTask> tasks = fcmSendTaskService.getStuckTasks(Duration.ofMinutes(2), 100);
         for (final FcmSendTask task : tasks) {
             if (task.isRetryLimitExceeded()) {
                 fcmSendTaskService.failTask(task.getId(), FailedCause.RETRY_LIMIT_EXCEEDED, task.getClaimId());
