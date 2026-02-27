@@ -114,6 +114,25 @@ class FcmSendTaskTest {
         // when & then
         assertAll(
                 () -> assertThat(task.isClaimedBy(uuid)).isTrue(),
+                () -> assertThat(task.isClaimedBy(anotherUuid)).isFalse(),
+                () -> assertThat(task.isClaimedBy(null)).isFalse()
+        );
+    }
+
+    @DisplayName("FcmSendTask의 점유자를 비교한다. null인 경우")
+    @Test
+    void isClaimedBy_null() {
+        // given
+        final FcmSendTask task = new FcmSendTask(
+                LocalDateTime.now().plusMinutes(5),
+                new PushMessage("test", "test", "null"),
+                1L
+        );
+        final UUID anotherUuid = UuidCreator.getTimeOrderedEpochFast();
+
+        // when & then
+        assertAll(
+                () -> assertThat(task.isClaimedBy(null)).isFalse(),
                 () -> assertThat(task.isClaimedBy(anotherUuid)).isFalse()
         );
     }

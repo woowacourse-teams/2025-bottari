@@ -108,6 +108,9 @@ public class FcmSendTask {
     }
 
     public boolean isClaimedBy(final UUID claimId) {
+        if (this.claimId == null) {
+            return false;
+        }
         return this.claimId.equals(claimId);
     }
 }
