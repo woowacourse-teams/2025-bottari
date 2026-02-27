@@ -94,8 +94,6 @@ class FcmSendFailedTaskServiceTest {
         task2.markInProgress(UuidCreator.getTimeOrderedEpochFast());
         final FcmSendFailedTask failedTask1 = new FcmSendFailedTask(task1, FailedCause.RETRY_LIMIT_EXCEEDED);
         final FcmSendFailedTask failedTask2 = new FcmSendFailedTask(task2, FailedCause.RETRY_LIMIT_EXCEEDED);
-        failedTask1.markAlerted();
-        failedTask2.markAlerted();
         entityManager.persist(task1);
         entityManager.persist(task2);
         entityManager.persist(failedTask1);
