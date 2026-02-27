@@ -120,6 +120,7 @@ public enum ErrorCode {
     FCM_SEND_TASK_INVALID_STATE_TRANSITION(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업의 상태 전이가 올바르지 않습니다."),
     FCM_SEND_TASK_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업을 찾을 수 없습니다."),
     FCM_SEND_TASK_CLAIM_MISMATCH(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업의 claimId가 일치하지 않습니다."),
+    FCM_SEND_FAILED_TASK_INVALID_STATE_TRANSITION(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 실패 작업의 상태 전이가 올바르지 않습니다."),
 
     // ===== SSE CONNECTION 관련 =====
     SSE_CONNECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결에 실패했습니다."),

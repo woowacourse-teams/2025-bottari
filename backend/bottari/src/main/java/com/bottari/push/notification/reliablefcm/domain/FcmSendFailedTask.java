@@ -1,5 +1,7 @@
 package com.bottari.push.notification.reliablefcm.domain;
 
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -57,6 +59,9 @@ public class FcmSendFailedTask {
     }
 
     public void markAlerted() {
+        if (this.state != FailedTaskState.PENDING) {
+            throw new BusinessException(ErrorCode.FCM_SEND_FAILED_TASK_INVALID_STATE_TRANSITION);
+        }
         this.state = FailedTaskState.ALERTED;
         this.alertedAt = LocalDateTime.now();
     }
