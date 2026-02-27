@@ -493,7 +493,7 @@ class FcmSendTaskServiceTest {
             );
         }
 
-        @DisplayName("claimId가 다르다면 FCM 전송 작업을 완료 처리할 수 없다.")
+        @DisplayName("claimId가 다르다면 FCM 전송 작업을 실패 처리할 수 없다.")
         @Test
         void failTask_invalid_claim() {
             // given
