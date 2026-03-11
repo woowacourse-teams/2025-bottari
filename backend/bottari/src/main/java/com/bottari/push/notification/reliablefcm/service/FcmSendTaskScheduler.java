@@ -30,6 +30,9 @@ public class FcmSendTaskScheduler {
                 // 1) 전송 성공: 작업 완료 처리
                 fcmSendTaskService.completeTask(task.getId(), claimId);
             } catch (final BusinessException e) {
+                if (ErrorCode.FCM_SEND_TASK_CLAIM_MISMATCH == e.getErrorCode()) {
+                    return;
+                }
                 handleBusinessException(task, e, claimId);
             } catch (final Exception e) {
                 handleRetryOrFail(task, claimId);
