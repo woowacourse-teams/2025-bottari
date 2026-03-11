@@ -15,6 +15,7 @@ import com.bottari.fixture.MemberFixture;
 import com.bottari.fixture.TeamBottariFixture;
 import com.bottari.member.domain.Member;
 import com.bottari.push.PushManager;
+import com.bottari.push.ScheduledChannels;
 import com.bottari.push.connection.ConnectionChannels;
 import com.bottari.push.notification.NotificationChannels;
 import com.bottari.teambottari.adapter.TeamBottariMessageConverter;
@@ -55,6 +56,9 @@ class TeamAssignedItemServiceTest {
 
     @MockitoBean
     private ConnectionChannels connectionChannels;
+
+    @MockitoBean
+    private ScheduledChannels scheduledChannels;
 
     @Autowired
     private EntityManager entityManager;

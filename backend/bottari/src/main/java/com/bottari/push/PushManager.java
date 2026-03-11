@@ -1,8 +1,11 @@
 package com.bottari.push;
 
+import com.bottari.error.BusinessException;
+import com.bottari.error.ErrorCode;
 import com.bottari.push.connection.ConnectionChannels;
 import com.bottari.push.message.PushMessage;
 import com.bottari.push.notification.NotificationChannels;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,12 +18,13 @@ public class PushManager {
 
     private final NotificationChannels notificationChannels;
     private final ConnectionChannels connectionChannels;
+    private final ScheduledChannels scheduledChannels;
 
     public StartChain message(final PushMessage message) {
         return new StartChain(message);
     }
 
-    public final class StartChain {
+    public class StartChain {
 
         private final PushMessage message;
         private final List<Long> memberIds = new ArrayList<>();
@@ -39,6 +43,13 @@ public class PushManager {
             return this;
         }
 
+        public ScheduledChannelChain scheduledAt(final LocalDateTime scheduledAt) {
+            if (scheduledAt == null) {
+                throw new BusinessException(ErrorCode.PUSH_SCHEDULED_AT_MUST_NOT_BE_NULL);
+            }
+            return new ScheduledChannelChain(message, memberIds, scheduledAt);
+        }
+
         public ActionStep unicast() {
             return new ChannelChain(new UnicastExecutor(), message, memberIds);
         }
@@ -55,6 +66,7 @@ public class PushManager {
     public interface ActionStep {
         ActionOrSendStep viaConnection(final ChannelType channelType);
         ActionOrSendStep viaNotification();
+        ActionOrSendStep viaNotification(final ChannelType channelType);
     }
 
     public interface ActionOrSendStep extends ActionStep {
@@ -83,9 +95,16 @@ public class PushManager {
             actions.add(() -> channelExecutor.executeConnection(message, memberIds, channelType));
             return this;
         }
+
         @Override
         public ActionOrSendStep viaNotification() {
             actions.add(() -> channelExecutor.executeNotification(message, memberIds));
+            return this;
+        }
+
+        @Override
+        public ActionOrSendStep viaNotification(final ChannelType channelType) {
+            actions.add(() -> channelExecutor.executeNotification(message, memberIds, channelType));
             return this;
         }
 
@@ -107,6 +126,12 @@ public class PushManager {
                 final PushMessage message,
                 final List<Long> memberIds
         );
+
+        void executeNotification(
+                final PushMessage message,
+                final List<Long> memberIds,
+                final ChannelType channelType
+        );
     }
 
     public final class UnicastExecutor implements ChannelExecutor {
@@ -126,6 +151,15 @@ public class PushManager {
                 final List<Long> memberIds
         ) {
             notificationChannels.unicast(message, memberIds.getFirst());
+        }
+
+        @Override
+        public void executeNotification(
+                final PushMessage message,
+                final List<Long> memberIds,
+                final ChannelType channelType
+        ) {
+            notificationChannels.unicast(message, channelType, memberIds.getFirst());
         }
     }
 
@@ -147,6 +181,15 @@ public class PushManager {
         ) {
             notificationChannels.multicast(message, memberIds);
         }
+
+        @Override
+        public void executeNotification(
+                final PushMessage message,
+                final List<Long> memberIds,
+                final ChannelType channelType
+        ) {
+            notificationChannels.multicast(message, channelType, memberIds);
+        }
     }
 
     public final class BroadcastExecutor implements ChannelExecutor {
@@ -167,6 +210,15 @@ public class PushManager {
         ) {
             throw new UnsupportedOperationException();
         }
+
+        @Override
+        public void executeNotification(
+                final PushMessage message,
+                final List<Long> memberIds,
+                final ChannelType channelType
+        ) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     public static final class ChainActionsExecutor implements MultiRunnableExecutor {
@@ -179,6 +231,55 @@ public class PushManager {
         @Override
         public void executeAsync(final List<Runnable> actions) {
             throw new UnsupportedOperationException();
+        }
+    }
+
+    public class ScheduledChannelChain {
+
+        private final PushMessage message;
+        private final List<Long> memberIds = new ArrayList<>();
+        private final LocalDateTime sendAt;
+
+        public ScheduledChannelChain(
+                final PushMessage message,
+                final List<Long> memberIds,
+                final LocalDateTime sendAt
+        ) {
+            this.message = message;
+            this.memberIds.addAll(memberIds);
+            this.sendAt = sendAt;
+        }
+
+        public ScheduledChain via(final ChannelType channelType) {
+            return new ScheduledChain(message, channelType, memberIds, sendAt);
+        }
+    }
+
+    public class ScheduledChain {
+
+        private final PushMessage message;
+        private final ChannelType channelType;
+        private final List<Long> memberIds;
+        private final LocalDateTime sendAt;
+
+        public ScheduledChain(
+                final PushMessage message,
+                final ChannelType channelType,
+                final List<Long> memberIds,
+                final LocalDateTime sendAt
+        ) {
+            this.message = message;
+            this.channelType = channelType;
+            this.memberIds = memberIds;
+            this.sendAt = sendAt;
+        }
+
+        public void unicast() {
+            scheduledChannels.unicast(message, channelType, memberIds.getFirst(), sendAt);
+        }
+
+        public void multicast() {
+            scheduledChannels.multicast(message, channelType, memberIds, sendAt);
         }
     }
 }

@@ -47,6 +47,7 @@ dependencies {
         // Micrometer Tracing 관련 모듈을 명시적으로 제외합니다.
         exclude group: 'io.micrometer', module: 'micrometer-tracing-bridge-brave'
     }
+    implementation 'com.github.f4b6a3:uuid-creator:6.0.0'
 
     // AWS S3
     implementation(enforcedPlatform("io.awspring.cloud:spring-cloud-aws-dependencies:3.4.0"))

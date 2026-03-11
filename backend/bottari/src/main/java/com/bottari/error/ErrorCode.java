@@ -120,9 +120,17 @@ public enum ErrorCode {
     FCM_INVALID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰으로 인해 FCM 메시지 전송을 실패하였습니다."),
     FCM_MESSAGE_CONVERT_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 메시지 변환을 실패하였습니다."),
 
+    // ===== Reliable FCM 관련 =====
+    FCM_SEND_TASK_INVALID_STATE_TRANSITION(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업의 상태 전이가 올바르지 않습니다."),
+    FCM_SEND_TASK_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업을 찾을 수 없습니다."),
+    FCM_SEND_TASK_CLAIM_MISMATCH(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 작업의 claimId가 일치하지 않습니다."),
+    FCM_SEND_FAILED_TASK_INVALID_STATE_TRANSITION(HttpStatus.INTERNAL_SERVER_ERROR, "FCM 전송 실패 작업의 상태 전이가 올바르지 않습니다."),
+
     // ===== SSE CONNECTION 관련 =====
     SSE_CONNECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결에 실패했습니다."),
 
+    // ===== PUSH_MANAGER 관련 =====,
+    PUSH_SCHEDULED_AT_MUST_NOT_BE_NULL(HttpStatus.INTERNAL_SERVER_ERROR, "예약 전송 시각은 null일 수 없습니다."),
     // ===== S3 관련 =====,
     S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 업로드에 실패했습니다."),
     S3_DOWNLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 다운로드에 실패했습니다."),
@@ -130,7 +138,7 @@ public enum ErrorCode {
     // ===== 기타 =====,
     DATE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 날짜 형식입니다."),
     NUMBER_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 숫자 형식입니다."),
-    INVALID_TOPIC_NAME(HttpStatus.INTERNAL_SERVER_ERROR, "올바르지 않은 토픽 이름입니다.")
+    INVALID_TOPIC_NAME(HttpStatus.INTERNAL_SERVER_ERROR, "올바르지 않은 토픽 이름입니다.");
     ;
 
     private final HttpStatus status;

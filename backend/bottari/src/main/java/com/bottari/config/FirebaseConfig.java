@@ -25,10 +25,13 @@ public class FirebaseConfig {
         try {
             final ByteArrayInputStream serviceAccount = new ByteArrayInputStream(firebaseAccountJson.getBytes(StandardCharsets.UTF_8));
             final FirebaseOptions options = FirebaseOptions.builder()
+                    .setConnectTimeout(2_000)
+                    .setReadTimeout(10_000)
+                    .setWriteTimeout(5_000)
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
             FirebaseApp.initializeApp(options);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new BusinessException(ErrorCode.FCM_INITIALIZED_FAIL);
         }
     }
