@@ -56,3 +56,8 @@ firebase:
 app:
   s3:
     bucket: bottari-prod
+bottari:
+  openapi:
+    server:
+      url: https://bottari.app
+      description: Prod

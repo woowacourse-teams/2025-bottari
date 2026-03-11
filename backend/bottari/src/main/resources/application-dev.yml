@@ -65,4 +65,9 @@ firebase:
 app:
   s3:
     bucket: bottari-dev
+bottari:
+  openapi:
+    server:
+      url: https://dev.bottari.app
+      description: Dev
 

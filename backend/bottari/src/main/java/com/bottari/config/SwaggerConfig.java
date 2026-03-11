@@ -6,17 +6,28 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springdoc.core.customizers.OperationCustomizer;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@ConfigurationPropertiesScan
+@RequiredArgsConstructor
 public class SwaggerConfig {
+
+    private final OpenApiServerProperties openApiServerProperties;
 
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
                 .info(apiInfo())
+                .servers(List.of(new Server()
+                        .url(openApiServerProperties.url())
+                        .description(openApiServerProperties.description())))
                 .addSecurityItem(getSecurityRequirement())
                 .components(getComponents());
     }

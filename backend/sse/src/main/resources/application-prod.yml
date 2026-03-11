@@ -6,3 +6,9 @@ spring:
       host: ${REDIS_PROD_HOST}
       port: ${REDIS_PROD_PORT}
       password: ${REDIS_PROD_PASSWORD}
+
+bottari:
+  openapi:
+    server:
+      url: https://bottari.app
+      description: Prod

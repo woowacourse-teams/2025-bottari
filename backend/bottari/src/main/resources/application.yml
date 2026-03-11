@@ -63,3 +63,8 @@ firebase:
 app:
   s3:
     bucket: bottari-local
+bottari:
+  openapi:
+    server:
+      url: http://localhost:8080
+      description: Local

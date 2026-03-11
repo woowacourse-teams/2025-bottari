@@ -22,8 +22,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SseMessageListener implements MessageListener {
 
-    private final SseChannel sseChannel;
     private final ObjectMapper objectMapper;
+    private final SseChannel sseChannel;
 
     @Override
     public void onMessage(
@@ -44,6 +44,7 @@ public class SseMessageListener implements MessageListener {
             throw new BusinessException(ErrorCode.INVALID_MESSAGE_FORMAT);
         }
     }
+
 
     @WithSpan(value = "redis subscriber", kind = SpanKind.CONSUMER)
     private void consume(
