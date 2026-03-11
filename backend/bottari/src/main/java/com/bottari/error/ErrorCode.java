@@ -23,6 +23,10 @@ public enum ErrorCode {
     BOTTARI_NOT_FOUND(HttpStatus.NOT_FOUND, "보따리를 찾을 수 없습니다."),
     BOTTARI_NOT_OWNED(HttpStatus.FORBIDDEN, "해당 보따리에 접근할 수 있는 권한이 없습니다."),
 
+    // ===== BOTTARI BACKUP 관련 =====
+    BOTTARI_BACKUP_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "보따리 백업에 실패했습니다."),
+    BOTTARI_LOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "보따리 복원에 실패했습니다."),
+
     // ===== BOTTARI TITLE 관련 =====
     BOTTARI_TITLE_UNCHANGED(HttpStatus.BAD_REQUEST, "기존의 보따리 이름과 동일한 이름으로는 변경할 수 없습니다."),
     BOTTARI_TITLE_BLANK(HttpStatus.BAD_REQUEST, "보따리 제목은 공백일 수 없습니다."),
@@ -119,10 +123,14 @@ public enum ErrorCode {
     // ===== SSE CONNECTION 관련 =====
     SSE_CONNECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결에 실패했습니다."),
 
-    // ===== 기타 =====
+    // ===== S3 관련 =====,
+    S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 업로드에 실패했습니다."),
+    S3_DOWNLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3 다운로드에 실패했습니다."),
+
+    // ===== 기타 =====,
     DATE_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 날짜 형식입니다."),
     NUMBER_FORMAT_INVALID(HttpStatus.BAD_REQUEST, "유효하지 않은 숫자 형식입니다."),
-    INVALID_TOPIC_NAME(HttpStatus.INTERNAL_SERVER_ERROR, "올바르지 않은 토픽 이름입니다."),
+    INVALID_TOPIC_NAME(HttpStatus.INTERNAL_SERVER_ERROR, "올바르지 않은 토픽 이름입니다.")
     ;
 
     private final HttpStatus status;
