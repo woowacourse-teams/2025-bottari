@@ -39,4 +39,13 @@ public class SseConnector implements SseConnectorApiDocs {
 
         return sseEmitter;
     }
+
+    private final SseRefreshRegistry sseRefreshRegistry;
+
+    @GetMapping("/reject/{memberId}")
+    public void reject(
+            @PathVariable final Long memberId
+    ) {
+        sseRefreshRegistry.setFlag(memberId);
+    }
 }
