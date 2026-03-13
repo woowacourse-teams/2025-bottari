@@ -2,6 +2,7 @@ package com.bottari.sse.config;
 
 import java.util.concurrent.Executor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -17,13 +18,24 @@ public class RedisConfig {
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(
             final RedisConnectionFactory redisConnectionFactory,
-            final Executor redisTaskExecutor
+            @Qualifier("singleThreadExecutor") final Executor redisTaskExecutor
     ) {
         final RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory);
         container.setTaskExecutor(redisTaskExecutor);
 
         return container;
+    }
+
+    @Bean
+    public Executor singleThreadExecutor() {
+        final ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(1);
+        executor.setMaxPoolSize(1);
+        executor.setThreadNamePrefix("redis-single-executor-");
+        executor.initialize();
+
+        return executor;
     }
 
     @Bean
