@@ -1,5 +1,6 @@
 package com.bottari.sse.sse;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +29,10 @@ public class SseSessions {
 
     public List<SseEmitter> findAll() {
         return sseEmittersByMemberId.values().stream().toList();
+    }
+
+    public Map<Long, SseEmitter> findAllWithMemberId() {
+        return Collections.unmodifiableMap(sseEmittersByMemberId);
     }
 
     public void save(

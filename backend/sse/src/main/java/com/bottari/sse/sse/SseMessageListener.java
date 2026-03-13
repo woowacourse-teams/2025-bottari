@@ -43,7 +43,7 @@ public class SseMessageListener implements MessageListener {
                     .extract(Context.current(), pubSubEnvelope.headers(), MapGetter.INSTANCE);
             try (final Scope ignored = parent.makeCurrent()) {
                 final SseSendTask task = new SseSendTask(sseChannel, pubSubEnvelope.payload(), topic);
-                sseSendExecutor.submit(task);
+                sseSendExecutor.submitSendTask(task);
             }
         } catch (IOException e) {
             throw new BusinessException(ErrorCode.INVALID_MESSAGE_FORMAT);
