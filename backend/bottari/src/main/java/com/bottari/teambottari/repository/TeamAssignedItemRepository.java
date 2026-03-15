@@ -39,7 +39,12 @@ public interface TeamAssignedItemRepository extends JpaRepository<TeamAssignedIt
             """)
     List<TeamAssignedItem> findAllByTeamMemberId(final Long teamMemberId);
 
-    void deleteAllByInfo(final TeamAssignedItemInfo teamAssignedItemInfo);
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query(value = """
+            DELETE FROM team_assigned_item
+            WHERE team_assigned_item_info_id = :teamAssignedItemInfoId
+            """, nativeQuery = true)
+    void deleteAllByInfo(final Long teamAssignedItemInfoId);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
