@@ -4,9 +4,8 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import com.bottari.core.navigation.LocalNavigator
 import com.bottari.core.ui.provider.LocalSnackbarHostState
-import com.bottari.feature.personal.edit.navigation.PersonalEditNavKey
+import com.bottari.feature.personal.edit.api.PersonalEditNavKey
 import com.bottari.feature.template.detail.TemplateDetailScreen
-import com.bottari.feature.template.detail.navigation.TemplateDetailNavKey
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
