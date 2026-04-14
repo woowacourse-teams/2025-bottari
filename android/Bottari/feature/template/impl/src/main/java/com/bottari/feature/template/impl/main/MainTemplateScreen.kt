@@ -165,7 +165,7 @@ private fun MainTemplateHeader(
                 modifier =
                     Modifier
                         .padding(horizontal = BottariTheme.spacing.spaceLarge)
-                        .padding(top = BottariTheme.spacing.spaceXSmall),
+                        .padding(top = BottariTheme.spacing.spaceSmall),
             )
 
             Spacer(modifier = Modifier.height(BottariTheme.spacing.spaceSmall))
