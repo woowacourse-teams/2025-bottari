@@ -57,9 +57,10 @@ fun App(
             NavDisplay(
                 entries = navigationState.toEntries(entryProvider),
                 onBack = navigator::goBack,
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .consumeWindowInsets(innerPadding),
+                modifier =
+                    Modifier
+                        .padding(innerPadding)
+                        .consumeWindowInsets(innerPadding),
             )
         }
     }
