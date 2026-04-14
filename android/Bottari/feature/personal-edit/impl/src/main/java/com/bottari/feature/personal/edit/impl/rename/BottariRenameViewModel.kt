@@ -1,5 +1,6 @@
 package com.bottari.feature.personal.edit.impl.rename
 
+import androidx.compose.runtime.Stable
 import com.bottari.core.domain.usecase.bottari.SaveBottariTitleUseCase
 import com.bottari.core.ui.base.BaseViewModel
 import com.bottari.logger.BottariLogger
@@ -9,6 +10,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 
+@Stable
 @HiltViewModel(assistedFactory = BottariRenameViewModel.Factory::class)
 class BottariRenameViewModel @AssistedInject constructor(
     @Assisted private val bottariId: Long,
