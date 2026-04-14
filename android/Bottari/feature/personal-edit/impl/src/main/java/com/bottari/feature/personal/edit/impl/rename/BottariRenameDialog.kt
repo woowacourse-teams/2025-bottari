@@ -47,7 +47,7 @@ fun BottariRenameDialog(
             it.create(bottariId)
         },
 ) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val context = LocalContext.current
 
     LaunchedEffect(bottariTitle) {
@@ -71,11 +71,11 @@ fun BottariRenameDialog(
     }
 
     BottariRenameDialog(
-        bottariTitle = uiState.value.title,
+        bottariTitle = uiState.title,
         onDismissRequest = onDismissRequest,
         onTitleChange = viewModel::cacheTitleInput,
         onTitleSave = viewModel::saveBottariTitle,
-        isSavable = uiState.value.isSaveEnabled,
+        isSavable = uiState.isSaveEnabled,
         modifier = modifier,
     )
 }
