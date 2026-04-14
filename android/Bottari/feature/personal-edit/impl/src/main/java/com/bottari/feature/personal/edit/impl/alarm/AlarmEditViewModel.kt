@@ -1,5 +1,6 @@
 package com.bottari.feature.personal.edit.impl.alarm
 
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
 import com.bottari.common.util.AlarmScheduler
 import com.bottari.common.util.debounce
@@ -24,6 +25,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
+@Stable
 @HiltViewModel(assistedFactory = AlarmEditViewModel.Factory::class)
 class AlarmEditViewModel @AssistedInject constructor(
     @Assisted private val bottariId: Long,
