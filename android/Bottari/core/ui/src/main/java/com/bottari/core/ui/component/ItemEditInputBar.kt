@@ -31,7 +31,7 @@ fun ItemEditInputBar(
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
     ) {
         BottariTextField(
             value = itemName,
