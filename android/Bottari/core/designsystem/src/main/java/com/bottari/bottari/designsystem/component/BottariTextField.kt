@@ -88,6 +88,7 @@ fun BottariTextField(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     errorIndicatorColor = Color.Transparent,
+                    errorContainerColor = BottariTheme.colors.gray200,
                     cursorColor = BottariTheme.colors.black,
                 ),
             textStyle = BottariTheme.typography.regular14.toTextStyle(),
