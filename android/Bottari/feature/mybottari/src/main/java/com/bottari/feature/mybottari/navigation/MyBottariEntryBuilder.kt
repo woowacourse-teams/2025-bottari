@@ -6,7 +6,7 @@ import com.bottari.core.navigation.LocalNavigator
 import com.bottari.core.ui.provider.LocalSnackbarHostState
 import com.bottari.feature.mybottari.MyBottariScreen
 import com.bottari.feature.personal.checklist.navigation.PersonalChecklistNavKey
-import com.bottari.feature.personal.edit.navigation.PersonalEditNavKey
+import com.bottari.feature.personal.edit.api.PersonalEditNavKey
 import com.bottari.feature.team.checklist.navigation.TeamChecklistNavKey
 import com.bottari.feature.team.edit.navigation.TeamEditNavKey
 import dagger.Module

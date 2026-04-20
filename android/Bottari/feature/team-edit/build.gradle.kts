@@ -8,6 +8,6 @@ android {
 
 dependencies {
     implementation(projects.core.common)
-    implementation(projects.feature.personalEdit)
+    implementation(projects.feature.personalEdit.api)
     implementation(projects.feature.teamChecklist)
 }

@@ -65,10 +65,11 @@ private fun Modifier.clickableCard(
     enabled: Boolean,
     tone: BottariCardTone,
     onClick: () -> Unit,
-): Modifier =
-    this.clickable(
+): Modifier {
+    if (!enabled) return this
+
+    return this.clickable(
         onClick = onClick,
-        enabled = enabled,
         interactionSource = remember { MutableInteractionSource() },
         indication =
             ripple(
@@ -80,6 +81,7 @@ private fun Modifier.clickableCard(
                     },
             ),
     )
+}
 
 @ComponentPreview
 @Composable

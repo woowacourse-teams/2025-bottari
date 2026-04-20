@@ -15,10 +15,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import com.bottari.bottari.designsystem.component.BottariCircularLoader
 import com.bottari.bottari.designsystem.theme.BottariTheme
+import com.bottari.core.ui.component.ItemEditInputBar
 import com.bottari.core.ui.extension.noRippleClickable
 import com.bottari.core.ui.model.bottari.BottariItemUiModel
 import com.bottari.core.ui.model.bottari.personal.BottariItemTypeUiModel
-import com.bottari.feature.personal.edit.item.component.ItemEditInputBar
 
 @Composable
 fun TeamChecklistEditScreen(

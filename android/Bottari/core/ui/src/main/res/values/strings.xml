@@ -94,9 +94,11 @@
     <string name="home_nav_my_bottari_title_text">나의 보따리</string>
     <string name="home_nav_template_title_text">모두의 보따리</string>
     <string name="home_nav_more_title_text">더보기</string>
-
     <string name="bottari_home_exit_confirm_text">한 번 더 누르면 앱이 종료돼요</string>
 
+    <!--  Bottari Edit  -->
+    <string name="bottari_item_edit_supporting_text">추가할 물건은 중복되지 않고 1–20자여야 해요</string>
+    <string name="bottari_item_edit_hint_text">추가할 물건을 입력해 주세요</string>
 
     <!--  Team Bottari  -->
     <string name="join_team_bottari_success_text">팀 보따리에 참가했어요</string>
@@ -116,6 +118,7 @@
     <string name="bottari_icon_item_empty_description">빈 물건 아이콘</string>
     <string name="bottari_icon_type_description">보따리 타입 아이콘</string>
     <string name="personal_bottari_btn_create_description">개인 보따리 만들기 버튼</string>
+    <string name="bottari_btn_item_add_description">물건 추가 버튼</string>
     <string name="common_btn_item_delete_description">물건 삭제 버튼</string>
     <string name="common_icon_search_description">검색 아이콘</string>
     <string name="common_state_open_description">열림</string>

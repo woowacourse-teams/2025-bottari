@@ -7,5 +7,5 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.personalEdit)
+    implementation(projects.feature.personalEdit.api)
 }
